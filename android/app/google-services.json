@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "682172366755",
+    "project_id": "moxy-144f2",
+    "storage_bucket": "moxy-144f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682172366755:android:038960b102f26b138d6416",
+        "android_client_info": {
+          "package_name": "com.example.moxy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682172366755-qcnep0kiocnr7avqn4sd5p8adqnob0c3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBay-38KCCx2S5rwsCwXf3Sj-Bs2QKb2uU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682172366755-qcnep0kiocnr7avqn4sd5p8adqnob0c3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
