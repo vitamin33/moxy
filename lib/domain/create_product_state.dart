@@ -5,7 +5,6 @@ import 'package:moxy/components/base_state.dart';
 import 'package:moxy/constant/route_name.dart';
 import 'package:moxy/data/models/product.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
-import 'package:moxy/data/repositories/user_repository.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/image_picker_service.dart';
 import 'package:moxy/services/navigation_service.dart';
@@ -13,7 +12,6 @@ import 'package:moxy/utils/common.dart';
 import 'package:random_string/random_string.dart';
 
 class CreateProductState extends BaseState {
-  final userRepository = locate<UserRepository>();
   final imagePickerService = locate<ImagePickerService>();
 
   final productRepository = locate<ProductRepository>();
@@ -113,6 +111,7 @@ class CreateProductState extends BaseState {
       String imageUrl = await imagePickerService.uploadImageToDefaultBucket(
           imageUnit8List!, "product_$id");
 
+      // TODO(fututristic_cowboy): add real user data
       final product = Product(
         id: id,
         title: titleController.text.trim(),
@@ -126,9 +125,9 @@ class CreateProductState extends BaseState {
         ingridients: const [],
         previousPrice: int.tryParse(previousPriceController.text) ?? 0,
         createdBy: {
-          "uid": userRepository.currentUserUID,
-          "name": userRepository.currentUserNotifier.value?.name,
-          "email": userRepository.currentUserNotifier.value?.email,
+          "uid": "user_id",
+          "name": "user_name",
+          "email": "email",
         },
       );
 

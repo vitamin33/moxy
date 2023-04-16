@@ -4,14 +4,12 @@ import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/services/navigation_service.dart';
 
 import '../data/repositories/product_repository.dart';
-import '../data/repositories/user_repository.dart';
 import '../data/secure_storage_repository.dart';
 import 'image_picker_service.dart';
 
 class GetItService {
   static final getIt = GetIt.instance;
   static initializeService() {
-    getIt.registerSingleton<UserRepository>(UserRepository());
     getIt.registerSingleton<AuthRepository>(AuthRepository.instance);
     getIt.registerSingleton<ISecureStorageRepository>(
         SecureStorageRepository.instance);

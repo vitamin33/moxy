@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/data/repositories/user_repository.dart';
+import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/screens/dashboard/dashboard_view.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation_service.dart';
@@ -7,7 +7,7 @@ import 'package:moxy/services/navigation_service.dart';
 import 'constant/route_name.dart';
 
 class UrlHandlerRouterDelegate extends RouterDelegate<String> {
-  final userRepository = locate<UserRepository>();
+  final authRepository = locate<AuthRepository>();
   final navigationService = locate<NavigationService>();
 
   @override
@@ -28,14 +28,15 @@ class UrlHandlerRouterDelegate extends RouterDelegate<String> {
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    if (userRepository.currentUserUID != null && configuration != authPath) {
+    bool hasUser = await authRepository.checkLoggedInState();
+    if (hasUser && configuration != authPath) {
       if (!navigationService.pathToCloseNavigationBar.contains(configuration)) {
         navigationService.setNavigationBar = true;
       }
       navigationService.routeNotifier.value = configuration;
       navigatePushReplaceName(configuration);
     } else {
-      if (userRepository.currentUserUID == null) {
+      if (hasUser) {
         navigatePushReplaceName(authPath);
       } else {
         navigatePushReplaceName(overview);

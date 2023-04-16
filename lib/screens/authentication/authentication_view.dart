@@ -5,9 +5,7 @@ import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/components/rounded_card.dart';
 import 'package:moxy/components/textfield.dart';
 import 'package:moxy/constant/image_path.dart';
-import 'package:moxy/domain/authentication_state.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:provider/provider.dart';
 
 import '../../components/snackbar_widgets.dart';
 import '../../constant/route_name.dart';

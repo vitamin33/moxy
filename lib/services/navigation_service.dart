@@ -1,6 +1,5 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/screens/authentication/authentication_view.dart';
 import 'package:moxy/screens/dashboard/pages/customers/customers_page.dart';
@@ -9,7 +8,7 @@ import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
 import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart';
 
 import '../constant/route_name.dart';
-import '../data/repositories/user_repository.dart';
+import '../data/repositories/auth_repository.dart';
 import '../screens/dashboard/pages/create_category/create_category_page.dart';
 import '../screens/dashboard/pages/create_product/create_product_page.dart';
 import '../screens/dashboard/pages/products/products_page.dart';
@@ -19,8 +18,6 @@ import "package:universal_html/html.dart" as html;
 
 class NavigationService {
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  UserRepository userRepo = locate<UserRepository>();
 
   ValueNotifier<String> routeNotifier = ValueNotifier<String>(authPath);
 
@@ -35,8 +32,8 @@ class NavigationService {
     showNavigationBar.notifyListeners();
   }
 
-  String determineHomePath() {
-    if (userRepo.currentUserUID != null) {
+  String determineHomePath({bool hasUser = false}) {
+    if (hasUser) {
       return overview;
     }
     return authPath;

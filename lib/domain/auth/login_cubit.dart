@@ -3,14 +3,12 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
-import '../../data/repositories/user_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final storage = locate<ISecureStorageRepository>();
-  final userRepository = locate<UserRepository>();
   final authRepository = locate<AuthRepository>();
   final navigationService = locate<NavigationService>();
 
