@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:moxy/components/app_scaffold.dart';
-import 'package:moxy/screens/dashboard/pages/create_product/create_product_state.dart';
+import 'package:moxy/domain/create_product_state.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/branding.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/pricing.dart';

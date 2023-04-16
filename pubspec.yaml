@@ -38,20 +38,30 @@ dependencies:
     #database
   firebase_core: ^2.9.0
   firebase_auth: ^4.4.0
+  shared_preferences: ^2.0.17
+  flutter_secure_storage: ^6.1.0
 
   #new
   firebase_storage: ^11.1.0
+  firebase_crashlytics: ^3.0.17
+  dio: ^4.0.6
 
   #state management control
   provider: ^6.0.5
   either_dart: ^0.1.4
   get_it: ^7.2.0
+  flutter_bloc: ^8.1.1
 
   #utils
   intl: ^0.17.0
-  equatable: ^2.0.3
   random_string: ^2.3.1
   file_picker: ^5.2.7
+  equatable: ^2.0.5
+  pretty_dio_logger: ^1.1.1
+  flutter_native_splash: ^2.2.9
+  flutter_svg: ^2.0.2
+  freezed_annotation: ^2.2.0
+  json_annotation: ^4.8.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +73,9 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
+  freezed: ^2.3.2
+  json_serializable: ^6.6.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/components/base_state.dart';
 import 'package:moxy/constant/route_name.dart';
-import 'package:moxy/models/user.dart';
-import 'package:moxy/repositories/user_repository.dart';
+import 'package:moxy/data/repositories/user_repository.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation_service.dart';
 

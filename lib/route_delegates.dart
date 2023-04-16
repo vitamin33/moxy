@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/repositories/user_repository.dart';
+import 'package:moxy/data/repositories/user_repository.dart';
 import 'package:moxy/screens/dashboard/dashboard_view.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation_service.dart';

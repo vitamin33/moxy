@@ -1,11 +1,10 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-import '../create_product_state.dart';
+import '../../../../../domain/create_product_state.dart';
 
 class Summary extends StatelessWidget {
   const Summary({Key? key}) : super(key: key);

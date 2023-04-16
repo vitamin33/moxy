@@ -8,7 +8,7 @@ import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
 import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart';
 
 import '../constant/route_name.dart';
-import '../repositories/user_repository.dart';
+import '../data/repositories/user_repository.dart';
 import '../screens/dashboard/pages/create_category/create_category_page.dart';
 import '../screens/dashboard/pages/create_product/create_product_page.dart';
 import '../screens/dashboard/pages/products/products_page.dart';

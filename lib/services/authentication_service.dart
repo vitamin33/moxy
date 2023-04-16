@@ -3,7 +3,7 @@
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/result.dart';
+import '../data/models/result.dart';
 
 class AuthenicationService {
   AuthenicationService._();
@@ -34,12 +34,16 @@ class AuthenicationService {
     }
   }
 
-  Future<Either<ErrorHandler, User>> logIn(String email, String password) async {
+  Future<Either<ErrorHandler, User>> logIn(
+      String email, String password) async {
     try {
       final emailInUse = await isEmailInUse(email);
-      if (!emailInUse) return const Left(ErrorHandler(message: "This user does not exist or email badly formatted"));
+      if (!emailInUse)
+        return const Left(ErrorHandler(
+            message: "This user does not exist or email badly formatted"));
 
-      final UserCredential authResult = await auth.signInWithEmailAndPassword(email: email, password: password);
+      final UserCredential authResult = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
       if (authResult.user != null) {
         return Right(authResult.user!);
       }

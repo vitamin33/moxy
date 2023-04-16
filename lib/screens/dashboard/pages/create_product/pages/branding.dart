@@ -3,7 +3,7 @@ import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
-import '../create_product_state.dart';
+import '../../../../../domain/create_product_state.dart';
 
 class Branding extends StatelessWidget {
   const Branding({Key? key}) : super(key: key);

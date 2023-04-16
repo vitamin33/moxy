@@ -5,7 +5,7 @@ import 'package:moxy/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../components/textfield.dart';
-import '../create_product_state.dart';
+import '../../../../../domain/create_product_state.dart';
 
 class Pricing extends StatelessWidget {
   const Pricing({Key? key}) : super(key: key);

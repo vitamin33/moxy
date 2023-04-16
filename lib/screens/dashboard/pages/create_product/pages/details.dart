@@ -6,7 +6,7 @@ import 'package:moxy/utils/common.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../constant/product_categories.dart';
-import '../create_product_state.dart';
+import '../../../../../domain/create_product_state.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);

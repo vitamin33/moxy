@@ -6,20 +6,20 @@ import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 
 import '../models/result.dart';
-import '../models/user.dart';
-import '../services/authentication_service.dart';
-import '../utils/common.dart';
+import '../models/user.dart' as u;
+import '../../services/authentication_service.dart';
+import '../../utils/common.dart';
 
 class UserRepository {
   final _authService = AuthenicationService.instance;
 
-  ValueNotifier<User?> currentUserNotifier = ValueNotifier<User?>(null);
+  ValueNotifier<u.User?> currentUserNotifier = ValueNotifier<u.User?>(null);
 
   StreamSubscription? _authStreamSubscription;
 
   String? get currentUserUID => _authService.auth.currentUser?.uid;
 
-  set setCurrentUser(User? user) {
+  set setCurrentUser(u.User? user) {
     currentUserNotifier.value = user;
     currentUserNotifier.notifyListeners();
   }
@@ -43,12 +43,12 @@ class UserRepository {
     });
   }
 
-  Future<Either<ErrorHandler, User>> getCurrentUser(String uid) async {
+  Future<Either<ErrorHandler, u.User>> getCurrentUser(String uid) async {
     try {
       //TODO implement real user storing
       final userExist = true;
       if (userExist) {
-        final User user = User(
+        final u.User user = u.User(
             uid: "4234324",
             email: "crazy@gmail.com",
             name: "Alice",
@@ -72,7 +72,7 @@ class UserRepository {
     }
   }
 
-  Future<Either<ErrorHandler, User>> login(
+  Future<Either<ErrorHandler, u.User>> login(
       String email, String password) async {
     try {
       final logIn = await _authService.logIn(email, password);

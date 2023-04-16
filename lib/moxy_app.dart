@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moxy/route_delegates.dart';
-import 'package:moxy/screens/authentication/authentication_state.dart';
+import 'package:moxy/domain/authentication_state.dart';
 import 'package:moxy/screens/dashboard/dashboard_state.dart';
 import 'package:moxy/theme/app_theme.dart';
 import 'package:provider/provider.dart';
