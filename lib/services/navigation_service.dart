@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/screens/authentication/authentication_view.dart';
 import 'package:moxy/screens/dashboard/pages/customers/customers_page.dart';
@@ -14,7 +15,7 @@ import '../screens/dashboard/pages/create_product/create_product_page.dart';
 import '../screens/dashboard/pages/products/products_page.dart';
 import '../screens/dashboard/pages/overview/overview_page.dart';
 import 'get_it.dart';
-import 'dart:html' as html;
+import "package:universal_html/html.dart" as html;
 
 class NavigationService {
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();

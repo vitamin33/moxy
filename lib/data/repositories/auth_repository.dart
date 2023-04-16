@@ -12,9 +12,9 @@ class AuthRepository {
   AuthRepository._private();
 
   Future<LoginResponse> loginWithCredentials(
-      String email, String password, bool rememberMe) async {
+      String email, String password) async {
     try {
-      final result = await client.login(email, password, rememberMe);
+      final result = await client.login(email, password);
       final token = result.data?.token;
       final userId = result.data?.uniqueId;
       if (result.success && token != null && userId != null) {

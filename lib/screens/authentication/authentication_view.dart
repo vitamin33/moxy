@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/components/app_scaffold.dart';
 import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/components/rounded_card.dart';
@@ -8,66 +9,90 @@ import 'package:moxy/domain/authentication_state.dart';
 import 'package:moxy/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
+import '../../components/snackbar_widgets.dart';
+import '../../domain/auth/login_cubit.dart';
+import '../../domain/auth/login_state.dart';
+
 class AuthenticationView extends StatelessWidget {
   const AuthenticationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<AuthenticationState>();
-    return AppScaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(AppTheme.cardPadding),
-        child: Column(
-          children: [
-            Image.asset(ImagePath.logo, width: 120),
-            const SizedBox(height: AppTheme.cardPadding * 2),
-            SizedBox(
-              width: 500,
-              child: RoundedCard(
-                color: AppTheme.darkBlue,
-                child: Padding(
-                  padding: const EdgeInsets.all(AppTheme.cardPadding),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Login",
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      const SizedBox(height: AppTheme.cardPadding),
-                      MoxyTextfield(
-                        title: "Email Address",
-                        controller: state.emailController,
-                        autofillHints: const [
-                          AutofillHints.email,
-                        ],
-                      ),
-                      const SizedBox(height: AppTheme.elementSpacing),
-                      MoxyTextfield(
-                        title: "Password",
-                        controller: state.passwordController,
-                        autofillHints: const [
-                          AutofillHints.password,
-                        ],
-                      ),
-                      const SizedBox(height: AppTheme.cardPadding),
-                      MoxyButton(
-                        title: "Login to your account",
-                        state: state.isLoading
-                            ? ButtonState.loading
-                            : (state.emailIsValid
-                                ? ButtonState.idle
-                                : ButtonState.disabled),
-                        onTap: state.login,
-                      ),
-                      const SizedBox(height: AppTheme.cardPadding),
-                    ],
+    return BlocConsumer<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state.state is LoginFailed) {
+          showFailureSnackbar(context, 'Unable to login. Please try again.');
+        } else if (state.state is LoginWithCredsSuccess) {
+          showSuccessSnackbar(context);
+        }
+      },
+      builder: (context, state) => AppScaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(AppTheme.cardPadding),
+          child: Column(
+            children: [
+              Image.asset(ImagePath.logo, width: 120),
+              const SizedBox(height: AppTheme.cardPadding * 2),
+              SizedBox(
+                width: 500,
+                child: RoundedCard(
+                  color: AppTheme.darkBlue,
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppTheme.cardPadding),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Login",
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        const SizedBox(height: AppTheme.cardPadding),
+                        MoxyTextfield(
+                          title: "Email Address",
+                          onChanged: (value) =>
+                              context.read<LoginCubit>().emailChanged(value),
+                          autofillHints: const [
+                            AutofillHints.email,
+                          ],
+                        ),
+                        const SizedBox(height: AppTheme.elementSpacing),
+                        MoxyTextfield(
+                          title: "Password",
+                          onChanged: (value) =>
+                              context.read<LoginCubit>().passwordChanged(value),
+                          autofillHints: const [
+                            AutofillHints.password,
+                          ],
+                        ),
+                        const SizedBox(height: AppTheme.cardPadding),
+                        MoxyButton(
+                          title: "Login to your account",
+                          state: state.state is Loading
+                              ? ButtonState.loading
+                              : (state.emailIsValid
+                                  ? ButtonState.idle
+                                  : ButtonState.disabled),
+                          onTap: () =>
+                              context.read<LoginCubit>().logInWithCredentials(),
+                        ),
+                        const SizedBox(height: AppTheme.cardPadding),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void showSuccessSnackbar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess());
+  }
+
+  void showFailureSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(snackBarWhenFailure(snackBarFailureText: message));
   }
 }

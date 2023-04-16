@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:moxy/route_delegates.dart';
-import 'package:moxy/domain/authentication_state.dart';
-import 'package:moxy/screens/dashboard/dashboard_state.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoxyApp extends StatelessWidget {
   const MoxyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => AuthenticationState()),
-        ChangeNotifierProvider(create: (context) => DashboardState()),
+    return MultiBlocProvider(
+      providers: <BlocProvider<dynamic>>[
+        BlocProvider<LoginCubit>(
+          create: (BuildContext context) => LoginCubit(),
+        ),
+        BlocProvider<DashboardCubit>(
+          create: (BuildContext context) => DashboardCubit(),
+        ),
       ],
       child: MaterialApp.router(
         theme: AppTheme.theme,

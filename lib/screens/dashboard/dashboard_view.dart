@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:provider/provider.dart';
 import '../../components/app_scaffold.dart';
 import '../../services/navigation_service.dart';
 import 'components/navigation_drawer.dart';
-import 'dashboard_state.dart';
 
 class DashboardView extends StatelessWidget {
   final String currentPath;
@@ -11,13 +11,13 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<DashboardState>();
+    final cubit = context.read<DashboardCubit>();
 
     return AppScaffold(
       body: Row(
         children: [
           ValueListenableBuilder<bool>(
-            valueListenable: state.navigationService.showNavigationBar,
+            valueListenable: cubit.navigationService.showNavigationBar,
             builder: (context, show, _) {
               if (!show) return const SizedBox.shrink();
               return const DashboardDrawer();
@@ -26,10 +26,10 @@ class DashboardView extends StatelessWidget {
           Expanded(
             child: ClipRRect(
               child: Navigator(
-                key: state.navigationService.navigatorKey,
+                key: cubit.navigationService.navigatorKey,
                 observers: [RouteObservers()],
                 initialRoute: currentPath,
-                onGenerateRoute: state.navigationService.onGeneratedRoute,
+                onGenerateRoute: cubit.navigationService.onGeneratedRoute,
               ),
             ),
           ),

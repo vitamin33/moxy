@@ -6,19 +6,7 @@ import 'models/response/login_response.dart';
 
 class DioClient {
   static const String baseUrl = 'http://localhost:3000';
-  //static const String baseUrl = 'https://miles-away-backend.herokuapp.com';
-  static const String checkTokenValidUrl =
-      '/api/v1/auth/check-token-valid-external';
-  static const String loginUserUrl = '/api/v1/auth/login-user';
-  static const String signUpUrl = '/api/v1/auth/create-new-user';
-  static const String getUserUrl = '/api/v1/user';
-  static const String getUserDashboardUrl = '/api/v1/user/dashboard';
-  static const String redeemMilesdUrl = '/api/v1/user/redeem';
-  static const String verifyAccountUrl =
-      '/api/v1/auth/verification/verify-account';
-  static const String checkSignatureUrl = '/api/v1/auth/signature';
-  static const String nonceUrl = '/api/v1/auth/nonce';
-  static const String checkWalletAddressUrl = '/api/v1/auth/check';
+  static const String loginUserUrl = '/auth/login';
 
   static final DioClient instance = DioClient._private();
 
@@ -41,8 +29,7 @@ class DioClient {
         maxWidth: 90));
   }
 
-  Future<LoginResponse> login(
-      String email, String password, bool rememberMe) async {
+  Future<LoginResponse> login(String email, String password) async {
     LoginRequest request = LoginRequest(email: email, password: password);
 
     LoginResponse result = LoginResponse(false, "Failed to login.", null);
