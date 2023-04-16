@@ -10,8 +10,10 @@ import 'package:moxy/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/snackbar_widgets.dart';
+import '../../constant/route_name.dart';
 import '../../domain/auth/login_cubit.dart';
 import '../../domain/auth/login_state.dart';
+import '../../services/navigation_service.dart';
 
 class AuthenticationView extends StatelessWidget {
   const AuthenticationView({Key? key}) : super(key: key);
@@ -20,10 +22,16 @@ class AuthenticationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
+        final cubit = context.read<LoginCubit>();
         if (state.state is LoginFailed) {
           showFailureSnackbar(context, 'Unable to login. Please try again.');
+          cubit.clearState();
         } else if (state.state is LoginWithCredsSuccess) {
-          showSuccessSnackbar(context);
+          navigatePushReplaceName(overview);
+          cubit.clearState();
+        } else if (state.state is Logout) {
+          navigatePushReplaceName(authPath);
+          cubit.clearState();
         }
       },
       builder: (context, state) => AppScaffold(

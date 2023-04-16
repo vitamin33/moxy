@@ -11,21 +11,21 @@ class AuthRepository {
 
   AuthRepository._private();
 
-  Future<LoginResponse> loginWithCredentials(
-      String email, String password) async {
+  Future<bool> loginWithCredentials(String email, String password) async {
     try {
       final result = await client.login(email, password);
-      final token = result.data?.token;
-      final userId = result.data?.uniqueId;
-      if (result.success && token != null && userId != null) {
+      final token = result?.token;
+      final userId = result?.userId;
+      if (token != null && userId != null) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(tokenKey, token);
         await prefs.setString(userIdKey, userId);
         print('Success login, saved token: $token');
+        return true;
       } else {
         print('Failed durring login!');
+        return false;
       }
-      return result;
     } catch (e) {
       rethrow;
     }
@@ -39,5 +39,10 @@ class AuthRepository {
     } catch (e) {
       print('Failed logout.');
     }
+  }
+
+  Future<bool> checkLoggedInState() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.containsKey(tokenKey) && prefs.containsKey(userIdKey);
   }
 }

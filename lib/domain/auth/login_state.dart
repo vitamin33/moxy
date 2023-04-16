@@ -28,6 +28,14 @@ class LoginWithCredsSuccess extends AuthState {
   LoginWithCredsSuccess();
 }
 
+class Logout extends AuthState {
+  Logout();
+}
+
+class LogoutFailed extends AuthState {
+  LogoutFailed();
+}
+
 class LoginFailed extends AuthState {
   LoginFailed({
     required this.message,

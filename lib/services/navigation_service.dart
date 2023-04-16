@@ -83,7 +83,8 @@ class NavigationService {
   }
 
   void navigatePushReplaceName(String path) {
-    navigatorKey.currentState!.pushNamedAndRemoveUntil(path, (route) => false);
+    navigatorKey.currentState!
+        .pushNamedAndRemoveUntil(path, (route) => route.isFirst);
   }
 }
 

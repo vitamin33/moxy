@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/route_name.dart';
+import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constant/image_path.dart';
@@ -14,7 +16,7 @@ class DashboardDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<DashboardState>();
+    final cubit = context.read<LoginCubit>();
 
     return ClipRRect(
       child: Container(
@@ -55,7 +57,7 @@ class DashboardDrawer extends StatelessWidget {
             const Divider(color: AppTheme.white, height: 0, thickness: 0.1),
             const SizedBox(height: AppTheme.cardPadding * 0.5),
             InkWell(
-              onTap: state.logOut,
+              onTap: () => cubit.signOut(),
               child: Text(
                 'Logout',
                 style: Theme.of(context).textTheme.button?.copyWith(

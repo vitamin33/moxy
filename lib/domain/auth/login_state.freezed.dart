@@ -18,21 +18,27 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$LoginState {
   String get email => throw _privateConstructorUsedError;
   String get password => throw _privateConstructorUsedError;
+  bool get isLoggedIn => throw _privateConstructorUsedError;
   AuthState get state => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String email, String password, AuthState state)
+    required TResult Function(
+            String email, String password, bool isLoggedIn, AuthState state)
         initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String password, AuthState state)? initial,
+    TResult? Function(
+            String email, String password, bool isLoggedIn, AuthState state)?
+        initial,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String password, AuthState state)? initial,
+    TResult Function(
+            String email, String password, bool isLoggedIn, AuthState state)?
+        initial,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -64,7 +70,7 @@ abstract class $LoginStateCopyWith<$Res> {
           LoginState value, $Res Function(LoginState) then) =
       _$LoginStateCopyWithImpl<$Res, LoginState>;
   @useResult
-  $Res call({String email, String password, AuthState state});
+  $Res call({String email, String password, bool isLoggedIn, AuthState state});
 }
 
 /// @nodoc
@@ -82,6 +88,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   $Res call({
     Object? email = null,
     Object? password = null,
+    Object? isLoggedIn = null,
     Object? state = null,
   }) {
     return _then(_value.copyWith(
@@ -93,6 +100,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      isLoggedIn: null == isLoggedIn
+          ? _value.isLoggedIn
+          : isLoggedIn // ignore: cast_nullable_to_non_nullable
+              as bool,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -108,7 +119,7 @@ abstract class _$$_InitialCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
       __$$_InitialCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String email, String password, AuthState state});
+  $Res call({String email, String password, bool isLoggedIn, AuthState state});
 }
 
 /// @nodoc
@@ -123,6 +134,7 @@ class __$$_InitialCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? password = null,
+    Object? isLoggedIn = null,
     Object? state = null,
   }) {
     return _then(_$_Initial(
@@ -134,6 +146,10 @@ class __$$_InitialCopyWithImpl<$Res>
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
               as String,
+      isLoggedIn: null == isLoggedIn
+          ? _value.isLoggedIn
+          : isLoggedIn // ignore: cast_nullable_to_non_nullable
+              as bool,
       state: null == state
           ? _value.state
           : state // ignore: cast_nullable_to_non_nullable
@@ -146,7 +162,10 @@ class __$$_InitialCopyWithImpl<$Res>
 
 class _$_Initial extends _Initial {
   const _$_Initial(
-      {this.email = '', this.password = '', this.state = const AuthState()})
+      {this.email = '',
+      this.password = '',
+      this.isLoggedIn = false,
+      this.state = const AuthState()})
       : super._();
 
   @override
@@ -157,11 +176,14 @@ class _$_Initial extends _Initial {
   final String password;
   @override
   @JsonKey()
+  final bool isLoggedIn;
+  @override
+  @JsonKey()
   final AuthState state;
 
   @override
   String toString() {
-    return 'LoginState.initial(email: $email, password: $password, state: $state)';
+    return 'LoginState.initial(email: $email, password: $password, isLoggedIn: $isLoggedIn, state: $state)';
   }
 
   @override
@@ -172,11 +194,14 @@ class _$_Initial extends _Initial {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.password, password) ||
                 other.password == password) &&
+            (identical(other.isLoggedIn, isLoggedIn) ||
+                other.isLoggedIn == isLoggedIn) &&
             (identical(other.state, state) || other.state == state));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, email, password, state);
+  int get hashCode =>
+      Object.hash(runtimeType, email, password, isLoggedIn, state);
 
   @JsonKey(ignore: true)
   @override
@@ -187,28 +212,33 @@ class _$_Initial extends _Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String email, String password, AuthState state)
+    required TResult Function(
+            String email, String password, bool isLoggedIn, AuthState state)
         initial,
   }) {
-    return initial(email, password, state);
+    return initial(email, password, isLoggedIn, state);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String email, String password, AuthState state)? initial,
+    TResult? Function(
+            String email, String password, bool isLoggedIn, AuthState state)?
+        initial,
   }) {
-    return initial?.call(email, password, state);
+    return initial?.call(email, password, isLoggedIn, state);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String email, String password, AuthState state)? initial,
+    TResult Function(
+            String email, String password, bool isLoggedIn, AuthState state)?
+        initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(email, password, state);
+      return initial(email, password, isLoggedIn, state);
     }
     return orElse();
   }
@@ -246,6 +276,7 @@ abstract class _Initial extends LoginState {
   const factory _Initial(
       {final String email,
       final String password,
+      final bool isLoggedIn,
       final AuthState state}) = _$_Initial;
   const _Initial._() : super._();
 
@@ -253,6 +284,8 @@ abstract class _Initial extends LoginState {
   String get email;
   @override
   String get password;
+  @override
+  bool get isLoggedIn;
   @override
   AuthState get state;
   @override

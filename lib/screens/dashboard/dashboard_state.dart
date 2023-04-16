@@ -7,9 +7,4 @@ import '../../services/get_it.dart';
 class DashboardState extends BaseState {
   final userRepo = locate<UserRepository>();
   final navigationService = locate<NavigationService>();
-
-  logOut() {
-    userRepo.logout();
-    navigatePushReplaceName(authPath);
-  }
 }

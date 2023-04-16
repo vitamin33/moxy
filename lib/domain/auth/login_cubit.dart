@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
-import '../../constant/route_name.dart';
 import '../../data/repositories/user_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
@@ -19,7 +18,9 @@ class LoginCubit extends Cubit<LoginState> {
   late TextEditingController passwordController;
   String walletConnectURI = '';
 
-  LoginCubit() : super(const LoginState.initial());
+  LoginCubit() : super(const LoginState.initial()) {
+    _checkLoggedInState();
+  }
 
   void emailChanged(String value) {
     final email = value;
@@ -42,11 +43,12 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await authRepository.loginWithCredentials(
           state.email, state.password);
 
-      if (result.success) {
+      if (result) {
         emit(state.copyWith(state: LoginWithCredsSuccess()));
-        navigatePushReplaceName(overview);
       } else {
-        emit(state.copyWith(state: LoginFailed(message: result.message)));
+        emit(state.copyWith(
+            state:
+                LoginFailed(message: 'Unable to login. Try one more time.')));
       }
     } on Exception catch (error) {
       emit(state.copyWith(state: LoginFailed(message: error.toString())));
@@ -58,13 +60,20 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(state: Loading()));
       await authRepository.logout();
       await storage.clear();
-      emit(state.copyWith(state: LoginWithCredsSuccess()));
-    } on Exception catch (error) {
-      emit(state.copyWith(state: LoginFailed(message: error.toString())));
+      emit(state.copyWith(state: Logout()));
+    } catch (error) {
+      emit(state.copyWith(state: LogoutFailed()));
     }
   }
 
-  void clearErrorState() {
+  void clearState() {
     emit(state.copyWith(state: const AuthState()));
+  }
+
+  _checkLoggedInState() async {
+    bool isLoggedIn = await authRepository.checkLoggedInState();
+    if (isLoggedIn) {
+      emit(state.copyWith(state: LoginWithCredsSuccess()));
+    }
   }
 }

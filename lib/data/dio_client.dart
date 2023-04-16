@@ -29,28 +29,20 @@ class DioClient {
         maxWidth: 90));
   }
 
-  Future<LoginResponse> login(String email, String password) async {
+  Future<LoginResponse?> login(String email, String password) async {
     LoginRequest request = LoginRequest(email: email, password: password);
 
-    LoginResponse result = LoginResponse(false, "Failed to login.", null);
+    LoginResponse result;
     try {
       Response response = await _dio.post(
         loginUserUrl,
         data: request.toJson(),
       );
 
-      print('Login response: ${response.data}');
-
       result = LoginResponse.fromJson(response.data);
-    } on DioError catch (e) {
-      final res = e.response;
-      if (res != null) {
-        result.message = LoginResponse.fromJson(res.data).message;
-      }
-      return result;
     } catch (e) {
       print('During login: $e');
-      return result;
+      return null;
     }
     return result;
   }
