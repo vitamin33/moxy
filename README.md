@@ -1,6 +1,6 @@
 # moxy
 
-A new Flutter project.
+Ecommerce shop with Flutter for Web and Mobile.
 
 ## Getting Started
 
