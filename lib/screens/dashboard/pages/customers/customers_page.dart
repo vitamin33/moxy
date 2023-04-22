@@ -6,11 +6,8 @@ class CustomersPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      appbar: AppBar(
-        title: const Text("Customers"),
-      ),
-      body: Container(),
+    return Container(
+      child: const Text('Customer page'),
     );
   }
 }

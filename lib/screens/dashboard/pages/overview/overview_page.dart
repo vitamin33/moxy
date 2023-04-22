@@ -6,11 +6,8 @@ class OverviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      appbar: AppBar(
-        title: const Text("Overview"),
-      ),
-      body: Container(),
+    return Container(
+      child: Text('Overview'),
     );
   }
 }

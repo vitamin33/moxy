@@ -25,38 +25,32 @@ class CreateProductPage extends StatelessWidget {
       Pricing(),
       Summary(),
     ];
-
-    return AppScaffold(
-      appbar: AppBar(
-        title: const Text("Create Product"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(AppTheme.cardPadding * 2),
-        child: RoundedCard(
-          padding: const EdgeInsets.all(AppTheme.elementSpacing),
-          child: Column(
-            children: [
-              CreateProductProgress(
-                count: (state.currentPage + 1) * 25,
-                onChangePage: (int page) {
-                  if (state.visitedPages.contains(page)) {
-                    state.animateToPage(page);
-                  }
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.cardPadding * 2),
+      child: RoundedCard(
+        padding: const EdgeInsets.all(AppTheme.elementSpacing),
+        child: Column(
+          children: [
+            CreateProductProgress(
+              count: (state.currentPage + 1) * 25,
+              onChangePage: (int page) {
+                if (state.visitedPages.contains(page)) {
+                  state.animateToPage(page);
+                }
+              },
+            ),
+            SizedBox(height: AppTheme.cardPadding),
+            Expanded(
+              child: PageView.builder(
+                controller: state.pageController,
+                onPageChanged: state.onChangePage,
+                itemCount: pages.length,
+                itemBuilder: (context, index) {
+                  return pages[index];
                 },
               ),
-              SizedBox(height: AppTheme.cardPadding),
-              Expanded(
-                child: PageView.builder(
-                  controller: state.pageController,
-                  onPageChanged: state.onChangePage,
-                  itemCount: pages.length,
-                  itemBuilder: (context, index) {
-                    return pages[index];
-                  },
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

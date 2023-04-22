@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/components/app_scaffold.dart';
 
 class CreateCategoryPage extends StatelessWidget {
   const CreateCategoryPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      appbar: AppBar(
-        title: const Text("Product Category"),
-      ),
-      body: Container(),
+    return Container(
+      child: const Text('Product category'),
     );
   }
 }

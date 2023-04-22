@@ -28,7 +28,7 @@ List<Menu> menus = const [
       Menu(
         title: 'Create Order',
         icon: Icons.create_sharp,
-        route: createCategoryPath,
+        route: createOrderPath,
         subRoutes: [],
       ),
       Menu(

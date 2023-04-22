@@ -6,11 +6,8 @@ class FeedbacksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      appbar: AppBar(
-        title: const Text("Feedbacks"),
-      ),
-      body: Container(),
+    return Container(
+      child: const Text('Feedbacks'),
     );
   }
 }

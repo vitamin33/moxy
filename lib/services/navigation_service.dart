@@ -6,6 +6,7 @@ import 'package:moxy/screens/dashboard/pages/customers/customers_page.dart';
 import 'package:moxy/screens/dashboard/pages/feedbacks/feedbacks_page.dart';
 import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
 import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart';
+import 'package:moxy/utils/common.dart';
 
 import '../constant/route_name.dart';
 import '../data/repositories/auth_repository.dart';
@@ -20,6 +21,7 @@ class NavigationService {
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   ValueNotifier<String> routeNotifier = ValueNotifier<String>(authPath);
+  ValueNotifier<String> titleNotifier = ValueNotifier<String>('');
 
   ValueNotifier<bool> showNavigationBar = ValueNotifier<bool>(false);
 
@@ -29,6 +31,11 @@ class NavigationService {
 
   set setNavigationBar(bool value) {
     showNavigationBar.value = value;
+    showNavigationBar.notifyListeners();
+  }
+
+  void toggleNavigationBar() {
+    showNavigationBar.value = !showNavigationBar.value;
     showNavigationBar.notifyListeners();
   }
 
@@ -46,6 +53,7 @@ class NavigationService {
       case authPath:
         return navigateToPageRoute(settings, const AuthenticationView());
       case overview:
+      case root:
         return navigateToPageRoute(settings, const OverviewPage());
       case customerPath:
         return navigateToPageRoute(settings, const CustomersPage());
@@ -58,7 +66,7 @@ class NavigationService {
       case transactionPath:
         return navigateToPageRoute(settings, const TransactionsPage());
 
-      case createCategoryPath:
+      case createOrderPath:
         return navigateToPageRoute(settings, const CreateCategoryPage());
       case createProductPath:
         return navigateToPageRoute(settings, const CreateProductView());
@@ -79,7 +87,36 @@ class NavigationService {
     );
   }
 
+  String _mapPathToTitle(String path) {
+    moxyPrint('Path: $path');
+    switch (path) {
+      case overview:
+        return 'Dashboard';
+      case authPath:
+        return 'Login';
+      case productsPath:
+        return 'Products';
+      case customerPath:
+        return 'Customers';
+      case ordersPath:
+        return 'Orders';
+      case createPath:
+        return 'Create';
+      case transactionPath:
+        return 'Transactions';
+      case feedbackPath:
+        return 'Reviews';
+      case createProductPath:
+        return 'Create product';
+      case createOrderPath:
+        return 'Create order';
+    }
+    return '';
+  }
+
   void navigatePushReplaceName(String path) {
+    moxyPrint('Path: $path');
+    titleNotifier.value = _mapPathToTitle(path);
     navigatorKey.currentState!
         .pushNamedAndRemoveUntil(path, (route) => route.isFirst);
   }

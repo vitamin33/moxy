@@ -1,3 +1,4 @@
+const String root = '/';
 const String authPath = '/authentication';
 const String welcomePath = '/welcome';
 const String overview = '/overview';
@@ -7,5 +8,5 @@ const String createPath = '/createPath';
 const String productsPath = '/products';
 const String transactionPath = '/transactions';
 const String feedbackPath = '/feedbacks';
-const String createCategoryPath = '/create_category';
+const String createOrderPath = '/create_order';
 const String createProductPath = '/create_product';

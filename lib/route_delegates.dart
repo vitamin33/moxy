@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
-import 'package:moxy/screens/dashboard/dashboard_view.dart';
+import 'package:moxy/screens/dashboard/dashboard_view_mobile.dart';
+import 'package:moxy/screens/dashboard/dashboard_view_web.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation_service.dart';
 
@@ -12,7 +14,13 @@ class UrlHandlerRouterDelegate extends RouterDelegate<String> {
 
   @override
   Widget build(BuildContext context) {
-    return DashboardView(currentPath: navigationService.determineHomePath());
+    if (kIsWeb) {
+      return DashboardViewWeb(
+          currentPath: navigationService.determineHomePath());
+    } else {
+      return DashboardViewMobile(
+          currentPath: navigationService.determineHomePath());
+    }
   }
 
   @override

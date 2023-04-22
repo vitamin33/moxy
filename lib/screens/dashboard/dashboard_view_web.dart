@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:provider/provider.dart';
@@ -5,9 +6,10 @@ import '../../components/app_scaffold.dart';
 import '../../services/navigation_service.dart';
 import 'components/navigation_drawer.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardViewWeb extends StatelessWidget {
   final String currentPath;
-  const DashboardView({Key? key, required this.currentPath}) : super(key: key);
+  const DashboardViewWeb({Key? key, required this.currentPath})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
