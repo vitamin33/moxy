@@ -42,7 +42,7 @@ class AuthenticationView extends StatelessWidget {
               SizedBox(
                 width: 500,
                 child: RoundedCard(
-                  color: AppTheme.darkBlue,
+                  color: Theme.of(context).cardColor,
                   child: Padding(
                     padding: const EdgeInsets.all(AppTheme.cardPadding),
                     child: Column(

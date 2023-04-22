@@ -33,23 +33,17 @@ class ProductDetails extends StatelessWidget {
           ),
           const SizedBox(height: AppTheme.cardPadding),
           DropdownButtonFormField<String>(
-            dropdownColor: AppTheme.darkBlue,
+            dropdownColor: Theme.of(context).dialogBackgroundColor,
             hint: Text(
               "Select Category",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1
-                  ?.copyWith(color: AppTheme.white.withOpacity(.6)),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
             items: categories
                 .map((e) => DropdownMenuItem(
                       value: e,
                       child: Text(
                         e,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: AppTheme.white),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ))
                 .toList(),

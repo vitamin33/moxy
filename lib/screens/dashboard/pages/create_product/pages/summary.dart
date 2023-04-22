@@ -74,9 +74,9 @@ class Summary extends StatelessWidget {
           Row(
             children: [
               CupertinoSwitch(
-                activeColor: AppTheme.red,
+                activeColor: Theme.of(context).primaryColor,
                 value: state.isLive,
-                trackColor: AppTheme.black,
+                trackColor: Theme.of(context).unselectedWidgetColor,
                 onChanged: state.setLive,
               ),
               const SizedBox(width: AppTheme.elementSpacing),
@@ -137,7 +137,7 @@ class SummaryTextCard extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(AppTheme.elementSpacing),
           decoration: BoxDecoration(
-            color: AppTheme.black,
+            color: Theme.of(context).canvasColor,
             borderRadius: BorderRadius.circular(15),
           ),
           child: SelectableText(

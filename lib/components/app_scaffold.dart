@@ -23,23 +23,24 @@ class AppScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = AppTheme.size(context);
+    final theme = Theme.of(context);
 
     return Scaffold(
       appBar: appbar,
       endDrawer: endDrawer,
-      backgroundColor: AppTheme.lightBackground,
+      backgroundColor: theme.primaryColorLight,
       drawer: drawer,
       floatingActionButton: floatingActionButton,
       bottomNavigationBar: bottomNavigationBar,
       body: Container(
         width: size.width,
         height: size.height,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: RadialGradient(
             radius: 1.5,
             colors: [
-              AppTheme.blackLight,
-              AppTheme.black,
+              theme.primaryColorLight,
+              theme.primaryColorDark,
             ],
           ),
         ),

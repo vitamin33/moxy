@@ -47,6 +47,8 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
                 isHover = v;
               });
             },
+            hoverColor: Theme.of(context).hoverColor,
+            focusColor: Theme.of(context).focusColor,
             onTap: () {
               navigatePushReplaceName(initialRoute);
             },
@@ -54,9 +56,6 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
               padding: const EdgeInsets.all(AppTheme.elementSpacing),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
-                color: isHover
-                    ? AppTheme.white.withOpacity(.1)
-                    : Colors.transparent,
               ),
               child: Row(
                 children: [
@@ -65,19 +64,21 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
                     child: Row(
                       children: [
                         Icon(icon,
-                            color: isTapped ? AppTheme.red : AppTheme.white),
+                            color: isTapped
+                                ? AppTheme.primaryColor
+                                : AppTheme.onPrimaryContainerColor),
                         const SizedBox(width: AppTheme.elementSpacing),
                         Text(
                           title,
-                          style: Theme.of(context)
-                              .textTheme
-                              .subtitle1
-                              ?.copyWith(
-                                color: isTapped ? AppTheme.red : AppTheme.white,
-                                fontWeight: isTapped
-                                    ? FontWeight.w700
-                                    : FontWeight.w500,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.titleSmall?.copyWith(
+                                    color: isTapped
+                                        ? AppTheme.primaryColor
+                                        : AppTheme.onPrimaryContainerColor,
+                                    fontWeight: isTapped
+                                        ? FontWeight.w700
+                                        : FontWeight.w500,
+                                  ),
                         ),
                       ],
                     ),
@@ -111,20 +112,24 @@ class NavigationBarCardList extends StatelessWidget {
           horizontalTitleGap: AppTheme.elementSpacing * 1.5,
           minLeadingWidth: 10,
           child: ExpansionTile(
-            backgroundColor: AppTheme.white.withOpacity(.1),
+            backgroundColor: Theme.of(context).canvasColor,
             tilePadding: const EdgeInsets.symmetric(
               horizontal: AppTheme.elementSpacing,
               vertical: AppTheme.elementSpacing * 0.25,
             ),
             childrenPadding:
                 const EdgeInsets.only(left: AppTheme.elementSpacing),
-            iconColor: AppTheme.white,
+            iconColor: Theme.of(context).iconTheme.color,
             leading: Icon(menu.icon,
-                color: isTapped ? AppTheme.orange : AppTheme.white),
+                color: isTapped
+                    ? AppTheme.primaryColor
+                    : AppTheme.onPrimaryContainerColor),
             title: Text(
               menu.title,
               style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                    color: isTapped ? AppTheme.red : AppTheme.white,
+                    color: isTapped
+                        ? AppTheme.primaryColor
+                        : AppTheme.onPrimaryContainerColor,
                     fontWeight: isTapped ? FontWeight.w700 : FontWeight.w500,
                   ),
             ),

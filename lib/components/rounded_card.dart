@@ -26,18 +26,18 @@ class RoundedCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: color != null
               ? null
-              : RadialGradient(
+              : const RadialGradient(
                   radius: 1.5,
                   colors: [
-                    AppTheme.purpleDark.withOpacity(.4),
-                    AppTheme.purpleDark,
+                    AppTheme.primaryContainerColor,
+                    AppTheme.surfaceColor,
                   ],
                 ),
           borderRadius: BorderRadius.circular(8),
-          color: color ?? AppTheme.white,
+          color: color ?? Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
-              color: AppTheme.black.withOpacity(0.3),
+              color: Theme.of(context).shadowColor.withOpacity(0.3),
               blurRadius: 8,
               spreadRadius: 8,
             ),
@@ -55,17 +55,17 @@ class RoundedCard extends StatelessWidget {
             title!,
             style: Theme.of(context)
                 .textTheme
-                .headline6
-                ?.copyWith(color: AppTheme.black, fontWeight: FontWeight.w600),
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.w600),
           ),
         if (title != null) const SizedBox(height: AppTheme.elementSpacing),
         Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
-              color: AppTheme.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: AppTheme.dimGrey.withOpacity(0.2),
+                  color: Theme.of(context).shadowColor.withOpacity(0.2),
                   blurRadius: 8,
                   spreadRadius: 6,
                 ),

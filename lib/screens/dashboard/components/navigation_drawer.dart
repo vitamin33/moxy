@@ -19,8 +19,8 @@ class DashboardDrawer extends StatelessWidget {
       child: Container(
         width: AppTheme.drawerWidth,
         height: AppTheme.size(context).height,
-        decoration: const BoxDecoration(
-          color: AppTheme.darkBlue,
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
         ),
         child: Column(
           children: [
@@ -40,7 +40,10 @@ class DashboardDrawer extends StatelessWidget {
               ],
             ),
             const SizedBox(height: AppTheme.elementSpacing * 0.85),
-            const Divider(color: AppTheme.white, height: 0, thickness: 0.1),
+            Divider(
+                color: Theme.of(context).dividerColor,
+                height: 0,
+                thickness: 0.1),
             const SizedBox(height: AppTheme.elementSpacing),
             Expanded(
               child: ListView.builder(
@@ -51,17 +54,29 @@ class DashboardDrawer extends StatelessWidget {
                 },
               ),
             ),
-            const Divider(color: AppTheme.white, height: 0, thickness: 0.1),
+            Divider(
+                color: Theme.of(context).dividerColor,
+                height: 0,
+                thickness: 0.1),
             const SizedBox(height: AppTheme.cardPadding * 0.5),
             InkWell(
-              onTap: () => cubit.signOut(),
+              onTap: () => {
+                cubit.signOut(),
+                navigatePushReplaceName(authPath),
+                Scaffold.of(context).closeDrawer()
+              },
+              focusColor: AppTheme.primaryColor,
+              highlightColor: AppTheme.primaryColor,
+              splashColor: AppTheme.primaryColor,
               child: Text(
                 'Logout',
-                style: Theme.of(context).textTheme.button?.copyWith(
-                    color: AppTheme.white, fontWeight: FontWeight.w800),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(fontWeight: FontWeight.w800),
               ),
             ),
-            const SizedBox(height: AppTheme.elementSpacing),
+            const SizedBox(height: AppTheme.elementSpacing * 3),
           ],
         ),
       ),

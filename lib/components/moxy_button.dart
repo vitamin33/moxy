@@ -29,7 +29,8 @@ class MoxyButton extends StatefulWidget {
 class _MoxyButtonState extends State<MoxyButton> {
   @override
   Widget build(BuildContext context) {
-    final defaultColor = widget.gradiant ?? [AppTheme.red, AppTheme.darkBlue];
+    final defaultColor = widget.gradiant ??
+        [Theme.of(context).primaryColor, Theme.of(context).focusColor];
     final disabled = [ButtonState.disabled].contains(widget.state);
     return InkWell(
       onTap: disabled ? null : widget.onTap,
@@ -38,7 +39,7 @@ class _MoxyButtonState extends State<MoxyButton> {
         constraints: const BoxConstraints(minWidth: 300),
         decoration: BoxDecoration(
             color: disabled
-                ? AppTheme.black.withOpacity(.8)
+                ? Theme.of(context).disabledColor
                 : defaultColor.length < 2
                     ? defaultColor.first
                     : null,
@@ -52,8 +53,9 @@ class _MoxyButtonState extends State<MoxyButton> {
             ? Center(
                 child: Transform.scale(
                     scale: 0.6,
-                    child: const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(AppTheme.white),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(
+                          Theme.of(context).primaryColor),
                     )))
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -66,9 +68,7 @@ class _MoxyButtonState extends State<MoxyButton> {
                     ),
                   Text(
                     widget.title,
-                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color:
-                            disabled ? AppTheme.white.withOpacity(.6) : null),
+                    style: Theme.of(context).textTheme.titleSmall,
                   ),
                 ],
               ),
@@ -102,7 +102,8 @@ class MoxyCircleButton extends StatefulWidget {
 class _MoxyCircleButtonState extends State<MoxyCircleButton> {
   @override
   Widget build(BuildContext context) {
-    final defaultColor = widget.gradiant ?? [AppTheme.red, AppTheme.darkBlue];
+    final defaultColor = widget.gradiant ??
+        [Theme.of(context).primaryColor, Theme.of(context).focusColor];
     return InkWell(
       onTap: widget.onTap,
       child: Container(
@@ -119,8 +120,9 @@ class _MoxyCircleButtonState extends State<MoxyCircleButton> {
             ? Center(
                 child: Transform.scale(
                     scale: 0.6,
-                    child: const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(AppTheme.white),
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(
+                          Theme.of(context).highlightColor),
                     )))
             : widget.icon,
       ),

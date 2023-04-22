@@ -5,16 +5,24 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:json_theme/json_theme.dart';
 
 import 'package:moxy/main.dart';
 import 'package:moxy/moxy_app.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+    final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
+    final themeJson = jsonDecode(themeStr);
+    final theme = ThemeDecoder.decodeThemeData(themeJson)!;
+    final darkTheme = ThemeDecoder.decodeThemeData(themeJson)!;
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MoxyApp());
+    await tester.pumpWidget(MoxyApp(theme, darkTheme));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

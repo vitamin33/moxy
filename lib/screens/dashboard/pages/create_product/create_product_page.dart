@@ -26,9 +26,9 @@ class CreateProductPage extends StatelessWidget {
       Summary(),
     ];
     return Padding(
-      padding: const EdgeInsets.all(AppTheme.cardPadding * 2),
+      padding: const EdgeInsets.all(AppTheme.cardPadding),
       child: RoundedCard(
-        padding: const EdgeInsets.all(AppTheme.elementSpacing),
+        //padding: const EdgeInsets.all(AppTheme.elementSpacing),
         child: Column(
           children: [
             CreateProductProgress(

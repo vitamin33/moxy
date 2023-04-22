@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:moxy/route_delegates.dart';
-import 'package:moxy/theme/app_theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MoxyApp extends StatelessWidget {
-  const MoxyApp({Key? key}) : super(key: key);
+  ThemeData theme;
+  ThemeData darkTheme;
+  MoxyApp(this.theme, this.darkTheme, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class MoxyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        theme: AppTheme.theme,
+        theme: theme,
+        darkTheme: darkTheme,
         title: 'Moxy Admin Panel',
         shortcuts: {
           LogicalKeySet(LogicalKeyboardKey.space): const ActivateIntent(),

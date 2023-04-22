@@ -63,6 +63,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
   universal_html: ^2.2.1
+  json_theme: ^4.0.0
 
 dev_dependencies:
   flutter_test:
@@ -92,6 +93,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/appainter_theme.json
 
   fonts:
     - family: OpenSans
@@ -103,13 +105,4 @@ flutter:
         - asset: assets/fonts/OpenSans-SemiBold.ttf
           weight: 600
         - asset: assets/fonts/OpenSans-Bold.ttf
-          weight: 700
-
-    - family: ArimaMadurai
-      fonts:
-        - asset: assets/fonts/ArimaMadurai-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/ArimaMadurai-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/ArimaMadurai-Bold.ttf
           weight: 700

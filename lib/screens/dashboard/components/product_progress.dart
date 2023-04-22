@@ -49,16 +49,16 @@ class CreateProductProgress extends StatelessWidget {
                         CircleAvatar(
                           radius: 35,
                           backgroundColor: hightlight <= count
-                              ? AppTheme.red
-                              : AppTheme.black,
+                              ? Theme.of(context).highlightColor
+                              : Theme.of(context).canvasColor,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Icon(
                               tabs[index].icon,
                               size: 50,
                               color: hightlight <= count
-                                  ? AppTheme.white
-                                  : AppTheme.blackLight,
+                                  ? Theme.of(context).highlightColor
+                                  : Theme.of(context).iconTheme.color,
                             ),
                           ),
                         ),
@@ -67,12 +67,14 @@ class CreateProductProgress extends StatelessWidget {
                           tabs[index].title,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle2
+                              .headlineMedium
                               ?.copyWith(
                                   fontWeight: FontWeight.bold,
                                   color: hightlight <= count
-                                      ? AppTheme.white
-                                      : AppTheme.white.withOpacity(.5)),
+                                      ? Theme.of(context).highlightColor
+                                      : Theme.of(context)
+                                          .highlightColor
+                                          .withOpacity(.5)),
                         )
                       ],
                     ),

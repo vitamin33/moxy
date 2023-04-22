@@ -23,7 +23,7 @@ List<Menu> menus = const [
   Menu(
     title: 'Create',
     icon: Icons.add_circle_outline,
-    route: '',
+    route: '/',
     subRoutes: [
       Menu(
         title: 'Create Order',

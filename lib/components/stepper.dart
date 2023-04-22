@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 
@@ -17,7 +18,7 @@ class StepperProgressBar extends StatelessWidget {
       width: width,
       decoration: BoxDecoration(
         borderRadius: borderRaduis,
-        color: AppTheme.black,
+        color: Theme.of(context).highlightColor,
       ),
       child: Stack(
         children: [
@@ -27,7 +28,7 @@ class StepperProgressBar extends StatelessWidget {
             height: 8,
             width: (count / 100) * (width * 0.7),
             decoration: BoxDecoration(
-              color: AppTheme.red,
+              color: Theme.of(context).primaryColor,
               borderRadius: borderRaduis,
             ),
           ),
