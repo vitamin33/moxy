@@ -22,7 +22,7 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
   Widget build(BuildContext context) => Navigator(
         key: navigatorKey,
         pages: List.from([
-          _materialPage(valueKey: "overview", child: OverviewPage()),
+          //_materialPage(valueKey: "overview", child: OverviewPage()),
           ..._extraPages,
         ]),
         onPopPage: _onPopPageParser,
@@ -48,6 +48,16 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
 
   List<Page> get _extraPages {
     String? extraPageContent;
+    if (_routerCubit.state is OverviewPageState) {
+      extraPageContent =
+          (_routerCubit.state as OverviewPageState).extraPageContent;
+      return [
+        _materialPage(
+          valueKey: "overview",
+          child: OverviewPage(),
+        ),
+      ];
+    }
     if (_routerCubit.state is ProductsPageState) {
       extraPageContent =
           (_routerCubit.state as ProductsPageState).extraPageContent;

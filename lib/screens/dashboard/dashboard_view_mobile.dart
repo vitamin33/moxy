@@ -11,28 +11,24 @@ class DashboardViewMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<DashboardCubit>();
     return Overlay(
       initialEntries: [
         OverlayEntry(
           builder: (context) {
-            return ValueListenableBuilder<String>(
-              valueListenable: cubit.navigationService.titleNotifier,
-              builder: (context, title, _) {
-                return mobileWidget(cubit, title);
-              },
-            );
+            return BlocBuilder<HomeRouterCubit, HomeRouterState>(
+                builder: (context, state) => mobileWidget(state));
           },
         ),
       ],
     );
   }
 
-  Widget mobileWidget(DashboardCubit cubit, String title) {
+  Widget mobileWidget(HomeRouterState state) {
     return AppScaffold(
         appbar: AppBar(
+          elevation: 10,
           title: Row(children: [
-            Text(title),
+            Text(_mapStateToTitleText(state)),
           ]),
           leading: Builder(
             builder: (BuildContext context) {
@@ -61,4 +57,26 @@ class DashboardViewMobile extends StatelessWidget {
           backButtonDispatcher: RootBackButtonDispatcher(),
         ),
       );
+
+  String _mapStateToTitleText(HomeRouterState state) {
+    switch (state.runtimeType) {
+      case OverviewPageState:
+        return 'Dashboard';
+      case ProductsPageState:
+        return 'Products';
+      case CustomersPageState:
+        return 'Customers';
+      case OrdersPageState:
+        return 'Orders';
+      case CreateProductPageState:
+        return 'Create product';
+      case CreateOrderPageState:
+        return 'Create order';
+      case TransactionsPageState:
+        return 'Transactions';
+      case FeedbacksPageState:
+        return 'Feedbacks';
+    }
+    return 'Dashboard';
+  }
 }

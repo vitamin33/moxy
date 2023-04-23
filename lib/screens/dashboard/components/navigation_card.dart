@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 
 import '../../../constant/menu.dart';
-import '../../../services/get_it.dart';
-import '../../../services/navigation_service.dart';
 import '../../../theme/app_theme.dart';
 
 class NavigationBarCard extends StatefulWidget {
@@ -19,8 +17,6 @@ class NavigationBarCard extends StatefulWidget {
 }
 
 class _NavigationBarCardState extends State<NavigationBarCard> {
-  final routerCubit = locate<HomeRouterCubit>();
-
   bool isHover = false;
 
   @override
@@ -51,7 +47,7 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
             hoverColor: Theme.of(context).hoverColor,
             focusColor: Theme.of(context).focusColor,
             onTap: () {
-              routerCubit.navigateTo(initialRoute);
+              context.read<HomeRouterCubit>().navigateTo(initialRoute);
             },
             child: Container(
               padding: const EdgeInsets.all(AppTheme.elementSpacing),

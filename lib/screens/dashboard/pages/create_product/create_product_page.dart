@@ -18,7 +18,9 @@ class CreateProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO fix this, create CreateProductCubit and get state from there
     final state = context.watch<CreateProductState>();
+
     List<Widget> pages = const [
       ProductDetails(),
       Branding(),
