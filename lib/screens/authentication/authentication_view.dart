@@ -26,7 +26,6 @@ class AuthenticationView extends StatelessWidget {
           cubit.clearState();
         } else if (state.state is LoginWithCredsSuccess) {
           navigatePushReplaceName(overview);
-          cubit.clearState();
         } else if (state.state is Logout) {
           navigatePushReplaceName(authPath);
           cubit.clearState();

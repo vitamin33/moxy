@@ -1,10 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
+import 'package:moxy/domain/auth/auth_cubit.dart';
+import 'package:moxy/domain/auth/auth_state.dart';
 import 'package:moxy/screens/dashboard/dashboard_view_mobile.dart';
 import 'package:moxy/screens/dashboard/dashboard_view_web.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation_service.dart';
+import 'package:moxy/utils/common.dart';
 
 import 'constant/route_name.dart';
 
@@ -14,13 +18,11 @@ class UrlHandlerRouterDelegate extends RouterDelegate<String> {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return DashboardViewWeb(
-          currentPath: navigationService.determineHomePath());
-    } else {
-      return DashboardViewMobile(
-          currentPath: navigationService.determineHomePath());
-    }
+    return BlocConsumer<AuthCubit, AuthorizedState>(
+        listener: (context, state) =>
+            {moxyPrint('DashboarViewMobile, state: ${state.isAuthorized}')},
+        buildWhen: (previous, current) => previous != current,
+        builder: (context, state) => buildPlatformWidget(state.isAuthorized));
   }
 
   @override
@@ -37,7 +39,7 @@ class UrlHandlerRouterDelegate extends RouterDelegate<String> {
   @override
   Future<void> setNewRoutePath(configuration) async {
     bool hasUser = await authRepository.checkLoggedInState();
-    if (hasUser && configuration != authPath) {
+    if (hasUser && configuration != authPath && configuration != root) {
       if (!navigationService.pathToCloseNavigationBar.contains(configuration)) {
         navigationService.setNavigationBar = true;
       }
@@ -45,10 +47,21 @@ class UrlHandlerRouterDelegate extends RouterDelegate<String> {
       navigatePushReplaceName(configuration);
     } else {
       if (hasUser) {
-        navigatePushReplaceName(authPath);
-      } else {
         navigatePushReplaceName(overview);
+      } else {
+        navigatePushReplaceName(authPath);
       }
+    }
+  }
+
+  Widget buildPlatformWidget(bool hasUser) {
+    if (kIsWeb) {
+      return DashboardViewWeb(
+          currentPath: navigationService.determineHomePath(hasUser));
+    } else {
+      return DashboardViewMobile(
+          isAuthorized: hasUser,
+          currentPath: navigationService.determineHomePath(hasUser));
     }
   }
 }

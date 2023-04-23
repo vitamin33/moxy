@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moxy/domain/auth/auth_cubit.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:moxy/route_delegates.dart';
@@ -14,6 +15,9 @@ class MoxyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
+        BlocProvider<AuthCubit>(
+          create: (BuildContext context) => AuthCubit(),
+        ),
         BlocProvider<LoginCubit>(
           create: (BuildContext context) => LoginCubit(),
         ),
