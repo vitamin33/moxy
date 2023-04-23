@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class ImagePickerService {
   /// Returns byte lists of selected images, or null if no image was selected
@@ -20,10 +19,6 @@ class ImagePickerService {
 
   Future<String> uploadImageToDefaultBucket(Uint8List image, String storagePath,
       {String ref = 'products'}) async {
-    Reference firebaseStorageRef =
-        FirebaseStorage.instance.ref(ref).child(storagePath);
-    UploadTask uploadTask = firebaseStorageRef.putData(image);
-    TaskSnapshot taskSnapshot = await uploadTask;
-    return taskSnapshot.ref.getDownloadURL();
+    return '';
   }
 }
