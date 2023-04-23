@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +28,7 @@ class DashboardViewWeb extends StatelessWidget {
             child: ClipRRect(
               child: Navigator(
                 key: cubit.navigationService.navigatorKey,
-                observers: [RouteObservers()],
+                //observers: [RouteObservers()],
                 initialRoute: currentPath,
                 onGenerateRoute: cubit.navigationService.onGeneratedRoute,
               ),

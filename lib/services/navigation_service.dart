@@ -53,7 +53,7 @@ class NavigationService {
         return navigateToPageRoute(settings, const AuthenticationView());
       case overview:
       case root:
-        return navigateToPageRoute(settings, const OverviewPage());
+        return navigateToPageRoute(settings, OverviewPage());
       case customerPath:
         return navigateToPageRoute(settings, const CustomersPage());
       case ordersPath:
@@ -66,7 +66,7 @@ class NavigationService {
         return navigateToPageRoute(settings, const TransactionsPage());
 
       case createOrderPath:
-        return navigateToPageRoute(settings, const CreateCategoryPage());
+        return navigateToPageRoute(settings, const CreateOrderPage());
       case createProductPath:
         return navigateToPageRoute(settings, const CreateProductView());
     }

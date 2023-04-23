@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/constant/route_name.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/navigation/home_router_cubit.dart';
+import 'package:moxy/navigation/root_router_cubit.dart';
 import 'package:provider/provider.dart';
 import '../../../constant/image_path.dart';
 import '../../../constant/menu.dart';
-import '../../../services/navigation_service.dart';
 import '../../../theme/app_theme.dart';
 import 'navigation_card.dart';
 
@@ -14,6 +14,8 @@ class DashboardDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
+    final navCubit = context.read<HomeRouterCubit>();
+    final navRootCubit = context.read<RootRouterCubit>();
 
     return ClipRRect(
       child: Container(
@@ -29,7 +31,7 @@ class DashboardDrawer extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    navigatePushReplaceName(overview);
+                    navCubit.goToOverview();
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -62,7 +64,7 @@ class DashboardDrawer extends StatelessWidget {
             InkWell(
               onTap: () => {
                 cubit.signOut(),
-                navigatePushReplaceName(authPath),
+                navRootCubit.goToAuth(),
                 Scaffold.of(context).closeDrawer()
               },
               focusColor: AppTheme.primaryColor,

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
+import 'package:moxy/navigation/home_router_cubit.dart';
 import 'package:moxy/services/navigation_service.dart';
 
 import '../data/repositories/product_repository.dart';
@@ -14,6 +15,7 @@ class GetItService {
     getIt.registerSingleton<ISecureStorageRepository>(
         SecureStorageRepository.instance);
     getIt.registerSingleton<NavigationService>(NavigationService());
+    getIt.registerSingleton<HomeRouterCubit>(HomeRouterCubit());
     getIt.registerSingleton<ProductRepository>(ProductRepository());
     getIt.registerSingleton<ImagePickerService>(ImagePickerService());
   }

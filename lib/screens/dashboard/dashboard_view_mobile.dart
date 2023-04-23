@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
+import 'package:moxy/navigation/home_router_delegate.dart';
 import '../../components/app_scaffold.dart';
-import '../../services/navigation_service.dart';
-import '../../utils/common.dart';
+import '../../navigation/home_router_cubit.dart';
 import 'components/navigation_drawer.dart';
 
 class DashboardViewMobile extends StatelessWidget {
-  final String currentPath;
-  final bool isAuthorized;
-  const DashboardViewMobile(
-      {Key? key, required this.isAuthorized, required this.currentPath})
-      : super(key: key);
+  DashboardViewMobile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,33 +29,36 @@ class DashboardViewMobile extends StatelessWidget {
   }
 
   Widget mobileWidget(DashboardCubit cubit, String title) {
-    moxyPrint('Build mobile widget, IsAuthorized: $isAuthorized');
     return AppScaffold(
-      appbar: AppBar(
-        title: Row(children: [
-          Text(title),
-        ]),
-        leading: isAuthorized
-            ? Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                    tooltip: 'Open side bar',
-                  );
+        appbar: AppBar(
+          title: Row(children: [
+            Text(title),
+          ]),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
                 },
-              )
-            : null,
-      ),
-      drawer: isAuthorized ? const DashboardDrawer() : null,
-      body: Navigator(
-        key: cubit.navigationService.navigatorKey,
-        observers: [RouteObservers()],
-        initialRoute: currentPath,
-        onGenerateRoute: cubit.navigationService.onGeneratedRoute,
-      ),
-    );
+                tooltip: 'Open side bar',
+              );
+            },
+          ),
+        ),
+        drawer: const DashboardDrawer(),
+        body: _routers);
   }
+
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  Widget get _routers => BlocBuilder<HomeRouterCubit, HomeRouterState>(
+        builder: (context, state) => Router(
+          routerDelegate: HomeRouterDelegate(
+            navigatorKey,
+            context.read<HomeRouterCubit>(),
+          ),
+          backButtonDispatcher: RootBackButtonDispatcher(),
+        ),
+      );
 }
