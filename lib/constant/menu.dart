@@ -1,40 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/route_name.dart';
+import 'package:moxy/navigation/home_router_cubit.dart';
 
 List<Menu> menus = const [
   Menu(
     title: 'Overview',
     icon: Icons.analytics_outlined,
-    route: overview,
+    route: OverviewPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Customers',
     icon: Icons.group_outlined,
-    route: customerPath,
+    route: CustomersPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Orders',
     icon: Icons.local_shipping,
-    route: ordersPath,
+    route: OrdersPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Create',
     icon: Icons.add_circle_outline,
-    route: '/',
+    route: EmptyState(),
     subRoutes: [
       Menu(
         title: 'Create Order',
         icon: Icons.create_sharp,
-        route: createOrderPath,
+        route: CreateOrderPageState(),
         subRoutes: [],
       ),
       Menu(
         title: 'Create Product',
         icon: Icons.create,
-        route: createProductPath,
+        route: CreateProductPageState(),
         subRoutes: [],
       ),
     ],
@@ -42,13 +43,13 @@ List<Menu> menus = const [
   Menu(
     title: 'Transactions',
     icon: Icons.monetization_on_outlined,
-    route: transactionPath,
+    route: TransactionsPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Feedbacks',
     icon: Icons.reviews_outlined,
-    route: feedbackPath,
+    route: FeedbacksPageState(),
     subRoutes: [],
   ),
 ];
@@ -57,13 +58,13 @@ List<Menu> menus = const [
 class Menu {
   final String title;
   final IconData icon;
-  final String route;
+  final HomeRouterState route;
   final List<Menu> subRoutes;
 
   const Menu({
     required this.title,
     required this.icon,
-    this.route = overview,
+    this.route = const OverviewPageState(),
     this.subRoutes = const [],
   });
 }

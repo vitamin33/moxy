@@ -9,7 +9,6 @@ import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart
 import 'package:moxy/utils/common.dart';
 
 import '../constant/route_name.dart';
-import '../data/repositories/auth_repository.dart';
 import '../screens/dashboard/pages/create_category/create_category_page.dart';
 import '../screens/dashboard/pages/create_product/create_product_page.dart';
 import '../screens/dashboard/pages/products/products_page.dart';
@@ -39,7 +38,7 @@ class NavigationService {
     showNavigationBar.notifyListeners();
   }
 
-  String determineHomePath({bool hasUser = false}) {
+  String determineHomePath(bool hasUser) {
     if (hasUser) {
       return overview;
     }
@@ -54,7 +53,7 @@ class NavigationService {
         return navigateToPageRoute(settings, const AuthenticationView());
       case overview:
       case root:
-        return navigateToPageRoute(settings, const OverviewPage());
+        return navigateToPageRoute(settings, OverviewPage());
       case customerPath:
         return navigateToPageRoute(settings, const CustomersPage());
       case ordersPath:
@@ -67,7 +66,7 @@ class NavigationService {
         return navigateToPageRoute(settings, const TransactionsPage());
 
       case createOrderPath:
-        return navigateToPageRoute(settings, const CreateCategoryPage());
+        return navigateToPageRoute(settings, const CreateOrderPage());
       case createProductPath:
         return navigateToPageRoute(settings, const CreateProductView());
     }

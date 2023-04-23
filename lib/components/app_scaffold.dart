@@ -26,26 +26,12 @@ class AppScaffold extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: appbar,
-      endDrawer: endDrawer,
-      backgroundColor: theme.primaryColorLight,
-      drawer: drawer,
-      floatingActionButton: floatingActionButton,
-      bottomNavigationBar: bottomNavigationBar,
-      body: Container(
-        width: size.width,
-        height: size.height,
-        decoration: BoxDecoration(
-          gradient: RadialGradient(
-            radius: 1.5,
-            colors: [
-              theme.primaryColorLight,
-              theme.primaryColorDark,
-            ],
-          ),
-        ),
-        child: body,
-      ),
-    );
+        appBar: appbar,
+        endDrawer: endDrawer,
+        backgroundColor: theme.canvasColor,
+        drawer: drawer,
+        floatingActionButton: floatingActionButton,
+        bottomNavigationBar: bottomNavigationBar,
+        body: body);
   }
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/navigation/home_router_cubit.dart';
 
 import '../../../constant/menu.dart';
-import '../../../services/get_it.dart';
-import '../../../services/navigation_service.dart';
 import '../../../theme/app_theme.dart';
 
 class NavigationBarCard extends StatefulWidget {
@@ -17,8 +17,6 @@ class NavigationBarCard extends StatefulWidget {
 }
 
 class _NavigationBarCardState extends State<NavigationBarCard> {
-  final navigationService = locate<NavigationService>();
-
   bool isHover = false;
 
   @override
@@ -28,10 +26,9 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
     final icon = widget.menu.icon;
     final subItems = widget.menu.subRoutes;
 
-    return ValueListenableBuilder<String>(
-      valueListenable: navigationService.routeNotifier,
-      builder: (context, value, _) {
-        final isTapped = initialRoute == value;
+    return BlocBuilder<HomeRouterCubit, HomeRouterState>(
+      builder: (context, state) {
+        final isTapped = initialRoute == state;
 
         if (subItems.isNotEmpty) {
           return NavigationBarCardList(menu: widget.menu, isTapped: isTapped);
@@ -50,7 +47,7 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
             hoverColor: Theme.of(context).hoverColor,
             focusColor: Theme.of(context).focusColor,
             onTap: () {
-              navigatePushReplaceName(initialRoute);
+              context.read<HomeRouterCubit>().navigateTo(initialRoute);
             },
             child: Container(
               padding: const EdgeInsets.all(AppTheme.elementSpacing),

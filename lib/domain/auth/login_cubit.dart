@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
   String walletConnectURI = '';
 
   LoginCubit() : super(const LoginState.initial()) {
-    _checkLoggedInState();
+    //_checkLoggedInState();
   }
 
   void emailChanged(String value) {

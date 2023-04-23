@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/services/navigation_service.dart';
-
 import '../data/repositories/product_repository.dart';
 import '../data/secure_storage_repository.dart';
 import 'image_picker_service.dart';

@@ -5,6 +5,7 @@ import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/components/rounded_card.dart';
 import 'package:moxy/components/textfield.dart';
 import 'package:moxy/constant/image_path.dart';
+import 'package:moxy/navigation/root_router_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
 
 import '../../components/snackbar_widgets.dart';
@@ -18,6 +19,7 @@ class AuthenticationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rootNavCubit = context.read<RootRouterCubit>();
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         final cubit = context.read<LoginCubit>();
@@ -25,10 +27,9 @@ class AuthenticationView extends StatelessWidget {
           showFailureSnackbar(context, 'Unable to login. Please try again.');
           cubit.clearState();
         } else if (state.state is LoginWithCredsSuccess) {
-          navigatePushReplaceName(overview);
+          rootNavCubit.goToMain();
           cubit.clearState();
         } else if (state.state is Logout) {
-          navigatePushReplaceName(authPath);
           cubit.clearState();
         }
       },
