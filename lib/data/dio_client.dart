@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../constant/route_name.dart';
 import 'models/request/login_request.dart';
+import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
@@ -45,5 +47,35 @@ class DioClient {
       return null;
     }
     return result;
+  }
+
+  Future<CreateProduct?> createProduct(
+    String name,
+    String description,
+    int costPrice,
+    double salePrice,
+    double regularPrice,
+    String color,
+    String image,
+  ) async {
+    var result = null;
+    CreateProduct request = CreateProduct(
+        name: name,
+        description: description,
+        costPrice: costPrice,
+        salePrice: salePrice,
+        regularPrice: regularPrice,
+        color: color,
+        image: image);
+    try {
+         Response response = await _dio.post(
+        createProductPath,
+        data: request.toJson(),
+      );
+      print('Create product: ${response.headers}');
+      result = CreateProduct.fromJson(response.data);
+    } catch (e) {
+      print('Request product :$e');
+    }
   }
 }
