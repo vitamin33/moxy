@@ -13,6 +13,7 @@ class CreateProduct {
   final double salePrice;
   final String color;
   final String image;
+ final File? imageFile;
 
   CreateProduct(
       {required this.name,
@@ -21,10 +22,12 @@ class CreateProduct {
       required this.regularPrice,
       required this.salePrice,
       required this.color,
-      required this.image});
+      required this.image,
+      this.imageFile});
       
     factory CreateProduct.fromJson(Map<String, dynamic> json) =>
       _$CreateProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreateProductToJson(this);
+
 }

@@ -71,7 +71,8 @@ class RoundedCard extends StatelessWidget {
                 ),
               ],
             ),
-            child: child),
+            child: 
+            child),
       ],
     );
   }

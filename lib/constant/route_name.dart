@@ -9,4 +9,5 @@ const String productsPath = '/products';
 const String transactionPath = '/transactions';
 const String feedbackPath = '/feedbacks';
 const String createOrderPath = '/create_order';
-const String createProductPath = '/create_product';
+// const String createProductPath = '/create_product';
+const String createProductPath = '/products/create';
