@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:path/path.dart';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -59,21 +60,24 @@ class DioClient {
     double salePrice,
     double regularPrice,
     String color,
-    String image,
+    List<String> images,
   ) async {
     var result = null;
-    CreateProduct request = CreateProduct(
-        name: name,
-        description: description,
-        costPrice: costPrice,
-        salePrice: salePrice,
-        regularPrice: regularPrice,
-        color: color,
-        image:image );
+    String fileName = basename(images.first);
+    FormData formData = FormData.fromMap({
+      'name': name,
+      'description': description,
+      'costPrice': costPrice,
+      'salePrice': salePrice,
+      'regularPrice': regularPrice,
+      'color': color,
+      'images': await MultipartFile.fromFile(images.first, filename: fileName)
+    });
+
     try {
       Response response = await _dio.post(
         createProductPath,
-        data: request.toJson(),
+        data: formData,
       );
       print('Create product: ${response.headers}');
       result = CreateProduct.fromJson(response.data);

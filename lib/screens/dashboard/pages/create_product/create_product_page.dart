@@ -32,7 +32,7 @@ class CreateProductPage extends StatelessWidget {
               child: Padding(
                   padding: const EdgeInsets.all(AppTheme.cardPadding),
                   child: Container(
-                    width: 400,
+                    width: double.maxFinite,
                     height: 550,
                     child: RoundedCard(
                         padding: const EdgeInsets.all(0),
@@ -92,15 +92,3 @@ class CreateProductPage extends StatelessWidget {
     });
   }
 }
-
-// class CreateProductView extends StatelessWidget {
-//   const CreateProductView({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ChangeNotifierProvider(
-//       create: (_) =>$ProductStateCopyWith,
-//       child: const CreateProductPage(),
-//     );
-//   }
-// }

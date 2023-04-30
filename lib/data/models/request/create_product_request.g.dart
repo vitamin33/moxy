@@ -14,7 +14,8 @@ CreateProduct _$CreateProductFromJson(Map<String, dynamic> json) =>
       regularPrice: (json['regularPrice'] as num).toDouble(),
       salePrice: (json['salePrice'] as num).toDouble(),
       color: json['color'] as String,
-      image: json['image'] as String,
+      images:
+          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$CreateProductToJson(CreateProduct instance) =>
@@ -25,5 +26,5 @@ Map<String, dynamic> _$CreateProductToJson(CreateProduct instance) =>
       'regularPrice': instance.regularPrice,
       'salePrice': instance.salePrice,
       'color': instance.color,
-      'image': instance.image,
+      'images': instance.images,
     };

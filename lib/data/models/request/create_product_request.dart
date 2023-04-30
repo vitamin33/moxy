@@ -12,22 +12,21 @@ class CreateProduct {
   final double regularPrice;
   final double salePrice;
   final String color;
-  final String image;
- final File? imageFile;
+  final List<String> images;
+  //final File? imageFile;
 
-  CreateProduct(
-      {required this.name,
-      required this.description,
-      required this.costPrice,
-      required this.regularPrice,
-      required this.salePrice,
-      required this.color,
-      required this.image,
-      this.imageFile});
-      
-    factory CreateProduct.fromJson(Map<String, dynamic> json) =>
+  CreateProduct({
+    required this.name,
+    required this.description,
+    required this.costPrice,
+    required this.regularPrice,
+    required this.salePrice,
+    required this.color,
+    required this.images,
+  });
+
+  factory CreateProduct.fromJson(Map<String, dynamic> json) =>
       _$CreateProductFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreateProductToJson(this);
-
 }

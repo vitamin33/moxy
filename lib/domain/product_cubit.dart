@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,9 +6,6 @@ import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/product_state.dart';
 import 'package:moxy/services/image_picker_service.dart';
-import 'package:moxy/services/navigation_service.dart';
-import 'package:moxy/utils/common.dart';
-import 'package:random_string/random_string.dart';
 
 import '../services/get_it.dart';
 
@@ -19,8 +14,6 @@ class CreateProductCubit extends Cubit<ProductState> {
 
   final productRepository = locate<ProductRepository>();
   final imagePickerService = locate<ImagePickerService>();
-
-
 
   final TextEditingController salePriceController = TextEditingController();
   final TextEditingController regularPriceController = TextEditingController();
@@ -38,7 +31,7 @@ class CreateProductCubit extends Cubit<ProductState> {
       regularPrice: state.regularPrice ?? 0,
       salePrice: state.salePrice ?? 0,
       color: state.color,
-      image: state.image,
+      images: state.images,
     );
     final pushProduct = await productRepository.addProduct(product);
   }
@@ -59,14 +52,17 @@ class CreateProductCubit extends Cubit<ProductState> {
 
   Future<void> pickImage() async {
     try {
-      final pickedFile = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 50,
-      );
-      if (pickedFile != null) {
-        final file = File(pickedFile.path);
-        final imagePath = file.path;
-        emit(state.copyWith(image: imagePath));
+      final pickedFiles = await ImagePicker().pickMultiImage();
+      final images = <String>[];
+      if (pickedFiles.isNotEmpty) {
+        pickedFiles.every((element) {
+          final file = File(element.path);
+          final imagePath = file.path;
+          images.add(imagePath);
+          return true;
+        });
+
+        emit(state.copyWith(images: images));
       }
     } catch (e) {
       debugPrint('$e');
@@ -107,5 +103,4 @@ class CreateProductCubit extends Cubit<ProductState> {
     final String color = value;
     emit(state.copyWith(color: color));
   }
- 
 }

@@ -26,9 +26,9 @@ class Branding extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  state.image != ''
+                  state.images.isNotEmpty
                       ? Image.file(
-                          File(state.image),
+                          File(state.images.first),
                           width: 100,
                           height: 100,
                         )
