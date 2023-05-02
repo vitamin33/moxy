@@ -15,7 +15,7 @@ class CreateProductCubit extends Cubit<ProductState> {
   final productRepository = locate<ProductRepository>();
 
   final TextEditingController salePriceController = TextEditingController();
-  final TextEditingController warehouseQuantityController = TextEditingController();
+  final TextEditingController warehouseQuantityController =TextEditingController();
   final TextEditingController costPriceController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -23,17 +23,32 @@ class CreateProductCubit extends Cubit<ProductState> {
   final PageController pageController = PageController(initialPage: 0);
 
   Future<bool> addProduct() async {
-    final product = CreateProduct(
-      name: state.name,
-      description: state.description,
-      costPrice: state.costPrice,
-      warehouseQuantity: state.warehouseQuantity,
-      salePrice: state.salePrice,
-      color: state.color,
-      images: state.images,
-    );
-    final pushProduct = await productRepository.addProduct(product);
-    return true;
+    try {
+      final product = CreateProduct(
+        name: state.name,
+        description: state.description,
+        costPrice: state.costPrice,
+        warehouseQuantity: state.warehouseQuantity,
+        salePrice: state.salePrice,
+        color: state.color,
+        images: state.images,
+      );
+      final pushProduct = await productRepository.addProduct(product);
+      if (pushProduct != null) {
+        nameController.clear();
+        descriptionController.clear();
+        costPriceController.clear();
+        warehouseQuantityController.clear();
+        salePriceController.clear();
+        colorController.clear();
+        emit(state.copyWith(activePage: 0));
+        clearState();
+      }
+      return true;
+    } catch (e) {
+      moxyPrint(e);
+      return false;
+    }
   }
 
   Future<void> pickImage() async {
@@ -109,5 +124,11 @@ class CreateProductCubit extends Cubit<ProductState> {
     } else {
       return;
     }
+  }
+
+  void clearState() {
+    emit(const ProductState.initial());
+    pageController.animateToPage(0,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 }

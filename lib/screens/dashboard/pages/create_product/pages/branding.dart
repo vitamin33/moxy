@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import '../../../../../domain/product_state.dart';
 
 class Branding extends StatelessWidget {
@@ -54,7 +53,6 @@ class Branding extends StatelessWidget {
                       child: const Text('Pick Image from Gallery'),
                       onPressed: () {
                         cubit.pickImage();
-                        moxyPrint('${state.images}');
                       }),
                 ],
               ),
@@ -79,25 +77,31 @@ class Branding extends StatelessWidget {
                     const SizedBox(width: AppTheme.cardPadding),
                     Expanded(
                       child: TextField(
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: 'Sale Price(\$)',
-                        ),
-                        controller: cubit.salePriceController,
-                        onChanged: (value) => {cubit.salePriceChanged(value)},
-                      ),
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            hintText: 'Sale Price(\$)',
+                          ),
+                          controller: cubit.salePriceController,
+                          onChanged: (value) => {cubit.salePriceChanged(value)},
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(16),
+                          ]),
                     ),
                     const SizedBox(width: AppTheme.cardPadding),
                     Expanded(
                       child: TextField(
-                        decoration: const InputDecoration(
-                          border: UnderlineInputBorder(),
-                          hintText: 'WarehouseQuantity',
-                        ),
-                        controller: cubit.warehouseQuantityController,
-                        onChanged: (value) =>
-                            {cubit.warehouseQuantityChanged(value)},
-                      ),
+                          decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            hintText: 'WarehouseQuantity',
+                          ),
+                          controller: cubit.warehouseQuantityController,
+                          onChanged: (value) =>
+                              {cubit.warehouseQuantityChanged(value)},
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(16),
+                          ]),
                     ),
                   ],
                 ),

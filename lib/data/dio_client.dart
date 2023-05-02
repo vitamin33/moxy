@@ -62,7 +62,16 @@ class DioClient {
     List<String> images,
   ) async {
     final CreateProduct result;
-    String fileName = basename(images.first);
+    List<MultipartFile> imageFiles = [];
+    for (String image in images) {
+      String fileName = basename(image);
+      imageFiles.add(
+        await MultipartFile.fromFile(
+          image,
+          filename: fileName,
+        ),
+      );
+    }
     FormData formData = FormData.fromMap({
       'name': name,
       'description': description,
@@ -70,7 +79,7 @@ class DioClient {
       'salePrice': salePrice,
       'warehouseQuantity': warehouseQuantity,
       'color': color,
-      'images': await MultipartFile.fromFile(images.first, filename: fileName)
+      'images': imageFiles
     });
     try {
       Response response = await _dio.post(
@@ -81,7 +90,7 @@ class DioClient {
       return result;
     } catch (e) {
       moxyPrint('Request product :$e');
+      return null;
     }
-    return null;
   }
 }

@@ -22,7 +22,7 @@ class ProductDetails extends StatelessWidget {
                     hintText: 'Name',
                   ),
                   controller: cubit.nameController,
-                  onChanged: (value) => cubit.nameChanged(value)),
+                  onChanged: (value) => cubit.nameChanged(value)  ),
               TextField(
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
