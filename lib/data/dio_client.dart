@@ -1,10 +1,10 @@
-import 'dart:io';
+import 'package:moxy/utils/common.dart';
 import 'package:path/path.dart';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-import '../constant/route_name.dart';
+import '../constant/api_path.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
@@ -44,10 +44,9 @@ class DioClient {
         loginUserUrl,
         data: request.toJson(),
       );
-
       result = LoginResponse.fromJson(response.data);
     } catch (e) {
-      print('During login: $e');
+      moxyPrint('During login: $e');
       return null;
     }
     return result;
@@ -56,75 +55,33 @@ class DioClient {
   Future<CreateProduct?> createProduct(
     String name,
     String description,
-    int costPrice,
+    int warehouseQuantity,
+    double costPrice,
     double salePrice,
-    double regularPrice,
     String color,
     List<String> images,
   ) async {
-    var result = null;
+    final CreateProduct result;
     String fileName = basename(images.first);
     FormData formData = FormData.fromMap({
       'name': name,
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'regularPrice': regularPrice,
+      'warehouseQuantity': warehouseQuantity,
       'color': color,
       'images': await MultipartFile.fromFile(images.first, filename: fileName)
     });
-
     try {
       Response response = await _dio.post(
-        createProductPath,
+        createProductApiPath,
         data: formData,
       );
-      print('Create product: ${response.headers}');
       result = CreateProduct.fromJson(response.data);
+      return result;
     } catch (e) {
-      print('Request product :$e');
+      moxyPrint('Request product :$e');
     }
+    return null;
   }
 }
-
-
-// Future<CreateProduct?> createProduct(
-//     String name,
-//     String description,
-//     int costPrice,
-//     double salePrice,
-//     double regularPrice,
-//     String color,
-//     File image,
-// ) async {
-//     var result = null;
-//     CreateProduct request = CreateProduct(
-//         name: name,
-//         description: description,
-//         costPrice: costPrice,
-//         salePrice: salePrice,
-//         regularPrice: regularPrice,
-//         color: color,
-//         image: image,
-//     );
-//     try {
-//         final formData = FormData.fromMap({
-//             'name': name,
-//             'description': description,
-//             'costPrice': costPrice,
-//             'salePrice': salePrice,
-//             'regularPrice': regularPrice,
-//             'color': color,
-//             'image': await MultipartFile.fromFile(image.path),
-//         });
-//         Response response = await _dio.post(
-//             createProductPath,
-//             data: formData,
-//         );
-//         print('Create product: ${response.headers}');
-//         result = CreateProduct.fromJson(response.data);
-//     } catch (e) {
-//         print('Request product :$e');
-//     }
-//     return result;
-// }

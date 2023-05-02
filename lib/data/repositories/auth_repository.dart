@@ -1,3 +1,4 @@
+import 'package:moxy/utils/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
@@ -20,10 +21,10 @@ class AuthRepository {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString(tokenKey, token);
         await prefs.setString(userIdKey, userId);
-        print('Success login, saved token: $token');
+        moxyPrint('Success login, saved token: $token');
         return true;
       } else {
-        print('Failed durring login!');
+        moxyPrint('Failed durring login!');
         return false;
       }
     } catch (e) {
@@ -35,9 +36,9 @@ class AuthRepository {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
-      print('Successfult logout completed.');
+      moxyPrint('Successfult logout completed.');
     } catch (e) {
-      print('Failed logout.');
+      moxyPrint('Failed logout.');
     }
   }
 

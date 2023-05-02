@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/product_state.dart';
-import 'package:moxy/services/image_picker_service.dart';
+import 'package:moxy/utils/common.dart';
 
 import '../services/get_it.dart';
 
@@ -13,59 +13,43 @@ class CreateProductCubit extends Cubit<ProductState> {
   CreateProductCubit() : super(const ProductState.initial());
 
   final productRepository = locate<ProductRepository>();
-  final imagePickerService = locate<ImagePickerService>();
 
   final TextEditingController salePriceController = TextEditingController();
-  final TextEditingController regularPriceController = TextEditingController();
+  final TextEditingController warehouseQuantityController = TextEditingController();
   final TextEditingController costPriceController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
-  Future<CreateProduct?> addProduct() async {
+  Future<bool> addProduct() async {
     final product = CreateProduct(
       name: state.name,
       description: state.description,
-      costPrice: state.costPrice ?? 0,
-      regularPrice: state.regularPrice ?? 0,
-      salePrice: state.salePrice ?? 0,
+      costPrice: state.costPrice,
+      warehouseQuantity: state.warehouseQuantity,
+      salePrice: state.salePrice,
       color: state.color,
       images: state.images,
     );
     final pushProduct = await productRepository.addProduct(product);
+    return true;
   }
-
-  // Future<void> addProduct() async {
-  //   final image = await imagePickerService.pickImages();
-  //   final product = CreateProduct(
-  //     name: state.name,
-  //     description: state.description,
-  //     costPrice: state.costPrice ?? 0,
-  //     regularPrice: state.regularPrice ?? 0,
-  //     salePrice: state.salePrice ?? 0,
-  //     color: state.color,
-  //     image: image,
-  //   );
-  //   final pushProduct = await productRepository.addProduct(product);
-  // }
 
   Future<void> pickImage() async {
     try {
-      final pickedFiles = await ImagePicker().pickMultiImage();
-      final images = <String>[];
+      final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
+      final images = <String>[...state.images];
       if (pickedFiles.isNotEmpty) {
-        pickedFiles.every((element) {
+        for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
           images.add(imagePath);
-          return true;
-        });
-
+        }
         emit(state.copyWith(images: images));
       }
     } catch (e) {
-      debugPrint('$e');
+      moxyPrint('$e');
     }
   }
 
@@ -76,7 +60,6 @@ class CreateProductCubit extends Cubit<ProductState> {
   void nameChanged(value) {
     final String name = value;
     emit(state.copyWith(name: name));
-    debugPrint('$state');
   }
 
   void descriptionChanged(value) {
@@ -85,22 +68,46 @@ class CreateProductCubit extends Cubit<ProductState> {
   }
 
   void costPriceChanged(value) {
-    final int costPrice = int.parse(value);
-    emit(state.copyWith(costPrice: costPrice));
+    if (value != null) {
+      final double costPrice = double.parse(value);
+      emit(state.copyWith(costPrice: costPrice));
+    }
   }
 
-  void regularPriceChanged(value) {
-    final double regularPrice = double.parse(value);
-    emit(state.copyWith(regularPrice: regularPrice));
+  void warehouseQuantityChanged(value) {
+    if (value != null) {
+      final int warehouseQuantity = int.parse(value);
+      emit(state.copyWith(warehouseQuantity: warehouseQuantity));
+    }
   }
 
   void salePriceChanged(value) {
-    final double salePrice = double.parse(value);
-    emit(state.copyWith(salePrice: salePrice));
+    if (value != null) {
+      final double salePrice = double.parse(value);
+      emit(state.copyWith(salePrice: salePrice));
+    }
   }
 
   void colorChanged(value) {
     final String color = value;
     emit(state.copyWith(color: color));
+  }
+
+  void moveToNextPage() {
+    if (state.activePage != 2) {
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+    } else {
+      addProduct();
+    }
+  }
+
+  void moveToPreviustPage() {
+    if (state.activePage != 0) {
+      pageController.previousPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+    } else {
+      return;
+    }
   }
 }

@@ -20,8 +20,8 @@ mixin _$ProductState {
   int get activePage => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  int get costPrice => throw _privateConstructorUsedError;
-  double get regularPrice => throw _privateConstructorUsedError;
+  int get warehouseQuantity => throw _privateConstructorUsedError;
+  double get costPrice => throw _privateConstructorUsedError;
   double get salePrice => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
@@ -32,8 +32,8 @@ mixin _$ProductState {
             int activePage,
             String name,
             String description,
-            int costPrice,
-            double regularPrice,
+            int warehouseQuantity,
+            double costPrice,
             double salePrice,
             String color,
             List<String> images)
@@ -47,8 +47,8 @@ mixin _$ProductState {
             int activePage,
             String name,
             String description,
-            int costPrice,
-            double regularPrice,
+            int warehouseQuantity,
+            double costPrice,
             double salePrice,
             String color,
             List<String> images)?
@@ -62,8 +62,8 @@ mixin _$ProductState {
             int activePage,
             String name,
             String description,
-            int costPrice,
-            double regularPrice,
+            int warehouseQuantity,
+            double costPrice,
             double salePrice,
             String color,
             List<String> images)?
@@ -104,8 +104,8 @@ abstract class $ProductStateCopyWith<$Res> {
       int activePage,
       String name,
       String description,
-      int costPrice,
-      double regularPrice,
+      int warehouseQuantity,
+      double costPrice,
       double salePrice,
       String color,
       List<String> images});
@@ -128,8 +128,8 @@ class _$ProductStateCopyWithImpl<$Res, $Val extends ProductState>
     Object? activePage = null,
     Object? name = null,
     Object? description = null,
+    Object? warehouseQuantity = null,
     Object? costPrice = null,
-    Object? regularPrice = null,
     Object? salePrice = null,
     Object? color = null,
     Object? images = null,
@@ -151,13 +151,13 @@ class _$ProductStateCopyWithImpl<$Res, $Val extends ProductState>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      warehouseQuantity: null == warehouseQuantity
+          ? _value.warehouseQuantity
+          : warehouseQuantity // ignore: cast_nullable_to_non_nullable
+              as int,
       costPrice: null == costPrice
           ? _value.costPrice
           : costPrice // ignore: cast_nullable_to_non_nullable
-              as int,
-      regularPrice: null == regularPrice
-          ? _value.regularPrice
-          : regularPrice // ignore: cast_nullable_to_non_nullable
               as double,
       salePrice: null == salePrice
           ? _value.salePrice
@@ -188,8 +188,8 @@ abstract class _$$_InitialCopyWith<$Res>
       int activePage,
       String name,
       String description,
-      int costPrice,
-      double regularPrice,
+      int warehouseQuantity,
+      double costPrice,
       double salePrice,
       String color,
       List<String> images});
@@ -209,8 +209,8 @@ class __$$_InitialCopyWithImpl<$Res>
     Object? activePage = null,
     Object? name = null,
     Object? description = null,
+    Object? warehouseQuantity = null,
     Object? costPrice = null,
-    Object? regularPrice = null,
     Object? salePrice = null,
     Object? color = null,
     Object? images = null,
@@ -232,13 +232,13 @@ class __$$_InitialCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
+      warehouseQuantity: null == warehouseQuantity
+          ? _value.warehouseQuantity
+          : warehouseQuantity // ignore: cast_nullable_to_non_nullable
+              as int,
       costPrice: null == costPrice
           ? _value.costPrice
           : costPrice // ignore: cast_nullable_to_non_nullable
-              as int,
-      regularPrice: null == regularPrice
-          ? _value.regularPrice
-          : regularPrice // ignore: cast_nullable_to_non_nullable
               as double,
       salePrice: null == salePrice
           ? _value.salePrice
@@ -264,8 +264,8 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       this.activePage = 0,
       this.name = '',
       this.description = '',
+      this.warehouseQuantity = 0,
       this.costPrice = 0,
-      this.regularPrice = 0.0,
       this.salePrice = 0.0,
       this.color = '',
       final List<String> images = const []})
@@ -286,10 +286,10 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   final String description;
   @override
   @JsonKey()
-  final int costPrice;
+  final int warehouseQuantity;
   @override
   @JsonKey()
-  final double regularPrice;
+  final double costPrice;
   @override
   @JsonKey()
   final double salePrice;
@@ -307,7 +307,7 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, costPrice: $costPrice, regularPrice: $regularPrice, salePrice: $salePrice, color: $color, images: $images)';
+    return 'ProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images)';
   }
 
   @override
@@ -319,8 +319,8 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('activePage', activePage))
       ..add(DiagnosticsProperty('name', name))
       ..add(DiagnosticsProperty('description', description))
+      ..add(DiagnosticsProperty('warehouseQuantity', warehouseQuantity))
       ..add(DiagnosticsProperty('costPrice', costPrice))
-      ..add(DiagnosticsProperty('regularPrice', regularPrice))
       ..add(DiagnosticsProperty('salePrice', salePrice))
       ..add(DiagnosticsProperty('color', color))
       ..add(DiagnosticsProperty('images', images));
@@ -338,10 +338,10 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.description, description) ||
                 other.description == description) &&
+            (identical(other.warehouseQuantity, warehouseQuantity) ||
+                other.warehouseQuantity == warehouseQuantity) &&
             (identical(other.costPrice, costPrice) ||
                 other.costPrice == costPrice) &&
-            (identical(other.regularPrice, regularPrice) ||
-                other.regularPrice == regularPrice) &&
             (identical(other.salePrice, salePrice) ||
                 other.salePrice == salePrice) &&
             (identical(other.color, color) || other.color == color) &&
@@ -355,8 +355,8 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       activePage,
       name,
       description,
+      warehouseQuantity,
       costPrice,
-      regularPrice,
       salePrice,
       color,
       const DeepCollectionEquality().hash(_images));
@@ -375,15 +375,15 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             int activePage,
             String name,
             String description,
-            int costPrice,
-            double regularPrice,
+            int warehouseQuantity,
+            double costPrice,
             double salePrice,
             String color,
             List<String> images)
         initial,
   }) {
-    return initial(initialPage, activePage, name, description, costPrice,
-        regularPrice, salePrice, color, images);
+    return initial(initialPage, activePage, name, description,
+        warehouseQuantity, costPrice, salePrice, color, images);
   }
 
   @override
@@ -394,15 +394,15 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             int activePage,
             String name,
             String description,
-            int costPrice,
-            double regularPrice,
+            int warehouseQuantity,
+            double costPrice,
             double salePrice,
             String color,
             List<String> images)?
         initial,
   }) {
-    return initial?.call(initialPage, activePage, name, description, costPrice,
-        regularPrice, salePrice, color, images);
+    return initial?.call(initialPage, activePage, name, description,
+        warehouseQuantity, costPrice, salePrice, color, images);
   }
 
   @override
@@ -413,8 +413,8 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             int activePage,
             String name,
             String description,
-            int costPrice,
-            double regularPrice,
+            int warehouseQuantity,
+            double costPrice,
             double salePrice,
             String color,
             List<String> images)?
@@ -422,8 +422,8 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(initialPage, activePage, name, description, costPrice,
-          regularPrice, salePrice, color, images);
+      return initial(initialPage, activePage, name, description,
+          warehouseQuantity, costPrice, salePrice, color, images);
     }
     return orElse();
   }
@@ -463,8 +463,8 @@ abstract class _Initial extends ProductState {
       final int activePage,
       final String name,
       final String description,
-      final int costPrice,
-      final double regularPrice,
+      final int warehouseQuantity,
+      final double costPrice,
       final double salePrice,
       final String color,
       final List<String> images}) = _$_Initial;
@@ -479,9 +479,9 @@ abstract class _Initial extends ProductState {
   @override
   String get description;
   @override
-  int get costPrice;
+  int get warehouseQuantity;
   @override
-  double get regularPrice;
+  double get costPrice;
   @override
   double get salePrice;
   @override

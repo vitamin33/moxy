@@ -1,11 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:provider/provider.dart';
-
 import '../../../../../domain/product_state.dart';
 
 class Summary extends StatelessWidget {
@@ -38,18 +34,6 @@ class Summary extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   height: 150,
-                  //   width: 150,
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.black,
-                  //     image: state.imageUnit8List != null
-                  //         ? DecorationImage(
-                  //             image: MemoryImage(state.imageUnit8List!))
-                  //         : null,
-                  //     borderRadius: BorderRadius.circular(15),
-                  //   ),
-                  // ),
                   const SizedBox(width: AppTheme.cardPadding),
                   Expanded(
                     child: SummaryTextCard(
@@ -73,21 +57,11 @@ class Summary extends StatelessWidget {
                   ),
                   const SizedBox(width: AppTheme.cardPadding),
                   SummaryTextCard(
-                    title: "RegularPrice",
-                    text: " ${state.regularPrice}",
+                    title: "Count",
+                    text: " ${state.warehouseQuantity}",
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  MoxyButton(
-                    title: "Publish",
-                    onTap: () =>
-                        context.read<CreateProductCubit>().addProduct(),
-                  ),
-                ],
-              )
             ],
           ),
         );

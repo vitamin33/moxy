@@ -1,15 +1,11 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/components/moxy_button.dart';
-import 'package:moxy/components/textfield.dart';
 import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:provider/provider.dart';
-
+import 'package:moxy/utils/common.dart';
 import '../../../../../domain/product_state.dart';
 
 class Branding extends StatelessWidget {
@@ -27,30 +23,51 @@ class Branding extends StatelessWidget {
               Column(
                 children: [
                   state.images.isNotEmpty
-                      ? Image.file(
-                          File(state.images.first),
-                          width: 100,
-                          height: 100,
-                        )
-                      : Icon(
+                      ? Row(children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 120,
+                              width: double.maxFinite,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: state.images.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: SizedBox(
+                                        child: Image.file(
+                                      File(state.images[index]),
+                                      width: 80,
+                                      height: 100,
+                                    )),
+                                  );
+                                },
+                              ),
+                            ),
+                          )
+                        ])
+                      : const Icon(
                           Icons.cloud_upload_sharp,
-                          color: AppTheme.primaryContainerColor,
+                          color: AppTheme.blackLight,
                         ),
-                  MoxyButton(
-                      title: "Pick Image from Gallery",
-                      onTap: () {
+                  TextButton(
+                      child: const Text('Pick Image from Gallery'),
+                      onPressed: () {
                         cubit.pickImage();
+                        moxyPrint('${state.images}');
                       }),
                 ],
               ),
-              Container(
+              SizedBox(
                 width: 300,
                 height: 200,
                 child: Column(
                   children: [
                     Expanded(
-                      child: MoxyTextfield(
-                        title: "Price(\$)",
+                      child: TextField(
+                        decoration: const InputDecoration(
+                            border: UnderlineInputBorder(),
+                            hintText: 'Price(\$)'),
                         controller: cubit.costPriceController,
                         onChanged: (value) => {cubit.costPriceChanged(value)},
                         inputFormatters: [
@@ -61,18 +78,25 @@ class Branding extends StatelessWidget {
                     ),
                     const SizedBox(width: AppTheme.cardPadding),
                     Expanded(
-                      child: MoxyTextfield(
-                        title: "Sale Price(\$)",
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          hintText: 'Sale Price(\$)',
+                        ),
                         controller: cubit.salePriceController,
                         onChanged: (value) => {cubit.salePriceChanged(value)},
                       ),
                     ),
                     const SizedBox(width: AppTheme.cardPadding),
                     Expanded(
-                      child: MoxyTextfield(
-                        title: "Regular Price(\$)",
+                      child: TextField(
+                        decoration: const InputDecoration(
+                          border: UnderlineInputBorder(),
+                          hintText: 'WarehouseQuantity',
+                        ),
+                        controller: cubit.warehouseQuantityController,
                         onChanged: (value) =>
-                            {cubit.regularPriceChanged(value)},
+                            {cubit.warehouseQuantityChanged(value)},
                       ),
                     ),
                   ],
@@ -80,62 +104,6 @@ class Branding extends StatelessWidget {
               ),
             ],
           ),
-
-          //  Column(
-          //   crossAxisAlignment: CrossAxisAlignment.start,
-          //   children: [
-          //     // InkWell(
-          //     //   borderRadius: BorderRadius.circular(15),
-          //     //   onTap: () {
-          //     //     context.read<CreateProductCubit>().pickImage();
-          //     //   },
-          //     //   // child: Container(
-          //     //   //   height: 350,
-          //     //   //   width: 350,
-          //     //   //   decoration: BoxDecoration(
-          //     //   //     color:  Colors.black,
-          //     //   //     image: state.image!= null
-          //     //   //         ? DecorationImage(
-          //     //   //             image: MemoryImage(imageUnit8List!))
-          //     //   //         : null,
-          //     //   //     borderRadius: BorderRadius.circular(15),
-          //     //   //   ),
-          //     //   //   child: imageUnit8List != null
-          //     //   //       ? const SizedBox.shrink()
-          //     //   //       : const Center(
-          //     //   //           child: Icon(
-          //     //   //           Icons.add_a_photo,
-          //     //   //           size: 80,
-          //     //   //         )),
-          //     //   // ),
-          //     // ),
-          //     const Spacer(),
-          //     // Row(
-          //     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     //   children: [
-          //     //     MoxyButton(
-          //     //       title: "Previous",
-          //     //       gradiant: const [
-          //     //         AppTheme.blackLight,
-          //     //         AppTheme.blackLight,
-          //     //       ],
-          //     //       onTap: () {
-          //     //         context.read<CreateProductCubit>().moveToPreviousPage();
-          //     //       },
-          //     //     ),
-          //     //     MoxyButton(
-          //     //       title: "Next",
-          //     //       state: imageUnit8List == null
-          //     //           ? ButtonState.disabled
-          //     //           : ButtonState.idle,
-          //     //       onTap: () {
-          //     //         context.read<CreateProductCubit>().moveToNexPage();
-          //     //       },
-          //     //     ),
-          //     //   ],
-          //     // )
-          //   ],
-          // ),
         );
       },
     );
