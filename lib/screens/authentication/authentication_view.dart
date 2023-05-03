@@ -34,63 +34,63 @@ class AuthenticationView extends StatelessWidget {
         }
       },
       builder: (context, state) => AppScaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(AppTheme.cardPadding),
-          child: Column(
-            children: [
-              Image.asset(ImagePath.logo, width: 120),
-              const SizedBox(height: AppTheme.cardPadding * 2),
-              SizedBox(
-                width: 500,
-                child: RoundedCard(
-                  color: Theme.of(context).cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppTheme.cardPadding),
-                    child: Column(
-                      children: [
-                        Text(
-                          "Login",
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                        const SizedBox(height: AppTheme.cardPadding),
-                        MoxyTextfield(
-                          title: "Email Address",
-                          onChanged: (value) =>
-                              context.read<LoginCubit>().emailChanged(value),
-                          autofillHints: const [
-                            AutofillHints.email,
-                          ],
-                        ),
-                        const SizedBox(height: AppTheme.elementSpacing),
-                        MoxyTextfield(
-                          title: "Password",
-                          onChanged: (value) =>
-                              context.read<LoginCubit>().passwordChanged(value),
-                          autofillHints: const [
-                            AutofillHints.password,
-                          ],
-                        ),
-                        const SizedBox(height: AppTheme.cardPadding),
-                        MoxyButton(
-                          title: "Login to your account",
-                          state: state.state is Loading
-                              ? ButtonState.loading
-                              : (state.emailIsValid
-                                  ? ButtonState.idle
-                                  : ButtonState.disabled),
-                          onTap: () =>
-                              context.read<LoginCubit>().logInWithCredentials(),
-                        ),
-                        const SizedBox(height: AppTheme.cardPadding),
-                      ],
-                    ),
+          body: SingleChildScrollView(
+              child: Padding(
+        padding: const EdgeInsets.all(AppTheme.cardPadding),
+        child: Column(
+          children: [
+            Image.asset(ImagePath.logo, width: 120),
+            const SizedBox(height: AppTheme.cardPadding * 2),
+            SizedBox(
+              width: 500,
+              child: RoundedCard(
+                color: Theme.of(context).cardColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(AppTheme.cardPadding),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Login",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      const SizedBox(height: AppTheme.cardPadding),
+                      MoxyTextfield(
+                        title: "Email Address",
+                        onChanged: (value) =>
+                            context.read<LoginCubit>().emailChanged(value),
+                        autofillHints: const [
+                          AutofillHints.email,
+                        ],
+                      ),
+                      const SizedBox(height: AppTheme.elementSpacing),
+                      MoxyTextfield(
+                        title: "Password",
+                        onChanged: (value) =>
+                            context.read<LoginCubit>().passwordChanged(value),
+                        autofillHints: const [
+                          AutofillHints.password,
+                        ],
+                      ),
+                      const SizedBox(height: AppTheme.cardPadding),
+                      MoxyButton(
+                        title: "Login to your account",
+                        state: state.state is Loading
+                            ? ButtonState.loading
+                            : (state.emailIsValid
+                                ? ButtonState.idle
+                                : ButtonState.disabled),
+                        onTap: () =>
+                            context.read<LoginCubit>().logInWithCredentials(),
+                      ),
+                      const SizedBox(height: AppTheme.cardPadding),
+                    ],
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
-      ),
+      ))),
     );
   }
 

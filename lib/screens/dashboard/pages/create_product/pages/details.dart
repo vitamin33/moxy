@@ -1,73 +1,50 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/components/moxy_button.dart';
-import 'package:moxy/components/textfield.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../../constant/product_categories.dart';
-import '../../../../../domain/create_product_state.dart';
+import '../../../../../domain/product_state.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CreateProductState>();
-
-    moxyPrint(state.detailPageIsValid);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
-      child: Column(
-        children: [
-          MoxyTextfield(
-            title: "Title",
-            controller: state.titleController,
-          ),
-          const SizedBox(height: AppTheme.elementSpacing),
-          MoxyTextfield(
-            controller: state.descriptionController,
-            title: "Description",
-            maxLines: 6,
-          ),
-          const SizedBox(height: AppTheme.cardPadding),
-          DropdownButtonFormField<String>(
-            dropdownColor: Theme.of(context).dialogBackgroundColor,
-            hint: Text(
-              "Select Category",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            items: categories
-                .map((e) => DropdownMenuItem(
-                      value: e,
-                      child: Text(
-                        e,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ))
-                .toList(),
-            onChanged: (value) {
-              state.setCategory(value!);
-            },
-          ),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+    return BlocBuilder<CreateProductCubit, ProductState>(
+      builder: (context, state) {
+        final cubit = context.read<CreateProductCubit>();
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
+          child: Column(
             children: [
-              MoxyButton(
-                title: "Next",
-                state: state.detailPageIsValid
-                    ? ButtonState.idle
-                    : ButtonState.disabled,
-                onTap: () {
-                  state.moveToNexPage();
-                },
+              TextField(
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    hintText: 'Name',
+                  ),
+                  controller: cubit.nameController,
+                  onChanged: (value) => cubit.nameChanged(value)  ),
+              TextField(
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: 'Description',
+                ),
+                controller: cubit.descriptionController,
+                onChanged: (value) => cubit.descriptionChanged(value),
+                maxLines: 6,
+              ),
+              TextField(
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: 'Color',
+                ),
+                controller: cubit.colorController,
+                onChanged: (value) => cubit.colorChanged(value),
               ),
             ],
-          )
-        ],
-      ),
+          ),
+        );
+        ;
+      },
     );
   }
 }

@@ -1,114 +1,78 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:moxy/components/moxy_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:provider/provider.dart';
-
-import '../../../../../domain/create_product_state.dart';
+import '../../../../../domain/product_state.dart';
 
 class Summary extends StatelessWidget {
   const Summary({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<CreateProductState>();
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SummaryTextCard(
-                title: "Title",
-                text: state.titleController.text,
-              ),
-              const SizedBox(width: AppTheme.cardPadding),
-              SummaryTextCard(
-                title: "Category",
-                text: state.seletedCategory!,
-              ),
-            ],
-          ),
-          const SizedBox(height: AppTheme.cardPadding),
-          Row(
+    return BlocBuilder<CreateProductCubit, ProductState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 150,
-                width: 150,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  image: state.imageUnit8List != null
-                      ? DecorationImage(
-                          image: MemoryImage(state.imageUnit8List!))
-                      : null,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-              const SizedBox(width: AppTheme.cardPadding),
-              Expanded(
-                child: SummaryTextCard(
-                    title: "Descripiton",
-                    maxLine: 6,
-                    text: state.descriptionController.text),
-              ),
-            ],
-          ),
-          const SizedBox(height: AppTheme.cardPadding),
-          Row(
-            children: [
-              SummaryTextCard(
-                title: "Price",
-                text: "\$ ${state.priceController.text}",
-              ),
-              const SizedBox(width: AppTheme.cardPadding),
-              SummaryTextCard(
-                title: "Previous Price",
-                text: "\$ ${state.previousPriceController.text}",
-              ),
-            ],
-          ),
-          const Spacer(),
-          Row(
-            children: [
-              CupertinoSwitch(
-                activeColor: Theme.of(context).primaryColor,
-                value: state.isLive,
-                trackColor: Theme.of(context).unselectedWidgetColor,
-                onChanged: state.setLive,
-              ),
-              const SizedBox(width: AppTheme.elementSpacing),
-              Text(
-                "Set Live",
-                style: Theme.of(context).textTheme.subtitle1,
-              )
-            ],
-          ),
-          const SizedBox(height: AppTheme.cardPadding),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              MoxyButton(
-                title: "Previous",
-                gradiant: const [
-                  AppTheme.blackLight,
-                  AppTheme.blackLight,
+              Row(
+                children: [
+                  SummaryTextCard(
+                    title: "Title",
+                    text: state.name,
+                  ),
+                  const SizedBox(width: AppTheme.cardPadding),
+                  SummaryTextCard(
+                    title: "Color",
+                    text: state.color,
+                  ),
+                  const SizedBox(width: AppTheme.cardPadding),
                 ],
-                onTap: () {
-                  state.moveToPreviousPage();
-                },
               ),
-              MoxyButton(
-                title: "Publish",
-                state: state.isLoading ? ButtonState.loading : ButtonState.idle,
-                onTap: state.publishProduct,
+              const SizedBox(height: AppTheme.cardPadding),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(width: AppTheme.cardPadding),
+                  Expanded(
+                    child: SummaryTextCard(
+                        title: "Descripiton",
+                        maxLine: 6,
+                        text: state.description),
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppTheme.cardPadding),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      SummaryTextCard(
+                        title: "Cost Price",
+                        text: "\$ ${state.costPrice}",
+                      ),
+                      const SizedBox(width: AppTheme.cardPadding),
+                      SummaryTextCard(
+                        title: "Price",
+                        text: "\$ ${state.salePrice}",
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppTheme.cardPadding),
+                    child: SummaryTextCard(
+                      title: "Count",
+                      text: " ${state.warehouseQuantity}",
+                    ),
+                  ),
+                ],
               ),
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }

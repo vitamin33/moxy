@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +31,8 @@ class MoxyApp extends StatelessWidget {
         BlocProvider<HomeRouterCubit>(
           create: (BuildContext context) => HomeRouterCubit(),
         ),
+        BlocProvider<CreateProductCubit>(
+            create: (BuildContext context) => CreateProductCubit()),
       ],
       child: MaterialApp(
         home: _routers,

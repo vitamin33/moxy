@@ -1,72 +1,152 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:moxy/components/app_scaffold.dart';
-import 'package:moxy/domain/create_product_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/components/snackbar_widgets.dart';
+import 'package:moxy/domain/product_cubit.dart';
+import 'package:moxy/domain/product_state.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/branding.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
-import 'package:moxy/screens/dashboard/pages/create_product/pages/pricing.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/summary.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:provider/provider.dart';
-
+import 'package:moxy/utils/common.dart';
 import '../../../../components/rounded_card.dart';
-import '../../components/product_progress.dart';
 
 class CreateProductPage extends StatelessWidget {
   const CreateProductPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // TODO fix this, create CreateProductCubit and get state from there
-    final state = context.watch<CreateProductState>();
-
     List<Widget> pages = const [
       ProductDetails(),
       Branding(),
-      Pricing(),
       Summary(),
     ];
-    return Padding(
-      padding: const EdgeInsets.all(AppTheme.cardPadding),
-      child: RoundedCard(
-        //padding: const EdgeInsets.all(AppTheme.elementSpacing),
-        child: Column(
-          children: [
-            CreateProductProgress(
-              count: (state.currentPage + 1) * 25,
-              onChangePage: (int page) {
-                if (state.visitedPages.contains(page)) {
-                  state.animateToPage(page);
-                }
-              },
-            ),
-            SizedBox(height: AppTheme.cardPadding),
-            Expanded(
-              child: PageView.builder(
-                controller: state.pageController,
-                onPageChanged: state.onChangePage,
-                itemCount: pages.length,
-                itemBuilder: (context, index) {
-                  return pages[index];
-                },
-              ),
-            )
-          ],
-        ),
-      ),
+    return BlocConsumer<CreateProductCubit, ProductState>(
+      listener: (context, state) => {
+        if (state.errorMessage != '')
+          {
+            ScaffoldMessenger.of(context).showSnackBar(
+                snackBarWhenFailure(snackBarFailureText: 'Failed')),
+            context.read<CreateProductCubit>().clearErrorState(),
+          }
+      },
+      builder: (context, state) {
+        final cubit = context.read<CreateProductCubit>();
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: state.isLoading
+              ? loader()
+              : Stack(
+                  children: [
+                    Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(
+                                      AppTheme.cardPadding),
+                                  child: SizedBox(
+                                      width: double.maxFinite,
+                                      height: 550,
+                                      child: RoundedCard(
+                                          padding: const EdgeInsets.all(0),
+                                          child: Column(children: [
+                                            appIndicator(state, cubit, pages),
+                                            Expanded(
+                                              child: PageView.builder(
+                                                controller:
+                                                    cubit.pageController,
+                                                onPageChanged: (int page) {
+                                                  cubit.onChangePage(page);
+                                                },
+                                                itemCount: pages.length,
+                                                itemBuilder: (context, index) {
+                                                  return pages[
+                                                      index % pages.length];
+                                                },
+                                              ),
+                                            )
+                                          ]))))),
+                        ),
+                      ],
+                    ),
+                    positionButton(state, cubit)
+                  ],
+                ),
+        );
+      },
     );
   }
 }
 
-class CreateProductView extends StatelessWidget {
-  const CreateProductView({Key? key}) : super(key: key);
+Widget positionButton(ProductState state, CreateProductCubit cubit) {
+  return Positioned(
+    height: 60,
+    bottom: 15,
+    left: 0,
+    right: 0,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () {
+            cubit.moveToPreviustPage();
+          },
+          style: TextButton.styleFrom(backgroundColor: AppTheme.surfaceColor),
+          child: const Text('Previus'),
+        ),
+        TextButton(
+          onPressed: () {
+            cubit.moveToNextPage();
+          },
+          style: TextButton.styleFrom(backgroundColor: AppTheme.surfaceColor),
+          child: Text(state.activePage != 2 ? 'Next' : 'Add'),
+        ),
+      ],
+    ),
+  );
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => CreateProductState(),
-      child: const CreateProductPage(),
-    );
-  }
+Widget appIndicator(ProductState state, CreateProductCubit cubit, pages) {
+  return SizedBox(
+      height: 50,
+      child: Container(
+        color: AppTheme.primaryContainerColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List<Widget>.generate(
+              pages.length,
+              (index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                        onTap: () {
+                          cubit.pageController.animateToPage(index,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeIn);
+                        },
+                        child: CircleAvatar(
+                          radius: 6,
+                          backgroundColor: state.activePage == index
+                              ? Colors.red
+                              : AppTheme.secondaryColor,
+                        )),
+                  )),
+        ),
+      ));
+}
+
+Widget loader() {
+  return Column(children: const [
+    Expanded(
+      child: Padding(
+          padding: EdgeInsets.all(AppTheme.cardPadding),
+          child: RoundedCard(
+            child: Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 1.0,
+              ),
+            ),
+          )),
+    )
+  ]);
 }

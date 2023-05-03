@@ -68,7 +68,7 @@ class NavigationService {
       case createOrderPath:
         return navigateToPageRoute(settings, const CreateOrderPage());
       case createProductPath:
-        return navigateToPageRoute(settings, const CreateProductView());
+        return navigateToPageRoute(settings, const CreateProductPage());
     }
     return null;
   }

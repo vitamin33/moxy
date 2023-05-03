@@ -1,12 +1,17 @@
+import 'package:moxy/utils/common.dart';
+import 'package:path/path.dart';
+
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
+import '../constant/api_path.dart';
 import 'models/request/login_request.dart';
+import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
-  static const String baseUrl = 'http://localhost:3000';
-  static const String loginUserUrl = '/auth/login';
+  static const String baseUrl = 'http://10.0.2.2:3000';
+  // static const String baseUrl = 'http://localhost:3000';
 
   static final DioClient instance = DioClient._private();
 
@@ -38,10 +43,51 @@ class DioClient {
         loginUserUrl,
         data: request.toJson(),
       );
-
       result = LoginResponse.fromJson(response.data);
     } catch (e) {
-      print('During login: $e');
+      moxyPrint('During login: $e');
+      return null;
+    }
+    return result;
+  }
+
+  Future<CreateProduct?> createProduct(
+    String name,
+    String description,
+    int warehouseQuantity,
+    double costPrice,
+    double salePrice,
+    String color,
+    List<String> images,
+  ) async {
+    final CreateProduct? result;
+    List<MultipartFile> imageFiles = [];
+    for (String image in images) {
+      String fileName = basename(image);
+      imageFiles.add(
+        await MultipartFile.fromFile(
+          image,
+          filename: fileName,
+        ),
+      );
+    }
+    FormData formData = FormData.fromMap({
+      'name': name,
+      'description': description,
+      'costPrice': costPrice,
+      'salePrice': salePrice,
+      'warehouseQuantity': warehouseQuantity,
+      'color': color,
+      'images': imageFiles
+    });
+    try {
+      Response response = await _dio.post(
+        createProductUrl,
+        data: formData,
+      );
+      result = CreateProduct.fromJson(response.data);
+    } catch (e) {
+      moxyPrint('Request product :$e');
       return null;
     }
     return result;
