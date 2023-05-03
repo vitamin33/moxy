@@ -21,7 +21,11 @@ class ProductRepository {
           product.salePrice,
           product.color,
           product.images));
-      return true;
+      if (result != null) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       moxyPrint('Repository Error:$e');
       return false;

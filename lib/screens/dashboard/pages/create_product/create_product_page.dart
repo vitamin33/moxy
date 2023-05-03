@@ -7,6 +7,7 @@ import 'package:moxy/screens/dashboard/pages/create_product/pages/branding.dart'
 import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/summary.dart';
 import 'package:moxy/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../../../components/rounded_card.dart';
 
 class CreateProductPage extends StatelessWidget {
@@ -25,6 +26,7 @@ class CreateProductPage extends StatelessWidget {
           {
             ScaffoldMessenger.of(context).showSnackBar(
                 snackBarWhenFailure(snackBarFailureText: 'Failed')),
+            context.read<CreateProductCubit>().clearErrorState(),
           }
       },
       builder: (context, state) {
@@ -32,19 +34,7 @@ class CreateProductPage extends StatelessWidget {
         return Scaffold(
           resizeToAvoidBottomInset: false,
           body: state.isLoading
-              ? Column(children: const [
-                  Expanded(
-                    child: Padding(
-                        padding: EdgeInsets.all(AppTheme.cardPadding),
-                        child: RoundedCard(
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 1.0,
-                            ),
-                          ),
-                        )),
-                  )
-                ])
+              ? loader()
               : Stack(
                   children: [
                     Column(
@@ -60,42 +50,7 @@ class CreateProductPage extends StatelessWidget {
                                       child: RoundedCard(
                                           padding: const EdgeInsets.all(0),
                                           child: Column(children: [
-                                            SizedBox(
-                                                height: 50,
-                                                child: Container(
-                                                  color: AppTheme
-                                                      .primaryContainerColor,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children:
-                                                        List<Widget>.generate(
-                                                            pages.length,
-                                                            (index) => Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .symmetric(
-                                                                      horizontal:
-                                                                          10),
-                                                                  child: InkWell(
-                                                                      onTap: () {
-                                                                        cubit.pageController.animateToPage(
-                                                                            index,
-                                                                            duration:
-                                                                                const Duration(milliseconds: 300),
-                                                                            curve: Curves.easeIn);
-                                                                      },
-                                                                      child: CircleAvatar(
-                                                                        radius:
-                                                                            6,
-                                                                        backgroundColor: state.activePage ==
-                                                                                index
-                                                                            ? Colors.red
-                                                                            : AppTheme.secondaryColor,
-                                                                      )),
-                                                                )),
-                                                  ),
-                                                )),
+                                            appIndicator(state, cubit, pages),
                                             Expanded(
                                               child: PageView.builder(
                                                 controller:
@@ -114,38 +69,84 @@ class CreateProductPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Positioned(
-                      height: 60,
-                      bottom: 15,
-                      left: 0,
-                      right: 0,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              cubit.moveToPreviustPage();
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: AppTheme.surfaceColor),
-                            child: const Text('Previus'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              cubit.moveToNextPage();
-                            },
-                            style: TextButton.styleFrom(
-                                backgroundColor: AppTheme.surfaceColor),
-                            child: Text(state.activePage != 2 ? 'Next' : 'Add'),
-                          ),
-                        ],
-                      ),
-                    ),
+                    positionButton(state, cubit)
                   ],
                 ),
         );
       },
     );
   }
+}
+
+Widget positionButton(ProductState state, CreateProductCubit cubit) {
+  return Positioned(
+    height: 60,
+    bottom: 15,
+    left: 0,
+    right: 0,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextButton(
+          onPressed: () {
+            cubit.moveToPreviustPage();
+          },
+          style: TextButton.styleFrom(backgroundColor: AppTheme.surfaceColor),
+          child: const Text('Previus'),
+        ),
+        TextButton(
+          onPressed: () {
+            cubit.moveToNextPage();
+          },
+          style: TextButton.styleFrom(backgroundColor: AppTheme.surfaceColor),
+          child: Text(state.activePage != 2 ? 'Next' : 'Add'),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget appIndicator(ProductState state, CreateProductCubit cubit, pages) {
+  return SizedBox(
+      height: 50,
+      child: Container(
+        color: AppTheme.primaryContainerColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List<Widget>.generate(
+              pages.length,
+              (index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: InkWell(
+                        onTap: () {
+                          cubit.pageController.animateToPage(index,
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeIn);
+                        },
+                        child: CircleAvatar(
+                          radius: 6,
+                          backgroundColor: state.activePage == index
+                              ? Colors.red
+                              : AppTheme.secondaryColor,
+                        )),
+                  )),
+        ),
+      ));
+}
+
+Widget loader() {
+  return Column(children: const [
+    Expanded(
+      child: Padding(
+          padding: EdgeInsets.all(AppTheme.cardPadding),
+          child: RoundedCard(
+            child: Center(
+              child: CircularProgressIndicator(
+                strokeWidth: 1.0,
+              ),
+            ),
+          )),
+    )
+  ]);
 }

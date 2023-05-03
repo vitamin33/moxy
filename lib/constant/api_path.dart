@@ -1,2 +1,2 @@
-const String createProductUrl = '/products/createfd';
+const String createProductUrl = '/products/create';
 const String loginUserUrl = '/auth/login';

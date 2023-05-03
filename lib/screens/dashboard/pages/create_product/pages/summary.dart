@@ -44,21 +44,28 @@ class Summary extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppTheme.cardPadding),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SummaryTextCard(
-                    title: "Price",
-                    text: "\$ ${state.costPrice}",
+                  Row(
+                    children: [
+                      SummaryTextCard(
+                        title: "Cost Price",
+                        text: "\$ ${state.costPrice}",
+                      ),
+                      const SizedBox(width: AppTheme.cardPadding),
+                      SummaryTextCard(
+                        title: "Price",
+                        text: "\$ ${state.salePrice}",
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: AppTheme.cardPadding),
-                  SummaryTextCard(
-                    title: "Previous Price",
-                    text: "\$ ${state.salePrice}",
-                  ),
-                  const SizedBox(width: AppTheme.cardPadding),
-                  SummaryTextCard(
-                    title: "Count",
-                    text: " ${state.warehouseQuantity}",
+                  Padding(
+                    padding: const EdgeInsets.only(top: AppTheme.cardPadding),
+                    child: SummaryTextCard(
+                      title: "Count",
+                      text: " ${state.warehouseQuantity}",
+                    ),
                   ),
                 ],
               ),

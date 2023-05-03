@@ -36,23 +36,21 @@ class CreateProductCubit extends Cubit<ProductState> {
         images: state.images,
       );
       final pushProduct = await productRepository.addProduct(product);
-      if (pushProduct != null) {
+      if (pushProduct == true) {
         nameController.clear();
         descriptionController.clear();
         costPriceController.clear();
         warehouseQuantityController.clear();
         salePriceController.clear();
         colorController.clear();
-        emit(state.copyWith(activePage: 0));
         clearState();
       } else {
-        emit(state.copyWith(errorMessage: 'Failed'));
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(
+            errorMessage: 'Failed', isLoading: false, activePage: 0));
       }
       return true;
     } catch (e) {
       moxyPrint(e);
-      emit(state.copyWith(errorMessage: '$e'));
       return false;
     }
   }
@@ -136,5 +134,9 @@ class CreateProductCubit extends Cubit<ProductState> {
     emit(const ProductState.initial());
     pageController.animateToPage(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
+
+  void clearErrorState() {
+    emit(state.copyWith(errorMessage: ''));
   }
 }
