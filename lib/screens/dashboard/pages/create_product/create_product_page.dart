@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/components/snackbar_widgets.dart';
 import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/domain/product_state.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/branding.dart';
@@ -18,109 +19,131 @@ class CreateProductPage extends StatelessWidget {
       Branding(),
       Summary(),
     ];
-    return BlocBuilder<CreateProductCubit, ProductState>(
+    return BlocConsumer<CreateProductCubit, ProductState>(
+      listener: (context, state) => {
+        if (state.errorMessage != '')
+          {
+            ScaffoldMessenger.of(context).showSnackBar(
+                snackBarWhenFailure(snackBarFailureText: 'Failed')),
+          }
+      },
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
         return Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Stack(
-            children: [
-              Column(
-                children: [
+          body: state.isLoading
+              ? Column(children: const [
                   Expanded(
-                    child: SingleChildScrollView(
-                        child: Padding(
-                            padding: const EdgeInsets.all(AppTheme.cardPadding),
-                            child: SizedBox(
-                                width: double.maxFinite,
-                                height: 550,
-                                child: RoundedCard(
-                                    padding: const EdgeInsets.all(0),
-                                    child: Column(children: [
-                                      SizedBox(
-                                          height: 50,
-                                          child: Container(
-                                            color:
-                                                AppTheme.primaryContainerColor,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: List<Widget>.generate(
-                                                  pages.length,
-                                                  (index) => Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .symmetric(
-                                                                horizontal: 10),
-                                                        child: InkWell(
-                                                            onTap: () {
-                                                              cubit.pageController.animateToPage(
-                                                                  index,
-                                                                  duration: const Duration(
-                                                                      milliseconds:
-                                                                          300),
-                                                                  curve: Curves
-                                                                      .easeIn);
-                                                            },
-                                                            child: CircleAvatar(
-                                                              radius: 6,
-                                                              backgroundColor:
-                                                                  state.activePage ==
-                                                                          index
-                                                                      ? Colors
-                                                                          .red
-                                                                      : AppTheme
-                                                                          .secondaryColor,
-                                                            )),
-                                                      )),
-                                            ),
-                                          )),
-                                      Expanded(
-                                        child: PageView.builder(
-                                          controller: cubit.pageController,
-                                          onPageChanged: (int page) {
-                                            cubit.onChangePage(page);
-                                          },
-                                          itemCount: pages.length,
-                                          itemBuilder: (context, index) {
-                                            return pages[index % pages.length];
-                                          },
-                                        ),
-                                      )
-                                    ]))))),
-                  ),
-                ],
-              ),
-              Positioned(
-                height: 60,
-                bottom: 15,
-                left: 0,
-                right: 0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Padding(
+                        padding: EdgeInsets.all(AppTheme.cardPadding),
+                        child: RoundedCard(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.0,
+                            ),
+                          ),
+                        )),
+                  )
+                ])
+              : Stack(
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        cubit.moveToPreviustPage();
-                      },
-                      style: TextButton.styleFrom(
-                          backgroundColor: AppTheme.surfaceColor),
-                      child: const Text('Previus'),
+                    Column(
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                              child: Padding(
+                                  padding: const EdgeInsets.all(
+                                      AppTheme.cardPadding),
+                                  child: SizedBox(
+                                      width: double.maxFinite,
+                                      height: 550,
+                                      child: RoundedCard(
+                                          padding: const EdgeInsets.all(0),
+                                          child: Column(children: [
+                                            SizedBox(
+                                                height: 50,
+                                                child: Container(
+                                                  color: AppTheme
+                                                      .primaryContainerColor,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children:
+                                                        List<Widget>.generate(
+                                                            pages.length,
+                                                            (index) => Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .symmetric(
+                                                                      horizontal:
+                                                                          10),
+                                                                  child: InkWell(
+                                                                      onTap: () {
+                                                                        cubit.pageController.animateToPage(
+                                                                            index,
+                                                                            duration:
+                                                                                const Duration(milliseconds: 300),
+                                                                            curve: Curves.easeIn);
+                                                                      },
+                                                                      child: CircleAvatar(
+                                                                        radius:
+                                                                            6,
+                                                                        backgroundColor: state.activePage ==
+                                                                                index
+                                                                            ? Colors.red
+                                                                            : AppTheme.secondaryColor,
+                                                                      )),
+                                                                )),
+                                                  ),
+                                                )),
+                                            Expanded(
+                                              child: PageView.builder(
+                                                controller:
+                                                    cubit.pageController,
+                                                onPageChanged: (int page) {
+                                                  cubit.onChangePage(page);
+                                                },
+                                                itemCount: pages.length,
+                                                itemBuilder: (context, index) {
+                                                  return pages[
+                                                      index % pages.length];
+                                                },
+                                              ),
+                                            )
+                                          ]))))),
+                        ),
+                      ],
                     ),
-                    TextButton(
-                      onPressed: () {
-                        cubit.moveToNextPage();
-                      },
-                      style: TextButton.styleFrom(
-                          backgroundColor: AppTheme.surfaceColor),
-                      child: Text(state.activePage != 2 ? 'Next' : 'Add'),
+                    Positioned(
+                      height: 60,
+                      bottom: 15,
+                      left: 0,
+                      right: 0,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              cubit.moveToPreviustPage();
+                            },
+                            style: TextButton.styleFrom(
+                                backgroundColor: AppTheme.surfaceColor),
+                            child: const Text('Previus'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              cubit.moveToNextPage();
+                            },
+                            style: TextButton.styleFrom(
+                                backgroundColor: AppTheme.surfaceColor),
+                            child: Text(state.activePage != 2 ? 'Next' : 'Add'),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
         );
       },
     );

@@ -15,7 +15,8 @@ class CreateProductCubit extends Cubit<ProductState> {
   final productRepository = locate<ProductRepository>();
 
   final TextEditingController salePriceController = TextEditingController();
-  final TextEditingController warehouseQuantityController =TextEditingController();
+  final TextEditingController warehouseQuantityController =
+      TextEditingController();
   final TextEditingController costPriceController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -24,6 +25,7 @@ class CreateProductCubit extends Cubit<ProductState> {
 
   Future<bool> addProduct() async {
     try {
+      emit(state.copyWith(isLoading: true));
       final product = CreateProduct(
         name: state.name,
         description: state.description,
@@ -43,10 +45,14 @@ class CreateProductCubit extends Cubit<ProductState> {
         colorController.clear();
         emit(state.copyWith(activePage: 0));
         clearState();
+      } else {
+        emit(state.copyWith(errorMessage: 'Failed'));
+        emit(state.copyWith(isLoading: false));
       }
       return true;
     } catch (e) {
       moxyPrint(e);
+      emit(state.copyWith(errorMessage: '$e'));
       return false;
     }
   }

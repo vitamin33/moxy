@@ -12,7 +12,6 @@ import 'models/response/login_response.dart';
 class DioClient {
   static const String baseUrl = 'http://10.0.2.2:3000';
   // static const String baseUrl = 'http://localhost:3000';
-  static const String loginUserUrl = '/auth/login';
 
   static final DioClient instance = DioClient._private();
 
@@ -61,7 +60,7 @@ class DioClient {
     String color,
     List<String> images,
   ) async {
-    final CreateProduct result;
+    final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
     for (String image in images) {
       String fileName = basename(image);
@@ -83,14 +82,14 @@ class DioClient {
     });
     try {
       Response response = await _dio.post(
-        createProductApiPath,
+        createProductUrl,
         data: formData,
       );
       result = CreateProduct.fromJson(response.data);
-      return result;
     } catch (e) {
       moxyPrint('Request product :$e');
       return null;
     }
+    return result;
   }
 }

@@ -25,6 +25,8 @@ mixin _$ProductState {
   double get salePrice => throw _privateConstructorUsedError;
   String get color => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
+  bool get isLoading => throw _privateConstructorUsedError;
+  String get errorMessage => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
@@ -36,7 +38,9 @@ mixin _$ProductState {
             double costPrice,
             double salePrice,
             String color,
-            List<String> images)
+            List<String> images,
+            bool isLoading,
+            String errorMessage)
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -51,7 +55,9 @@ mixin _$ProductState {
             double costPrice,
             double salePrice,
             String color,
-            List<String> images)?
+            List<String> images,
+            bool isLoading,
+            String errorMessage)?
         initial,
   }) =>
       throw _privateConstructorUsedError;
@@ -66,7 +72,9 @@ mixin _$ProductState {
             double costPrice,
             double salePrice,
             String color,
-            List<String> images)?
+            List<String> images,
+            bool isLoading,
+            String errorMessage)?
         initial,
     required TResult orElse(),
   }) =>
@@ -108,7 +116,9 @@ abstract class $ProductStateCopyWith<$Res> {
       double costPrice,
       double salePrice,
       String color,
-      List<String> images});
+      List<String> images,
+      bool isLoading,
+      String errorMessage});
 }
 
 /// @nodoc
@@ -133,6 +143,8 @@ class _$ProductStateCopyWithImpl<$Res, $Val extends ProductState>
     Object? salePrice = null,
     Object? color = null,
     Object? images = null,
+    Object? isLoading = null,
+    Object? errorMessage = null,
   }) {
     return _then(_value.copyWith(
       initialPage: null == initialPage
@@ -171,6 +183,14 @@ class _$ProductStateCopyWithImpl<$Res, $Val extends ProductState>
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -192,7 +212,9 @@ abstract class _$$_InitialCopyWith<$Res>
       double costPrice,
       double salePrice,
       String color,
-      List<String> images});
+      List<String> images,
+      bool isLoading,
+      String errorMessage});
 }
 
 /// @nodoc
@@ -214,6 +236,8 @@ class __$$_InitialCopyWithImpl<$Res>
     Object? salePrice = null,
     Object? color = null,
     Object? images = null,
+    Object? isLoading = null,
+    Object? errorMessage = null,
   }) {
     return _then(_$_Initial(
       initialPage: null == initialPage
@@ -252,6 +276,14 @@ class __$$_InitialCopyWithImpl<$Res>
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      isLoading: null == isLoading
+          ? _value.isLoading
+          : isLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      errorMessage: null == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -268,7 +300,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       this.costPrice = 0,
       this.salePrice = 0.0,
       this.color = '',
-      final List<String> images = const []})
+      final List<String> images = const [],
+      this.isLoading = false,
+      this.errorMessage = ''})
       : _images = images,
         super._();
 
@@ -306,8 +340,15 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   }
 
   @override
+  @JsonKey()
+  final bool isLoading;
+  @override
+  @JsonKey()
+  final String errorMessage;
+
+  @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images)';
+    return 'ProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images, isLoading: $isLoading, errorMessage: $errorMessage)';
   }
 
   @override
@@ -323,7 +364,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('costPrice', costPrice))
       ..add(DiagnosticsProperty('salePrice', salePrice))
       ..add(DiagnosticsProperty('color', color))
-      ..add(DiagnosticsProperty('images', images));
+      ..add(DiagnosticsProperty('images', images))
+      ..add(DiagnosticsProperty('isLoading', isLoading))
+      ..add(DiagnosticsProperty('errorMessage', errorMessage));
   }
 
   @override
@@ -345,7 +388,11 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             (identical(other.salePrice, salePrice) ||
                 other.salePrice == salePrice) &&
             (identical(other.color, color) || other.color == color) &&
-            const DeepCollectionEquality().equals(other._images, _images));
+            const DeepCollectionEquality().equals(other._images, _images) &&
+            (identical(other.isLoading, isLoading) ||
+                other.isLoading == isLoading) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
@@ -359,7 +406,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       costPrice,
       salePrice,
       color,
-      const DeepCollectionEquality().hash(_images));
+      const DeepCollectionEquality().hash(_images),
+      isLoading,
+      errorMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -379,11 +428,23 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             double costPrice,
             double salePrice,
             String color,
-            List<String> images)
+            List<String> images,
+            bool isLoading,
+            String errorMessage)
         initial,
   }) {
-    return initial(initialPage, activePage, name, description,
-        warehouseQuantity, costPrice, salePrice, color, images);
+    return initial(
+        initialPage,
+        activePage,
+        name,
+        description,
+        warehouseQuantity,
+        costPrice,
+        salePrice,
+        color,
+        images,
+        isLoading,
+        errorMessage);
   }
 
   @override
@@ -398,11 +459,23 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             double costPrice,
             double salePrice,
             String color,
-            List<String> images)?
+            List<String> images,
+            bool isLoading,
+            String errorMessage)?
         initial,
   }) {
-    return initial?.call(initialPage, activePage, name, description,
-        warehouseQuantity, costPrice, salePrice, color, images);
+    return initial?.call(
+        initialPage,
+        activePage,
+        name,
+        description,
+        warehouseQuantity,
+        costPrice,
+        salePrice,
+        color,
+        images,
+        isLoading,
+        errorMessage);
   }
 
   @override
@@ -417,13 +490,25 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
             double costPrice,
             double salePrice,
             String color,
-            List<String> images)?
+            List<String> images,
+            bool isLoading,
+            String errorMessage)?
         initial,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial(initialPage, activePage, name, description,
-          warehouseQuantity, costPrice, salePrice, color, images);
+      return initial(
+          initialPage,
+          activePage,
+          name,
+          description,
+          warehouseQuantity,
+          costPrice,
+          salePrice,
+          color,
+          images,
+          isLoading,
+          errorMessage);
     }
     return orElse();
   }
@@ -467,7 +552,9 @@ abstract class _Initial extends ProductState {
       final double costPrice,
       final double salePrice,
       final String color,
-      final List<String> images}) = _$_Initial;
+      final List<String> images,
+      final bool isLoading,
+      final String errorMessage}) = _$_Initial;
   const _Initial._() : super._();
 
   @override
@@ -488,6 +575,10 @@ abstract class _Initial extends ProductState {
   String get color;
   @override
   List<String> get images;
+  @override
+  bool get isLoading;
+  @override
+  String get errorMessage;
   @override
   @JsonKey(ignore: true)
   _$$_InitialCopyWith<_$_Initial> get copyWith =>

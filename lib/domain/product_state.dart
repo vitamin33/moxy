@@ -15,7 +15,10 @@ class ProductState with _$ProductState {
     @Default(0.0) double salePrice,
     @Default('') String color,
     @Default([]) List<String> images,
+    @Default(false) bool isLoading,
+    @Default('') String errorMessage,
   }) = _Initial;
+
 
   const ProductState._();
 }
