@@ -92,14 +92,31 @@ Widget positionButton(ProductState state, CreateProductCubit cubit) {
           onPressed: () {
             cubit.moveToPreviustPage();
           },
-          style: TextButton.styleFrom(backgroundColor: AppTheme.surfaceColor),
+          style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                      color: AppTheme.primaryColor,
+                      width: 1,
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(50)),
+              elevation: 50,
+              padding: const EdgeInsets.all(28),
+              backgroundColor: AppTheme.primaryContainerColor),
           child: const Text('Previus'),
         ),
-        TextButton(
+        OutlinedButton(
           onPressed: () {
             cubit.moveToNextPage();
           },
-          style: TextButton.styleFrom(backgroundColor: AppTheme.surfaceColor),
+          style: TextButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  side: const BorderSide(
+                      color: AppTheme.primaryColor,
+                      width: 1,
+                      style: BorderStyle.solid),
+                  borderRadius: BorderRadius.circular(50)),
+              padding: const EdgeInsets.all(28),
+              backgroundColor: AppTheme.primaryContainerColor),
           child: Text(state.activePage != 2 ? 'Next' : 'Add'),
         ),
       ],
