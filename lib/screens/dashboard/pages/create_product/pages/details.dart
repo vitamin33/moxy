@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
+import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/product_state.dart';
 
 class ProductDetails extends StatelessWidget {
@@ -9,6 +10,8 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String dropdownValue = productColors.first;
+
     return BlocBuilder<CreateProductCubit, ProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
@@ -22,7 +25,7 @@ class ProductDetails extends StatelessWidget {
                     hintText: 'Name',
                   ),
                   controller: cubit.nameController,
-                  onChanged: (value) => cubit.nameChanged(value)  ),
+                  onChanged: (value) => cubit.nameChanged(value)),
               TextField(
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -32,13 +35,28 @@ class ProductDetails extends StatelessWidget {
                 onChanged: (value) => cubit.descriptionChanged(value),
                 maxLines: 6,
               ),
-              TextField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
-                  hintText: 'Color',
+              Padding(
+                padding: const EdgeInsets.all(AppTheme.cardPadding),
+                child: DropdownButton<String>(
+                  value: dropdownValue,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  dropdownColor: AppTheme.primaryContainerColor,
+                  underline: Container(
+                    height: 1,
+                    color: AppTheme.secondaryColor,
+                  ),
+                  onChanged: (value) {
+                    dropdownValue = value!;
+                    cubit.colorChanged(value);
+                  },
+                  items: productColors
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
                 ),
-                controller: cubit.colorController,
-                onChanged: (value) => cubit.colorChanged(value),
               ),
             ],
           ),
