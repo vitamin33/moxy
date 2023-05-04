@@ -104,7 +104,7 @@ Widget positionButton(ProductState state, CreateProductCubit cubit) {
               backgroundColor: AppTheme.primaryContainerColor),
           child: const Text('Previus'),
         ),
-        OutlinedButton(
+        TextButton(
           onPressed: () {
             cubit.moveToNextPage();
           },
