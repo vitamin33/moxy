@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
-import 'package:moxy/domain/product_state.dart';
+import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../services/get_it.dart';
+import '../../services/get_it.dart';
 
-class CreateProductCubit extends Cubit<ProductState> {
-  CreateProductCubit() : super(const ProductState.initial());
+class CreateProductCubit extends Cubit<CreateProductState> {
+  CreateProductCubit() : super(const CreateProductState.initial());
 
   final productRepository = locate<ProductRepository>();
 
@@ -116,6 +116,7 @@ class CreateProductCubit extends Cubit<ProductState> {
     if (state.activePage != 2) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+
     } else {
       addProduct();
     }
@@ -131,7 +132,7 @@ class CreateProductCubit extends Cubit<ProductState> {
   }
 
   void clearState() {
-    emit(const ProductState.initial());
+    emit(const CreateProductState.initial());
     pageController.animateToPage(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }

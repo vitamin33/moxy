@@ -41,9 +41,9 @@ List<Menu> menus = const [
     ],
   ),
   Menu(
-    title: 'Transactions',
-    icon: Icons.monetization_on_outlined,
-    route: TransactionsPageState(),
+    title: 'Products',
+    icon: Icons.shopping_basket_outlined,
+    route: ProductsPageState(),
     subRoutes: [],
   ),
   Menu(
