@@ -1,8 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/all_products/all_products_state.dart';
-
+import 'package:moxy/theme/app_theme.dart';
 
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -17,17 +19,27 @@ class ProductsPage extends StatelessWidget {
           Expanded(
               child: state.when(
                   initial: (allProducts) {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: allProducts.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          final product = allProducts[index];
-                          return ListTile(
-                            title: Text(product.name),
-                            subtitle: Text(product.description),
-                            trailing: Text(product.salePrice.toString()),
-                          );
-                        });
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: allProducts.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final product = allProducts[index];
+                            return Card(
+                              margin: const EdgeInsets.all(3.0),
+                              child: ListTile(
+                                leading: Image.network(
+                                  '${product.images.first}',
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                title: Text(product.name),
+                                trailing: listTileTrailing(state, product),
+                              ),
+                            );
+                          }),
+                    );
                   },
                   loading: () => const Center(
                         child: CircularProgressIndicator(),
@@ -39,4 +51,31 @@ class ProductsPage extends StatelessWidget {
       ));
     });
   }
+}
+
+Widget listTileTrailing(AllProductsState state, product) {
+  return SizedBox(
+    width: 150,
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text('Quantity: '),
+            Text('Price:  '),
+          ],
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(' ${product.warehouseQuantity.toString()}'),
+            Text(' ${product.salePrice.toString()} \$'),
+          ],
+        ),
+      ],
+    ),
+  );
 }
