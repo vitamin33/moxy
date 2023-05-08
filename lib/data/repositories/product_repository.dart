@@ -9,10 +9,9 @@ import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
-
 class ProductRepository {
   static DioClient client = DioClient.instance;
-  Future<dynamic> addProduct(CreateProduct product) async {
+  Future<Result<dynamic, Exception>> addProduct(CreateProduct product) async {
     try {
       final result = (await client.createProduct(
           product.name,
@@ -23,13 +22,13 @@ class ProductRepository {
           product.color,
           product.images));
       if (result != null) {
-        return true;
+        return Result.success(result);
       } else {
-        return false;
+        return Result.error(Exception('sd'));
       }
     } catch (e) {
       moxyPrint('Repository Error:$e');
-      return false;
+      return Result.error(Exception('$e'));
     }
   }
 

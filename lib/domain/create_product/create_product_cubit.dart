@@ -23,7 +23,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   final TextEditingController nameController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
-  Future<bool> addProduct() async {
+  void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
       final product = CreateProduct(
@@ -36,7 +36,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         images: state.images,
       );
       final pushProduct = await productRepository.addProduct(product);
-      if (pushProduct == true) {
+      pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();
         costPriceController.clear();
@@ -44,14 +44,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         salePriceController.clear();
         colorController.clear();
         clearState();
-      } else {
+      }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
-      }
-      return true;
+      });
     } catch (e) {
       moxyPrint(e);
-      return false;
     }
   }
 
@@ -116,7 +114,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     if (state.activePage != 2) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-
     } else {
       addProduct();
     }
