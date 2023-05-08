@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/components/snackbar_widgets.dart';
-import 'package:moxy/domain/product_cubit.dart';
-import 'package:moxy/domain/product_state.dart';
+import 'package:moxy/domain/create_product/create_product_cubit.dart';
+import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/branding.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/summary.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import '../../../../components/rounded_card.dart';
 
 class CreateProductPage extends StatelessWidget {
@@ -20,7 +19,7 @@ class CreateProductPage extends StatelessWidget {
       Branding(),
       Summary(),
     ];
-    return BlocConsumer<CreateProductCubit, ProductState>(
+    return BlocConsumer<CreateProductCubit, CreateProductState>(
       listener: (context, state) => {
         if (state.errorMessage != '')
           {
@@ -78,7 +77,7 @@ class CreateProductPage extends StatelessWidget {
   }
 }
 
-Widget positionButton(ProductState state, CreateProductCubit cubit) {
+Widget positionButton(CreateProductState state, CreateProductCubit cubit) {
   return Positioned(
     height: 60,
     bottom: 15,
@@ -124,7 +123,7 @@ Widget positionButton(ProductState state, CreateProductCubit cubit) {
   );
 }
 
-Widget appIndicator(ProductState state, CreateProductCubit cubit, pages) {
+Widget appIndicator(CreateProductState state, CreateProductCubit cubit, pages) {
   return SizedBox(
       height: 50,
       child: Container(

@@ -78,6 +78,7 @@ dev_dependencies:
   freezed: ^2.3.2
   json_serializable: ^6.6.1
   image_picker: ^0.8.7+4
+  multiple_result: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

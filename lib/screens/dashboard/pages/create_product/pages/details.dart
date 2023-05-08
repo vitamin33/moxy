@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/product_cubit.dart';
+import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../constant/product_colors.dart';
-import '../../../../../domain/product_state.dart';
+import '../../../../../domain/create_product/create_product_state.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -12,7 +12,7 @@ class ProductDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     String dropdownValue = productColors.first;
 
-    return BlocBuilder<CreateProductCubit, ProductState>(
+    return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
         return Padding(

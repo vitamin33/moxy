@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
+import 'package:moxy/utils/common.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import 'login_state.dart';
@@ -41,13 +42,13 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await authRepository.loginWithCredentials(
           state.email, state.password);
 
-      if (result) {
+      result.when((success) {
         emit(state.copyWith(state: LoginWithCredsSuccess()));
-      } else {
+      }, (error) {
         emit(state.copyWith(
             state:
                 LoginFailed(message: 'Unable to login. Try one more time.')));
-      }
+      });
     } on Exception catch (error) {
       emit(state.copyWith(state: LoginFailed(message: error.toString())));
     }

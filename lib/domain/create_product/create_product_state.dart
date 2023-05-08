@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'product_state.freezed.dart';
+part 'create_product_state.freezed.dart';
 
 @freezed
-class ProductState with _$ProductState {
-  const factory ProductState.initial({
+class CreateProductState with _$CreateProductState {
+  const factory CreateProductState.initial({
     @Default(0) int initialPage,
     @Default(0) int activePage,
     @Default('') String name,
@@ -20,5 +20,5 @@ class ProductState with _$ProductState {
   }) = _Initial;
 
 
-  const ProductState._();
+  const CreateProductState._();
 }

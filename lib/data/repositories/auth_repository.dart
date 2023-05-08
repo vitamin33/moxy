@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants.dart';
 import '../dio_client.dart';
 import '../models/response/login_response.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 class AuthRepository {
   static DioClient client = DioClient.instance;
@@ -12,7 +13,8 @@ class AuthRepository {
 
   AuthRepository._private();
 
-  Future<bool> loginWithCredentials(String email, String password) async {
+  Future<Result<SharedPreferences, Exception>> loginWithCredentials(
+      String email, String password) async {
     try {
       final result = await client.login(email, password);
       final token = result?.token;
@@ -22,10 +24,10 @@ class AuthRepository {
         await prefs.setString(tokenKey, token);
         await prefs.setString(userIdKey, userId);
         moxyPrint('Success login, saved token: $token');
-        return true;
+        return Result.success(prefs);
       } else {
         moxyPrint('Failed durring login!');
-        return false;
+        return Result.error(Exception('sdsd'));
       }
     } catch (e) {
       rethrow;

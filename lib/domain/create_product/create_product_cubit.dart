@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
-import 'package:moxy/domain/product_state.dart';
+import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../services/get_it.dart';
+import '../../services/get_it.dart';
 
-class CreateProductCubit extends Cubit<ProductState> {
-  CreateProductCubit() : super(const ProductState.initial());
+class CreateProductCubit extends Cubit<CreateProductState> {
+  CreateProductCubit() : super(const CreateProductState.initial());
 
   final productRepository = locate<ProductRepository>();
 
@@ -23,7 +23,7 @@ class CreateProductCubit extends Cubit<ProductState> {
   final TextEditingController nameController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
-  Future<bool> addProduct() async {
+  void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
       final product = CreateProduct(
@@ -36,7 +36,7 @@ class CreateProductCubit extends Cubit<ProductState> {
         images: state.images,
       );
       final pushProduct = await productRepository.addProduct(product);
-      if (pushProduct == true) {
+      pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();
         costPriceController.clear();
@@ -44,14 +44,12 @@ class CreateProductCubit extends Cubit<ProductState> {
         salePriceController.clear();
         colorController.clear();
         clearState();
-      } else {
+      }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
-      }
-      return true;
+      });
     } catch (e) {
       moxyPrint(e);
-      return false;
     }
   }
 
@@ -131,7 +129,7 @@ class CreateProductCubit extends Cubit<ProductState> {
   }
 
   void clearState() {
-    emit(const ProductState.initial());
+    emit(const CreateProductState.initial());
     pageController.animateToPage(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }

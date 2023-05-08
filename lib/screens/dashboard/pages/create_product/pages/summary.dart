@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/product_cubit.dart';
+import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import '../../../../../domain/product_state.dart';
+import '../../../../../domain/create_product/create_product_state.dart';
 
 class Summary extends StatelessWidget {
   const Summary({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreateProductCubit, ProductState>(
+    return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),

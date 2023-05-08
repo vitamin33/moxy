@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'product_state.dart';
+part of 'create_product_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 /// @nodoc
-mixin _$ProductState {
+mixin _$CreateProductState {
   int get initialPage => throw _privateConstructorUsedError;
   int get activePage => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
@@ -97,15 +97,15 @@ mixin _$ProductState {
       throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
-  $ProductStateCopyWith<ProductState> get copyWith =>
+  $CreateProductStateCopyWith<CreateProductState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ProductStateCopyWith<$Res> {
-  factory $ProductStateCopyWith(
-          ProductState value, $Res Function(ProductState) then) =
-      _$ProductStateCopyWithImpl<$Res, ProductState>;
+abstract class $CreateProductStateCopyWith<$Res> {
+  factory $CreateProductStateCopyWith(
+          CreateProductState value, $Res Function(CreateProductState) then) =
+      _$CreateProductStateCopyWithImpl<$Res, CreateProductState>;
   @useResult
   $Res call(
       {int initialPage,
@@ -122,9 +122,9 @@ abstract class $ProductStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ProductStateCopyWithImpl<$Res, $Val extends ProductState>
-    implements $ProductStateCopyWith<$Res> {
-  _$ProductStateCopyWithImpl(this._value, this._then);
+class _$CreateProductStateCopyWithImpl<$Res, $Val extends CreateProductState>
+    implements $CreateProductStateCopyWith<$Res> {
+  _$CreateProductStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -197,7 +197,7 @@ class _$ProductStateCopyWithImpl<$Res, $Val extends ProductState>
 
 /// @nodoc
 abstract class _$$_InitialCopyWith<$Res>
-    implements $ProductStateCopyWith<$Res> {
+    implements $CreateProductStateCopyWith<$Res> {
   factory _$$_InitialCopyWith(
           _$_Initial value, $Res Function(_$_Initial) then) =
       __$$_InitialCopyWithImpl<$Res>;
@@ -219,7 +219,7 @@ abstract class _$$_InitialCopyWith<$Res>
 
 /// @nodoc
 class __$$_InitialCopyWithImpl<$Res>
-    extends _$ProductStateCopyWithImpl<$Res, _$_Initial>
+    extends _$CreateProductStateCopyWithImpl<$Res, _$_Initial>
     implements _$$_InitialCopyWith<$Res> {
   __$$_InitialCopyWithImpl(_$_Initial _value, $Res Function(_$_Initial) _then)
       : super(_value, _then);
@@ -348,14 +348,14 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images, isLoading: $isLoading, errorMessage: $errorMessage)';
+    return 'CreateProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images, isLoading: $isLoading, errorMessage: $errorMessage)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'ProductState.initial'))
+      ..add(DiagnosticsProperty('type', 'CreateProductState.initial'))
       ..add(DiagnosticsProperty('initialPage', initialPage))
       ..add(DiagnosticsProperty('activePage', activePage))
       ..add(DiagnosticsProperty('name', name))
@@ -542,7 +542,7 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   }
 }
 
-abstract class _Initial extends ProductState {
+abstract class _Initial extends CreateProductState {
   const factory _Initial(
       {final int initialPage,
       final int activePage,

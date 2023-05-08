@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:path/path.dart';
 
@@ -91,5 +94,19 @@ class DioClient {
       return null;
     }
     return result;
+  }
+
+  Future<List<Product>> allProducts() async {
+    try {
+      final response = await _dio.get(allProductsUrl);
+      final data = response.data;
+      final productList = <Product>[];
+      for (var value in (data as List)) {
+        productList.add(Product.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      throw Exception('Failed to load product: $e');
+    }
   }
 }
