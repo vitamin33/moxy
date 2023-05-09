@@ -24,7 +24,7 @@ class Product {
   double costPrice;
   double salePrice;
   String color;
-  List images;
+  List<String> images;
 
   Product({
     required this.id,

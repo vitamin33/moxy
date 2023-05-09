@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/all_products/all_products_state.dart';
+import 'package:moxy/domain/create_product/create_product_cubit.dart';
+import 'package:moxy/navigation/home_router_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -30,12 +33,22 @@ class ProductsPage extends StatelessWidget {
                               margin: const EdgeInsets.all(3.0),
                               child: ListTile(
                                 leading: Image.network(
-                                  '${product.images.first}',
+                                  product.images.first,
                                   width: 50,
                                   height: 50,
                                 ),
                                 title: Text(product.name),
                                 trailing: listTileTrailing(state, product),
+                                onTap: () {
+                                  context
+                                      .read<CreateProductCubit>()
+                                      .changeEdit();
+                                  context
+                                      .read<CreateProductCubit>()
+                                      .getProductById(product.id);
+                                  context.read<HomeRouterCubit>().navigateTo(
+                                      const CreateProductPageState());
+                                },
                               ),
                             );
                           }),

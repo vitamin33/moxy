@@ -16,6 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$CreateProductState {
+  dynamic get productById => throw _privateConstructorUsedError;
+  bool get isEdit => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
   int get initialPage => throw _privateConstructorUsedError;
   int get activePage => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
@@ -30,6 +33,9 @@ mixin _$CreateProductState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            dynamic productById,
+            bool isEdit,
+            String id,
             int initialPage,
             int activePage,
             String name,
@@ -47,6 +53,9 @@ mixin _$CreateProductState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            dynamic productById,
+            bool isEdit,
+            String id,
             int initialPage,
             int activePage,
             String name,
@@ -64,6 +73,9 @@ mixin _$CreateProductState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            dynamic productById,
+            bool isEdit,
+            String id,
             int initialPage,
             int activePage,
             String name,
@@ -108,7 +120,10 @@ abstract class $CreateProductStateCopyWith<$Res> {
       _$CreateProductStateCopyWithImpl<$Res, CreateProductState>;
   @useResult
   $Res call(
-      {int initialPage,
+      {dynamic productById,
+      bool isEdit,
+      String id,
+      int initialPage,
       int activePage,
       String name,
       String description,
@@ -134,6 +149,9 @@ class _$CreateProductStateCopyWithImpl<$Res, $Val extends CreateProductState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? productById = freezed,
+    Object? isEdit = null,
+    Object? id = null,
     Object? initialPage = null,
     Object? activePage = null,
     Object? name = null,
@@ -147,6 +165,18 @@ class _$CreateProductStateCopyWithImpl<$Res, $Val extends CreateProductState>
     Object? errorMessage = null,
   }) {
     return _then(_value.copyWith(
+      productById: freezed == productById
+          ? _value.productById
+          : productById // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      isEdit: null == isEdit
+          ? _value.isEdit
+          : isEdit // ignore: cast_nullable_to_non_nullable
+              as bool,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       initialPage: null == initialPage
           ? _value.initialPage
           : initialPage // ignore: cast_nullable_to_non_nullable
@@ -204,7 +234,10 @@ abstract class _$$_InitialCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int initialPage,
+      {dynamic productById,
+      bool isEdit,
+      String id,
+      int initialPage,
       int activePage,
       String name,
       String description,
@@ -227,6 +260,9 @@ class __$$_InitialCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? productById = freezed,
+    Object? isEdit = null,
+    Object? id = null,
     Object? initialPage = null,
     Object? activePage = null,
     Object? name = null,
@@ -240,6 +276,15 @@ class __$$_InitialCopyWithImpl<$Res>
     Object? errorMessage = null,
   }) {
     return _then(_$_Initial(
+      productById: freezed == productById ? _value.productById! : productById,
+      isEdit: null == isEdit
+          ? _value.isEdit
+          : isEdit // ignore: cast_nullable_to_non_nullable
+              as bool,
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
       initialPage: null == initialPage
           ? _value.initialPage
           : initialPage // ignore: cast_nullable_to_non_nullable
@@ -292,7 +337,10 @@ class __$$_InitialCopyWithImpl<$Res>
 
 class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   const _$_Initial(
-      {this.initialPage = 0,
+      {this.productById = const [],
+      this.isEdit = false,
+      this.id = '',
+      this.initialPage = 0,
       this.activePage = 0,
       this.name = '',
       this.description = '',
@@ -306,6 +354,15 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
       : _images = images,
         super._();
 
+  @override
+  @JsonKey()
+  final dynamic productById;
+  @override
+  @JsonKey()
+  final bool isEdit;
+  @override
+  @JsonKey()
+  final String id;
   @override
   @JsonKey()
   final int initialPage;
@@ -348,7 +405,7 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CreateProductState.initial(initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images, isLoading: $isLoading, errorMessage: $errorMessage)';
+    return 'CreateProductState.initial(productById: $productById, isEdit: $isEdit, id: $id, initialPage: $initialPage, activePage: $activePage, name: $name, description: $description, warehouseQuantity: $warehouseQuantity, costPrice: $costPrice, salePrice: $salePrice, color: $color, images: $images, isLoading: $isLoading, errorMessage: $errorMessage)';
   }
 
   @override
@@ -356,6 +413,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'CreateProductState.initial'))
+      ..add(DiagnosticsProperty('productById', productById))
+      ..add(DiagnosticsProperty('isEdit', isEdit))
+      ..add(DiagnosticsProperty('id', id))
       ..add(DiagnosticsProperty('initialPage', initialPage))
       ..add(DiagnosticsProperty('activePage', activePage))
       ..add(DiagnosticsProperty('name', name))
@@ -374,6 +434,10 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Initial &&
+            const DeepCollectionEquality()
+                .equals(other.productById, productById) &&
+            (identical(other.isEdit, isEdit) || other.isEdit == isEdit) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.initialPage, initialPage) ||
                 other.initialPage == initialPage) &&
             (identical(other.activePage, activePage) ||
@@ -398,6 +462,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(productById),
+      isEdit,
+      id,
       initialPage,
       activePage,
       name,
@@ -420,6 +487,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(
+            dynamic productById,
+            bool isEdit,
+            String id,
             int initialPage,
             int activePage,
             String name,
@@ -434,6 +504,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
         initial,
   }) {
     return initial(
+        productById,
+        isEdit,
+        id,
         initialPage,
         activePage,
         name,
@@ -451,6 +524,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(
+            dynamic productById,
+            bool isEdit,
+            String id,
             int initialPage,
             int activePage,
             String name,
@@ -465,6 +541,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
         initial,
   }) {
     return initial?.call(
+        productById,
+        isEdit,
+        id,
         initialPage,
         activePage,
         name,
@@ -482,6 +561,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(
+            dynamic productById,
+            bool isEdit,
+            String id,
             int initialPage,
             int activePage,
             String name,
@@ -498,6 +580,9 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
   }) {
     if (initial != null) {
       return initial(
+          productById,
+          isEdit,
+          id,
           initialPage,
           activePage,
           name,
@@ -544,7 +629,10 @@ class _$_Initial extends _Initial with DiagnosticableTreeMixin {
 
 abstract class _Initial extends CreateProductState {
   const factory _Initial(
-      {final int initialPage,
+      {final dynamic productById,
+      final bool isEdit,
+      final String id,
+      final int initialPage,
       final int activePage,
       final String name,
       final String description,
@@ -557,6 +645,12 @@ abstract class _Initial extends CreateProductState {
       final String errorMessage}) = _$_Initial;
   const _Initial._() : super._();
 
+  @override
+  dynamic get productById;
+  @override
+  bool get isEdit;
+  @override
+  String get id;
   @override
   int get initialPage;
   @override

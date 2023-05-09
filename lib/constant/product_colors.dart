@@ -12,4 +12,5 @@ List<String> productColors = const [
   'Jeans',
   'Green',
   'Bars',
+  'Unified'
 ];

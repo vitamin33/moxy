@@ -109,4 +109,59 @@ class DioClient {
       throw Exception('Failed to load product: $e');
     }
   }
+
+  Future<Product> getProductById(String id) async {
+    try {
+      final response = await _dio.get('http://10.0.2.2:3000/products/$id');
+      final data = response.data;
+      final result = Product.fromJson(data);
+      return result;
+    } catch (e) {
+      throw Exception('Failed to load product: $e');
+    }
+  }
+
+  Future<Product?> editProduct(
+    String id,
+    String name,
+    String description,
+    int warehouseQuantity,
+    double costPrice,
+    double salePrice,
+    String color,
+    List<String> images,
+  ) async {
+    final Product? result;
+    List<MultipartFile> imageFiles = [];
+    for (String image in images) {
+      String fileName = basename(image);
+      imageFiles.add(
+        await MultipartFile.fromFile(
+          image,
+          filename: fileName,
+        ),
+      );
+    }
+    FormData formData = FormData.fromMap({
+      'id': id,
+      'name': name,
+      'description': description,
+      'costPrice': costPrice,
+      'salePrice': salePrice,
+      'warehouseQuantity': warehouseQuantity,
+      'color': color,
+      'images': imageFiles
+    });
+    try {
+      Response response = await _dio.post(
+        'http://10.0.2.2:3000/products/edit/$id',
+        data: formData,
+      );
+      result = Product.fromJson(response.data);
+    } catch (e) {
+      moxyPrint('Request product :$e');
+      return null;
+    }
+    return result;
+  }
 }

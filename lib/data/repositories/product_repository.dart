@@ -44,4 +44,40 @@ class ProductRepository {
       return Result.error(Exception('$e'));
     }
   }
+
+  Future<Result<Product, Exception>> getProductById(id) async {
+    try {
+      final result = await client.getProductById(id);
+      if (result != null) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('Result ProductById is null'));
+      }
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
+  }
+
+  Future<Result<Product,Exception>> editProduct(Product product)async{
+      try {
+      final result = (await client.editProduct(
+          product.id,
+          product.name,
+          product.description,
+          product.warehouseQuantity,
+          product.salePrice,
+          product.costPrice,
+          product.color,
+          product.images));
+      if (result != null) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('sd'));
+      }
+    } catch (e) {
+      moxyPrint('Repository Error:$e');
+      return Result.error(Exception('$e'));
+    }
+
+  }
 }

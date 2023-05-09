@@ -20,12 +20,13 @@ class ProductDetails extends StatelessWidget {
           child: Column(
             children: [
               TextField(
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    hintText: 'Name',
-                  ),
-                  controller: cubit.nameController,
-                  onChanged: (value) => cubit.nameChanged(value)),
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  hintText: 'Name',
+                ),
+                controller: cubit.nameController,
+                onChanged: (value) => cubit.nameChanged(value )
+              ),
               TextField(
                 decoration: const InputDecoration(
                   border: UnderlineInputBorder(),
@@ -38,7 +39,7 @@ class ProductDetails extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(AppTheme.cardPadding),
                 child: DropdownButton<String>(
-                  value: dropdownValue,
+                  value:dropdownValue ,
                   icon: const Icon(Icons.arrow_drop_down),
                   dropdownColor: AppTheme.primaryContainerColor,
                   underline: Container(
