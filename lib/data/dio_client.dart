@@ -11,6 +11,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../constant/api_path.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
+import 'models/response/all_orders_response.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
@@ -163,5 +164,22 @@ class DioClient {
       return null;
     }
     return result;
+  }
+
+
+  // ORDERS
+
+  Future<List<Order>> allOrders() async {
+    try {
+      final response = await _dio.get(allOrdersUrl);
+      final data = response.data;
+      final orderList = <Order>[];
+      for (var value in (data as List)) {
+        orderList.add(Order.fromJson(value));
+      }
+      return orderList;
+    } catch (e) {
+      throw Exception('Failed to load product: $e');
+    }
   }
 }
