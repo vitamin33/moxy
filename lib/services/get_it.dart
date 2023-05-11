@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
+import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/services/navigation_service.dart';
 import '../data/repositories/product_repository.dart';
 import '../data/secure_storage_repository.dart';
@@ -15,6 +16,7 @@ class GetItService {
     getIt.registerSingleton<NavigationService>(NavigationService());
     getIt.registerSingleton<ProductRepository>(ProductRepository());
     getIt.registerSingleton<ImagePickerService>(ImagePickerService());
+    getIt.registerSingleton<ProductMapper>(ProductMapper());
   }
 }
 

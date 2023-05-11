@@ -2,18 +2,20 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../services/get_it.dart';
+import '../mappers/product_mapper.dart';
 
 class CreateProductCubit extends Cubit<CreateProductState> {
-  CreateProductCubit() : super(const CreateProductState.initial());
-
+  final produtctMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+
+  CreateProductCubit() : super(const CreateProductState.initial());
 
   final TextEditingController salePriceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
@@ -27,15 +29,17 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final product = CreateProduct(
-        name: state.name,
-        description: state.description,
-        costPrice: state.costPrice,
-        salePrice: state.salePrice,
-        dimensions: state.dimensions,
-        idName: state.idName,
-        images: state.images,
-      );
+      final product = produtctMapper.mapToNetworkProduct(
+          Product(
+            name: state.name,
+            description: state.description,
+            costPrice: state.costPrice,
+            salePrice: state.salePrice,
+            dimensions: state.dimensions,
+            idName: state.idName,
+            images: state.images,
+          ),
+          state.dimensions);
       final pushProduct = await productRepository.addProduct(product);
       pushProduct.when((success) {
         nameController.clear();
@@ -112,10 +116,10 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
-    // void updateColor(int index, String color) {
-    //   final newState = state.copyWith.dimensions[index].copyWith(color: color);
-    //   emit(state.copyWith.dimensions[index] = newState);
-    // }
+  // void updateColor(int index, String color) {
+  //   final newState = state.copyWith.dimensions[index].copyWith(color: color);
+  //   emit(state.copyWith.dimensions[index] = newState);
+  // }
 
 //   void updateColor(int index, String color) {
 //   final newDimensions = List<Dimension>.from(state.dimensions);
@@ -202,7 +206,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   //   emit(currentState.copyWith(dimensions: newDimensions));
   // }
 
-
 // void updateDimensions(int index, String color, int quantity) {
   // final List<Dimension> updatedDimensions = state.dimensions.map((dimension) {
   //   if (state.dimensions.indexOf(dimension) == index) {
@@ -244,7 +247,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }, (error) {});
   }
 
-  void fillFields(Product product) {
+  void fillFields(NetworkProduct product) {
     nameController.text = product.name;
     descriptionController.text = product.description;
     costPriceController.text = product.costPrice.toString();

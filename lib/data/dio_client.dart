@@ -14,8 +14,8 @@ import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
-  static const String baseUrl = 'http://10.0.2.2:3000';
-  // static const String baseUrl = 'http://localhost:3000';
+  //static const String baseUrl = 'http://10.0.2.2:3000';
+  static const String baseUrl = 'http://localhost:3000';
 
   static final DioClient instance = DioClient._private();
 
@@ -60,7 +60,7 @@ class DioClient {
     String description,
     double costPrice,
     double salePrice,
-    List<Dimension> dimensions,
+    List<NetworkDimension> dimensions,
     List<String> images,
     String idName,
   ) async {
@@ -97,13 +97,13 @@ class DioClient {
     return result;
   }
 
-  Future<List<Product>> allProducts() async {
+  Future<List<NetworkProduct>> allProducts() async {
     try {
       final response = await _dio.get(allProductsUrl);
       final data = response.data;
-      final productList = <Product>[];
+      final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
-        productList.add(Product.fromJson(value));
+        productList.add(NetworkProduct.fromJson(value));
       }
       return productList;
     } catch (e) {
@@ -111,28 +111,28 @@ class DioClient {
     }
   }
 
-  Future<Product> getProductById(String id) async {
+  Future<NetworkProduct> getProductById(String id) async {
     try {
-      final response = await _dio.get('http://10.0.2.2:3000/products/$id');
+      final response = await _dio.get('$baseUrl/products/$id');
       final data = response.data;
-      final result = Product.fromJson(data);
+      final result = NetworkProduct.fromJson(data);
       return result;
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
   }
 
-  Future<Product?> editProduct(
-    String id,
+  Future<NetworkProduct?> editProduct(
+    String? id,
     String name,
     String description,
     String idName,
-    List<Dimension> dimensions,
+    List<NetworkDimension> dimensions,
     double costPrice,
     double salePrice,
     List<String> images,
   ) async {
-    final Product? result;
+    final NetworkProduct? result;
     List<MultipartFile> imageFiles = [];
     for (String image in images) {
       String fileName = basename(image);
@@ -154,10 +154,10 @@ class DioClient {
     });
     try {
       Response response = await _dio.post(
-        'http://10.0.2.2:3000/products/edit/$id',
+        '$baseUrl/products/edit/$id',
         data: formData,
       );
-      result = Product.fromJson(response.data);
+      result = NetworkProduct.fromJson(response.data);
     } catch (e) {
       moxyPrint('Request product :$e');
       return null;

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/data/models/response/all_products_response.dart';
+
+import '../models/product.dart';
 
 part 'all_products_state.freezed.dart';
 

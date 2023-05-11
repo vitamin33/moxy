@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/data/models/request/create_product_request.dart';
-// import 'package:moxy/data/models/request/create_product_request.dart';
-// import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/models/product.dart';
 
 part 'create_product_state.freezed.dart';
 
@@ -30,21 +28,3 @@ class CreateProductState with _$CreateProductState {
 
   const CreateProductState._();
 }
-
-// @freezed
-// class Dimension with _$Dimension {
-//   const factory Dimension({
-//     @Default('') String color,
-//     @Default(0) int quantity,
-//   }) = _Dimension;
-
-//   factory Dimension.fromJson(Map<String, dynamic> json) =>
-//       _$DimensionFromJson(json);
-//   Map<String, dynamic> toJson() => _$DimensionToJson(this);
-// }
-
-
-// Map<String, dynamic> DimensionToJson(Dimension instance) => <String, dynamic>{
-//       'color': instance.color,
-//       'quantity': instance.quantity,
-//     };
