@@ -14,13 +14,13 @@ class ProductMapper {
             salePrice: p.salePrice,
             dimensions: p.dimensions
                 .map((d) => Dimension(color: d.color, quantity: d.quantity))
-                .toList(),
+                .toSet(),
             idName: p.idName,
             images: p.images))
         .toList();
   }
 
-  NetworkProduct mapToNetworkProduct(Product p, List<Dimension> dimensions) {
+  NetworkProduct mapToNetworkProduct(Product p, Set<Dimension> dimensions) {
     return NetworkProduct(
         id: p.id,
         name: p.name,
@@ -32,5 +32,18 @@ class ProductMapper {
             .toList(),
         idName: p.idName,
         images: p.images);
+  }
+
+  Product mapToProduct(NetworkProduct success) {
+    return Product(
+        name: success.name,
+        description: success.description,
+        costPrice: success.costPrice,
+        salePrice: success.salePrice,
+        dimensions: success.dimensions
+            .map((d) => Dimension(color: d.color, quantity: d.quantity))
+            .toSet(),
+        idName: success.idName,
+        images: success.images);
   }
 }

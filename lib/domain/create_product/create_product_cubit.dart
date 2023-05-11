@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
@@ -15,7 +14,17 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   final produtctMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
 
-  CreateProductCubit() : super(const CreateProductState.initial());
+  CreateProductCubit()
+      : super(CreateProductState(
+            isLoading: false,
+            isEdit: false,
+            errorMessage: '',
+            editProduct: Product.defaultProduct(),
+            initialPage: 0,
+            activePage: 0,
+            product: Product.defaultProduct(),
+            images: [],
+            dimensions: []));
 
   final TextEditingController salePriceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
@@ -30,16 +39,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     try {
       emit(state.copyWith(isLoading: true));
       final product = produtctMapper.mapToNetworkProduct(
-          Product(
-            name: state.name,
-            description: state.description,
-            costPrice: state.costPrice,
-            salePrice: state.salePrice,
-            dimensions: state.dimensions,
-            idName: state.idName,
-            images: state.images,
-          ),
-          state.dimensions);
+          state.product, state.product.dimensions);
       final pushProduct = await productRepository.addProduct(product);
       pushProduct.when((success) {
         nameController.clear();
@@ -82,37 +82,47 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
   void nameChanged(value) {
     final String name = value;
-    emit(state.copyWith(name: name));
+    emit(state.copyWith(product: state.product.copyWith(name: name)));
   }
 
   void descriptionChanged(value) {
     final String description = value;
-    emit(state.copyWith(description: description));
+    emit(state.copyWith(
+        product: state.product.copyWith(description: description)));
   }
 
   void idNameChanged(value) {
     final String idName = value;
-    emit(state.copyWith(idName: idName));
+    emit(state.copyWith(product: state.product.copyWith(idName: idName)));
   }
 
   void costPriceChanged(value) {
     if (value != null) {
       final double costPrice = double.parse(value);
-      emit(state.copyWith(costPrice: costPrice));
+      emit(state.copyWith(
+          product: state.product.copyWith(costPrice: costPrice)));
     }
   }
 
   void quantityChanged(value) {
+    // TODO change implementation for color specific quantity,
+    //generate dimension here and add it
+    // color should be passed here to this method
     if (value != null) {
       final int quantity = int.parse(value);
-      emit(state.copyWith(quantity: quantity));
+      final Dimension dimension = Dimension(color: 'Black', quantity: quantity);
+      final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
+      newSetDimensions.add(dimension);
+      emit(state.copyWith(
+          product: state.product.copyWith(dimensions: newSetDimensions)));
     }
   }
 
   void salePriceChanged(value) {
     if (value != null) {
       final double salePrice = double.parse(value);
-      emit(state.copyWith(salePrice: salePrice));
+      emit(state.copyWith(
+          product: state.product.copyWith(salePrice: salePrice)));
     }
   }
 
@@ -160,8 +170,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 // }
 
   void colorChanged(value) {
+    // quantity should be passed here to this method
     final String color = value;
-    emit(state.copyWith(color: color));
+    final Dimension dimension = Dimension(color: color, quantity: 1);
+    final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
+    newSetDimensions.add(dimension);
+    emit(state.copyWith(
+        product: state.product.copyWith(dimensions: newSetDimensions)));
   }
 
   void moveToNextPage() {
@@ -188,7 +203,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   }
 
   void clearState() {
-    emit(const CreateProductState.initial());
+    emit(CreateProductState.defaultCreateProductState());
     pageController.animateToPage(0,
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
@@ -234,26 +249,15 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   void getProductById(id) async {
     final productById = await productRepository.getProductById(id);
     productById.when((success) {
-      emit(state.copyWith(productById: success));
-      emit(state.copyWith(
-        name: success.name,
-        description: success.description,
-        costPrice: success.costPrice,
-        // warehouseQuantity: success.warehouseQuantity,
-        salePrice: success.salePrice,
-        // color: success.color,
-        images: success.images,
-      ));
+      emit(state.copyWith(editProduct: produtctMapper.mapToProduct(success)));
     }, (error) {});
   }
 
-  void fillFields(NetworkProduct product) {
+  void fillFields(Product product) {
     nameController.text = product.name;
     descriptionController.text = product.description;
     costPriceController.text = product.costPrice.toString();
-    // colorController.text = product.color;
     salePriceController.text = product.salePrice.toString();
-    // warehouseQuantityController.text = product.warehouseQuantity.toString();
   }
 
   void changeEdit() {

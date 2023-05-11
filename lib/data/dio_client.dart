@@ -80,10 +80,10 @@ class DioClient {
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'dimensions': dimensions,
-      'images': imageFiles,
+      'dimensions': jsonDecode(jsonEncode(dimensions)),
+      'images': jsonDecode(jsonEncode(imageFiles)),
       'idName': idName
-    });
+    }, ListFormat.multiCompatible);
     try {
       Response response = await _dio.post(
         createProductUrl,
