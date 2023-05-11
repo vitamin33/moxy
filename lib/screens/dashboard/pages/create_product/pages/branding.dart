@@ -89,20 +89,20 @@ class Branding extends StatelessWidget {
                           ]),
                     ),
                     const SizedBox(width: AppTheme.cardPadding),
-                    Expanded(
-                      child: TextField(
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
-                            hintText: 'WarehouseQuantity',
-                          ),
-                          controller: cubit.warehouseQuantityController,
-                          onChanged: (value) =>
-                              {cubit.warehouseQuantityChanged(value)},
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(16),
-                          ]),
-                    ),
+                    // Expanded(
+                    //   child: TextField(
+                    //       decoration: const InputDecoration(
+                    //         border: UnderlineInputBorder(),
+                    //         hintText: 'WarehouseQuantity',
+                    //       ),
+                    //       controller: cubit.warehouseQuantityController,
+                    //       onChanged: (value) =>
+                    //           {cubit.warehouseQuantityChanged(value)},
+                    //       inputFormatters: [
+                    //         FilteringTextInputFormatter.digitsOnly,
+                    //         LengthLimitingTextInputFormatter(16),
+                    //       ]),
+                    // ),
                   ],
                 ),
               ),

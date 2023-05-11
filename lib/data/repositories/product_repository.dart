@@ -16,11 +16,12 @@ class ProductRepository {
       final result = (await client.createProduct(
           product.name,
           product.description,
-          product.warehouseQuantity,
           product.costPrice,
           product.salePrice,
-          product.color,
-          product.images));
+          product.dimensions,
+          product.images,
+          product.idName
+          ));
       if (result != null) {
         return Result.success(result);
       } else {
@@ -58,17 +59,19 @@ class ProductRepository {
     }
   }
 
-  Future<Result<Product,Exception>> editProduct(Product product)async{
-      try {
+  Future<Result<Product, Exception>> editProduct(
+      Product product) async {
+    try {
       final result = (await client.editProduct(
-          product.id,
-          product.name,
-          product.description,
-          product.warehouseQuantity,
-          product.salePrice,
-          product.costPrice,
-          product.color,
-          product.images));
+        product.id,
+        product.name,
+        product.description,
+        product.idName,
+        product.dimensions  ,
+        product.costPrice,
+        product.salePrice,
+        product.images,
+      ));
       if (result != null) {
         return Result.success(result);
       } else {
@@ -78,6 +81,5 @@ class ProductRepository {
       moxyPrint('Repository Error:$e');
       return Result.error(Exception('$e'));
     }
-
   }
 }

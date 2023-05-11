@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/domain/create_product/create_product_state.dart';
 
 part 'all_products_response.g.dart';
 
@@ -20,20 +22,20 @@ class Product {
   String id;
   String name;
   String description;
-  int warehouseQuantity;
   double costPrice;
   double salePrice;
-  String color;
+  List<Dimension> dimensions;
   List<String> images;
+  String idName;
 
   Product({
     required this.id,
     required this.name,
     required this.description,
-    required this.warehouseQuantity,
     required this.costPrice,
     required this.salePrice,
-    required this.color,
+    required this.dimensions,
+    required this.idName,
     required this.images,
   });
 

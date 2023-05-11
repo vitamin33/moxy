@@ -23,10 +23,10 @@ class Summary extends StatelessWidget {
                     text: state.name,
                   ),
                   const SizedBox(width: AppTheme.cardPadding),
-                  SummaryTextCard(
-                    title: "Color",
-                    text: state.color,
-                  ),
+                  // SummaryTextCard(
+                  //   title: "Color",
+                  //   text: state.color,
+                  // ),
                   const SizedBox(width: AppTheme.cardPadding),
                 ],
               ),
@@ -60,13 +60,13 @@ class Summary extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: AppTheme.cardPadding),
-                    child: SummaryTextCard(
-                      title: "Count",
-                      text: " ${state.warehouseQuantity}",
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: AppTheme.cardPadding),
+                  //   child: SummaryTextCard(
+                  //     title: "Count",
+                  //     text: " ${state.warehouseQuantity}",
+                  //   ),
+                  // ),
                 ],
               ),
             ],

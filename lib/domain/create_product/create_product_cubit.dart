@@ -16,11 +16,11 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   final productRepository = locate<ProductRepository>();
 
   final TextEditingController salePriceController = TextEditingController();
-  final TextEditingController warehouseQuantityController =
-      TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
   final TextEditingController costPriceController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController idNameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
@@ -31,9 +31,9 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         name: state.name,
         description: state.description,
         costPrice: state.costPrice,
-        warehouseQuantity: state.warehouseQuantity,
         salePrice: state.salePrice,
-        color: state.color,
+        dimensions: state.dimensions,
+        idName: state.idName,
         images: state.images,
       );
       final pushProduct = await productRepository.addProduct(product);
@@ -41,9 +41,10 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         nameController.clear();
         descriptionController.clear();
         costPriceController.clear();
-        warehouseQuantityController.clear();
+        quantityController.clear();
         salePriceController.clear();
         colorController.clear();
+        idNameController.clear();
         clearState();
       }, (error) {
         emit(state.copyWith(
@@ -85,6 +86,11 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(state.copyWith(description: description));
   }
 
+  void idNameChanged(value) {
+    final String idName = value;
+    emit(state.copyWith(idName: idName));
+  }
+
   void costPriceChanged(value) {
     if (value != null) {
       final double costPrice = double.parse(value);
@@ -92,10 +98,10 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
-  void warehouseQuantityChanged(value) {
+  void quantityChanged(value) {
     if (value != null) {
-      final int warehouseQuantity = int.parse(value);
-      emit(state.copyWith(warehouseQuantity: warehouseQuantity));
+      final int quantity = int.parse(value);
+      emit(state.copyWith(quantity: quantity));
     }
   }
 
@@ -105,6 +111,49 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       emit(state.copyWith(salePrice: salePrice));
     }
   }
+
+    // void updateColor(int index, String color) {
+    //   final newState = state.copyWith.dimensions[index].copyWith(color: color);
+    //   emit(state.copyWith.dimensions[index] = newState);
+    // }
+
+//   void updateColor(int index, String color) {
+//   final newDimensions = List<Dimension>.from(state.dimensions);
+//   final newState = state.copyWith(dimensions: newDimensions.map((dimension) {
+//     if (dimension.index == index) {
+//       return dimension.copyWith(color: color);
+//     }
+//     return dimension;
+//   }).toList());
+//   emit(newState);
+// }
+// void updateColor(int index, String value) {
+//   final newState = state.dimensions[index].copyWith(color: value);
+//   final newDimensions = List.of(state.dimensions)..[index] = newState;
+//   emit(state.copyWith(dimensions: newDimensions));
+// }
+
+// void updateColor(int index, String color) {
+//   final newDimensions = List<Dimension>.from(state.dimensions);
+//   final newState = state.copyWith(dimensions: newDimensions.map((dimension) {
+//     if (dimension.index == index) {
+//       return dimension.copyWith(color: color);
+//     }
+//     return dimension;
+//   }).toList());
+//   emit(newState);
+// }
+
+// void updateColor(int index, String color) {
+//   final newDimensions = List<Dimensions>.from(state.dimensions );
+//   final newState = state.copyWith(dimensions: newDimensions.map((Dimension dimension) {
+//     if (dimension.index == index) {
+//       return dimension.copyWith(color: color);
+//     }
+//     return dimension;
+//   }).toList());
+//   emit(newState);
+// }
 
   void colorChanged(value) {
     final String color = value;
@@ -118,7 +167,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       moxyPrint(state);
     } else {
       if (state.isEdit) {
-        editProduct();
+        // editProduct();
       } else {
         addProduct();
       }
@@ -144,6 +193,40 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(state.copyWith(errorMessage: ''));
   }
 
+  //  void addDimension(String color, int quantity) {
+  //   final currentState = state;
+
+  //   final newDimensions = List<Dimensions>.from(currentState.dimensions)
+  //     ..add(Dimensions(color: color, quantity: quantity));
+
+  //   emit(currentState.copyWith(dimensions: newDimensions));
+  // }
+
+
+// void updateDimensions(int index, String color, int quantity) {
+  // final List<Dimension> updatedDimensions = state.dimensions.map((dimension) {
+  //   if (state.dimensions.indexOf(dimension) == index) {
+  //     return state.dimensions.add( [color, quantity]);
+  //   }
+  //   return dimension;
+  // }).toList();
+
+//   final List<Dimension> updatedDimension = state.dimensions.map((dimension){
+//       if(state.dimensions.indexOf( dimension) ==index){
+//         return
+//       }
+//   }).toList();
+
+//   emit(state.copyWith(dimensions: updatedDimensions));
+// }
+
+// void updateDemension(){
+//   if(state.color!=''){
+//   final newDemension = state.dimensions.add(color:state.color);
+//     emit(state.copyWith(dimensions:newDemension ))
+//   }
+// }
+
   //  EDIT FUNCTION
   void getProductById(id) async {
     final productById = await productRepository.getProductById(id);
@@ -153,9 +236,9 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         name: success.name,
         description: success.description,
         costPrice: success.costPrice,
-        warehouseQuantity: success.warehouseQuantity,
+        // warehouseQuantity: success.warehouseQuantity,
         salePrice: success.salePrice,
-        color: success.color,
+        // color: success.color,
         images: success.images,
       ));
     }, (error) {});
@@ -165,43 +248,45 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     nameController.text = product.name;
     descriptionController.text = product.description;
     costPriceController.text = product.costPrice.toString();
-    colorController.text = product.color;
+    // colorController.text = product.color;
     salePriceController.text = product.salePrice.toString();
-    warehouseQuantityController.text = product.warehouseQuantity.toString();
+    // warehouseQuantityController.text = product.warehouseQuantity.toString();
   }
 
   void changeEdit() {
     emit(state.copyWith(isEdit: true));
   }
 
-  void editProduct() async {
-    try {
-      emit(state.copyWith(isLoading: true));
-      final product = Product(
-        id: state.id,
-        name: state.name,
-        description: state.description,
-        costPrice: state.costPrice,
-        warehouseQuantity: state.warehouseQuantity,
-        salePrice: state.salePrice,
-        color: state.color,
-        images: state.images,
-      );
-      final pushProduct = await productRepository.editProduct(product);
-      pushProduct.when((success) {
-        nameController.clear();
-        descriptionController.clear();
-        costPriceController.clear();
-        warehouseQuantityController.clear();
-        salePriceController.clear();
-        colorController.clear();
-        clearState();
-      }, (error) {
-        emit(state.copyWith(
-            errorMessage: 'Failed', isLoading: false, activePage: 0));
-      });
-    } catch (e) {
-      moxyPrint(e);
-    }
-  }
+  // void editProduct() async {
+  //   try {
+  //     emit(state.copyWith(isLoading: true));
+  //     final product = Product(
+  //       id: state.id,
+  //       name: state.name,
+  //       description: state.description,
+  //       costPrice: state.costPrice,
+  //       idName: state.idName,
+  //       // dimensions: state.dimensions,
+  //       // warehouseQuantity: state.warehouseQuantity,
+  //       salePrice: state.salePrice,
+  //       // color: state.color,
+  //       images: state.images,
+  //     );
+  //     final pushProduct = await productRepository.editProduct(product);
+  //     pushProduct.when((success) {
+  //       nameController.clear();
+  //       descriptionController.clear();
+  //       costPriceController.clear();
+  //       quantityController.clear();
+  //       salePriceController.clear();
+  //       colorController.clear();
+  //       clearState();
+  //     }, (error) {
+  //       emit(state.copyWith(
+  //           errorMessage: 'Failed', isLoading: false, activePage: 0));
+  //     });
+  //   } catch (e) {
+  //     moxyPrint(e);
+  //   }
+  // }
 }

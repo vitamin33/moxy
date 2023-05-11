@@ -11,20 +11,32 @@ CreateProduct _$CreateProductFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String,
       costPrice: (json['costPrice'] as num).toDouble(),
-      warehouseQuantity: json['warehouseQuantity'] as int,
       salePrice: (json['salePrice'] as num).toDouble(),
-      color: json['color'] as String,
+      dimensions: (json['dimensions'] as List<dynamic>)
+          .map((e) => Dimension.fromJson(e as Map<String, dynamic>))
+          .toList(),
       images:
           (json['images'] as List<dynamic>).map((e) => e as String).toList(),
+      idName: json['idName'] as String,
     );
 
 Map<String, dynamic> _$CreateProductToJson(CreateProduct instance) =>
     <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
-      'warehouseQuantity': instance.warehouseQuantity,
       'costPrice': instance.costPrice,
       'salePrice': instance.salePrice,
-      'color': instance.color,
+      'dimensions': instance.dimensions,
       'images': instance.images,
+      'idName': instance.idName,
+    };
+
+Dimension _$DimensionFromJson(Map<String, dynamic> json) => Dimension(
+      color: json['color'] as String,
+      quantity: json['quantity'] as int,
+    );
+
+Map<String, dynamic> _$DimensionToJson(Dimension instance) => <String, dynamic>{
+      'color': instance.color,
+      'quantity': instance.quantity,
     };

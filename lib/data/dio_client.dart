@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:path/path.dart';
 
@@ -57,11 +58,11 @@ class DioClient {
   Future<CreateProduct?> createProduct(
     String name,
     String description,
-    int warehouseQuantity,
     double costPrice,
     double salePrice,
-    String color,
+    List<Dimension> dimensions,
     List<String> images,
+    String idName,
   ) async {
     final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
@@ -79,9 +80,9 @@ class DioClient {
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'warehouseQuantity': warehouseQuantity,
-      'color': color,
-      'images': imageFiles
+      'dimensions': dimensions,
+      'images': imageFiles,
+      'idName': idName
     });
     try {
       Response response = await _dio.post(
@@ -125,10 +126,10 @@ class DioClient {
     String id,
     String name,
     String description,
-    int warehouseQuantity,
+    String idName,
+    List<Dimension> dimensions,
     double costPrice,
     double salePrice,
-    String color,
     List<String> images,
   ) async {
     final Product? result;
@@ -143,13 +144,12 @@ class DioClient {
       );
     }
     FormData formData = FormData.fromMap({
-      'id': id,
       'name': name,
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'warehouseQuantity': warehouseQuantity,
-      'color': color,
+      'idName': idName,
+      'dimension': dimensions,
       'images': imageFiles
     });
     try {
