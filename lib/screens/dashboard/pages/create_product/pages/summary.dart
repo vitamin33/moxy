@@ -23,11 +23,6 @@ class Summary extends StatelessWidget {
                     text: state.product.name,
                   ),
                   const SizedBox(width: AppTheme.cardPadding),
-                  // SummaryTextCard(
-                  //   title: "Color",
-                  //   text: state.color,
-                  // ),
-                  const SizedBox(width: AppTheme.cardPadding),
                 ],
               ),
               const SizedBox(height: AppTheme.cardPadding),

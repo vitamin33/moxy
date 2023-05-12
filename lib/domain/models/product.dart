@@ -1,3 +1,5 @@
+import 'package:moxy/constant/product_colors.dart';
+
 import '../copyable.dart';
 
 class Product implements Copyable<Product> {
@@ -60,7 +62,7 @@ class Dimension implements Copyable<Dimension> {
   Dimension({required this.color, required this.quantity});
 
   static Dimension defaultDimension() {
-    return Dimension(color: 'Black', quantity: 0);
+    return Dimension(color: ProductColor.black.color, quantity: 0);
   }
 
   @override

@@ -14,8 +14,8 @@ import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
-  //static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'http://10.0.2.2:3000';
+  // static const String baseUrl = 'http://localhost:3000';
 
   static final DioClient instance = DioClient._private();
 
@@ -81,9 +81,9 @@ class DioClient {
       'costPrice': costPrice,
       'salePrice': salePrice,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
-      'images': jsonDecode(jsonEncode(imageFiles)),
+      'images':imageFiles,
       'idName': idName
-    }, ListFormat.multiCompatible);
+    });
     try {
       Response response = await _dio.post(
         createProductUrl,

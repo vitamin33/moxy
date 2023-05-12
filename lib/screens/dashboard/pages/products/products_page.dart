@@ -84,7 +84,7 @@ Widget listTileTrailing(AllProductsState state, product) {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(' ${product.warehouseQuantity.toString()}'),
+            // Text(' ${product.warehouseQuantity.toString()}'),
             Text(' ${product.salePrice.toString()} \$'),
           ],
         ),

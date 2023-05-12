@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
@@ -11,7 +12,7 @@ import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';
 
 class CreateProductCubit extends Cubit<CreateProductState> {
-  final produtctMapper = locate<ProductMapper>();
+  final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
 
   CreateProductCubit()
@@ -38,7 +39,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final product = produtctMapper.mapToNetworkProduct(
+      final product = productMapper.mapToNetworkProduct(
           state.product, state.product.dimensions);
       final pushProduct = await productRepository.addProduct(product);
       pushProduct.when((success) {
@@ -62,14 +63,14 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   Future<void> pickImage() async {
     try {
       final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
-      final images = <String>[...state.images];
+      final images = <String>[...state.product.images];
       if (pickedFiles.isNotEmpty) {
         for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
           images.add(imagePath);
         }
-        emit(state.copyWith(images: images));
+        emit(state.copyWith(product: state.product.copyWith(images: images)));
       }
     } catch (e) {
       moxyPrint('$e');
@@ -104,13 +105,15 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
+//color update when change quantity
+
   void quantityChanged(value) {
     // TODO change implementation for color specific quantity,
-    //generate dimension here and add it
+    // generate dimension here and add it
     // color should be passed here to this method
     if (value != null) {
       final int quantity = int.parse(value);
-      final Dimension dimension = Dimension(color: 'Black', quantity: quantity);
+      final Dimension dimension = Dimension(color: ProductColor.black.color, quantity: quantity);
       final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
       newSetDimensions.add(dimension);
       emit(state.copyWith(
@@ -118,65 +121,47 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
+  void colorChanged(value) {
+  final String color = value;
+  final String quantityText = quantityController.text;
+  final int? quantity = quantityText.isNotEmpty ? int.tryParse(quantityText) : null;
+  if (quantity != null) {
+    final dimensionIndex = state.product.dimensions.toList().indexWhere((element) => element.color == color);
+    if (dimensionIndex != -1) {
+      final updatedDimensions = state.product.dimensions
+          .map((d) => d.color == color ? d.copyWith(quantity: quantity) : d)
+          .toSet();
+      emit(state.copyWith(
+          product: state.product.copyWith(dimensions: updatedDimensions)));
+    } else {
+      final dimension = Dimension(color: color, quantity: quantity);
+      final updatedDimensions = Set.of(state.product.dimensions)..add(dimension);
+      emit(state.copyWith(
+          product: state.product.copyWith(dimensions: updatedDimensions)));
+    }
+  }
+}
+
+// color changet when quantity!=null
+
+  // void colorChanged(value) {
+  //   final String color = value;
+  //   final int quantity = int.parse(quantityController.text);
+  //   if(quantity!=null){
+  //   final Dimension dimension = Dimension(color: color, quantity: quantity);
+  //   final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
+  //   newSetDimensions.add(dimension);
+  //   emit(state.copyWith(
+  //       product: state.product.copyWith(dimensions: newSetDimensions)));
+  //   }
+  // }
+
   void salePriceChanged(value) {
     if (value != null) {
       final double salePrice = double.parse(value);
       emit(state.copyWith(
           product: state.product.copyWith(salePrice: salePrice)));
     }
-  }
-
-  // void updateColor(int index, String color) {
-  //   final newState = state.copyWith.dimensions[index].copyWith(color: color);
-  //   emit(state.copyWith.dimensions[index] = newState);
-  // }
-
-//   void updateColor(int index, String color) {
-//   final newDimensions = List<Dimension>.from(state.dimensions);
-//   final newState = state.copyWith(dimensions: newDimensions.map((dimension) {
-//     if (dimension.index == index) {
-//       return dimension.copyWith(color: color);
-//     }
-//     return dimension;
-//   }).toList());
-//   emit(newState);
-// }
-// void updateColor(int index, String value) {
-//   final newState = state.dimensions[index].copyWith(color: value);
-//   final newDimensions = List.of(state.dimensions)..[index] = newState;
-//   emit(state.copyWith(dimensions: newDimensions));
-// }
-
-// void updateColor(int index, String color) {
-//   final newDimensions = List<Dimension>.from(state.dimensions);
-//   final newState = state.copyWith(dimensions: newDimensions.map((dimension) {
-//     if (dimension.index == index) {
-//       return dimension.copyWith(color: color);
-//     }
-//     return dimension;
-//   }).toList());
-//   emit(newState);
-// }
-
-// void updateColor(int index, String color) {
-//   final newDimensions = List<Dimensions>.from(state.dimensions );
-//   final newState = state.copyWith(dimensions: newDimensions.map((Dimension dimension) {
-//     if (dimension.index == index) {
-//       return dimension.copyWith(color: color);
-//     }
-//     return dimension;
-//   }).toList());
-//   emit(newState);
-// }
-
-  void colorChanged(value) {
-    // quantity should be passed here to this method
-    final String color = value;
-    final Dimension dimension = Dimension(color: color, quantity: 1);
-    final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
-    newSetDimensions.add(dimension);
-    emit(state.copyWith(
-        product: state.product.copyWith(dimensions: newSetDimensions)));
   }
 
   void moveToNextPage() {
@@ -212,44 +197,15 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(state.copyWith(errorMessage: ''));
   }
 
-  //  void addDimension(String color, int quantity) {
-  //   final currentState = state;
+ 
 
-  //   final newDimensions = List<Dimensions>.from(currentState.dimensions)
-  //     ..add(Dimensions(color: color, quantity: quantity));
 
-  //   emit(currentState.copyWith(dimensions: newDimensions));
-  // }
-
-// void updateDimensions(int index, String color, int quantity) {
-  // final List<Dimension> updatedDimensions = state.dimensions.map((dimension) {
-  //   if (state.dimensions.indexOf(dimension) == index) {
-  //     return state.dimensions.add( [color, quantity]);
-  //   }
-  //   return dimension;
-  // }).toList();
-
-//   final List<Dimension> updatedDimension = state.dimensions.map((dimension){
-//       if(state.dimensions.indexOf( dimension) ==index){
-//         return
-//       }
-//   }).toList();
-
-//   emit(state.copyWith(dimensions: updatedDimensions));
-// }
-
-// void updateDemension(){
-//   if(state.color!=''){
-//   final newDemension = state.dimensions.add(color:state.color);
-//     emit(state.copyWith(dimensions:newDemension ))
-//   }
-// }
 
   //  EDIT FUNCTION
   void getProductById(id) async {
     final productById = await productRepository.getProductById(id);
     productById.when((success) {
-      emit(state.copyWith(editProduct: produtctMapper.mapToProduct(success)));
+      emit(state.copyWith(editProduct: productMapper.mapToProduct(success)));
     }, (error) {});
   }
 

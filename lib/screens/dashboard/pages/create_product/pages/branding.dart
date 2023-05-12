@@ -21,7 +21,7 @@ class Branding extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  state.images.isNotEmpty
+                  state.product.images.isNotEmpty
                       ? Row(children: [
                           Expanded(
                             child: SizedBox(
@@ -29,13 +29,13 @@ class Branding extends StatelessWidget {
                               width: double.maxFinite,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: state.images.length,
+                                itemCount: state.product.images.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: SizedBox(
                                         child:state.isEdit? Image.network(state.images[index]) :Image.file(
-                                      File(state.images[index]),
+                                      File(state.product.images[index]),
                                       width: 80,
                                       height: 100,
                                     )),
@@ -89,20 +89,6 @@ class Branding extends StatelessWidget {
                           ]),
                     ),
                     const SizedBox(width: AppTheme.cardPadding),
-                    // Expanded(
-                    //   child: TextField(
-                    //       decoration: const InputDecoration(
-                    //         border: UnderlineInputBorder(),
-                    //         hintText: 'WarehouseQuantity',
-                    //       ),
-                    //       controller: cubit.warehouseQuantityController,
-                    //       onChanged: (value) =>
-                    //           {cubit.warehouseQuantityChanged(value)},
-                    //       inputFormatters: [
-                    //         FilteringTextInputFormatter.digitsOnly,
-                    //         LengthLimitingTextInputFormatter(16),
-                    //       ]),
-                    // ),
                   ],
                 ),
               ),

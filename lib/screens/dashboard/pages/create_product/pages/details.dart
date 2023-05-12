@@ -11,11 +11,17 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String dropdownValue = productColors.first;
+    String dropdownValue = ProductColor.black.color;
 
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
+        List<DropdownMenuItem<String>> items = ProductColor.values
+            .map((color) => DropdownMenuItem(
+                  value: color.color,
+                  child: Text(color.color),
+                ))
+            .toList();
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
           child: Column(children: [
@@ -52,9 +58,7 @@ class ProductDetails extends StatelessWidget {
                 child: Column(children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: state.dimensions.isNotEmpty
-                          ? state.dimensions.length
-                          : 1,
+                      itemCount: state.dimensions.length + 1,
                       itemBuilder: (context, index) {
                         return Container(
                           decoration: BoxDecoration(
@@ -65,26 +69,18 @@ class ProductDetails extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               DropdownButton<String>(
-                                value: dropdownValue,
-                                icon: const Icon(Icons.arrow_drop_down),
-                                dropdownColor: AppTheme.primaryContainerColor,
-                                underline: Container(
-                                  height: 1,
-                                  color: AppTheme.secondaryColor,
-                                ),
-                                onChanged: (value) {
-                                  dropdownValue = value!;
-                                  // cubit.updateColor(index, value);
-                                },
-                                items: productColors
-                                    .map<DropdownMenuItem<String>>(
-                                        (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
+                                  value: dropdownValue,
+                                  icon: const Icon(Icons.arrow_drop_down),
+                                  dropdownColor: AppTheme.primaryContainerColor,
+                                  underline: Container(
+                                    height: 1,
+                                    color: AppTheme.secondaryColor,
+                                  ),
+                                  items: items,
+                                  onChanged: (value) {
+                                    dropdownValue = value!;
+                                    cubit.colorChanged(value);
+                                  }),
                               SizedBox(
                                 width: 50,
                                 child: TextField(
