@@ -17,18 +17,18 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
   CreateProductCubit()
       : super(CreateProductState(
-            isLoading: false,
-            isEdit: false,
-            errorMessage: '',
-            editProduct: Product.defaultProduct(),
-            initialPage: 0,
-            activePage: 0,
-            product: Product.defaultProduct(),
-            images: [],
-            dimensions: []));
+          isLoading: false,
+          isEdit: false,
+          errorMessage: '',
+          editProduct: Product.defaultProduct(),
+          initialPage: 0,
+          activePage: 0,
+          product: Product.defaultProduct(),
+          images: [],
+        ));
+  final List<TextEditingController> quantityControllers = [];
 
   final TextEditingController salePriceController = TextEditingController();
-  final TextEditingController quantityController = TextEditingController();
   final TextEditingController costPriceController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -46,10 +46,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
         nameController.clear();
         descriptionController.clear();
         costPriceController.clear();
-        quantityController.clear();
         salePriceController.clear();
         colorController.clear();
         idNameController.clear();
+        for (var element in quantityControllers) {
+          element.clear();
+        }
         clearState();
       }, (error) {
         emit(state.copyWith(
@@ -105,56 +107,29 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
-//color update when change quantity
+  void quantityChanged(int index, String? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null && quantity.isNotEmpty && dimen != null) {
+      dimen.quantity = int.parse(quantity);
+      final newSetDimensions =
+          Map<int, Dimension>.from(state.product.dimensions)
+            ..remove(index)
+            ..putIfAbsent(index, () => dimen);
 
-  void quantityChanged(value) {
-    // TODO change implementation for color specific quantity,
-    // generate dimension here and add it
-    // color should be passed here to this method
-    if (value != null) {
-      final int quantity = int.parse(value);
-      final Dimension dimension = Dimension(color: ProductColor.black.color, quantity: quantity);
-      final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
-      newSetDimensions.add(dimension);
-      emit(state.copyWith(
-          product: state.product.copyWith(dimensions: newSetDimensions)));
+      emit(state.copyWith(product: state.product));
     }
   }
 
-  void colorChanged(value) {
-  final String color = value;
-  final String quantityText = quantityController.text;
-  final int? quantity = quantityText.isNotEmpty ? int.tryParse(quantityText) : null;
-  if (quantity != null) {
-    final dimensionIndex = state.product.dimensions.toList().indexWhere((element) => element.color == color);
-    if (dimensionIndex != -1) {
-      final updatedDimensions = state.product.dimensions
-          .map((d) => d.color == color ? d.copyWith(quantity: quantity) : d)
-          .toSet();
-      emit(state.copyWith(
-          product: state.product.copyWith(dimensions: updatedDimensions)));
-    } else {
-      final dimension = Dimension(color: color, quantity: quantity);
-      final updatedDimensions = Set.of(state.product.dimensions)..add(dimension);
-      emit(state.copyWith(
-          product: state.product.copyWith(dimensions: updatedDimensions)));
+  void colorChanged(int index, Dimension? dimen, Dimension newDimen) {
+    if (dimen == null) {
+      return;
     }
+    final updatedDimensions = Map.of(state.product.dimensions)
+      ..remove(index)
+      ..putIfAbsent(index, () => newDimen);
+    emit(state.copyWith(
+        product: state.product.copyWith(dimensions: updatedDimensions)));
   }
-}
-
-// color changet when quantity!=null
-
-  // void colorChanged(value) {
-  //   final String color = value;
-  //   final int quantity = int.parse(quantityController.text);
-  //   if(quantity!=null){
-  //   final Dimension dimension = Dimension(color: color, quantity: quantity);
-  //   final newSetDimensions = Set<Dimension>.from(state.product.dimensions);
-  //   newSetDimensions.add(dimension);
-  //   emit(state.copyWith(
-  //       product: state.product.copyWith(dimensions: newSetDimensions)));
-  //   }
-  // }
 
   void salePriceChanged(value) {
     if (value != null) {
@@ -197,10 +172,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     emit(state.copyWith(errorMessage: ''));
   }
 
- 
-
-
-
   //  EDIT FUNCTION
   void getProductById(id) async {
     final productById = await productRepository.getProductById(id);
@@ -218,6 +189,30 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
   void changeEdit() {
     emit(state.copyWith(isEdit: true));
+  }
+
+  void addColorField() {
+    quantityControllers.add(TextEditingController());
+    int newIndex = state.product.dimensions.length;
+    List<Dimension> freeList = getFreeDimensionList(state.product.dimensions);
+    if (freeList.isNotEmpty) {
+      final newDimen = freeList.first;
+      final updatedDimensions =
+          Map<int, Dimension>.of(state.product.dimensions);
+      updatedDimensions.putIfAbsent(newIndex, () => newDimen);
+      emit(state.copyWith(
+          product: state.product.copyWith(dimensions: updatedDimensions)));
+    }
+  }
+
+  List<Dimension> getFreeDimensionList(Map<int, Dimension> dimensions) {
+    final result = <Dimension>[];
+    for (var element in allColorsDimens) {
+      if (!dimensions.containsValue(element)) {
+        result.add(element);
+      }
+    }
+    return result;
   }
 
   // void editProduct() async {

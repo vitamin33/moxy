@@ -13,7 +13,6 @@ class CreateProductState implements Copyable<CreateProductState> {
   int activePage;
   Product product;
   List<String> images;
-  List<Dimension> dimensions;
   CreateProductState({
     required this.isLoading,
     required this.isEdit,
@@ -23,33 +22,33 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.activePage,
     required this.product,
     required this.images,
-    required this.dimensions,
   });
 
   static CreateProductState defaultCreateProductState() {
     return CreateProductState(
-        isLoading: false,
-        isEdit: false,
-        errorMessage: '',
-        editProduct: Product.defaultProduct(),
-        initialPage: 0,
-        activePage: 0,
-        product: Product.defaultProduct(),
-        images: [],
-        dimensions: []);
+      isLoading: false,
+      isEdit: false,
+      errorMessage: '',
+      editProduct: Product.defaultProduct(),
+      initialPage: 0,
+      activePage: 0,
+      product: Product.defaultProduct(),
+      images: [],
+    );
   }
 
   @override
-  CreateProductState copyWith(
-      {bool? isLoading,
-      bool? isEdit,
-      String? errorMessage,
-      Product? editProduct,
-      int? initialPage,
-      int? activePage,
-      Product? product,
-      List<String>? images,
-      List<Dimension>? dimensions}) {
+  CreateProductState copyWith({
+    bool? isLoading,
+    bool? isEdit,
+    String? errorMessage,
+    Product? editProduct,
+    int? initialPage,
+    int? activePage,
+    Product? product,
+    List<String>? images,
+    List<Dimension>? dimensions,
+  }) {
     return CreateProductState(
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
@@ -59,7 +58,6 @@ class CreateProductState implements Copyable<CreateProductState> {
       activePage: activePage ?? this.activePage,
       product: product ?? this.product,
       images: images ?? this.images,
-      dimensions: dimensions ?? this.dimensions,
     );
   }
 }

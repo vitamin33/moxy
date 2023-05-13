@@ -8,7 +8,7 @@ class Product implements Copyable<Product> {
   String description;
   double costPrice;
   double salePrice;
-  Set<Dimension> dimensions;
+  Map<int, Dimension> dimensions;
   List<String> images;
   String idName;
 
@@ -29,7 +29,7 @@ class Product implements Copyable<Product> {
         description: '',
         costPrice: 0,
         salePrice: 0,
-        dimensions: <Dimension>{},
+        dimensions: {},
         idName: '',
         images: []);
   }
@@ -41,7 +41,7 @@ class Product implements Copyable<Product> {
     String? description,
     double? costPrice,
     double? salePrice,
-    Set<Dimension>? dimensions,
+    Map<int, Dimension>? dimensions,
     List<String>? images,
   }) {
     return Product(
@@ -56,8 +56,8 @@ class Product implements Copyable<Product> {
 }
 
 class Dimension implements Copyable<Dimension> {
-  final String color;
-  final int quantity;
+  String color;
+  int quantity;
 
   Dimension({required this.color, required this.quantity});
 
@@ -69,5 +69,18 @@ class Dimension implements Copyable<Dimension> {
   Dimension copyWith({String? color, int? quantity}) {
     return Dimension(
         color: color ?? this.color, quantity: quantity ?? this.quantity);
+  }
+
+  @override
+  bool operator ==(other) {
+    if (other is! Dimension) {
+      return false;
+    }
+    return color == (other).color;
+  }
+
+  @override
+  int get hashCode {
+    return color.hashCode;
   }
 }
