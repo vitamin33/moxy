@@ -10,19 +10,22 @@ class AllProductsCubit extends Cubit<AllProductsState> {
   final produtctMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
 
-  AllProductsCubit() : super(const AllProductsState.initial()) {
+  AllProductsCubit()
+      : super(AllProductsState(
+            allProducts: [], isLoading: false, errorMessage: '')) {
     allProducts();
   }
 
   void allProducts() async {
     try {
-      emit(const AllProductsState.loading());
+      emit(state.copyWith(isLoading: true));
       final result = await productRepository.getAllProducts();
       result.when((success) {
         final products = produtctMapper.mapToProductList(success);
-        emit(AllProductsState.initial(allProducts: products));
+        emit(state.copyWith(allProducts: products));
+        emit(state.copyWith(isLoading: false));
       }, (error) {
-        emit(const AllProductsState.error('Failed getAllProduct'));
+        emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
       });
     } catch (e) {
       moxyPrint('$e');

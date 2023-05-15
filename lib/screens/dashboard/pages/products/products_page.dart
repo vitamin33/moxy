@@ -9,59 +9,60 @@ import 'package:moxy/navigation/home_router_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 
+import '../../../../components/snackbar_widgets.dart';
+
 class ProductsPage extends StatelessWidget {
   const ProductsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AllProductsCubit, AllProductsState>(
-        builder: (context, state) {
+    return BlocConsumer<AllProductsCubit, AllProductsState>(
+        listener: (context, state) {
+      if (state.errorMessage != '') {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(snackBarWhenFailure(snackBarFailureText: 'Failed'));
+        context.read<CreateProductCubit>().clearErrorState();
+      }
+    }, builder: (context, state) {
       return Scaffold(
-          body: Column(
-        children: [
-          Expanded(
-              child: state.when(
-                  initial: (allProducts) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: allProducts.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final product = allProducts[index];
-                            return Card(
-                              margin: const EdgeInsets.all(3.0),
-                              child: ListTile(
-                                leading: Image.network(
-                                  product.images.first,
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                title: Text(product.name),
-                                trailing: listTileTrailing(state, product),
-                                onTap: () {
-                                  context
-                                      .read<CreateProductCubit>()
-                                      .changeEdit();
-                                  context
-                                      .read<CreateProductCubit>()
-                                      .getProductById(product.id);
-                                  context.read<HomeRouterCubit>().navigateTo(
-                                      const CreateProductPageState());
-                                },
-                              ),
-                            );
-                          }),
-                    );
-                  },
-                  loading: () => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                  error: (message) => Center(
-                        child: Text('$message'),
-                      ))),
-        ],
-      ));
+          body: Column(children: [
+        Expanded(
+          child: state.isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: state.allProducts.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final product = state.allProducts[index];
+                        return Card(
+                          margin: const EdgeInsets.all(3.0),
+                          child: ListTile(
+                            leading: Image.network(
+                              product.images.first,
+                              width: 50,
+                              height: 50,
+                            ),
+                            title: Text(product.name),
+                            trailing: listTileTrailing(state, product),
+                            onTap: () {
+                              context.read<CreateProductCubit>().changeEdit();
+                              context
+                                  .read<CreateProductCubit>()
+                                  .getProductById(product.id);
+                              context
+                                  .read<HomeRouterCubit>()
+                                  .navigateTo(const CreateProductPageState());
+                            },
+                          ),
+                        );
+                      }),
+                ),
+        ),
+      ]));
     });
   }
 }

@@ -111,11 +111,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     Dimension? dimen = state.product.dimensions[index];
     if (quantity != null && quantity.isNotEmpty && dimen != null) {
       dimen.quantity = int.parse(quantity);
-      final newSetDimensions =
-          Map<int, Dimension>.from(state.product.dimensions)
-            ..remove(index)
-            ..putIfAbsent(index, () => dimen);
-
       emit(state.copyWith(product: state.product));
     }
   }
@@ -185,6 +180,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     descriptionController.text = product.description;
     costPriceController.text = product.costPrice.toString();
     salePriceController.text = product.salePrice.toString();
+    idNameController.text = product.idName.toString();
   }
 
   void changeEdit() {
@@ -215,36 +211,29 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     return result;
   }
 
-  // void editProduct() async {
-  //   try {
-  //     emit(state.copyWith(isLoading: true));
-  //     final product = Product(
-  //       id: state.id,
-  //       name: state.name,
-  //       description: state.description,
-  //       costPrice: state.costPrice,
-  //       idName: state.idName,
-  //       // dimensions: state.dimensions,
-  //       // warehouseQuantity: state.warehouseQuantity,
-  //       salePrice: state.salePrice,
-  //       // color: state.color,
-  //       images: state.images,
-  //     );
-  //     final pushProduct = await productRepository.editProduct(product);
-  //     pushProduct.when((success) {
-  //       nameController.clear();
-  //       descriptionController.clear();
-  //       costPriceController.clear();
-  //       quantityController.clear();
-  //       salePriceController.clear();
-  //       colorController.clear();
-  //       clearState();
-  //     }, (error) {
-  //       emit(state.copyWith(
-  //           errorMessage: 'Failed', isLoading: false, activePage: 0));
-  //     });
-  //   } catch (e) {
-  //     moxyPrint(e);
-  //   }
-  // }
+  void editProduct() async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final product = productMapper.mapToNetworkProduct(
+          state.product, state.product.dimensions);
+      final pushProduct = await productRepository.editProduct(product);
+      pushProduct.when((success) {
+        nameController.clear();
+        descriptionController.clear();
+        costPriceController.clear();
+        salePriceController.clear();
+        colorController.clear();
+        idNameController.clear();
+        for (var element in quantityControllers) {
+          element.clear();
+        }
+        clearState();
+      }, (error) {
+        emit(state.copyWith(
+            errorMessage: 'Failed', isLoading: false, activePage: 0));
+      });
+    } catch (e) {
+      moxyPrint(e);
+    }
+  }
 }

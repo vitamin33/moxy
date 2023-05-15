@@ -17,7 +17,7 @@ class LoginCubit extends Cubit<LoginState> {
   late TextEditingController passwordController;
   String walletConnectURI = '';
 
-  LoginCubit() : super(const LoginState.initial()) {
+  LoginCubit() : super( LoginState(email: '',password: '',state:AuthState() )) {
     //_checkLoggedInState();
   }
 
