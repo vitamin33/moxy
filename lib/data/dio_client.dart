@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:path/path.dart';
 
@@ -57,11 +58,11 @@ class DioClient {
   Future<CreateProduct?> createProduct(
     String name,
     String description,
-    int warehouseQuantity,
     double costPrice,
     double salePrice,
-    String color,
+    List<NetworkDimension> dimensions,
     List<String> images,
+    String idName,
   ) async {
     final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
@@ -79,9 +80,9 @@ class DioClient {
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'warehouseQuantity': warehouseQuantity,
-      'color': color,
-      'images': imageFiles
+      'dimensions': jsonDecode(jsonEncode(dimensions)),
+      'images': imageFiles,
+      'idName': idName
     });
     try {
       Response response = await _dio.post(
@@ -96,17 +97,71 @@ class DioClient {
     return result;
   }
 
-  Future<List<Product>> allProducts() async {
+  Future<List<NetworkProduct>> allProducts() async {
     try {
       final response = await _dio.get(allProductsUrl);
       final data = response.data;
-      final productList = <Product>[];
+      final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
-        productList.add(Product.fromJson(value));
+        productList.add(NetworkProduct.fromJson(value));
       }
       return productList;
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
+  }
+
+  Future<NetworkProduct> getProductById(String id) async {
+    try {
+      final response = await _dio.get('$baseUrl/products/$id');
+      final data = response.data;
+      final result = NetworkProduct.fromJson(data);
+      return result;
+    } catch (e) {
+      throw Exception('Failed to load product: $e');
+    }
+  }
+
+  Future<NetworkProduct?> editProduct(
+    String? id,
+    String name,
+    String description,
+    String idName,
+    List<NetworkDimension> dimensions,
+    double costPrice,
+    double salePrice,
+    List<String> images,
+  ) async {
+    final NetworkProduct? result;
+    List<MultipartFile> imageFiles = [];
+    for (String image in images) {
+      String fileName = basename(image);
+      imageFiles.add(
+        await MultipartFile.fromFile(
+          image,
+          filename: fileName,
+        ),
+      );
+    }
+    FormData formData = FormData.fromMap({
+      'name': name,
+      'description': description,
+      'costPrice': costPrice,
+      'salePrice': salePrice,
+      'idName': idName,
+      'dimension': dimensions,
+      'images': imageFiles
+    });
+    try {
+      Response response = await _dio.post(
+        '$baseUrl/products/edit/$id',
+        data: formData,
+      );
+      result = NetworkProduct.fromJson(response.data);
+    } catch (e) {
+      moxyPrint('Request product :$e');
+      return null;
+    }
+    return result;
   }
 }

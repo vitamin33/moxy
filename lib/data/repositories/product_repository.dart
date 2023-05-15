@@ -11,16 +11,16 @@ import 'package:multiple_result/multiple_result.dart';
 
 class ProductRepository {
   static DioClient client = DioClient.instance;
-  Future<Result<dynamic, Exception>> addProduct(CreateProduct product) async {
+  Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
     try {
       final result = (await client.createProduct(
           product.name,
           product.description,
-          product.warehouseQuantity,
           product.costPrice,
           product.salePrice,
-          product.color,
-          product.images));
+          product.dimensions,
+          product.images,
+          product.idName));
       if (result != null) {
         return Result.success(result);
       } else {
@@ -32,7 +32,7 @@ class ProductRepository {
     }
   }
 
-  Future<Result<List<Product>, Exception>> getAllProducts() async {
+  Future<Result<List<NetworkProduct>, Exception>> getAllProducts() async {
     try {
       final result = await client.allProducts();
       if (result != null) {
@@ -41,6 +41,43 @@ class ProductRepository {
         return Result.error(Exception('Result is null'));
       }
     } catch (e) {
+      return Result.error(Exception('$e'));
+    }
+  }
+
+  Future<Result<NetworkProduct, Exception>> getProductById(id) async {
+    try {
+      final result = await client.getProductById(id);
+      if (result != null) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('Result ProductById is null'));
+      }
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
+  }
+
+  Future<Result<NetworkProduct, Exception>> editProduct(
+      NetworkProduct product) async {
+    try {
+      final result = (await client.editProduct(
+        product.id,
+        product.name,
+        product.description,
+        product.idName,
+        product.dimensions,
+        product.costPrice,
+        product.salePrice,
+        product.images,
+      ));
+      if (result != null) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('sd'));
+      }
+    } catch (e) {
+      moxyPrint('Repository Error:$e');
       return Result.error(Exception('$e'));
     }
   }

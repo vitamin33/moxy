@@ -1,10 +1,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:moxy/data/models/request/create_product_request.dart';
 
 part 'all_products_response.g.dart';
 
 @JsonSerializable()
 class AllProductsResponse {
-  List<Product>? allProducts;
+  List<NetworkProduct>? allProducts;
 
   AllProductsResponse(this.allProducts);
 
@@ -15,30 +16,30 @@ class AllProductsResponse {
 }
 
 @JsonSerializable()
-class Product {
+class NetworkProduct {
   @JsonKey(name: '_id')
-  String id;
+  String? id;
   String name;
   String description;
-  int warehouseQuantity;
   double costPrice;
   double salePrice;
-  String color;
-  List images;
+  List<NetworkDimension> dimensions;
+  List<String> images;
+  String idName;
 
-  Product({
-    required this.id,
+  NetworkProduct({
+    this.id,
     required this.name,
     required this.description,
-    required this.warehouseQuantity,
     required this.costPrice,
     required this.salePrice,
-    required this.color,
+    required this.dimensions,
+    required this.idName,
     required this.images,
   });
 
-  factory Product.fromJson(Map<String, dynamic> json) =>
-      _$ProductFromJson(json);
+  factory NetworkProduct.fromJson(Map<String, dynamic> json) =>
+      _$NetworkProductFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductToJson(this);
+  Map<String, dynamic> toJson() => _$NetworkProductToJson(this);
 }

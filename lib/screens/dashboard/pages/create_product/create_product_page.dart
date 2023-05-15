@@ -8,6 +8,7 @@ import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/summary.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../components/rounded_card.dart';
+import '../../../../utils/common.dart';
 
 class CreateProductPage extends StatelessWidget {
   const CreateProductPage({Key? key}) : super(key: key);
@@ -21,6 +22,8 @@ class CreateProductPage extends StatelessWidget {
     ];
     return BlocConsumer<CreateProductCubit, CreateProductState>(
       listener: (context, state) => {
+        if (state.isEdit)
+          {context.read<CreateProductCubit>().fillFields(state.editProduct)},
         if (state.errorMessage != '')
           {
             ScaffoldMessenger.of(context).showSnackBar(
