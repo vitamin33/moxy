@@ -6,8 +6,6 @@ import 'package:moxy/domain/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/all_products/all_products_state.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
-import 'package:moxy/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 
 import '../../../../components/snackbar_widgets.dart';
 
@@ -42,7 +40,7 @@ class ProductsPage extends StatelessWidget {
                           margin: const EdgeInsets.all(3.0),
                           child: ListTile(
                             leading: Image.network(
-                              product.images.first,
+                              product.images.first.imagePath,
                               width: 50,
                               height: 50,
                             ),

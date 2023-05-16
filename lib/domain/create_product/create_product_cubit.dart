@@ -65,12 +65,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   Future<void> pickImage() async {
     try {
       final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
-      final images = <String>[...state.product.images];
+      final images = <ImagePath>[...state.product.images];
       if (pickedFiles.isNotEmpty) {
         for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
-          images.add(imagePath);
+          images.add(ImagePath(type: Type.file, imagePath: imagePath));
         }
         emit(state.copyWith(product: state.product.copyWith(images: images)));
       }
@@ -217,7 +217,8 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       emit(state.copyWith(isLoading: true));
       final product = productMapper.mapToNetworkProduct(
           state.product, state.product.dimensions);
-      final pushProduct = await productRepository.editProduct(product,editProductId);
+      final pushProduct =
+          await productRepository.editProduct(product, editProductId);
       pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();
