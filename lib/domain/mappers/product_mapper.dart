@@ -52,6 +52,7 @@ class ProductMapper {
               color: success.dimensions[i].color,
               quantity: success.dimensions[i].quantity));
     }
+    
     return Product(
         name: success.name,
         description: success.description,

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
@@ -123,38 +125,50 @@ class DioClient {
   }
 
   Future<NetworkProduct?> editProduct(
-    String? id,
-    String name,
-    String description,
-    String idName,
-    List<NetworkDimension> dimensions,
-    double costPrice,
-    double salePrice,
-    List<String> images,
-  ) async {
+      String? id,
+      String name,
+      String description,
+      String idName,
+      List<NetworkDimension> dimensions,
+      double costPrice,
+      double salePrice,
+      List<String> images,
+      editProductId) async {
     final NetworkProduct? result;
     List<MultipartFile> imageFiles = [];
     for (String image in images) {
-      String fileName = basename(image);
-      imageFiles.add(
-        await MultipartFile.fromFile(
-          image,
-          filename: fileName,
-        ),
-      );
+      if (image.contains('http')) {
+        String fileName = getImageFileNameFromUrl(image);
+        String savePath = '${Directory.systemTemp.path}/$fileName';
+        await _dio.download(image, savePath);
+        imageFiles.add(
+          await MultipartFile.fromFile(
+            savePath,
+            filename: fileName,
+          ),
+        );
+      } else {
+        String fileName = basename(image);
+        imageFiles.add(
+          await MultipartFile.fromFile(
+            image,
+            filename: fileName,
+          ),
+        );
+      }
     }
     FormData formData = FormData.fromMap({
       'name': name,
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'idName': idName,
-      'dimension': dimensions,
-      'images': imageFiles
+      'idName': idName.toString(),
+      // 'dimensions':dimensions,
+      // 'images': imageFiles
     });
     try {
       Response response = await _dio.post(
-        '$baseUrl/products/edit/$id',
+        '$baseUrl/products/edit/$editProductId',
         data: formData,
       );
       result = NetworkProduct.fromJson(response.data);
@@ -163,5 +177,13 @@ class DioClient {
       return null;
     }
     return result;
+  }
+
+  String getImageFileNameFromUrl(String imageUrl) {
+    Uri uri = Uri.parse(imageUrl);
+    String path = uri.path;
+    List<String> segments = path.split('/');
+    String fileName = segments.last;
+    return fileName;
   }
 }

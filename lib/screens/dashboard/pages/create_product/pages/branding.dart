@@ -34,7 +34,7 @@ class Branding extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: SizedBox(
-                                        child:state.isEdit? Image.network(state.images[index]) :Image.file(
+                                        child:(state.isEdit || state.product.images.isNotEmpty)? Image.network(state.product.images[index]) :Image.file(
                                       File(state.product.images[index]),
                                       width: 80,
                                       height: 100,

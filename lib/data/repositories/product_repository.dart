@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/dio_client.dart';
@@ -59,7 +58,7 @@ class ProductRepository {
   }
 
   Future<Result<NetworkProduct, Exception>> editProduct(
-      NetworkProduct product) async {
+      NetworkProduct product,editProductId) async {
     try {
       final result = (await client.editProduct(
         product.id,
@@ -70,6 +69,7 @@ class ProductRepository {
         product.costPrice,
         product.salePrice,
         product.images,
+        editProductId,
       ));
       if (result != null) {
         return Result.success(result);
