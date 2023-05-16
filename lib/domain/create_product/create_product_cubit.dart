@@ -157,6 +157,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     }
   }
 
+  void removeImage(index) {
+    final updatedImages = List<ImagePath>.from(state.product.images);
+    updatedImages.removeAt(index);
+    final updatedProduct = state.product.copyWith(images: updatedImages);
+    emit(state.copyWith(product: updatedProduct));
+  }
+
   void clearState() {
     emit(CreateProductState.defaultCreateProductState());
     pageController.animateToPage(0,

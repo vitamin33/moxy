@@ -35,7 +35,8 @@ class Branding extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: SizedBox(
-                                      child: _buildImage(state.product, index),
+                                      child: _buildImage(
+                                          state.product, index, cubit),
                                     ),
                                   );
                                 },
@@ -97,20 +98,49 @@ class Branding extends StatelessWidget {
     );
   }
 
-  _buildImage(Product product, int index) {
+
+   _buildImage(Product product, int index, cubit) {
     final images = product.images;
     if (images.isEmpty) {
       return Container();
     } else {
       final image = images[index];
       if (image.type == Type.file) {
-        return Image.file(
-          File(image.imagePath),
-          width: 80,
-          height: 100,
+        return Stack(
+          children: [
+            Image.file(
+              File(image.imagePath),
+              width: 80,
+              height: 100,
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  cubit.removeImage(index);
+                },
+                child: const Icon(Icons.close, color: AppTheme.blackLight),
+              ),
+            ),
+          ],
         );
       } else {
-        return Image.network(image.imagePath);
+        return Stack(
+          children: [
+            Image.network(image.imagePath),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  cubit.removeImage(index);
+                },
+                child: const Icon(Icons.close, color: AppTheme.blackLight),
+              ),
+            ),
+          ],
+        );
       }
     }
   }
