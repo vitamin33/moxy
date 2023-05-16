@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../constant/api_path.dart';
+import '../domain/models/product.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
@@ -135,21 +136,14 @@ class DioClient {
       List<String> images,
       editProductId) async {
     final NetworkProduct? result;
-    List<MultipartFile> imageFiles = [];
+    List<MultipartFile> newImage = [];
+    List<String> currentImage = [];
     for (String image in images) {
       if (image.contains('http')) {
-        String fileName = getImageFileNameFromUrl(image);
-        String savePath = '${Directory.systemTemp.path}/$fileName';
-        await _dio.download(image, savePath);
-        imageFiles.add(
-          await MultipartFile.fromFile(
-            savePath,
-            filename: fileName,
-          ),
-        );
+        currentImage.add(image);
       } else {
         String fileName = basename(image);
-        imageFiles.add(
+        newImage.add(
           await MultipartFile.fromFile(
             image,
             filename: fileName,
@@ -163,8 +157,8 @@ class DioClient {
       'costPrice': costPrice,
       'salePrice': salePrice,
       'idName': idName.toString(),
-      // 'dimensions':dimensions,
-      // 'images': imageFiles
+      'newImages': newImage,
+      'currentImages': currentImage,
     });
     try {
       Response response = await _dio.post(
@@ -177,13 +171,5 @@ class DioClient {
       return null;
     }
     return result;
-  }
-
-  String getImageFileNameFromUrl(String imageUrl) {
-    Uri uri = Uri.parse(imageUrl);
-    String path = uri.path;
-    List<String> segments = path.split('/');
-    String fileName = segments.last;
-    return fileName;
   }
 }

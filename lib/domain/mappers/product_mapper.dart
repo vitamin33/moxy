@@ -36,20 +36,17 @@ class ProductMapper {
   NetworkProduct mapToNetworkProduct(
       Product p, Map<int, Dimension> dimensions) {
     return NetworkProduct(
-      id: p.id,
-      name: p.name,
-      description: p.description,
-      costPrice: p.costPrice,
-      salePrice: p.salePrice,
-      dimensions: dimensions.values
-          .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
-          .toList(),
-      idName: p.idName,
-      images: p.images
-          .where((element) => element.type == Type.network)
-          .map((e) => e.imagePath)
-          .toList(),
-    );
+        id: p.id,
+        name: p.name,
+        description: p.description,
+        costPrice: p.costPrice,
+        salePrice: p.salePrice,
+        dimensions: dimensions.values
+            .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
+            .toList(),
+        idName: p.idName,
+        images: p.images.map((e) => e.imagePath).toList()
+        );
   }
 
   Product mapToProduct(NetworkProduct success) {

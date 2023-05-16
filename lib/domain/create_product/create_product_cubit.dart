@@ -174,6 +174,7 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     productById.when((success) {
       emit(state.copyWith(product: productMapper.mapToProduct(success)));
     }, (error) {});
+    fillFields(state.product);
   }
 
   void fillFields(Product product) {
