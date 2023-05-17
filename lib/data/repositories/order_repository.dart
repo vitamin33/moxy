@@ -6,7 +6,7 @@ import '../models/response/all_orders_response.dart';
 
 class OrderRepository {
   static DioClient client = DioClient.instance;
-  Future<Result<List<Order>, Exception>> getAllOrders() async {
+  Future<Result<List<NetworkOrder>, Exception>> getAllOrders() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final token = prefs.getString('token');

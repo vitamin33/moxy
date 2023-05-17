@@ -176,14 +176,14 @@ class DioClient {
 
   // ORDERS
 
-  Future<List<Order>> allOrders(token) async {
+  Future<List<NetworkOrder>> allOrders(token) async {
     try {
       _dio.options.headers["Authorization"] = "Bearer $token";
       final response = await _dio.get('http://10.0.2.2:3000/orders');
       final data = response.data;
-      final orderList = <Order>[];
+      final orderList = <NetworkOrder>[];
       for (var value in (data as List)) {
-        orderList.add(Order.fromJson(value));
+        orderList.add(NetworkOrder.fromJson(value));
       }
       return orderList;
     } catch (e) {
