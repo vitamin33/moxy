@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
@@ -9,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../constant/api_path.dart';
+import '../domain/models/product.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
 import 'models/response/login_response.dart';
@@ -123,38 +126,43 @@ class DioClient {
   }
 
   Future<NetworkProduct?> editProduct(
-    String? id,
-    String name,
-    String description,
-    String idName,
-    List<NetworkDimension> dimensions,
-    double costPrice,
-    double salePrice,
-    List<String> images,
-  ) async {
+      String? id,
+      String name,
+      String description,
+      String idName,
+      List<NetworkDimension> dimensions,
+      double costPrice,
+      double salePrice,
+      List<String> images,
+      editProductId) async {
     final NetworkProduct? result;
-    List<MultipartFile> imageFiles = [];
+    List<MultipartFile> newImage = [];
+    List<String> currentImage = [];
     for (String image in images) {
-      String fileName = basename(image);
-      imageFiles.add(
-        await MultipartFile.fromFile(
-          image,
-          filename: fileName,
-        ),
-      );
+      if (image.contains('http')) {
+        currentImage.add(image);
+      } else {
+        String fileName = basename(image);
+        newImage.add(
+          await MultipartFile.fromFile(
+            image,
+            filename: fileName,
+          ),
+        );
+      }
     }
     FormData formData = FormData.fromMap({
       'name': name,
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'idName': idName,
-      'dimension': dimensions,
-      'images': imageFiles
+      'idName': idName.toString(),
+      'newImages': newImage,
+      'currentImages': currentImage,
     });
     try {
       Response response = await _dio.post(
-        '$baseUrl/products/edit/$id',
+        '$baseUrl/products/edit/$editProductId',
         data: formData,
       );
       result = NetworkProduct.fromJson(response.data);

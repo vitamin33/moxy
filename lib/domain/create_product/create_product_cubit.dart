@@ -17,16 +17,16 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
   CreateProductCubit()
       : super(CreateProductState(
-          isLoading: false,
-          isEdit: false,
-          errorMessage: '',
-          editProduct: Product.defaultProduct(),
-          initialPage: 0,
-          activePage: 0,
-          product: Product.defaultProduct(),
-          images: [],
-        ));
-  final List<TextEditingController> quantityControllers = [];
+            isLoading: false,
+            isEdit: false,
+            errorMessage: '',
+            editProduct: Product.defaultProduct(),
+            initialPage: 0,
+            activePage: 0,
+            product: Product.defaultProduct(),
+            images: [],
+            editProductId: ''));
+  List<TextEditingController> quantityControllers = [];
 
   final TextEditingController salePriceController = TextEditingController();
   final TextEditingController costPriceController = TextEditingController();
@@ -65,12 +65,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
   Future<void> pickImage() async {
     try {
       final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
-      final images = <String>[...state.product.images];
+      final images = <ImagePath>[...state.product.images];
       if (pickedFiles.isNotEmpty) {
         for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
-          images.add(imagePath);
+          images.add(ImagePath(type: Type.file, imagePath: imagePath));
         }
         emit(state.copyWith(product: state.product.copyWith(images: images)));
       }
@@ -138,10 +138,9 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     if (state.activePage != 2) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-      moxyPrint(state);
     } else {
       if (state.isEdit) {
-        // editProduct();
+        editProduct(state.editProductId);
       } else {
         addProduct();
       }
@@ -152,9 +151,17 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     if (state.activePage != 0) {
       pageController.previousPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+      moxyPrint(state.product);
     } else {
       return;
     }
+  }
+
+  void removeImage(index) {
+    final updatedImages = List<ImagePath>.from(state.product.images);
+    updatedImages.removeAt(index);
+    final updatedProduct = state.product.copyWith(images: updatedImages);
+    emit(state.copyWith(product: updatedProduct));
   }
 
   void clearState() {
@@ -169,10 +176,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
 
   //  EDIT FUNCTION
   void getProductById(id) async {
+    emit(state.copyWith(editProductId: id));
     final productById = await productRepository.getProductById(id);
     productById.when((success) {
-      emit(state.copyWith(editProduct: productMapper.mapToProduct(success)));
+      emit(state.copyWith(product: productMapper.mapToProduct(success)));
     }, (error) {});
+    fillFields(state.product);
   }
 
   void fillFields(Product product) {
@@ -211,12 +220,13 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     return result;
   }
 
-  void editProduct() async {
+  void editProduct(editProductId) async {
     try {
       emit(state.copyWith(isLoading: true));
       final product = productMapper.mapToNetworkProduct(
           state.product, state.product.dimensions);
-      final pushProduct = await productRepository.editProduct(product);
+      final pushProduct =
+          await productRepository.editProduct(product, editProductId);
       pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();

@@ -9,7 +9,7 @@ class Product implements Copyable<Product> {
   double costPrice;
   double salePrice;
   Map<int, Dimension> dimensions;
-  List<String> images;
+  List<ImagePath> images;
   String idName;
 
   Product({
@@ -42,7 +42,7 @@ class Product implements Copyable<Product> {
     double? costPrice,
     double? salePrice,
     Map<int, Dimension>? dimensions,
-    List<String>? images,
+    List<ImagePath>? images,
   }) {
     return Product(
         name: name ?? this.name,
@@ -82,5 +82,33 @@ class Dimension implements Copyable<Dimension> {
   @override
   int get hashCode {
     return color.hashCode;
+  }
+}
+
+enum Type { network, file }
+
+class ImagePath implements Copyable<ImagePath> {
+  Type type;
+  String imagePath;
+
+  ImagePath({required this.type, required this.imagePath});
+
+  @override
+  ImagePath copyWith({Type? type, String? imagePath}) {
+    return ImagePath(
+        type: type ?? this.type, imagePath: imagePath ?? this.imagePath);
+  }
+
+  @override
+  bool operator ==(other) {
+    if (other is! ImagePath) {
+      return false;
+    }
+    return type == (other).type && imagePath == (other).imagePath;
+  }
+
+  @override
+  int get hashCode {
+    return imagePath.hashCode + type.hashCode;
   }
 }

@@ -16,14 +16,19 @@ class ProductMapper {
                   quantity: p.dimensions[i].quantity));
         }
         return Product(
-            id: p.id,
-            name: p.name,
-            description: p.description,
-            costPrice: p.costPrice,
-            salePrice: p.salePrice,
-            dimensions: dimenMap,
-            idName: p.idName,
-            images: p.images);
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          costPrice: p.costPrice,
+          salePrice: p.salePrice,
+          dimensions: dimenMap,
+          idName: p.idName,
+          images: p.images
+              .map(
+                (e) => ImagePath(type: Type.network, imagePath: e),
+              )
+              .toList(),
+        );
       },
     ).toList();
   }
@@ -40,7 +45,8 @@ class ProductMapper {
             .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
             .toList(),
         idName: p.idName,
-        images: p.images);
+        images: p.images.map((e) => e.imagePath).toList()
+        );
   }
 
   Product mapToProduct(NetworkProduct success) {
@@ -52,13 +58,19 @@ class ProductMapper {
               color: success.dimensions[i].color,
               quantity: success.dimensions[i].quantity));
     }
+
     return Product(
-        name: success.name,
-        description: success.description,
-        costPrice: success.costPrice,
-        salePrice: success.salePrice,
-        dimensions: dimenMap,
-        idName: success.idName,
-        images: success.images);
+      name: success.name,
+      description: success.description,
+      costPrice: success.costPrice,
+      salePrice: success.salePrice,
+      dimensions: dimenMap,
+      idName: success.idName,
+      images: success.images
+          .map(
+            (e) => ImagePath(type: Type.network, imagePath: e),
+          )
+          .toList(),
+    );
   }
 }

@@ -119,7 +119,7 @@ class ProductDetails extends StatelessWidget {
                   border: UnderlineInputBorder(),
                   hintText: 'Quantity',
                 ),
-                controller: cubit.quantityControllers[index],
+                // controller: cubit.quantityControllers![index]!,
                 onChanged: (value) {
                   cubit.quantityChanged(index, value);
                 },

@@ -12,6 +12,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   int activePage;
   Product product;
   List<String> images;
+  String editProductId;
   CreateProductState({
     required this.isLoading,
     required this.isEdit,
@@ -21,19 +22,20 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.activePage,
     required this.product,
     required this.images,
+    required this.editProductId,
   });
 
   static CreateProductState defaultCreateProductState() {
     return CreateProductState(
-      isLoading: false,
-      isEdit: false,
-      errorMessage: '',
-      editProduct: Product.defaultProduct(),
-      initialPage: 0,
-      activePage: 0,
-      product: Product.defaultProduct(),
-      images: [],
-    );
+        isLoading: false,
+        isEdit: false,
+        errorMessage: '',
+        editProduct: Product.defaultProduct(),
+        initialPage: 0,
+        activePage: 0,
+        product: Product.defaultProduct(),
+        images: [],
+        editProductId: '');
   }
 
   @override
@@ -47,6 +49,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     Product? product,
     List<String>? images,
     List<Dimension>? dimensions,
+    String? editProductId,
   }) {
     return CreateProductState(
       isLoading: isLoading ?? this.isLoading,
@@ -57,6 +60,7 @@ class CreateProductState implements Copyable<CreateProductState> {
       activePage: activePage ?? this.activePage,
       product: product ?? this.product,
       images: images ?? this.images,
+      editProductId:editProductId ?? this.editProductId
     );
   }
 }
