@@ -22,9 +22,6 @@ class CreateProductPage extends StatelessWidget {
     ];
     return BlocConsumer<CreateProductCubit, CreateProductState>(
       listener: (context, state) => {
-        if (state.isEdit){
-          context.read<CreateProductCubit>().fillFields(state.productById)
-        },
         if (state.errorMessage != '')
           {
             ScaffoldMessenger.of(context).showSnackBar(

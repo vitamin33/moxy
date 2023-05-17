@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
@@ -9,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../constant/api_path.dart';
+import '../domain/models/product.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
 import 'models/response/all_orders_response.dart';
@@ -61,7 +64,7 @@ class DioClient {
     String description,
     double costPrice,
     double salePrice,
-    List<Dimension> dimensions,
+    List<NetworkDimension> dimensions,
     List<String> images,
     String idName,
   ) async {
@@ -81,7 +84,7 @@ class DioClient {
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'dimensions': dimensions,
+      'dimensions': jsonDecode(jsonEncode(dimensions)),
       'images': imageFiles,
       'idName': idName
     });
@@ -98,13 +101,13 @@ class DioClient {
     return result;
   }
 
-  Future<List<Product>> allProducts() async {
+  Future<List<NetworkProduct>> allProducts() async {
     try {
       final response = await _dio.get(allProductsUrl);
       final data = response.data;
-      final productList = <Product>[];
+      final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
-        productList.add(Product.fromJson(value));
+        productList.add(NetworkProduct.fromJson(value));
       }
       return productList;
     } catch (e) {
@@ -112,53 +115,58 @@ class DioClient {
     }
   }
 
-  Future<Product> getProductById(String id) async {
+  Future<NetworkProduct> getProductById(String id) async {
     try {
-      final response = await _dio.get('http://10.0.2.2:3000/products/$id');
+      final response = await _dio.get('$baseUrl/products/$id');
       final data = response.data;
-      final result = Product.fromJson(data);
+      final result = NetworkProduct.fromJson(data);
       return result;
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
   }
 
-  Future<Product?> editProduct(
-    String id,
-    String name,
-    String description,
-    String idName,
-    List<Dimension> dimensions,
-    double costPrice,
-    double salePrice,
-    List<String> images,
-  ) async {
-    final Product? result;
-    List<MultipartFile> imageFiles = [];
+  Future<NetworkProduct?> editProduct(
+      String? id,
+      String name,
+      String description,
+      String idName,
+      List<NetworkDimension> dimensions,
+      double costPrice,
+      double salePrice,
+      List<String> images,
+      editProductId) async {
+    final NetworkProduct? result;
+    List<MultipartFile> newImage = [];
+    List<String> currentImage = [];
     for (String image in images) {
-      String fileName = basename(image);
-      imageFiles.add(
-        await MultipartFile.fromFile(
-          image,
-          filename: fileName,
-        ),
-      );
+      if (image.contains('http')) {
+        currentImage.add(image);
+      } else {
+        String fileName = basename(image);
+        newImage.add(
+          await MultipartFile.fromFile(
+            image,
+            filename: fileName,
+          ),
+        );
+      }
     }
     FormData formData = FormData.fromMap({
       'name': name,
       'description': description,
       'costPrice': costPrice,
       'salePrice': salePrice,
-      'idName': idName,
-      'dimension': dimensions,
-      'images': imageFiles
+      'idName': idName.toString(),
+      'newImages': newImage,
+      'currentImages': currentImage,
     });
     try {
       Response response = await _dio.post(
-        'http://10.0.2.2:3000/products/edit/$id',
+        '$baseUrl/products/edit/$editProductId',
         data: formData,
       );
-      result = Product.fromJson(response.data);
+      result = NetworkProduct.fromJson(response.data);
     } catch (e) {
       moxyPrint('Request product :$e');
       return null;

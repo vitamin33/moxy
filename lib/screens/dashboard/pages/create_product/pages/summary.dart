@@ -20,13 +20,8 @@ class Summary extends StatelessWidget {
                 children: [
                   SummaryTextCard(
                     title: "Title",
-                    text: state.name,
+                    text: state.product.name,
                   ),
-                  const SizedBox(width: AppTheme.cardPadding),
-                  // SummaryTextCard(
-                  //   title: "Color",
-                  //   text: state.color,
-                  // ),
                   const SizedBox(width: AppTheme.cardPadding),
                 ],
               ),
@@ -39,7 +34,7 @@ class Summary extends StatelessWidget {
                     child: SummaryTextCard(
                         title: "Descripiton",
                         maxLine: 6,
-                        text: state.description),
+                        text: state.product.description),
                   ),
                 ],
               ),
@@ -51,22 +46,15 @@ class Summary extends StatelessWidget {
                     children: [
                       SummaryTextCard(
                         title: "Cost Price",
-                        text: "\$ ${state.costPrice}",
+                        text: "\$ ${state.product.costPrice}",
                       ),
                       const SizedBox(width: AppTheme.cardPadding),
                       SummaryTextCard(
-                        title: "Price",
-                        text: "\$ ${state.salePrice}",
+                        title: "Sale Price",
+                        text: "\$ ${state.product.salePrice}",
                       ),
                     ],
                   ),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: AppTheme.cardPadding),
-                  //   child: SummaryTextCard(
-                  //     title: "Count",
-                  //     text: " ${state.warehouseQuantity}",
-                  //   ),
-                  // ),
                 ],
               ),
             ],

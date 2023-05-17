@@ -1,50 +1,66 @@
 import 'package:flutter/foundation.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/data/models/request/create_product_request.dart';
-// import 'package:moxy/data/models/request/create_product_request.dart';
-// import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/models/product.dart';
 
-part 'create_product_state.freezed.dart';
+import '../copyable.dart';
 
-@freezed
-class CreateProductState with _$CreateProductState {
-  const factory CreateProductState.initial({
-    @Default(false) bool isLoading,
-    @Default(false) bool isEdit,
-    @Default('') String errorMessage,
-    @Default([]) productById,
-    @Default(0) int initialPage,
-    @Default(0) int activePage,
-    @Default('') String id,
-    @Default('') String name,
-    @Default('') String description,
-    @Default(0) double costPrice,
-    @Default(0.0) double salePrice,
-    @Default('') String idName,
-    @Default('') String color,
-    @Default(0) int quantity,
-    @Default(0) int index,
-    @Default([]) List<String> images,
-    @Default([]) List<Dimension> dimensions,
-  }) = _Initial;
+class CreateProductState implements Copyable<CreateProductState> {
+  bool isLoading;
+  bool isEdit;
+  String errorMessage;
+  Product editProduct;
+  int initialPage;
+  int activePage;
+  Product product;
+  List<String> images;
+  String editProductId;
+  CreateProductState({
+    required this.isLoading,
+    required this.isEdit,
+    required this.errorMessage,
+    required this.editProduct,
+    required this.initialPage,
+    required this.activePage,
+    required this.product,
+    required this.images,
+    required this.editProductId,
+  });
 
-  const CreateProductState._();
+  static CreateProductState defaultCreateProductState() {
+    return CreateProductState(
+        isLoading: false,
+        isEdit: false,
+        errorMessage: '',
+        editProduct: Product.defaultProduct(),
+        initialPage: 0,
+        activePage: 0,
+        product: Product.defaultProduct(),
+        images: [],
+        editProductId: '');
+  }
+
+  @override
+  CreateProductState copyWith({
+    bool? isLoading,
+    bool? isEdit,
+    String? errorMessage,
+    Product? editProduct,
+    int? initialPage,
+    int? activePage,
+    Product? product,
+    List<String>? images,
+    List<Dimension>? dimensions,
+    String? editProductId,
+  }) {
+    return CreateProductState(
+      isLoading: isLoading ?? this.isLoading,
+      isEdit: isEdit ?? this.isEdit,
+      errorMessage: errorMessage ?? this.errorMessage,
+      editProduct: editProduct ?? this.editProduct,
+      initialPage: initialPage ?? this.initialPage,
+      activePage: activePage ?? this.activePage,
+      product: product ?? this.product,
+      images: images ?? this.images,
+      editProductId:editProductId ?? this.editProductId
+    );
+  }
 }
-
-// @freezed
-// class Dimension with _$Dimension {
-//   const factory Dimension({
-//     @Default('') String color,
-//     @Default(0) int quantity,
-//   }) = _Dimension;
-
-//   factory Dimension.fromJson(Map<String, dynamic> json) =>
-//       _$DimensionFromJson(json);
-//   Map<String, dynamic> toJson() => _$DimensionToJson(this);
-// }
-
-
-// Map<String, dynamic> DimensionToJson(Dimension instance) => <String, dynamic>{
-//       'color': instance.color,
-//       'quantity': instance.quantity,
-//     };

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
@@ -21,7 +22,7 @@ class Branding extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  state.images.isNotEmpty
+                  state.product.images.isNotEmpty
                       ? Row(children: [
                           Expanded(
                             child: SizedBox(
@@ -29,16 +30,14 @@ class Branding extends StatelessWidget {
                               width: double.maxFinite,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: state.images.length,
+                                itemCount: state.product.images.length,
                                 itemBuilder: (context, index) {
                                   return Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: SizedBox(
-                                        child:state.isEdit? Image.network(state.images[index]) :Image.file(
-                                      File(state.images[index]),
-                                      width: 80,
-                                      height: 100,
-                                    )),
+                                      child: _buildImage(
+                                          state.product, index, cubit),
+                                    ),
                                   );
                                 },
                               ),
@@ -89,20 +88,6 @@ class Branding extends StatelessWidget {
                           ]),
                     ),
                     const SizedBox(width: AppTheme.cardPadding),
-                    // Expanded(
-                    //   child: TextField(
-                    //       decoration: const InputDecoration(
-                    //         border: UnderlineInputBorder(),
-                    //         hintText: 'WarehouseQuantity',
-                    //       ),
-                    //       controller: cubit.warehouseQuantityController,
-                    //       onChanged: (value) =>
-                    //           {cubit.warehouseQuantityChanged(value)},
-                    //       inputFormatters: [
-                    //         FilteringTextInputFormatter.digitsOnly,
-                    //         LengthLimitingTextInputFormatter(16),
-                    //       ]),
-                    // ),
                   ],
                 ),
               ),
@@ -111,5 +96,52 @@ class Branding extends StatelessWidget {
         );
       },
     );
+  }
+
+
+   _buildImage(Product product, int index, cubit) {
+    final images = product.images;
+    if (images.isEmpty) {
+      return Container();
+    } else {
+      final image = images[index];
+      if (image.type == Type.file) {
+        return Stack(
+          children: [
+            Image.file(
+              File(image.imagePath),
+              width: 80,
+              height: 100,
+            ),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  cubit.removeImage(index);
+                },
+                child: const Icon(Icons.close, color: AppTheme.blackLight),
+              ),
+            ),
+          ],
+        );
+      } else {
+        return Stack(
+          children: [
+            Image.network(image.imagePath),
+            Positioned(
+              top: 0,
+              right: 0,
+              child: GestureDetector(
+                onTap: () {
+                  cubit.removeImage(index);
+                },
+                child: const Icon(Icons.close, color: AppTheme.blackLight),
+              ),
+            ),
+          ],
+        );
+      }
+    }
   }
 }

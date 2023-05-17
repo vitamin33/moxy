@@ -1,16 +1,35 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import '../copyable.dart';
 
-part 'login_state.freezed.dart';
+class LoginState implements Copyable<LoginState> {
+  final String email;
+  final String password;
+  final AuthState state;
 
-@freezed
-class LoginState with _$LoginState {
-  const factory LoginState.initial({
-    @Default('') String email,
-    @Default('') String password,
-    @Default(AuthState()) AuthState state,
-  }) = _Initial;
+  LoginState({
+    required this.email,
+    required this.password,
+    required this.state,
+  });
 
-  const LoginState._();
+  static LoginState defaultAllProductsState() {
+    return LoginState(
+      email: '',
+      password: '',
+      state: const AuthState(),
+    );
+  }
+
+  @override
+  LoginState copyWith({
+    String? email,
+    String? password,
+    AuthState? state,
+  }) {
+    return LoginState(
+        email: email ?? this.email,
+        password: password ?? this.password,
+        state: state ?? this.state);
+  }
 
   bool get emailIsValid =>
       email.trim().isNotEmpty && email.trim().contains("@");

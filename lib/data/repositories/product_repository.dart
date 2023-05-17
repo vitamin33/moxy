@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/dio_client.dart';
@@ -11,7 +10,7 @@ import 'package:multiple_result/multiple_result.dart';
 
 class ProductRepository {
   static DioClient client = DioClient.instance;
-  Future<Result<dynamic, Exception>> addProduct(CreateProduct product) async {
+  Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
     try {
       final result = (await client.createProduct(
           product.name,
@@ -20,8 +19,7 @@ class ProductRepository {
           product.salePrice,
           product.dimensions,
           product.images,
-          product.idName
-          ));
+          product.idName));
       if (result != null) {
         return Result.success(result);
       } else {
@@ -33,7 +31,7 @@ class ProductRepository {
     }
   }
 
-  Future<Result<List<Product>, Exception>> getAllProducts() async {
+  Future<Result<List<NetworkProduct>, Exception>> getAllProducts() async {
     try {
       final result = await client.allProducts();
       if (result != null) {
@@ -46,7 +44,7 @@ class ProductRepository {
     }
   }
 
-  Future<Result<Product, Exception>> getProductById(id) async {
+  Future<Result<NetworkProduct, Exception>> getProductById(id) async {
     try {
       final result = await client.getProductById(id);
       if (result != null) {
@@ -59,18 +57,19 @@ class ProductRepository {
     }
   }
 
-  Future<Result<Product, Exception>> editProduct(
-      Product product) async {
+  Future<Result<NetworkProduct, Exception>> editProduct(
+      NetworkProduct product,editProductId) async {
     try {
       final result = (await client.editProduct(
         product.id,
         product.name,
         product.description,
         product.idName,
-        product.dimensions  ,
+        product.dimensions,
         product.costPrice,
         product.salePrice,
         product.images,
+        editProductId,
       ));
       if (result != null) {
         return Result.success(result);

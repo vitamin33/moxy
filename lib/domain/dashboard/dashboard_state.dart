@@ -1,10 +1,16 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:moxy/domain/copyable.dart';
 
-part 'dashboard_state.freezed.dart';
+class DashboardState implements Copyable<DashboardState> {
+  final bool showDrawer;
 
-@freezed
-class DashboardState with _$DashboardState {
-  const factory DashboardState.initial({
-    @Default(false) bool showDrawer,
-  }) = _Initial;
+  DashboardState({required this.showDrawer});
+
+  static defaultDashboardState() {
+    return DashboardState(showDrawer: false);
+  }
+
+  @override
+  DashboardState copyWith({bool? showDrawer}) {
+    return DashboardState(showDrawer: showDrawer ?? this.showDrawer);
+  }
 }

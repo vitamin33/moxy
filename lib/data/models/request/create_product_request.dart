@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/domain/create_product/create_product_state.dart';
+import 'package:moxy/constant/product_colors.dart';
 
 part 'create_product_request.g.dart';
 
@@ -9,7 +9,7 @@ class CreateProduct {
   final String description;
   final double costPrice;
   final double salePrice;
-  final List<Dimension> dimensions;
+  final List<NetworkDimension> dimensions;
   final List<String> images;
   final String idName;
 
@@ -30,15 +30,14 @@ class CreateProduct {
 }
 
 @JsonSerializable()
-class Dimension {
+class NetworkDimension {
   final String color;
   final int quantity;
 
-  Dimension({required this.color,required this.quantity});
+  NetworkDimension({required this.color, required this.quantity});
 
-  factory Dimension.fromJson(Map<String, dynamic> json) =>
-      _$DimensionFromJson(json);
+  factory NetworkDimension.fromJson(Map<String, dynamic> json) =>
+      _$NetworkDimensionFromJson(json);
 
-  Map<String, dynamic> toJson() => _$DimensionToJson(this);
+  Map<String, dynamic> toJson() => _$NetworkDimensionToJson(this);
 }
-
