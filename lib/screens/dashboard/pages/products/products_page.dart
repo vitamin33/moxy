@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/all_products/all_products_state.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 
 import '../../../../components/snackbar_widgets.dart';
@@ -39,11 +40,7 @@ class ProductsPage extends StatelessWidget {
                         return Card(
                           margin: const EdgeInsets.all(3.0),
                           child: ListTile(
-                            leading: Image.network(
-                              product.images.first.imagePath,
-                              width: 50,
-                              height: 50,
-                            ),
+                            leading: _buildProductImage(product),
                             title: Text(product.name),
                             trailing: listTileTrailing(state, product),
                             onTap: () {
@@ -62,6 +59,20 @@ class ProductsPage extends StatelessWidget {
         ),
       ]));
     });
+  }
+
+  Widget _buildProductImage(Product product) {
+    if (product.images.isNotEmpty) {
+      return FadeInImage.assetNetwork(
+        placeholder: 'assets/images/placeholder.jpg',
+        image: product.images.first.imagePath,
+        width: 50,
+        height: 50,
+      );
+    } else {
+      return Image.asset(
+          width: 50, height: 50, 'assets/images/placeholder.jpg');
+    }
   }
 }
 
