@@ -6,6 +6,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
+import '../../../../../domain/validation_mixin.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -19,15 +20,22 @@ class ProductDetails extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
           child: Column(children: [
             TextField(
-                decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
+                decoration: InputDecoration(
+                  border: _renderBorder(!_nameIsValid(state), false),
+                  enabledBorder: _renderBorder(_nameIsValid(state), false),
+                  focusedBorder: _renderBorder(_nameIsValid(state), true),
+                  hintStyle: _renderHintStyle(context, _nameIsValid(state)),
                   hintText: 'Name',
                 ),
                 controller: cubit.nameController,
                 onChanged: (value) => cubit.nameChanged(value)),
             TextField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
+              decoration: InputDecoration(
+                border: _renderBorder(!_descriptionIsValid(state), false),
+                enabledBorder: _renderBorder(_descriptionIsValid(state), false),
+                focusedBorder: _renderBorder(_descriptionIsValid(state), true),
+                hintStyle:
+                    _renderHintStyle(context, _descriptionIsValid(state)),
                 hintText: 'Description',
               ),
               controller: cubit.descriptionController,
@@ -35,8 +43,11 @@ class ProductDetails extends StatelessWidget {
               maxLines: 6,
             ),
             TextField(
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
+              decoration: InputDecoration(
+                border: _renderBorder(_idNameIsValid(state), false),
+                enabledBorder: _renderBorder(_idNameIsValid(state), false),
+                focusedBorder: _renderBorder(_idNameIsValid(state), true),
+                hintStyle: _renderHintStyle(context, _idNameIsValid(state)),
                 hintText: 'idName',
               ),
               controller: cubit.idNameController,
@@ -130,6 +141,29 @@ class ProductDetails extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  UnderlineInputBorder _renderBorder(bool isValid, bool focused) {
+    return UnderlineInputBorder(
+      borderSide: BorderSide(
+          color: isValid ? AppTheme.secondaryColor : Colors.red,
+          width: focused ? 2 : 1),
+    );
+  }
+
+  bool _nameIsValid(CreateProductState state) =>
+      state.errors.productName == null;
+
+  bool _descriptionIsValid(CreateProductState state) =>
+      state.errors.productDescription == null;
+
+  bool _idNameIsValid(CreateProductState state) =>
+      state.errors.productIdName == null;
+
+  TextStyle _renderHintStyle(BuildContext context, bool isValid) {
+    return TextStyle(
+      color: isValid ? Theme.of(context).hintColor : Colors.red,
     );
   }
 }

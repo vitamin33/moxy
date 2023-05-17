@@ -6,17 +6,20 @@ import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';
 
-class CreateProductCubit extends Cubit<CreateProductState> {
+class CreateProductCubit extends Cubit<CreateProductState>
+    with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
 
   CreateProductCubit()
-      : super(CreateProductState(
+      : super(
+          CreateProductState(
             isLoading: false,
             isEdit: false,
             errorMessage: '',
@@ -25,7 +28,10 @@ class CreateProductCubit extends Cubit<CreateProductState> {
             activePage: 0,
             product: Product.defaultProduct(),
             images: [],
-            editProductId: ''));
+            editProductId: '',
+            errors: FieldErrors.noErrors(),
+          ),
+        );
   List<TextEditingController> quantityControllers = [];
 
   final TextEditingController salePriceController = TextEditingController();
@@ -139,10 +145,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
-      if (state.isEdit) {
-        editProduct(state.editProductId);
-      } else {
-        addProduct();
+      if (validateFields()) {
+        if (state.isEdit) {
+          editProduct(state.editProductId);
+        } else {
+          addProduct();
+        }
       }
     }
   }
@@ -245,5 +253,32 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     } catch (e) {
       moxyPrint(e);
     }
+  }
+
+  bool validateFields() {
+    final errors = FieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.product.name)) {
+      errors.productName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.product.description)) {
+      errors.productDescription = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.product.idName)) {
+      errors.productIdName = FieldError.empty;
+      noErrors = false;
+    }
+    if (!isValidPrice(state.product.costPrice)) {
+      errors.costPrice = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidPrice(state.product.salePrice)) {
+      errors.salePrice = FieldError.invalid;
+      noErrors = false;
+    }
+    emit(state.copyWith(errors: errors));
+    return noErrors;
   }
 }

@@ -63,7 +63,6 @@ dependencies:
   universal_html: ^2.2.1
   json_theme: ^4.0.0
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -79,6 +78,7 @@ dev_dependencies:
   json_serializable: ^6.6.1
   image_picker: ^0.8.7+4
   multiple_result: ^4.0.0
+  bloc_effects: ^0.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
