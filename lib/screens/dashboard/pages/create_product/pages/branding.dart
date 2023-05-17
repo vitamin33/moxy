@@ -69,8 +69,8 @@ class Branding extends StatelessWidget {
                                 _renderBorder(_costPriceIsValid(state), false),
                             focusedBorder:
                                 _renderBorder(_costPriceIsValid(state), true),
-                            hintStyle:
-                                _renderHintStyle(context, _nameIsValid(state)),
+                            hintStyle: _renderHintStyle(
+                                context, _costPriceIsValid(state)),
                             hintText: 'Price(\$)'),
                         controller: cubit.costPriceController,
                         onChanged: (value) => {cubit.costPriceChanged(value)},
@@ -83,8 +83,15 @@ class Branding extends StatelessWidget {
                     const SizedBox(width: AppTheme.cardPadding),
                     Expanded(
                       child: TextField(
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
+                          decoration: InputDecoration(
+                            border:
+                                _renderBorder(!_salePriceIsValid(state), false),
+                            enabledBorder:
+                                _renderBorder(_salePriceIsValid(state), false),
+                            focusedBorder:
+                                _renderBorder(_salePriceIsValid(state), true),
+                            hintStyle: _renderHintStyle(
+                                context, _salePriceIsValid(state)),
                             hintText: 'Sale Price(\$)',
                           ),
                           controller: cubit.salePriceController,

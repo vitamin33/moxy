@@ -1,3 +1,4 @@
+import 'package:bloc_effects/bloc_effects.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/components/snackbar_widgets.dart';
@@ -8,7 +9,8 @@ import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/summary.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../components/rounded_card.dart';
-import '../../../../utils/common.dart';
+import '../../../../domain/create_product/create_product_effects.dart';
+import '../../../../domain/ui_effect.dart';
 
 class CreateProductPage extends StatelessWidget {
   const CreateProductPage({Key? key}) : super(key: key);
@@ -20,60 +22,69 @@ class CreateProductPage extends StatelessWidget {
       Branding(),
       Summary(),
     ];
-    return BlocConsumer<CreateProductCubit, CreateProductState>(
-      listener: (context, state) => {
-        if (state.errorMessage != '')
-          {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenFailure(snackBarFailureText: 'Failed')),
-            context.read<CreateProductCubit>().clearErrorState(),
-          }
+    return BlocEffectListener<CreateProductCubit, UiEffect, CreateProductState>(
+      listener: (context, effect, state) {
+        if (effect is ValidationFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+              snackBarFailureText: 'Wrong input, please check text fields.'));
+        }
       },
-      builder: (context, state) {
-        final cubit = context.read<CreateProductCubit>();
-        return Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: state.isLoading
-              ? loader()
-              : Stack(
-                  children: [
-                    Column(
-                      children: [
-                        Expanded(
-                          child: SingleChildScrollView(
-                              child: Padding(
-                                  padding: const EdgeInsets.all(
-                                      AppTheme.cardPadding),
-                                  child: SizedBox(
-                                      width: double.maxFinite,
-                                      height: 550,
-                                      child: RoundedCard(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Column(children: [
-                                            appIndicator(state, cubit, pages),
-                                            Expanded(
-                                              child: PageView.builder(
-                                                controller:
-                                                    cubit.pageController,
-                                                onPageChanged: (int page) {
-                                                  cubit.onChangePage(page);
-                                                },
-                                                itemCount: pages.length,
-                                                itemBuilder: (context, index) {
-                                                  return pages[
-                                                      index % pages.length];
-                                                },
-                                              ),
-                                            )
-                                          ]))))),
-                        ),
-                      ],
-                    ),
-                    positionButton(state, cubit)
-                  ],
-                ),
-        );
-      },
+      child: BlocConsumer<CreateProductCubit, CreateProductState>(
+        listener: (context, state) => {
+          if (state.errorMessage != '')
+            {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarWhenFailure(snackBarFailureText: 'Failed')),
+              context.read<CreateProductCubit>().clearErrorState(),
+            }
+        },
+        builder: (context, state) {
+          final cubit = context.read<CreateProductCubit>();
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            body: state.isLoading
+                ? loader()
+                : Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Expanded(
+                            child: SingleChildScrollView(
+                                child: Padding(
+                                    padding: const EdgeInsets.all(
+                                        AppTheme.cardPadding),
+                                    child: SizedBox(
+                                        width: double.maxFinite,
+                                        height: 550,
+                                        child: RoundedCard(
+                                            padding: const EdgeInsets.all(0),
+                                            child: Column(children: [
+                                              appIndicator(state, cubit, pages),
+                                              Expanded(
+                                                child: PageView.builder(
+                                                  controller:
+                                                      cubit.pageController,
+                                                  onPageChanged: (int page) {
+                                                    cubit.onChangePage(page);
+                                                  },
+                                                  itemCount: pages.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return pages[
+                                                        index % pages.length];
+                                                  },
+                                                ),
+                                              )
+                                            ]))))),
+                          ),
+                        ],
+                      ),
+                      positionButton(state, cubit)
+                    ],
+                  ),
+          );
+        },
+      ),
     );
   }
 }

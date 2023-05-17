@@ -92,4 +92,26 @@ class FieldErrors {
   static FieldErrors noErrors() {
     return FieldErrors();
   }
+
+  String formErrorMessageFields() {
+    var buffer = StringBuffer();
+    buffer.write('Validation errors: ');
+    if (productName != null) {
+      buffer.write('productName ');
+    }
+    if (productDescription != null) {
+      buffer.write('productDescription ');
+    }
+    if (productIdName != null) {
+      buffer.write('productIdName ');
+    }
+    if (costPrice != null) {
+      buffer.write('costPrice ');
+    }
+    if (salePrice != null) {
+      buffer.write('salePrice ');
+    }
+    buffer.write('.');
+    return buffer.toString();
+  }
 }

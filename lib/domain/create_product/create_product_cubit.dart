@@ -4,15 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
+import 'package:moxy/domain/create_product/create_product_effects.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:bloc_effects/bloc_effects.dart';
 
 import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';
 
-class CreateProductCubit extends Cubit<CreateProductState>
+class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
@@ -277,6 +280,9 @@ class CreateProductCubit extends Cubit<CreateProductState>
     if (!isValidPrice(state.product.salePrice)) {
       errors.salePrice = FieldError.invalid;
       noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(ValidationFailed(errors.formErrorMessageFields()));
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
