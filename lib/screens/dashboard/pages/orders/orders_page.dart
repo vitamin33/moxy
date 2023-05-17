@@ -28,23 +28,13 @@ class OrdersPage extends StatelessWidget {
                             return Card(
                               margin: const EdgeInsets.all(3.0),
                               child: ListTile(
-                                leading: Image.network(
-                                  order.products[0].images.first,
-                                  width: 50,
-                                  height: 50,
-                                ),
+                                // leading: Image.network(
+                                //   order.products[0].images.first,
+                                //   width: 50,
+                                //   height: 50,
+                                // ),
                                 title: Text(order.deliveryType),
-                                // trailing: listTileTrailing(state, product),
-                                // onTap: () {
-                                //   context
-                                //       .read<CreateProductCubit>()
-                                //       .changeEdit();
-                                //   context
-                                //       .read<CreateProductCubit>()
-                                //       .getProductById(product.id);
-                                //   context.read<HomeRouterCubit>().navigateTo(
-                                //       const CreateProductPageState());
-                                // },
+                                trailing: Icon(Icons.arrow_forward_ios),
                               ),
                             );
                           }),
@@ -61,37 +51,3 @@ class OrdersPage extends StatelessWidget {
     });
   }
 }
-
-// Widget listTileTrailing(AllProductsState state, product) {
-//   return SizedBox(
-//     width: 150,
-//     child: Row(
-//       mainAxisSize: MainAxisSize.max,
-//       children: [
-//         Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: const [
-//             Text('Quantity: '),
-//             Text('Price:  '),
-//           ],
-//         ),
-//         Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           mainAxisAlignment: MainAxisAlignment.center,
-//           children: [
-//             // Text(' ${product.warehouseQuantity.toString()}'),
-//             Text(' ${product.salePrice.toString()} \$'),
-//           ],
-//         ),
-//       ],
-//     ),
-//   );
-
-//   // @override
-//   // Widget build(BuildContext context) {
-//   //   return Container(
-//   //     child: const Text('Orders'),
-//   //   );
-//   // }
-// }

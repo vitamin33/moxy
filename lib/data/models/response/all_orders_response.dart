@@ -19,26 +19,28 @@ class AllOrdersResponse {
 class Order {
   @JsonKey(name: '_id')
   String id;
-  int novaPostNumber;
+  int ukrPostNumber;
   String deliveryType;
   String status;
   String paymentType;
-  int  client;
-  List<Product> products;
-
+  String client;
+  List<dynamic> products;
+  String createdAt;
+  String updatedAt;
 
   Order({
     required this.id,
-    required this.novaPostNumber,
+    required this.ukrPostNumber,
     required this.deliveryType,
     required this.status,
     required this.paymentType,
     required this.client,
     required this.products,
+    required this.createdAt,
+    required this.updatedAt
   });
 
-  factory Order.fromJson(Map<String, dynamic> json) =>
-      _$OrderFromJson(json);
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
 
   Map<String, dynamic> toJson() => _$OrderToJson(this);
 }
