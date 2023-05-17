@@ -179,7 +179,7 @@ class DioClient {
   Future<List<NetworkOrder>> allOrders(token) async {
     try {
       _dio.options.headers["Authorization"] = "Bearer $token";
-      final response = await _dio.get('http://10.0.2.2:3000/orders');
+      final response = await _dio.get('$baseUrl/orders');
       final data = response.data;
       final orderList = <NetworkOrder>[];
       for (var value in (data as List)) {

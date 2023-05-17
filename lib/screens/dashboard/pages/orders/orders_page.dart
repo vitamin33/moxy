@@ -12,13 +12,12 @@ class OrdersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AllOrdersCubit, AllOrdersState>(
-      listener: (context, state) {
-         if (state.errorMessage != '') {
+        listener: (context, state) {
+      if (state.errorMessage != '') {
         ScaffoldMessenger.of(context)
-            .showSnackBar(snackBarWhenFailure(snackBarFailureText: 'Failed'));
+            .showSnackBar(snackBarWhenFailure(snackBarFailureText: 'Failed:${state.errorMessage}'));
       }
-      },
-        builder: (context, state) {
+    }, builder: (context, state) {
       return Scaffold(
           body: Column(
         children: [
@@ -43,7 +42,7 @@ class OrdersPage extends StatelessWidget {
                                   height: 50,
                                 ),
                                 title: Text(order.deliveryType),
-                                trailing:const Icon(Icons.arrow_forward_ios),
+                                trailing: const Icon(Icons.arrow_forward_ios),
                               ),
                             );
                           }),
