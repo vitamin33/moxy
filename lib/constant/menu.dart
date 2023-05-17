@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/route_name.dart';
+import 'package:moxy/custom_icons.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 
 List<Menu> menus = const [
   Menu(
     title: 'Overview',
-    icon: Icons.analytics_outlined,
+    icon: CustomIcons.pill,
     route: OverviewPageState(),
     subRoutes: [],
   ),

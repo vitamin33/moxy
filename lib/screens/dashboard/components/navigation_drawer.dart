@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/custom_icons.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 import 'package:moxy/navigation/root_router_cubit.dart';
@@ -36,7 +37,7 @@ class DashboardDrawer extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: AppTheme.cardPadding),
-                    child: Image.asset(ImagePath.logo, height: 35),
+                    child: Image.asset(ImageAssets.logo, height: 35),
                   ),
                 ),
               ],
@@ -47,6 +48,7 @@ class DashboardDrawer extends StatelessWidget {
                 height: 0,
                 thickness: 0.1),
             const SizedBox(height: AppTheme.elementSpacing),
+            Icon(CustomIcons.pill),
             Expanded(
               child: ListView.builder(
                 itemCount: menus.length,

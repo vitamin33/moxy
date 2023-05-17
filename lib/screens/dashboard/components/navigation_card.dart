@@ -61,9 +61,11 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
                     child: Row(
                       children: [
                         Icon(icon,
-                            color: isTapped
-                                ? AppTheme.primaryColor
-                                : AppTheme.onPrimaryContainerColor),
+                            color: Colors.black
+                            // isTapped
+                            //     ? AppTheme.primaryColor
+                            //     : AppTheme.onPrimaryContainerColor
+                                ),
                         const SizedBox(width: AppTheme.elementSpacing),
                         Text(
                           title,
