@@ -13,7 +13,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   int activePage;
   Product product;
   List<String> images;
-  String editProductId;
+  String? editProductId;
 
   // field errors
   FieldErrors errors;

@@ -19,22 +19,28 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+  final bool isEditMode;
+  final String? productId;
 
-  CreateProductCubit()
+  CreateProductCubit({required this.productId, required this.isEditMode})
       : super(
           CreateProductState(
             isLoading: false,
-            isEdit: false,
+            isEdit: isEditMode,
             errorMessage: '',
             editProduct: Product.defaultProduct(),
             initialPage: 0,
             activePage: 0,
             product: Product.defaultProduct(),
             images: [],
-            editProductId: '',
+            editProductId: productId,
             errors: FieldErrors.noErrors(),
           ),
-        );
+        ) {
+    if (isEditMode && productId != null) {
+      getProductById(productId);
+    }
+  }
   List<TextEditingController> quantityControllers = [];
 
   final TextEditingController salePriceController = TextEditingController();

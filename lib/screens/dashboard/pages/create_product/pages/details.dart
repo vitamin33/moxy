@@ -6,7 +6,6 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
-import '../../../../../domain/validation_mixin.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);

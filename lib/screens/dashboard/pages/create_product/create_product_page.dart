@@ -13,7 +13,13 @@ import '../../../../domain/create_product/create_product_effects.dart';
 import '../../../../domain/ui_effect.dart';
 
 class CreateProductPage extends StatelessWidget {
-  const CreateProductPage({Key? key}) : super(key: key);
+  bool isEditMode;
+  String? editProductId;
+  CreateProductPage({
+    Key? key,
+    required this.isEditMode,
+    this.editProductId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,68 +28,77 @@ class CreateProductPage extends StatelessWidget {
       Branding(),
       Summary(),
     ];
-    return BlocEffectListener<CreateProductCubit, UiEffect, CreateProductState>(
-      listener: (context, effect, state) {
-        if (effect is ValidationFailed) {
-          ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-              snackBarFailureText: 'Wrong input, please check text fields.'));
-        }
-      },
-      child: BlocConsumer<CreateProductCubit, CreateProductState>(
-        listener: (context, state) => {
-          if (state.errorMessage != '')
-            {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  snackBarWhenFailure(snackBarFailureText: 'Failed')),
-              context.read<CreateProductCubit>().clearErrorState(),
-            }
+    return BlocProvider<CreateProductCubit>(
+      create: (BuildContext context) =>
+          CreateProductCubit(productId: editProductId, isEditMode: isEditMode),
+      child:
+          BlocEffectListener<CreateProductCubit, UiEffect, CreateProductState>(
+        listener: (context, effect, state) {
+          if (effect is ValidationFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+                snackBarFailureText: 'Wrong input, please check text fields.'));
+          }
         },
-        builder: (context, state) {
-          final cubit = context.read<CreateProductCubit>();
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            body: state.isLoading
-                ? loader()
-                : Stack(
-                    children: [
-                      Column(
-                        children: [
-                          Expanded(
-                            child: SingleChildScrollView(
+        child: BlocConsumer<CreateProductCubit, CreateProductState>(
+          listener: (context, state) => {
+            if (state.errorMessage != '')
+              {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    snackBarWhenFailure(snackBarFailureText: 'Failed')),
+                context.read<CreateProductCubit>().clearErrorState(),
+              }
+          },
+          builder: (context, state) {
+            final cubit = context.read<CreateProductCubit>();
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: state.isLoading
+                  ? loader()
+                  : Stack(
+                      children: [
+                        Column(
+                          children: [
+                            Expanded(
+                              child: SingleChildScrollView(
                                 child: Padding(
-                                    padding: const EdgeInsets.all(
-                                        AppTheme.cardPadding),
-                                    child: SizedBox(
-                                        width: double.maxFinite,
-                                        height: 550,
-                                        child: RoundedCard(
-                                            padding: const EdgeInsets.all(0),
-                                            child: Column(children: [
-                                              appIndicator(state, cubit, pages),
-                                              Expanded(
-                                                child: PageView.builder(
-                                                  controller:
-                                                      cubit.pageController,
-                                                  onPageChanged: (int page) {
-                                                    cubit.onChangePage(page);
-                                                  },
-                                                  itemCount: pages.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    return pages[
-                                                        index % pages.length];
-                                                  },
-                                                ),
-                                              )
-                                            ]))))),
-                          ),
-                        ],
-                      ),
-                      positionButton(state, cubit)
-                    ],
-                  ),
-          );
-        },
+                                  padding: const EdgeInsets.all(
+                                      AppTheme.cardPadding),
+                                  child: SizedBox(
+                                    width: double.maxFinite,
+                                    height: 550,
+                                    child: RoundedCard(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Column(
+                                        children: [
+                                          appIndicator(state, cubit, pages),
+                                          Expanded(
+                                            child: PageView.builder(
+                                              controller: cubit.pageController,
+                                              onPageChanged: (int page) {
+                                                cubit.onChangePage(page);
+                                              },
+                                              itemCount: pages.length,
+                                              itemBuilder: (context, index) {
+                                                return pages[
+                                                    index % pages.length];
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        positionButton(state, cubit)
+                      ],
+                    ),
+            );
+          },
+        ),
       ),
     );
   }
