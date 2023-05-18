@@ -120,12 +120,14 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
       ];
     }
     if (_routerCubit.state is CreateProductPageState) {
-      extraPageContent =
-          (_routerCubit.state as CreateProductPageState).extraPageContent;
+      final state = _routerCubit.state as CreateProductPageState;
+      bool? isEditMode = state.isEditMode ?? false;
+      String? editProductId = state.editProductId;
       return [
         _materialPage(
           valueKey: "createProduct",
-          child: const CreateProductPage(),
+          child: CreateProductPage(
+              editProductId: editProductId, isEditMode: isEditMode),
         ),
       ];
     }

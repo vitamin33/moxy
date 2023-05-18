@@ -4,28 +4,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
+import 'package:moxy/domain/create_product/create_product_effects.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:bloc_effects/bloc_effects.dart';
 
 import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';
 
-class CreateProductCubit extends Cubit<CreateProductState> {
+class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
+    with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+  final bool isEditMode;
+  final String? productId;
 
-  CreateProductCubit()
-      : super(CreateProductState(
+  CreateProductCubit({required this.productId, required this.isEditMode})
+      : super(
+          CreateProductState(
             isLoading: false,
-            isEdit: false,
+            isEdit: isEditMode,
             errorMessage: '',
             editProduct: Product.defaultProduct(),
             initialPage: 0,
             activePage: 0,
             product: Product.defaultProduct(),
             images: [],
-            editProductId: ''));
+            editProductId: productId,
+            errors: FieldErrors.noErrors(),
+          ),
+        ) {
+    if (isEditMode && productId != null) {
+      getProductById(productId);
+    }
+  }
   List<TextEditingController> quantityControllers = [];
 
   final TextEditingController salePriceController = TextEditingController();
@@ -139,10 +154,12 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
-      if (state.isEdit) {
-        editProduct(state.editProductId);
-      } else {
-        addProduct();
+      if (validateFields()) {
+        if (state.isEdit) {
+          editProduct(state.editProductId);
+        } else {
+          addProduct();
+        }
       }
     }
   }
@@ -245,5 +262,35 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     } catch (e) {
       moxyPrint(e);
     }
+  }
+
+  bool validateFields() {
+    final errors = FieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.product.name)) {
+      errors.productName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.product.description)) {
+      errors.productDescription = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.product.idName)) {
+      errors.productIdName = FieldError.empty;
+      noErrors = false;
+    }
+    if (!isValidPrice(state.product.costPrice)) {
+      errors.costPrice = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidPrice(state.product.salePrice)) {
+      errors.salePrice = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(ValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(errors: errors));
+    return noErrors;
   }
 }

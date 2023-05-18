@@ -33,8 +33,6 @@ class MoxyApp extends StatelessWidget {
         BlocProvider<HomeRouterCubit>(
           create: (BuildContext context) => HomeRouterCubit(),
         ),
-        BlocProvider<CreateProductCubit>(
-            create: (BuildContext context) => CreateProductCubit()),
         BlocProvider<AllProductsCubit>(
             create: (BuildContext context) => AllProductsCubit()),
         BlocProvider<AllOrdersCubit>(

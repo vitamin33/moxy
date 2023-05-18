@@ -62,8 +62,15 @@ class Branding extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextField(
-                        decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
+                        decoration: InputDecoration(
+                            border:
+                                _renderBorder(!_costPriceIsValid(state), false),
+                            enabledBorder:
+                                _renderBorder(_costPriceIsValid(state), false),
+                            focusedBorder:
+                                _renderBorder(_costPriceIsValid(state), true),
+                            hintStyle: _renderHintStyle(
+                                context, _costPriceIsValid(state)),
                             hintText: 'Price(\$)'),
                         controller: cubit.costPriceController,
                         onChanged: (value) => {cubit.costPriceChanged(value)},
@@ -76,8 +83,15 @@ class Branding extends StatelessWidget {
                     const SizedBox(width: AppTheme.cardPadding),
                     Expanded(
                       child: TextField(
-                          decoration: const InputDecoration(
-                            border: UnderlineInputBorder(),
+                          decoration: InputDecoration(
+                            border:
+                                _renderBorder(!_salePriceIsValid(state), false),
+                            enabledBorder:
+                                _renderBorder(_salePriceIsValid(state), false),
+                            focusedBorder:
+                                _renderBorder(_salePriceIsValid(state), true),
+                            hintStyle: _renderHintStyle(
+                                context, _salePriceIsValid(state)),
                             hintText: 'Sale Price(\$)',
                           ),
                           controller: cubit.salePriceController,
@@ -98,8 +112,7 @@ class Branding extends StatelessWidget {
     );
   }
 
-
-   _buildImage(Product product, int index, cubit) {
+  _buildImage(Product product, int index, cubit) {
     final images = product.images;
     if (images.isEmpty) {
       return Container();
@@ -143,5 +156,25 @@ class Branding extends StatelessWidget {
         );
       }
     }
+  }
+
+  UnderlineInputBorder _renderBorder(bool isValid, bool focused) {
+    return UnderlineInputBorder(
+      borderSide: BorderSide(
+          color: isValid ? AppTheme.secondaryColor : Colors.red,
+          width: focused ? 2 : 1),
+    );
+  }
+
+  bool _costPriceIsValid(CreateProductState state) =>
+      state.errors.costPrice == null;
+
+  bool _salePriceIsValid(CreateProductState state) =>
+      state.errors.salePrice == null;
+
+  TextStyle _renderHintStyle(BuildContext context, bool isValid) {
+    return TextStyle(
+      color: isValid ? Theme.of(context).hintColor : Colors.red,
+    );
   }
 }

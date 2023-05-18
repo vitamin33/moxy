@@ -14,10 +14,11 @@ class ProductsPageState extends HomeRouterState {
 }
 
 class CreateProductPageState extends HomeRouterState {
-  final String? extraPageContent;
-  const CreateProductPageState([this.extraPageContent]);
+  final bool? isEditMode;
+  final String? editProductId;
+  const CreateProductPageState({this.isEditMode, this.editProductId});
   @override
-  List<Object?> get props => [extraPageContent];
+  List<Object?> get props => [isEditMode, editProductId];
 }
 
 class OverviewPageState extends HomeRouterState {
