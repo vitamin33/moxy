@@ -50,6 +50,7 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
             focusColor: Theme.of(context).focusColor,
             onTap: () {
               context.read<HomeRouterCubit>().navigateTo(initialRoute);
+              Scaffold.of(context).closeDrawer();
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
