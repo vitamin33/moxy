@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moxy/screens/dashboard/pages/products/products_page.dart';
 
 import '../../../components/custom_expansion_tile.dart';
 import '../../../constant/menu.dart';
@@ -46,18 +45,14 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
                 isHover = v;
               });
             },
-            hoverColor: Theme.of(context).hoverColor,
-            focusColor: Theme.of(context).focusColor,
             onTap: () {
               context.read<HomeRouterCubit>().navigateTo(initialRoute);
               Scaffold.of(context).closeDrawer();
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color:
-                      isTapped ? AppTheme.pink : Theme.of(context).canvasColor,
-                  borderRadius: BorderRadius.circular(15)),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
               padding: const EdgeInsets.all(AppTheme.elementSpacing),
               child: Row(
                 children: [
@@ -65,10 +60,10 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        SvgPicture.asset(
-                          icon,
-                          color: isTapped ? AppTheme.pinkDark : AppTheme.black,
-                        ),
+                        SvgPicture.asset(icon,
+                            colorFilter: ColorFilter.mode(
+                                isTapped ? AppTheme.pinkDark : AppTheme.black,
+                                BlendMode.srcIn)),
                         const SizedBox(width: AppTheme.elementSpacing),
                         Text(
                           title,

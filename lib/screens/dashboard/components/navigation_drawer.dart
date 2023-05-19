@@ -17,59 +17,58 @@ class DashboardDrawer extends StatelessWidget {
     final navRootCubit = context.read<RootRouterCubit>();
 
     return ClipRRect(
-      child: Container(
-        width: AppTheme.drawerWidth,
-        height: AppTheme.size(context).height,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 70, left: 25, right: 10),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(IconPath.moxylogo),
-                      IconButton(
-                          onPressed: () {
-                            Scaffold.of(context).closeDrawer();
-                          },
-                          icon: SvgPicture.asset(IconPath.closeDrawer)),
-                    ],
-                  ))
-                ],
+      child: Material(
+        color: Theme.of(context).canvasColor,
+        child: SizedBox(
+          width: AppTheme.drawerWidth,
+          height: AppTheme.size(context).height,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 70, left: 25, right: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(IconPath.moxylogo),
+                        IconButton(
+                            onPressed: () {
+                              Scaffold.of(context).closeDrawer();
+                            },
+                            icon: SvgPicture.asset(IconPath.closeDrawer)),
+                      ],
+                    ))
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: AppTheme.elementSpacing * 0.85),
-            Divider(
-              color: Theme.of(context).dividerColor,
-              height: 1.0,
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: menus.length,
-                itemBuilder: (_, index) {
-                  final menu = menus[index];
-                  return NavigationBarCard(menu: menu);
-                },
-              ),
-            ),
-            Divider(
+              const SizedBox(height: AppTheme.elementSpacing * 0.85),
+              Divider(
                 color: Theme.of(context).dividerColor,
-                height: 0,
-                thickness: 0.1),
-            const SizedBox(height: AppTheme.cardPadding * 0.5),
-            InkWell(
+                height: 1.0,
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: menus.length,
+                  itemBuilder: (_, index) {
+                    final menu = menus[index];
+                    return NavigationBarCard(menu: menu);
+                  },
+                ),
+              ),
+              Divider(
+                  color: Theme.of(context).dividerColor,
+                  height: 0,
+                  thickness: 0.1),
+              const SizedBox(height: AppTheme.cardPadding * 0.5),
+              InkWell(
                 onTap: () => {
-                      cubit.signOut(),
-                      navRootCubit.goToAuth(),
-                      Scaffold.of(context).closeDrawer()
-                    },
+                  cubit.signOut(),
+                  navRootCubit.goToAuth(),
+                  Scaffold.of(context).closeDrawer()
+                },
                 focusColor: AppTheme.darkPink,
                 highlightColor: AppTheme.darkPink,
                 splashColor: AppTheme.darkPink,
@@ -88,8 +87,10 @@ class DashboardDrawer extends StatelessWidget {
                       const SizedBox(height: AppTheme.elementSpacing * 6),
                     ],
                   ),
-                )),
-          ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
