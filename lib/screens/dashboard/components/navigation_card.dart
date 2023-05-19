@@ -114,7 +114,7 @@ class NavigationBarCardList extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: ListTileTheme(
           dense: true,
-          horizontalTitleGap: AppTheme.elementSpacing * 1.5,
+          horizontalTitleGap: AppTheme.elementSpacing * 1.2,
           minLeadingWidth: 10,
           child: CustomExpansionTile(
             backgroundColor: Theme.of(context).canvasColor,
