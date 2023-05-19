@@ -5,5 +5,16 @@ class IconPath {
   static const String search = "assets/icons/search.png";
   static const String menu = "assets/icons/menu.png";
   static const String bag = "assets/icons/bag.png";
-  static const String overview = "assets/icons/overview.png";
+  static const String overview = "assets/icons/overview.svg";
+  static const String customers = "assets/icons/customers.svg";
+  static const String orders = "assets/icons/orders.svg";
+  static const String create = "assets/icons/create.svg";
+  static const String createProduct = "assets/icons/create_product.svg";
+  static const String feedbacks = "assets/icons/feedbacks.svg";
+  static const String moxylogo = "assets/icons/moxy_logo.svg";
+  static const String logout = "assets/icons/logout.svg";
+  static const String closeDrawer = "assets/icons/close_drawer.svg";
+  static const String arrowDownDrawer = "assets/icons/arrow_down_drawer.svg";
+  static const String arrowUpDrawer = "assets/icons/arrow_up_drawer.svg";
+  static const String product = "assets/icons/product.svg";
 }

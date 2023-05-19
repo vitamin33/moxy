@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/constant/route_name.dart';
-import 'package:moxy/custom_icons.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 
 List<Menu> menus = const [
   Menu(
     title: 'Overview',
-    icon: CustomIcons.pill,
+    icon: IconPath.overview,
     route: OverviewPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Customers',
-    icon: Icons.group_outlined,
+    icon: IconPath.customers,
     route: CustomersPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Orders',
-    icon: Icons.local_shipping,
+    icon: IconPath.orders,
     route: OrdersPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Create',
-    icon: Icons.add_circle_outline,
+    icon: IconPath.customers,
     route: EmptyState(),
     subRoutes: [
       Menu(
         title: 'Create Order',
-        icon: Icons.create_sharp,
+        icon: IconPath.createProduct,
         route: CreateOrderPageState(),
         subRoutes: [],
       ),
       Menu(
         title: 'Create Product',
-        icon: Icons.create,
+        icon: IconPath.createProduct,
         route: CreateProductPageState(),
         subRoutes: [],
       ),
@@ -44,13 +42,13 @@ List<Menu> menus = const [
   ),
   Menu(
     title: 'Products',
-    icon: Icons.shopping_basket_outlined,
+    icon: IconPath.product,
     route: ProductsPageState(),
     subRoutes: [],
   ),
   Menu(
     title: 'Feedbacks',
-    icon: Icons.reviews_outlined,
+    icon: IconPath.feedbacks,
     route: FeedbacksPageState(),
     subRoutes: [],
   ),
@@ -59,7 +57,7 @@ List<Menu> menus = const [
 @immutable
 class Menu {
   final String title;
-  final IconData icon;
+  final String icon;
   final HomeRouterState route;
   final List<Menu> subRoutes;
 
