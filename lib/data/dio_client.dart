@@ -19,8 +19,8 @@ import 'models/response/all_orders_response.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
-  //static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'http://10.0.2.2:3000';
+  // static const String baseUrl = 'http://localhost:3000';
 
   static final DioClient instance = DioClient._private();
 

@@ -58,7 +58,7 @@ dependencies:
   equatable: ^2.0.5
   pretty_dio_logger: ^1.1.1
   flutter_native_splash: ^2.2.9
-  flutter_svg: ^2.0.2
+  flutter_svg: ^2.0.5
   freezed_annotation: ^2.2.0
   json_annotation: ^4.8.0
   universal_html: ^2.2.1
@@ -98,8 +98,8 @@ flutter:
     - assets/appainter_theme.json
 
   fonts:
-    - family: OpenSans
-      fonts:
+  - family: OpenSans
+    fonts:
         - asset: assets/fonts/OpenSans-Regular.ttf
           weight: 400
         - asset: assets/fonts/OpenSans-Medium.ttf

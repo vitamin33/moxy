@@ -1,4 +1,4 @@
-class ImagePath {
+class ImageAssets {
   static const String discuss = "assets/images/discuss.png";
   static const String logo = "assets/images/logo.png";
   static const String salad = "assets/images/salad.png";

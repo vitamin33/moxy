@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../components/custom_expansion_tile.dart';
 import '../../../constant/menu.dart';
 import '../../../theme/app_theme.dart';
 
@@ -29,57 +32,54 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
     return BlocBuilder<HomeRouterCubit, HomeRouterState>(
       builder: (context, state) {
         final isTapped = initialRoute == state;
-
         if (subItems.isNotEmpty) {
           return NavigationBarCardList(menu: widget.menu, isTapped: isTapped);
         }
-
         return Padding(
           padding: const EdgeInsets.symmetric(
               horizontal: AppTheme.elementSpacing,
-              vertical: AppTheme.elementSpacing * 0.5),
+              vertical: AppTheme.elementSpacing * 0.25),
           child: InkWell(
             onHover: (v) {
               setState(() {
                 isHover = v;
               });
             },
-            hoverColor: Theme.of(context).hoverColor,
-            focusColor: Theme.of(context).focusColor,
             onTap: () {
               context.read<HomeRouterCubit>().navigateTo(initialRoute);
+              Scaffold.of(context).closeDrawer();
             },
             child: Container(
+              width: MediaQuery.of(context).size.width,
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
               padding: const EdgeInsets.all(AppTheme.elementSpacing),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-              ),
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(),
+                  Expanded(
                     child: Row(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
-                        Icon(icon,
-                            color: isTapped
-                                ? AppTheme.primaryColor
-                                : AppTheme.onPrimaryContainerColor),
+                        SvgPicture.asset(icon,
+                            colorFilter: ColorFilter.mode(
+                                isTapped ? AppTheme.pinkDark : AppTheme.black,
+                                BlendMode.srcIn)),
                         const SizedBox(width: AppTheme.elementSpacing),
                         Text(
                           title,
                           style:
                               Theme.of(context).textTheme.titleSmall?.copyWith(
                                     color: isTapped
-                                        ? AppTheme.primaryColor
+                                        ? AppTheme.pinkDark
                                         : AppTheme.onPrimaryContainerColor,
                                     fontWeight: isTapped
                                         ? FontWeight.w700
                                         : FontWeight.w500,
                                   ),
-                        ),
+                        )
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -91,9 +91,12 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
 }
 
 class NavigationBarCardList extends StatelessWidget {
-  const NavigationBarCardList(
-      {Key? key, required this.menu, required, required this.isTapped})
-      : super(key: key);
+  const NavigationBarCardList({
+    Key? key,
+    required this.menu,
+    required,
+    required this.isTapped,
+  }) : super(key: key);
 
   final Menu menu;
   final bool isTapped;
@@ -106,9 +109,9 @@ class NavigationBarCardList extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
         child: ListTileTheme(
           dense: true,
-          horizontalTitleGap: AppTheme.elementSpacing * 1.5,
+          horizontalTitleGap: AppTheme.elementSpacing * 1.2,
           minLeadingWidth: 10,
-          child: ExpansionTile(
+          child: CustomExpansionTile(
             backgroundColor: Theme.of(context).canvasColor,
             tilePadding: const EdgeInsets.symmetric(
               horizontal: AppTheme.elementSpacing,
@@ -116,11 +119,10 @@ class NavigationBarCardList extends StatelessWidget {
             ),
             childrenPadding:
                 const EdgeInsets.only(left: AppTheme.elementSpacing),
-            iconColor: Theme.of(context).iconTheme.color,
-            leading: Icon(menu.icon,
-                color: isTapped
-                    ? AppTheme.primaryColor
-                    : AppTheme.onPrimaryContainerColor),
+            iconColor: Colors.black,
+            leading: SvgPicture.asset(
+              IconPath.create,
+            ),
             title: Text(
               menu.title,
               style: Theme.of(context).textTheme.subtitle1?.copyWith(
