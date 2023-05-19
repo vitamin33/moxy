@@ -4,6 +4,7 @@ import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'domain/all_orders/all_orders_cubit.dart';
 import 'domain/all_products/all_products_cubit.dart';
 import 'navigation/root_router_cubit.dart';
 import 'navigation/root_router_delegate.dart';
@@ -32,10 +33,10 @@ class MoxyApp extends StatelessWidget {
         BlocProvider<HomeRouterCubit>(
           create: (BuildContext context) => HomeRouterCubit(),
         ),
-        BlocProvider<CreateProductCubit>(
-            create: (BuildContext context) => CreateProductCubit()),
         BlocProvider<AllProductsCubit>(
             create: (BuildContext context) => AllProductsCubit()),
+        BlocProvider<AllOrdersCubit>(
+            create: (BuildContext context) => AllOrdersCubit()),
       ],
       child: MaterialApp(
         home: _routers,

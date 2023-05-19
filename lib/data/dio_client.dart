@@ -15,6 +15,7 @@ import '../constant/api_path.dart';
 import '../domain/models/product.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
+import 'models/response/all_orders_response.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
@@ -172,5 +173,22 @@ class DioClient {
       return null;
     }
     return result;
+  }
+
+  // ORDERS
+
+  Future<List<NetworkOrder>> allOrders(token) async {
+    try {
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      final response = await _dio.get('$baseUrl/orders');
+      final data = response.data;
+      final orderList = <NetworkOrder>[];
+      for (var value in (data as List)) {
+        orderList.add(NetworkOrder.fromJson(value));
+      }
+      return orderList;
+    } catch (e) {
+      throw Exception('Failed to load product: $e');
+    }
   }
 }

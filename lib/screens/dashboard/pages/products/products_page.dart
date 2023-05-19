@@ -44,13 +44,12 @@ class ProductsPage extends StatelessWidget {
                             title: Text(product.name),
                             trailing: listTileTrailing(state, product),
                             onTap: () {
-                              context.read<CreateProductCubit>().changeEdit();
-                              context
-                                  .read<CreateProductCubit>()
-                                  .getProductById(product.id);
-                              context
-                                  .read<HomeRouterCubit>()
-                                  .navigateTo(const CreateProductPageState());
+                              context.read<HomeRouterCubit>().navigateTo(
+                                    CreateProductPageState(
+                                      editProductId: product.id,
+                                      isEditMode: true,
+                                    ),
+                                  );
                             },
                           ),
                         );
