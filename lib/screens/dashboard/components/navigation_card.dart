@@ -51,8 +51,10 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(15)),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: isTapped ? AppTheme.pink : Theme.of(context).canvasColor,
+              ),
               padding: const EdgeInsets.all(AppTheme.elementSpacing),
               child: Row(
                 children: [
