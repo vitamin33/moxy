@@ -150,7 +150,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void moveToNextPage() {
-    if (state.activePage != 2) {
+    if (state.activePage != 1) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
+import '../../../../../components/custom_textfield.dart';
 import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
@@ -18,67 +19,58 @@ class ProductDetails extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
           child: Column(children: [
-            TextField(
-                decoration: InputDecoration(
-                  border: _renderBorder(!_nameIsValid(state), false),
-                  enabledBorder: _renderBorder(_nameIsValid(state), false),
-                  focusedBorder: _renderBorder(_nameIsValid(state), true),
-                  hintStyle: _renderHintStyle(context, _nameIsValid(state)),
-                  hintText: 'Name',
-                ),
-                controller: cubit.nameController,
-                onChanged: (value) => cubit.nameChanged(value)),
-            TextField(
-              decoration: InputDecoration(
-                border: _renderBorder(!_descriptionIsValid(state), false),
-                enabledBorder: _renderBorder(_descriptionIsValid(state), false),
-                focusedBorder: _renderBorder(_descriptionIsValid(state), true),
-                hintStyle:
-                    _renderHintStyle(context, _descriptionIsValid(state)),
-                hintText: 'Description',
-              ),
+            CustomTextField(
+              title: 'Name',
+              maxLines: 1,
+              controller: cubit.nameController,
+              onChanged: cubit.nameChanged,
+              validation: true,
+              state: state.errors.productName,
+            ),
+            const SizedBox(height: 30),
+              CustomTextField(
+              title: 'Description',
               controller: cubit.descriptionController,
-              onChanged: (value) => cubit.descriptionChanged(value),
-              maxLines: 6,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                border: _renderBorder(_idNameIsValid(state), false),
-                enabledBorder: _renderBorder(_idNameIsValid(state), false),
-                focusedBorder: _renderBorder(_idNameIsValid(state), true),
-                hintStyle: _renderHintStyle(context, _idNameIsValid(state)),
-                hintText: 'idName',
-              ),
+              onChanged: cubit.descriptionChanged,
+              validation: true,
+              state: state.errors.productDescription,
+            ),  
+            const SizedBox(height: 30),
+            CustomTextField(
+              title: 'IdName',
+              maxLines: 1,
               controller: cubit.idNameController,
-              onChanged: (value) => cubit.idNameChanged(value),
+              onChanged: cubit.idNameChanged,
+              validation: true,
+              state: state.errors.productIdName,
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Container(
-                color: const Color.fromARGB(255, 254, 182, 191),
-                width: 300,
-                height: 150,
-                child: Column(children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: state.product.dimensions.length,
-                      itemBuilder: (context, index) {
-                        return _buildColorQuantityRow(state, cubit, index);
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                      width: 100,
-                      height: 20,
-                      child: TextButton(
-                        onPressed: () {
-                          cubit.addColorField();
-                        },
-                        child: const Text('add'),
-                      ))
-                ]),
-              ),
-            )
+            // Padding(
+            //   padding: const EdgeInsets.all(10.0),
+            //   child: Container(
+            //     color: const Color.fromARGB(255, 254, 182, 191),
+            //     width: 300,
+            //     height: 150,
+            //     child: Column(children: [
+            //       Expanded(
+            //         child: ListView.builder(
+            //           itemCount: state.product.dimensions.length,
+            //           itemBuilder: (context, index) {
+            //             return _buildColorQuantityRow(state, cubit, index);
+            //           },
+            //         ),
+            //       ),
+            //       SizedBox(
+            //           width: 100,
+            //           height: 20,
+            //           child: TextButton(
+            //             onPressed: () {
+            //               cubit.addColorField();
+            //             },
+            //             child: const Text('add'),
+            //           ))
+            //     ]),
+            //   ),
+            // )
           ]),
         );
         ;
@@ -126,7 +118,7 @@ class ProductDetails extends StatelessWidget {
             width: 50,
             child: TextField(
                 decoration: const InputDecoration(
-                  border: UnderlineInputBorder(),
+                  border: OutlineInputBorder(),
                   hintText: 'Quantity',
                 ),
                 // controller: cubit.quantityControllers![index]!,
@@ -140,29 +132,6 @@ class ProductDetails extends StatelessWidget {
           )
         ],
       ),
-    );
-  }
-
-  UnderlineInputBorder _renderBorder(bool isValid, bool focused) {
-    return UnderlineInputBorder(
-      borderSide: BorderSide(
-          color: isValid ? AppTheme.secondaryColor : Colors.red,
-          width: focused ? 2 : 1),
-    );
-  }
-
-  bool _nameIsValid(CreateProductState state) =>
-      state.errors.productName == null;
-
-  bool _descriptionIsValid(CreateProductState state) =>
-      state.errors.productDescription == null;
-
-  bool _idNameIsValid(CreateProductState state) =>
-      state.errors.productIdName == null;
-
-  TextStyle _renderHintStyle(BuildContext context, bool isValid) {
-    return TextStyle(
-      color: isValid ? Theme.of(context).hintColor : Colors.red,
     );
   }
 }

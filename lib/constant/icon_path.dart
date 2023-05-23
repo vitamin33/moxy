@@ -3,7 +3,7 @@ class IconPath {
   static const String favourite = "assets/icons/favourite.png";
   static const String home = "assets/icons/home.png";
   static const String search = "assets/icons/search.png";
-  static const String menu = "assets/icons/menu.png";
+  static const String menu = "assets/icons/menu.svg";
   static const String bag = "assets/icons/bag.png";
   static const String overview = "assets/icons/overview.svg";
   static const String customers = "assets/icons/customers.svg";
@@ -17,4 +17,6 @@ class IconPath {
   static const String arrowDownDrawer = "assets/icons/arrow_down_drawer.svg";
   static const String arrowUpDrawer = "assets/icons/arrow_up_drawer.svg";
   static const String product = "assets/icons/product.svg";
+  static const String pickImage = "assets/icons/pick_image.svg";
+  // static const String menu = "assets/icons/product.svg";
 }

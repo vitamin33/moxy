@@ -3,9 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:moxy/components/custom_textfield.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
+import '../../../../../components/dashed_path_painter.dart';
+import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
 class Branding extends StatelessWidget {
@@ -44,67 +48,81 @@ class Branding extends StatelessWidget {
                             ),
                           )
                         ])
-                      : const Icon(
-                          Icons.cloud_upload_sharp,
-                          color: AppTheme.blackLight,
-                        ),
-                  TextButton(
-                      child: const Text('Pick Image from Gallery'),
-                      onPressed: () {
-                        cubit.pickImage();
-                      }),
+                      : InkWell(
+                          onTap: () {
+                            cubit.pickImage();
+                          },
+                          // borderRadius: BorderRadius.all(Radius.circular(6)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 100,
+                                width: MediaQuery.of(context).size.width,
+                                child: CustomPaint(
+                                  foregroundPainter: DashedPathPainter(
+                                    originalPath: Path()
+                                      ..addRect(
+                                        const Rect.fromLTWH(0, 0, 365, 100),
+                                      ),
+                                    pathColor: Colors.grey,
+                                    strokeWidth: 1.0,
+                                    dashGapLength: 5.0,
+                                    dashLength: 3.0,
+                                  ),
+                                  child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        SvgPicture.asset(IconPath.pickImage),
+                                        Text('Pick Image From Gallery')
+                                      ]),
+                                ),
+                              ),
+                              // Container(
+                              //   width: MediaQuery.of(context).size.width,
+                              //   height: 100,
+                              //   decoration: BoxDecoration(
+                              //       borderRadius: BorderRadius.circular(6.0),
+                              //       border: Border.all(
+                              //           width: 1.0, color: AppTheme.black)),
+                              //   child: Column(
+                              //       mainAxisAlignment: MainAxisAlignment.center,
+                              //       children: [
+                              //         SvgPicture.asset(IconPath.pickImage),
+                              //         Text('Pick Image From Gallery')
+                              //       ]),
+                              // ),
+                            ],
+                          ),
+                        )
                 ],
               ),
-              SizedBox(
-                width: 300,
-                height: 200,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                            border:
-                                _renderBorder(!_costPriceIsValid(state), false),
-                            enabledBorder:
-                                _renderBorder(_costPriceIsValid(state), false),
-                            focusedBorder:
-                                _renderBorder(_costPriceIsValid(state), true),
-                            hintStyle: _renderHintStyle(
-                                context, _costPriceIsValid(state)),
-                            hintText: 'Price(\$)'),
-                        controller: cubit.costPriceController,
-                        onChanged: (value) => {cubit.costPriceChanged(value)},
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(16),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: AppTheme.cardPadding),
-                    Expanded(
-                      child: TextField(
-                          decoration: InputDecoration(
-                            border:
-                                _renderBorder(!_salePriceIsValid(state), false),
-                            enabledBorder:
-                                _renderBorder(_salePriceIsValid(state), false),
-                            focusedBorder:
-                                _renderBorder(_salePriceIsValid(state), true),
-                            hintStyle: _renderHintStyle(
-                                context, _salePriceIsValid(state)),
-                            hintText: 'Sale Price(\$)',
-                          ),
-                          controller: cubit.salePriceController,
-                          onChanged: (value) => {cubit.salePriceChanged(value)},
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(16),
-                          ]),
-                    ),
-                    const SizedBox(width: AppTheme.cardPadding),
-                  ],
-                ),
+              SizedBox(height: 50),
+              CustomTextField(
+                title: ' Price(\$)',
+                controller: cubit.costPriceController,
+                onChanged: cubit.costPriceChanged,
+                state: state.errors.costPrice,
+                maxLines: 1,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(16),
+                ],
               ),
+              const SizedBox(height: 30),
+              CustomTextField(
+                title: 'Sale Price(\$)',
+                controller: cubit.salePriceController,
+                onChanged: cubit.salePriceChanged,
+                state: state.errors.salePrice,
+                maxLines: 1,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(16),
+                ],
+              ),
+              const SizedBox(width: AppTheme.cardPadding),
             ],
           ),
         );
@@ -156,25 +174,5 @@ class Branding extends StatelessWidget {
         );
       }
     }
-  }
-
-  UnderlineInputBorder _renderBorder(bool isValid, bool focused) {
-    return UnderlineInputBorder(
-      borderSide: BorderSide(
-          color: isValid ? AppTheme.secondaryColor : Colors.red,
-          width: focused ? 2 : 1),
-    );
-  }
-
-  bool _costPriceIsValid(CreateProductState state) =>
-      state.errors.costPrice == null;
-
-  bool _salePriceIsValid(CreateProductState state) =>
-      state.errors.salePrice == null;
-
-  TextStyle _renderHintStyle(BuildContext context, bool isValid) {
-    return TextStyle(
-      color: isValid ? Theme.of(context).hintColor : Colors.red,
-    );
   }
 }
