@@ -122,6 +122,22 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
+  void quantityAdd(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null && dimen != null) {
+      dimen.quantity++;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
+  void quantityRemove(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null && dimen != null) {
+      dimen.quantity--;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
   void quantityChanged(int index, String? quantity) {
     Dimension? dimen = state.product.dimensions[index];
     if (quantity != null && quantity.isNotEmpty && dimen != null) {
@@ -212,19 +228,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void changeEdit() {
     emit(state.copyWith(isEdit: true));
   }
-
-  void addColorField() {
-    quantityControllers.add(TextEditingController());
+  void addColorField( dimen) {
     int newIndex = state.product.dimensions.length;
     List<Dimension> freeList = getFreeDimensionList(state.product.dimensions);
-    if (freeList.isNotEmpty) {
-      final newDimen = freeList.first;
-      final updatedDimensions =
-          Map<int, Dimension>.of(state.product.dimensions);
-      updatedDimensions.putIfAbsent(newIndex, () => newDimen);
-      emit(state.copyWith(
-          product: state.product.copyWith(dimensions: updatedDimensions)));
-    }
+   final updatedDimensions =  Map<int, Dimension>.of(state.product.dimensions);
+      updatedDimensions.putIfAbsent(newIndex, () => dimen);
+    emit(state.copyWith(product: state.product.copyWith(dimensions: updatedDimensions)));
   }
 
   List<Dimension> getFreeDimensionList(Map<int, Dimension> dimensions) {

@@ -32,7 +32,7 @@ class CustomTextField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+          style: renderTitleStyle(context, isValid(state)),
         ),
         Container(
             padding: EdgeInsets.all(6),
@@ -50,7 +50,6 @@ class CustomTextField extends StatelessWidget {
                 enabledBorder: _renderBorder(isValid(state), false),
                 focusedBorder: _renderBorder(isValid(state), true),
                 hintText: title,
-                hintStyle: renderHintStyle(context, isValid(state)),
                 contentPadding: const EdgeInsets.all(15),
               ),
             )),
@@ -67,8 +66,10 @@ OutlineInputBorder _renderBorder(bool isValid, bool focused) {
 }
 
 bool isValid(state) => state == null;
-TextStyle renderHintStyle(BuildContext context, bool isValid) {
+TextStyle renderTitleStyle(BuildContext context, bool isValid) {
   return TextStyle(
-    color: isValid ? Theme.of(context).hintColor : Colors.red,
+    color: isValid ? Colors.black : Colors.red,
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
   );
 }

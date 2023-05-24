@@ -58,17 +58,20 @@ class Product implements Copyable<Product> {
 class Dimension implements Copyable<Dimension> {
   String color;
   int quantity;
+  bool? isSelected;
 
-  Dimension({required this.color, required this.quantity});
+  Dimension({required this.color, required this.quantity, this.isSelected});
 
   static Dimension defaultDimension() {
-    return Dimension(color: ProductColor.black.color, quantity: 0);
+    return Dimension(color: ProductColor.black.color, quantity: 0,isSelected:false);
   }
 
   @override
-  Dimension copyWith({String? color, int? quantity}) {
+  Dimension copyWith({String? color, int? quantity,bool? isSelected}) {
     return Dimension(
-        color: color ?? this.color, quantity: quantity ?? this.quantity);
+        color: color ?? this.color,
+        quantity: quantity ?? this.quantity,
+        isSelected:isSelected ?? this.isSelected);
   }
 
   @override

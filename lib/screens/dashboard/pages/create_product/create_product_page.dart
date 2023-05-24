@@ -105,7 +105,7 @@ class CreateProductPage extends StatelessWidget {
 Widget positionButton(CreateProductState state, CreateProductCubit cubit) {
   return Positioned(
     height: 60,
-    bottom: 15,
+    bottom: 40,
     left: 0,
     right: 0,
     child: Row(
@@ -117,8 +117,11 @@ Widget positionButton(CreateProductState state, CreateProductCubit cubit) {
                 title: 'Previus',
                 onTap: cubit.moveToPreviustPage,
                 buttonWidth: 150,
+                outline: true,
               )
-            : Container(),
+            : Container(
+                width: 150,
+              ),
         CutomButton(
           title: state.activePage != 1 ? 'Next' : 'Add',
           onTap: cubit.moveToNextPage,
@@ -180,7 +183,7 @@ Widget appIndicator(
                     style: TextStyle(
                         color: state.activePage == index
                             ? AppTheme.black
-                            : AppTheme.gray),
+                            : AppTheme.darkPink),
                   )
                 ],
               ),

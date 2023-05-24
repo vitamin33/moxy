@@ -20,112 +20,131 @@ class Branding extends StatelessWidget {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  state.product.images.isNotEmpty
-                      ? Row(children: [
-                          Expanded(
-                            child: SizedBox(
-                              height: 120,
-                              width: double.maxFinite,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: state.product.images.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child: SizedBox(
-                                      child: _buildImage(
-                                          state.product, index, cubit),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          )
-                        ])
-                      : InkWell(
-                          onTap: () {
-                            cubit.pickImage();
-                          },
-                          // borderRadius: BorderRadius.all(Radius.circular(6)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 100,
-                                width: MediaQuery.of(context).size.width,
-                                child: CustomPaint(
-                                  foregroundPainter: DashedPathPainter(
-                                    originalPath: Path()
-                                      ..addRect(
-                                        const Rect.fromLTWH(0, 0, 365, 100),
+        return SingleChildScrollView(
+            child: Container(
+          height: MediaQuery.of(context).size.height,
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    state.product.images.isNotEmpty
+                        ? Row(children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 120,
+                                width: double.maxFinite,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: state.product.images.length,
+                                  itemBuilder: (context, index) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(2.0),
+                                      child: SizedBox(
+                                        child: _buildImage(
+                                            state.product, index, cubit),
                                       ),
-                                    pathColor: Colors.grey,
-                                    strokeWidth: 1.0,
-                                    dashGapLength: 5.0,
-                                    dashLength: 3.0,
-                                  ),
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        SvgPicture.asset(IconPath.pickImage),
-                                        Text('Pick Image From Gallery')
-                                      ]),
+                                    );
+                                  },
                                 ),
                               ),
-                              // Container(
-                              //   width: MediaQuery.of(context).size.width,
-                              //   height: 100,
-                              //   decoration: BoxDecoration(
-                              //       borderRadius: BorderRadius.circular(6.0),
-                              //       border: Border.all(
-                              //           width: 1.0, color: AppTheme.black)),
-                              //   child: Column(
-                              //       mainAxisAlignment: MainAxisAlignment.center,
-                              //       children: [
-                              //         SvgPicture.asset(IconPath.pickImage),
-                              //         Text('Pick Image From Gallery')
-                              //       ]),
-                              // ),
-                            ],
-                          ),
-                        )
-                ],
-              ),
-              SizedBox(height: 50),
-              CustomTextField(
-                title: ' Price(\$)',
-                controller: cubit.costPriceController,
-                onChanged: cubit.costPriceChanged,
-                state: state.errors.costPrice,
-                maxLines: 1,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(16),
-                ],
-              ),
-              const SizedBox(height: 30),
-              CustomTextField(
-                title: 'Sale Price(\$)',
-                controller: cubit.salePriceController,
-                onChanged: cubit.salePriceChanged,
-                state: state.errors.salePrice,
-                maxLines: 1,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(16),
-                ],
-              ),
-              const SizedBox(width: AppTheme.cardPadding),
-            ],
+                            )
+                          ])
+                        : InkWell(
+                            onTap: () {
+                              cubit.pickImage();
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 100,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: CustomPaint(
+                                    foregroundPainter: DashedPathPainter(
+                                      originalPath: Path()
+                                        ..addRect(
+                                          const Rect.fromLTWH(0, 0, 365, 100),
+                                        ),
+                                      pathColor: Colors.grey,
+                                      strokeWidth: 1.0,
+                                      dashGapLength: 5.0,
+                                      dashLength: 3.0,
+                                    ),
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SvgPicture.asset(IconPath.pickImage),
+                                          Text('Pick Image From Gallery')
+                                        ]),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                  ],
+                ),
+                SizedBox(height: 20),
+                CustomTextField(
+                  title: ' Price(\$)',
+                  controller: cubit.costPriceController,
+                  onChanged: cubit.costPriceChanged,
+                  state: state.errors.costPrice,
+                  maxLines: 1,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                CustomTextField(
+                  title: 'Sale Price(\$)',
+                  controller: cubit.salePriceController,
+                  onChanged: cubit.salePriceChanged,
+                  state: state.errors.salePrice,
+                  maxLines: 1,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
+                  ],
+                ),
+                const SizedBox(width: AppTheme.cardPadding),
+                Expanded(
+                  child: ListView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: state.product.dimensions.length,
+                      itemBuilder: (context, index) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('${state.product.dimensions[index]?.color}'),
+                            IconButton(
+                              onPressed: () {
+                                cubit.quantityRemove(index,
+                                    state.product.dimensions[index]?.quantity);
+                              },
+                              icon: Icon(Icons.remove),
+                            ),
+                            Text(
+                                '${state.product.dimensions[index]?.quantity}'),
+                            IconButton(
+                              onPressed: () {
+                                cubit.quantityAdd(index,
+                                    state.product.dimensions[index]?.quantity);
+                              },
+                              icon: Icon(Icons.add),
+                            ),
+                          ],
+                        );
+                      }),
+                )
+              ],
+            ),
           ),
-        );
+        ));
       },
     );
   }
