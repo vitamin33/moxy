@@ -122,6 +122,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
+  void quantityLongAdd(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null && dimen != null) {
+      dimen.quantity += 10;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
   void quantityAdd(int index, int? quantity) {
     Dimension? dimen = state.product.dimensions[index];
     if (quantity != null && dimen != null) {
@@ -134,6 +142,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     Dimension? dimen = state.product.dimensions[index];
     if (quantity != null && dimen != null) {
       dimen.quantity--;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
+  void quantityLongRemove(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null && dimen != null) {
+      dimen.quantity -= 10;
     }
     emit(state.copyWith(product: state.product));
   }
@@ -228,12 +244,27 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void changeEdit() {
     emit(state.copyWith(isEdit: true));
   }
-  void addColorField( dimen) {
-    int newIndex = state.product.dimensions.length;
-    List<Dimension> freeList = getFreeDimensionList(state.product.dimensions);
-   final updatedDimensions =  Map<int, Dimension>.of(state.product.dimensions);
+
+  void addColorField(dimen) {
+    bool isColorExists = state.product.dimensions.values
+        .any((dimension) => dimension.color == dimen.color);
+    if (!isColorExists) {
+      int newIndex = state.product.dimensions.length;
+      final updatedDimensions =
+          Map<int, Dimension>.of(state.product.dimensions);
       updatedDimensions.putIfAbsent(newIndex, () => dimen);
-    emit(state.copyWith(product: state.product.copyWith(dimensions: updatedDimensions)));
+      emit(state.copyWith(
+        product: state.product.copyWith(dimensions: updatedDimensions),
+      ));
+    }
+  }
+
+  void removeColorField(Dimension dimen) {
+    final updatedDimensions =
+        Map<int, Dimension>.from(state.product.dimensions);
+    updatedDimensions.removeWhere((key, value) => value.color == dimen.color);
+    emit(state.copyWith(
+        product: state.product.copyWith(dimensions: updatedDimensions)));
   }
 
   List<Dimension> getFreeDimensionList(Map<int, Dimension> dimensions) {

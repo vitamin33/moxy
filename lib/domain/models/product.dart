@@ -59,19 +59,23 @@ class Dimension implements Copyable<Dimension> {
   String color;
   int quantity;
   bool? isSelected;
+  String? image;
 
-  Dimension({required this.color, required this.quantity, this.isSelected});
+  Dimension({required this.color, required this.quantity, this.isSelected, this.image});
 
   static Dimension defaultDimension() {
-    return Dimension(color: ProductColor.black.color, quantity: 0,isSelected:false);
+    return Dimension(
+        color: ProductColor.black.color, quantity: 0, isSelected: false,image:'assets/images/logo.png' );
   }
 
   @override
-  Dimension copyWith({String? color, int? quantity,bool? isSelected}) {
+  Dimension copyWith({String? color, int? quantity, bool? isSelected,String? image}) {
     return Dimension(
         color: color ?? this.color,
         quantity: quantity ?? this.quantity,
-        isSelected:isSelected ?? this.isSelected);
+        isSelected: isSelected ?? this.isSelected,
+        image: image ?? this.image,
+        );
   }
 
   @override

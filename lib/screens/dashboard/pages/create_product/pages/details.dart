@@ -7,6 +7,7 @@ import 'package:moxy/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../constant/colors_image.dart';
+import '../../../../../constant/image_path.dart';
 import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
@@ -71,27 +72,38 @@ class ProductDetails extends StatelessWidget {
       },
     );
   }
+}
 
-  Widget _buildColorQuantityRow(
-      CreateProductState state, CreateProductCubit cubit, int index) {
-    List<Dimension> dropDownItems = allColorsDimens.toList();
-    Dimension? dropdownValue = state.product.dimensions[index];
-    return InkWell(
-        onTap: () {
-          cubit.addColorField (dropDownItems[index]);
-          moxyPrint(state.product.dimensions);
-        },
-        child: Container(
-            padding: EdgeInsets.all(3),
+Widget _buildColorQuantityRow(
+    CreateProductState state, CreateProductCubit cubit, int index) {
+  List<Dimension> dropDownItems = allColorsDimens.toList();
+  Dimension? dropdownValue = state.product.dimensions[index];
+  bool isSelected = dropdownValue != null && dropdownValue == dropDownItems[index];
+  return InkWell(
+      onTap: () {
+        if (isSelected) {
+          cubit.removeColorField(dropDownItems[index]);
+        } else {
+          cubit.addColorField(dropDownItems[index]);
+        }
+      },
+      child: Container(
+          padding: const EdgeInsets.all(3),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: isSelected ? AppTheme.black : null,
+            border: Border.all(
+              color: isSelected ? AppTheme.black : Colors.transparent,
+              width: 1,
+            ),
+          ),
+          child: CircleAvatar(
+            radius: 20,
+            backgroundColor: AppTheme.white,
             child: CircleAvatar(
-              radius: 20,
-              backgroundColor: AppTheme.white,
-              child: CircleAvatar(
-                radius: 15,
-                backgroundColor: AppTheme.gray,
-                backgroundImage: NetworkImage(colorsImage[index]),
-              ),
-            )
-            ));
-  }
+              radius: 15,
+              backgroundColor: AppTheme.pink,
+              backgroundImage: AssetImage(dropDownItems[index].image!),
+            ),
+          )));
 }

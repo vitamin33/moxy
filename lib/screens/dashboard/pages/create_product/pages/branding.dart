@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
+import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
 class Branding extends StatelessWidget {
@@ -20,6 +22,7 @@ class Branding extends StatelessWidget {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
+        List<String> backgroundImage = [];
         return SingleChildScrollView(
             child: Container(
           height: MediaQuery.of(context).size.height,
@@ -78,7 +81,7 @@ class Branding extends StatelessWidget {
                                             MainAxisAlignment.center,
                                         children: [
                                           SvgPicture.asset(IconPath.pickImage),
-                                          Text('Pick Image From Gallery')
+                                          const Text('Pick Image From Gallery')
                                         ]),
                                   ),
                                 ),
@@ -87,7 +90,7 @@ class Branding extends StatelessWidget {
                           )
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomTextField(
                   title: ' Price(\$)',
                   controller: cubit.costPriceController,
@@ -114,30 +117,99 @@ class Branding extends StatelessWidget {
                 const SizedBox(width: AppTheme.cardPadding),
                 Expanded(
                   child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: state.product.dimensions.length,
                       itemBuilder: (context, index) {
-                        return Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text('${state.product.dimensions[index]?.color}'),
-                            IconButton(
-                              onPressed: () {
-                                cubit.quantityRemove(index,
-                                    state.product.dimensions[index]?.quantity);
-                              },
-                              icon: Icon(Icons.remove),
-                            ),
-                            Text(
-                                '${state.product.dimensions[index]?.quantity}'),
-                            IconButton(
-                              onPressed: () {
-                                cubit.quantityAdd(index,
-                                    state.product.dimensions[index]?.quantity);
-                              },
-                              icon: Icon(Icons.add),
-                            ),
-                          ],
+                        List<Dimension> dropDownItems =
+                            allColorsDimens.toList();
+
+                        for (Dimension item in dropDownItems) {
+                          if (item.color ==
+                              state.product.dimensions[index]?.color) {
+                            backgroundImage.add(item.image!);
+                          }
+                        }
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                  padding: const EdgeInsets.all(3),
+                                  child: CircleAvatar(
+                                    radius: 20,
+                                    backgroundColor: AppTheme.white,
+                                    child: CircleAvatar(
+                                      radius: 15,
+                                      backgroundColor: AppTheme.pink,
+                                      backgroundImage:
+                                          AssetImage(backgroundImage[index]),
+                                    ),
+                                  )),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onLongPress: () {
+                                  cubit.quantityLongRemove(
+                                      index,
+                                      state
+                                          .product.dimensions[index]?.quantity);
+                                },
+                                child: IconButton(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 30),
+                                  iconSize: 15,
+                                  color: AppTheme.black,
+                                  style: const ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        AppTheme.white),
+                                  ),
+                                  onPressed: () {
+                                    cubit.quantityRemove(
+                                        index,
+                                        state.product.dimensions[index]
+                                            ?.quantity);
+                                  },
+                                  icon: const Icon(Icons.remove),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                '${state.product.dimensions[index]?.quantity}',
+                                style: const TextStyle(fontSize: 17),
+                              ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              GestureDetector(
+                                behavior: HitTestBehavior.translucent,
+                                onLongPress: () {
+                                  cubit.quantityLongAdd(
+                                      index,
+                                      state
+                                          .product.dimensions[index]?.quantity);
+                                },
+                                child: IconButton(
+                                  constraints:
+                                      const BoxConstraints(maxHeight: 30),
+                                  iconSize: 15,
+                                  color: AppTheme.black,
+                                  style: const ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                        AppTheme.white),
+                                  ),
+                                  onPressed: () {
+                                    cubit.quantityAdd(
+                                        index,
+                                        state.product.dimensions[index]
+                                            ?.quantity);
+                                  },
+                                  icon: const Icon(Icons.add),
+                                ),
+                              )
+                            ],
+                          ),
                         );
                       }),
                 )
