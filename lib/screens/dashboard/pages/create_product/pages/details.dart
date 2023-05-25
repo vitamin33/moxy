@@ -78,8 +78,17 @@ Widget _buildColorQuantityRow(
     CreateProductState state, CreateProductCubit cubit, int index) {
   List<Dimension> dropDownItems = allColorsDimens.toList();
   Dimension? dropdownValue = state.product.dimensions[index];
-  bool isSelected = dropdownValue != null && dropdownValue == dropDownItems[index];
-  return InkWell(
+  // bool isSelected = dropdownValue != null && dropdownValue == dropDownItems[index];
+
+  bool isSelected = false;
+
+  if (dropdownValue != null &&
+      dropdownValue.color == dropDownItems[index].color) {
+    isSelected = true;
+  } else {
+    isSelected = false;
+  }
+  return GestureDetector(
       onTap: () {
         if (isSelected) {
           cubit.removeColorField(dropDownItems[index]);

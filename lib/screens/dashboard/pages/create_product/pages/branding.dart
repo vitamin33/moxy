@@ -127,6 +127,9 @@ class Branding extends StatelessWidget {
                           if (item.color ==
                               state.product.dimensions[index]?.color) {
                             backgroundImage.add(item.image!);
+                          } else if (backgroundImage.length >
+                              state.product.dimensions.length) {
+                            backgroundImage.remove(index.toString());
                           }
                         }
                         return Padding(
