@@ -176,16 +176,16 @@ class Branding extends StatelessWidget {
 
   Widget _buildSelectedDimensWidget(
       CreateProductState state, CreateProductCubit cubit) {
-    if (state.selectedDimensions.isEmpty) {
+    if (state.allDimensions.isEmpty) {
       return Container();
     }
-    List<String> backgroundImage = [];
+
     return Expanded(
       child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: state.selectedDimensions.length,
+          itemCount: state.product.dimensions.length,
           itemBuilder: (context, index) {
-            Dimension dimen = state.selectedDimensions[index];
+            Dimension dimen = state.product.dimensions[index];
             final imagePath = _generateImagePath(dimen);
 
             return Padding(

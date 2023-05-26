@@ -15,7 +15,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   Product product;
   List<String> images;
   String? editProductId;
-  List<Dimension> selectedDimensions;
+  List<Dimension> allDimensions;
 
   // field errors
   FieldErrors errors;
@@ -31,7 +31,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.images,
     required this.editProductId,
     required this.errors,
-    required this.selectedDimensions,
+    required this.allDimensions,
   });
 
   static CreateProductState defaultCreateProductState() {
@@ -46,7 +46,7 @@ class CreateProductState implements Copyable<CreateProductState> {
       images: [],
       editProductId: '',
       errors: FieldErrors(),
-      selectedDimensions: [],
+      allDimensions: allColorsDimens,
     );
   }
 
@@ -62,7 +62,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     List<String>? images,
     String? editProductId,
     FieldErrors? errors,
-    List<Dimension>? selectedDimensions,
+    List<Dimension>? allDimensions,
   }) {
     return CreateProductState(
         isLoading: isLoading ?? this.isLoading,
@@ -75,7 +75,7 @@ class CreateProductState implements Copyable<CreateProductState> {
         images: images ?? this.images,
         editProductId: editProductId ?? this.editProductId,
         errors: errors ?? this.errors,
-        selectedDimensions: selectedDimensions ?? this.selectedDimensions);
+        allDimensions: allDimensions ?? this.allDimensions);
   }
 }
 

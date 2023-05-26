@@ -29,7 +29,7 @@ class Product implements Copyable<Product> {
         description: '',
         costPrice: 0,
         salePrice: 0,
-        dimensions: allColorsDimens,
+        dimensions: [],
         idName: '',
         images: []);
   }

@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/product_colors.dart';
+import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/create_product/create_product_effects.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
@@ -35,7 +36,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
             images: [],
             editProductId: productId,
             errors: FieldErrors.noErrors(),
-            selectedDimensions: [],
+            allDimensions: allColorsDimens,
           ),
         ) {
     if (isEditMode && productId != null) {
@@ -125,7 +126,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void quantityLongAdd(int index, int? quantity) {
     Dimension? dimen = state.product.dimensions[index];
-    if (quantity != null && dimen != null) {
+    if (quantity != null) {
       dimen.quantity += 10;
     }
     emit(state.copyWith(product: state.product));
@@ -133,7 +134,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void quantityAdd(int index, int? quantity) {
     Dimension? dimen = state.product.dimensions[index];
-    if (quantity != null && dimen != null) {
+    if (quantity != null) {
       dimen.quantity++;
     }
     emit(state.copyWith(product: state.product));
@@ -141,7 +142,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void quantityRemove(int index, int? quantity) {
     Dimension? dimen = state.product.dimensions[index];
-    if (quantity != null && dimen != null) {
+    if (quantity != null) {
       dimen.quantity--;
     }
     emit(state.copyWith(product: state.product));
@@ -149,7 +150,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void quantityLongRemove(int index, int? quantity) {
     Dimension? dimen = state.product.dimensions[index];
-    if (quantity != null && dimen != null) {
+    if (quantity != null) {
       dimen.quantity -= 10;
     }
     emit(state.copyWith(product: state.product));
@@ -157,7 +158,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void quantityChanged(int index, String? quantity) {
     Dimension? dimen = state.product.dimensions[index];
-    if (quantity != null && quantity.isNotEmpty && dimen != null) {
+    if (quantity != null && quantity.isNotEmpty) {
       dimen.quantity = int.parse(quantity);
       emit(state.copyWith(product: state.product));
     }
@@ -218,7 +219,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(editProductId: id));
     final productById = await productRepository.getProductById(id);
     productById.when((success) {
-      emit(state.copyWith(product: productMapper.mapToProduct(success)));
+      final product = productMapper.mapToProduct(success);
+      final updatedAllDimens = checkSelectedColors(product.dimensions);
+      emit(state.copyWith(product: product, allDimensions: updatedAllDimens));
     }, (error) {});
     fillFields(state.product);
   }
@@ -236,18 +239,18 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void toggleColorField(int index) {
-    state.product.dimensions[index].isSelected =
-        !state.product.dimensions[index].isSelected;
-    final updatedDimens = state.product.dimensions;
+    state.allDimensions[index].isSelected =
+        !state.allDimensions[index].isSelected;
+    final updatedDimens = state.allDimensions;
 
-    final selectedDimensions = state.product.dimensions
+    final selectedDimensions = state.allDimensions
         .where(
           (element) => element.isSelected,
         )
         .toList();
     emit(state.copyWith(
-      selectedDimensions: selectedDimensions,
-      product: state.product.copyWith(dimensions: updatedDimens),
+      allDimensions: updatedDimens,
+      product: state.product.copyWith(dimensions: selectedDimensions),
     ));
   }
 
@@ -306,5 +309,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
+  }
+
+  List<Dimension> checkSelectedColors(List<Dimension> dimensions) {
+    for (var element in state.allDimensions) {
+      element.isSelected = dimensions.contains(element);
+    }
+    return state.allDimensions;
   }
 }

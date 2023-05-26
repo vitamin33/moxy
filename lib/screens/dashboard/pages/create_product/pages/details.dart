@@ -57,9 +57,9 @@ class ProductDetails extends StatelessWidget {
                   Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: state.product.dimensions.length,
+                      itemCount: state.allDimensions.length,
                       itemBuilder: (context, index) {
-                        final dimen = state.product.dimensions[index];
+                        final dimen = state.allDimensions[index];
 
                         return _buildColorQuantityRow(dimen, cubit, index);
                       },
