@@ -35,6 +35,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
             images: [],
             editProductId: productId,
             errors: FieldErrors.noErrors(),
+            selectedDimensions: [],
           ),
         ) {
     if (isEditMode && productId != null) {
@@ -162,17 +163,6 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
-  void colorChanged(int index, Dimension? dimen, Dimension newDimen) {
-    if (dimen == null) {
-      return;
-    }
-    final updatedDimensions = Map.of(state.product.dimensions)
-      ..remove(index)
-      ..putIfAbsent(index, () => newDimen);
-    emit(state.copyWith(
-        product: state.product.copyWith(dimensions: updatedDimensions)));
-  }
-
   void salePriceChanged(value) {
     if (value != null) {
       final double salePrice = double.parse(value);
@@ -245,36 +235,20 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(isEdit: true));
   }
 
-  void addColorField(dimen) {
-    bool isColorExists = state.product.dimensions.values
-        .any((dimension) => dimension.color == dimen.color);
-    if (!isColorExists) {
-      int newIndex = state.product.dimensions.length;
-      final updatedDimensions =
-          Map<int, Dimension>.of(state.product.dimensions);
-      updatedDimensions.putIfAbsent(newIndex, () => dimen);
-      emit(state.copyWith(
-        product: state.product.copyWith(dimensions: updatedDimensions),
-      ));
-    }
-  }
+  void toggleColorField(int index) {
+    state.product.dimensions[index].isSelected =
+        !state.product.dimensions[index].isSelected;
+    final updatedDimens = state.product.dimensions;
 
-  void removeColorField(Dimension dimen) {
-    final updatedDimensions =
-        Map<int, Dimension>.from(state.product.dimensions);
-    updatedDimensions.removeWhere((key, value) => value.color == dimen.color);
+    final selectedDimensions = state.product.dimensions
+        .where(
+          (element) => element.isSelected,
+        )
+        .toList();
     emit(state.copyWith(
-        product: state.product.copyWith(dimensions: updatedDimensions)));
-  }
-
-  List<Dimension> getFreeDimensionList(Map<int, Dimension> dimensions) {
-    final result = <Dimension>[];
-    for (var element in allColorsDimens) {
-      if (!dimensions.containsValue(element)) {
-        result.add(element);
-      }
-    }
-    return result;
+      selectedDimensions: selectedDimensions,
+      product: state.product.copyWith(dimensions: updatedDimens),
+    ));
   }
 
   void editProduct(editProductId) async {

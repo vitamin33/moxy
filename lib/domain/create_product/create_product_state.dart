@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 
@@ -14,6 +15,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   Product product;
   List<String> images;
   String? editProductId;
+  List<Dimension> selectedDimensions;
 
   // field errors
   FieldErrors errors;
@@ -29,6 +31,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.images,
     required this.editProductId,
     required this.errors,
+    required this.selectedDimensions,
   });
 
   static CreateProductState defaultCreateProductState() {
@@ -43,6 +46,7 @@ class CreateProductState implements Copyable<CreateProductState> {
       images: [],
       editProductId: '',
       errors: FieldErrors(),
+      selectedDimensions: [],
     );
   }
 
@@ -56,22 +60,22 @@ class CreateProductState implements Copyable<CreateProductState> {
     int? activePage,
     Product? product,
     List<String>? images,
-    List<Dimension>? dimensions,
     String? editProductId,
     FieldErrors? errors,
+    List<Dimension>? selectedDimensions,
   }) {
     return CreateProductState(
-      isLoading: isLoading ?? this.isLoading,
-      isEdit: isEdit ?? this.isEdit,
-      errorMessage: errorMessage ?? this.errorMessage,
-      editProduct: editProduct ?? this.editProduct,
-      initialPage: initialPage ?? this.initialPage,
-      activePage: activePage ?? this.activePage,
-      product: product ?? this.product,
-      images: images ?? this.images,
-      editProductId: editProductId ?? this.editProductId,
-      errors: errors ?? this.errors,
-    );
+        isLoading: isLoading ?? this.isLoading,
+        isEdit: isEdit ?? this.isEdit,
+        errorMessage: errorMessage ?? this.errorMessage,
+        editProduct: editProduct ?? this.editProduct,
+        initialPage: initialPage ?? this.initialPage,
+        activePage: activePage ?? this.activePage,
+        product: product ?? this.product,
+        images: images ?? this.images,
+        editProductId: editProductId ?? this.editProductId,
+        errors: errors ?? this.errors,
+        selectedDimensions: selectedDimensions ?? this.selectedDimensions);
   }
 }
 

@@ -19,7 +19,7 @@ class ProductDetails extends StatelessWidget {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
-        List<Dimension> dropDownItems = allColorsDimens.toList();
+
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
           child: Column(children: [
@@ -50,16 +50,18 @@ class ProductDetails extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Container(
+              child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 60,
                 child: Row(children: [
                   Expanded(
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: dropDownItems.length,
+                      itemCount: state.product.dimensions.length,
                       itemBuilder: (context, index) {
-                        return _buildColorQuantityRow(state, cubit, index);
+                        final dimen = state.product.dimensions[index];
+
+                        return _buildColorQuantityRow(dimen, cubit, index);
                       },
                     ),
                   ),
@@ -75,34 +77,19 @@ class ProductDetails extends StatelessWidget {
 }
 
 Widget _buildColorQuantityRow(
-    CreateProductState state, CreateProductCubit cubit, int index) {
-  List<Dimension> dropDownItems = allColorsDimens.toList();
-  Dimension? dropdownValue = state.product.dimensions[index];
-  // bool isSelected = dropdownValue != null && dropdownValue == dropDownItems[index];
-
-  bool isSelected = false;
-
-  if (dropdownValue != null &&
-      dropdownValue.color == dropDownItems[index].color) {
-    isSelected = true;
-  } else {
-    isSelected = false;
-  }
+    Dimension colorDimen, CreateProductCubit cubit, int index) {
   return GestureDetector(
       onTap: () {
-        if (isSelected) {
-          cubit.removeColorField(dropDownItems[index]);
-        } else {
-          cubit.addColorField(dropDownItems[index]);
-        }
+        cubit.toggleColorField(index);
       },
       child: Container(
           padding: const EdgeInsets.all(3),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isSelected ? AppTheme.black : null,
+            color: colorDimen.isSelected ? AppTheme.black : null,
             border: Border.all(
-              color: isSelected ? AppTheme.black : Colors.transparent,
+              color:
+                  colorDimen.isSelected ? AppTheme.black : Colors.transparent,
               width: 1,
             ),
           ),
@@ -112,7 +99,7 @@ Widget _buildColorQuantityRow(
             child: CircleAvatar(
               radius: 15,
               backgroundColor: AppTheme.pink,
-              backgroundImage: AssetImage(dropDownItems[index].image!),
+              backgroundImage: AssetImage(colorDimen.image!),
             ),
           )));
 }

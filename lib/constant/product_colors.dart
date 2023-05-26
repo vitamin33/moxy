@@ -1,6 +1,6 @@
 import 'package:moxy/domain/models/product.dart';
 
-Set<Dimension> allColorsDimens = {
+List<Dimension> allColorsDimens = [
   Dimension(
       color: 'Black',
       quantity: 0,
@@ -71,7 +71,7 @@ Set<Dimension> allColorsDimens = {
       quantity: 0,
       isSelected: false,
       image: 'assets/images/unified_background.png'),
-};
+];
 
 enum ProductColor {
   black('Black'),
@@ -86,7 +86,8 @@ enum ProductColor {
   zebra('Zebra'),
   jeans('Jeans'),
   green('Green'),
-  bars('Bars');
+  bars('Bars'),
+  unified('Unified');
 
   final String color;
   const ProductColor(this.color);
