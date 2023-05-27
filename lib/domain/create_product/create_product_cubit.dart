@@ -222,7 +222,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       final product = productMapper.mapToProduct(success);
       final updatedAllDimens = checkSelectedColors(product.dimensions);
       emit(state.copyWith(product: product, allDimensions: updatedAllDimens));
-    }, (error) {});
+    }, (error) {
+      // do not left error block empty
+    });
     fillFields(state.product);
   }
 
@@ -314,6 +316,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   List<Dimension> checkSelectedColors(List<Dimension> dimensions) {
     for (var element in state.allDimensions) {
       element.isSelected = dimensions.contains(element);
+      element.quantity = dimensions
+          .firstWhere(
+            (e) => e.color == element.color,
+            orElse: () => element,
+          )
+          .quantity;
     }
     return state.allDimensions;
   }
