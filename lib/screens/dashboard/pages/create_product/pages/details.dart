@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import '../../../../../components/custom_textfield.dart';
-import '../../../../../constant/colors_image.dart';
-import '../../../../../constant/image_path.dart';
-import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
 class ProductDetails extends StatelessWidget {
@@ -82,24 +77,28 @@ Widget _buildColorQuantityRow(
       onTap: () {
         cubit.toggleColorField(index);
       },
-      child: Container(
-          padding: const EdgeInsets.all(3),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: colorDimen.isSelected ? AppTheme.black : null,
-            border: Border.all(
-              color:
-                  colorDimen.isSelected ? AppTheme.black : Colors.transparent,
-              width: 1,
+      child: Padding(
+        padding: const EdgeInsets.all(2.0),
+        child: Container(
+            padding: const EdgeInsets.all(2),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: colorDimen.isSelected ? AppTheme.black : null,
+              border: Border.all(
+                style: BorderStyle.solid,
+                color:
+                    colorDimen.isSelected ? AppTheme.black : Colors.transparent,
+                width: 1,
+              ),
             ),
-          ),
-          child: CircleAvatar(
-            radius: 20,
-            backgroundColor: AppTheme.white,
             child: CircleAvatar(
-              radius: 15,
-              backgroundColor: AppTheme.pink,
-              backgroundImage: AssetImage(colorDimen.image!),
-            ),
-          )));
+              radius: 20,
+              backgroundColor: AppTheme.white,
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: AppTheme.pink,
+                backgroundImage: AssetImage(colorDimen.image!),
+              ),
+            )),
+      ));
 }

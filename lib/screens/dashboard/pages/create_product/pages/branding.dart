@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +10,6 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
-import '../../../../../constant/product_colors.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
 
 class Branding extends StatelessWidget {
@@ -24,7 +22,6 @@ class Branding extends StatelessWidget {
         final cubit = context.read<CreateProductCubit>();
         return SingleChildScrollView(
             child: SizedBox(
-          height: MediaQuery.of(context).size.height,
           child: Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
@@ -55,8 +52,10 @@ class Branding extends StatelessWidget {
                     LengthLimitingTextInputFormatter(16),
                   ],
                 ),
-                const SizedBox(width: AppTheme.cardPadding),
                 _buildSelectedDimensWidget(state, cubit),
+                const SizedBox(
+                  height: 100,
+                ),
               ],
             ),
           ),
@@ -111,152 +110,158 @@ class Branding extends StatelessWidget {
     }
   }
 
-  Widget _buildGalleryArea(BuildContext context, CreateProductState state,
-      CreateProductCubit cubit) {
-    return Column(
-      children: [
-        state.product.images.isNotEmpty
-            ? Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 120,
-                      width: double.maxFinite,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: state.product.images.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: SizedBox(
-                              child: _buildImage(state.product, index, cubit),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : InkWell(
-                onTap: () {
-                  cubit.pickImage();
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                      child: CustomPaint(
-                        foregroundPainter: DashedPathPainter(
-                          originalPath: Path()
-                            ..addRect(
-                              const Rect.fromLTWH(0, 0, 365, 100),
-                            ),
-                          pathColor: Colors.grey,
-                          strokeWidth: 1.0,
-                          dashGapLength: 5.0,
-                          dashLength: 3.0,
-                        ),
-                        child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(IconPath.pickImage),
-                              const Text('Pick Image From Gallery')
-                            ]),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-      ],
-    );
-  }
-
   Widget _buildSelectedDimensWidget(
       CreateProductState state, CreateProductCubit cubit) {
     if (state.allDimensions.isEmpty) {
       return Container();
     }
-
-    return Expanded(
-      child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: state.product.dimensions.length,
-          itemBuilder: (context, index) {
-            Dimension dimen = state.product.dimensions[index];
-            final imagePath = _generateImagePath(dimen);
-
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                      padding: const EdgeInsets.all(3),
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: List.generate(state.product.dimensions.length, (index) {
+          Dimension dimen = state.product.dimensions[index];
+          final imagePath = _generateImagePath(dimen);
+          return Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    padding: const EdgeInsets.all(3),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppTheme.white,
                       child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: AppTheme.white,
-                        child: CircleAvatar(
-                          radius: 15,
-                          backgroundColor: AppTheme.pink,
-                          backgroundImage: AssetImage(imagePath),
-                        ),
-                      )),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onLongPress: () {
-                      cubit.quantityLongRemove(index, dimen.quantity);
-                    },
-                    child: IconButton(
-                      constraints: const BoxConstraints(maxHeight: 30),
-                      iconSize: 15,
-                      color: AppTheme.black,
-                      style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(AppTheme.white),
+                        radius: 15,
+                        backgroundColor: AppTheme.pink,
+                        backgroundImage: AssetImage(imagePath),
                       ),
-                      onPressed: () {
-                        cubit.quantityRemove(index, dimen.quantity);
-                      },
-                      icon: const Icon(Icons.remove),
+                    )),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onLongPress: () {
+                    cubit.quantityLongRemove(index, dimen.quantity);
+                  },
+                  child: IconButton(
+                    constraints: const BoxConstraints(maxHeight: 30),
+                    iconSize: 15,
+                    color: AppTheme.black,
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(AppTheme.white),
                     ),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    '${dimen.quantity}',
-                    style: const TextStyle(fontSize: 17),
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onLongPress: () {
-                      cubit.quantityLongAdd(index, dimen.quantity);
+                    onPressed: () {
+                      cubit.quantityRemove(index, dimen.quantity);
                     },
-                    child: IconButton(
-                      constraints: const BoxConstraints(maxHeight: 30),
-                      iconSize: 15,
-                      color: AppTheme.black,
-                      style: const ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll(AppTheme.white),
-                      ),
-                      onPressed: () {
-                        cubit.quantityAdd(index, dimen.quantity);
-                      },
-                      icon: const Icon(Icons.add),
+                    icon: const Icon(Icons.remove),
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  '${dimen.quantity}',
+                  style: const TextStyle(fontSize: 17),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onLongPress: () {
+                    cubit.quantityLongAdd(index, dimen.quantity);
+                  },
+                  child: IconButton(
+                    constraints: const BoxConstraints(maxHeight: 30),
+                    iconSize: 15,
+                    color: AppTheme.black,
+                    style: const ButtonStyle(
+                      backgroundColor: MaterialStatePropertyAll(AppTheme.white),
                     ),
-                  )
-                ],
-              ),
-            );
-          }),
+                    onPressed: () {
+                      cubit.quantityAdd(index, dimen.quantity);
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
+                )
+              ],
+            ),
+          );
+        }),
+      ),
     );
+  }
+
+  Widget _buildGalleryArea(BuildContext context, CreateProductState state,
+      CreateProductCubit cubit) {
+    return LayoutBuilder(builder: (context, constraints) {
+      final lineWidth = constraints.maxWidth;
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          state.product.images.isNotEmpty
+              ? Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Flexible(
+                      child: SizedBox(
+                        height: 120,
+                        width: double.maxFinite,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.product.images.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: SizedBox(
+                                child: _buildImage(state.product, index, cubit),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : InkWell(
+                  onTap: () {
+                    cubit.pickImage();
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                        child: CustomPaint(
+                          foregroundPainter: DashedPathPainter(
+                            originalPath: Path()
+                              ..addRect(
+                                Rect.fromLTWH(0, 0, lineWidth, 100),
+                              ),
+                            pathColor: Colors.grey,
+                            strokeWidth: 1.0,
+                            dashGapLength: 5.0,
+                            dashLength: 3.0,
+                          ),
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(IconPath.pickImage),
+                                const Text('Pick Image From Gallery')
+                              ]),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+        ],
+      );
+    });
   }
 
   String _generateImagePath(Dimension dimen) {
