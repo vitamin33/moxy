@@ -70,7 +70,12 @@ class DashboardViewMobile extends StatelessWidget {
       case OrdersPageState:
         return 'Orders';
       case CreateProductPageState:
-        return 'Створити продукт ';
+        final createProductState = state as CreateProductPageState;
+        if (createProductState.isEditMode ?? false) {
+          return 'Edit product';
+        } else {
+          return 'Create product';
+        }
       case CreateOrderPageState:
         return 'Create order';
       case TransactionsPageState:
