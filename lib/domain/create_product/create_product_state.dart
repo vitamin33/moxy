@@ -1,12 +1,17 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 
+import '../../screens/dashboard/pages/create_product/pages/branding.dart';
+import '../../screens/dashboard/pages/create_product/pages/details.dart';
 import '../copyable.dart';
 
 class CreateProductState implements Copyable<CreateProductState> {
   bool isLoading;
   bool isEdit;
+  bool isSuccess;
   String errorMessage;
   Product editProduct;
   int initialPage;
@@ -14,6 +19,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   Product product;
   List<String> images;
   String? editProductId;
+  List<Dimension> allDimensions;
 
   // field errors
   FieldErrors errors;
@@ -21,6 +27,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   CreateProductState({
     required this.isLoading,
     required this.isEdit,
+    required this.isSuccess,
     required this.errorMessage,
     required this.editProduct,
     required this.initialPage,
@@ -29,12 +36,19 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.images,
     required this.editProductId,
     required this.errors,
+    required this.allDimensions,
   });
 
   static CreateProductState defaultCreateProductState() {
+    for (var element in allColorsDimens) {
+      if (element.isSelected == true) {
+        element.isSelected = false;
+      }
+    }
     return CreateProductState(
       isLoading: false,
       isEdit: false,
+      isSuccess: false,
       errorMessage: '',
       editProduct: Product.defaultProduct(),
       initialPage: 0,
@@ -43,6 +57,7 @@ class CreateProductState implements Copyable<CreateProductState> {
       images: [],
       editProductId: '',
       errors: FieldErrors(),
+      allDimensions: allColorsDimens,
     );
   }
 
@@ -50,28 +65,30 @@ class CreateProductState implements Copyable<CreateProductState> {
   CreateProductState copyWith({
     bool? isLoading,
     bool? isEdit,
+    bool? isSuccess,
     String? errorMessage,
     Product? editProduct,
     int? initialPage,
     int? activePage,
     Product? product,
     List<String>? images,
-    List<Dimension>? dimensions,
     String? editProductId,
     FieldErrors? errors,
+    List<Dimension>? allDimensions,
   }) {
     return CreateProductState(
-      isLoading: isLoading ?? this.isLoading,
-      isEdit: isEdit ?? this.isEdit,
-      errorMessage: errorMessage ?? this.errorMessage,
-      editProduct: editProduct ?? this.editProduct,
-      initialPage: initialPage ?? this.initialPage,
-      activePage: activePage ?? this.activePage,
-      product: product ?? this.product,
-      images: images ?? this.images,
-      editProductId: editProductId ?? this.editProductId,
-      errors: errors ?? this.errors,
-    );
+        isLoading: isLoading ?? this.isLoading,
+        isEdit: isEdit ?? this.isEdit,
+        isSuccess: isSuccess ?? this.isSuccess,
+        errorMessage: errorMessage ?? this.errorMessage,
+        editProduct: editProduct ?? this.editProduct,
+        initialPage: initialPage ?? this.initialPage,
+        activePage: activePage ?? this.activePage,
+        product: product ?? this.product,
+        images: images ?? this.images,
+        editProductId: editProductId ?? this.editProductId,
+        errors: errors ?? this.errors,
+        allDimensions: allDimensions ?? this.allDimensions);
   }
 }
 

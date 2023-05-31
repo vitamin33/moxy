@@ -1,17 +1,21 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
+import 'package:moxy/domain/all_products/all_products_state.dart';
 import 'package:moxy/domain/create_product/create_product_effects.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
+import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:bloc_effects/bloc_effects.dart';
 
+import '../../constant/route_name.dart';
+import '../../navigation/home_router_cubit.dart';
 import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';
 
@@ -19,6 +23,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+  final navigationService = locate<NavigationService>();
   final bool isEditMode;
   final String? productId;
 
@@ -27,6 +32,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
           CreateProductState(
             isLoading: false,
             isEdit: isEditMode,
+            isSuccess: false,
             errorMessage: '',
             editProduct: Product.defaultProduct(),
             initialPage: 0,
@@ -35,6 +41,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
             images: [],
             editProductId: productId,
             errors: FieldErrors.noErrors(),
+            allDimensions: allColorsDimens,
           ),
         ) {
     if (isEditMode && productId != null) {
@@ -58,6 +65,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
           state.product, state.product.dimensions);
       final pushProduct = await productRepository.addProduct(product);
       pushProduct.when((success) {
+        emit(state.copyWith(isLoading: false));
         nameController.clear();
         descriptionController.clear();
         costPriceController.clear();
@@ -67,7 +75,8 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
         for (var element in quantityControllers) {
           element.clear();
         }
-        clearState();
+        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isSuccess: true));
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
@@ -92,6 +101,16 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     } catch (e) {
       moxyPrint('$e');
     }
+  }
+
+  void createNew() {
+    emit(state.copyWith(isSuccess: false));
+    clearState();
+  }
+   // Thisss function!!!
+  void backToProduct() {
+    clearState();
+    navigationService.navigatePushReplaceName(productsPath); //doesnt work
   }
 
   void onChangePage(int page) {
@@ -122,23 +141,45 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
+  void quantityLongAdd(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null) {
+      dimen.quantity += 10;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
+  void quantityAdd(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null) {
+      dimen.quantity++;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
+  void quantityRemove(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+
+    if (quantity != null && dimen.quantity > 0) {
+      dimen.quantity--;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
+  void quantityLongRemove(int index, int? quantity) {
+    Dimension? dimen = state.product.dimensions[index];
+    if (quantity != null && dimen.quantity > 0) {
+      dimen.quantity -= 10;
+    }
+    emit(state.copyWith(product: state.product));
+  }
+
   void quantityChanged(int index, String? quantity) {
     Dimension? dimen = state.product.dimensions[index];
-    if (quantity != null && quantity.isNotEmpty && dimen != null) {
+    if (quantity != null && quantity.isNotEmpty) {
       dimen.quantity = int.parse(quantity);
       emit(state.copyWith(product: state.product));
     }
-  }
-
-  void colorChanged(int index, Dimension? dimen, Dimension newDimen) {
-    if (dimen == null) {
-      return;
-    }
-    final updatedDimensions = Map.of(state.product.dimensions)
-      ..remove(index)
-      ..putIfAbsent(index, () => newDimen);
-    emit(state.copyWith(
-        product: state.product.copyWith(dimensions: updatedDimensions)));
   }
 
   void salePriceChanged(value) {
@@ -150,7 +191,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void moveToNextPage() {
-    if (state.activePage != 2) {
+    if (state.activePage != 1) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
@@ -183,8 +224,6 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void clearState() {
     emit(CreateProductState.defaultCreateProductState());
-    pageController.animateToPage(0,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
   void clearErrorState() {
@@ -196,8 +235,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(editProductId: id));
     final productById = await productRepository.getProductById(id);
     productById.when((success) {
-      emit(state.copyWith(product: productMapper.mapToProduct(success)));
-    }, (error) {});
+      final product = productMapper.mapToProduct(success);
+      final updatedAllDimens = checkSelectedColors(product.dimensions);
+      emit(state.copyWith(product: product, allDimensions: updatedAllDimens));
+    }, (error) {
+      moxyPrint(error);
+    });
     fillFields(state.product);
   }
 
@@ -213,28 +256,20 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(isEdit: true));
   }
 
-  void addColorField() {
-    quantityControllers.add(TextEditingController());
-    int newIndex = state.product.dimensions.length;
-    List<Dimension> freeList = getFreeDimensionList(state.product.dimensions);
-    if (freeList.isNotEmpty) {
-      final newDimen = freeList.first;
-      final updatedDimensions =
-          Map<int, Dimension>.of(state.product.dimensions);
-      updatedDimensions.putIfAbsent(newIndex, () => newDimen);
-      emit(state.copyWith(
-          product: state.product.copyWith(dimensions: updatedDimensions)));
-    }
-  }
+  void toggleColorField(int index) {
+    state.allDimensions[index].isSelected =
+        !state.allDimensions[index].isSelected;
+    final updatedDimens = state.allDimensions;
 
-  List<Dimension> getFreeDimensionList(Map<int, Dimension> dimensions) {
-    final result = <Dimension>[];
-    for (var element in allColorsDimens) {
-      if (!dimensions.containsValue(element)) {
-        result.add(element);
-      }
-    }
-    return result;
+    final selectedDimensions = state.allDimensions
+        .where(
+          (element) => element.isSelected,
+        )
+        .toList();
+    emit(state.copyWith(
+      allDimensions: updatedDimens,
+      product: state.product.copyWith(dimensions: selectedDimensions),
+    ));
   }
 
   void editProduct(editProductId) async {
@@ -254,7 +289,8 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
         for (var element in quantityControllers) {
           element.clear();
         }
-        clearState();
+        emit(state.copyWith(isSuccess: true));
+        emit(state.copyWith(isLoading: false));
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
@@ -292,5 +328,18 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
+  }
+
+  List<Dimension> checkSelectedColors(List<Dimension> dimensions) {
+    for (var element in state.allDimensions) {
+      element.isSelected = dimensions.contains(element);
+      element.quantity = dimensions
+          .firstWhere(
+            (e) => e.color == element.color,
+            orElse: () => element,
+          )
+          .quantity;
+    }
+    return state.allDimensions;
   }
 }

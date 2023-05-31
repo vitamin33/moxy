@@ -8,7 +8,7 @@ class Product implements Copyable<Product> {
   String description;
   double costPrice;
   double salePrice;
-  Map<int, Dimension> dimensions;
+  List<Dimension> dimensions;
   List<ImagePath> images;
   String idName;
 
@@ -29,7 +29,7 @@ class Product implements Copyable<Product> {
         description: '',
         costPrice: 0,
         salePrice: 0,
-        dimensions: {},
+        dimensions: [],
         idName: '',
         images: []);
   }
@@ -41,7 +41,7 @@ class Product implements Copyable<Product> {
     String? description,
     double? costPrice,
     double? salePrice,
-    Map<int, Dimension>? dimensions,
+    List<Dimension>? dimensions,
     List<ImagePath>? images,
   }) {
     return Product(
@@ -58,17 +58,32 @@ class Product implements Copyable<Product> {
 class Dimension implements Copyable<Dimension> {
   String color;
   int quantity;
+  bool isSelected;
+  String? image;
 
-  Dimension({required this.color, required this.quantity});
+  Dimension(
+      {required this.color,
+      required this.quantity,
+      this.isSelected = false,
+      this.image});
 
   static Dimension defaultDimension() {
-    return Dimension(color: ProductColor.black.color, quantity: 0);
+    return Dimension(
+        color: ProductColor.black.color,
+        quantity: 0,
+        isSelected: false,
+        image: 'assets/images/logo.png');
   }
 
   @override
-  Dimension copyWith({String? color, int? quantity}) {
+  Dimension copyWith(
+      {String? color, int? quantity, bool? isSelected, String? image}) {
     return Dimension(
-        color: color ?? this.color, quantity: quantity ?? this.quantity);
+      color: color ?? this.color,
+      quantity: quantity ?? this.quantity,
+      isSelected: isSelected ?? this.isSelected,
+      image: image ?? this.image,
+    );
   }
 
   @override

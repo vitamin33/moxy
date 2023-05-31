@@ -161,6 +161,7 @@ class DioClient {
       'idName': idName,
       'newImages': newImage,
       'currentImages': currentImage,
+      'dimensions': jsonDecode(jsonEncode(dimensions)),
     });
     try {
       Response response = await _dio.post(

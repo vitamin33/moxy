@@ -34,7 +34,7 @@ List<Menu> menus = const [
       ),
       Menu(
         title: 'Create Product',
-        icon: IconPath.create,
+        icon: IconPath.createProduct,
         route: CreateProductPageState(isEditMode: false),
         subRoutes: [],
       ),

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:moxy/navigation/home_router_delegate.dart';
+import 'package:moxy/theme/app_theme.dart';
 import '../../components/app_scaffold.dart';
 import '../../navigation/home_router_cubit.dart';
 import 'components/navigation_drawer.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DashboardViewMobile extends StatelessWidget {
   DashboardViewMobile({Key? key}) : super(key: key);
@@ -26,14 +29,12 @@ class DashboardViewMobile extends StatelessWidget {
   Widget mobileWidget(HomeRouterState state) {
     return AppScaffold(
         appbar: AppBar(
-          elevation: 10,
-          title: Row(children: [
-            Text(_mapStateToTitleText(state)),
-          ]),
+          backgroundColor: AppTheme.pink,
+          title: Text(_mapStateToTitleText(state)),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon: const Icon(Icons.menu),
+                icon: SvgPicture.asset(IconPath.menu),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -69,7 +70,7 @@ class DashboardViewMobile extends StatelessWidget {
       case OrdersPageState:
         return 'Orders';
       case CreateProductPageState:
-        return 'Create product';
+        return 'Створити продукт ';
       case CreateOrderPageState:
         return 'Create order';
       case TransactionsPageState:
