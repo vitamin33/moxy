@@ -27,40 +27,50 @@ class DashboardViewMobile extends StatelessWidget {
   }
 
   Widget mobileWidget(HomeRouterState state) {
-    final arrIcon = _mapStateToActionIcon(state);
+    final arrIcons = _mapStateToActionIcon(state);
     return AppScaffold(
         appbar: AppBar(
           actions: [
-            arrIcon.isNotEmpty
-                ? SizedBox(
-                    width: 70,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: arrIcon.length,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    arrIcon[index].onPress();
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(2.0),
-                                    child:
-                                        SvgPicture.asset(arrIcon[index].icon),
+            arrIcons.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: LayoutBuilder(
+                      builder: (BuildContext ctx, BoxConstraints constraints) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            for (final item in arrIcons) ...[
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: SizedBox(
+                                  width: 38,
+                                  height: 38,
+                                  child: InkWell(
+                                    onTap: () {
+                                      item.onPress();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: SvgPicture.asset(item.icon),
+                                    ),
                                   ),
-                                );
-                              }),
-                        ),
-                      ],
+                                ),
+                              ),
+                            ]
+                          ],
+                        );
+                      },
                     ),
                   )
                 : Container()
           ],
           backgroundColor: AppTheme.pink,
-          title: Text(_mapStateToTitleText(state)),
+          title: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              _mapStateToTitleText(state),
+            ),
+          ),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -125,7 +135,7 @@ class DashboardViewMobile extends StatelessWidget {
           AppBarIcon(
               icon: IconPath.filter,
               onPress: () {
-                moxyPrint('folter');
+                moxyPrint('filter');
               })
         ];
       case CustomersPageState:
