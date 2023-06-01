@@ -81,14 +81,13 @@ class AuthenticationView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 6.0),
                     child: CutomButton(
                       buttonWidth: MediaQuery.of(context).size.width,
-                      title: "Login to your account",
+                      title: "Login",
                       state: state.state is Loading
                           ? ButtonState.loading
                           : (state.emailIsValid
                               ? ButtonState.idle
                               : ButtonState.disabled),
-                      onTap: () =>
-                          context.read<LoginCubit>().logInWithCredentials(),
+                      onTap: context.read<LoginCubit>().logInWithCredentials,
                     ),
                   ),
                   const SizedBox(height: AppTheme.cardPadding * 6),

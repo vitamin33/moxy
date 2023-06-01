@@ -52,7 +52,7 @@ class _CutomButtonState extends State<CutomButton> {
                 ),
               )
             : TextButton(
-                onPressed: disabled ? widget.onTap : null,
+                onPressed: disabled ? null : widget.onTap,
                 style: TextButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(6))),

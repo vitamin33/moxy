@@ -32,9 +32,12 @@ class CustomTextField extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: renderTitleStyle(context, isValid(state)),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            title,
+            style: renderTitleStyle(context, isValid(state)),
+          ),
         ),
         Container(
             padding: EdgeInsets.all(6),
