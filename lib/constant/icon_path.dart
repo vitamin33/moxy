@@ -17,6 +17,9 @@ class IconPath {
   static const String arrowDownDrawer = "assets/icons/arrow_down_drawer.svg";
   static const String arrowUpDrawer = "assets/icons/arrow_up_drawer.svg";
   static const String product = "assets/icons/product.svg";
+  static const String backArrow = "assets/icons/back_arrow.svg";
   static const String pickImage = "assets/icons/pick_image.svg";
   static const String successImage = "assets/icons/success_image.svg";
+  static const String plus = "assets/icons/plus.svg";
+  static const String filter = "assets/icons/filter.svg";
 }

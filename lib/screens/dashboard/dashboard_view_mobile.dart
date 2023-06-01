@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:moxy/navigation/home_router_delegate.dart';
 import 'package:moxy/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../components/app_scaffold.dart';
 import '../../navigation/home_router_cubit.dart';
 import 'components/navigation_drawer.dart';
@@ -27,10 +27,50 @@ class DashboardViewMobile extends StatelessWidget {
   }
 
   Widget mobileWidget(HomeRouterState state) {
+    final arrIcons = _mapStateToActionIcon(state);
     return AppScaffold(
         appbar: AppBar(
+          actions: [
+            arrIcons.isNotEmpty
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: LayoutBuilder(
+                      builder: (BuildContext ctx, BoxConstraints constraints) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            for (final item in arrIcons) ...[
+                              Padding(
+                                padding: const EdgeInsets.all(5),
+                                child: SizedBox(
+                                  width: 38,
+                                  height: 38,
+                                  child: InkWell(
+                                    onTap: () {
+                                      item.onPress();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: SvgPicture.asset(item.icon),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ]
+                          ],
+                        );
+                      },
+                    ),
+                  )
+                : Container()
+          ],
           backgroundColor: AppTheme.pink,
-          title: Text(_mapStateToTitleText(state)),
+          title: Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              _mapStateToTitleText(state),
+            ),
+          ),
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
@@ -85,4 +125,43 @@ class DashboardViewMobile extends StatelessWidget {
     }
     return 'Dashboard';
   }
+
+  List<AppBarIcon> _mapStateToActionIcon(HomeRouterState state) {
+    switch (state.runtimeType) {
+      case OverviewPageState:
+        return [];
+      case ProductsPageState:
+        return [
+          AppBarIcon(
+              icon: IconPath.plus,
+              onPress: () {
+                moxyPrint('plus');
+              }),
+          AppBarIcon(
+              icon: IconPath.filter,
+              onPress: () {
+                moxyPrint('filter');
+              })
+        ];
+      case CustomersPageState:
+        return [];
+      case OrdersPageState:
+        return [];
+      case CreateProductPageState:
+        return [];
+      case CreateOrderPageState:
+        return [];
+      case TransactionsPageState:
+        return [];
+      case FeedbacksPageState:
+        return [];
+    }
+    return [];
+  }
+}
+
+class AppBarIcon {
+  final String icon;
+  final Function() onPress;
+  const AppBarIcon({required this.icon, required this.onPress});
 }
