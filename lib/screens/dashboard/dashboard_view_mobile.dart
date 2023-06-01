@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/navigation/home_router_delegate.dart';
 import 'package:moxy/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../components/app_scaffold.dart';
 import '../../navigation/home_router_cubit.dart';
 import 'components/navigation_drawer.dart';
@@ -41,9 +42,15 @@ class DashboardViewMobile extends StatelessWidget {
                               scrollDirection: Axis.horizontal,
                               itemCount: arrIcon.length,
                               itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: SvgPicture.asset(arrIcon[index]),
+                                return InkWell(
+                                  onTap: () {
+                                    arrIcon[index].onPress();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child:
+                                        SvgPicture.asset(arrIcon[index].icon),
+                                  ),
                                 );
                               }),
                         ),
@@ -104,12 +111,23 @@ class DashboardViewMobile extends StatelessWidget {
     return 'Dashboard';
   }
 
-  List _mapStateToActionIcon(HomeRouterState state) {
+  List<AppBarIcon> _mapStateToActionIcon(HomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
         return [];
       case ProductsPageState:
-        return [IconPath.plus, IconPath.filter];
+        return [
+          AppBarIcon(
+              icon: IconPath.plus,
+              onPress: () {
+                moxyPrint('plus');
+              }),
+          AppBarIcon(
+              icon: IconPath.filter,
+              onPress: () {
+                moxyPrint('folter');
+              })
+        ];
       case CustomersPageState:
         return [];
       case OrdersPageState:
@@ -125,4 +143,10 @@ class DashboardViewMobile extends StatelessWidget {
     }
     return [];
   }
+}
+
+class AppBarIcon {
+  final String icon;
+  final Function() onPress;
+  const AppBarIcon({required this.icon, required this.onPress});
 }
