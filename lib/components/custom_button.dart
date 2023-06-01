@@ -28,6 +28,7 @@ class _CutomButtonState extends State<CutomButton> {
   @override
   Widget build(BuildContext context) {
     final buttonWidth = widget.buttonWidth ?? widget.buttonWidth;
+    final disabled = [ButtonState.disabled].contains(widget.state);
 
     return SizedBox(
         width: buttonWidth,
@@ -44,25 +45,35 @@ class _CutomButtonState extends State<CutomButton> {
                     color: AppTheme.black,
                   ),
                 ),
-                onPressed: widget.onTap,
+                onPressed: disabled ? widget.onTap : null,
                 child: Text(
                   widget.title,
                   style: const TextStyle(color: AppTheme.black, fontSize: 18),
                 ),
               )
             : TextButton(
-                onPressed: () {
-                  widget.onTap();
-                },
+                onPressed: disabled ? null : widget.onTap,
                 style: TextButton.styleFrom(
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(6))),
-                    padding: const EdgeInsets.all(28),
+                    padding: const EdgeInsets.all(0),
                     backgroundColor: AppTheme.black),
-                child: Text(
-                  widget.title,
-                  style: const TextStyle(color: AppTheme.white, fontSize: 18),
-                ),
-              ));
+                child: Container(
+                  height: 56.0,
+                  alignment: Alignment.center,
+                  child: widget.state == ButtonState.loading
+                      ? Center(
+                          child: Transform.scale(
+                              scale: 0.6,
+                              child: const CircularProgressIndicator(
+                                valueColor:
+                                    AlwaysStoppedAnimation(AppTheme.pink),
+                              )))
+                      : Text(
+                          widget.title,
+                          style: const TextStyle(
+                              color: AppTheme.white, fontSize: 18),
+                        ),
+                )));
   }
 }
