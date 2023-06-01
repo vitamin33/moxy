@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moxy/components/app_scaffold.dart';
+import 'package:moxy/components/custom_textfield.dart';
 import 'package:moxy/components/moxy_button.dart';
 import 'package:moxy/components/rounded_card.dart';
 import 'package:moxy/components/textfield.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/navigation/root_router_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 
+import '../../components/custom_button.dart';
 import '../../components/snackbar_widgets.dart';
 import '../../constant/route_name.dart';
 import '../../domain/auth/login_cubit.dart';
@@ -33,64 +38,94 @@ class AuthenticationView extends StatelessWidget {
           cubit.clearState();
         }
       },
-      builder: (context, state) => AppScaffold(
-          body: SingleChildScrollView(
-              child: Padding(
-        padding: const EdgeInsets.all(AppTheme.cardPadding),
-        child: Column(
-          children: [
-            Image.asset(ImageAssets.logo, width: 120),
-            const SizedBox(height: AppTheme.cardPadding * 2),
-            SizedBox(
-              width: 500,
-              child: RoundedCard(
-                color: Theme.of(context).cardColor,
-                child: Padding(
-                  padding: const EdgeInsets.all(AppTheme.cardPadding),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Login",
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      const SizedBox(height: AppTheme.cardPadding),
-                      MoxyTextfield(
-                        title: "Email Address",
-                        onChanged: (value) =>
-                            context.read<LoginCubit>().emailChanged(value),
-                        autofillHints: const [
-                          AutofillHints.email,
-                        ],
-                      ),
-                      const SizedBox(height: AppTheme.elementSpacing),
-                      MoxyTextfield(
-                        title: "Password",
-                        onChanged: (value) =>
-                            context.read<LoginCubit>().passwordChanged(value),
-                        autofillHints: const [
-                          AutofillHints.password,
-                        ],
-                      ),
-                      const SizedBox(height: AppTheme.cardPadding),
-                      MoxyButton(
-                        title: "Login to your account",
-                        state: state.state is Loading
-                            ? ButtonState.loading
-                            : (state.emailIsValid
-                                ? ButtonState.idle
-                                : ButtonState.disabled),
-                        onTap: () =>
-                            context.read<LoginCubit>().logInWithCredentials(),
-                      ),
-                      const SizedBox(height: AppTheme.cardPadding),
+      builder: (context, state) => Scaffold(
+        backgroundColor: AppTheme.white,
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(AppTheme.cardPadding),
+              child: Column(
+                children: [
+                  const SizedBox(height: AppTheme.cardPadding * 2),
+                  SvgPicture.asset(
+                    IconPath.moxylogo,
+                    width: 150,
+                  ),
+                  const SizedBox(height: AppTheme.cardPadding * 2),
+                  const Text(
+                    "Login",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: AppTheme.cardPadding),
+                  CustomTextField(
+                    borderColor: AppTheme.greyLigth,
+                    title: "Email ",
+                    onChanged: (value) =>
+                        context.read<LoginCubit>().emailChanged(value),
+                    autofillHints: const [
+                      AutofillHints.email,
                     ],
                   ),
-                ),
+                  const SizedBox(height: AppTheme.elementSpacing),
+                  CustomTextField(
+                    borderColor: AppTheme.greyLigth,
+                    title: "Password",
+                    onChanged: (value) =>
+                        context.read<LoginCubit>().passwordChanged(value),
+                    autofillHints: const [
+                      AutofillHints.password,
+                    ],
+                  ),
+                  const SizedBox(height: AppTheme.cardPadding),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                    child: CutomButton(
+                      buttonWidth: MediaQuery.of(context).size.width,
+                      title: "Login to your account",
+                      state: state.state is Loading
+                          ? ButtonState.loading
+                          : (state.emailIsValid
+                              ? ButtonState.idle
+                              : ButtonState.disabled),
+                      onTap: () =>
+                          context.read<LoginCubit>().logInWithCredentials(),
+                    ),
+                  ),
+                  const SizedBox(height: AppTheme.cardPadding * 6),
+                  downText()
+                ],
               ),
-            )
-          ],
+            ),
+          ),
         ),
-      ))),
+      ),
+    );
+  }
+
+  Widget downText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'No account yet?',
+          style: TextStyle(fontSize: 18),
+        ),
+        const SizedBox(
+          width: 2,
+        ),
+        InkWell(
+            onTap: () {
+              moxyPrint('Sign up');
+            },
+            child: const Text(
+              'Sign up',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.pinkDark,
+                  decoration: TextDecoration.underline),
+            )),
+      ],
     );
   }
 

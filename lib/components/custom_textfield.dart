@@ -12,17 +12,19 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final bool validation;
   final FieldError? state;
-  const CustomTextField({
-    Key? key,
-    required this.title,
-    this.controller,
-    this.onChanged,
-    this.maxLines,
-    this.inputFormatters,
-    this.autofillHints = const [],
-    this.validation = false,
-    this.state,
-  }) : super(key: key);
+  final Color? borderColor;
+  const CustomTextField(
+      {Key? key,
+      required this.title,
+      this.controller,
+      this.onChanged,
+      this.maxLines,
+      this.inputFormatters,
+      this.autofillHints = const [],
+      this.validation = false,
+      this.state,
+      this.borderColor})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class CustomTextField extends StatelessWidget {
             padding: EdgeInsets.all(6),
             decoration: const BoxDecoration(
                 color: AppTheme.white,
-                borderRadius: BorderRadius.all(Radius.circular(6))),
+                borderRadius: BorderRadius.all(Radius.circular(8))),
             child: TextField(
               onChanged: onChanged,
               controller: controller,
@@ -46,9 +48,10 @@ class CustomTextField extends StatelessWidget {
               inputFormatters: inputFormatters,
               autofillHints: autofillHints,
               decoration: InputDecoration(
-                border: _renderBorder(isValid(state), false),
-                enabledBorder: _renderBorder(isValid(state), false),
-                focusedBorder: _renderBorder(isValid(state), true),
+                border: _renderBorder(isValid(state), false, borderColor),
+                enabledBorder:
+                    _renderBorder(isValid(state), false, borderColor),
+                focusedBorder: _renderBorder(isValid(state), true, borderColor),
                 hintText: title,
                 contentPadding: const EdgeInsets.all(15),
               ),
@@ -58,10 +61,11 @@ class CustomTextField extends StatelessWidget {
   }
 }
 
-OutlineInputBorder _renderBorder(bool isValid, bool focused) {
+OutlineInputBorder _renderBorder(bool isValid, bool focused, borderColor) {
   return OutlineInputBorder(
     borderSide: BorderSide(
-        color: isValid ? AppTheme.white : Colors.red, width: focused ? 2 : 1),
+        color: isValid ? borderColor ?? Colors.white : Colors.red,
+        width: focused ? 2 : 1),
   );
 }
 
