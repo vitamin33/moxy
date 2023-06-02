@@ -9,7 +9,7 @@ import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart
 import 'package:moxy/utils/common.dart';
 
 import '../constant/route_name.dart';
-import '../screens/dashboard/pages/create_category/create_category_page.dart';
+import '../screens/dashboard/pages/create_order/create_order_page.dart';
 import '../screens/dashboard/pages/create_product/create_product_page.dart';
 import '../screens/dashboard/pages/products/products_page.dart';
 import '../screens/dashboard/pages/overview/overview_page.dart';
@@ -66,7 +66,7 @@ class NavigationService {
         return navigateToPageRoute(settings, const TransactionsPage());
 
       case createOrderPath:
-        return navigateToPageRoute(settings, const CreateOrderPage());
+        return navigateToPageRoute(settings, CreateOrderPage());
       case createProductPath:
         return navigateToPageRoute(
             settings, CreateProductPage(isEditMode: false));

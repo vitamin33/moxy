@@ -45,7 +45,7 @@ class _CutomButtonState extends State<CutomButton> {
                     color: AppTheme.black,
                   ),
                 ),
-                onPressed: disabled ? widget.onTap : null,
+                onPressed: disabled ? null : widget.onTap,
                 child: Text(
                   widget.title,
                   style: const TextStyle(color: AppTheme.black, fontSize: 18),

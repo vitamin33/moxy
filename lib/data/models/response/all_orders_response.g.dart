@@ -24,7 +24,7 @@ NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
       deliveryType: json['deliveryType'] as String,
       status: json['status'] as String,
       paymentType: json['paymentType'] as String,
-      client: json['client'] as String,
+      client: NetworkClient.fromJson(json['client'] as Map<String, dynamic>),
       products: (json['products'] as List<dynamic>)
           .map((e) => NetworkProduct.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -43,4 +43,20 @@ Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
       'products': instance.products,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
+    };
+
+NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>
+    NetworkClient(
+      json['city'] as String,
+      json['firstName'] as String,
+      json['mobileNumber'] as int,
+      json['secondName'] as String,
+    );
+
+Map<String, dynamic> _$NetworkClientToJson(NetworkClient instance) =>
+    <String, dynamic>{
+      'mobileNumber': instance.mobileNumber,
+      'firstName': instance.firstName,
+      'secondName': instance.secondName,
+      'city': instance.city,
     };
