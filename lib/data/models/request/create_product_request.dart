@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/constant/product_colors.dart';
 
 part 'create_product_request.g.dart';
 
