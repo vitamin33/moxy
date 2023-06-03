@@ -1,4 +1,3 @@
-
 // ignore_for_file: constant_identifier_names
 
 import 'dart:convert';
@@ -10,7 +9,7 @@ const String ADMIN_PERMISSION = "admin";
 const String CUSTOMER_PERMISSION = "customer";
 
 @immutable
-class User extends Equatable {
+class NetworkUser extends Equatable {
   final String uid;
   final String email;
   final String name;
@@ -25,7 +24,7 @@ class User extends Equatable {
 
   bool get isAdmin => permisions.contains(ADMIN_PERMISSION);
 
-  const User({
+  const NetworkUser({
     required this.uid,
     required this.email,
     required this.name,
@@ -56,7 +55,7 @@ class User extends Equatable {
     ];
   }
 
-  User copyWith({
+  NetworkUser copyWith({
     String? uid,
     String? email,
     String? name,
@@ -69,7 +68,7 @@ class User extends Equatable {
     List<String>? permisions,
     List<String>? favorites,
   }) {
-    return User(
+    return NetworkUser(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       name: name ?? this.name,
@@ -100,8 +99,8 @@ class User extends Equatable {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
+  factory NetworkUser.fromMap(Map<String, dynamic> map) {
+    return NetworkUser(
       uid: map['uid'] ?? '',
       email: map['email'] ?? '',
       name: map['name'] ?? '',
@@ -118,7 +117,8 @@ class User extends Equatable {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) => User.fromMap(json.decode(source));
+  factory NetworkUser.fromJson(String source) =>
+      NetworkUser.fromMap(json.decode(source));
 
   @override
   String toString() {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
-import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +9,7 @@ import 'navigation/root_router_cubit.dart';
 import 'navigation/root_router_delegate.dart';
 import 'navigation/home_router_cubit.dart';
 
+// ignore: must_be_immutable
 class MoxyApp extends StatelessWidget {
   ThemeData theme;
   ThemeData darkTheme;

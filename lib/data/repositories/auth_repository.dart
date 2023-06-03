@@ -1,17 +1,22 @@
+import 'package:moxy/domain/models/user.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
+import '../../domain/mappers/user_mapper.dart';
+import '../../services/get_it.dart';
 import '../dio_client.dart';
-import '../models/response/login_response.dart';
 import 'package:multiple_result/multiple_result.dart';
+
+import '../models/request/user_request.dart';
 
 class AuthRepository {
   static DioClient client = DioClient.instance;
-
   static final AuthRepository instance = AuthRepository._private();
 
   AuthRepository._private();
+
+  final userMapper = locate<UserMapper>();
 
   Future<Result<SharedPreferences, Exception>> loginWithCredentials(
       String email, String password) async {
@@ -47,5 +52,12 @@ class AuthRepository {
   Future<bool> checkLoggedInState() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.containsKey(tokenKey) && prefs.containsKey(userIdKey);
+  }
+
+  Future<Result<User, Exception>> createGuestUser(NetworkGuestUser user) async {
+    final resultCase = await client.createGuestUser(user);
+    return resultCase.when(
+        (success) => Result.success(userMapper.mapToUser(success)),
+        (error) => Result.error(error));
   }
 }

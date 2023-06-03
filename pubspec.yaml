@@ -97,8 +97,8 @@ flutter:
     - assets/appainter_theme.json
 
   fonts:
-  - family: OpenSans
-    fonts:
+    - family: OpenSans
+      fonts:
         - asset: assets/fonts/OpenSans-Regular.ttf
           weight: 400
         - asset: assets/fonts/OpenSans-Medium.ttf
