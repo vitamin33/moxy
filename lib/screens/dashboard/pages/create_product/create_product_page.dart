@@ -26,7 +26,7 @@ class CreateProductPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mainContext) {
     List<Widget> pages = const [
       ProductDetails(),
       Branding(),
@@ -58,8 +58,17 @@ class CreateProductPage extends StatelessWidget {
               color: AppTheme.pink,
               child: state.isSuccess
                   ? succsess(
-                      onTap:
-                          state.isEdit ? cubit.backToProduct : cubit.createNew,
+                      onTap: () {
+                        if (state.isEdit) {
+                          // cubit.backToProduct(context);
+                          cubit.clearState();
+                          context.read<HomeRouterCubit>().navigateTo(
+                                const ProductsPageState(),
+                              );
+                        } else {
+                          cubit.createNew();
+                        }
+                      },
                       title: 'Product Added',
                       titleButton:
                           state.isEdit ? 'Back To Product' : 'Create New')

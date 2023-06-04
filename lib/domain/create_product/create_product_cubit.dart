@@ -107,10 +107,15 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(isSuccess: false));
     clearState();
   }
-   // Thisss function!!!
-  void backToProduct() {
+
+  // Thisss function!!!
+  void backToProduct(context) {
     clearState();
-    navigationService.navigatePushReplaceName(productsPath); //doesnt work
+    // navigationService.navigatePushReplaceName(productsPath); //doesnt work
+
+    context.read<HomeRouterCubit>().navigateTo(
+          const ProductsPageState(),
+        );
   }
 
   void onChangePage(int page) {
