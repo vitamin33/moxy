@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:path/path.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -10,6 +11,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import '../constant/api_path.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
+import 'models/request/user_request.dart';
 import 'models/response/all_orders_response.dart';
 import 'models/response/login_response.dart';
 
@@ -95,6 +97,24 @@ class DioClient {
       return null;
     }
     return result;
+  }
+
+  Future<Result<NetworkGuestUser, Exception>> createGuestUser(
+      NetworkGuestUser guest) async {
+    final NetworkGuestUser result;
+
+    try {
+      Response response = await _dio.post(
+        createGuestUserUrl,
+        data: guest.toJson(),
+      );
+      result = NetworkGuestUser.fromJson(response.data);
+    } catch (e) {
+      print('Error during creating user: $e');
+
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
   }
 
   Future<List<NetworkProduct>> allProducts() async {
@@ -186,5 +206,13 @@ class DioClient {
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
+  }
+
+  Exception _handleHttpException(Object e) {
+    var message = e.toString();
+    if (e is DioError) {
+      message = e.response?.data['message'];
+    }
+    return Exception(message);
   }
 }
