@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:moxy/screens/authentication/authentication_view.dart';
-import 'package:moxy/screens/dashboard/pages/customers/customers_page.dart';
+import 'package:moxy/screens/dashboard/pages/customers/users_page.dart';
 import 'package:moxy/screens/dashboard/pages/feedbacks/feedbacks_page.dart';
 import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
 import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart';
@@ -55,7 +55,7 @@ class NavigationService {
       case root:
         return navigateToPageRoute(settings, OverviewPage());
       case customerPath:
-        return navigateToPageRoute(settings, const CustomersPage());
+        return navigateToPageRoute(settings, const UsersPage());
       case ordersPath:
         return navigateToPageRoute(settings, const OrdersPage());
       case productsPath:

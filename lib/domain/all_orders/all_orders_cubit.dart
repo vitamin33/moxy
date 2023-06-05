@@ -1,21 +1,18 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/order_repository.dart';
 import 'package:moxy/domain/all_orders/all_orders_state.dart';
-import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../data/repositories/product_repository.dart';
 import '../../services/get_it.dart';
 import '../mappers/order_mapper.dart';
-
 
 class AllOrdersCubit extends Cubit<AllOrdersState> {
   final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
 
   AllOrdersCubit()
-      : super(AllOrdersState(
-            allOrders: [], isLoading: false, errorMessage: '')) {
+      : super(
+            AllOrdersState(allOrders: [], isLoading: false, errorMessage: '')) {
     allOrders();
   }
 
@@ -25,7 +22,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       final result = await orderRepository.getAllOrders();
       result.when((success) {
         final orders = orderMapper.mapToOrderList(success);
-        emit(state.copyWith(allOrders: orders));
+        emit(state.copyWith(allUsers: orders));
         emit(state.copyWith(isLoading: false));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed getAllProduct'));

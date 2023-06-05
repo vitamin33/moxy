@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/create_user/create_user_effects.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
@@ -30,23 +31,26 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
           ),
         );
 
-  final TextEditingController firstName = TextEditingController();
-  final TextEditingController secondName = TextEditingController();
-  final TextEditingController mobileNumber = TextEditingController();
-  final TextEditingController city = TextEditingController();
-  final TextEditingController instagram = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController secondNameController = TextEditingController();
+  final TextEditingController mobileNumberController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController instagramController = TextEditingController();
 
   void createGuestUser() async {
     try {
-      emit(state.copyWith(isLoading: true));
-      final user = userMapper.mapToNetworkUser(state.editedUser);
-      final createdUser = await userRepository.createGuestUser(user);
-      createdUser.when((success) {
-        emit(state.copyWith(isLoading: false));
-        emit(state.copyWith(isSuccess: true));
-      }, (error) {
-        emit(state.copyWith(errorMessage: error.toString(), isLoading: false));
-      });
+      if (validateFields()) {
+        emit(state.copyWith(isLoading: true));
+        final user = userMapper.mapToNetworkUser(state.editedUser);
+        final createdUser = await userRepository.createGuestUser(user);
+        createdUser.when((success) {
+          emit(state.copyWith(isLoading: false));
+          emitEffect(const UserCreatedSuccess());
+        }, (error) {
+          emit(
+              state.copyWith(errorMessage: error.toString(), isLoading: false));
+        });
+      }
     } catch (e) {
       moxyPrint(e);
     }
@@ -110,18 +114,73 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
       errors.phoneNumber = FieldError.empty;
       noErrors = false;
     }
-    // if (!isFieldEmpty(state.editedUser.city)) {
-    //   errors.city = FieldError.invalid;
-    //   noErrors = false;
-    // }
-    // if (!isFieldEmpty(state.editedUser.instagram)) {
-    //   errors.instagramLink = FieldError.invalid;
-    //   noErrors = false;
-    // }
+    if (!phoneNumberRegExp.hasMatch(state.editedUser.mobileNumber)) {
+      errors.phoneNumber = FieldError.invalid;
+      noErrors = false;
+    }
     if (!noErrors) {
-      emitEffect(ValidationFailed(errors.formErrorMessageFields()));
+      emitEffect(UserValidationFailed(errors.formErrorMessageFields()));
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
+  }
+
+  void tryToParseDataFromClipboard() async {
+    try {
+      ClipboardData? data = await Clipboard.getData('text/plain');
+      final text = data?.text ?? '';
+      final numLines = '\n'.allMatches(text).length + 1;
+      String firstName = '';
+      String secondName = '';
+      String phoneNumber = '';
+      String city = '';
+
+      if (numLines > 1) {
+        final lines = text.split('\n');
+        final first = lines[0];
+        final names = nameSurnameRegExp.firstMatch(first);
+        if (names != null) {
+          List<String>? fullName = names[0]?.split(' ');
+          secondName = fullName?[0] ?? '';
+          firstName = fullName?[1] ?? '';
+        }
+        if (firstName.isEmpty && secondName.isEmpty) {
+          final first = lines[0];
+          final names = nameSurnameRegExp.firstMatch(first);
+          if (names != null) {
+            List<String>? fullName = names[0]?.split(' ');
+            firstName = fullName?[0] ?? '';
+            secondName = fullName?[1] ?? '';
+          }
+        }
+      } else {
+        final names = nameSurnameRegExp.firstMatch(text);
+        if (names != null) {
+          List<String>? fullName = names[0]?.split(' ');
+          firstName = fullName?[0] ?? '';
+          secondName = fullName?[1] ?? '';
+        }
+      }
+      final phones = phoneNumberRegExp.firstMatch(text);
+      if (phones != null) {
+        phoneNumber = phones[0] ?? '';
+        phoneNumber = phoneNumber.replaceAll(RegExp('[^0-9]'), '');
+      }
+      emit(
+        state.copyWith(
+          editedUser: state.editedUser.copyWith(
+            firstName: firstName,
+            secondName: secondName,
+            mobileNumber: phoneNumber,
+            city: city,
+          ),
+        ),
+      );
+      firstNameController.text = firstName;
+      secondNameController.text = secondName;
+      mobileNumberController.text = phoneNumber;
+    } catch (e) {
+      emitEffect(const DataParseFailed());
+    }
   }
 }

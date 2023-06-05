@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/components/app_scaffold.dart';
 
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/all_orders/all_orders_cubit.dart';
@@ -14,8 +13,8 @@ class OrdersPage extends StatelessWidget {
     return BlocConsumer<AllOrdersCubit, AllOrdersState>(
         listener: (context, state) {
       if (state.errorMessage != '') {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(snackBarWhenFailure(snackBarFailureText: 'Failed:${state.errorMessage}'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText: 'Failed:${state.errorMessage}'));
       }
     }, builder: (context, state) {
       return Scaffold(

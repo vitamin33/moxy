@@ -54,10 +54,23 @@ class AuthRepository {
     return prefs.containsKey(tokenKey) && prefs.containsKey(userIdKey);
   }
 
-  Future<Result<User, Exception>> createGuestUser(NetworkGuestUser user) async {
+  Future<Result<User, Exception>> createGuestUser(NetworkUser user) async {
     final resultCase = await client.createGuestUser(user);
     return resultCase.when(
         (success) => Result.success(userMapper.mapToUser(success)),
+        (error) => Result.error(error));
+  }
+
+  Future<Result<List<User>, Exception>> getAllUsers() async {
+    final resultUsers = await client.getAllUsers();
+    return resultUsers.when(
+        (success) => Result.success(
+              success
+                  .map(
+                    (e) => userMapper.mapToUser(e),
+                  )
+                  .toList(),
+            ),
         (error) => Result.error(error));
   }
 }

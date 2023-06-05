@@ -33,14 +33,14 @@ class CustomTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 8.0),
+          padding: const EdgeInsets.only(left: 0.0, bottom: 3),
           child: Text(
             title,
             style: renderTitleStyle(context, isValid(state)),
           ),
         ),
         Container(
-            padding: EdgeInsets.all(6),
+            padding: const EdgeInsets.all(2),
             decoration: const BoxDecoration(
                 color: AppTheme.white,
                 borderRadius: BorderRadius.all(Radius.circular(8))),

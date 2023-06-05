@@ -144,7 +144,7 @@ Widget positionButton(CreateProductState state, CreateProductCubit cubit) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         state.activePage == 1
-            ? CutomButton(
+            ? CustomButton(
                 title: 'Previus',
                 onTap: cubit.moveToPreviustPage,
                 buttonWidth: 150,
@@ -153,7 +153,7 @@ Widget positionButton(CreateProductState state, CreateProductCubit cubit) {
             : Container(
                 width: 150,
               ),
-        CutomButton(
+        CustomButton(
           title: state.activePage != 1 ? 'Next' : 'Add',
           onTap: cubit.moveToNextPage,
           buttonWidth: 150,

@@ -105,7 +105,7 @@ class DashboardViewMobile extends StatelessWidget {
         return 'Dashboard';
       case ProductsPageState:
         return 'Products';
-      case CustomersPageState:
+      case UsersPageState:
         return 'Customers';
       case OrdersPageState:
         return 'Orders';
@@ -118,6 +118,8 @@ class DashboardViewMobile extends StatelessWidget {
         }
       case CreateOrderPageState:
         return 'Create order';
+      case CreateUserPageState:
+        return 'Create user';
       case TransactionsPageState:
         return 'Products';
       case FeedbacksPageState:
@@ -143,7 +145,7 @@ class DashboardViewMobile extends StatelessWidget {
                 moxyPrint('filter');
               })
         ];
-      case CustomersPageState:
+      case UsersPageState:
         return [];
       case OrdersPageState:
         return [];

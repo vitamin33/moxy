@@ -13,7 +13,6 @@ import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:bloc_effects/bloc_effects.dart';
 
-import '../../constant/route_name.dart';
 import '../../navigation/home_router_cubit.dart';
 import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';

@@ -2,8 +2,8 @@ import '../../data/models/request/user_request.dart';
 import '../models/user.dart';
 
 class UserMapper {
-  NetworkGuestUser mapToNetworkUser(User user) {
-    return NetworkGuestUser(
+  NetworkUser mapToNetworkUser(User user) {
+    return NetworkUser(
       firstName: user.firstName,
       secondName: user.secondName,
       mobileNumber: user.mobileNumber,
@@ -12,13 +12,13 @@ class UserMapper {
     );
   }
 
-  User mapToUser(NetworkGuestUser network) {
+  User mapToUser(NetworkUser network) {
     return User(
-      firstName: network.firstName,
-      secondName: network.secondName,
+      firstName: network.firstName ?? '',
+      secondName: network.secondName ?? '',
       mobileNumber: network.mobileNumber,
-      city: network.city,
-      instagram: network.instagram,
+      city: network.city ?? '',
+      instagram: network.instagram ?? '',
     );
   }
 }

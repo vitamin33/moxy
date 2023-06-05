@@ -13,6 +13,7 @@ import 'image_picker_service.dart';
 class GetItService {
   static final getIt = GetIt.instance;
   static initializeService() {
+    getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<AuthRepository>(AuthRepository.instance);
     getIt.registerSingleton<ISecureStorageRepository>(
         SecureStorageRepository.instance);
@@ -22,7 +23,6 @@ class GetItService {
     getIt.registerSingleton<ImagePickerService>(ImagePickerService());
     getIt.registerSingleton<ProductMapper>(ProductMapper());
     getIt.registerSingleton<OrderMapper>(OrderMapper());
-    getIt.registerSingleton<UserMapper>(UserMapper());
   }
 }
 
