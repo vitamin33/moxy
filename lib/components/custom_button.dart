@@ -4,14 +4,14 @@ import '../theme/app_theme.dart';
 
 enum ButtonState { idle, loading, disabled }
 
-class CutomButton extends StatefulWidget {
+class CustomButton extends StatefulWidget {
   final String title;
   final ButtonState state;
   final double? buttonWidth;
   final bool outline;
   final Function() onTap;
 
-  const CutomButton({
+  const CustomButton({
     Key? key,
     required this.title,
     this.buttonWidth = 100.0,
@@ -21,10 +21,10 @@ class CutomButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CutomButton> createState() => _CutomButtonState();
+  State<CustomButton> createState() => _CustomButtonState();
 }
 
-class _CutomButtonState extends State<CutomButton> {
+class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
     final buttonWidth = widget.buttonWidth ?? widget.buttonWidth;

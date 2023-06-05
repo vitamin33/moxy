@@ -7,13 +7,14 @@ class HomeRouterCubit extends Cubit<HomeRouterState> {
   HomeRouterCubit() : super(const OverviewPageState());
   void goToProducts([String? text]) => emit(ProductsPageState(text));
   void goToOverview([String? text]) => emit(OverviewPageState(text));
-  void goToCustomers([String? text]) => emit(CustomersPageState(text));
+  void goToCustomers([String? text]) => emit(UsersPageState(text));
   void goToOrders([String? text]) => emit(OrdersPageState(text));
   void goToTransactions([String? text]) => emit(TransactionsPageState(text));
   void goToFeedbacks([String? text]) => emit(FeedbacksPageState(text));
   void goToCreateProduct([bool? isEdit, String? editProductId]) => emit(
       CreateProductPageState(isEditMode: isEdit, editProductId: editProductId));
   void goToCreateOrder([String? text]) => emit(CreateOrderPageState(text));
+  void goToCreateUser([String? text]) => emit(CreateUserPageState(text));
   void popExtra() {
     if (state is OverviewPageState) {
       goToOverview();
@@ -34,7 +35,7 @@ class HomeRouterCubit extends Cubit<HomeRouterState> {
       case ProductsPageState:
         goToProducts();
         break;
-      case CustomersPageState:
+      case UsersPageState:
         goToCustomers();
         break;
       case OrdersPageState:
@@ -46,6 +47,9 @@ class HomeRouterCubit extends Cubit<HomeRouterState> {
         break;
       case CreateOrderPageState:
         goToCreateOrder();
+        break;
+      case CreateUserPageState:
+        goToCreateUser();
         break;
       case TransactionsPageState:
         goToTransactions();

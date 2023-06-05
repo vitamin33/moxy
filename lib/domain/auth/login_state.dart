@@ -1,19 +1,19 @@
 import '../copyable.dart';
 
 class LoginState implements Copyable<LoginState> {
-  final String email;
+  final String mobileNumber;
   final String password;
   final AuthState state;
 
   LoginState({
-    required this.email,
+    required this.mobileNumber,
     required this.password,
     required this.state,
   });
 
   static LoginState defaultAllProductsState() {
     return LoginState(
-      email: '',
+      mobileNumber: '',
       password: '',
       state: const AuthState(),
     );
@@ -21,18 +21,17 @@ class LoginState implements Copyable<LoginState> {
 
   @override
   LoginState copyWith({
-    String? email,
+    String? mobileNumber,
     String? password,
     AuthState? state,
   }) {
     return LoginState(
-        email: email ?? this.email,
+        mobileNumber: mobileNumber ?? this.mobileNumber,
         password: password ?? this.password,
         state: state ?? this.state);
   }
 
-  bool get emailIsValid =>
-      email.trim().isNotEmpty && email.trim().contains("@");
+  bool get mobileNumberIsValid => mobileNumber.length > 9;
 }
 
 class AuthState {

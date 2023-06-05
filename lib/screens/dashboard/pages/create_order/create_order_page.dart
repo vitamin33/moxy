@@ -11,7 +11,6 @@ import '../../../../components/app_indicator.dart';
 import '../../../../components/custom_button.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/snackbar_widgets.dart';
-import '../../../../components/succes_card.dart';
 import '../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../domain/create_order/create_order_effects.dart';
 import '../../../../domain/create_order/create_order_state.dart';
@@ -27,7 +26,8 @@ class CreateOrderPage extends StatelessWidget {
     List<Widget> pages = const [About(), Payment(), Delivery(), StatusPage()];
 
     return BlocProvider<CreateOrderCubit>(
-      create: (BuildContext context) => CreateOrderCubit(CreateOrderState(
+      create: (BuildContext context) => CreateOrderCubit(
+        CreateOrderState(
           isLoading: false,
           isSuccess: false,
           errorMessage: '',
@@ -39,7 +39,9 @@ class CreateOrderPage extends StatelessWidget {
           novaPostNumber: 0,
           products: [Product.defaultProduct()],
           client: Client.defaultClient(),
-          status: '')),
+          status: '',
+        ),
+      ),
       child: BlocEffectListener<CreateOrderCubit, UiEffect, CreateOrderState>(
         listener: (context, effect, state) {
           if (effect is ValidationFailed) {
@@ -144,7 +146,7 @@ Widget positionButton(CreateOrderState state, CreateOrderCubit cubit) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         state.activePage != 0
-            ? CutomButton(
+            ? CustomButton(
                 title: 'Previus',
                 onTap: cubit.moveToPreviustPage,
                 buttonWidth: 150,
@@ -153,7 +155,7 @@ Widget positionButton(CreateOrderState state, CreateOrderCubit cubit) {
             : Container(
                 width: 150,
               ),
-        CutomButton(
+        CustomButton(
           title: state.activePage != 3 ? 'Next' : 'Add',
           onTap: cubit.moveToNextPage,
           buttonWidth: 150,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget loader() {
-  return Column(children: const [
+  return const Column(children: [
     Expanded(
       child: Center(
         child: CircularProgressIndicator(

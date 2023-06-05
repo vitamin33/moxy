@@ -28,9 +28,16 @@ class OverviewPageState extends HomeRouterState {
   List<Object?> get props => [extraPageContent];
 }
 
-class CustomersPageState extends HomeRouterState {
+class UsersPageState extends HomeRouterState {
   final String? extraPageContent;
-  const CustomersPageState([this.extraPageContent]);
+  const UsersPageState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}
+
+class CreateUserPageState extends HomeRouterState {
+  final String? extraPageContent;
+  const CreateUserPageState([this.extraPageContent]);
   @override
   List<Object?> get props => [extraPageContent];
 }

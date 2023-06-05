@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/create_product_page.dart';
-import 'package:moxy/screens/dashboard/pages/customers/customers_page.dart';
+import 'package:moxy/screens/dashboard/pages/customers/users_page.dart';
 import 'package:moxy/screens/dashboard/pages/feedbacks/feedbacks_page.dart';
 import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
 import 'package:moxy/screens/dashboard/pages/overview/overview_page.dart';
@@ -8,6 +8,7 @@ import 'package:moxy/screens/dashboard/pages/products/products_page.dart';
 import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart';
 
 import '../screens/dashboard/pages/create_order/create_order_page.dart';
+import '../screens/dashboard/pages/create_user/create_user_page.dart';
 import 'home_router_cubit.dart';
 
 class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
@@ -99,13 +100,13 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
         ),
       ];
     }
-    if (_routerCubit.state is CustomersPageState) {
+    if (_routerCubit.state is UsersPageState) {
       extraPageContent =
-          (_routerCubit.state as CustomersPageState).extraPageContent;
+          (_routerCubit.state as UsersPageState).extraPageContent;
       return [
         _materialPage(
           valueKey: "customers",
-          child: const CustomersPage(),
+          child: const UsersPage(),
         ),
       ];
     }
@@ -115,7 +116,17 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
       return [
         _materialPage(
           valueKey: "createOrder",
-          child:  CreateOrderPage(),
+          child: CreateOrderPage(),
+        ),
+      ];
+    }
+    if (_routerCubit.state is CreateUserPageState) {
+      extraPageContent =
+          (_routerCubit.state as CreateUserPageState).extraPageContent;
+      return [
+        _materialPage(
+          valueKey: "createUser",
+          child: const CreateUserPage(),
         ),
       ];
     }

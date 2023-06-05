@@ -1,11 +1,7 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 
-import '../../screens/dashboard/pages/create_product/pages/branding.dart';
-import '../../screens/dashboard/pages/create_product/pages/details.dart';
 import '../copyable.dart';
 
 class CreateProductState implements Copyable<CreateProductState> {
