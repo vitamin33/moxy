@@ -19,8 +19,8 @@ Map<String, dynamic> _$AllOrdersResponseToJson(AllOrdersResponse instance) =>
     };
 
 NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
-      id: json['_id'] as String,
-      ukrPostNumber: json['ukrPostNumber'] as int,
+      id: json['id'] as String,
+      ukrPostNumber: json['ukrPostNumber'] as int?,
       deliveryType: json['deliveryType'] as String,
       status: json['status'] as String,
       paymentType: json['paymentType'] as String,
@@ -30,12 +30,13 @@ NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
           .toList(),
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
-    );
+    )..novaPostNumber = json['novaPostNumber'] as int?;
 
 Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
     <String, dynamic>{
-      '_id': instance.id,
+      'id': instance.id,
       'ukrPostNumber': instance.ukrPostNumber,
+      'novaPostNumber': instance.novaPostNumber,
       'deliveryType': instance.deliveryType,
       'status': instance.status,
       'paymentType': instance.paymentType,
@@ -49,7 +50,7 @@ NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>
     NetworkClient(
       json['city'] as String,
       json['firstName'] as String,
-      json['mobileNumber'] as int,
+      json['mobileNumber'] as String,
       json['secondName'] as String,
     );
 

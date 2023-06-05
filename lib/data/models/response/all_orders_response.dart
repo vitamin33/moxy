@@ -17,9 +17,9 @@ class AllOrdersResponse {
 
 @JsonSerializable()
 class NetworkOrder {
-  @JsonKey(name: '_id')
   String id;
-  int ukrPostNumber;
+  int? ukrPostNumber;
+  int? novaPostNumber;
   String deliveryType;
   String status;
   String paymentType;
@@ -47,7 +47,7 @@ class NetworkOrder {
 
 @JsonSerializable()
 class NetworkClient {
-  int mobileNumber;
+  String mobileNumber;
   String firstName;
   String secondName;
   String city;

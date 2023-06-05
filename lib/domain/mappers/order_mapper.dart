@@ -6,26 +6,26 @@ import '../models/order.dart';
 
 class OrderMapper {
   final productMapper = locate<ProductMapper>();
-    List<Order> mapToOrderList(List<NetworkOrder> networkOrders) {
-  return networkOrders.map((o) {
-    return Order(
-      ukrPostNumber: o.ukrPostNumber,
-      deliveryType: o.deliveryType,
-      status: o.status,
-      paymentType: o.paymentType,
-      client: Client(
-        mobileNumber: o.client.mobileNumber,
-        firstName: o.client.firstName,
-        secondName: o.client.secondName,
-        city: o.client.city,
-      ),
-      products: productMapper.mapToProductList(o.products),
-      createdAt: o.createdAt,
-      updatedAt: o.updatedAt,
-    );
-  }).toList();
-}
+  List<Order> mapToOrderList(List<NetworkOrder> networkOrders) {
+    return networkOrders.map((o) {
+      return Order(
+        ukrPostNumber: o.ukrPostNumber,
+        deliveryType: o.deliveryType,
+        status: o.status,
+        paymentType: o.paymentType,
+        client: Client(
+          mobileNumber: o.client.mobileNumber,
+          firstName: o.client.firstName,
+          secondName: o.client.secondName,
+          city: o.client.city,
+        ),
+        products: productMapper.mapToProductList(o.products),
+        createdAt: o.createdAt,
+        updatedAt: o.updatedAt,
+      );
+    }).toList();
   }
+}
 
   // List<Client> mapToClientList(List<NetworkOrder> networkClient) {
   //   return networkClient.map(

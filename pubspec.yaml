@@ -1,5 +1,5 @@
 name: moxy
-description: A new Flutter project.
+description: Moxy - brand-new e-commerce shop with unique style. Break Free and Be You.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -63,6 +63,11 @@ dependencies:
   json_annotation: ^4.8.0
   universal_html: ^2.2.1
   json_theme: ^4.0.0
+  json_serializable: ^6.6.1
+  image_picker: ^0.8.7+4
+  multiple_result: ^4.0.0
+  flutter_dotenv: ^5.1.0
+  freezed: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -75,11 +80,14 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
-  freezed: ^2.3.2
-  json_serializable: ^6.6.1
-  image_picker: ^0.8.7+4
-  multiple_result: ^4.0.0
-  flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/ic_launcher.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -93,7 +101,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - .env
+    - .dev.env
+    - .prod.env
     - assets/images/
     - assets/icons/
     - assets/appainter_theme.json
