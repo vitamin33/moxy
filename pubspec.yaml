@@ -79,6 +79,7 @@ dev_dependencies:
   json_serializable: ^6.6.1
   image_picker: ^0.8.7+4
   multiple_result: ^4.0.0
+  flutter_dotenv: ^5.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -92,6 +93,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/
     - assets/icons/
     - assets/appainter_theme.json

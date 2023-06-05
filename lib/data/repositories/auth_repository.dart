@@ -6,15 +6,13 @@ import '../../constants.dart';
 import '../../domain/mappers/user_mapper.dart';
 import '../../services/get_it.dart';
 import '../dio_client.dart';
+// ignore: depend_on_referenced_packages
 import 'package:multiple_result/multiple_result.dart';
 
 import '../models/request/user_request.dart';
 
 class AuthRepository {
   static DioClient client = DioClient.instance;
-  static final AuthRepository instance = AuthRepository._private();
-
-  AuthRepository._private();
 
   final userMapper = locate<UserMapper>();
 

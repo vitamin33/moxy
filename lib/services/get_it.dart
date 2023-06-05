@@ -14,7 +14,7 @@ class GetItService {
   static final getIt = GetIt.instance;
   static initializeService() {
     getIt.registerSingleton<UserMapper>(UserMapper());
-    getIt.registerSingleton<AuthRepository>(AuthRepository.instance);
+    getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ISecureStorageRepository>(
         SecureStorageRepository.instance);
     getIt.registerSingleton<NavigationService>(NavigationService());
