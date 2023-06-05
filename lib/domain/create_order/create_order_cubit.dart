@@ -60,15 +60,18 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   void firstNameChanged(value) {
     final String firstName = value;
-    emit(state.copyWith(client:state.client.copyWith(firstName: firstName)));
+    emit(state.copyWith(client: state.client.copyWith(firstName: firstName)));
   }
+
   void secondNameChanged(value) {
     final String secondName = value;
-    emit(state.copyWith(client:state.client.copyWith(secondName: secondName)));
+    emit(state.copyWith(client: state.client.copyWith(secondName: secondName)));
   }
+
   void phoneNumberChanged(value) {
-    final int mobileNumber = value;
-    emit(state.copyWith(client:state.client.copyWith(mobileNumber: mobileNumber)));
+    final String mobileNumber = value;
+    emit(state.copyWith(
+        client: state.client.copyWith(mobileNumber: mobileNumber)));
   }
 
   void updateSelectedStatusTitle(String newSelectedStatusTitle) {

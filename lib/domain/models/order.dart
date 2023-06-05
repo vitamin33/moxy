@@ -3,7 +3,8 @@ import 'package:moxy/domain/models/product.dart';
 
 class Order implements Copyable<Order> {
   String? id;
-  int ukrPostNumber;
+  int? ukrPostNumber;
+  int? novaPostNumber;
   String deliveryType;
   String status;
   String paymentType;
@@ -63,7 +64,7 @@ class Order implements Copyable<Order> {
 }
 
 class Client {
-  int? mobileNumber;
+  String? mobileNumber;
   String? firstName;
   String? secondName;
   String? city;
@@ -72,14 +73,14 @@ class Client {
 
   static Client defaultClient() {
     return Client(
-        mobileNumber: 380000000000,
+        mobileNumber: '',
         firstName: 'Ivan',
         secondName: 'Mikolenko',
         city: 'Lviv');
   }
 
   Client copyWith(
-      {int? mobileNumber,
+      {String? mobileNumber,
       String? firstName,
       String? secondName,
       String? city}) {
