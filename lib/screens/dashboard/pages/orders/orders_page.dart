@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/models/product.dart';
 
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/all_orders/all_orders_cubit.dart';
@@ -21,33 +22,47 @@ class OrdersPage extends StatelessWidget {
           body: Column(
         children: [
           Expanded(
-              child: state.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.allOrders.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final order = state.allOrders[index];
-                            return Card(
-                              margin: const EdgeInsets.all(3.0),
-                              child: ListTile(
-                                leading: Image.network(
-                                  order.products.first.images.first.imagePath,
-                                  width: 50,
-                                  height: 50,
+            child: state.isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: state.allOrders.isEmpty
+                        ? const Text('No orders')
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.allOrders.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final order = state.allOrders[index];
+                              return Card(
+                                margin: const EdgeInsets.all(3.0),
+                                child: ListTile(
+                                  leading: _buildImage(order.products),
+                                  title: Text(order.deliveryType),
+                                  trailing: const Icon(Icons.arrow_forward_ios),
                                 ),
-                                title: Text(order.deliveryType),
-                                trailing: const Icon(Icons.arrow_forward_ios),
-                              ),
-                            );
-                          }),
-                    ))
+                              );
+                            }),
+                  ),
+          ),
         ],
       ));
     });
+  }
+
+  Widget _buildImage(List<Product> products) {
+    if (products.isEmpty) {
+      return Container(
+        color: Colors.grey,
+        width: 50,
+        height: 50,
+      );
+    }
+    return Image.network(
+      products.first.images.first.imagePath,
+      width: 50,
+      height: 50,
+    );
   }
 }
