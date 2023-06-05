@@ -42,8 +42,9 @@ class DioClient {
         maxWidth: 90));
   }
 
-  Future<LoginResponse?> login(String email, String password) async {
-    LoginRequest request = LoginRequest(email: email, password: password);
+  Future<LoginResponse?> login(String mobileNumber, String password) async {
+    LoginRequest request =
+        LoginRequest(mobileNumber: mobileNumber, password: password);
 
     LoginResponse result;
     try {

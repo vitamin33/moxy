@@ -52,9 +52,9 @@ class AuthenticationView extends StatelessWidget {
                   const SizedBox(height: AppTheme.cardPadding),
                   CustomTextField(
                     borderColor: AppTheme.greyLigth,
-                    title: "Email ",
+                    title: "Phone Number ",
                     onChanged: (value) =>
-                        context.read<LoginCubit>().emailChanged(value),
+                        context.read<LoginCubit>().mobileNumberChanged(value),
                     autofillHints: const [
                       AutofillHints.email,
                     ],
@@ -77,7 +77,7 @@ class AuthenticationView extends StatelessWidget {
                       title: "Login",
                       state: state.state is Loading
                           ? ButtonState.loading
-                          : (state.emailIsValid
+                          : (state.mobileNumberIsValid
                               ? ButtonState.idle
                               : ButtonState.disabled),
                       onTap: context.read<LoginCubit>().logInWithCredentials,

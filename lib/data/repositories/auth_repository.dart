@@ -19,9 +19,9 @@ class AuthRepository {
   final userMapper = locate<UserMapper>();
 
   Future<Result<SharedPreferences, Exception>> loginWithCredentials(
-      String email, String password) async {
+      String mobileNumber, String password) async {
     try {
-      final result = await client.login(email, password);
+      final result = await client.login(mobileNumber, password);
       final token = result?.token;
       final userId = result?.userId;
       if (token != null && userId != null) {
