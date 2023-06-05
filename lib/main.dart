@@ -12,9 +12,11 @@ import 'package:moxy/utils/common.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
+import 'environment.dart';
+
 void main() {
   runZonedGuarded<Future<void>>(() async {
-    await dotenv.load();
+    await dotenv.load(fileName: Environment.fileName);
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
