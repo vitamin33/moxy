@@ -1,9 +1,5 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:moxy/data/dio_client.dart';
-import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -58,7 +54,7 @@ class ProductRepository {
   }
 
   Future<Result<NetworkProduct, Exception>> editProduct(
-      NetworkProduct product,editProductId) async {
+      NetworkProduct product, editProductId) async {
     try {
       final result = (await client.editProduct(
         product.id,

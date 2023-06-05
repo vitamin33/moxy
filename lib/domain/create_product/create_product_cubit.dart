@@ -1,10 +1,9 @@
 import 'dart:io';
+// ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
-import 'package:moxy/domain/all_products/all_products_state.dart';
 import 'package:moxy/domain/create_product/create_product_effects.dart';
 import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
@@ -14,7 +13,6 @@ import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:bloc_effects/bloc_effects.dart';
 
-import '../../constant/route_name.dart';
 import '../../navigation/home_router_cubit.dart';
 import '../../services/get_it.dart';
 import '../mappers/product_mapper.dart';
@@ -107,10 +105,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(isSuccess: false));
     clearState();
   }
-   // Thisss function!!!
-  void backToProduct() {
+
+  void backToProduct(context) {
     clearState();
-    navigationService.navigatePushReplaceName(productsPath); //doesnt work
+    // navigationService.navigatePushReplaceName(productsPath); //doesnt work
+
+    context.read<HomeRouterCubit>().navigateTo(
+          const ProductsPageState(),
+        );
   }
 
   void onChangePage(int page) {

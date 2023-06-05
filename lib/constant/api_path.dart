@@ -4,5 +4,5 @@ const String allProductsUrl = '/products';
 const String getProductByIdUrl = '/products/';
 const String editProductUrl = '/products/edit/';
 const String allOrdersUrl = '/orders';
-
-
+const String createGuestUserUrl = '/users/create-guest';
+const String allUsersUrl = '/users';

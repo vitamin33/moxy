@@ -22,4 +22,6 @@ class IconPath {
   static const String successImage = "assets/icons/success_image.svg";
   static const String plus = "assets/icons/plus.svg";
   static const String filter = "assets/icons/filter.svg";
+  static const String fullPayment = "assets/icons/full_payment.svg";
+  static const String cashPayment = "assets/icons/cash_payment.svg";
 }

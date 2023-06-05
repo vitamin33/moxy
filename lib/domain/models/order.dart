@@ -7,7 +7,7 @@ class Order implements Copyable<Order> {
   String deliveryType;
   String status;
   String paymentType;
-  String client;
+  Client client;
   List<Product> products;
   String createdAt;
   String updatedAt;
@@ -26,12 +26,12 @@ class Order implements Copyable<Order> {
 
   static Order defaultOrder() {
     return Order(
-      id: '',
+        id: '',
         ukrPostNumber: 0,
         deliveryType: '',
         status: '',
         paymentType: '',
-        client: '',
+        client: Client.defaultClient(),
         products: [],
         createdAt: '',
         updatedAt: '');
@@ -44,7 +44,7 @@ class Order implements Copyable<Order> {
     String? deliveryType,
     String? status,
     String? paymentType,
-    String? client,
+    Client? client,
     List<Product>? products,
     String? createdAt,
     String? updatedAt,
@@ -59,5 +59,35 @@ class Order implements Copyable<Order> {
         products: products ?? this.products,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
+  }
+}
+
+class Client {
+  int? mobileNumber;
+  String? firstName;
+  String? secondName;
+  String? city;
+
+  Client({this.city, this.firstName, this.mobileNumber, this.secondName});
+
+  static Client defaultClient() {
+    return Client(
+        mobileNumber: 380000000000,
+        firstName: 'Ivan',
+        secondName: 'Mikolenko',
+        city: 'Lviv');
+  }
+
+  Client copyWith(
+      {int? mobileNumber,
+      String? firstName,
+      String? secondName,
+      String? city}) {
+    return Client(
+      mobileNumber: mobileNumber ?? this.mobileNumber,
+      firstName: firstName ?? this.firstName,
+      secondName: secondName ?? this.secondName,
+      city: city ?? this.city,
+    );
   }
 }

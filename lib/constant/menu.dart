@@ -12,7 +12,7 @@ List<Menu> menus = const [
   Menu(
     title: 'Customers',
     icon: IconPath.customers,
-    route: CustomersPageState(),
+    route: UsersPageState(),
     subRoutes: [],
   ),
   Menu(
@@ -26,6 +26,12 @@ List<Menu> menus = const [
     icon: IconPath.customers,
     route: EmptyState(),
     subRoutes: [
+      Menu(
+        title: 'Create User',
+        icon: IconPath.createProduct,
+        route: CreateUserPageState(),
+        subRoutes: [],
+      ),
       Menu(
         title: 'Create Order',
         icon: IconPath.createProduct,

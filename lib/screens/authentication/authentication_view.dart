@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moxy/components/app_scaffold.dart';
 import 'package:moxy/components/custom_textfield.dart';
-import 'package:moxy/components/moxy_button.dart';
-import 'package:moxy/components/rounded_card.dart';
-import 'package:moxy/components/textfield.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/navigation/root_router_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../components/custom_button.dart';
 import '../../components/snackbar_widgets.dart';
-import '../../constant/route_name.dart';
 import '../../domain/auth/login_cubit.dart';
 import '../../domain/auth/login_state.dart';
-import '../../services/navigation_service.dart';
 
 class AuthenticationView extends StatelessWidget {
   const AuthenticationView({Key? key}) : super(key: key);
@@ -59,9 +52,9 @@ class AuthenticationView extends StatelessWidget {
                   const SizedBox(height: AppTheme.cardPadding),
                   CustomTextField(
                     borderColor: AppTheme.greyLigth,
-                    title: "Email ",
+                    title: "Phone Number ",
                     onChanged: (value) =>
-                        context.read<LoginCubit>().emailChanged(value),
+                        context.read<LoginCubit>().mobileNumberChanged(value),
                     autofillHints: const [
                       AutofillHints.email,
                     ],
@@ -79,12 +72,12 @@ class AuthenticationView extends StatelessWidget {
                   const SizedBox(height: AppTheme.cardPadding),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                    child: CutomButton(
+                    child: CustomButton(
                       buttonWidth: MediaQuery.of(context).size.width,
                       title: "Login",
                       state: state.state is Loading
                           ? ButtonState.loading
-                          : (state.emailIsValid
+                          : (state.mobileNumberIsValid
                               ? ButtonState.idle
                               : ButtonState.disabled),
                       onTap: context.read<LoginCubit>().logInWithCredentials,

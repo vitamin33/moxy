@@ -1,26 +1,25 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
-import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:path/path.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constant/api_path.dart';
-import '../domain/models/product.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
+import 'models/request/user_request.dart';
 import 'models/response/all_orders_response.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
-  static const String baseUrl = 'http://10.0.2.2:3000';
-  // static const String baseUrl = 'http://localhost:3000';
+  //static const String baseUrl = 'http://10.0.2.2:3000';
+  static const String baseUrl = 'http://localhost:3000';
 
   static final DioClient instance = DioClient._private();
 
@@ -43,8 +42,9 @@ class DioClient {
         maxWidth: 90));
   }
 
-  Future<LoginResponse?> login(String email, String password) async {
-    LoginRequest request = LoginRequest(email: email, password: password);
+  Future<LoginResponse?> login(String mobileNumber, String password) async {
+    LoginRequest request =
+        LoginRequest(mobileNumber: mobileNumber, password: password);
 
     LoginResponse result;
     try {
@@ -191,5 +191,52 @@ class DioClient {
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
+  }
+
+  // USERS
+
+  Future<Result<NetworkUser, Exception>> createGuestUser(
+      NetworkUser guest) async {
+    final NetworkUser result;
+
+    try {
+      Response response = await _dio.post(
+        createGuestUserUrl,
+        data: guest.toJson(),
+      );
+      result = NetworkUser.fromJson(response.data);
+    } catch (e) {
+      print('Error during creating user: $e');
+
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
+  }
+
+  Future<Result<List<NetworkUser>, Exception>> getAllUsers() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(tokenKey);
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      final response = await _dio.get('$baseUrl$allUsersUrl');
+      final data = response.data;
+      final userList = <NetworkUser>[];
+      for (var value in (data as List)) {
+        userList.add(NetworkUser.fromJson(value));
+      }
+      return Result.success(userList);
+    } catch (e) {
+      print('Error during gettting user list: $e');
+
+      return Result.error(_handleHttpException(e));
+    }
+  }
+
+  Exception _handleHttpException(Object e) {
+    var message = e.toString();
+    if (e is DioError) {
+      message = e.response?.data['message'];
+    }
+    return Exception(message);
   }
 }

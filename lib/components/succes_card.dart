@@ -39,7 +39,7 @@ Widget succsess(
                   const SizedBox(
                     height: 40,
                   ),
-                  CutomButton(
+                  CustomButton(
                     buttonWidth: 250,
                     title: titleButton,
                     onTap: () {

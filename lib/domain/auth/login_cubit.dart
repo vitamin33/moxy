@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
-import 'package:moxy/utils/common.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import 'login_state.dart';
@@ -17,14 +16,15 @@ class LoginCubit extends Cubit<LoginState> {
   late TextEditingController passwordController;
   String walletConnectURI = '';
 
-  LoginCubit() : super( LoginState(email: '',password: '',state:AuthState() )) {
+  LoginCubit()
+      : super(LoginState(mobileNumber: '', password: '', state: AuthState())) {
     //_checkLoggedInState();
   }
 
-  void emailChanged(String value) {
+  void mobileNumberChanged(String value) {
     final email = value;
     emit(state.copyWith(
-      email: email,
+      mobileNumber: email,
     ));
   }
 
@@ -40,7 +40,7 @@ class LoginCubit extends Cubit<LoginState> {
       emit(state.copyWith(state: Loading()));
 
       final result = await authRepository.loginWithCredentials(
-          state.email, state.password);
+          state.mobileNumber, state.password);
 
       result.when((success) {
         emit(state.copyWith(state: LoginWithCredsSuccess()));
