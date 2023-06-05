@@ -63,7 +63,6 @@ dependencies:
   json_annotation: ^4.8.0
   universal_html: ^2.2.1
   json_theme: ^4.0.0
-  flutter_launcher_icons: ^0.13.1
   json_serializable: ^6.6.1
   image_picker: ^0.8.7+4
   multiple_result: ^4.0.0
@@ -81,6 +80,14 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/ic_launcher.png"
+  min_sdk_android: 21
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
