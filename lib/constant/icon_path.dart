@@ -24,4 +24,10 @@ class IconPath {
   static const String filter = "assets/icons/filter.svg";
   static const String fullPayment = "assets/icons/full_payment.svg";
   static const String cashPayment = "assets/icons/cash_payment.svg";
+  static const String newStatus = "assets/icons/new_status.svg";
+  static const String paidStatus = "assets/icons/paid_status.svg";
+  static const String sentStatus = "assets/icons/sent_status.svg";
+  static const String saleStatus = "assets/icons/sale_status.svg";
+  static const String canceledStatus = "assets/icons/canceled_status.svg";
+  static const String returnedStatus = "assets/icons/returned_status.svg";
 }

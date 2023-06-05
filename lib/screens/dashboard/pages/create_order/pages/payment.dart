@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../../constant/icon_path.dart';
+import '../../../../../domain/create_order/create_order_cubit.dart';
+import '../../../../../domain/create_order/create_order_state.dart';
 import '../../../../../theme/app_theme.dart';
 
 class Payment extends StatelessWidget {
@@ -11,56 +11,87 @@ class Payment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 300,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: AppTheme.black),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: AppTheme.white),
-            width: 180,
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(IconPath.fullPayment),
-                const SizedBox(
-                  height: 30,
+    return BlocBuilder<CreateOrderCubit, CreateOrderState>(
+        builder: (context, state) {
+      final cubit = context.read<CreateOrderCubit>();
+
+      return Padding(
+        padding: const EdgeInsets.all(AppTheme.cardPadding),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    cubit.selectPaymentType('Full Payment');
+                  },
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 3,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: state.paymentType == 'Full Payment'
+                            ? Colors.black
+                            : AppTheme.white,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      color: AppTheme.white,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(IconPath.fullPayment),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text('Full Payment',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
                 ),
-                Text('Full Payment'),
-              ],
-            ),
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(color: AppTheme.black),
-                borderRadius: BorderRadius.all(Radius.circular(20)),
-                color: AppTheme.white),
-            width: 180,
-            height: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(IconPath.cashPayment),
-                const SizedBox(
-                  height: 30,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    cubit.selectPaymentType('cash advance');
+                  },
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 3,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: state.paymentType == 'cash advance'
+                            ? Colors.black
+                            : AppTheme.white,
+                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                      color: AppTheme.white,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(IconPath.cashPayment),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        const Text('Cash advance',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.w600)),
+                      ],
+                    ),
+                  ),
                 ),
-                const Text('Cash advance'),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 }

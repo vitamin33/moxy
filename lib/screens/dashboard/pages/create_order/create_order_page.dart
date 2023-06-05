@@ -5,7 +5,7 @@ import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/about.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/delivery.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/payment.dart';
-import 'package:moxy/screens/dashboard/pages/create_order/pages/status.dart';
+import 'package:moxy/screens/dashboard/pages/create_order/pages/statusPage.dart';
 
 import '../../../../components/app_indicator.dart';
 import '../../../../components/custom_button.dart';
@@ -24,7 +24,7 @@ class CreateOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> pages = const [About(), Payment(), Delivery(), Status()];
+    List<Widget> pages = const [About(), Payment(), Delivery(), StatusPage()];
 
     return BlocProvider<CreateOrderCubit>(
       create: (BuildContext context) => CreateOrderCubit(CreateOrderState(
@@ -38,8 +38,8 @@ class CreateOrderPage extends StatelessWidget {
           paymentType: '',
           novaPostNumber: 0,
           products: [Product.defaultProduct()],
-          client:Client.defaultClient()
-          )),
+          client: Client.defaultClient(),
+          status: '')),
       child: BlocEffectListener<CreateOrderCubit, UiEffect, CreateOrderState>(
         listener: (context, effect, state) {
           if (effect is ValidationFailed) {
@@ -97,12 +97,11 @@ class CreateOrderPage extends StatelessWidget {
                                                   About(),
                                                   Payment(),
                                                   Delivery(),
-                                                  Status()
+                                                  StatusPage()
                                                 ],
                                                 controller:
                                                     cubit.pageController),
                                           ),
-                                          const SizedBox(height: 30),
                                           Expanded(
                                             child: PageView.builder(
                                               controller: cubit.pageController,

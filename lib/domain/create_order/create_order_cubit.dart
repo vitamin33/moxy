@@ -5,6 +5,7 @@ import '../../data/repositories/product_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import '../mappers/product_mapper.dart';
+import '../models/status.dart';
 import '../ui_effect.dart';
 import '../validation_mixin.dart';
 import 'create_order_state.dart';
@@ -70,32 +71,18 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     emit(state.copyWith(client:state.client.copyWith(mobileNumber: mobileNumber)));
   }
 
-  // void descriptionChanged(value) {
-  //   final String description = value;
-  //   emit(state.copyWith(
-  //       product: state.product.copyWith(description: description)));
-  // }
+  void updateSelectedStatusTitle(String newSelectedStatusTitle) {
+    emit(state.copyWith(status: newSelectedStatusTitle));
+  }
 
-  // void idNameChanged(value) {
-  //   final String idName = value;
-  //   emit(state.copyWith(product: state.product.copyWith(idName: idName)));
-  // }
+  void selectDeliveryType(String type) {
+    emit(state.copyWith(deliveryType: type));
+  }
 
-  // void costPriceChanged(value) {
-  //   if (value != null) {
-  //     final double costPrice = double.parse(value);
-  //     emit(state.copyWith(
-  //         product: state.product.copyWith(costPrice: costPrice)));
-  //   }
-  // }
+  void selectPaymentType(String type) {
+    emit(state.copyWith(paymentType: type));
+  }
 
-  // void salePriceChanged(value) {
-  //   if (value != null) {
-  //     final double salePrice = double.parse(value);
-  //     emit(state.copyWith(
-  //         product: state.product.copyWith(salePrice: salePrice)));
-  //   }
-  // }
 
   void moveToNextPage() {
     if (state.activePage != 3) {

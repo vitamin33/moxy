@@ -14,6 +14,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   String paymentType;
   int novaPostNumber;
   List<Product> products;
+  String status;
   Client client;
 
   // field errors
@@ -31,6 +32,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.novaPostNumber,
     required this.products,
     required this.client,
+    required this.status,
   });
 
   static CreateOrderState defaultCreateProductState() {
@@ -45,13 +47,14 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         paymentType: '',
         novaPostNumber: 0,
         products: [Product.defaultProduct()],
-        client:Client.defaultClient());
+        client: Client.defaultClient(),
+        status: ''
+        );
   }
 
   @override
   CreateOrderState copyWith(
-      {
-      bool? isLoading,
+      {bool? isLoading,
       bool? isEdit,
       bool? isSuccess,
       String? errorMessage,
@@ -64,7 +67,8 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       String? paymentType,
       int? novaPostNumber,
       List<Product>? products,
-      Client? client
+      Client? client,
+      String? status
       }) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
@@ -78,6 +82,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       novaPostNumber: novaPostNumber ?? this.novaPostNumber,
       products: products ?? this.products,
       client: client ?? this.client,
+      status: status ?? this.status,
     );
   }
 }
