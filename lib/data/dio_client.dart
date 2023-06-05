@@ -3,8 +3,12 @@ import 'dart:convert';
 import 'package:moxy/constants.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
+// ignore: depend_on_referenced_packages
 import 'package:multiple_result/multiple_result.dart';
+// ignore: depend_on_referenced_packages
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -19,13 +23,15 @@ import 'models/response/login_response.dart';
 
 class DioClient {
   //static const String baseUrl = 'http://10.0.2.2:3000';
-  static const String baseUrl = 'http://localhost:3000';
+  //static const String baseUrl = 'http://localhost:3000';
 
   static final DioClient instance = DioClient._private();
+  late String baseUrl;
 
   final Dio _dio = Dio();
 
   DioClient._private() {
+    baseUrl = dotenv.env['BASE_URL']!;
     // Set default configs
     _dio.options.baseUrl = baseUrl;
     _dio.options.connectTimeout = 10000; //10s
