@@ -80,7 +80,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           cache: true
-          flutter-version: 3.7.1
+          channel: "stable"
 
       # Start ssh-agent but set it to use the same ssh_auth_sock value.
       # The agent will be running in all steps after this, so it
