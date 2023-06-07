@@ -25,6 +25,18 @@ jobs:
     steps:
       - name: Check out from git
         uses: actions/checkout@v3
+
+      - name: Create .dev.env file
+        run: |
+          cat > assets/.dev.env <<EOF
+          BASE_URL=https://moxy.herokuapp.com
+          EOF
+
+      - name: Create .prod.env file
+        run: |
+          cat > assets/.prod.env <<EOF
+          BASE_URL=https://moxy.herokuapp.com
+          EOF
       # This retrieves the current date & week in a format that we can use for keying our
       # cache on to help us pick the most recent cached data
       - name: Fetch date for cache key
