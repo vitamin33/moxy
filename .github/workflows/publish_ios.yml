@@ -98,8 +98,9 @@ jobs:
         run: flutter pub get
       - name: Build & Publish to TestFlight with Fastlane
         env:
-          APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY_KEY }}
-          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          APP_STORE_CONNECT_API_KEY_KEY: ${{secrets.APP_STORE_CONNECT_API_KEY_KEY }}
+          MATCH_PASSWORD: ${{secrets.MATCH_PASSWORD}}
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: cd ios && bundle exec fastlane beta "build_name:${{ github.ref_name }}"
       # Package up the derived data for the caching action, including permissions and fine grained timestamps
       - name: Package DerivedData for cache
