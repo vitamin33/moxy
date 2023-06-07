@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:682172366755:android:038960b102f26b138d6416",
+        "mobilesdk_app_id": "1:682172366755:android:862bdc7b09d57a488d6416",
         "android_client_info": {
-          "package_name": "com.example.moxy"
+          "package_name": "com.moxy.store"
         }
       },
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "682172366755-qcnep0kiocnr7avqn4sd5p8adqnob0c3.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "682172366755-8pnv5gd4543qlhcihjf8o7momjnteq1j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.moxy"
+              }
             }
           ]
         }
