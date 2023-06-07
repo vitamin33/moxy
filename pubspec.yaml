@@ -36,7 +36,6 @@ dependencies:
   cupertino_icons:
     ^1.0.2
     #database
-  firebase_core: ^2.13.1
   shared_preferences: ^2.0.17
   flutter_secure_storage: ^6.1.0
 
