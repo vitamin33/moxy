@@ -10,6 +10,10 @@
 #     https://docs.fastlane.tools/plugins/available-plugins
 #
 
+import_from_git(
+  url: "https://github.com/fastlane-community/fastlane-plugin-increment_build_number"
+)
+
 ## Update these lines to match your project!
 # Bundle Identifier used for the iOS App on the App Store Connect portal
 APP_IDENTIFIER = 'com.moxy.store'
@@ -66,7 +70,7 @@ platform :ios do
 
     # Prep the xcodeproject from Flutter without building (`--config-only`)
     sh(
-      "flutter", "build", "ios", "--config-only",
+      "flutter", "build", "ios",
       "--release", "--no-pub", "--no-codesign",
       "--build-number", new_build_number.to_s,
       *extra_config_args
