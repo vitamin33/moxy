@@ -55,6 +55,12 @@ class CreateOrderPageState extends HomeRouterState {
   @override
   List<Object?> get props => [extraPageContent];
 }
+class OrderProductListPageState extends HomeRouterState {
+  final String? extraPageContent;
+  const OrderProductListPageState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}
 
 class FeedbacksPageState extends HomeRouterState {
   final String? extraPageContent;

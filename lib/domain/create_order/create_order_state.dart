@@ -13,7 +13,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   String deliveryType;
   String paymentType;
   int novaPostNumber;
-  List<Product> products;
+  List<Product> selectedProducts;
   String status;
   Client client;
 
@@ -30,7 +30,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.deliveryType,
     required this.paymentType,
     required this.novaPostNumber,
-    required this.products,
+    required this.selectedProducts,
     required this.client,
     required this.status,
   });
@@ -46,10 +46,9 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         deliveryType: '',
         paymentType: '',
         novaPostNumber: 0,
-        products: [Product.defaultProduct()],
+        selectedProducts: [],
         client: Client.defaultClient(),
-        status: ''
-        );
+        status: '');
   }
 
   @override
@@ -66,10 +65,9 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       String? deliveryType,
       String? paymentType,
       int? novaPostNumber,
-      List<Product>? products,
+      List<Product>? selectedProducts,
       Client? client,
-      String? status
-      }) {
+      String? status}) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
@@ -80,7 +78,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
       novaPostNumber: novaPostNumber ?? this.novaPostNumber,
-      products: products ?? this.products,
+      selectedProducts: selectedProducts ?? this.selectedProducts,
       client: client ?? this.client,
       status: status ?? this.status,
     );

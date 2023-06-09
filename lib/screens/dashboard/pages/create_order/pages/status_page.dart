@@ -20,6 +20,7 @@ class StatusPage extends StatelessWidget {
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: ListView.builder(
+              shrinkWrap: true,
               itemCount: allStatusOrder.length,
               itemBuilder: (context, index) {
                 final status = allStatusOrder[index];

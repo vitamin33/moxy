@@ -108,8 +108,6 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void backToProduct(context) {
     clearState();
-    // navigationService.navigatePushReplaceName(productsPath); //doesnt work
-
     context.read<HomeRouterCubit>().navigateTo(
           const ProductsPageState(),
         );

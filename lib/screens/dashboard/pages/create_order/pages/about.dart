@@ -8,6 +8,7 @@ import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../../domain/create_order/create_order_state.dart';
+import '../../../../../navigation/home_router_cubit.dart';
 import '../../../../../theme/app_theme.dart';
 
 class About extends StatelessWidget {
@@ -32,7 +33,7 @@ class About extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-             CustomTextField(
+            CustomTextField(
               title: 'Second Name',
               maxLines: 1,
               controller: cubit.secondNameController,
@@ -42,16 +43,16 @@ class About extends StatelessWidget {
             const SizedBox(
               height: 10,
             ),
-             CustomTextField(
+            CustomTextField(
               title: 'Phone Number',
               controller: cubit.phoneNumberController,
-                  onChanged: cubit.phoneNumberChanged,
-                  state: state.errors.costPrice,
-                  maxLines: 1,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(16),
-                  ],
+              onChanged: cubit.phoneNumberChanged,
+              state: state.errors.costPrice,
+              maxLines: 1,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(16),
+              ],
             ),
             const SizedBox(
               height: 10,
@@ -83,34 +84,37 @@ Widget _buildGalleryArea(
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        state.isLoading
-            ? Container()
-            //  Row(
-            //     mainAxisSize: MainAxisSize.min,
-            //     children: [
-            //       Flexible(
-            //         child: SizedBox(
-            //           height: 120,
-            //           width: double.maxFinite,
-            //           child: ListView.builder(
-            //             scrollDirection: Axis.horizontal,
-            //             itemCount: state.product.images.length,
-            //             itemBuilder: (context, index) {
-            //               return Padding(
-            //                 padding: const EdgeInsets.all(2.0),
-            //                 child: SizedBox(
-            //                   child: _buildImage(state.product, index, cubit),
-            //                 ),
-            //               );
-            //             },
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   )
+        state.selectedProducts.isNotEmpty
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: SizedBox(
+                      height: 120,
+                      width: double.maxFinite,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.selectedProducts.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Container(
+                                color: AppTheme.blackLight,
+                                child: Center(
+                                    child: Text(
+                                        state.selectedProducts[index].name))),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              )
             : InkWell(
                 onTap: () {
-                  cubit.pickProduct();
+                  context.read<HomeRouterCubit>().navigateTo(
+                        const OrderProductListPageState(),
+                      );
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

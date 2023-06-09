@@ -5,7 +5,7 @@ import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/about.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/delivery.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/payment.dart';
-import 'package:moxy/screens/dashboard/pages/create_order/pages/statusPage.dart';
+import 'package:moxy/screens/dashboard/pages/create_order/pages/status_page.dart';
 
 import '../../../../components/app_indicator.dart';
 import '../../../../components/custom_button.dart';
@@ -14,7 +14,6 @@ import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../domain/create_order/create_order_effects.dart';
 import '../../../../domain/create_order/create_order_state.dart';
-import '../../../../domain/models/product.dart';
 import '../../../../domain/ui_effect.dart';
 import '../../../../theme/app_theme.dart';
 
@@ -26,112 +25,107 @@ class CreateOrderPage extends StatelessWidget {
     List<Widget> pages = const [About(), Payment(), Delivery(), StatusPage()];
 
     return BlocProvider<CreateOrderCubit>(
-      create: (BuildContext context) => CreateOrderCubit(
-        CreateOrderState(
-          isLoading: false,
-          isSuccess: false,
-          errorMessage: '',
-          initialPage: 0,
-          activePage: 0,
-          errors: FieldErrors(),
-          deliveryType: '',
-          paymentType: '',
-          novaPostNumber: 0,
-          products: [Product.defaultProduct()],
-          client: Client.defaultClient(),
-          status: '',
-        ),
-      ),
-      child: BlocEffectListener<CreateOrderCubit, UiEffect, CreateOrderState>(
-        listener: (context, effect, state) {
-          if (effect is ValidationFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-                snackBarFailureText: 'Wrong input, please check text fields.'));
-          }
-        },
-        child: BlocConsumer<CreateOrderCubit, CreateOrderState>(
-          listener: (context, state) => {
-            if (state.errorMessage != '')
-              {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    snackBarWhenFailure(snackBarFailureText: 'Failed')),
-                context.read<CreateOrderCubit>().clearErrorState(),
-              }
+        create: (BuildContext context) => CreateOrderCubit(
+              CreateOrderState(
+                isLoading: false,
+                isSuccess: false,
+                errorMessage: '',
+                initialPage: 0,
+                activePage: 0,
+                errors: FieldErrors(),
+                deliveryType: '',
+                paymentType: '',
+                novaPostNumber: 0,
+                selectedProducts: [],
+                client: Client.defaultClient(),
+                status: '',
+              ),
+            ),
+        child: BlocEffectListener<CreateOrderCubit, UiEffect, CreateOrderState>(
+          listener: (context, effect, state) {
+            if (effect is ValidationFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+                  snackBarFailureText:
+                      'Wrong input, please check text fields.'));
+            }
           },
-          builder: (context, state) {
-            final cubit = context.read<CreateOrderCubit>();
-            return Material(
-              color: AppTheme.pink,
-              child:
-                  //  state.isSuccess
-                  //     ? succsess(
-                  //         onTap:
-                  //             state.isEdit ? cubit.backToProduct : cubit.createNew,
-                  //         title: 'Product Added',
-                  //         titleButton:
-                  //             state.isEdit ? 'Back To Product' : 'Create New')
-                  //     :
-                  state.isLoading
-                      ? loader()
-                      : Stack(
-                          children: [
-                            Column(
-                              children: [
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 550,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: AppIndicator(
-                                                activePage: state.activePage,
-                                                inadicatorName: const [
-                                                  'About',
-                                                  'Payment',
-                                                  'Delivery',
-                                                  'Status'
-                                                ],
-                                                pages: const [
-                                                  About(),
-                                                  Payment(),
-                                                  Delivery(),
-                                                  StatusPage()
-                                                ],
-                                                controller:
-                                                    cubit.pageController),
-                                          ),
-                                          Expanded(
-                                            child: PageView.builder(
-                                              controller: cubit.pageController,
-                                              onPageChanged: (int page) {
-                                                cubit.onChangePage(page);
-                                              },
-                                              itemCount: pages.length,
-                                              itemBuilder: (context, index) {
-                                                return pages[
-                                                    index % pages.length];
-                                              },
+          child: BlocConsumer<CreateOrderCubit, CreateOrderState>(
+            listener: (context, state) => {
+              if (state.errorMessage != '')
+                {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      snackBarWhenFailure(snackBarFailureText: 'Failed')),
+                  context.read<CreateOrderCubit>().clearErrorState(),
+                }
+            },
+            builder: (context, state) {
+              final cubit = context.read<CreateOrderCubit>();
+              return Material(
+                color: AppTheme.pink,
+                child:
+                    state.isLoading
+                        ? loader()
+                        : Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: 550,
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                              child: AppIndicator(
+                                                  activePage: state.activePage,
+                                                  inadicatorName: const [
+                                                    'About',
+                                                    'Payment',
+                                                    'Delivery',
+                                                    'Status'
+                                                  ],
+                                                  pages: const [
+                                                    About(),
+                                                    Payment(),
+                                                    Delivery(),
+                                                    StatusPage()
+                                                  ],
+                                                  controller:
+                                                      cubit.pageController),
                                             ),
-                                          )
-                                        ],
+                                            Expanded(
+                                              child: PageView.builder(
+                                                controller:
+                                                    cubit.pageController,
+                                                onPageChanged: (int page) {
+                                                  cubit.onChangePage(page);
+                                                },
+                                                itemCount: pages.length,
+                                                itemBuilder: (context, index) {
+                                                  return pages[
+                                                      index % pages.length];
+                                                },
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                            positionButton(state, cubit)
-                          ],
-                        ),
-            );
-          },
-        ),
-      ),
-    );
+                                ],
+                              ),
+                              positionButton(state, cubit)
+                            ],
+                          ),
+              );
+            },
+          ),
+        ));
   }
 }
 

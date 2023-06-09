@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/create_product_page.dart';
 import 'package:moxy/screens/dashboard/pages/customers/users_page.dart';
 import 'package:moxy/screens/dashboard/pages/feedbacks/feedbacks_page.dart';
+import 'package:moxy/screens/dashboard/pages/order_product_list/order_product_list.dart';
 import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
 import 'package:moxy/screens/dashboard/pages/overview/overview_page.dart';
 import 'package:moxy/screens/dashboard/pages/products/products_page.dart';
@@ -117,6 +118,16 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
         _materialPage(
           valueKey: "createOrder",
           child: CreateOrderPage(),
+        ),
+      ];
+    }
+    if (_routerCubit.state is OrderProductListPageState) {
+      extraPageContent =
+          (_routerCubit.state as OrderProductListPageState).extraPageContent;
+      return [
+        _materialPage(
+          valueKey: "createOrder",
+          child: OrderProductList(),
         ),
       ];
     }
