@@ -68,14 +68,35 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
         state.copyWith(editedUser: state.editedUser.copyWith(firstName: name)));
   }
 
+  void firstNamePasted() async {
+    final name = await getTextFromClipboard();
+    firstNameController.text = name;
+    emit(
+        state.copyWith(editedUser: state.editedUser.copyWith(firstName: name)));
+  }
+
   void secondNameChanged(value) {
     final String secondName = value;
     emit(state.copyWith(
         editedUser: state.editedUser.copyWith(secondName: secondName)));
   }
 
+  void secondNamePasted() async {
+    final name = await getTextFromClipboard();
+    secondNameController.text = name;
+    emit(state.copyWith(
+        editedUser: state.editedUser.copyWith(secondName: name)));
+  }
+
   void mobileNumberChanged(value) {
     final String number = value;
+    emit(state.copyWith(
+        editedUser: state.editedUser.copyWith(mobileNumber: number)));
+  }
+
+  void mobileNumberPasted() async {
+    final number = await getTextFromClipboard();
+    mobileNumberController.text = number;
     emit(state.copyWith(
         editedUser: state.editedUser.copyWith(mobileNumber: number)));
   }
@@ -85,8 +106,21 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
     emit(state.copyWith(editedUser: state.editedUser.copyWith(city: city)));
   }
 
+  void cityPasted() async {
+    final city = await getTextFromClipboard();
+    cityController.text = city;
+    emit(state.copyWith(editedUser: state.editedUser.copyWith(city: city)));
+  }
+
   void instagramChanged(value) {
     final String instagram = value;
+    emit(state.copyWith(
+        editedUser: state.editedUser.copyWith(instagram: instagram)));
+  }
+
+  void instagramPasted() async {
+    final instagram = await getTextFromClipboard();
+    instagramController.text = instagram;
     emit(state.copyWith(
         editedUser: state.editedUser.copyWith(instagram: instagram)));
   }
@@ -127,8 +161,7 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
 
   void tryToParseDataFromClipboard() async {
     try {
-      ClipboardData? data = await Clipboard.getData('text/plain');
-      final text = data?.text ?? '';
+      final text = await getTextFromClipboard();
       final numLines = '\n'.allMatches(text).length + 1;
       String firstName = '';
       String secondName = '';
@@ -182,5 +215,11 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
     } catch (e) {
       emitEffect(const DataParseFailed());
     }
+  }
+
+  Future<String> getTextFromClipboard() async {
+    ClipboardData? data = await Clipboard.getData('text/plain');
+    final text = data?.text ?? '';
+    return text;
   }
 }
