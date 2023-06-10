@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/components/custom_button.dart';
-import 'package:moxy/domain/create_order/create_order_cubit.dart';
 import 'package:moxy/domain/order_product_list/order_product_list_state.dart';
 
 import '../../../../components/search_textfield.dart';
@@ -21,11 +20,8 @@ class OrderProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<OrderProductListCubit>(
         create: (BuildContext context) => OrderProductListCubit(
-            OrderProductListState(
-                productsByColor: {},
-                allProducts: [],
-                isLoading: false,
-                errorMessage: '')),
+              OrderProductListState.defaultAllProductsState(),
+            ),
         child: BlocConsumer<OrderProductListCubit, OrderProductListState>(
           listener: (context, state) {
             if (state.errorMessage != '') {
@@ -92,12 +88,10 @@ class OrderProductList extends StatelessWidget {
                       CustomButton(
                         title: 'Choose',
                         onTap: () {
+                          cubit.productsSelected();
                           context.read<HomeRouterCubit>().navigateTo(
                                 const CreateOrderPageState(),
                               );
-                          context
-                              .read<CreateOrderCubit>()
-                              .selectedProducts(cubit.selectedProducts);
                         },
                         buttonWidth: MediaQuery.of(context).size.width - 90,
                       )

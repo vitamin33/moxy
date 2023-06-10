@@ -7,21 +7,25 @@ import '../models/product.dart';
 import 'order_product_list_state.dart';
 
 class OrderProductListCubit extends Cubit<OrderProductListState> {
-  final produtctMapper = locate<ProductMapper>();
-  final productRepository = locate<ProductRepository>();
+  final _produtctMapper = locate<ProductMapper>();
+  final _productRepository = locate<ProductRepository>();
 
   OrderProductListCubit(OrderProductListState orderProductListState)
       : super(OrderProductListState.defaultAllProductsState()) {
     orderProductsList();
   }
 
+  void productsSelected() {
+    _productRepository.updateSelectedProducts(selectedProducts.toList());
+  }
+
   void orderProductsList() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final result = await productRepository.getAllProducts();
+      final result = await _productRepository.getAllProducts();
       result.when(
         (success) {
-          final products = produtctMapper.mapToProductList(success);
+          final products = _produtctMapper.mapToProductList(success);
           final productsByColor = groupProductsByColor(products);
           emit(state.copyWith(
               allProducts: products,
@@ -116,15 +120,13 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
       if (products.isNotEmpty) {
         Dimension? dimen = products.first.dimensions.first;
-        if (dimen != null) {
-          dimen.quantity++;
+        dimen.quantity++;
 
-          Map<String, List<Product>> newProductsByColor =
-              Map.from(state.productsByColor);
-          newProductsByColor.values.toList()[index] = List.from(products);
+        Map<String, List<Product>> newProductsByColor =
+            Map.from(state.productsByColor);
+        newProductsByColor.values.toList()[index] = List.from(products);
 
-          emit(state.copyWith(productsByColor: newProductsByColor));
-        }
+        emit(state.copyWith(productsByColor: newProductsByColor));
       }
     }
   }
@@ -137,15 +139,13 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
       if (products.isNotEmpty) {
         Dimension? dimen = products.first.dimensions.first;
-        if (dimen != null) {
-          dimen.quantity--;
+        dimen.quantity--;
 
-          Map<String, List<Product>> newProductsByColor =
-              Map.from(state.productsByColor);
-          newProductsByColor.values.toList()[index] = List.from(products);
+        Map<String, List<Product>> newProductsByColor =
+            Map.from(state.productsByColor);
+        newProductsByColor.values.toList()[index] = List.from(products);
 
-          emit(state.copyWith(productsByColor: newProductsByColor));
-        }
+        emit(state.copyWith(productsByColor: newProductsByColor));
       }
     }
   }

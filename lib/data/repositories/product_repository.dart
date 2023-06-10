@@ -1,11 +1,21 @@
 import 'dart:async';
 import 'package:moxy/data/dio_client.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
+import 'package:rxdart/subjects.dart';
 
 class ProductRepository {
   static DioClient client = DioClient.instance;
+
+  final _selectedProductSubject = BehaviorSubject<List<Product>>();
+
+  Stream<List<Product>> get selectedProducts => _selectedProductSubject.stream;
+
+  void addToSelectedProductStream(List<Product> items) =>
+      _selectedProductSubject.sink.add(items);
+
   Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
     try {
       final result = (await client.createProduct(
@@ -30,11 +40,7 @@ class ProductRepository {
   Future<Result<List<NetworkProduct>, Exception>> getAllProducts() async {
     try {
       final result = await client.allProducts();
-      if (result != null) {
-        return Result.success(result);
-      } else {
-        return Result.error(Exception('Result is null'));
-      }
+      return Result.success(result);
     } catch (e) {
       return Result.error(Exception('$e'));
     }
@@ -43,11 +49,7 @@ class ProductRepository {
   Future<Result<NetworkProduct, Exception>> getProductById(id) async {
     try {
       final result = await client.getProductById(id);
-      if (result != null) {
-        return Result.success(result);
-      } else {
-        return Result.error(Exception('Result ProductById is null'));
-      }
+      return Result.success(result);
     } catch (e) {
       return Result.error(Exception('$e'));
     }
@@ -76,5 +78,9 @@ class ProductRepository {
       moxyPrint('Repository Error:$e');
       return Result.error(Exception('$e'));
     }
+  }
+
+  void updateSelectedProducts(List<Product> list) {
+    addToSelectedProductStream(list);
   }
 }

@@ -127,7 +127,7 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
       return [
         _materialPage(
           valueKey: "createOrder",
-          child: OrderProductList(),
+          child: const OrderProductList(),
         ),
       ];
     }

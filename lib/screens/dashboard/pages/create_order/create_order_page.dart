@@ -1,7 +1,6 @@
 import 'package:bloc_effects/bloc_effects.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/about.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/delivery.dart';
 import 'package:moxy/screens/dashboard/pages/create_order/pages/payment.dart';
@@ -24,23 +23,8 @@ class CreateOrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> pages = const [About(), Payment(), Delivery(), StatusPage()];
 
-    return BlocProvider<CreateOrderCubit>(
-        create: (BuildContext context) => CreateOrderCubit(
-              CreateOrderState(
-                isLoading: false,
-                isSuccess: false,
-                errorMessage: '',
-                initialPage: 0,
-                activePage: 0,
-                errors: FieldErrors(),
-                deliveryType: '',
-                paymentType: '',
-                novaPostNumber: 0,
-                selectedProducts: [],
-                client: Client.defaultClient(),
-                status: '',
-              ),
-            ),
+    return BlocProvider.value(
+        value: CreateOrderCubit(CreateOrderState.defaultCreateProductState()),
         child: BlocEffectListener<CreateOrderCubit, UiEffect, CreateOrderState>(
           listener: (context, effect, state) {
             if (effect is ValidationFailed) {
@@ -62,66 +46,61 @@ class CreateOrderPage extends StatelessWidget {
               final cubit = context.read<CreateOrderCubit>();
               return Material(
                 color: AppTheme.pink,
-                child:
-                    state.isLoading
-                        ? loader()
-                        : Stack(
+                child: state.isLoading
+                    ? loader()
+                    : Stack(
+                        children: [
+                          Column(
                             children: [
-                              Column(
-                                children: [
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: 550,
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 20),
-                                              child: AppIndicator(
-                                                  activePage: state.activePage,
-                                                  inadicatorName: const [
-                                                    'About',
-                                                    'Payment',
-                                                    'Delivery',
-                                                    'Status'
-                                                  ],
-                                                  pages: const [
-                                                    About(),
-                                                    Payment(),
-                                                    Delivery(),
-                                                    StatusPage()
-                                                  ],
-                                                  controller:
-                                                      cubit.pageController),
-                                            ),
-                                            Expanded(
-                                              child: PageView.builder(
-                                                controller:
-                                                    cubit.pageController,
-                                                onPageChanged: (int page) {
-                                                  cubit.onChangePage(page);
-                                                },
-                                                itemCount: pages.length,
-                                                itemBuilder: (context, index) {
-                                                  return pages[
-                                                      index % pages.length];
-                                                },
-                                              ),
-                                            )
-                                          ],
+                              Expanded(
+                                child: SingleChildScrollView(
+                                  child: SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 550,
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: AppIndicator(
+                                              activePage: state.activePage,
+                                              inadicatorName: const [
+                                                'About',
+                                                'Payment',
+                                                'Delivery',
+                                                'Status'
+                                              ],
+                                              pages: const [
+                                                About(),
+                                                Payment(),
+                                                Delivery(),
+                                                StatusPage()
+                                              ],
+                                              controller: cubit.pageController),
                                         ),
-                                      ),
+                                        Expanded(
+                                          child: PageView.builder(
+                                            controller: cubit.pageController,
+                                            onPageChanged: (int page) {
+                                              cubit.onChangePage(page);
+                                            },
+                                            itemCount: pages.length,
+                                            itemBuilder: (context, index) {
+                                              return pages[
+                                                  index % pages.length];
+                                            },
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
-                                ],
+                                ),
                               ),
-                              positionButton(state, cubit)
                             ],
                           ),
+                          positionButton(state, cubit)
+                        ],
+                      ),
               );
             },
           ),

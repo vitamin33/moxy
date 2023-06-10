@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:moxy/utils/common.dart';
 
@@ -5,7 +7,6 @@ import '../../data/repositories/product_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import '../mappers/product_mapper.dart';
-import '../models/product.dart';
 import '../ui_effect.dart';
 import '../validation_mixin.dart';
 import 'create_order_state.dart';
@@ -14,18 +15,35 @@ import 'package:bloc_effects/bloc_effects.dart';
 class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
-  final productRepository = locate<ProductRepository>();
+  final _productRepository = locate<ProductRepository>();
   final navigationService = locate<NavigationService>();
 
-  CreateOrderCubit(super.initialState);
+  late final StreamSubscription _selectedProductSubscription;
+
+  CreateOrderCubit(super.initialState) {
+    _subscribe();
+  }
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController secondNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
-  void selectedProducts(Set<Product> selectProduct) {
-    emit(state.copyWith(selectedProducts: selectProduct.toList()));
+  void _subscribe() {
+    _selectedProductSubscription = _productRepository.selectedProducts.listen(
+      (items) {
+        emit(state.copyWith(selectedProducts: items));
+      },
+      onError: (error) =>
+          {moxyPrint('Error during selected products listening.')},
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _selectedProductSubscription.cancel();
+    moxyPrint('Cubit closed');
+    return super.close();
   }
 
   void onChangePage(int page) {
@@ -38,15 +56,21 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   void firstNameChanged(value) {
     final String firstName = value;
-    emit(state.copyWith(client:state.client.copyWith(firstName: firstName)));
+    emit(state.copyWith(client: state.client.copyWith(firstName: firstName)));
   }
+
   void secondNameChanged(value) {
     final String secondName = value;
-    emit(state.copyWith(client:state.client.copyWith(secondName: secondName)));
+    emit(state.copyWith(client: state.client.copyWith(secondName: secondName)));
   }
-  void phoneNumberChanged(value) {
-    final int mobileNumber = value;
-    emit(state.copyWith(client:state.client.copyWith(mobileNumber: mobileNumber)));
+
+  void phoneNumberChanged(String value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final int mobileNumber = int.parse(value);
+    emit(state.copyWith(
+        client: state.client.copyWith(mobileNumber: mobileNumber)));
   }
 
   void updateSelectedStatusTitle(String newSelectedStatusTitle) {
