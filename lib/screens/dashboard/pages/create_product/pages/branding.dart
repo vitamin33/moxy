@@ -28,6 +28,27 @@ class Branding extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
             child: Column(
               children: [
+                InkWell(
+                  onTap: () {
+                    cubit.pickImage();
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      SvgPicture.asset(IconPath.plus),
+                      const SizedBox(
+                        width: 2,
+                      ),
+                      const Text(
+                        'Add Product',
+                        style: TextStyle(
+                            color: AppTheme.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ],
+                  ),
+                ),
                 _buildGalleryArea(context, state, cubit),
                 const SizedBox(height: 20),
                 CustomTextField(
@@ -66,7 +87,7 @@ class Branding extends StatelessWidget {
     );
   }
 
-  _buildImage(Product product, int index, cubit) {
+  _buildImage(Product product, int index, CreateProductCubit cubit) {
     final images = product.images;
     if (images.isEmpty) {
       return Container();
