@@ -66,7 +66,7 @@ class NavigationService {
         return navigateToPageRoute(settings, const TransactionsPage());
 
       case createOrderPath:
-        return navigateToPageRoute(settings, CreateOrderPage());
+        return navigateToPageRoute(settings, CreateOrderPage(isEditMode: false));
       case createProductPath:
         return navigateToPageRoute(
             settings, CreateProductPage(isEditMode: false));

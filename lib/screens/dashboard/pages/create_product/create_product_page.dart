@@ -60,7 +60,6 @@ class CreateProductPage extends StatelessWidget {
                   ? succsess(
                       onTap: () {
                         if (state.isEdit) {
-                          // cubit.backToProduct(context);
                           cubit.clearState();
                           context.read<HomeRouterCubit>().navigateTo(
                                 const ProductsPageState(),
@@ -74,56 +73,41 @@ class CreateProductPage extends StatelessWidget {
                           state.isEdit ? 'Back To Product' : 'Create New')
                   : state.isLoading
                       ? loader()
-                      : Stack(
-                          children: [
-                            Column(
+                      :
+                      SingleChildScrollView(
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: SingleChildScrollView(
-                                    child: SizedBox(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 550,
-                                      child: Column(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            child: AppIndicator(
-                                                activePage: state.activePage,
-                                                inadicatorName: const [
-                                                  'About',
-                                                  'Sale'
-                                                ],
-                                                pages: const [
-                                                  ProductDetails(),
-                                                  Branding()
-                                                ],
-                                                controller:
-                                                    cubit.pageController),
-                                          ),
-                                          const SizedBox(height: 30),
-                                          Expanded(
-                                            child: PageView.builder(
-                                              controller: cubit.pageController,
-                                              onPageChanged: (int page) {
-                                                cubit.onChangePage(page);
-                                              },
-                                              itemCount: pages.length,
-                                              itemBuilder: (context, index) {
-                                                return pages[
-                                                    index % pages.length];
-                                              },
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: AppIndicator(
+                                      activePage: state.activePage,
+                                      inadicatorName: const ['About', 'Sale'],
+                                      pages: const [
+                                        ProductDetails(),
+                                        Branding()
+                                      ],
+                                      controller: cubit.pageController),
                                 ),
+                                const SizedBox(height: 30),
+                                Expanded(
+                                  child: PageView.builder(
+                                    controller: cubit.pageController,
+                                    onPageChanged: (int page) {
+                                      cubit.onChangePage(page);
+                                    },
+                                    itemCount: pages.length,
+                                    itemBuilder: (context, index) {
+                                      return pages[index % pages.length];
+                                    },
+                                  ),
+                                )
                               ],
                             ),
-                            positionButton(state, cubit)
-                          ],
+                          ),
                         ),
             );
           },
@@ -133,32 +117,27 @@ class CreateProductPage extends StatelessWidget {
   }
 }
 
-Widget positionButton(CreateProductState state, CreateProductCubit cubit) {
-  return Positioned(
-    height: 60,
-    bottom: 40,
-    left: 0,
-    right: 0,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        state.activePage == 1
-            ? CustomButton(
-                title: 'Previus',
-                onTap: cubit.moveToPreviustPage,
-                buttonWidth: 150,
-                outline: true,
-              )
-            : Container(
-                width: 150,
-              ),
-        CustomButton(
-          title: state.activePage != 1 ? 'Next' : 'Add',
-          onTap: cubit.moveToNextPage,
-          buttonWidth: 150,
-        )
-      ],
-    ),
+Widget positionProductButton(
+    CreateProductState state, CreateProductCubit cubit) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      state.activePage != 0
+          ? CustomButton(
+              title: 'Previus',
+              onTap: cubit.moveToPreviustPage,
+              buttonWidth: 150,
+              outline: true,
+            )
+          : Container(
+              width: 150,
+            ),
+      CustomButton(
+        title: state.activePage != 1 ? 'Next' : 'Add',
+        onTap: cubit.moveToNextPage,
+        buttonWidth: 150,
+      )
+    ],
   );
 }

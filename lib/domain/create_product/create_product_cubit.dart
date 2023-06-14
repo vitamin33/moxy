@@ -108,8 +108,6 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void backToProduct(context) {
     clearState();
-    // navigationService.navigatePushReplaceName(productsPath); //doesnt work
-
     context.read<HomeRouterCubit>().navigateTo(
           const ProductsPageState(),
         );
@@ -125,6 +123,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void descriptionChanged(value) {
+    List<String> lines = value.split('\n');
+    if (lines.length > 6) {
+      lines.removeRange(6, lines.length);
+      descriptionController.value = TextEditingValue(
+        text: lines.join('\n'),
+        selection: TextSelection.collapsed(offset: lines.join('\n').length),
+      );
+    }
     final String description = value;
     emit(state.copyWith(
         product: state.product.copyWith(description: description)));

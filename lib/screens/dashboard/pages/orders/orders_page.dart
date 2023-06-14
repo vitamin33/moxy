@@ -40,7 +40,7 @@ class OrdersPage extends StatelessWidget {
                                 margin: const EdgeInsets.all(3.0),
                                 child: ListTile(
                                   leading: _buildImage(order.orderedItems),
-                                  title: Text(order.deliveryType),
+                                  title: Text('${order.deliveryType}'),
                                   trailing: const Icon(Icons.arrow_forward_ios),
                                 ),
                               );
