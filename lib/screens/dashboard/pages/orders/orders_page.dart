@@ -40,7 +40,7 @@ class OrdersPage extends StatelessWidget {
                                   width: 50,
                                   height: 50,
                                 ),
-                                title: Text(order.deliveryType),
+                                title: Text('${order.deliveryType}'),
                                 trailing: const Icon(Icons.arrow_forward_ios),
                               ),
                             );

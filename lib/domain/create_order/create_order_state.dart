@@ -1,18 +1,21 @@
 import 'package:moxy/domain/models/product.dart';
 
+import '../../constant/order_constants.dart';
 import '../copyable.dart';
 import '../models/order.dart';
 import '../validation_mixin.dart';
 
 class CreateOrderState implements Copyable<CreateOrderState> {
   bool isLoading;
+  bool isEdit;
   bool isSuccess;
   String errorMessage;
   int initialPage;
   int activePage;
-  String deliveryType;
-  String paymentType;
+  DeliveryType deliveryType;
+  PaymentType paymentType;
   int novaPostNumber;
+  int productListPrice;
   List<Product> selectedProducts;
   String status;
   Client client;
@@ -22,6 +25,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
 
   CreateOrderState({
     required this.isLoading,
+    required this.isEdit,
     required this.isSuccess,
     required this.errorMessage,
     required this.initialPage,
@@ -30,6 +34,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.deliveryType,
     required this.paymentType,
     required this.novaPostNumber,
+    required this.productListPrice,
     required this.selectedProducts,
     required this.client,
     required this.status,
@@ -38,14 +43,16 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   static CreateOrderState defaultCreateProductState() {
     return CreateOrderState(
         isLoading: false,
+        isEdit: false,
         isSuccess: false,
         errorMessage: '',
         initialPage: 0,
         activePage: 0,
         errors: FieldErrors(),
-        deliveryType: '',
-        paymentType: '',
+        deliveryType: DeliveryType.NovaPost,
+        paymentType: PaymentType.FullPayment,
         novaPostNumber: 0,
+        productListPrice: 0,
         selectedProducts: [],
         client: Client.defaultClient(),
         status: '');
@@ -62,14 +69,16 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       List<String>? images,
       String? editProductId,
       FieldErrors? errors,
-      String? deliveryType,
-      String? paymentType,
+      DeliveryType? deliveryType,
+      PaymentType? paymentType,
       int? novaPostNumber,
+      int? productListPrice,
       List<Product>? selectedProducts,
       Client? client,
       String? status}) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
+      isEdit: isEdit ?? this.isEdit,
       isSuccess: isSuccess ?? this.isSuccess,
       errorMessage: errorMessage ?? this.errorMessage,
       initialPage: initialPage ?? this.initialPage,
@@ -78,6 +87,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
       novaPostNumber: novaPostNumber ?? this.novaPostNumber,
+      productListPrice: productListPrice ?? this.productListPrice,
       selectedProducts: selectedProducts ?? this.selectedProducts,
       client: client ?? this.client,
       status: status ?? this.status,
@@ -86,17 +96,14 @@ class CreateOrderState implements Copyable<CreateOrderState> {
 }
 
 class FieldErrors {
-  FieldError? productName;
-  FieldError? productDescription;
-  FieldError? productIdName;
-  FieldError? salePrice;
-  FieldError? costPrice;
+  FieldError? firstName;
+  FieldError? secondName;
+  FieldError? phoneNumber;
+
   FieldErrors({
-    this.productName,
-    this.productDescription,
-    this.productIdName,
-    this.salePrice,
-    this.costPrice,
+    this.firstName,
+    this.secondName,
+    this.phoneNumber,
   });
 
   static FieldErrors noErrors() {
@@ -106,20 +113,14 @@ class FieldErrors {
   String formErrorMessageFields() {
     var buffer = StringBuffer();
     buffer.write('Validation errors: ');
-    if (productName != null) {
-      buffer.write('productName ');
+    if (firstName != null) {
+      buffer.write('firstName ');
     }
-    if (productDescription != null) {
-      buffer.write('productDescription ');
+    if (secondName != null) {
+      buffer.write('secondName ');
     }
-    if (productIdName != null) {
-      buffer.write('productIdName ');
-    }
-    if (costPrice != null) {
-      buffer.write('costPrice ');
-    }
-    if (salePrice != null) {
-      buffer.write('salePrice ');
+    if (phoneNumber != null) {
+      buffer.write('phoneNumber ');
     }
     buffer.write('.');
     return buffer.toString();

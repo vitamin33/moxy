@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/components/custom_button.dart';
+import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/order_product_list/order_product_list_state.dart';
-
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../constant/icon_path.dart';
@@ -57,6 +57,11 @@ class OrderProductList extends StatelessWidget {
                                       (BuildContext context, int index) {
                                     final color = state.productsByColor.keys
                                         .elementAt(index);
+                                    final Dimension colorAvatar =
+                                        allColorsDimens.firstWhere((e) =>
+                                            e.color ==
+                                            state.productsByColor[color]?.first
+                                                .dimensions.first.color);
                                     final products =
                                         state.productsByColor[color]!;
                                     final isSelected =
@@ -79,8 +84,14 @@ class OrderProductList extends StatelessWidget {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                             ),
-                                            child: _listTile(products, color,
-                                                isSelected, cubit, index)),
+                                            child: _listTile(
+                                                state,
+                                                products,
+                                                color,
+                                                isSelected,
+                                                cubit,
+                                                index,
+                                                colorAvatar)),
                                       ),
                                     );
                                   },
@@ -124,7 +135,17 @@ Widget _buildProductImage(Product product) {
   }
 }
 
-Widget _listTile(products, color, isSelected, cubit, index) {
+String _generateImagePath(Dimension dimen) {
+  if (dimen.image != null) {
+    return dimen.image!;
+  } else {
+    return 'assets/images/logo.png';
+  }
+}
+
+Widget _listTile(
+    state, products, color, isSelected,OrderProductListCubit cubit, index, colorAvatar) {
+  final colorAvatarImage = _generateImagePath(colorAvatar);
   return ListTile(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
@@ -136,7 +157,7 @@ Widget _listTile(products, color, isSelected, cubit, index) {
         ClipOval(
           child: _buildProductImage(products.first),
         ),
-        const Positioned(
+        Positioned(
           top: 22.0,
           left: 25.0,
           child: CircleAvatar(
@@ -144,19 +165,19 @@ Widget _listTile(products, color, isSelected, cubit, index) {
             backgroundColor: AppTheme.white,
             child: CircleAvatar(
               radius: 10,
-              backgroundColor: AppTheme.pinkDark,
+              backgroundImage: AssetImage(colorAvatarImage),
             ),
           ),
         ),
       ],
     ),
     title: Text('${products.first.name}'),
-    subtitle: Text('${getSecondWord(color)} '),
+    subtitle: Text('${products.first.salePrice} '),
     trailing: isSelected
         ? SizedBox(
             width: 110,
             child: Padding(
-              padding: const EdgeInsets.only(right: 25.0),
+              padding: const EdgeInsets.only(right: 10.0),
               child: Row(
                 children: [
                   GestureDetector(
@@ -178,7 +199,7 @@ Widget _listTile(products, color, isSelected, cubit, index) {
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    '${products.first.dimensions.first.quantity}',
+                    '${products.first.dimensions.first.quantity}/$color',
                     style: const TextStyle(fontSize: 13),
                   ),
                   const SizedBox(width: 5),
@@ -203,15 +224,6 @@ Widget _listTile(products, color, isSelected, cubit, index) {
               ),
             ),
           )
-        : SvgPicture.asset(IconPath.backArrow),
+        : SvgPicture.asset(IconPath.forwardArrow),
   );
-}
-
-String getSecondWord(String sentence) {
-  List<String> words = sentence.split(' ');
-
-  if (words.length >= 2) {
-    return words[1];
-  }
-  return '';
 }

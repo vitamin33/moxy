@@ -112,12 +112,12 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
       ];
     }
     if (_routerCubit.state is CreateOrderPageState) {
-      extraPageContent =
-          (_routerCubit.state as CreateOrderPageState).extraPageContent;
+      final state = _routerCubit.state as CreateOrderPageState;
+      bool? isEditMode = state.isEditMode ?? false;
       return [
         _materialPage(
           valueKey: "createOrder",
-          child: CreateOrderPage(),
+          child: CreateOrderPage( isEditMode: isEditMode),
         ),
       ];
     }

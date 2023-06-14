@@ -10,7 +10,6 @@ class ProductRepository {
   static DioClient client = DioClient.instance;
 
   final _selectedProductSubject = BehaviorSubject<List<Product>>();
-
   Stream<List<Product>> get selectedProducts => _selectedProductSubject.stream;
 
   void addToSelectedProductStream(List<Product> items) =>

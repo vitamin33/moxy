@@ -73,13 +73,23 @@ class DashboardViewMobile extends StatelessWidget {
           ),
           leading: Builder(
             builder: (BuildContext context) {
-              return IconButton(
-                icon: SvgPicture.asset(IconPath.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: 'Open side bar',
-              );
+              if (state.runtimeType == OrderProductListPageState) {
+                return IconButton(
+                    onPressed: () {
+                      context.read<HomeRouterCubit>().navigateTo(
+                            const CreateOrderPageState(),
+                          );
+                    },
+                    icon: SvgPicture.asset(IconPath.backArrow));
+              } else {
+                return IconButton(
+                  icon: SvgPicture.asset(IconPath.menu),
+                  onPressed: () {
+                    Scaffold.of(context).openDrawer();
+                  },
+                  tooltip: 'Open side bar',
+                );
+              }
             },
           ),
         ),
@@ -118,6 +128,8 @@ class DashboardViewMobile extends StatelessWidget {
         }
       case CreateOrderPageState:
         return 'Create order';
+      case OrderProductListPageState:
+        return 'Order Product List';
       case CreateUserPageState:
         return 'Create user';
       case TransactionsPageState:

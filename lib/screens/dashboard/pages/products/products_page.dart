@@ -73,7 +73,7 @@ class ProductsPage extends StatelessWidget {
                                   title: Text(product.name),
                                   subtitle: Text('${product.salePrice} UAH'),
                                   trailing:
-                                      SvgPicture.asset(IconPath.backArrow)),
+                                      SvgPicture.asset(IconPath.forwardArrow)),
                             );
                           }),
                 ),

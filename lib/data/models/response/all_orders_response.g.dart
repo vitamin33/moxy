@@ -21,9 +21,9 @@ Map<String, dynamic> _$AllOrdersResponseToJson(AllOrdersResponse instance) =>
 NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
       id: json['_id'] as String,
       ukrPostNumber: json['ukrPostNumber'] as int,
-      deliveryType: json['deliveryType'] as String,
+      deliveryType: $enumDecode(_$DeliveryTypeEnumMap, json['deliveryType']),
       status: json['status'] as String,
-      paymentType: json['paymentType'] as String,
+      paymentType: $enumDecode(_$PaymentTypeEnumMap, json['paymentType']),
       client: NetworkClient.fromJson(json['client'] as Map<String, dynamic>),
       products: (json['products'] as List<dynamic>)
           .map((e) => NetworkProduct.fromJson(e as Map<String, dynamic>))
@@ -36,14 +36,24 @@ Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'ukrPostNumber': instance.ukrPostNumber,
-      'deliveryType': instance.deliveryType,
+      'deliveryType': _$DeliveryTypeEnumMap[instance.deliveryType]!,
       'status': instance.status,
-      'paymentType': instance.paymentType,
+      'paymentType': _$PaymentTypeEnumMap[instance.paymentType]!,
       'client': instance.client,
       'products': instance.products,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
     };
+
+const _$DeliveryTypeEnumMap = {
+  DeliveryType.NovaPost: 'NovaPost',
+  DeliveryType.UkrPost: 'UkrPost',
+};
+
+const _$PaymentTypeEnumMap = {
+  PaymentType.CashAdvance: 'CashAdvance',
+  PaymentType.FullPayment: 'FullPayment',
+};
 
 NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>
     NetworkClient(

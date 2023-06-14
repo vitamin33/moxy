@@ -17,14 +17,21 @@ import '../../../../domain/ui_effect.dart';
 import '../../../../theme/app_theme.dart';
 
 class CreateOrderPage extends StatelessWidget {
-  CreateOrderPage();
+  // const CreateOrderPage();
+  bool isEditMode;
+  // String? editProductId;
+  CreateOrderPage({
+    Key? key,
+    required this.isEditMode,
+    // this.editProductId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = const [About(), Payment(), Delivery(), StatusPage()];
 
     return BlocProvider.value(
-        value: CreateOrderCubit(CreateOrderState.defaultCreateProductState()),
+        value: CreateOrderCubit(isEditMode: isEditMode),
         child: BlocEffectListener<CreateOrderCubit, UiEffect, CreateOrderState>(
           listener: (context, effect, state) {
             if (effect is ValidationFailed) {
@@ -48,58 +55,48 @@ class CreateOrderPage extends StatelessWidget {
                 color: AppTheme.pink,
                 child: state.isLoading
                     ? loader()
-                    : Stack(
-                        children: [
-                          Column(
+                    :
+                    SingleChildScrollView(
+                        child:
+                            SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Column(
                             children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: AppIndicator(
+                                    activePage: state.activePage,
+                                    inadicatorName: const [
+                                      'About',
+                                      'Payment',
+                                      'Delivery',
+                                      'Status'
+                                    ],
+                                    pages: const [
+                                      About(),
+                                      Payment(),
+                                      Delivery(),
+                                      StatusPage()
+                                    ],
+                                    controller: cubit.pageController),
+                              ),
                               Expanded(
-                                child: SingleChildScrollView(
-                                  child: SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 550,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: AppIndicator(
-                                              activePage: state.activePage,
-                                              inadicatorName: const [
-                                                'About',
-                                                'Payment',
-                                                'Delivery',
-                                                'Status'
-                                              ],
-                                              pages: const [
-                                                About(),
-                                                Payment(),
-                                                Delivery(),
-                                                StatusPage()
-                                              ],
-                                              controller: cubit.pageController),
-                                        ),
-                                        Expanded(
-                                          child: PageView.builder(
-                                            controller: cubit.pageController,
-                                            onPageChanged: (int page) {
-                                              cubit.onChangePage(page);
-                                            },
-                                            itemCount: pages.length,
-                                            itemBuilder: (context, index) {
-                                              return pages[
-                                                  index % pages.length];
-                                            },
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                child: PageView.builder(
+                                  controller: cubit.pageController,
+                                  onPageChanged: (int page) {
+                                    cubit.onChangePage(page);
+                                  },
+                                  itemCount: pages.length,
+                                  itemBuilder: (context, index) {
+                                    return pages[index % pages.length];
+                                  },
                                 ),
                               ),
                             ],
                           ),
-                          positionButton(state, cubit)
-                        ],
+                        ),
                       ),
               );
             },
@@ -108,32 +105,26 @@ class CreateOrderPage extends StatelessWidget {
   }
 }
 
-Widget positionButton(CreateOrderState state, CreateOrderCubit cubit) {
-  return Positioned(
-    height: 60,
-    bottom: 40,
-    left: 0,
-    right: 0,
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        state.activePage != 0
-            ? CustomButton(
-                title: 'Previus',
-                onTap: cubit.moveToPreviustPage,
-                buttonWidth: 150,
-                outline: true,
-              )
-            : Container(
-                width: 150,
-              ),
-        CustomButton(
-          title: state.activePage != 3 ? 'Next' : 'Add',
-          onTap: cubit.moveToNextPage,
-          buttonWidth: 150,
-        )
-      ],
-    ),
+Widget positionOrderButton(CreateOrderState state, CreateOrderCubit cubit) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      state.activePage != 0
+          ? CustomButton(
+              title: 'Previus',
+              onTap: cubit.moveToPreviustPage,
+              buttonWidth: 150,
+              outline: true,
+            )
+          : Container(
+              width: 150,
+            ),
+      CustomButton(
+        title: state.activePage != 3 ? 'Next' : 'Add',
+        onTap: cubit.moveToNextPage,
+        buttonWidth: 150,
+      )
+    ],
   );
 }

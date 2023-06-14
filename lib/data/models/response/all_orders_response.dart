@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 
 part 'all_orders_response.g.dart';
@@ -20,9 +21,9 @@ class NetworkOrder {
   @JsonKey(name: '_id')
   String id;
   int ukrPostNumber;
-  String deliveryType;
+  DeliveryType deliveryType;
   String status;
-  String paymentType;
+  PaymentType paymentType;
   NetworkClient client;
   List<NetworkProduct> products;
   String createdAt;

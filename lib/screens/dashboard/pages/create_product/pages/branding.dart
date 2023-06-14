@@ -11,6 +11,7 @@ import 'package:moxy/theme/app_theme.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
+import '../create_product_page.dart';
 
 class Branding extends StatelessWidget {
   const Branding({Key? key}) : super(key: key);
@@ -54,8 +55,9 @@ class Branding extends StatelessWidget {
                 ),
                 _buildSelectedDimensWidget(state, cubit),
                 const SizedBox(
-                  height: 100,
+                  height: 20,
                 ),
+                positionProductButton(state, cubit)
               ],
             ),
           ),

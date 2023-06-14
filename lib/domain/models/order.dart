@@ -1,12 +1,13 @@
+import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/product.dart';
 
 class Order implements Copyable<Order> {
   String? id;
   int ukrPostNumber;
-  String deliveryType;
+  DeliveryType deliveryType;
   String status;
-  String paymentType;
+  PaymentType paymentType;
   Client client;
   List<Product> products;
   String createdAt;
@@ -28,9 +29,9 @@ class Order implements Copyable<Order> {
     return Order(
         id: '',
         ukrPostNumber: 0,
-        deliveryType: '',
+        deliveryType: DeliveryType.NovaPost,
         status: '',
-        paymentType: '',
+        paymentType: PaymentType.CashAdvance,
         client: Client.defaultClient(),
         products: [],
         createdAt: '',
@@ -41,9 +42,9 @@ class Order implements Copyable<Order> {
   Order copyWith({
     String? id,
     int? ukrPostNumber,
-    String? deliveryType,
+    DeliveryType? deliveryType,
     String? status,
-    String? paymentType,
+    PaymentType? paymentType,
     Client? client,
     List<Product>? products,
     String? createdAt,
@@ -63,12 +64,13 @@ class Order implements Copyable<Order> {
 }
 
 class Client {
-  int? mobileNumber;
-  String? firstName;
-  String? secondName;
-  String? city;
+  int mobileNumber;
+  String firstName;
+  String secondName;
+  String city;
 
-  Client({this.city, this.firstName, this.mobileNumber, this.secondName});
+  Client({
+    required this.city,required this.firstName,required this.mobileNumber,required this.secondName});
 
   static Client defaultClient() {
     return Client(

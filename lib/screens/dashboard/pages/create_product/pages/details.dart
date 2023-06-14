@@ -5,6 +5,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
+import '../create_product_page.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -14,7 +15,6 @@ class ProductDetails extends StatelessWidget {
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
-
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
           child: Column(children: [
@@ -27,13 +27,14 @@ class ProductDetails extends StatelessWidget {
               state: state.errors.productName,
             ),
             const SizedBox(height: 30),
-            CustomTextField(
-              title: 'Description',
-              controller: cubit.descriptionController,
-              onChanged: cubit.descriptionChanged,
-              validation: true,
-              state: state.errors.productDescription,
-            ),
+              CustomTextField(
+                maxLines: 6,
+                title: 'Description',
+                controller: cubit.descriptionController,
+                onChanged: cubit.descriptionChanged,
+                validation: true,
+                state: state.errors.productDescription,
+              ),
             const SizedBox(height: 30),
             CustomTextField(
               title: 'IdName',
@@ -55,14 +56,14 @@ class ProductDetails extends StatelessWidget {
                       itemCount: state.allDimensions.length,
                       itemBuilder: (context, index) {
                         final dimen = state.allDimensions[index];
-
                         return _buildColorQuantityRow(dimen, cubit, index);
                       },
                     ),
                   ),
                 ]),
               ),
-            )
+            ),
+            positionProductButton(state, cubit)
           ]),
         );
       },

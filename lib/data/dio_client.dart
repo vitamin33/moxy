@@ -14,6 +14,8 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constant/api_path.dart';
+import '../constant/order_constants.dart';
+import 'models/request/create_order_request.dart';
 import 'models/request/login_request.dart';
 import 'models/request/create_product_request.dart';
 import 'models/request/user_request.dart';
@@ -21,9 +23,6 @@ import 'models/response/all_orders_response.dart';
 import 'models/response/login_response.dart';
 
 class DioClient {
-  //static const String baseUrl = 'http://10.0.2.2:3000';
-  //static const String baseUrl = 'http://localhost:3000';
-
   static final DioClient instance = DioClient._private();
   late String baseUrl;
 
@@ -199,6 +198,37 @@ class DioClient {
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
+  }
+
+  Future<CreateOrder?> createOrder(
+      DeliveryType deliveryType,
+      PaymentType paymentType,
+      int novaPostNumber,
+      List<NetworkProduct> selectedProducts,
+      NetworkClient client,
+      String status,
+      token) async {
+    final CreateOrder? result;
+    FormData formData = FormData.fromMap({
+      'deliveryType': deliveryType.name,
+      'paymentType': paymentType.name,
+      'novaPostNumber': novaPostNumber,
+      'products': selectedProducts,
+      'client': client,
+      'status': status
+    });
+    try {
+      _dio.options.headers["Authorization"] = "Bearer $token";
+      Response response = await _dio.post(
+        createOrdersUrl,
+        data: formData,
+      );
+      result = CreateOrder.fromJson(response.data);
+    } catch (e) {
+      moxyPrint('Request product :$e');
+      return null;
+    }
+    return result;
   }
 
   // USERS

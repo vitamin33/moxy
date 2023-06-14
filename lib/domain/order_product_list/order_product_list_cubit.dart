@@ -12,7 +12,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
   OrderProductListCubit(OrderProductListState orderProductListState)
       : super(OrderProductListState.defaultAllProductsState()) {
-    orderProductsList();
+    state.isEdit ? moxyPrint('habadga') : orderProductsList();
   }
 
   void productsSelected() {
@@ -56,21 +56,28 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
       for (final dimension in product.dimensions) {
         final color = dimension.color;
-        final quantity = dimension.quantity;
-        final key = '$keyPrefix$color $quantity';
+        final quantityKey = dimension.quantity;
+        const quantity = 1;
+        final key = '$quantityKey';
 
         if (!productsByColor.containsKey(key)) {
           productsByColor[key] = [];
         }
 
+        final newDimension = Dimension(
+          color: color,
+          quantity: quantity,
+        );
+
         final newProduct = Product(
-            name: productName,
-            description: productDescription,
-            costPrice: productCostPrice,
-            salePrice: productSalePrice,
-            idName: productIdName,
-            images: productImages,
-            dimensions: [dimension]);
+          name: productName,
+          description: productDescription,
+          costPrice: productCostPrice,
+          salePrice: productSalePrice,
+          idName: productIdName,
+          images: productImages,
+          dimensions: [newDimension],
+        );
 
         productsByColor[key]?.add(newProduct);
       }
@@ -117,15 +124,12 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
     if (index >= 0 && index < productsList.length) {
       List<Product> products = productsList[index];
-
       if (products.isNotEmpty) {
         Dimension? dimen = products.first.dimensions.first;
         dimen.quantity++;
-
         Map<String, List<Product>> newProductsByColor =
             Map.from(state.productsByColor);
         newProductsByColor.values.toList()[index] = List.from(products);
-
         emit(state.copyWith(productsByColor: newProductsByColor));
       }
     }
@@ -136,15 +140,12 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
     if (index >= 0 && index < productsList.length) {
       List<Product> products = productsList[index];
-
       if (products.isNotEmpty) {
         Dimension? dimen = products.first.dimensions.first;
         dimen.quantity--;
-
         Map<String, List<Product>> newProductsByColor =
             Map.from(state.productsByColor);
         newProductsByColor.values.toList()[index] = List.from(products);
-
         emit(state.copyWith(productsByColor: newProductsByColor));
       }
     }

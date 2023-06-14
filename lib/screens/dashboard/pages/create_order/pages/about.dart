@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../../domain/create_order/create_order_state.dart';
+import '../../../../../domain/models/product.dart';
 import '../../../../../navigation/home_router_cubit.dart';
 import '../../../../../theme/app_theme.dart';
+import '../create_order_page.dart';
 
 class About extends StatelessWidget {
   const About({super.key});
@@ -24,11 +25,12 @@ class About extends StatelessWidget {
         child: Column(
           children: [
             CustomTextField(
-              title: ' First Name',
+              title: 'First Name',
               maxLines: 1,
               controller: cubit.firstNameController,
               onChanged: cubit.firstNameChanged,
               validation: true,
+              state: state.errors.firstName,
             ),
             const SizedBox(
               height: 10,
@@ -39,6 +41,7 @@ class About extends StatelessWidget {
               controller: cubit.secondNameController,
               onChanged: cubit.secondNameChanged,
               validation: true,
+              state: state.errors.secondName,
             ),
             const SizedBox(
               height: 10,
@@ -47,8 +50,8 @@ class About extends StatelessWidget {
               title: 'Phone Number',
               controller: cubit.phoneNumberController,
               onChanged: cubit.phoneNumberChanged,
-              state: state.errors.costPrice,
               maxLines: 1,
+              state: state.errors.phoneNumber,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(16),
@@ -60,14 +63,58 @@ class About extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'List of products',
-                  textAlign: TextAlign.start,
-                ),
+                state.selectedProducts.isNotEmpty
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'List Price:${state.productListPrice}',
+                            textAlign: TextAlign.start,
+                            style: const TextStyle(
+                                color: AppTheme.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              context.read<HomeRouterCubit>().navigateTo(
+                                    const OrderProductListPageState(),
+                                  );
+                            },
+                            child: Row(
+                              children: [
+                                SvgPicture.asset(IconPath.plus),
+                                const SizedBox(
+                                  width: 2,
+                                ),
+                                const Text(
+                                  'Add Product',
+                                  style: TextStyle(
+                                      color: AppTheme.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
+                    : const Text(
+                        'List of products',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: AppTheme.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500),
+                      ),
                 const SizedBox(
                   height: 10,
                 ),
-                _buildGalleryArea(context, state, cubit)
+                _buildGalleryArea(context, state, cubit),
+                const SizedBox(
+                  height: 20,
+                ),
+                positionOrderButton(state, cubit)
               ],
             ),
           ],
@@ -86,23 +133,33 @@ Widget _buildGalleryArea(
       children: [
         state.selectedProducts.isNotEmpty
             ? Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Flexible(
                     child: SizedBox(
-                      height: 120,
+                      height: 125,
                       width: double.maxFinite,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: state.selectedProducts.length,
                         itemBuilder: (context, index) {
                           return Padding(
-                            padding: const EdgeInsets.all(2.0),
+                            padding: const EdgeInsets.all(5.0),
                             child: Container(
-                                color: AppTheme.blackLight,
-                                child: Center(
-                                    child: Text(
-                                        state.selectedProducts[index].name))),
+                                color: AppTheme.white,
+                                child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      ClipOval(
+                                          child: _buildProductImage(
+                                              state.selectedProducts[index])),
+                                      Text(state.selectedProducts[index].name),
+                                      Text(state.selectedProducts[index]
+                                          .dimensions.first.color),
+                                      Text(
+                                          ' quantity:${state.selectedProducts[index].dimensions.first.quantity}'),
+                                    ])),
                           );
                         },
                       ),
@@ -148,4 +205,23 @@ Widget _buildGalleryArea(
       ],
     );
   });
+}
+
+Widget _buildProductImage(Product product) {
+  if (product.images.isNotEmpty) {
+    return FadeInImage.assetNetwork(
+      placeholder: 'assets/images/placeholder.jpg',
+      image: product.images.first.imagePath,
+      width: 50,
+      height: 50,
+      fit: BoxFit.cover,
+    );
+  } else {
+    return Image.asset(
+      'assets/images/placeholder.jpg',
+      width: 50,
+      height: 50,
+      fit: BoxFit.cover,
+    );
+  }
 }

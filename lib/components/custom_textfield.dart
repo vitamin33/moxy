@@ -11,6 +11,8 @@ class CustomTextField extends StatelessWidget {
   final List<String> autofillHints;
   final int? maxLines;
   final bool validation;
+  final bool expands;
+  final ScrollPhysics? scrollPhysics;
   final FieldError? state;
   final Color? borderColor;
   const CustomTextField(
@@ -19,9 +21,11 @@ class CustomTextField extends StatelessWidget {
       this.controller,
       this.onChanged,
       this.maxLines,
+      this.scrollPhysics,
       this.inputFormatters,
       this.autofillHints = const [],
       this.validation = false,
+      this.expands = false,
       this.state,
       this.borderColor})
       : super(key: key);
@@ -45,6 +49,9 @@ class CustomTextField extends StatelessWidget {
                 color: AppTheme.white,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             child: TextField(
+              minLines: 1,
+              // expands: expands,
+              // scrollPhysics: ClampingScrollPhysics(),
               onChanged: onChanged,
               controller: controller,
               maxLines: maxLines,
