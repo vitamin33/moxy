@@ -1,5 +1,3 @@
-import 'package:moxy/domain/models/product.dart';
-
 import '../../constant/order_constants.dart';
 import '../copyable.dart';
 import '../models/order.dart';
@@ -16,7 +14,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   PaymentType paymentType;
   int novaPostNumber;
   int productListPrice;
-  List<Product> selectedProducts;
+  List<OrderedItem> selectedProducts;
   String status;
   Client client;
 
@@ -49,8 +47,8 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         initialPage: 0,
         activePage: 0,
         errors: FieldErrors(),
-        deliveryType: DeliveryType.NovaPost,
-        paymentType: PaymentType.FullPayment,
+        deliveryType: DeliveryType.novaPost,
+        paymentType: PaymentType.fullPayment,
         novaPostNumber: 0,
         productListPrice: 0,
         selectedProducts: [],
@@ -73,7 +71,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       PaymentType? paymentType,
       int? novaPostNumber,
       int? productListPrice,
-      List<Product>? selectedProducts,
+      List<OrderedItem>? selectedProducts,
       Client? client,
       String? status}) {
     return CreateOrderState(

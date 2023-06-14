@@ -23,10 +23,11 @@ NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
       ukrPostNumber: json['ukrPostNumber'] as int?,
       deliveryType: json['deliveryType'] as String,
       status: json['status'] as String,
-      paymentType: $enumDecode(_$PaymentTypeEnumMap, json['paymentType']),
+      paymentType: json['paymentType'] as String,
       client: NetworkClient.fromJson(json['client'] as Map<String, dynamic>),
       orderedItems: (json['orderedItems'] as List<dynamic>)
-          .map((e) => NetworkOrderedItem.fromJson(e as Map<String, dynamic>))
+          .map((e) =>
+              NetworkOrderedItemResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
@@ -37,24 +38,14 @@ Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
       '_id': instance.id,
       'ukrPostNumber': instance.ukrPostNumber,
       'novaPostNumber': instance.novaPostNumber,
-      'deliveryType': _$DeliveryTypeEnumMap[instance.deliveryType]!,
+      'deliveryType': instance.deliveryType,
       'status': instance.status,
-      'paymentType': _$PaymentTypeEnumMap[instance.paymentType]!,
+      'paymentType': instance.paymentType,
       'client': instance.client,
       'orderedItems': instance.orderedItems,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
     };
-
-const _$DeliveryTypeEnumMap = {
-  DeliveryType.NovaPost: 'NovaPost',
-  DeliveryType.UkrPost: 'UkrPost',
-};
-
-const _$PaymentTypeEnumMap = {
-  PaymentType.CashAdvance: 'CashAdvance',
-  PaymentType.FullPayment: 'FullPayment',
-};
 
 NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>
     NetworkClient(
@@ -72,18 +63,22 @@ Map<String, dynamic> _$NetworkClientToJson(NetworkClient instance) =>
       'city': instance.city,
     };
 
-NetworkOrderedItem _$NetworkOrderedItemFromJson(Map<String, dynamic> json) =>
-    NetworkOrderedItem(
+NetworkOrderedItemResponse _$NetworkOrderedItemResponseFromJson(
+        Map<String, dynamic> json) =>
+    NetworkOrderedItemResponse(
       json['product'] as String,
+      json['productName'] as String,
       (json['dimensions'] as List<dynamic>)
           .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['imageUrl'] as String,
     );
 
-Map<String, dynamic> _$NetworkOrderedItemToJson(NetworkOrderedItem instance) =>
+Map<String, dynamic> _$NetworkOrderedItemResponseToJson(
+        NetworkOrderedItemResponse instance) =>
     <String, dynamic>{
       'product': instance.product,
+      'productName': instance.productName,
       'imageUrl': instance.imageUrl,
       'dimensions': instance.dimensions,
     };

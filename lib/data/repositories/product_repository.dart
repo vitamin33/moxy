@@ -8,8 +8,6 @@ import 'package:rxdart/subjects.dart';
 
 import '../../services/get_it.dart';
 
-import '../../services/get_it.dart';
-
 class ProductRepository {
   final DioClient client = locate<DioClient>();
   final _selectedProductSubject = BehaviorSubject<List<Product>>();

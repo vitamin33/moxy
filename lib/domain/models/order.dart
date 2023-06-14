@@ -30,9 +30,9 @@ class Order implements Copyable<Order> {
     return Order(
         id: '',
         ukrPostNumber: 0,
-        deliveryType: DeliveryType.NovaPost,
+        deliveryType: DeliveryType.novaPost,
         status: '',
-        paymentType: PaymentType.CashAdvance,
+        paymentType: PaymentType.cashAdvance,
         client: Client.defaultClient(),
         orderedItems: [],
         createdAt: '',
@@ -65,10 +65,10 @@ class Order implements Copyable<Order> {
 }
 
 class Client {
-  String? mobileNumber;
-  String? firstName;
-  String? secondName;
-  String? city;
+  String mobileNumber;
+  String firstName;
+  String secondName;
+  String city;
 
   Client(
       {required this.city,
@@ -99,23 +99,31 @@ class Client {
 }
 
 class OrderedItem {
-  String? productId;
-  List<Dimension>? dimensions;
+  String productId;
+  String productName;
+  List<Dimension> dimensions;
   String? imageUrl;
 
-  OrderedItem({this.productId, this.dimensions, this.imageUrl});
+  OrderedItem(
+      {required this.productId,
+      required this.productName,
+      required this.dimensions,
+      this.imageUrl});
 
   static OrderedItem defaultOrderedItem() {
-    return OrderedItem(productId: '', dimensions: [], imageUrl: null);
+    return OrderedItem(
+        productId: '', productName: '', dimensions: [], imageUrl: null);
   }
 
   OrderedItem copyWith({
     String? productId,
+    String? productName,
     List<Dimension>? dimensions,
     String? imageUrl,
   }) {
     return OrderedItem(
       productId: productId ?? this.productId,
+      productName: productName ?? this.productName,
       dimensions: dimensions ?? this.dimensions,
       imageUrl: imageUrl ?? this.imageUrl,
     );

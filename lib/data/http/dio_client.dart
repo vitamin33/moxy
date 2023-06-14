@@ -14,6 +14,8 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../constant/api_path.dart';
+import '../../constant/order_constants.dart';
+import '../models/request/create_order_request.dart';
 import '../models/request/login_request.dart';
 import '../models/request/create_product_request.dart';
 import '../models/request/user_request.dart';
@@ -238,6 +240,36 @@ class DioClient {
     } catch (e) {
       throw Exception('Failed to load product: $e');
     }
+  }
+
+  Future<CreateOrder?> createOrder(
+    DeliveryType deliveryType,
+    PaymentType paymentType,
+    int novaPostNumber,
+    List<NetworkOrderedItem> selectedProducts,
+    NetworkClient client,
+    String status,
+  ) async {
+    final CreateOrder? result;
+    FormData formData = FormData.fromMap({
+      'deliveryType': deliveryType.name,
+      'paymentType': paymentType.name,
+      'novaPostNumber': novaPostNumber,
+      'products': selectedProducts,
+      'client': client,
+      'status': status
+    });
+    try {
+      Response response = await dio.post(
+        createOrdersUrl,
+        data: formData,
+      );
+      result = CreateOrder.fromJson(response.data);
+    } catch (e) {
+      moxyPrint('Request product :$e');
+      return null;
+    }
+    return result;
   }
 
   // USERS

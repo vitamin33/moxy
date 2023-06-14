@@ -9,7 +9,6 @@ import '../../data/repositories/product_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import '../mappers/order_mapper.dart';
-import '../mappers/product_mapper.dart';
 import '../models/order.dart';
 import '../models/product.dart';
 import '../ui_effect.dart';
@@ -38,8 +37,8 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
               initialPage: 0,
               activePage: 0,
               errors: FieldErrors(),
-              deliveryType: DeliveryType.NovaPost,
-              paymentType: PaymentType.FullPayment,
+              deliveryType: DeliveryType.novaPost,
+              paymentType: PaymentType.fullPayment,
               novaPostNumber: 0,
               productListPrice: 0,
               selectedProducts: [],
@@ -62,7 +61,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
       (items) {
         final totalPrice = fullPrice(items);
         emit(state.copyWith(
-            selectedProducts: items,
+            selectedProducts: orderMapper.mapProductsToOrderedItemList(items),
             productListPrice: totalPrice,
             isEdit: true));
       },
@@ -81,7 +80,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void addOrder() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final order = orderMapper.mapToNetworkOrder(
+      final order = orderMapper.mapToNetworkCreateOrder(
           state.deliveryType,
           state.paymentType,
           state.selectedProducts,
@@ -135,7 +134,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     if (value.isEmpty) {
       return;
     }
-    final int mobileNumber = int.parse(value);
+    final String mobileNumber = value;
     emit(state.copyWith(
         client: state.client.copyWith(mobileNumber: mobileNumber)));
   }

@@ -1,5 +1,9 @@
+import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/models/product.dart';
 
+import '../../constant/order_constants.dart';
+import '../../data/models/request/create_order_request.dart';
 import '../../data/models/response/all_orders_response.dart';
 import '../../services/get_it.dart';
 import '../models/order.dart';
@@ -10,9 +14,9 @@ class OrderMapper {
     return networkOrders.map((o) {
       return Order(
         ukrPostNumber: o.ukrPostNumber,
-        deliveryType: o.deliveryType,
+        deliveryType: _mapDeliveryType(o.deliveryType),
         status: o.status,
-        paymentType: o.paymentType,
+        paymentType: _mapPaymentType(o.paymentType),
         client: Client(
           mobileNumber: o.client.mobileNumber,
           firstName: o.client.firstName,
@@ -24,6 +28,67 @@ class OrderMapper {
         updatedAt: o.updatedAt,
       );
     }).toList();
+  }
+
+  List<OrderedItem> mapProductsToOrderedItemList(List<Product> products) {
+    return products.where((source) => source.id != null).map((product) {
+      final firstImage =
+          product.images.isEmpty ? null : product.images.first.imagePath;
+      return OrderedItem(
+        productId: product.id!,
+        productName: product.name,
+        dimensions: product.dimensions,
+        imageUrl: firstImage,
+      );
+    }).toList();
+  }
+
+  PaymentType _mapPaymentType(String paymentType) {
+    switch (paymentType) {
+      case 'cashAdvance':
+        return PaymentType.cashAdvance;
+      case 'fullPayment':
+        return PaymentType.fullPayment;
+    }
+    return PaymentType.fullPayment;
+  }
+
+  DeliveryType _mapDeliveryType(String paymentType) {
+    switch (paymentType) {
+      case 'novaPost':
+        return DeliveryType.novaPost;
+      case 'ukrPost':
+        return DeliveryType.ukrPost;
+    }
+    return DeliveryType.novaPost;
+  }
+
+  CreateOrder mapToNetworkCreateOrder(
+    DeliveryType deliveryType,
+    PaymentType paymentType,
+    List<OrderedItem> selectedProduct,
+    Client client,
+    String status,
+  ) {
+    return CreateOrder(
+      deliveryType: deliveryType,
+      paymentType: paymentType,
+      novaPostNumber: 23,
+      status: status,
+      client: NetworkClient(client.city, client.firstName, client.mobileNumber,
+          client.secondName),
+      products: selectedProduct.map(
+        (e) {
+          List<Dimension> list = e.dimensions;
+          return NetworkOrderedItem(
+            id: e.productId,
+            dimensions: list.map((d) {
+              return NetworkDimension(color: d.color, quantity: d.quantity);
+            }).toList(),
+          );
+        },
+      ).toList(),
+    );
   }
 }
 

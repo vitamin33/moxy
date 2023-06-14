@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 
 part 'all_orders_response.g.dart';
@@ -20,12 +19,13 @@ class AllOrdersResponse {
 class NetworkOrder {
   @JsonKey(name: '_id')
   String id;
-  int ukrPostNumber;
+  int? ukrPostNumber;
+  int? novaPostNumber;
   String deliveryType;
   String status;
-  PaymentType paymentType;
+  String paymentType;
   NetworkClient client;
-  List<NetworkOrderedItem> orderedItems;
+  List<NetworkOrderedItemResponse> orderedItems;
   String createdAt;
   String updatedAt;
 
@@ -59,12 +59,14 @@ class NetworkClient {
 }
 
 @JsonSerializable()
-class NetworkOrderedItem {
+class NetworkOrderedItemResponse {
   String product;
+  String productName;
   String imageUrl;
   List<NetworkDimension> dimensions;
-  NetworkOrderedItem(this.product, this.dimensions, this.imageUrl);
+  NetworkOrderedItemResponse(
+      this.product, this.productName, this.dimensions, this.imageUrl);
 
-  factory NetworkOrderedItem.fromJson(Map<String, dynamic> json) =>
-      _$NetworkOrderedItemFromJson(json);
+  factory NetworkOrderedItemResponse.fromJson(Map<String, dynamic> json) =>
+      _$NetworkOrderedItemResponseFromJson(json);
 }

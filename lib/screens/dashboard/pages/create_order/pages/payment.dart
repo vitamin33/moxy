@@ -30,13 +30,13 @@ class Payment extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        cubit.selectPaymentType(PaymentType.FullPayment);
+                        cubit.selectPaymentType(PaymentType.fullPayment);
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height / 3,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: state.paymentType == PaymentType.FullPayment
+                            color: state.paymentType == PaymentType.fullPayment
                                 ? Colors.black
                                 : AppTheme.white,
                           ),
@@ -64,13 +64,13 @@ class Payment extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        cubit.selectPaymentType(PaymentType.CashAdvance);
+                        cubit.selectPaymentType(PaymentType.cashAdvance);
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height / 3,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: state.paymentType == PaymentType.CashAdvance
+                            color: state.paymentType == PaymentType.cashAdvance
                                 ? Colors.black
                                 : AppTheme.white,
                           ),

@@ -112,10 +112,11 @@ class ProductMapper {
   }
 
   List<OrderedItem> mapToOrderedItemList(
-      List<NetworkOrderedItem> networkOrderedItems) {
+      List<NetworkOrderedItemResponse> networkOrderedItems) {
     return networkOrderedItems.map((p) {
       return OrderedItem(
         productId: p.product,
+        productName: p.productName,
         imageUrl: p.imageUrl,
         dimensions: p.dimensions
             .map(

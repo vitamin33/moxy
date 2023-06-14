@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/domain/models/order.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
@@ -154,7 +155,8 @@ Widget _buildGalleryArea(
                                       ClipOval(
                                           child: _buildProductImage(
                                               state.selectedProducts[index])),
-                                      Text(state.selectedProducts[index].name),
+                                      Text(state
+                                          .selectedProducts[index].productName),
                                       Text(state.selectedProducts[index]
                                           .dimensions.first.color),
                                       Text(
@@ -207,11 +209,11 @@ Widget _buildGalleryArea(
   });
 }
 
-Widget _buildProductImage(Product product) {
-  if (product.images.isNotEmpty) {
+Widget _buildProductImage(OrderedItem product) {
+  if (product.imageUrl == null) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.images.first.imagePath,
+      image: product.imageUrl!,
       width: 50,
       height: 50,
       fit: BoxFit.cover,

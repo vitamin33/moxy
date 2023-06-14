@@ -29,13 +29,13 @@ class Delivery extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        cubit.selectDeliveryType(DeliveryType.NovaPost);
+                        cubit.selectDeliveryType(DeliveryType.novaPost);
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height / 3,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: state.deliveryType == DeliveryType.NovaPost
+                            color: state.deliveryType == DeliveryType.novaPost
                                 ? Colors.black
                                 : AppTheme.white,
                           ),
@@ -53,13 +53,13 @@ class Delivery extends StatelessWidget {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        cubit.selectDeliveryType(DeliveryType.UkrPost);
+                        cubit.selectDeliveryType(DeliveryType.ukrPost);
                       },
                       child: Container(
                         height: MediaQuery.of(context).size.height / 3,
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: state.deliveryType == DeliveryType.UkrPost
+                            color: state.deliveryType == DeliveryType.ukrPost
                                 ? Colors.black
                                 : AppTheme.white,
                           ),

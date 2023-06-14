@@ -19,46 +19,16 @@ class OrderRepository {
 
   Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
       // final result = await client.allOrders(token);
-      final result = (await client.createOrder(
-          order.deliveryType,
-          order.paymentType,
-          order.novaPostNumber,
-          order.selectedProducts,
-          order.client,
-          order.status,
-          token));
-      if (result != null) {
-        return Result.success(result);
-      } else {
-        return Result.error(Exception('sd'));
-      }
-    } catch (e) {
-      moxyPrint('Repository Error:$e');
-      return Result.error(Exception('$e'));
-    }
-  }
-
-  Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString('token');
-      // final result = await client.allOrders(token);
-      final result = (await client.createOrder(
-          order.deliveryType,
-          order.paymentType,
-          order.novaPostNumber,
-          order.selectedProducts,
-          order.client,
-          order.status,
-          token));
-      if (result != null) {
-        return Result.success(result);
-      } else {
-        return Result.error(Exception('sd'));
-      }
+      final result = await client.createOrder(
+        order.deliveryType,
+        order.paymentType,
+        order.novaPostNumber,
+        order.products,
+        order.client,
+        order.status,
+      );
+      return Result.success(result);
     } catch (e) {
       moxyPrint('Repository Error:$e');
       return Result.error(Exception('$e'));

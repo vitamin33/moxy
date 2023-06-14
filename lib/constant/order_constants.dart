@@ -1,6 +1,6 @@
 enum DeliveryType {
-  NovaPost,
-  UkrPost,
+  novaPost,
+  ukrPost,
 }
 
-enum PaymentType { CashAdvance, FullPayment }
+enum PaymentType { cashAdvance, fullPayment }
