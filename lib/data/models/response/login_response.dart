@@ -5,9 +5,10 @@ part 'login_response.g.dart';
 @JsonSerializable()
 class LoginResponse {
   String userId;
-  String token;
+  String accessToken;
+  String refreshToken;
 
-  LoginResponse(this.token, this.userId);
+  LoginResponse(this.accessToken, this.refreshToken, this.userId);
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
       _$LoginResponseFromJson(json);

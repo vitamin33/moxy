@@ -1,7 +1,8 @@
 const double defaultPadding = 16.0;
 
 // SharedPrefs keys
-const tokenKey = 'token';
+const accessTokenKey = 'accessToken';
+const refreshTokenKey = 'refreshToken';
 const userIdKey = 'userId';
 
 // GET params keys

@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:moxy/constants.dart';
+import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/environment.dart';
+import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
@@ -11,36 +12,37 @@ import 'package:multiple_result/multiple_result.dart';
 
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../constant/api_path.dart';
-import 'models/request/login_request.dart';
-import 'models/request/create_product_request.dart';
-import 'models/request/user_request.dart';
-import 'models/response/all_orders_response.dart';
-import 'models/response/login_response.dart';
+import '../../constant/api_path.dart';
+import '../models/request/login_request.dart';
+import '../models/request/create_product_request.dart';
+import '../models/request/user_request.dart';
+import '../models/response/all_orders_response.dart';
+import '../models/response/login_response.dart';
 
 class DioClient {
   //static const String baseUrl = 'http://10.0.2.2:3000';
   //static const String baseUrl = 'http://localhost:3000';
 
-  static final DioClient instance = DioClient._private();
   late String baseUrl;
 
-  final Dio _dio = Dio();
+  final Dio dio = locate<Dio>();
 
-  DioClient._private() {
+  final TokenService _tokenService = locate<TokenService>();
+
+  DioClient() {
     baseUrl = Environment.apiUrl;
     if (baseUrl.isEmpty) {
       throw Exception('Unable to find BASE_URL parameter in env file.');
     }
+
     // Set default configs
-    _dio.options.baseUrl = baseUrl;
-    _dio.options.connectTimeout = 10000; //10s
-    _dio.options.receiveTimeout = 10000;
+    dio.options.baseUrl = baseUrl;
+    dio.options.connectTimeout = 10000; //10s
+    dio.options.receiveTimeout = 10000;
 
     // customization
-    _dio.interceptors.add(PrettyDioLogger(
+    dio.interceptors.add(PrettyDioLogger(
         requestHeader: false,
         requestBody: true,
         responseBody: true,
@@ -48,6 +50,44 @@ class DioClient {
         error: true,
         compact: true,
         maxWidth: 90));
+
+    dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        // Add the access token to the request headers
+        final String? accessToken = await _tokenService.getAccessToken();
+        if (accessToken != null) {
+          options.headers['Authorization'] = 'Bearer $accessToken';
+        }
+
+        return handler.next(options);
+      },
+      onError: (DioError error, handler) async {
+        if (error.response?.statusCode == 401) {
+          // Token expired or invalid, attempt to refresh it
+          Result<String, Exception> newAccessTokenResult =
+              await _tokenService.refreshAccessToken();
+          if (newAccessTokenResult.isSuccess()) {
+            final accessToken = newAccessTokenResult.tryGetSuccess();
+            // Retry the original request with the new access token
+            error.requestOptions.headers['Authorization'] =
+                'Bearer $accessToken';
+            final options = Options(
+              method: error.requestOptions.method,
+              headers: error.requestOptions.headers,
+              responseType: error.requestOptions.responseType,
+            );
+            final response =
+                await dio.request(error.requestOptions.path, options: options);
+            return handler.resolve(response);
+          } else {
+            moxyPrint(
+                'Error during refreshing access token: ${error.toString()}');
+            return handler.reject(error);
+          }
+        }
+        return handler.next(error);
+      },
+    ));
   }
 
   Future<LoginResponse?> login(String mobileNumber, String password) async {
@@ -56,7 +96,7 @@ class DioClient {
 
     LoginResponse result;
     try {
-      Response response = await _dio.post(
+      Response response = await dio.post(
         loginUserUrl,
         data: request.toJson(),
       );
@@ -98,7 +138,7 @@ class DioClient {
       'idName': idName
     });
     try {
-      Response response = await _dio.post(
+      Response response = await dio.post(
         createProductUrl,
         data: formData,
       );
@@ -112,7 +152,7 @@ class DioClient {
 
   Future<List<NetworkProduct>> allProducts() async {
     try {
-      final response = await _dio.get(allProductsUrl);
+      final response = await dio.get(allProductsUrl);
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
@@ -126,7 +166,7 @@ class DioClient {
 
   Future<NetworkProduct> getProductById(String id) async {
     try {
-      final response = await _dio.get('$baseUrl/products/$id');
+      final response = await dio.get('$baseUrl/products/$id');
       final data = response.data;
       final result = NetworkProduct.fromJson(data);
       return result;
@@ -172,7 +212,7 @@ class DioClient {
       'dimensions': jsonDecode(jsonEncode(dimensions)),
     });
     try {
-      Response response = await _dio.post(
+      Response response = await dio.post(
         '$baseUrl/products/edit/$editProductId',
         data: formData,
       );
@@ -188,8 +228,7 @@ class DioClient {
 
   Future<List<NetworkOrder>> allOrders(token) async {
     try {
-      _dio.options.headers["Authorization"] = "Bearer $token";
-      final response = await _dio.get('$baseUrl/orders');
+      final response = await dio.get('$baseUrl/orders');
       final data = response.data;
       final orderList = <NetworkOrder>[];
       for (var value in (data as List)) {
@@ -208,7 +247,7 @@ class DioClient {
     final NetworkUser result;
 
     try {
-      Response response = await _dio.post(
+      Response response = await dio.post(
         createGuestUserUrl,
         data: guest.toJson(),
       );
@@ -223,10 +262,7 @@ class DioClient {
 
   Future<Result<List<NetworkUser>, Exception>> getAllUsers() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getString(tokenKey);
-      _dio.options.headers["Authorization"] = "Bearer $token";
-      final response = await _dio.get('$baseUrl$allUsersUrl');
+      final response = await dio.get('$baseUrl$allUsersUrl');
       final data = response.data;
       final userList = <NetworkUser>[];
       for (var value in (data as List)) {

@@ -1,4 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:moxy/data/http/dio_client.dart';
+import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
@@ -13,6 +16,10 @@ import 'image_picker_service.dart';
 class GetItService {
   static final getIt = GetIt.instance;
   static initializeService() {
+    final dio = Dio();
+    getIt.registerSingleton<Dio>(dio);
+    getIt.registerSingleton<TokenService>(TokenService(dio));
+    getIt.registerSingleton<DioClient>(DioClient());
     getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ISecureStorageRepository>(
