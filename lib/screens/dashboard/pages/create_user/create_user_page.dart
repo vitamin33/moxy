@@ -27,6 +27,10 @@ class CreateUserPage extends StatelessWidget {
             ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
                 snackBarFailureText: 'Unable to parse data.'));
           }
+          if (effect is ApiRequestFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                snackBarWhenFailure(snackBarFailureText: effect.failureText));
+          }
           if (effect is UserValidationFailed) {
             ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
                 snackBarFailureText: 'Wrong input, please check text fields.'));

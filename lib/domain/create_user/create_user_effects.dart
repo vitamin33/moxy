@@ -12,3 +12,8 @@ class UserCreatedSuccess implements UiEffect {
 class DataParseFailed implements UiEffect {
   const DataParseFailed();
 }
+
+class ApiRequestFailed implements UiEffect {
+  String failureText;
+  ApiRequestFailed(this.failureText);
+}

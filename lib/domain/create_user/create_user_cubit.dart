@@ -47,6 +47,7 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
           emit(state.copyWith(isLoading: false));
           emitEffect(const UserCreatedSuccess());
         }, (error) {
+          emitEffect(ApiRequestFailed(error.toString()));
           emit(
               state.copyWith(errorMessage: error.toString(), isLoading: false));
         });
