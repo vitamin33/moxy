@@ -226,7 +226,7 @@ class DioClient {
 
   // ORDERS
 
-  Future<List<NetworkOrder>> allOrders(token) async {
+  Future<List<NetworkOrder>> allOrders() async {
     try {
       final response = await dio.get('$baseUrl/orders');
       final data = response.data;

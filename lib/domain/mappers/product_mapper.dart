@@ -1,5 +1,7 @@
 import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/models/order.dart';
 
 import '../models/product.dart';
 
@@ -107,5 +109,24 @@ class ProductMapper {
           )
           .toList(),
     );
+  }
+
+  List<OrderedItem> mapToOrderedItemList(
+      List<NetworkOrderedItem> networkOrderedItems) {
+    return networkOrderedItems.map((p) {
+      return OrderedItem(
+        productId: p.product,
+        imageUrl: p.imageUrl,
+        dimensions: p.dimensions
+            .map(
+              (e) => Dimension(
+                color: e.color,
+                quantity: e.quantity,
+                image: _mapColorDimensionImage(e),
+              ),
+            )
+            .toList(),
+      );
+    }).toList();
   }
 }

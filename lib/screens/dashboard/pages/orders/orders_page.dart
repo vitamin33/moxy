@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/product.dart';
 
 import '../../../../components/snackbar_widgets.dart';
@@ -38,7 +39,7 @@ class OrdersPage extends StatelessWidget {
                               return Card(
                                 margin: const EdgeInsets.all(3.0),
                                 child: ListTile(
-                                  leading: _buildImage(order.products),
+                                  leading: _buildImage(order.orderedItems),
                                   title: Text(order.deliveryType),
                                   trailing: const Icon(Icons.arrow_forward_ios),
                                 ),
@@ -51,8 +52,8 @@ class OrdersPage extends StatelessWidget {
     });
   }
 
-  Widget _buildImage(List<Product> products) {
-    if (products.isEmpty) {
+  Widget _buildImage(List<OrderedItem> products) {
+    if (products.isEmpty || products.first.imageUrl == null) {
       return Container(
         color: Colors.grey,
         width: 50,
@@ -60,7 +61,7 @@ class OrdersPage extends StatelessWidget {
       );
     }
     return Image.network(
-      products.first.images.first.imagePath,
+      products.first.imageUrl!,
       width: 50,
       height: 50,
     );

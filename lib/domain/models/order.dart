@@ -9,7 +9,7 @@ class Order implements Copyable<Order> {
   String status;
   String paymentType;
   Client client;
-  List<Product> products;
+  List<OrderedItem> orderedItems;
   String createdAt;
   String updatedAt;
 
@@ -20,7 +20,7 @@ class Order implements Copyable<Order> {
     required this.status,
     required this.paymentType,
     required this.client,
-    required this.products,
+    required this.orderedItems,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -33,7 +33,7 @@ class Order implements Copyable<Order> {
         status: '',
         paymentType: '',
         client: Client.defaultClient(),
-        products: [],
+        orderedItems: [],
         createdAt: '',
         updatedAt: '');
   }
@@ -46,7 +46,7 @@ class Order implements Copyable<Order> {
     String? status,
     String? paymentType,
     Client? client,
-    List<Product>? products,
+    List<OrderedItem>? orderedItems,
     String? createdAt,
     String? updatedAt,
   }) {
@@ -57,7 +57,7 @@ class Order implements Copyable<Order> {
         status: status ?? this.status,
         paymentType: paymentType ?? this.paymentType,
         client: client ?? this.client,
-        products: products ?? this.products,
+        orderedItems: orderedItems ?? this.orderedItems,
         createdAt: createdAt ?? this.createdAt,
         updatedAt: updatedAt ?? this.updatedAt);
   }
@@ -89,6 +89,30 @@ class Client {
       firstName: firstName ?? this.firstName,
       secondName: secondName ?? this.secondName,
       city: city ?? this.city,
+    );
+  }
+}
+
+class OrderedItem {
+  String? productId;
+  List<Dimension>? dimensions;
+  String? imageUrl;
+
+  OrderedItem({this.productId, this.dimensions, this.imageUrl});
+
+  static OrderedItem defaultOrderedItem() {
+    return OrderedItem(productId: '', dimensions: [], imageUrl: null);
+  }
+
+  OrderedItem copyWith({
+    String? productId,
+    List<Dimension>? dimensions,
+    String? imageUrl,
+  }) {
+    return OrderedItem(
+      productId: productId ?? this.productId,
+      dimensions: dimensions ?? this.dimensions,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }

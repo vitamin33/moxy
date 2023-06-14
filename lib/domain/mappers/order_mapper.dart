@@ -19,7 +19,7 @@ class OrderMapper {
           secondName: o.client.secondName,
           city: o.client.city,
         ),
-        products: productMapper.mapToProductList(o.products),
+        orderedItems: productMapper.mapToOrderedItemList(o.orderedItems),
         createdAt: o.createdAt,
         updatedAt: o.updatedAt,
       );
