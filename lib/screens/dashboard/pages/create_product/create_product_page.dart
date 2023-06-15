@@ -1,4 +1,3 @@
-import 'package:bloc_effects/bloc_effects.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/components/custom_button.dart';
@@ -32,86 +31,81 @@ class CreateProductPage extends StatelessWidget {
       Branding(),
     ];
 
+    final CreateProductCubit cubit =
+        CreateProductCubit(productId: editProductId, isEditMode: isEditMode);
+    cubit.effectStream.listen((effect) {
+      if (effect is ValidationFailed) {
+        ScaffoldMessenger.of(mainContext).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText: 'Wrong input, please check text fields.'));
+      }
+    });
+
     return BlocProvider<CreateProductCubit>(
-      create: (BuildContext context) =>
-          CreateProductCubit(productId: editProductId, isEditMode: isEditMode),
-      child:
-          BlocEffectListener<CreateProductCubit, UiEffect, CreateProductState>(
-        listener: (context, effect, state) {
-          if (effect is ValidationFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-                snackBarFailureText: 'Wrong input, please check text fields.'));
-          }
+      create: (BuildContext context) => cubit,
+      child: BlocConsumer<CreateProductCubit, CreateProductState>(
+        listener: (context, state) => {
+          if (state.errorMessage != '')
+            {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarWhenFailure(snackBarFailureText: 'Failed')),
+              context.read<CreateProductCubit>().clearErrorState(),
+            }
         },
-        child: BlocConsumer<CreateProductCubit, CreateProductState>(
-          listener: (context, state) => {
-            if (state.errorMessage != '')
-              {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    snackBarWhenFailure(snackBarFailureText: 'Failed')),
-                context.read<CreateProductCubit>().clearErrorState(),
-              }
-          },
-          builder: (context, state) {
-            final cubit = context.read<CreateProductCubit>();
-            return Material(
-              color: AppTheme.pink,
-              child: state.isSuccess
-                  ? succsess(
-                      onTap: () {
-                        if (state.isEdit) {
-                          cubit.clearState();
-                          context.read<HomeRouterCubit>().navigateTo(
-                                const ProductsPageState(),
-                              );
-                        } else {
-                          cubit.createNew();
-                        }
-                      },
-                      title: 'Product Added',
-                      titleButton:
-                          state.isEdit ? 'Back To Product' : 'Create New')
-                  : state.isLoading
-                      ? loader()
-                      :
-                      SingleChildScrollView(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: AppIndicator(
-                                      activePage: state.activePage,
-                                      inadicatorName: const ['About', 'Sale'],
-                                      pages: const [
-                                        ProductDetails(),
-                                        Branding()
-                                      ],
-                                      controller: cubit.pageController),
+        builder: (context, state) {
+          final cubit = context.read<CreateProductCubit>();
+          return Material(
+            color: AppTheme.pink,
+            child: state.isSuccess
+                ? succsess(
+                    onTap: () {
+                      if (state.isEdit) {
+                        cubit.clearState();
+                        context.read<HomeRouterCubit>().navigateTo(
+                              const ProductsPageState(),
+                            );
+                      } else {
+                        cubit.createNew();
+                      }
+                    },
+                    title: 'Product Added',
+                    titleButton:
+                        state.isEdit ? 'Back To Product' : 'Create New')
+                : state.isLoading
+                    ? loader()
+                    : SingleChildScrollView(
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: AppIndicator(
+                                    activePage: state.activePage,
+                                    inadicatorName: const ['About', 'Sale'],
+                                    pages: const [ProductDetails(), Branding()],
+                                    controller: cubit.pageController),
+                              ),
+                              const SizedBox(height: 30),
+                              Expanded(
+                                child: PageView.builder(
+                                  controller: cubit.pageController,
+                                  onPageChanged: (int page) {
+                                    cubit.onChangePage(page);
+                                  },
+                                  itemCount: pages.length,
+                                  itemBuilder: (context, index) {
+                                    return pages[index % pages.length];
+                                  },
                                 ),
-                                const SizedBox(height: 30),
-                                Expanded(
-                                  child: PageView.builder(
-                                    controller: cubit.pageController,
-                                    onPageChanged: (int page) {
-                                      cubit.onChangePage(page);
-                                    },
-                                    itemCount: pages.length,
-                                    itemBuilder: (context, index) {
-                                      return pages[index % pages.length];
-                                    },
-                                  ),
-                                )
-                              ],
-                            ),
+                              )
+                            ],
                           ),
                         ),
-            );
-          },
-        ),
+                      ),
+          );
+        },
       ),
     );
   }

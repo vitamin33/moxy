@@ -1,4 +1,3 @@
-import 'package:bloc_effects/bloc_effects.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +9,6 @@ import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/create_user/create_user_cubit.dart';
 import '../../../../domain/create_user/create_user_effects.dart';
 import '../../../../domain/create_user/create_user_state.dart';
-import '../../../../domain/ui_effect.dart';
 import '../../../../theme/app_theme.dart';
 import '../../components/paste_text_field.dart';
 
@@ -19,63 +17,62 @@ class CreateUserPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CreateUserCubit cubit = CreateUserCubit();
+    cubit.effectStream.listen((effect) {
+      if (effect is DataParseFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarWhenFailure(snackBarFailureText: 'Unable to parse data.'));
+      }
+      if (effect is ApiRequestFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarWhenFailure(snackBarFailureText: effect.failureText));
+      }
+      if (effect is UserValidationFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText: 'Wrong input, please check text fields.'));
+      }
+      if (effect is UserCreatedSuccess) {
+        context.read<HomeRouterCubit>().goToCustomers();
+      }
+    });
     return BlocProvider<CreateUserCubit>(
-      create: (BuildContext context) => CreateUserCubit(),
-      child: BlocEffectListener<CreateUserCubit, UiEffect, CreateUserState>(
-        listener: (context, effect, state) {
-          if (effect is DataParseFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-                snackBarFailureText: 'Unable to parse data.'));
-          }
-          if (effect is ApiRequestFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenFailure(snackBarFailureText: effect.failureText));
-          }
-          if (effect is UserValidationFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-                snackBarFailureText: 'Wrong input, please check text fields.'));
-          }
-          if (effect is UserCreatedSuccess) {
-            context.read<HomeRouterCubit>().goToCustomers();
-          }
-        },
-        child: BlocBuilder<CreateUserCubit, CreateUserState>(
-          builder: (context, state) {
-            final cubit = context.read<CreateUserCubit>();
-            return LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                  ),
-                  child: IntrinsicHeight(
-                    child: Material(
-                      color: AppTheme.pink,
-                      child: state.isLoading
-                          ? loader()
-                          : Column(
-                              children: [
-                                _buildUserDataWidget(cubit, state),
-                                Expanded(
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: _buildAddUserButton(state, cubit),
-                                  ),
+      create: (BuildContext context) => cubit,
+      child: BlocBuilder<CreateUserCubit, CreateUserState>(
+        builder: (context, state) {
+          final cubit = context.read<CreateUserCubit>();
+          return LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: IntrinsicHeight(
+                  child: Material(
+                    color: AppTheme.pink,
+                    child: state.isLoading
+                        ? loader()
+                        : Column(
+                            children: [
+                              _buildUserDataWidget(cubit, state),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: _buildAddUserButton(state, cubit),
                                 ),
-                                const SizedBox(
-                                  height: 40,
-                                )
-                              ],
-                            ),
-                    ),
+                              ),
+                              const SizedBox(
+                                height: 40,
+                              )
+                            ],
+                          ),
                   ),
                 ),
-              );
-            });
-          },
-        ),
+              ),
+            );
+          });
+        },
       ),
     );
   }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,7 +8,6 @@ import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/navigation/home_router_cubit.dart';
 
-import '../../../../components/custom_textfield.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../theme/app_theme.dart';

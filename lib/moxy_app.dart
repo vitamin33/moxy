@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/create_order/create_order_cubit.dart';
 import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'domain/all_orders/all_orders_cubit.dart';
@@ -36,6 +37,9 @@ class MoxyApp extends StatelessWidget {
             create: (BuildContext context) => AllProductsCubit()),
         BlocProvider<AllOrdersCubit>(
             create: (BuildContext context) => AllOrdersCubit()),
+        BlocProvider<CreateOrderCubit>(
+            create: (BuildContext context) =>
+                CreateOrderCubit(isEditMode: false)),
       ],
       child: MaterialApp(
         home: _routers,

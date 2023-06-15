@@ -9,9 +9,9 @@ import 'package:moxy/domain/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
-import 'package:bloc_effects/bloc_effects.dart';
 
 import '../../navigation/home_router_cubit.dart';
 import '../../services/get_it.dart';

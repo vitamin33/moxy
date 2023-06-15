@@ -52,8 +52,6 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       final productIdName = product.idName;
       final productImages = product.images;
 
-      final keyPrefix = '$productName ';
-
       for (final dimension in product.dimensions) {
         final color = dimension.color;
         final quantityKey = dimension.quantity;

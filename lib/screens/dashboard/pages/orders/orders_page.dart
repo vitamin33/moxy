@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/models/order.dart';
-import 'package:moxy/domain/models/product.dart';
 
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/all_orders/all_orders_cubit.dart';
