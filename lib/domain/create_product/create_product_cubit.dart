@@ -327,6 +327,10 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       errors.costPrice = FieldError.invalid;
       noErrors = false;
     }
+    if (!isValidQuantity(state.product.dimensions)) {
+      errors.quantity = FieldError.invalid;
+      noErrors = false;
+    }
     if (!isValidPrice(state.product.salePrice)) {
       errors.salePrice = FieldError.invalid;
       noErrors = false;

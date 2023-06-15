@@ -49,9 +49,8 @@ class CustomTextField extends StatelessWidget {
                 color: AppTheme.white,
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             child: TextField(
+              textInputAction: TextInputAction.done,
               minLines: 1,
-              // expands: expands,
-              // scrollPhysics: ClampingScrollPhysics(),
               onChanged: onChanged,
               controller: controller,
               maxLines: maxLines,
