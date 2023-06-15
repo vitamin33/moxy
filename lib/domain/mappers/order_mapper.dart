@@ -31,7 +31,9 @@ class OrderMapper {
   }
 
   List<OrderedItem> mapProductsToOrderedItemList(List<Product> products) {
-    return products.where((source) => source.id != null).map((product) {
+    return products.where((source) {
+      return source.id != null;
+    }).map((product) {
       final firstImage =
           product.images.isEmpty ? null : product.images.first.imagePath;
       return OrderedItem(

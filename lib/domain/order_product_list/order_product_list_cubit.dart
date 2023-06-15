@@ -70,6 +70,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
         );
 
         final newProduct = Product(
+          id: product.id,
           name: productName,
           description: productDescription,
           costPrice: productCostPrice,

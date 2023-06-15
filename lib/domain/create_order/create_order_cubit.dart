@@ -60,8 +60,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
         final totalPrice = fullPrice(items);
+        final selectedItems = orderMapper.mapProductsToOrderedItemList(items);
         emit(state.copyWith(
-            selectedProducts: orderMapper.mapProductsToOrderedItemList(items),
+            selectedProducts: selectedItems,
             productListPrice: totalPrice,
             isEdit: true));
       },
