@@ -12,6 +12,8 @@ class ProductRepository {
   final DioClient client = locate<DioClient>();
   final _selectedProductSubject = BehaviorSubject<List<Product>>();
   Stream<List<Product>> get selectedProducts => _selectedProductSubject.stream;
+  List<Product>? get currentSelectedProducts =>
+      _selectedProductSubject.valueOrNull;
 
   void addToSelectedProductStream(List<Product> items) =>
       _selectedProductSubject.sink.add(items);

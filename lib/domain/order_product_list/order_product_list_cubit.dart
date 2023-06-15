@@ -25,6 +25,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       final result = await _productRepository.getAllProducts();
       result.when(
         (success) {
+          initSelectedProductList();
           final products = _produtctMapper.mapToProductList(success);
           final productsByColor = groupProductsByColor(products);
           emit(state.copyWith(
@@ -85,7 +86,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     return productsByColor;
   }
 
-  final Set<Product> selectedProducts = {};
+  Set<Product> selectedProducts = {};
 
   void toggleProductSelection(Product product) {
     final productName = product.name;
@@ -148,5 +149,10 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
         emit(state.copyWith(productsByColor: newProductsByColor));
       }
     }
+  }
+
+  void initSelectedProductList() {
+    List<Product>? selectedList = _productRepository.currentSelectedProducts;
+    selectedProducts = selectedList?.toSet() ?? {};
   }
 }
