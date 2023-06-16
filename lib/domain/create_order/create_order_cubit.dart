@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../constant/order_constants.dart';
@@ -14,7 +15,6 @@ import '../models/product.dart';
 import '../ui_effect.dart';
 import '../validation_mixin.dart';
 import 'create_order_state.dart';
-import 'package:bloc_effects/bloc_effects.dart';
 
 class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     with ValidationMixin {
@@ -25,9 +25,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   late final StreamSubscription _selectedProductSubscription;
 
-  final bool isEditMode;
+  bool isEditMode;
 
-  CreateOrderCubit({required this.isEditMode})
+  CreateOrderCubit({this.isEditMode = false})
       : super(
           CreateOrderState(
               isLoading: false,
@@ -46,9 +46,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
               status: ''),
         ) {
     _subscribe();
-    if (isEditMode != null) {
-      moxyPrint('edit order cubit');
-    }
   }
 
   final TextEditingController firstNameController = TextEditingController();
@@ -56,12 +53,17 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   final TextEditingController phoneNumberController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
+  void setEditMode(bool isEdit) {
+    isEditMode = isEdit;
+  }
+
   void _subscribe() {
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
         final totalPrice = fullPrice(items);
+        final selectedItems = orderMapper.mapProductsToOrderedItemList(items);
         emit(state.copyWith(
-            selectedProducts: orderMapper.mapProductsToOrderedItemList(items),
+            selectedProducts: selectedItems,
             productListPrice: totalPrice,
             isEdit: true));
       },

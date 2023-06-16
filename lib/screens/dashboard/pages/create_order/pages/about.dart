@@ -8,7 +8,6 @@ import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../../domain/create_order/create_order_state.dart';
-import '../../../../../domain/models/product.dart';
 import '../../../../../navigation/home_router_cubit.dart';
 import '../../../../../theme/app_theme.dart';
 import '../create_order_page.dart';
