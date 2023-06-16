@@ -5,7 +5,6 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
-import '../create_product_page.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -17,54 +16,57 @@ class ProductDetails extends StatelessWidget {
         final cubit = context.read<CreateProductCubit>();
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
-          child: Column(children: [
-            CustomTextField(
-              title: 'Name',
-              maxLines: 1,
-              controller: cubit.nameController,
-              onChanged: cubit.nameChanged,
-              validation: true,
-              state: state.errors.productName,
-            ),
-            const SizedBox(height: 30),
-              CustomTextField(
-                maxLines: 6,
-                title: 'Description',
-                controller: cubit.descriptionController,
-                onChanged: cubit.descriptionChanged,
-                validation: true,
-                state: state.errors.productDescription,
-              ),
-            const SizedBox(height: 30),
-            CustomTextField(
-              title: 'IdName',
-              maxLines: 1,
-              controller: cubit.idNameController,
-              onChanged: cubit.idNameChanged,
-              validation: true,
-              state: state.errors.productIdName,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 60,
-                child: Row(children: [
-                  Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: state.allDimensions.length,
-                      itemBuilder: (context, index) {
-                        final dimen = state.allDimensions[index];
-                        return _buildColorQuantityRow(dimen, cubit, index);
-                      },
-                    ),
+          child: SingleChildScrollView(
+            child: SizedBox(
+              child: Column(children: [
+                CustomTextField(
+                  title: 'Name',
+                  maxLines: 1,
+                  controller: cubit.nameController,
+                  onChanged: cubit.nameChanged,
+                  validation: true,
+                  state: state.errors.productName,
+                ),
+                const SizedBox(height: 30),
+                CustomTextField(
+                  maxLines: 6,
+                  title: 'Description',
+                  controller: cubit.descriptionController,
+                  onChanged: cubit.descriptionChanged,
+                  validation: true,
+                  state: state.errors.productDescription,
+                ),
+                const SizedBox(height: 30),
+                CustomTextField(
+                  title: 'IdName',
+                  maxLines: 1,
+                  controller: cubit.idNameController,
+                  onChanged: cubit.idNameChanged,
+                  validation: true,
+                  state: state.errors.productIdName,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15.0),
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 60,
+                    child: Row(children: [
+                      Expanded(
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: state.allDimensions.length,
+                          itemBuilder: (context, index) {
+                            final dimen = state.allDimensions[index];
+                            return _buildColorQuantityRow(dimen, cubit, index);
+                          },
+                        ),
+                      ),
+                    ]),
                   ),
-                ]),
-              ),
+                ),
+              ]),
             ),
-            positionProductButton(state, cubit)
-          ]),
+          ),
         );
       },
     );

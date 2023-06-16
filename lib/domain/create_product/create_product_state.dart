@@ -94,12 +94,15 @@ class FieldErrors {
   FieldError? productIdName;
   FieldError? salePrice;
   FieldError? costPrice;
+  FieldError? quantity;
+
   FieldErrors({
     this.productName,
     this.productDescription,
     this.productIdName,
     this.salePrice,
     this.costPrice,
+    this.quantity,
   });
 
   static FieldErrors noErrors() {
@@ -123,6 +126,9 @@ class FieldErrors {
     }
     if (salePrice != null) {
       buffer.write('salePrice ');
+    }
+    if (quantity != null) {
+      buffer.write('quantity ');
     }
     buffer.write('.');
     return buffer.toString();

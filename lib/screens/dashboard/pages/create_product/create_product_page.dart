@@ -8,11 +8,13 @@ import 'package:moxy/navigation/home_router_cubit.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/branding.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/pages/details.dart';
 import 'package:moxy/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../../../components/app_indicator.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/succes_card.dart';
 import '../../../../domain/create_product/create_product_effects.dart';
-import '../../../../domain/ui_effect.dart';
+
+const bottomButtonsHeight = 100.0;
 
 // ignore: must_be_immutable
 class CreateProductPage extends StatelessWidget {
@@ -41,7 +43,8 @@ class CreateProductPage extends StatelessWidget {
     });
 
     return BlocProvider<CreateProductCubit>(
-      create: (BuildContext context) => cubit,
+      create: (BuildContext context) =>
+          CreateProductCubit(productId: editProductId, isEditMode: isEditMode),
       child: BlocConsumer<CreateProductCubit, CreateProductState>(
         listener: (context, state) => {
           if (state.errorMessage != '')
@@ -109,29 +112,52 @@ class CreateProductPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildSuccessWidget(BuildContext context, CreateProductCubit cubit,
+      CreateProductState state) {
+    return succsess(
+        onTap: () {
+          if (state.isEdit) {
+            cubit.clearState();
+            context.read<HomeRouterCubit>().navigateTo(
+                  const ProductsPageState(),
+                );
+          } else {
+            cubit.createNew();
+          }
+        },
+        title: 'Product Added',
+        titleButton: state.isEdit ? 'Back To Product' : 'Create New');
+  }
 }
 
-Widget positionProductButton(
-    CreateProductState state, CreateProductCubit cubit) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      state.activePage != 0
-          ? CustomButton(
-              title: 'Previus',
-              onTap: cubit.moveToPreviustPage,
-              buttonWidth: 150,
-              outline: true,
-            )
-          : Container(
-              width: 150,
-            ),
-      CustomButton(
-        title: state.activePage != 1 ? 'Next' : 'Add',
-        onTap: cubit.moveToNextPage,
-        buttonWidth: 150,
-      )
-    ],
+Widget positionProductButton(CreateProductState state, CreateProductCubit cubit,
+    bool isKeyboardVisible) {
+  double buttonsHeight = isKeyboardVisible ? 0 : bottomButtonsHeight;
+  moxyPrint(
+      'Buttons height: $buttonsHeight, isKeyboardVisible: $isKeyboardVisible');
+  return SizedBox(
+    height: buttonsHeight,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        state.activePage != 0
+            ? CustomButton(
+                title: 'Previus',
+                onTap: cubit.moveToPreviustPage,
+                buttonWidth: 150,
+                outline: true,
+              )
+            : Container(
+                width: 150,
+              ),
+        CustomButton(
+          title: state.activePage != 1 ? 'Next' : 'Add',
+          onTap: cubit.moveToNextPage,
+          buttonWidth: 150,
+        )
+      ],
+    ),
   );
 }

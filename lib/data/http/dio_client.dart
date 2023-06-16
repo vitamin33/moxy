@@ -95,7 +95,6 @@ class DioClient {
   Future<LoginResponse?> login(String mobileNumber, String password) async {
     LoginRequest request =
         LoginRequest(mobileNumber: mobileNumber, password: password);
-
     LoginResponse result;
     try {
       Response response = await dio.post(

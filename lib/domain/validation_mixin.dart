@@ -1,3 +1,5 @@
+import 'package:moxy/domain/models/product.dart';
+
 mixin ValidationMixin {
   bool isFieldEmpty(String? fieldValue) => fieldValue?.isEmpty ?? true;
 
@@ -6,6 +8,15 @@ mixin ValidationMixin {
       return false;
     }
     return price > 0;
+  }
+
+  bool isValidQuantity(List<Dimension> dimension) {
+    for (var item in dimension) {
+      if (item.quantity == 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
   bool validateEmailAddress(String? email) {
