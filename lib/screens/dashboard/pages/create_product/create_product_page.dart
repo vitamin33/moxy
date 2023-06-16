@@ -54,66 +54,71 @@ class CreateProductPage extends StatelessWidget {
           },
           builder: (context, state) {
             final cubit = context.read<CreateProductCubit>();
-            return Material(
-              color: AppTheme.pink,
-              child: state.isSuccess
-                  ? succsess(
-                      onTap: () {
-                        if (state.isEdit) {
-                          cubit.clearState();
-                          context.read<HomeRouterCubit>().navigateTo(
-                                const ProductsPageState(),
-                              );
-                        } else {
-                          cubit.createNew();
-                        }
-                      },
-                      title: 'Product Added',
-                      titleButton:
-                          state.isEdit ? 'Back To Product' : 'Create New')
-                  : state.isLoading
-                      ? loader()
-                      :
-                      SingleChildScrollView(
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
-                                  child: AppIndicator(
-                                      activePage: state.activePage,
-                                      inadicatorName: const ['About', 'Sale'],
-                                      pages: const [
-                                        ProductDetails(),
-                                        Branding()
-                                      ],
-                                      controller: cubit.pageController),
-                                ),
-                                const SizedBox(height: 30),
-                                Expanded(
-                                  child: PageView.builder(
-                                    controller: cubit.pageController,
-                                    onPageChanged: (int page) {
-                                      cubit.onChangePage(page);
-                                    },
-                                    itemCount: pages.length,
-                                    itemBuilder: (context, index) {
-                                      return pages[index % pages.length];
-                                    },
+            return LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return SingleChildScrollView(
+                child: SizedBox(
+                  height: constraints.maxHeight,
+                  child: Material(
+                    color: AppTheme.pink,
+                    child: state.isSuccess
+                        ? _buildSuccessWidget(context, cubit, state)
+                        : state.isLoading
+                            ? loader()
+                            : Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: AppIndicator(
+                                        activePage: state.activePage,
+                                        inadicatorName: const ['About', 'Sale'],
+                                        pages: const [
+                                          ProductDetails(),
+                                          Branding()
+                                        ],
+                                        controller: cubit.pageController),
                                   ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-            );
+                                  const SizedBox(height: 30),
+                                  Expanded(
+                                    child: PageView.builder(
+                                      controller: cubit.pageController,
+                                      onPageChanged: (int page) {
+                                        cubit.onChangePage(page);
+                                      },
+                                      itemCount: pages.length,
+                                      itemBuilder: (context, index) {
+                                        return pages[index % pages.length];
+                                      },
+                                    ),
+                                  )
+                                ],
+                              ),
+                  ),
+                ),
+              );
+            });
           },
         ),
       ),
     );
+  }
+
+  Widget _buildSuccessWidget(BuildContext context, CreateProductCubit cubit,
+      CreateProductState state) {
+    return succsess(
+        onTap: () {
+          if (state.isEdit) {
+            cubit.clearState();
+            context.read<HomeRouterCubit>().navigateTo(
+                  const ProductsPageState(),
+                );
+          } else {
+            cubit.createNew();
+          }
+        },
+        title: 'Product Added',
+        titleButton: state.isEdit ? 'Back To Product' : 'Create New');
   }
 }
 
