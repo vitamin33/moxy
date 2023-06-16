@@ -11,7 +11,6 @@ import 'package:moxy/theme/app_theme.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/create_product/create_product_state.dart';
-import '../create_product_page.dart';
 
 class Branding extends StatelessWidget {
   const Branding({Key? key}) : super(key: key);
@@ -22,69 +21,66 @@ class Branding extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
         return SingleChildScrollView(
-            child: SizedBox(
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
-            child: Column(
-              children: [
-                state.product.images.isNotEmpty
-                    ? InkWell(
-                        onTap: () {
-                          cubit.pickImage();
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            SvgPicture.asset(IconPath.plus),
-                            const SizedBox(
-                              width: 2,
-                            ),
-                            const Text(
-                              'Pick Image',
-                              style: TextStyle(
-                                  color: AppTheme.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container(),
-                _buildGalleryArea(context, state, cubit),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: ' Price(\$)',
-                  controller: cubit.costPriceController,
-                  onChanged: cubit.costPriceChanged,
-                  state: state.errors.costPrice,
-                  maxLines: 1,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(16),
-                  ],
-                ),
-                const SizedBox(height: 20),
-                CustomTextField(
-                  title: 'Sale Price(\$)',
-                  controller: cubit.salePriceController,
-                  onChanged: cubit.salePriceChanged,
-                  state: state.errors.salePrice,
-                  maxLines: 1,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    LengthLimitingTextInputFormatter(16),
-                  ],
-                ),
-                _buildSelectedDimensWidget(state, cubit),
-                const SizedBox(
-                  height: 20,
-                ),
-                positionProductButton(state, cubit)
-              ],
+          child: SizedBox(
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
+              child: Column(
+                children: [
+                  state.product.images.isNotEmpty
+                      ? InkWell(
+                          onTap: () {
+                            cubit.pickImage();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              SvgPicture.asset(IconPath.plus),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              const Text(
+                                'Pick Image',
+                                style: TextStyle(
+                                    color: AppTheme.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        )
+                      : Container(),
+                  _buildGalleryArea(context, state, cubit),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    title: ' Price(\$)',
+                    controller: cubit.costPriceController,
+                    onChanged: cubit.costPriceChanged,
+                    state: state.errors.costPrice,
+                    maxLines: 1,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    title: 'Sale Price(\$)',
+                    controller: cubit.salePriceController,
+                    onChanged: cubit.salePriceChanged,
+                    state: state.errors.salePrice,
+                    maxLines: 1,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ),
+                  _buildSelectedDimensWidget(state, cubit),
+                ],
+              ),
             ),
           ),
-        ));
+        );
       },
     );
   }
