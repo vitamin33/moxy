@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:moxy/components/custom_button.dart';
 import 'package:moxy/components/snackbar_widgets.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
@@ -32,7 +33,6 @@ class CreateProductPage extends StatelessWidget {
       ProductDetails(),
       Branding(),
     ];
-
     final CreateProductCubit cubit =
         CreateProductCubit(productId: editProductId, isEditMode: isEditMode);
     cubit.effectStream.listen((effect) {
@@ -41,7 +41,6 @@ class CreateProductPage extends StatelessWidget {
             snackBarFailureText: 'Wrong input, please check text fields.'));
       }
     });
-
     return BlocProvider<CreateProductCubit>(
       create: (BuildContext context) =>
           CreateProductCubit(productId: editProductId, isEditMode: isEditMode),
@@ -58,55 +57,65 @@ class CreateProductPage extends StatelessWidget {
           final cubit = context.read<CreateProductCubit>();
           return Material(
             color: AppTheme.pink,
-            child: state.isSuccess
-                ? succsess(
-                    onTap: () {
-                      if (state.isEdit) {
-                        cubit.clearState();
-                        context.read<HomeRouterCubit>().navigateTo(
-                              const ProductsPageState(),
-                            );
-                      } else {
-                        cubit.createNew();
-                      }
-                    },
-                    title: 'Product Added',
-                    titleButton:
-                        state.isEdit ? 'Back To Product' : 'Create New')
-                : state.isLoading
-                    ? loader()
-                    : SingleChildScrollView(
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return KeyboardVisibilityBuilder(
+                  builder: (context, isKeyboardVisible) {
+                return SizedBox(
+                  height: constraints.maxHeight,
+                  child: Column(
+                    children: [
+                      SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height,
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: AppIndicator(
-                                    activePage: state.activePage,
-                                    inadicatorName: const ['About', 'Sale'],
-                                    pages: const [ProductDetails(), Branding()],
-                                    controller: cubit.pageController),
-                              ),
-                              const SizedBox(height: 30),
-                              Expanded(
-                                child: PageView.builder(
-                                  controller: cubit.pageController,
-                                  onPageChanged: (int page) {
-                                    cubit.onChangePage(page);
-                                  },
-                                  itemCount: pages.length,
-                                  itemBuilder: (context, index) {
-                                    return pages[index % pages.length];
-                                  },
-                                ),
-                              )
-                            ],
-                          ),
+                          height: isKeyboardVisible
+                              ? constraints.maxHeight
+                              : constraints.maxHeight - bottomButtonsHeight,
+                          child: state.isSuccess
+                              ? _buildSuccessWidget(context, cubit, state)
+                              : state.isLoading
+                                  ? loader()
+                                  : Column(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                          child: AppIndicator(
+                                              activePage: state.activePage,
+                                              inadicatorName: const [
+                                                'About',
+                                                'Sale'
+                                              ],
+                                              pages: const [
+                                                ProductDetails(),
+                                                Branding()
+                                              ],
+                                              controller: cubit.pageController),
+                                        ),
+                                        const SizedBox(height: 30),
+                                        Expanded(
+                                          child: PageView.builder(
+                                            controller: cubit.pageController,
+                                            onPageChanged: (int page) {
+                                              cubit.onChangePage(page);
+                                            },
+                                            itemCount: pages.length,
+                                            itemBuilder: (context, index) {
+                                              return pages[
+                                                  index % pages.length];
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                         ),
                       ),
+                      positionProductButton(state, cubit, isKeyboardVisible),
+                    ],
+                  ),
+                );
+              });
+            }),
           );
         },
       ),
