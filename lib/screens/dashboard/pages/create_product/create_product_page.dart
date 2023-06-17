@@ -110,7 +110,10 @@ class CreateProductPage extends StatelessWidget {
                                     ),
                         ),
                       ),
-                      positionProductButton(state, cubit, isKeyboardVisible),
+                      !state.isSuccess
+                          ? positionProductButton(
+                              state, cubit, isKeyboardVisible)
+                          : Container(),
                     ],
                   ),
                 );
