@@ -1,5 +1,6 @@
 import '../../constant/order_constants.dart';
 import '../copyable.dart';
+import '../models/city.dart';
 import '../models/order.dart';
 import '../validation_mixin.dart';
 
@@ -15,6 +16,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   int novaPostNumber;
   int productListPrice;
   List<OrderedItem> selectedProducts;
+  City? selectedCity;
   String status;
   Client client;
 
@@ -34,6 +36,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.novaPostNumber,
     required this.productListPrice,
     required this.selectedProducts,
+    required this.selectedCity,
     required this.client,
     required this.status,
   });
@@ -52,6 +55,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         novaPostNumber: 0,
         productListPrice: 0,
         selectedProducts: [],
+        selectedCity: null,
         client: Client.defaultClient(),
         status: '');
   }
@@ -72,6 +76,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       int? novaPostNumber,
       int? productListPrice,
       List<OrderedItem>? selectedProducts,
+      City? selectedCity,
       Client? client,
       String? status}) {
     return CreateOrderState(
@@ -87,6 +92,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       novaPostNumber: novaPostNumber ?? this.novaPostNumber,
       productListPrice: productListPrice ?? this.productListPrice,
       selectedProducts: selectedProducts ?? this.selectedProducts,
+      selectedCity: selectedCity ?? this.selectedCity,
       client: client ?? this.client,
       status: status ?? this.status,
     );
