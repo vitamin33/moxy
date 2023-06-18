@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
 
@@ -10,7 +11,6 @@ import '../../data/repositories/product_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import '../mappers/order_mapper.dart';
-import '../models/order.dart';
 import '../models/product.dart';
 import '../ui_effect.dart';
 import '../validation_mixin.dart';
@@ -28,23 +28,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   bool isEditMode;
 
   CreateOrderCubit({this.isEditMode = false})
-      : super(
-          CreateOrderState(
-              isLoading: false,
-              isEdit: false,
-              isSuccess: false,
-              errorMessage: '',
-              initialPage: 0,
-              activePage: 0,
-              errors: FieldErrors(),
-              deliveryType: DeliveryType.novaPost,
-              paymentType: PaymentType.fullPayment,
-              novaPostNumber: 0,
-              productListPrice: 0,
-              selectedProducts: [],
-              client: Client.defaultClient(),
-              status: ''),
-        ) {
+      : super(CreateOrderState.defaultCreateProductState()) {
     _subscribe();
   }
 
@@ -175,5 +159,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   void clearErrorState() {
     emit(state.copyWith(errorMessage: ''));
+  }
+
+  void selectCity(City? city) {
+    emit(state.copyWith(selectedCity: city));
   }
 }

@@ -6,6 +6,7 @@ import '../../../../../constant/image_path.dart';
 import '../../../../../constant/order_constants.dart';
 import '../../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../../domain/create_order/create_order_state.dart';
+import '../city_dropdown.dart';
 import '../create_order_page.dart';
 
 class Delivery extends StatelessWidget {
@@ -76,6 +77,10 @@ class Delivery extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          const Padding(
+            padding: EdgeInsets.all(16),
+            child: SearchCityDropdown(),
           ),
           positionOrderButton(state, cubit)
         ],
