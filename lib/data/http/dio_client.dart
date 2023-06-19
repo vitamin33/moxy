@@ -244,18 +244,20 @@ class DioClient {
   Future<CreateOrder?> createOrder(
     DeliveryType deliveryType,
     PaymentType paymentType,
-    int novaPostNumber,
+    NetworkNovaPost novaPost,
     List<NetworkOrderedItem> selectedProducts,
     NetworkClient client,
+    NetworkCity city,
     String status,
   ) async {
     final CreateOrder? result;
     FormData formData = FormData.fromMap({
       'deliveryType': deliveryType.name,
       'paymentType': paymentType.name,
-      'novaPostNumber': novaPostNumber,
+      'novaPost': novaPost,
       'products': selectedProducts,
       'client': client,
+      'city': city,
       'status': status
     });
     try {

@@ -10,17 +10,19 @@ part 'create_order_request.g.dart';
 class CreateOrder {
   final DeliveryType deliveryType;
   final PaymentType paymentType;
-  final int novaPostNumber;
+  final NetworkNovaPost novaPost;
   final List<NetworkOrderedItem> products;
   final NetworkClient client;
+  final NetworkCity city;
   final String status;
 
   CreateOrder({
     required this.deliveryType,
     required this.paymentType,
-    required this.novaPostNumber,
+    required this.novaPost,
     required this.products,
     required this.client,
+    required this.city,
     required this.status,
   });
 
@@ -45,4 +47,42 @@ class NetworkOrderedItem {
       _$NetworkOrderedItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$NetworkOrderedItemToJson(this);
+}
+
+@JsonSerializable()
+class NetworkCity {
+  String? ref;
+  String? mainDescription;
+  String? deliveryCityRef;
+  String? presentName;
+
+  NetworkCity({
+    required this.ref,
+    required this.mainDescription,
+    required this.deliveryCityRef,
+    required this.presentName,
+  });
+
+  factory NetworkCity.fromJson(Map<String, dynamic> json) =>
+      _$NetworkCityFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NetworkCityToJson(this);
+}
+
+@JsonSerializable()
+class NetworkNovaPost {
+  String? ref;
+  String? postMachineType;
+  int? number;
+
+  NetworkNovaPost({
+    required this.ref,
+    required this.postMachineType,
+    required this.number,
+  });
+
+  factory NetworkNovaPost.fromJson(Map<String, dynamic> json) =>
+      _$NetworkNovaPostFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NetworkNovaPostToJson(this);
 }

@@ -1,9 +1,5 @@
-import 'package:flutter/foundation.dart';
-
-import '../../data/models/response/all_orders_response.dart';
 import '../copyable.dart';
 import '../models/order.dart';
-import '../models/product.dart';
 
 class AllOrdersState implements Copyable<AllOrdersState> {
   final List<Order> allOrders;

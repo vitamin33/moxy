@@ -6,6 +6,7 @@ import '../../constant/order_constants.dart';
 import '../../data/models/request/create_order_request.dart';
 import '../../data/models/response/all_orders_response.dart';
 import '../../services/get_it.dart';
+import '../models/city.dart';
 import '../models/order.dart';
 
 class OrderMapper {
@@ -70,15 +71,30 @@ class OrderMapper {
     PaymentType paymentType,
     List<OrderedItem> selectedProduct,
     Client client,
+    City city,
     String status,
   ) {
     return CreateOrder(
       deliveryType: deliveryType,
       paymentType: paymentType,
-      novaPostNumber: 23,
+      // TODO  data for this object should be set to real data
+      novaPost: NetworkNovaPost(
+          number: 23,
+          ref: 'test_ref',
+          postMachineType: 'test_post_mashine_type'),
       status: status,
-      client: NetworkClient(client.city, client.firstName, client.mobileNumber,
-          client.secondName),
+      client: NetworkClient(
+        client.city,
+        client.firstName,
+        client.mobileNumber,
+        client.secondName,
+      ),
+      city: NetworkCity(
+        ref: city.ref,
+        mainDescription: city.mainDescription,
+        deliveryCityRef: city.deliveryCityRef,
+        presentName: city.presentName,
+      ),
       products: selectedProduct.map(
         (e) {
           List<Dimension> list = e.dimensions;

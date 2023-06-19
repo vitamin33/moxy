@@ -1,19 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'network_city.dart';
+part of 'nova_network_city.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-NetworkCity _$NetworkCityFromJson(Map<String, dynamic> json) => NetworkCity(
+NovaNetworkCity _$NovaNetworkCityFromJson(Map<String, dynamic> json) =>
+    NovaNetworkCity(
       json['MainDescription'] as String,
       json['Ref'] as String,
       json['DeliveryCity'] as String,
       json['Present'] as String,
     );
 
-Map<String, dynamic> _$NetworkCityToJson(NetworkCity instance) =>
+Map<String, dynamic> _$NovaNetworkCityToJson(NovaNetworkCity instance) =>
     <String, dynamic>{
       'MainDescription': instance.mainDescription,
       'Ref': instance.ref,

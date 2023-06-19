@@ -1,8 +1,8 @@
-import '../../data/models/response/network_city.dart';
+import '../../data/models/response/nova_network_city.dart';
 import '../models/city.dart';
 
 class CityMapper {
-  List<City> mapToCityList(List<NetworkCity> networkCities) {
+  List<City> mapToCityList(List<NovaNetworkCity> networkCities) {
     return networkCities
         .map(
           (e) => City(

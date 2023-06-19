@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:moxy/data/models/response/network_city.dart';
+import 'package:moxy/data/models/response/nova_network_city.dart';
 
 class NovaPoshtaClient {
   static const baseUrl = 'https://api.novaposhta.ua/v2.0/json/';
@@ -7,7 +7,7 @@ class NovaPoshtaClient {
 
   final Dio _dio = Dio();
 
-  Future<List<NetworkCity>> fetchCities(String searchTerm) async {
+  Future<List<NovaNetworkCity>> fetchCities(String searchTerm) async {
     const url = '$baseUrl/Address/searchSettlements';
     final body = {
       'apiKey': apiKey,
@@ -25,8 +25,8 @@ class NovaPoshtaClient {
 
       if (response.statusCode == 200 && jsonData['success']) {
         final addresses = jsonData['data'][0]['Addresses'];
-        final cities = List<NetworkCity>.from(
-            addresses.map((city) => NetworkCity.fromJson(city)));
+        final cities = List<NovaNetworkCity>.from(
+            addresses.map((city) => NovaNetworkCity.fromJson(city)));
         return cities;
       } else {
         throw Exception('Failed to fetch cities');

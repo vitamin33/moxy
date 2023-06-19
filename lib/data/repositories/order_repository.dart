@@ -19,13 +19,13 @@ class OrderRepository {
 
   Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
     try {
-      // final result = await client.allOrders(token);
       final result = await client.createOrder(
         order.deliveryType,
         order.paymentType,
-        order.novaPostNumber,
+        order.novaPost,
         order.products,
         order.client,
+        order.city,
         order.status,
       );
       return Result.success(result);

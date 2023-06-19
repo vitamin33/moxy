@@ -1,9 +1,9 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'network_city.g.dart';
+part 'nova_network_city.g.dart';
 
 @JsonSerializable()
-class NetworkCity {
+class NovaNetworkCity {
   @JsonKey(name: 'MainDescription')
   final String mainDescription;
   @JsonKey(name: 'Ref')
@@ -13,11 +13,11 @@ class NetworkCity {
   @JsonKey(name: 'Present')
   final String presentName;
 
-  NetworkCity(
+  NovaNetworkCity(
       this.mainDescription, this.ref, this.deliveryCityRef, this.presentName);
 
-  factory NetworkCity.fromJson(Map<String, dynamic> json) =>
-      _$NetworkCityFromJson(json);
+  factory NovaNetworkCity.fromJson(Map<String, dynamic> json) =>
+      _$NovaNetworkCityFromJson(json);
 
-  Map<String, dynamic> toJson() => _$NetworkCityToJson(this);
+  Map<String, dynamic> toJson() => _$NovaNetworkCityToJson(this);
 }
