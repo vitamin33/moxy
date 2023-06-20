@@ -88,5 +88,16 @@ platform :ios do
       skip_waiting_for_build_processing: true,
       uses_non_exempt_encryption: false,
     )
+
+    # Automatically approve Export Compliance Information
+    supply(
+      skip_upload_metadata: true,
+      skip_upload_screenshots: true,
+      skip_upload_images: true,
+      skip_upload_binary: true,
+      run_precheck_before_submit: true,
+      submit_for_review: false,
+      force: true
+    )
   end
 end
