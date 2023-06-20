@@ -57,14 +57,6 @@ platform :ios do
       issuer_id: APPSTORECONNECT_ISSUER_ID
     )
 
-     # Add the plist_set action to set export compliance information
-    plist_set(
-      path: "Runner/Info.plist",  # Path to your Info.plist file
-      key: "ITSAppUsesNonExemptEncryption",
-      value: "false"
-    )
-
-
     # Figure out the build number (and optionally build name)
     new_build_number = (latest_testflight_build_number + 1)
     extra_config_args = []
