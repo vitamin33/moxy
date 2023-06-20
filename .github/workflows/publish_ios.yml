@@ -35,6 +35,12 @@ jobs:
           cat > .prod.env <<EOF
           BASE_URL=https://moxy.herokuapp.com
           EOF
+
+      # Extract Git tag and set it as env variable
+      - name: Extract version from Git tag
+        id: extract-version
+        run: echo "::set-env name=VERSION::${{ github.ref }}" | sed 's/refs\/tags\/v//'
+
       # This retrieves the current date & week in a format that we can use for keying our
       # cache on to help us pick the most recent cached data
       - name: Fetch date for cache key
