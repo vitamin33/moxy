@@ -57,6 +57,14 @@ platform :ios do
       issuer_id: APPSTORECONNECT_ISSUER_ID
     )
 
+     # Add the plist_set action to set export compliance information
+    plist_set(
+      path: "Runner/Info.plist",  # Path to your Info.plist file
+      key: "ITSAppUsesNonExemptEncryption",
+      value: "false"
+    )
+
+
     # Figure out the build number (and optionally build name)
     new_build_number = (latest_testflight_build_number + 1)
     extra_config_args = []
@@ -87,16 +95,6 @@ platform :ios do
       # set the build live for external testers).
       skip_waiting_for_build_processing: true,
       uses_non_exempt_encryption: false,
-    )
-
-    # Automatically approve Export Compliance Information
-    supply(
-      skip_upload_metadata: true,
-      skip_upload_screenshots: true,
-      skip_upload_images: true,
-      run_precheck_before_submit: true,
-      submit_for_review: false,
-      force: true
     )
   end
 end
