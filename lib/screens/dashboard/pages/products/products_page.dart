@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/all_products/all_products_cubit.dart';
+import 'package:moxy/domain/all_products/all_products_effects.dart';
 import 'package:moxy/domain/all_products/all_products_state.dart';
 import 'package:moxy/domain/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
@@ -17,6 +18,14 @@ class ProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AllProductsCubit cubit = context.read<AllProductsCubit>();
+    cubit.effectStream.listen((effect) {
+      if (effect is ProductsLoadingFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'Products loading failed: ${effect.failureText}'));
+      }
+    });
     return BlocConsumer<AllProductsCubit, AllProductsState>(
       listener: (context, state) {
         if (state.errorMessage != '') {

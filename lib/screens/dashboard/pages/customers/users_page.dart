@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/all_users/all_users_cubit.dart';
+import '../../../../domain/all_users/all_users_effects.dart';
 import '../../../../domain/all_users/all_users_state.dart';
 
 class UsersPage extends StatelessWidget {
@@ -11,8 +13,13 @@ class UsersPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final AllUsersCubit cubit = AllUsersCubit();
     cubit.effectStream.listen((effect) {
-      // TODO add effects here
+      if (effect is UsersLoadingFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'Users loading failed: ${effect.failureText}'));
+      }
     });
+
     return BlocProvider<AllUsersCubit>(
       create: (BuildContext context) => cubit,
       child:

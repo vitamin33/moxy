@@ -20,7 +20,7 @@ class ProductMapper {
         return Product(
           id: p.id,
           name: p.name,
-          description: p.description,
+          description: p.description ?? '',
           costPrice: p.costPrice,
           salePrice: p.salePrice,
           dimensions: p.dimensions
@@ -92,7 +92,7 @@ class ProductMapper {
   Product mapToProduct(NetworkProduct success) {
     return Product(
       name: success.name,
-      description: success.description,
+      description: success.description ?? '',
       costPrice: success.costPrice,
       salePrice: success.salePrice,
       dimensions: success.dimensions

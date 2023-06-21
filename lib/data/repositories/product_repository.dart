@@ -20,14 +20,15 @@ class ProductRepository {
 
   Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
     try {
-      final result = (await client.createProduct(
-          product.name,
-          product.description,
-          product.costPrice,
-          product.salePrice,
-          product.dimensions,
-          product.images,
-          product.idName));
+      final result = await client.createProduct(
+        product.name,
+        product.description,
+        product.costPrice,
+        product.salePrice,
+        product.dimensions,
+        product.images,
+        product.idName,
+      );
       if (result != null) {
         return Result.success(result);
       } else {

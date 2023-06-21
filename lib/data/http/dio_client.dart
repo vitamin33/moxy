@@ -111,7 +111,7 @@ class DioClient {
 
   Future<CreateProduct?> createProduct(
     String name,
-    String description,
+    String? description,
     double costPrice,
     double salePrice,
     List<NetworkDimension> dimensions,
@@ -131,7 +131,7 @@ class DioClient {
     }
     FormData formData = FormData.fromMap({
       'name': name,
-      'description': description,
+      'description': description ?? '',
       'costPrice': costPrice,
       'salePrice': salePrice,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
@@ -179,7 +179,7 @@ class DioClient {
   Future<NetworkProduct?> editProduct(
       String? id,
       String name,
-      String description,
+      String? description,
       String idName,
       List<NetworkDimension> dimensions,
       double costPrice,
@@ -204,7 +204,7 @@ class DioClient {
     }
     FormData formData = FormData.fromMap({
       'name': name,
-      'description': description,
+      'description': description ?? '',
       'costPrice': costPrice,
       'salePrice': salePrice,
       'idName': idName,
