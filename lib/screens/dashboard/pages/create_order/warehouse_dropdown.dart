@@ -2,50 +2,58 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/create_order/create_order_cubit.dart';
 import 'package:moxy/domain/create_order/create_order_state.dart';
-import 'package:moxy/domain/create_order/search_cities/search_cities_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:moxy/domain/create_order/search_cities/search_cities_state.dart';
-import 'package:moxy/domain/models/city.dart';
+import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/theme/app_theme.dart';
 
-class SearchCityDropdown extends StatelessWidget {
-  const SearchCityDropdown({super.key});
+import '../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
+import '../../../../domain/create_order/search_warehouse/search_warehouse_state.dart';
+
+class SearchWarehouseDropdown extends StatelessWidget {
+  const SearchWarehouseDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => SearchCitiesCubit(),
+      create: (context) => SearchWarehouseCubit(),
       child: Column(
         children: [
           BlocBuilder<CreateOrderCubit, CreateOrderState>(
               builder: (context, orderState) {
-            return BlocBuilder<SearchCitiesCubit, SearchCitiesState>(
+            return BlocBuilder<SearchWarehouseCubit, SearchWarehouseState>(
               builder: (context, state) {
                 if (state.isLoading) {
                   return const CircularProgressIndicator();
                 }
-                final citySearchCubit = context.read<SearchCitiesCubit>();
+                final warehouseSearchCubit =
+                    context.read<SearchWarehouseCubit>();
+
+                final selectedWarehouse = orderState.selectedWarehouse;
                 final selectedCity = orderState.selectedCity;
-                return DropdownSearch<City>(
-                  items: state.cityList,
-                  asyncItems: citySearchCubit.searchCities,
+
+                return DropdownSearch<Warehouse>(
+                  items: state.warehouseList,
+                  asyncItems: (String searchTerm) =>
+                      warehouseSearchCubit.searchWarehouse(
+                          searchTerm, selectedCity.deliveryCityRef),
                   popupProps: PopupPropsMultiSelection.modalBottomSheet(
                     showSelectedItems: false,
-                    searchFieldProps:
-                        _createSearchFieldProps(citySearchCubit.controller),
-                    itemBuilder: _cityPopupItemBuilder,
+                    searchFieldProps: _createSearchFieldProps(
+                        warehouseSearchCubit.controller),
+                    itemBuilder: _warehousePopupItemBuilder,
                     showSearchBox: true,
                     isFilterOnline: true,
                     modalBottomSheetProps: const ModalBottomSheetProps(
                         enableDrag: true, shape: BeveledRectangleBorder()),
                   ),
-                  selectedItem: selectedCity,
-                  itemAsString: state.cityList.isNotEmpty
-                      ? (City city) => city.toString()
-                      : (City city) => "City",
-                  onChanged: (City? city) {
+                  selectedItem: selectedWarehouse,
+                  itemAsString: state.warehouseList.isNotEmpty
+                      ? (Warehouse warehouse) =>
+                          warehouse.postMachineType.toString()
+                      : (Warehouse warehouse) => 'Warehouse',
+                  onChanged: (Warehouse? warehouse) {
                     final createOrderCubit = context.read<CreateOrderCubit>();
-                    createOrderCubit.selectCity(city);
+                    createOrderCubit.selectWarehouse(warehouse);
                   },
                 );
               },
@@ -56,8 +64,8 @@ class SearchCityDropdown extends StatelessWidget {
     );
   }
 
-  Widget _cityPopupItemBuilder(
-      BuildContext context, City item, bool isSelected) {
+  Widget _warehousePopupItemBuilder(
+      BuildContext context, Warehouse item, bool isSelected) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: !isSelected
@@ -69,7 +77,7 @@ class SearchCityDropdown extends StatelessWidget {
             ),
       child: ListTile(
         selected: isSelected,
-        title: Text(item.presentName),
+        title: Text('${item.postMachineType}'),
         subtitle: Text(item.ref),
       ),
     );
@@ -79,7 +87,7 @@ class SearchCityDropdown extends StatelessWidget {
     return TextFieldProps(
       cursorColor: AppTheme.pinkDark,
       decoration: InputDecoration(
-        labelText: 'Enter city name',
+        labelText: 'Enter warehouse',
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: AppTheme.greyDark,
@@ -88,7 +96,7 @@ class SearchCityDropdown extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: AppTheme.darkPink, // Set your desired border color here
+            color: AppTheme.pinkDark, // Set your desired border color here
           ),
           borderRadius: BorderRadius.circular(8),
         ),

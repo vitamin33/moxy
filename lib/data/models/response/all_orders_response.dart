@@ -19,31 +19,48 @@ class AllOrdersResponse {
 class NetworkOrder {
   @JsonKey(name: '_id')
   String id;
-  int? ukrPostNumber;
-  int? novaPostNumber;
+  int novaPostNumber;
   String deliveryType;
   String status;
   String paymentType;
-  NetworkClient client;
+  CreateNetworkClient client;
   List<NetworkOrderedItemResponse> orderedItems;
   String createdAt;
   String updatedAt;
 
-  NetworkOrder(
-      {required this.id,
-      required this.ukrPostNumber,
-      required this.deliveryType,
-      required this.status,
-      required this.paymentType,
-      required this.client,
-      required this.orderedItems,
-      required this.createdAt,
-      required this.updatedAt});
+  NetworkOrder({
+    required this.id,
+    required this.novaPostNumber,
+    required this.deliveryType,
+    required this.status,
+    required this.paymentType,
+    required this.client,
+    required this.orderedItems,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
   factory NetworkOrder.fromJson(Map<String, dynamic> json) =>
       _$NetworkOrderFromJson(json);
 
+  get ukrPostNumber => null;
+
   Map<String, dynamic> toJson() => _$NetworkOrderToJson(this);
+}
+
+@JsonSerializable()
+class CreateNetworkClient {
+  String mobileNumber;
+  String firstName;
+  String secondName;
+  String city;
+  List<String> orders;
+  CreateNetworkClient(this.city, this.firstName, this.mobileNumber,
+      this.secondName, this.orders);
+
+  factory CreateNetworkClient.fromJson(Map<String, dynamic> json) =>
+      _$CreateNetworkClientFromJson(json);
+  Map<String, dynamic> toJson() => _$CreateNetworkClientToJson(this);
 }
 
 @JsonSerializable()
@@ -56,6 +73,7 @@ class NetworkClient {
 
   factory NetworkClient.fromJson(Map<String, dynamic> json) =>
       _$NetworkClientFromJson(json);
+  Map<String, dynamic> toJson() => _$NetworkClientToJson(this);
 }
 
 @JsonSerializable()
@@ -70,3 +88,4 @@ class NetworkOrderedItemResponse {
   factory NetworkOrderedItemResponse.fromJson(Map<String, dynamic> json) =>
       _$NetworkOrderedItemResponseFromJson(json);
 }
+

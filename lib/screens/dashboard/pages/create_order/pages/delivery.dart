@@ -7,7 +7,7 @@ import '../../../../../constant/order_constants.dart';
 import '../../../../../domain/create_order/create_order_cubit.dart';
 import '../../../../../domain/create_order/create_order_state.dart';
 import '../city_dropdown.dart';
-import '../create_order_page.dart';
+import '../warehouse_dropdown.dart';
 
 class Delivery extends StatelessWidget {
   const Delivery({super.key});
@@ -17,73 +17,84 @@ class Delivery extends StatelessWidget {
     return BlocBuilder<CreateOrderCubit, CreateOrderState>(
         builder: (context, state) {
       final cubit = context.read<CreateOrderCubit>();
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(AppTheme.cardPadding),
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        cubit.selectDeliveryType(DeliveryType.novaPost);
-                      },
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 3,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: state.deliveryType == DeliveryType.novaPost
-                                ? Colors.black
-                                : AppTheme.white,
+      return SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(AppTheme.cardPadding),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          cubit.selectDeliveryType(DeliveryType.novaPost);
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 3,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: state.deliveryType == DeliveryType.novaPost
+                                  ? Colors.black
+                                  : AppTheme.white,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            color: AppTheme.white,
                           ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          color: AppTheme.white,
-                        ),
-                        child: Center(
-                          child: Image.asset(ImageAssets.novaPoshta),
+                          child: Center(
+                            child: Image.asset(ImageAssets.novaPoshta),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        cubit.selectDeliveryType(DeliveryType.ukrPost);
-                      },
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 3,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: state.deliveryType == DeliveryType.ukrPost
-                                ? Colors.black
-                                : AppTheme.white,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          cubit.selectDeliveryType(DeliveryType.ukrPost);
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 3,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 2,
+                              color: state.deliveryType == DeliveryType.ukrPost
+                                  ? Colors.black
+                                  : AppTheme.white,
+                            ),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            color: AppTheme.white,
                           ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          color: AppTheme.white,
-                        ),
-                        child: Center(
-                          child: Image.asset(ImageAssets.ukrPoshta),
+                          child: Center(
+                            child: Image.asset(ImageAssets.ukrPoshta),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: SearchCityDropdown(),
-          ),
-          positionOrderButton(state, cubit)
-        ],
+            state.deliveryType.index == 0
+                ? Padding(
+                    padding: const EdgeInsets.all(AppTheme.cardPadding),
+                    child: Column(
+                      children: const [
+                        SearchCityDropdown(),
+                        SizedBox(height: 20),
+                        SearchWarehouseDropdown()
+                      ],
+                    ),
+                  )
+                : Container()
+          ],
+        ),
       );
     });
   }

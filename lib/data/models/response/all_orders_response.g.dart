@@ -20,23 +20,23 @@ Map<String, dynamic> _$AllOrdersResponseToJson(AllOrdersResponse instance) =>
 
 NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
       id: json['_id'] as String,
-      ukrPostNumber: json['ukrPostNumber'] as int?,
+      novaPostNumber: json['novaPostNumber'] as int,
       deliveryType: json['deliveryType'] as String,
       status: json['status'] as String,
       paymentType: json['paymentType'] as String,
-      client: NetworkClient.fromJson(json['client'] as Map<String, dynamic>),
+      client:
+          CreateNetworkClient.fromJson(json['client'] as Map<String, dynamic>),
       orderedItems: (json['orderedItems'] as List<dynamic>)
           .map((e) =>
               NetworkOrderedItemResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
-    )..novaPostNumber = json['novaPostNumber'] as int?;
+    );
 
 Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
     <String, dynamic>{
       '_id': instance.id,
-      'ukrPostNumber': instance.ukrPostNumber,
       'novaPostNumber': instance.novaPostNumber,
       'deliveryType': instance.deliveryType,
       'status': instance.status,
@@ -45,6 +45,25 @@ Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
       'orderedItems': instance.orderedItems,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
+    };
+
+CreateNetworkClient _$CreateNetworkClientFromJson(Map<String, dynamic> json) =>
+    CreateNetworkClient(
+      json['city'] as String,
+      json['firstName'] as String,
+      json['mobileNumber'] as String,
+      json['secondName'] as String,
+      (json['orders'] as List<dynamic>).map((e) => e as String).toList(),
+    );
+
+Map<String, dynamic> _$CreateNetworkClientToJson(
+        CreateNetworkClient instance) =>
+    <String, dynamic>{
+      'mobileNumber': instance.mobileNumber,
+      'firstName': instance.firstName,
+      'secondName': instance.secondName,
+      'city': instance.city,
+      'orders': instance.orders,
     };
 
 NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>

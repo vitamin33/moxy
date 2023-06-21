@@ -8,6 +8,7 @@ import '../../data/models/response/all_orders_response.dart';
 import '../../services/get_it.dart';
 import '../models/city.dart';
 import '../models/order.dart';
+import '../models/warehouse.dart';
 
 class OrderMapper {
   final productMapper = locate<ProductMapper>();
@@ -56,32 +57,55 @@ class OrderMapper {
     return PaymentType.fullPayment;
   }
 
+  String _mapPaymentTypeNetwork(String paymentType) {
+    switch (paymentType) {
+      case 'cashAdvance':
+        return 'CashAdvance';
+      case 'fullPayment':
+        return 'FullPayment';
+    }
+    return 'CashAdvance';
+  }
+
   DeliveryType _mapDeliveryType(String paymentType) {
     switch (paymentType) {
-      case 'novaPost':
+      case 'NovaPost':
         return DeliveryType.novaPost;
-      case 'ukrPost':
+      case 'UkrPost':
         return DeliveryType.ukrPost;
     }
     return DeliveryType.novaPost;
+  }
+
+  String _mapDeliveryTypeNetwork(String paymentType) {
+    switch (paymentType) {
+      case 'novaPost':
+        return 'NovaPost';
+      case 'ukrPost':
+        return 'UkrPost';
+    }
+    return 'NovaPost';
   }
 
   CreateOrder mapToNetworkCreateOrder(
     DeliveryType deliveryType,
     PaymentType paymentType,
     List<OrderedItem> selectedProduct,
+    Warehouse novapost,
     Client client,
     City city,
     String status,
+    String prepayment
   ) {
     return CreateOrder(
-      deliveryType: deliveryType,
-      paymentType: paymentType,
-      // TODO  data for this object should be set to real data
+      cashAdvanceValue:int.parse(prepayment),
+      deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
+      paymentType: _mapPaymentTypeNetwork(paymentType.name),
       novaPost: NetworkNovaPost(
-          number: 23,
-          ref: 'test_ref',
-          postMachineType: 'test_post_mashine_type'),
+          number: novapost.number,
+          ref: novapost.ref,
+          postMachineType: novapost.postMachineType
+          ),
       status: status,
       client: NetworkClient(
         client.city,
@@ -109,40 +133,3 @@ class OrderMapper {
     );
   }
 }
-
-  // List<Client> mapToClientList(List<NetworkOrder> networkClient) {
-  //   return networkClient.map(
-  //     (p) {
-  //       Map<int, Client> dimenMap = {};
-  //       for (var i = 0; i < p.client.length; i++) {
-  //         dimenMap.putIfAbsent(
-  //             i,
-  //             () => Client(
-  //                 mobileNumber: p.client[i].mobileNumber,
-  //                 quantity: p.dimensions[i].quantity
-  //                 ));
-  //       }
-  //       return Client(
-  //         mobileNumber: p.client.mobileNumber,
-  //         name: p.name,
-  //         description: p.description,
-  //         costPrice: p.costPrice,
-  //         salePrice: p.salePrice,
-  //         dimensions: p.dimensions
-  //             .map((e) => Dimension(
-  //                   color: e.color,
-  //                   quantity: e.quantity,
-  //                   image: _mapColorDimensionImage(e),
-  //                 ))
-  //             .toList(),
-  //         idName: p.idName,
-  //         images: p.images
-  //             .map(
-  //               (e) => ImagePath(type: Type.network, imagePath: e),
-  //             )
-  //             .toList(),
-  //       );
-  //     },
-  //   ).toList();
-  // }
-

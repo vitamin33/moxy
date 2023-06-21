@@ -78,10 +78,7 @@ class Client {
 
   static Client defaultClient() {
     return Client(
-        mobileNumber: '',
-        firstName: 'Ivan',
-        secondName: 'Mikolenko',
-        city: 'Lviv');
+        mobileNumber: '', firstName: '', secondName: '', city: 'Lviv');
   }
 
   Client copyWith(

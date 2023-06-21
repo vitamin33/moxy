@@ -7,8 +7,8 @@ part of 'create_order_request.dart';
 // **************************************************************************
 
 CreateOrder _$CreateOrderFromJson(Map<String, dynamic> json) => CreateOrder(
-      deliveryType: $enumDecode(_$DeliveryTypeEnumMap, json['deliveryType']),
-      paymentType: $enumDecode(_$PaymentTypeEnumMap, json['paymentType']),
+      deliveryType: json['deliveryType'] as String,
+      paymentType: json['paymentType'] as String,
       novaPost:
           NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       products: (json['products'] as List<dynamic>)
@@ -17,28 +17,20 @@ CreateOrder _$CreateOrderFromJson(Map<String, dynamic> json) => CreateOrder(
       client: NetworkClient.fromJson(json['client'] as Map<String, dynamic>),
       city: NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
       status: json['status'] as String,
+      cashAdvanceValue: json['cashAdvanceValue'] as int,
     );
 
 Map<String, dynamic> _$CreateOrderToJson(CreateOrder instance) =>
     <String, dynamic>{
-      'deliveryType': _$DeliveryTypeEnumMap[instance.deliveryType]!,
-      'paymentType': _$PaymentTypeEnumMap[instance.paymentType]!,
+      'deliveryType': instance.deliveryType,
+      'paymentType': instance.paymentType,
       'novaPost': instance.novaPost,
       'products': instance.products,
       'client': instance.client,
       'city': instance.city,
       'status': instance.status,
+      'cashAdvanceValue': instance.cashAdvanceValue,
     };
-
-const _$DeliveryTypeEnumMap = {
-  DeliveryType.novaPost: 'novaPost',
-  DeliveryType.ukrPost: 'ukrPost',
-};
-
-const _$PaymentTypeEnumMap = {
-  PaymentType.cashAdvance: 'cashAdvance',
-  PaymentType.fullPayment: 'fullPayment',
-};
 
 NetworkOrderedItem _$NetworkOrderedItemFromJson(Map<String, dynamic> json) =>
     NetworkOrderedItem(
@@ -71,9 +63,9 @@ Map<String, dynamic> _$NetworkCityToJson(NetworkCity instance) =>
 
 NetworkNovaPost _$NetworkNovaPostFromJson(Map<String, dynamic> json) =>
     NetworkNovaPost(
-      ref: json['ref'] as String?,
-      postMachineType: json['postMachineType'] as String?,
-      number: json['number'] as int?,
+      ref: json['ref'] as String,
+      postMachineType: json['postMachineType'] as String,
+      number: json['number'] as int,
     );
 
 Map<String, dynamic> _$NetworkNovaPostToJson(NetworkNovaPost instance) =>

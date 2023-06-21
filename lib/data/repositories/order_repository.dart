@@ -19,16 +19,12 @@ class OrderRepository {
 
   Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
     try {
-      final result = await client.createOrder(
-        order.deliveryType,
-        order.paymentType,
-        order.novaPost,
-        order.products,
-        order.client,
-        order.city,
-        order.status,
-      );
-      return Result.success(result);
+      final result = await client.createOrder(order);
+      if (result != null) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('sd'));
+      }
     } catch (e) {
       moxyPrint('Repository Error:$e');
       return Result.error(Exception('$e'));

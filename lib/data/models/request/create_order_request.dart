@@ -2,19 +2,21 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 
 import '../../../constant/order_constants.dart';
+import '../../../domain/models/city.dart';
 import '../response/all_orders_response.dart';
 
 part 'create_order_request.g.dart';
 
 @JsonSerializable()
 class CreateOrder {
-  final DeliveryType deliveryType;
-  final PaymentType paymentType;
+  final String deliveryType;
+  final String paymentType;
   final NetworkNovaPost novaPost;
   final List<NetworkOrderedItem> products;
   final NetworkClient client;
   final NetworkCity city;
   final String status;
+  final int cashAdvanceValue;
 
   CreateOrder({
     required this.deliveryType,
@@ -24,6 +26,7 @@ class CreateOrder {
     required this.client,
     required this.city,
     required this.status,
+    required this.cashAdvanceValue,
   });
 
   factory CreateOrder.fromJson(Map<String, dynamic> json) =>
@@ -71,9 +74,20 @@ class NetworkCity {
 
 @JsonSerializable()
 class NetworkNovaPost {
-  String? ref;
-  String? postMachineType;
-  int? number;
+  String ref;
+  String postMachineType;
+  int number;
+  // "city": {
+  //       "ref": "FABBD-FEFDFE-142FDKJF",
+  //       "presentName": "м. Lviv, Lvivska obl",
+  //       "mainDescription": "Lviv",
+  //       "deliveryCityRef": "LL_FEIJE_FDFE_12_FFQ"
+  //   },
+  //   "novaPost": {
+  //       "number": 1,
+  //       "ref": "FABBD-FEFDFE-142FDKJF",
+  //       "postMachineType": "FullDayService"
+  //   }
 
   NetworkNovaPost({
     required this.ref,

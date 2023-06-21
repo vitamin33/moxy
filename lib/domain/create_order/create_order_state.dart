@@ -2,6 +2,7 @@ import '../../constant/order_constants.dart';
 import '../copyable.dart';
 import '../models/city.dart';
 import '../models/order.dart';
+import '../models/warehouse.dart';
 import '../validation_mixin.dart';
 
 class CreateOrderState implements Copyable<CreateOrderState> {
@@ -16,9 +17,11 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   int novaPostNumber;
   int productListPrice;
   List<OrderedItem> selectedProducts;
-  City? selectedCity;
+  City selectedCity;
+  Warehouse selectedWarehouse;
   String status;
   Client client;
+  String prepayment;
 
   // field errors
   FieldErrors errors;
@@ -37,8 +40,10 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.productListPrice,
     required this.selectedProducts,
     required this.selectedCity,
+    required this.selectedWarehouse,
     required this.client,
     required this.status,
+    required this.prepayment,
   });
 
   static CreateOrderState defaultCreateProductState() {
@@ -55,9 +60,11 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         novaPostNumber: 0,
         productListPrice: 0,
         selectedProducts: [],
-        selectedCity: null,
+        selectedCity: City.defaultCity(),
+        selectedWarehouse:Warehouse.defaultWarehouse(),
         client: Client.defaultClient(),
-        status: '');
+        status: 'New',
+        prepayment:'150');
   }
 
   @override
@@ -77,8 +84,11 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       int? productListPrice,
       List<OrderedItem>? selectedProducts,
       City? selectedCity,
+      Warehouse? selectedWarehouse,
       Client? client,
-      String? status}) {
+      String? status,
+      String? prepayment
+      }) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
@@ -93,8 +103,10 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       productListPrice: productListPrice ?? this.productListPrice,
       selectedProducts: selectedProducts ?? this.selectedProducts,
       selectedCity: selectedCity ?? this.selectedCity,
+      selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,
       status: status ?? this.status,
+      prepayment: prepayment ?? this.prepayment,
     );
   }
 }
@@ -103,11 +115,15 @@ class FieldErrors {
   FieldError? firstName;
   FieldError? secondName;
   FieldError? phoneNumber;
+  FieldError? selectedProduct;
+  FieldError? selectedPrepayment;
 
   FieldErrors({
     this.firstName,
     this.secondName,
     this.phoneNumber,
+    this.selectedProduct,
+    this.selectedPrepayment,
   });
 
   static FieldErrors noErrors() {
@@ -125,6 +141,12 @@ class FieldErrors {
     }
     if (phoneNumber != null) {
       buffer.write('phoneNumber ');
+    }
+    if (selectedProduct != null) {
+      buffer.write('selectedProduct ');
+    }
+    if (selectedPrepayment != null) {
+      buffer.write('selectedPrepayment ');
     }
     buffer.write('.');
     return buffer.toString();
