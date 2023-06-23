@@ -27,12 +27,15 @@ class NovaNetworkWarehouse {
   @JsonKey(name: 'TypeOfWarehouse')
   final String ref;
   @JsonKey(name: 'Description')
+  final String description;
+  @JsonKey(name: 'PostMachineType')
   final String postMachineType;
   @JsonKey(name: 'Number')
   final String number;
 
   NovaNetworkWarehouse(
     this.ref,
+    this.description,
     this.postMachineType,
     this.number,
   );

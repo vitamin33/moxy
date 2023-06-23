@@ -88,24 +88,22 @@ class OrderMapper {
   }
 
   CreateOrder mapToNetworkCreateOrder(
-    DeliveryType deliveryType,
-    PaymentType paymentType,
-    List<OrderedItem> selectedProduct,
-    Warehouse novapost,
-    Client client,
-    City city,
-    String status,
-    String prepayment
-  ) {
+      DeliveryType deliveryType,
+      PaymentType paymentType,
+      List<OrderedItem> selectedProduct,
+      Warehouse novapost,
+      Client client,
+      City city,
+      String status,
+      String prepayment) {
     return CreateOrder(
-      cashAdvanceValue:int.parse(prepayment),
+      cashAdvanceValue: int.parse(prepayment),
       deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
       paymentType: _mapPaymentTypeNetwork(paymentType.name),
       novaPost: NetworkNovaPost(
           number: novapost.number,
           ref: novapost.ref,
-          postMachineType: novapost.postMachineType
-          ),
+          postMachineType: novapost.postMachineType),
       status: status,
       client: NetworkClient(
         client.city,

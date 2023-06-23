@@ -16,53 +16,50 @@ class SearchWarehouseDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-    // BlocProvider(
-    //     create: (context) => SearchWarehouseCubit(),
-    //     child: 
+    return
+        // BlocProvider(
+        //     create: (context) => SearchWarehouseCubit(),
+        //     child:
         Column(
-          children: [
-            BlocBuilder<CreateOrderCubit, CreateOrderState>(
-                builder: (context, orderState) {
-              return BlocBuilder<SearchWarehouseCubit, SearchWarehouseState>(
-                builder: (context, state) {
-                  if (state.isLoading) {
-                    return const CircularProgressIndicator();
-                  }
-                  final warehouseSearchCubit =
-                      context.read<SearchWarehouseCubit>();
-                  final selectedWarehouse = orderState.selectedWarehouse;
-                  final selectedCity = orderState.selectedCity;
-                  return DropdownSearch<Warehouse>(
-                    items: state.warehouseList,
-                    asyncItems: (String searchTerm) =>
-                        warehouseSearchCubit.searchWarehouse(
-                            searchTerm, selectedCity.deliveryCityRef),
-                    popupProps: PopupPropsMultiSelection.modalBottomSheet(
-                      showSelectedItems: false,
-                      searchFieldProps: _createSearchFieldProps(
-                          warehouseSearchCubit.controller),
-                      itemBuilder: _warehousePopupItemBuilder,
-                      showSearchBox: true,
-                      isFilterOnline: true,
-                      modalBottomSheetProps: const ModalBottomSheetProps(
-                          enableDrag: true, shape: BeveledRectangleBorder()),
-                    ),
-                    selectedItem: selectedWarehouse,
-                    itemAsString: state.warehouseList.isNotEmpty
-                        ? (Warehouse warehouse) =>
-                            warehouse.postMachineType.toString()
-                        : (Warehouse warehouse) => 'Warehouse',
-                    onChanged: (Warehouse? warehouse) {
-                      final createOrderCubit = context.read<CreateOrderCubit>();
-                      createOrderCubit.selectWarehouse(warehouse);
-                    },
-                  );
+      children: [
+        BlocBuilder<CreateOrderCubit, CreateOrderState>(
+            builder: (context, orderState) {
+          return BlocBuilder<SearchWarehouseCubit, SearchWarehouseState>(
+            builder: (context, state) {
+              if (state.isLoading) {
+                return const CircularProgressIndicator();
+              }
+              final warehouseSearchCubit = context.read<SearchWarehouseCubit>();
+              final selectedWarehouse = orderState.selectedWarehouse;
+              final selectedCity = orderState.selectedCity;
+              return DropdownSearch<Warehouse>(
+                items: state.warehouseList,
+                asyncItems: (String searchTerm) => warehouseSearchCubit
+                    .searchWarehouse(searchTerm, selectedCity.deliveryCityRef),
+                popupProps: PopupPropsMultiSelection.modalBottomSheet(
+                  showSelectedItems: false,
+                  searchFieldProps:
+                      _createSearchFieldProps(warehouseSearchCubit.controller),
+                  itemBuilder: _warehousePopupItemBuilder,
+                  showSearchBox: true,
+                  isFilterOnline: true,
+                  modalBottomSheetProps: const ModalBottomSheetProps(
+                      enableDrag: true, shape: BeveledRectangleBorder()),
+                ),
+                selectedItem: selectedWarehouse,
+                itemAsString: state.warehouseList.isNotEmpty
+                    ? (Warehouse warehouse) => warehouse.description.toString()
+                    : (Warehouse warehouse) => 'Warehouse',
+                onChanged: (Warehouse? warehouse) {
+                  final createOrderCubit = context.read<CreateOrderCubit>();
+                  createOrderCubit.selectWarehouse(warehouse);
                 },
               );
-            }),
-          ],
-        );
+            },
+          );
+        }),
+      ],
+    );
   }
 
   Widget _warehousePopupItemBuilder(
@@ -78,7 +75,7 @@ class SearchWarehouseDropdown extends StatelessWidget {
             ),
       child: ListTile(
         selected: isSelected,
-        title: Text(item.postMachineType),
+        title: Text(item.description),
         subtitle: Text(item.ref),
       ),
     );

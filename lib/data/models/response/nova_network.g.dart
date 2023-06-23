@@ -27,6 +27,7 @@ NovaNetworkWarehouse _$NovaNetworkWarehouseFromJson(
     NovaNetworkWarehouse(
       json['TypeOfWarehouse'] as String,
       json['Description'] as String,
+      json['PostMachineType'] as String,
       json['Number'] as String,
     );
 
@@ -34,6 +35,7 @@ Map<String, dynamic> _$NovaNetworkWarehouseToJson(
         NovaNetworkWarehouse instance) =>
     <String, dynamic>{
       'TypeOfWarehouse': instance.ref,
-      'Description': instance.postMachineType,
+      'Description': instance.description,
+      'PostMachineType': instance.postMachineType,
       'Number': instance.number,
     };

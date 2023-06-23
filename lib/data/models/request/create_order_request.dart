@@ -77,17 +77,7 @@ class NetworkNovaPost {
   String ref;
   String postMachineType;
   int number;
-  // "city": {
-  //       "ref": "FABBD-FEFDFE-142FDKJF",
-  //       "presentName": "м. Lviv, Lvivska obl",
-  //       "mainDescription": "Lviv",
-  //       "deliveryCityRef": "LL_FEIJE_FDFE_12_FFQ"
-  //   },
-  //   "novaPost": {
-  //       "number": 1,
-  //       "ref": "FABBD-FEFDFE-142FDKJF",
-  //       "postMachineType": "FullDayService"
-  //   }
+ 
 
   NetworkNovaPost({
     required this.ref,

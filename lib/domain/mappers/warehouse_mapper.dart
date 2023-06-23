@@ -8,6 +8,7 @@ class WarehouseMapper {
           (e) => Warehouse(
               ref: e.ref,
               postMachineType: e.postMachineType,
+              description: e.description,
               number: int.parse(e.number)),
         )
         .toList();
