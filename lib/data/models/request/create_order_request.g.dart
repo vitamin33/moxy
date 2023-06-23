@@ -64,7 +64,7 @@ Map<String, dynamic> _$NetworkCityToJson(NetworkCity instance) =>
 NetworkNovaPost _$NetworkNovaPostFromJson(Map<String, dynamic> json) =>
     NetworkNovaPost(
       ref: json['ref'] as String,
-      postMachineType: json['postMachineType'] as String,
+      postMachineType: json['postMachineType'] as String?,
       number: json['number'] as int,
     );
 

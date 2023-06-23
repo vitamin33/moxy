@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/domain/models/city.dart';
 
 part 'all_orders_response.g.dart';
 
@@ -19,7 +21,9 @@ class AllOrdersResponse {
 class NetworkOrder {
   @JsonKey(name: '_id')
   String id;
-  int novaPostNumber;
+  int cashAdvanceValue;
+  NetworkNovaPost novaPost;
+  NetworkCity city;
   String deliveryType;
   String status;
   String paymentType;
@@ -30,7 +34,9 @@ class NetworkOrder {
 
   NetworkOrder({
     required this.id,
-    required this.novaPostNumber,
+    required this.cashAdvanceValue,
+    required this.novaPost,
+    required this.city,
     required this.deliveryType,
     required this.status,
     required this.paymentType,
@@ -88,4 +94,3 @@ class NetworkOrderedItemResponse {
   factory NetworkOrderedItemResponse.fromJson(Map<String, dynamic> json) =>
       _$NetworkOrderedItemResponseFromJson(json);
 }
-

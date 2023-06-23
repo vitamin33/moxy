@@ -75,13 +75,13 @@ class NetworkCity {
 @JsonSerializable()
 class NetworkNovaPost {
   String ref;
-  String postMachineType;
+  String? postMachineType;
   int number;
  
 
   NetworkNovaPost({
     required this.ref,
-    required this.postMachineType,
+     this.postMachineType,
     required this.number,
   });
 
