@@ -5,9 +5,6 @@ import 'package:moxy/domain/create_order/create_order_state.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/theme/app_theme.dart';
-
-import '../../../../domain/create_order/search_cities/search_cities_cubit.dart';
-import '../../../../domain/create_order/search_cities/search_cities_state.dart';
 import '../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../../../../domain/create_order/search_warehouse/search_warehouse_state.dart';
 
@@ -17,9 +14,6 @@ class SearchWarehouseDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return
-        // BlocProvider(
-        //     create: (context) => SearchWarehouseCubit(),
-        //     child:
         Column(
       children: [
         BlocBuilder<CreateOrderCubit, CreateOrderState>(
@@ -47,7 +41,7 @@ class SearchWarehouseDropdown extends StatelessWidget {
                       enableDrag: true, shape: BeveledRectangleBorder()),
                 ),
                 selectedItem: selectedWarehouse,
-                itemAsString: state.warehouseList.isNotEmpty
+                itemAsString: selectedWarehouse.description != ''
                     ? (Warehouse warehouse) => warehouse.description.toString()
                     : (Warehouse warehouse) => 'Warehouse',
                 onChanged: (Warehouse? warehouse) {

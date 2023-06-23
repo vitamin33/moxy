@@ -4,7 +4,6 @@ import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/create_order/create_order_effects.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
-import 'package:rxdart/rxdart.dart';
 import '../../constant/order_constants.dart';
 import '../../data/repositories/order_repository.dart';
 import '../../data/repositories/product_repository.dart';
@@ -26,13 +25,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   final navigationService = locate<NavigationService>();
 
   late final StreamSubscription _selectedProductSubscription;
-
-  late final StreamSubscription _selectedCitySubscription;
-  final _selectedCitySubject = BehaviorSubject<City>();
-  City? get currentSelectedCity => _selectedCitySubject.valueOrNull;
-  void addToSelectedCityStream(City items) =>
-      _selectedCitySubject.sink.add(items);
-  Stream<City> get selectedCity => _selectedCitySubject.stream;
 
   bool isEditMode;
 
@@ -72,7 +64,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   }
 
   void _subscribe() {
-    _selectedCitySubscription = selectedCity.listen((items) {});
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
         final totalPrice = fullPrice(items);
@@ -90,7 +81,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   @override
   Future<void> close() {
     _selectedProductSubscription.cancel();
-    _selectedCitySubscription.cancel();
     moxyPrint('Cubit closed');
     return super.close();
   }
@@ -207,8 +197,8 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   }
 
   void selectCity(City? city) {
-    // addToSelectedCityStream(city!);
-    emit(state.copyWith(selectedCity: city));
+    emit(state.copyWith(
+        selectedCity: city, selectedWarehouse: Warehouse.defaultWarehouse()));
   }
 
   void selectWarehouse(Warehouse? warehouse) {

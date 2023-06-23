@@ -11,15 +11,6 @@ import '../models/response/all_orders_response.dart';
 class OrderRepository {
   final DioClient client = locate<DioClient>();
 
-  final _selectedCitySubject = BehaviorSubject<City>();
-  Stream<City> get selectedCity => _selectedCitySubject.stream;
-  City? get currentSelectedCity =>
-      _selectedCitySubject.valueOrNull;
-
-  void addToSelectedCityStream(City items) =>
-      _selectedCitySubject.sink.add(items);
-
-
   Future<Result<List<NetworkOrder>, Exception>> getAllOrders() async {
     try {
       final result = await client.allOrders();
@@ -42,7 +33,5 @@ class OrderRepository {
       return Result.error(Exception('$e'));
     }
   }
-  void updateSelectedCity(City list) {
-    addToSelectedCityStream(list);
-  }
+
 }

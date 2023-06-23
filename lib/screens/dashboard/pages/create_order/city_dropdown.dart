@@ -14,12 +14,7 @@ class SearchCityDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // BlocProvider(
-        //   create: (context) => SearchCitiesCubit(),
-        //     child:
-
-        Column(
+    return Column(
       children: [
         BlocBuilder<CreateOrderCubit, CreateOrderState>(
             builder: (context, orderState) {
@@ -45,7 +40,7 @@ class SearchCityDropdown extends StatelessWidget {
                         enableDrag: true, shape: BeveledRectangleBorder()),
                   ),
                   selectedItem: selectedCity,
-                  itemAsString: state.cityList.isNotEmpty
+                  itemAsString: selectedCity.presentName != ''
                       ? (City city) => city.toString()
                       : (City city) => "City",
                   onChanged: (City? city) {
