@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'nova_network_city.dart';
+part of 'nova_network.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -20,4 +20,22 @@ Map<String, dynamic> _$NovaNetworkCityToJson(NovaNetworkCity instance) =>
       'Ref': instance.ref,
       'DeliveryCity': instance.deliveryCityRef,
       'Present': instance.presentName,
+    };
+
+NovaNetworkWarehouse _$NovaNetworkWarehouseFromJson(
+        Map<String, dynamic> json) =>
+    NovaNetworkWarehouse(
+      json['TypeOfWarehouse'] as String,
+      json['Description'] as String,
+      json['PostMachineType'] as String,
+      json['Number'] as String,
+    );
+
+Map<String, dynamic> _$NovaNetworkWarehouseToJson(
+        NovaNetworkWarehouse instance) =>
+    <String, dynamic>{
+      'TypeOfWarehouse': instance.ref,
+      'Description': instance.description,
+      'PostMachineType': instance.postMachineType,
+      'Number': instance.number,
     };

@@ -7,28 +7,26 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:moxy/domain/create_order/search_cities/search_cities_state.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/theme/app_theme.dart';
+import '../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
 
 class SearchCityDropdown extends StatelessWidget {
   const SearchCityDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SearchCitiesCubit(),
-      child: Column(
-        children: [
-          BlocBuilder<CreateOrderCubit, CreateOrderState>(
-              builder: (context, orderState) {
-            return BlocBuilder<SearchCitiesCubit, SearchCitiesState>(
-              builder: (context, state) {
-                if (state.isLoading) {
-                  return const CircularProgressIndicator();
-                }
-                final citySearchCubit = context.read<SearchCitiesCubit>();
-
-                final selectedCity = orderState.selectedCity;
-
-                return DropdownSearch<City>(
+    return Column(
+      children: [
+        BlocBuilder<CreateOrderCubit, CreateOrderState>(
+            builder: (context, orderState) {
+          return BlocBuilder<SearchCitiesCubit, SearchCitiesState>(
+            builder: (context, state) {
+              if (state.isLoading) {
+                return const CircularProgressIndicator();
+              }
+              final citySearchCubit = context.read<SearchCitiesCubit>();
+              final warehousSearchCubit = context.read<SearchWarehouseCubit>();
+              final selectedCity = orderState.selectedCity;
+              return DropdownSearch<City>(
                   items: state.cityList,
                   asyncItems: citySearchCubit.searchCities,
                   popupProps: PopupPropsMultiSelection.modalBottomSheet(
@@ -42,17 +40,18 @@ class SearchCityDropdown extends StatelessWidget {
                         enableDrag: true, shape: BeveledRectangleBorder()),
                   ),
                   selectedItem: selectedCity,
-                  itemAsString: (City city) => city.toString(),
+                  itemAsString: selectedCity.presentName != ''
+                      ? (City city) => city.toString()
+                      : (City city) => "City",
                   onChanged: (City? city) {
                     final createOrderCubit = context.read<CreateOrderCubit>();
                     createOrderCubit.selectCity(city);
-                  },
-                );
-              },
-            );
-          }),
-        ],
-      ),
+                    warehousSearchCubit.clearWarehouse();
+                  });
+            },
+          );
+        })
+      ],
     );
   }
 
@@ -88,7 +87,7 @@ class SearchCityDropdown extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: const BorderSide(
-            color: AppTheme.pinkDark, // Set your desired border color here
+            color: AppTheme.darkPink,
           ),
           borderRadius: BorderRadius.circular(8),
         ),

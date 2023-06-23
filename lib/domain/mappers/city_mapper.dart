@@ -1,4 +1,4 @@
-import '../../data/models/response/nova_network_city.dart';
+import '../../data/models/response/nova_network.dart';
 import '../models/city.dart';
 
 class CityMapper {

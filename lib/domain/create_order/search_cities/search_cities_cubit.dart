@@ -18,9 +18,9 @@ class SearchCitiesCubit extends Cubit<SearchCitiesState> {
 
     try {
       final cities = await apiService.fetchCities(searchTerm);
-      emit(state.copyWith(
-          cityList: mapper.mapToCityList(cities), isLoading: false));
-      return mapper.mapToCityList(cities);
+      final cityList = mapper.mapToCityList(cities);
+      emit(state.copyWith(cityList: cityList, isLoading: false));
+      return cityList;
     } catch (e) {
       emit(state.copyWith(isLoading: false));
     }

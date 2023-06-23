@@ -121,11 +121,13 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
   void quantityAdd(int index) {
     List<List<Product>> productsList = state.productsByColor.values.toList();
+    List<String> productsListKey = state.productsByColor.keys.toList();
 
     if (index >= 0 && index < productsList.length) {
       List<Product> products = productsList[index];
-      if (products.isNotEmpty) {
-        Dimension? dimen = products.first.dimensions.first;
+      int maxQuantity = int.parse(productsListKey[index]);
+      Dimension? dimen = products.first.dimensions.first;
+      if (products.isNotEmpty && dimen.quantity < maxQuantity) {
         dimen.quantity++;
         Map<String, List<Product>> newProductsByColor =
             Map.from(state.productsByColor);
@@ -140,8 +142,8 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
     if (index >= 0 && index < productsList.length) {
       List<Product> products = productsList[index];
-      if (products.isNotEmpty) {
-        Dimension? dimen = products.first.dimensions.first;
+      Dimension? dimen = products.first.dimensions.first;
+      if (products.isNotEmpty && dimen.quantity > 1) {
         dimen.quantity--;
         Map<String, List<Product>> newProductsByColor =
             Map.from(state.productsByColor);

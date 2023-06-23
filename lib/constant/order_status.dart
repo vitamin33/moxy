@@ -16,5 +16,3 @@ List<Status> allStatusOrder = [
       isSelected: false,
       iconPath: IconPath.returnedStatus),
 ];
-
-

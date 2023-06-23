@@ -1,17 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/models/city.dart';
+import 'package:moxy/domain/create_order/create_order_effects.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
-
 import '../../constant/order_constants.dart';
 import '../../data/repositories/order_repository.dart';
 import '../../data/repositories/product_repository.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 import '../mappers/order_mapper.dart';
+import '../models/order.dart';
 import '../models/product.dart';
+import '../models/warehouse.dart';
 import '../ui_effect.dart';
 import '../validation_mixin.dart';
 import 'create_order_state.dart';
@@ -28,13 +29,34 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   bool isEditMode;
 
   CreateOrderCubit({this.isEditMode = false})
-      : super(CreateOrderState.defaultCreateProductState()) {
+      : super(
+          CreateOrderState(
+              isLoading: false,
+              isEdit: false,
+              isSuccess: false,
+              errorMessage: '',
+              initialPage: 0,
+              activePage: 0,
+              errors: FieldErrors(),
+              deliveryType: DeliveryType.novaPost,
+              paymentType: PaymentType.fullPayment,
+              novaPostNumber: 0,
+              productListPrice: 0,
+              selectedProducts: [],
+              selectedCity: City.defaultCity(),
+              selectedWarehouse: Warehouse.defaultWarehouse(),
+              client: Client.defaultClient(),
+              status: 'New',
+              prepayment: '150'),
+        ) {
     _subscribe();
   }
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController secondNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
+  final TextEditingController prePaymentController =
+      TextEditingController(text: '150');
   final PageController pageController = PageController(initialPage: 0);
 
   void setEditMode(bool isEdit) {
@@ -74,11 +96,13 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
           state.deliveryType,
           state.paymentType,
           state.selectedProducts,
+          state.selectedWarehouse,
           state.client,
-          state.selectedCity!,
-          state.status);
-      final pushProduct = await orderRepository.addOrder(order);
-      pushProduct.when((success) {
+          state.selectedCity,
+          state.status,
+          state.prepayment);
+      final pushOrder = await orderRepository.addOrder(order);
+      pushOrder.when((success) {
         emit(state.copyWith(isLoading: false));
         firstNameController.clear();
         secondNameController.clear();
@@ -130,6 +154,14 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
         client: state.client.copyWith(mobileNumber: mobileNumber)));
   }
 
+  void prePaymentChanged(String value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String prepayment = value;
+    emit(state.copyWith(prepayment: prepayment));
+  }
+
   void updateSelectedStatusTitle(String newSelectedStatusTitle) {
     emit(state.copyWith(status: newSelectedStatusTitle));
   }
@@ -147,7 +179,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
       pageController.nextPage(
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
-      addOrder();
+      if (validateFields()) {
+        addOrder();
+      }
     }
   }
 
@@ -167,6 +201,46 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   }
 
   void selectCity(City? city) {
-    emit(state.copyWith(selectedCity: city));
+    emit(state.copyWith(
+        selectedCity: city, selectedWarehouse: Warehouse.defaultWarehouse()));
+  }
+
+  void selectWarehouse(Warehouse? warehouse) {
+    emit(state.copyWith(selectedWarehouse: warehouse));
+  }
+
+  void createNew() {
+    emit(state.copyWith(isSuccess: false));
+    clearState();
+  }
+
+  bool validateFields() {
+    final errors = FieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.client.firstName)) {
+      errors.firstName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.prepayment)) {
+      errors.selectedPrepayment = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.client.secondName)) {
+      errors.secondName = FieldError.empty;
+      noErrors = false;
+    }
+    if (!phoneNumberRegExp.hasMatch(state.client.mobileNumber)) {
+      errors.phoneNumber = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSelectedProduct(state.selectedProducts)) {
+      errors.selectedProduct = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(ValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(errors: errors));
+    return noErrors;
   }
 }
