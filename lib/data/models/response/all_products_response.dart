@@ -20,7 +20,7 @@ class NetworkProduct {
   @JsonKey(name: '_id')
   String? id;
   String name;
-  String description;
+  String? description;
   double costPrice;
   double salePrice;
   List<NetworkDimension> dimensions;

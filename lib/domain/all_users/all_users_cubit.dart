@@ -1,4 +1,5 @@
 import 'package:moxy/data/repositories/auth_repository.dart';
+import 'package:moxy/domain/all_users/all_users_effects.dart';
 import 'package:moxy/domain/all_users/all_users_state.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
@@ -23,7 +24,7 @@ class AllUsersCubit extends CubitWithEffects<AllUsersState, UiEffect> {
         emit(state.copyWith(allUsers: users));
         emit(state.copyWith(isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed getAllUsers'));
+        emitEffect(UsersLoadingFailed(error.toString()));
       });
     } catch (e) {
       moxyPrint('$e');

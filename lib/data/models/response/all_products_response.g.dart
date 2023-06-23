@@ -23,7 +23,7 @@ NetworkProduct _$NetworkProductFromJson(Map<String, dynamic> json) =>
     NetworkProduct(
       id: json['_id'] as String?,
       name: json['name'] as String,
-      description: json['description'] as String,
+      description: json['description'] as String?,
       costPrice: (json['costPrice'] as num).toDouble(),
       salePrice: (json['salePrice'] as num).toDouble(),
       dimensions: (json['dimensions'] as List<dynamic>)

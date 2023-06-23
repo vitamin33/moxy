@@ -6,6 +6,8 @@ import 'package:moxy/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../components/app_scaffold.dart';
 import '../../navigation/home_router_cubit.dart';
+import 'components/action_button.dart';
+import 'components/flutter_expandable_fab.dart';
 import 'components/navigation_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -19,82 +21,85 @@ class DashboardViewMobile extends StatelessWidget {
         OverlayEntry(
           builder: (context) {
             return BlocBuilder<HomeRouterCubit, HomeRouterState>(
-                builder: (context, state) => mobileWidget(state));
+                builder: (context, state) => mobileWidget(context, state));
           },
         ),
       ],
     );
   }
 
-  Widget mobileWidget(HomeRouterState state) {
+  Widget mobileWidget(BuildContext context, HomeRouterState state) {
     final arrIcons = _mapStateToActionIcon(state);
+
     return AppScaffold(
-        appbar: AppBar(
-          actions: [
-            arrIcons.isNotEmpty
-                ? Padding(
-                    padding: const EdgeInsets.only(right: 10),
-                    child: LayoutBuilder(
-                      builder: (BuildContext ctx, BoxConstraints constraints) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            for (final item in arrIcons) ...[
-                              Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: SizedBox(
-                                  width: 38,
-                                  height: 38,
-                                  child: InkWell(
-                                    onTap: () {
-                                      item.onPress();
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: SvgPicture.asset(item.icon),
-                                    ),
+      appbar: AppBar(
+        actions: [
+          arrIcons.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: LayoutBuilder(
+                    builder: (BuildContext ctx, BoxConstraints constraints) {
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          for (final item in arrIcons) ...[
+                            Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: SizedBox(
+                                width: 38,
+                                height: 38,
+                                child: InkWell(
+                                  onTap: () {
+                                    item.onPress();
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: SvgPicture.asset(item.icon),
                                   ),
                                 ),
                               ),
-                            ]
-                          ],
-                        );
-                      },
-                    ),
-                  )
-                : Container()
-          ],
-          backgroundColor: AppTheme.pink,
-          title: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              _mapStateToTitleText(state),
-            ),
-          ),
-          leading: Builder(
-            builder: (BuildContext context) {
-              if (state.runtimeType == OrderProductListPageState) {
-                return IconButton(
-                    onPressed: () {
-                      context.read<HomeRouterCubit>().navigateTo(
-                            const CreateOrderPageState(),
-                          );
+                            ),
+                          ]
+                        ],
+                      );
                     },
-                    icon: SvgPicture.asset(IconPath.backArrow));
-              } else {
-                return IconButton(
-                  icon: SvgPicture.asset(IconPath.menu),
-                  onPressed: () {
-                    Scaffold.of(context).openDrawer();
-                  },
-                  tooltip: 'Open side bar',
-                );
-              }
-            },
+                  ),
+                )
+              : Container()
+        ],
+        backgroundColor: AppTheme.pink,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            _mapStateToTitleText(state),
           ),
         ),
-        drawer: const DashboardDrawer(),
-        body: _routers);
+        leading: Builder(
+          builder: (BuildContext context) {
+            if (state.runtimeType == OrderProductListPageState) {
+              return IconButton(
+                  onPressed: () {
+                    context.read<HomeRouterCubit>().navigateTo(
+                          const CreateOrderPageState(),
+                        );
+                  },
+                  icon: SvgPicture.asset(IconPath.backArrow));
+            } else {
+              return IconButton(
+                icon: SvgPicture.asset(IconPath.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+                tooltip: 'Open side bar',
+              );
+            }
+          },
+        ),
+      ),
+      drawer: const DashboardDrawer(),
+      floatingActionButton: _buildFabWidget(context, state),
+      body: _routers,
+    );
   }
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -171,6 +176,50 @@ class DashboardViewMobile extends StatelessWidget {
         return [];
     }
     return [];
+  }
+
+  Widget _buildFabWidget(BuildContext context, HomeRouterState state) {
+    switch (state.runtimeType) {
+      case CreateProductPageState:
+      case CreateUserPageState:
+      case CreateOrderPageState:
+        return Container();
+    }
+    return ExpandableFab(distance: 100, children: [
+      ActionButton(
+        icon: const Icon(
+          Icons.add_business,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          context
+              .read<HomeRouterCubit>()
+              .navigateTo(const CreateOrderPageState());
+        },
+      ),
+      ActionButton(
+        icon: const Icon(
+          Icons.people,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          context
+              .read<HomeRouterCubit>()
+              .navigateTo(const CreateUserPageState());
+        },
+      ),
+      ActionButton(
+        icon: const Icon(
+          Icons.add_box,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          context
+              .read<HomeRouterCubit>()
+              .navigateTo(const CreateProductPageState());
+        },
+      ),
+    ]);
   }
 }
 

@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 import '../copyable.dart';
 import '../models/product.dart';
 

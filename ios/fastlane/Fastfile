@@ -64,11 +64,18 @@ platform :ios do
       extra_config_args = ["--build-name", options[:build_name].delete_prefix('v')]
     end
 
+    # Increment the build number
+    increment_build_number(build_number: new_build_number)
+
+    # Get the version name from the environment variable
+    version_name = ENV['VERSION']
+
     # Prep the xcodeproject from Flutter without building (`--config-only`)
     sh(
       "flutter", "build", "ios",
       "--release", "--no-codesign",
       "--build-number", new_build_number.to_s,
+      "--build-name", version_name,
       *extra_config_args
     )
   

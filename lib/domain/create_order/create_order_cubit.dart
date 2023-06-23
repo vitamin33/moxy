@@ -88,6 +88,10 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void addOrder() async {
     try {
       emit(state.copyWith(isLoading: true));
+
+      // TODO here should be validation in order to have all needed data
+      // before creating order - like state.selectedCity should't be null
+
       final order = orderMapper.mapToNetworkCreateOrder(
           state.deliveryType,
           state.paymentType,
