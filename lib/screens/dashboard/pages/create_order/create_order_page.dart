@@ -20,12 +20,8 @@ import '../create_product/create_product_page.dart';
 
 // ignore: must_be_immutable
 class CreateOrderPage extends StatelessWidget {
-  bool isEditMode;
 
-  CreateOrderPage({
-    Key? key,
-    required this.isEditMode,
-  }) : super(key: key);
+ const CreateOrderPage() ;
 
   @override
   Widget build(BuildContext context) {

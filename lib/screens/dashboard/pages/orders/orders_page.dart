@@ -5,6 +5,7 @@ import 'package:moxy/domain/models/order.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../domain/all_orders/all_orders_cubit.dart';
 import '../../../../domain/all_orders/all_orders_state.dart';
+import '../../../../navigation/home_router_cubit.dart';
 
 class OrdersPage extends StatelessWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -38,6 +39,11 @@ class OrdersPage extends StatelessWidget {
                               return Card(
                                 margin: const EdgeInsets.all(3.0),
                                 child: ListTile(
+                                  onTap: () {
+                                    context
+                                        .read<HomeRouterCubit>()
+                                        .navigateTo(const EditOrderPageState());
+                                  },
                                   leading: _buildImage(order.orderedItems),
                                   title: Text('${order.deliveryType}'),
                                   trailing: const Icon(Icons.arrow_forward_ios),

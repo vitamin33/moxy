@@ -133,6 +133,8 @@ class DashboardViewMobile extends StatelessWidget {
         }
       case CreateOrderPageState:
         return 'Create order';
+      case EditOrderPageState:
+        return 'Order Details';
       case OrderProductListPageState:
         return 'Order Product List';
       case CreateUserPageState:

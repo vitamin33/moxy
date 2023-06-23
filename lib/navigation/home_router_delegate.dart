@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/screens/dashboard/pages/create_product/create_product_page.dart';
 import 'package:moxy/screens/dashboard/pages/customers/users_page.dart';
+import 'package:moxy/screens/dashboard/pages/edit_order/edit_order_page.dart';
 import 'package:moxy/screens/dashboard/pages/feedbacks/feedbacks_page.dart';
 import 'package:moxy/screens/dashboard/pages/order_product_list/order_product_list.dart';
 import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
@@ -113,11 +114,19 @@ class HomeRouterDelegate extends RouterDelegate<HomeRouterState> {
     }
     if (_routerCubit.state is CreateOrderPageState) {
       final state = _routerCubit.state as CreateOrderPageState;
-      bool? isEditMode = state.isEditMode ?? false;
       return [
         _materialPage(
           valueKey: "createOrder",
-          child: CreateOrderPage( isEditMode: isEditMode),
+          child: const CreateOrderPage(),
+        ),
+      ];
+    }
+    if (_routerCubit.state is EditOrderPageState) {
+      final state = _routerCubit.state as EditOrderPageState;
+      return [
+        _materialPage(
+          valueKey: "createOrder",
+          child: const EditOrderPage(),
         ),
       ];
     }
