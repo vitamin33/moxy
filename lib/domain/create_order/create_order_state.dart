@@ -61,10 +61,10 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         productListPrice: 0,
         selectedProducts: [],
         selectedCity: City.defaultCity(),
-        selectedWarehouse:Warehouse.defaultWarehouse(),
+        selectedWarehouse: Warehouse.defaultWarehouse(),
         client: Client.defaultClient(),
         status: 'New',
-        prepayment:'150');
+        prepayment: '150');
   }
 
   @override
@@ -87,8 +87,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       Warehouse? selectedWarehouse,
       Client? client,
       String? status,
-      String? prepayment
-      }) {
+      String? prepayment}) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
