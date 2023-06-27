@@ -17,7 +17,6 @@ class Payment extends StatelessWidget {
     return BlocBuilder<CreateOrderCubit, CreateOrderState>(
         builder: (context, state) {
       final cubit = context.read<CreateOrderCubit>();
-
       return SingleChildScrollView(
         child: Column(
           children: [

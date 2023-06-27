@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 
 import '../../../../components/search_textfield.dart';
@@ -58,6 +59,9 @@ class OrdersPage extends StatelessWidget {
                                           .read<HomeRouterCubit>()
                                           .navigateTo(
                                               const EditOrderPageState());
+                                      context
+                                          .read<EditOrderCubit>()
+                                          .getOrder(order);
                                     },
                                     tileColor: AppTheme.white,
                                     // isThreeLine: true,

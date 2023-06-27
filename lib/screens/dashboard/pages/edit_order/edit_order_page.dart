@@ -1,53 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/components/custom_button.dart';
+import 'package:moxy/components/custom_textfield.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/edit_order/edit_order_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../../constant/order_status.dart';
 
 import '../../../../constant/image_path.dart';
+import '../../../../constant/order_constants.dart';
+import '../../../../domain/edit_order/edit_order_state.dart';
+import '../../../../navigation/home_router_cubit.dart';
 
 class EditOrderPage extends StatelessWidget {
   const EditOrderPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppTheme.white,
-        body: Material(
-            child: Padding(
-          padding: const EdgeInsets.all(AppTheme.cardPadding),
-          child: SingleChildScrollView(
-            child: Column(children: [
-              contactDetails(),
-              const SizedBox(height: 20),
-              typePayment(),
-              const SizedBox(height: 20),
-              typeDelivery(),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: const [
-                  Text('Date Range',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-                ],
-              ),
-              const SizedBox(height: 20),
-              orderStatus(context),
-              const SizedBox(height: 20),
-              CustomButton(
-                title: 'Edit',
-                onTap: () {},
-                buttonWidth: MediaQuery.of(context).size.width,
-              )
-            ]),
-          ),
-        )));
+    return BlocConsumer<EditOrderCubit, EditOrderState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        final cubit = context.read<EditOrderCubit>();
+        return Scaffold(
+            body: Material(
+                color: AppTheme.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(AppTheme.cardPadding),
+                  child: SingleChildScrollView(
+                    child: Column(children: [
+                      contactDetails(state, cubit, context),
+                      const SizedBox(height: 20),
+                      typePayment(state, cubit),
+                      const SizedBox(height: 20),
+                      typeDelivery(state, cubit),
+                      const SizedBox(height: 20),
+                      dataRange(),
+                      const SizedBox(height: 20),
+                      orderStatus(context, state, cubit),
+                      const SizedBox(height: 20),
+                      CustomButton(
+                        title: 'Edit',
+                        onTap: () {
+                          cubit.editOrder();
+                        },
+                        buttonWidth: MediaQuery.of(context).size.width,
+                      )
+                    ]),
+                  ),
+                )));
+      },
+    );
   }
 }
 
-Widget contactDetails() {
+Widget contactDetails(EditOrderState state, EditOrderCubit cubit, context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -55,109 +62,205 @@ Widget contactDetails() {
         'Contact Details',
         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
       ),
-      SizedBox(height: 10),
+      const SizedBox(height: 10),
+      Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: state.isEditName
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SvgPicture.asset(
+                      IconPath.personName,
+                    ),
+                    const SizedBox(
+                        width: 100,
+                        height: 40,
+                        child: TextField(
+                          decoration:
+                              InputDecoration(border: OutlineInputBorder()),
+                        )),
+                    IconButton(
+                        onPressed: () {
+                          cubit.changeEditName();
+                        },
+                        icon: Icon(Icons.check))
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SvgPicture.asset(
+                      IconPath.personName,
+                    ),
+                    Text(
+                        '${state.client.firstName}  ${state.client.secondName}'),
+                    TextButton(
+                        onPressed: () {
+                          cubit.changeEditName();
+                        },
+                        child: const Text('Change'))
+                  ],
+                )),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SvgPicture.asset(
-              IconPath.personName,
-            ),
-            const Text('Rosalina Stark'),
-            TextButton(onPressed: () {}, child: const Text('Change'))
-          ],
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15.0),
-        child:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          SvgPicture.asset(IconPath.phone),
-          const Text('+913456754 34'),
-          TextButton(onPressed: () {}, child: const Text('Change'))
-        ]),
+        child: state.isEditPhone
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                SvgPicture.asset(IconPath.phone),
+                const SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: TextField(
+                      decoration: InputDecoration(border: OutlineInputBorder()),
+                    )),
+                IconButton(
+                    onPressed: () {
+                      cubit.changeEditPhone();
+                    },
+                    icon: Icon(Icons.check))
+              ])
+            : Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                SvgPicture.asset(IconPath.phone),
+                Text(state.client.mobileNumber),
+                TextButton(
+                    onPressed: () {
+                      cubit.changeEditPhone();
+                    },
+                    child: const Text('Change'))
+              ]),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15.0),
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           SvgPicture.asset(IconPath.selectedProduct),
-          const Text('Dior,Chanel'),
-          TextButton(onPressed: () {}, child: const Text('Change'))
+          Text(state.selectedProducts.first.productName),
+          TextButton(
+              onPressed: () {
+                // context.read<HomeRouterCubit>().navigateTo(
+                //       const OrderProductListPageState(),
+                //     );
+              },
+              child: const Text('Change'))
         ]),
       )
     ],
   );
 }
 
-Widget typePayment() {
+Widget typePayment(EditOrderState state, EditOrderCubit cubit) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
       const Text('Type Payment',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       InkWell(
-        child: Container(
-            child: CircleAvatar(
+        onTap: () {
+          cubit.changePayment(PaymentType.fullPayment);
+        },
+        child: CircleAvatar(
           radius: 30,
-          backgroundColor: AppTheme.black,
-          // _renderBorder(isValid(
-          //   // state.errors.quantity
-          //   )),
+          backgroundColor: state.paymentType == PaymentType.fullPayment
+              ? AppTheme.black
+              : AppTheme.white,
           child: CircleAvatar(
             radius: 28,
             backgroundColor: AppTheme.white,
-            child: SvgPicture.asset(IconPath.fullPayment),
+            child: SvgPicture.asset(IconPath.fullPayment, width: 30),
           ),
-        )),
+        ),
       ),
       InkWell(
-        child: Container(
-            child: CircleAvatar(
+        onTap: () {
+          cubit.changePayment(PaymentType.cashAdvance);
+        },
+        child: CircleAvatar(
           radius: 30,
-          backgroundColor: AppTheme.black,
-          // _renderBorder(isValid(
-          //   // state.errors.quantity
-          //   )),
+          backgroundColor: state.paymentType == PaymentType.cashAdvance
+              ? AppTheme.black
+              : AppTheme.white,
           child: CircleAvatar(
             radius: 28,
             backgroundColor: AppTheme.white,
-            child: SvgPicture.asset(IconPath.cashPayment),
+            child: SvgPicture.asset(
+              IconPath.cashPayment,
+              width: 30,
+            ),
           ),
-        )),
+        ),
       )
     ],
   );
 }
 
-Widget typeDelivery() {
+Widget typeDelivery(EditOrderState state, EditOrderCubit cubit) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
       const Text('Type Delivery',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       InkWell(
+        onTap: () {
+          cubit.changeDelivery(DeliveryType.novaPost);
+        },
         child: Container(
-          child: Image.asset(ImageAssets.novaPoshta),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  width: 3,
+                  color: state.deliveryType == DeliveryType.novaPost
+                      ? AppTheme.pink
+                      : AppTheme.white),
+              borderRadius: const BorderRadius.all(Radius.circular(6))),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Image.asset(ImageAssets.novaPoshta),
+          ),
         ),
       ),
       InkWell(
+        onTap: () {
+          cubit.changeDelivery(DeliveryType.ukrPost);
+        },
         child: Container(
-          child: Image.asset(ImageAssets.ukrPoshta),
+          decoration: BoxDecoration(
+              border: Border.all(
+                  width: 3,
+                  color: state.deliveryType == DeliveryType.ukrPost
+                      ? AppTheme.pink
+                      : AppTheme.white),
+              borderRadius: const BorderRadius.all(Radius.circular(6))),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Image.asset(ImageAssets.ukrPoshta),
+          ),
         ),
       )
     ],
   );
 }
 
-Widget orderStatus(context) {
+Widget dataRange() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceAround,
+    children: const [
+      Text('Date Range',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+      SizedBox(
+          width: 200,
+          height: 40,
+          child: TextField(
+            decoration: InputDecoration(border: OutlineInputBorder()),
+          )),
+    ],
+  );
+}
+
+Widget orderStatus(context, EditOrderState state, cubit) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const Text('Order Status',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-      Container(
+      SizedBox(
         width: MediaQuery.of(context).size.width,
         height: 100,
         child: Row(
@@ -169,23 +272,25 @@ Widget orderStatus(context) {
                 itemCount: allStatusOrder.length,
                 itemBuilder: (context, index) {
                   final status = allStatusOrder[index];
-                  // final isSelected = status.statusTitle == state.status;
+                  final isSelected = status.statusTitle == state.status;
                   return Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: CircleAvatar(
-                        radius: 30,
-                        backgroundColor: AppTheme.black,
-                        // _renderBorder(isValid(
-                        //   // state.errors.quantity
-                        //   )),
+                      child: InkWell(
+                        onTap: () {
+                          cubit.changeStatus(status.statusTitle);
+                        },
                         child: CircleAvatar(
-                          radius: 28,
-                          backgroundColor: AppTheme.white,
-                          child: SvgPicture.asset(status.iconPath),
-                          //   // context
-                          //   //     .read<CreateOrderCubit>()
-                          //   //     .updateSelectedStatusTitle(newValue!);
-                          // },
+                          radius: 30,
+                          backgroundColor:
+                              isSelected ? AppTheme.black : AppTheme.white,
+                          child: InkWell(
+                            child: CircleAvatar(
+                              radius: 28,
+                              backgroundColor: AppTheme.white,
+                              child:
+                                  SvgPicture.asset(status.iconPath, width: 30),
+                            ),
+                          ),
                         ),
                       ));
                 },
@@ -198,8 +303,10 @@ Widget orderStatus(context) {
   );
 }
 
-Color _renderBorder(bool isValid) {
-  return isValid ? AppTheme.white : Colors.red;
-}
 
-bool isValid(state) => state == null;
+
+// Color _renderBorder(bool isValid) {
+//   return isValid ? AppTheme.white : Colors.red;
+// }
+
+// bool isValid(state) => state == null;

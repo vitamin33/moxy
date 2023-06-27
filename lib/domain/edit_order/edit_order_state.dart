@@ -8,6 +8,8 @@ import '../validation_mixin.dart';
 class EditOrderState implements Copyable<EditOrderState> {
   bool isLoading;
   bool isSuccess;
+  bool isEditName;
+  bool isEditPhone;
   String errorMessage;
   DeliveryType deliveryType;
   PaymentType paymentType;
@@ -24,6 +26,8 @@ class EditOrderState implements Copyable<EditOrderState> {
   EditOrderState({
     required this.isLoading,
     required this.isSuccess,
+    required this.isEditName,
+    required this.isEditPhone,
     required this.errorMessage,
     required this.errors,
     required this.deliveryType,
@@ -40,6 +44,8 @@ class EditOrderState implements Copyable<EditOrderState> {
     return EditOrderState(
         isLoading: false,
         isSuccess: false,
+        isEditName: false,
+        isEditPhone: false,
         errorMessage: '',
         errors: FieldErrors(),
         deliveryType: DeliveryType.novaPost,
@@ -56,6 +62,8 @@ class EditOrderState implements Copyable<EditOrderState> {
   EditOrderState copyWith(
       {bool? isLoading,
       bool? isSuccess,
+      bool? isEditName,
+      bool? isEditPhone,
       String? errorMessage,
       FieldErrors? errors,
       DeliveryType? deliveryType,
@@ -69,6 +77,8 @@ class EditOrderState implements Copyable<EditOrderState> {
     return EditOrderState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
+      isEditName: isEditName ?? this.isEditName,
+      isEditPhone: isEditPhone ?? this.isEditPhone,
       errorMessage: errorMessage ?? this.errorMessage,
       errors: errors ?? this.errors,
       deliveryType: deliveryType ?? this.deliveryType,
