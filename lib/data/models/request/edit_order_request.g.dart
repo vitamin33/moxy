@@ -8,8 +8,8 @@ part of 'edit_order_request.dart';
 
 EditOrder _$EditOrderFromJson(Map<String, dynamic> json) => EditOrder(
       orderId: json['orderId'] as String,
-      deliveryType: json['deliveryType'] as String,
-      paymentType: json['paymentType'] as String,
+      deliveryType: json['deliveryType'] as DeliveryType,
+      paymentType: json['paymentType'] as PaymentType,
       novaPost:
           NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       products: (json['products'] as List<dynamic>)

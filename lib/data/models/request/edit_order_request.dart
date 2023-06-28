@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import '../../../constant/order_constants.dart';
 import '../response/all_orders_response.dart';
 import 'create_product_request.dart';
 
@@ -8,8 +9,8 @@ part 'edit_order_request.g.dart';
 @JsonSerializable()
 class EditOrder {
   final String orderId;
-  final String deliveryType;
-  final String paymentType;
+  final DeliveryType deliveryType;
+  final PaymentType paymentType;
   final NetworkNovaPost novaPost;
   final List<NetworkOrderedItem> products;
   final NetworkClient client;

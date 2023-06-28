@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:moxy/domain/edit_order/edit_order_state.dart';
 import 'package:moxy/domain/ui_effect.dart';
 
@@ -14,8 +15,9 @@ import '../validation_mixin.dart';
 
 class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     with ValidationMixin {
- final orderMapper = locate<OrderMapper>();
+  final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
+  late TextEditingController paymentController;
 
   EditOrderCubit()
       : super(EditOrderState(
@@ -32,8 +34,12 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
             selectedWarehouse: Warehouse.defaultWarehouse(),
             client: Client.defaultClient(),
             status: 'New',
-            prepayment: '150'));
+            prepayment: '150')) {
+    paymentController = TextEditingController(text: state.prepayment);
+  }
 
+  final TextEditingController nameEditController = TextEditingController();
+  final TextEditingController phoneEditController = TextEditingController();
 
   void editOrder() async {
     try {
@@ -53,7 +59,9 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
         emit(state.copyWith(isSuccess: true, isLoading: false));
       }, (error) {
         emit(state.copyWith(
-            errorMessage: 'Failed', isLoading: false,));
+          errorMessage: 'Failed',
+          isLoading: false,
+        ));
       });
     } catch (e) {
       moxyPrint(e);
@@ -83,12 +91,39 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   }
 
   void changeEditName() {
-    emit(state.copyWith(isEditName: !state.isEditName));
+    nameEditController.value = TextEditingValue(
+        text: '${state.client.firstName} ${state.client.secondName}');
+    emit(state.copyWith(isEditName: true));
   }
+
   void changeEditPhone() {
-    emit(state.copyWith(isEditPhone: !state.isEditPhone));
+    phoneEditController.value =
+        TextEditingValue(text: state.client.mobileNumber);
+    emit(state.copyWith(isEditPhone: true));
   }
-  // void editName() {
-  //   emit(state.copyWith(deliveryType: updateDelivery));
-  // }
+
+  void addEditPhone() {
+    final phoneTextField = phoneEditController.text;
+    emit(state.copyWith(
+        isEditPhone: false,
+        client: state.client.copyWith(mobileNumber: phoneTextField)));
+  }
+
+  void addEditName() {
+    final textFieldValue = nameEditController.text;
+    final arrTextField = textFieldValue.split(' ');
+    emit(state.copyWith(
+        isEditName: false,
+        client: state.client.copyWith(
+            firstName: arrTextField[0], secondName: arrTextField[1])));
+  }
+
+  void selectCity(City? city) {
+    emit(state.copyWith(
+        selectedCity: city, selectedWarehouse: Warehouse.defaultWarehouse()));
+  }
+
+  void selectWarehouse(Warehouse? warehouse) {
+    emit(state.copyWith(selectedWarehouse: warehouse));
+  }
 }
