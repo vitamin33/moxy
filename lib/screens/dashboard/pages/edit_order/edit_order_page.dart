@@ -5,9 +5,10 @@ import 'package:moxy/components/custom_button.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/edit_order/edit_order_cubit.dart';
 import 'package:moxy/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import '../../../../../constant/order_status.dart';
 
+import '../../../../components/loader.dart';
+import '../../../../components/succes_card.dart';
 import '../../../../constant/image_path.dart';
 import '../../../../constant/order_constants.dart';
 import '../../../../domain/create_order/search_cities/search_cities_cubit.dart';
@@ -26,42 +27,57 @@ class EditOrderPage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         final cubit = context.read<EditOrderCubit>();
-        return MultiBlocProvider(
-            providers: [
-              BlocProvider<SearchCitiesCubit>(
-                create: (BuildContext context) => SearchCitiesCubit(),
-              ),
-              BlocProvider<SearchWarehouseCubit>(
-                create: (BuildContext context) => SearchWarehouseCubit(),
-              ),
-            ],
-            child: Scaffold(
-                body: Material(
-                    color: AppTheme.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppTheme.cardPadding),
-                      child: SingleChildScrollView(
-                        child: Column(children: [
-                          contactDetails(context, state, cubit),
-                          const SizedBox(height: 20),
-                          typePayment(state, cubit),
-                          const SizedBox(height: 20),
-                          typeDelivery(state, cubit),
-                          const SizedBox(height: 20),
-                          dataRange(),
-                          const SizedBox(height: 20),
-                          orderStatus(context, state, cubit),
-                          const SizedBox(height: 20),
-                          CustomButton(
-                            title: 'Edit',
-                            onTap: () {
-                              cubit.editOrder();
-                            },
-                            buttonWidth: MediaQuery.of(context).size.width,
-                          )
-                        ]),
-                      ),
-                    ))));
+        return state.isSuccess
+            ? succsess(
+                onTap: () {
+                  context.read<HomeRouterCubit>().navigateTo(
+                        const OrdersPageState(),
+                      );
+                  cubit.clearState();
+                },
+                title: 'Order Edited',
+                titleButton: 'Back To Order')
+            : state.isLoading
+                ? loader()
+                : MultiBlocProvider(
+                    providers: [
+                        BlocProvider<SearchCitiesCubit>(
+                          create: (BuildContext context) => SearchCitiesCubit(),
+                        ),
+                        BlocProvider<SearchWarehouseCubit>(
+                          create: (BuildContext context) =>
+                              SearchWarehouseCubit(),
+                        ),
+                      ],
+                    child: Scaffold(
+                        body: Material(
+                            color: AppTheme.white,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.all(AppTheme.cardPadding),
+                              child: SingleChildScrollView(
+                                child: Column(children: [
+                                  contactDetails(context, state, cubit),
+                                  const SizedBox(height: 20),
+                                  typePayment(state, cubit),
+                                  const SizedBox(height: 20),
+                                  typeDelivery(state, cubit),
+                                  const SizedBox(height: 20),
+                                  dataRange(cubit),
+                                  const SizedBox(height: 20),
+                                  orderStatus(context, state, cubit),
+                                  const SizedBox(height: 20),
+                                  CustomButton(
+                                    title: 'Edit',
+                                    onTap: () {
+                                      cubit.editOrder();
+                                    },
+                                    buttonWidth:
+                                        MediaQuery.of(context).size.width,
+                                  )
+                                ]),
+                              ),
+                            ))));
       },
     );
   }
@@ -111,12 +127,24 @@ Widget contactDetails(
                       IconPath.personName,
                     ),
                     Text(
-                        '${state.client.firstName}  ${state.client.secondName}'),
+                        '${state.client.firstName}  ${state.client.secondName}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          color: AppTheme.gray,
+                        )),
                     TextButton(
                         onPressed: () {
                           cubit.changeEditName();
                         },
-                        child: const Text('Change'))
+                        child: const Text(
+                          'Change',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppTheme.pinkDark,
+                          ),
+                        ))
                   ],
                 )),
       Padding(
@@ -140,12 +168,24 @@ Widget contactDetails(
               ])
             : Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 SvgPicture.asset(IconPath.phone),
-                Text(state.client.mobileNumber),
+                Text(state.client.mobileNumber,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: AppTheme.gray,
+                    )),
                 TextButton(
                     onPressed: () {
                       cubit.changeEditPhone();
                     },
-                    child: const Text('Change'))
+                    child: const Text(
+                      'Change',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: AppTheme.pinkDark,
+                      ),
+                    ))
               ]),
       ),
       Padding(
@@ -153,14 +193,26 @@ Widget contactDetails(
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           SvgPicture.asset(IconPath.selectedProduct),
-          Text(state.selectedProducts.first.productName),
+          Text(state.selectedProducts.first.productName,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: AppTheme.gray,
+              )),
           TextButton(
               onPressed: () {
                 context.read<HomeRouterCubit>().navigateTo(
                       const OrderProductListPageState(),
                     );
               },
-              child: const Text('Change'))
+              child: const Text(
+                'Change',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: AppTheme.pinkDark,
+                ),
+              ))
         ]),
       )
     ],
@@ -169,57 +221,97 @@ Widget contactDetails(
 
 Widget typePayment(EditOrderState state, EditOrderCubit cubit) {
   return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           const Text('Type Payment',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          InkWell(
-            onTap: () {
-              cubit.changePayment(PaymentType.fullPayment);
-            },
-            child: CircleAvatar(
-              radius: 30,
-              backgroundColor: state.paymentType == PaymentType.fullPayment
-                  ? AppTheme.black
-                  : AppTheme.white,
-              child: CircleAvatar(
-                radius: 28,
-                backgroundColor: AppTheme.white,
-                child: SvgPicture.asset(IconPath.fullPayment, width: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      cubit.changePayment(PaymentType.fullPayment);
+                    },
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor:
+                          state.paymentType == PaymentType.fullPayment
+                              ? AppTheme.pinkDark
+                              : AppTheme.greyLigth,
+                      child: CircleAvatar(
+                        radius: 28,
+                        backgroundColor: AppTheme.white,
+                        child:
+                            SvgPicture.asset(IconPath.fullPayment, width: 30),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      'Full payment',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  )
+                ],
               ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              cubit.changePayment(PaymentType.cashAdvance);
-            },
-            child: CircleAvatar(
-              radius: 30,
-              backgroundColor: state.paymentType == PaymentType.cashAdvance
-                  ? AppTheme.black
-                  : AppTheme.white,
-              child: CircleAvatar(
-                radius: 28,
-                backgroundColor: AppTheme.white,
-                child: SvgPicture.asset(
-                  IconPath.cashPayment,
-                  width: 30,
-                ),
+              const SizedBox(
+                width: 20,
               ),
-            ),
+              Column(
+                children: [
+                  InkWell(
+                    onTap: () {
+                      cubit.changePayment(PaymentType.cashAdvance);
+                    },
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor:
+                          state.paymentType == PaymentType.cashAdvance
+                              ? AppTheme.pinkDark
+                              : AppTheme.greyLigth,
+                      child: CircleAvatar(
+                        radius: 28,
+                        backgroundColor: AppTheme.white,
+                        child: SvgPicture.asset(
+                          IconPath.cashPayment,
+                          width: 30,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text('Cash Advance',
+                        style: TextStyle(fontWeight: FontWeight.w500)),
+                  )
+                ],
+              )
+            ],
           )
         ],
       ),
       state.paymentType == PaymentType.cashAdvance
-          ? Container(
-              width: 150,
-              height: 50,
-              child: TextField(
-                controller: cubit.paymentController,
-                decoration: InputDecoration(border: OutlineInputBorder()),
-              ),
+          ? Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: 150,
+                  height: 50,
+                  child: TextField(
+                    controller: cubit.paymentController,
+                    decoration:
+                        const InputDecoration(border: OutlineInputBorder()),
+                  ),
+                ),
+              ],
             )
           : Container()
     ],
@@ -241,10 +333,10 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit) {
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
-                      width: 3,
+                      width: 2,
                       color: state.deliveryType == DeliveryType.novaPost
-                          ? AppTheme.pink
-                          : AppTheme.white),
+                          ? AppTheme.pinkDark
+                          : AppTheme.greyLigth),
                   borderRadius: const BorderRadius.all(Radius.circular(6))),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -259,10 +351,10 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit) {
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
-                      width: 3,
+                      width: 2,
                       color: state.deliveryType == DeliveryType.ukrPost
-                          ? AppTheme.pink
-                          : AppTheme.white),
+                          ? AppTheme.pinkDark
+                          : AppTheme.greyLigth),
                   borderRadius: const BorderRadius.all(Radius.circular(6))),
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -276,13 +368,15 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit) {
           ? Container(
               child: Column(
                 children: [
+                  const SizedBox(
+                    height: 20,
+                  ),
                   SearchCityDropdown(
                       selectedCity: state.selectedCity,
                       selectedWarehouse: state.selectedWarehouse,
                       onChanged: (city) {
                         cubit.selectCity(city);
                       }),
-                  // SearchCityDropdown(),
                   const SizedBox(height: 20),
                   SearchWarehouseDropdown(
                       selectedCity: state.selectedCity,
@@ -290,7 +384,6 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit) {
                       onChanged: (warehouse) {
                         cubit.selectWarehouse(warehouse);
                       })
-                  // SearchWarehouseDropdown(),
                 ],
               ),
             )
@@ -299,16 +392,17 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit) {
   );
 }
 
-Widget dataRange() {
+Widget dataRange(EditOrderCubit cubit) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: const [
-      Text('Date Range',
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      const Text('Date Range',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       SizedBox(
           width: 200,
           height: 40,
           child: TextField(
+            controller: cubit.dateController,
             decoration: InputDecoration(border: OutlineInputBorder()),
           )),
     ],
@@ -336,23 +430,34 @@ Widget orderStatus(context, EditOrderState state, cubit) {
                   final isSelected = status.statusTitle == state.status;
                   return Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: InkWell(
-                        onTap: () {
-                          cubit.changeStatus(status.statusTitle);
-                        },
-                        child: CircleAvatar(
-                          radius: 30,
-                          backgroundColor:
-                              isSelected ? AppTheme.black : AppTheme.white,
-                          child: InkWell(
+                      child: Column(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              cubit.changeStatus(status.statusTitle);
+                            },
                             child: CircleAvatar(
-                              radius: 28,
-                              backgroundColor: AppTheme.white,
-                              child:
-                                  SvgPicture.asset(status.iconPath, width: 30),
+                              radius: 30,
+                              backgroundColor: isSelected
+                                  ? AppTheme.pinkDark
+                                  : AppTheme.greyLigth,
+                              child: InkWell(
+                                child: CircleAvatar(
+                                  radius: 28,
+                                  backgroundColor: AppTheme.white,
+                                  child: SvgPicture.asset(status.iconPath,
+                                      width: 30),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(status.statusTitle,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500)),
+                          )
+                        ],
                       ));
                 },
               ),

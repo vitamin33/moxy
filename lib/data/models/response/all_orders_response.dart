@@ -56,12 +56,14 @@ class NetworkOrder {
 
 @JsonSerializable()
 class CreateNetworkClient {
+  @JsonKey(name: '_id')
+  String? id;
   String mobileNumber;
   String firstName;
   String secondName;
   String city;
   List<String> orders;
-  CreateNetworkClient(this.city, this.firstName, this.mobileNumber,
+  CreateNetworkClient(this.id, this.city, this.firstName, this.mobileNumber,
       this.secondName, this.orders);
 
   factory CreateNetworkClient.fromJson(Map<String, dynamic> json) =>
@@ -71,11 +73,18 @@ class CreateNetworkClient {
 
 @JsonSerializable()
 class NetworkClient {
+  @JsonKey(name: '_id')
+  String? id;
   String mobileNumber;
   String firstName;
   String secondName;
   String city;
-  NetworkClient(this.city, this.firstName, this.mobileNumber, this.secondName);
+  NetworkClient(
+      {this.id,
+      required this.city,
+      required this.firstName,
+      required this.mobileNumber,
+      required this.secondName});
 
   factory NetworkClient.fromJson(Map<String, dynamic> json) =>
       _$NetworkClientFromJson(json);

@@ -54,6 +54,7 @@ Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
 
 CreateNetworkClient _$CreateNetworkClientFromJson(Map<String, dynamic> json) =>
     CreateNetworkClient(
+      json['_id'] as String?,
       json['city'] as String,
       json['firstName'] as String,
       json['mobileNumber'] as String,
@@ -64,6 +65,7 @@ CreateNetworkClient _$CreateNetworkClientFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$CreateNetworkClientToJson(
         CreateNetworkClient instance) =>
     <String, dynamic>{
+      '_id': instance.id,
       'mobileNumber': instance.mobileNumber,
       'firstName': instance.firstName,
       'secondName': instance.secondName,
@@ -73,14 +75,16 @@ Map<String, dynamic> _$CreateNetworkClientToJson(
 
 NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>
     NetworkClient(
-      json['city'] as String,
-      json['firstName'] as String,
-      json['mobileNumber'] as String,
-      json['secondName'] as String,
+      id: json['_id'] as String?,
+      city: json['city'] as String,
+      firstName: json['firstName'] as String,
+      mobileNumber: json['mobileNumber'] as String,
+      secondName: json['secondName'] as String,
     );
 
 Map<String, dynamic> _$NetworkClientToJson(NetworkClient instance) =>
     <String, dynamic>{
+      '_id': instance.id,
       'mobileNumber': instance.mobileNumber,
       'firstName': instance.firstName,
       'secondName': instance.secondName,

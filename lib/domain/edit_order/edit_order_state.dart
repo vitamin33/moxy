@@ -11,6 +11,7 @@ class EditOrderState implements Copyable<EditOrderState> {
   bool isEditName;
   bool isEditPhone;
   String errorMessage;
+  String orderId;
   DeliveryType deliveryType;
   PaymentType paymentType;
   List<OrderedItem> selectedProducts;
@@ -18,7 +19,9 @@ class EditOrderState implements Copyable<EditOrderState> {
   Warehouse selectedWarehouse;
   String status;
   Client client;
-  String prepayment;
+  int prepayment;
+  String createdAt;
+  String updatedAt;
 
   // field errors
   FieldErrors errors;
@@ -30,6 +33,7 @@ class EditOrderState implements Copyable<EditOrderState> {
     required this.isEditPhone,
     required this.errorMessage,
     required this.errors,
+    required this.orderId,
     required this.deliveryType,
     required this.paymentType,
     required this.selectedProducts,
@@ -38,6 +42,8 @@ class EditOrderState implements Copyable<EditOrderState> {
     required this.client,
     required this.status,
     required this.prepayment,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
   static EditOrderState defaultEditOrderState() {
@@ -48,14 +54,17 @@ class EditOrderState implements Copyable<EditOrderState> {
         isEditPhone: false,
         errorMessage: '',
         errors: FieldErrors(),
+        orderId: '',
         deliveryType: DeliveryType.novaPost,
         paymentType: PaymentType.fullPayment,
-        selectedProducts: [],
+        selectedProducts: [OrderedItem.defaultOrderedItem()],
         selectedCity: City.defaultCity(),
         selectedWarehouse: Warehouse.defaultWarehouse(),
         client: Client.defaultClient(),
         status: 'New',
-        prepayment: '150');
+        prepayment: 150,
+        createdAt: '',
+        updatedAt: '');
   }
 
   @override
@@ -66,6 +75,7 @@ class EditOrderState implements Copyable<EditOrderState> {
       bool? isEditPhone,
       String? errorMessage,
       FieldErrors? errors,
+      String? orderId,
       DeliveryType? deliveryType,
       PaymentType? paymentType,
       List<OrderedItem>? selectedProducts,
@@ -73,7 +83,9 @@ class EditOrderState implements Copyable<EditOrderState> {
       Warehouse? selectedWarehouse,
       Client? client,
       String? status,
-      String? prepayment}) {
+      int? prepayment,
+      String? createdAt,
+      String? updatedAt}) {
     return EditOrderState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
@@ -81,6 +93,7 @@ class EditOrderState implements Copyable<EditOrderState> {
       isEditPhone: isEditPhone ?? this.isEditPhone,
       errorMessage: errorMessage ?? this.errorMessage,
       errors: errors ?? this.errors,
+      orderId: orderId ?? this.orderId,
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
       selectedProducts: selectedProducts ?? this.selectedProducts,
@@ -89,6 +102,8 @@ class EditOrderState implements Copyable<EditOrderState> {
       client: client ?? this.client,
       status: status ?? this.status,
       prepayment: prepayment ?? this.prepayment,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

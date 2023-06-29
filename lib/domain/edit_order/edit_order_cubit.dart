@@ -18,6 +18,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
   late TextEditingController paymentController;
+  late TextEditingController dateController;
 
   EditOrderCubit()
       : super(EditOrderState(
@@ -27,6 +28,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
             isEditPhone: false,
             errorMessage: '',
             errors: FieldErrors(),
+            orderId: '',
             deliveryType: DeliveryType.novaPost,
             paymentType: PaymentType.fullPayment,
             selectedProducts: [],
@@ -34,8 +36,12 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
             selectedWarehouse: Warehouse.defaultWarehouse(),
             client: Client.defaultClient(),
             status: 'New',
-            prepayment: '150')) {
-    paymentController = TextEditingController(text: state.prepayment);
+            prepayment: 150,
+            createdAt: '',
+            updatedAt: '')) {
+    paymentController =
+        TextEditingController(text: state.prepayment.toString());
+    dateController = TextEditingController(text: state.createdAt);
   }
 
   final TextEditingController nameEditController = TextEditingController();
@@ -44,7 +50,8 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   void editOrder() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final order = orderMapper.mapToNetworkCreateOrder(
+      final order = orderMapper.mapToNetworkEditOrder(
+          state.orderId,
           state.deliveryType,
           state.paymentType,
           state.selectedProducts,
@@ -52,8 +59,8 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
           state.client,
           state.selectedCity,
           state.status,
-          state.prepayment);
-      final pushOrder = await orderRepository.addOrder(order);
+          state.prepayment.toString());
+      final pushOrder = await orderRepository.editOrder(order);
       pushOrder.when((success) {
         emit(state.copyWith(isLoading: false));
         emit(state.copyWith(isSuccess: true, isLoading: false));
@@ -70,11 +77,26 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
 
   void getOrder(Order order) {
     emit(state.copyWith(
+      selectedWarehouse: Warehouse(
+          ref: order.novaPost.ref,
+          postMachineType: order.novaPost.postMachineType!,
+          description: order.novaPost.postMachineType!,
+          number: order.novaPost.number),
+      orderId: order.id,
+      prepayment: order.cashAdvanceValue,
+      selectedCity: order.city,
       deliveryType: order.deliveryType,
       paymentType: order.paymentType,
       status: order.status,
-      client: order.client,
+      client: Client(
+          id: order.client.id,
+          city: order.client.city,
+          firstName: order.client.firstName,
+          mobileNumber: order.client.mobileNumber,
+          secondName: order.client.secondName),
       selectedProducts: order.orderedItems,
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
     ));
   }
 
@@ -125,5 +147,9 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
 
   void selectWarehouse(Warehouse? warehouse) {
     emit(state.copyWith(selectedWarehouse: warehouse));
+  }
+
+  void clearState() {
+    emit(EditOrderState.defaultEditOrderState());
   }
 }

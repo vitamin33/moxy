@@ -64,7 +64,6 @@ class OrdersPage extends StatelessWidget {
                                           .getOrder(order);
                                     },
                                     tileColor: AppTheme.white,
-                                    // isThreeLine: true,
                                     leading: ClipOval(
                                         child: _buildImage(order.orderedItems)),
                                     title: Text(
