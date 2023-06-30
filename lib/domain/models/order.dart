@@ -38,7 +38,8 @@ class Order implements Copyable<Order> {
         id: '',
         cashAdvanceValue: 0,
         city: City.defaultCity(),
-        novaPost: NetworkNovaPost(number: 0, ref: '', postMachineType: ''),
+        novaPost: NetworkNovaPost(
+            number: 0, ref: '', postMachineType: '', presentName: ''),
         deliveryType: DeliveryType.novaPost,
         status: '',
         paymentType: PaymentType.cashAdvance,

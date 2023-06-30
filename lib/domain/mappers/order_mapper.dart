@@ -112,7 +112,9 @@ class OrderMapper {
       novaPost: NetworkNovaPost(
           number: novapost.number,
           ref: novapost.ref,
-          postMachineType: novapost.postMachineType),
+          postMachineType: novapost.postMachineType,
+          presentName: novapost.description
+          ),
       status: status,
       client: NetworkClient(
         city: client.city,
@@ -158,7 +160,9 @@ class OrderMapper {
       novaPost: NetworkNovaPost(
           number: novapost.number,
           ref: novapost.ref,
-          postMachineType: novapost.postMachineType),
+          postMachineType: novapost.postMachineType,
+          presentName: novapost.description
+          ),
       status: status,
       client:
           // client,

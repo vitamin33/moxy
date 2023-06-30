@@ -80,7 +80,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
       selectedWarehouse: Warehouse(
           ref: order.novaPost.ref,
           postMachineType: order.novaPost.postMachineType!,
-          description: order.novaPost.postMachineType!,
+          description: order.novaPost.presentName,
           number: order.novaPost.number),
       orderId: order.id,
       prepayment: order.cashAdvanceValue,
