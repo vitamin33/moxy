@@ -13,6 +13,13 @@ class AdminPageState extends RootRouterState {
   List<Object?> get props => [extraPageContent];
 }
 
+class ClientPageState extends RootRouterState {
+  final String? extraPageContent;
+  const ClientPageState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}
+
 class AuthPageState extends RootRouterState {
   final String? extraPageContent;
   const AuthPageState([this.extraPageContent]);

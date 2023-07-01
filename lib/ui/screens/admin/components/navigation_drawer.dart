@@ -66,7 +66,7 @@ class DashboardDrawer extends StatelessWidget {
               InkWell(
                 onTap: () => {
                   cubit.signOut(),
-                  navRootCubit.goToAuth(),
+                  navRootCubit.goToAuthFlow(),
                   Scaffold.of(context).closeDrawer()
                 },
                 focusColor: AppTheme.darkPink,
