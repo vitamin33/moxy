@@ -1,5 +1,4 @@
 import '../../copyable.dart';
-import '../../models/city.dart';
 import '../../models/warehouse.dart';
 
 class SearchWarehouseState implements Copyable<SearchWarehouseState> {

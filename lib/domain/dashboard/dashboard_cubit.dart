@@ -2,7 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
-import 'package:moxy/screens/dashboard/dashboard_state.dart';
+import 'package:moxy/ui/screens/admin/dashboard_state.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
 

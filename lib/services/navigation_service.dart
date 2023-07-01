@@ -1,19 +1,19 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 
 import 'package:flutter/material.dart';
-import 'package:moxy/screens/authentication/authentication_view.dart';
-import 'package:moxy/screens/dashboard/pages/customers/users_page.dart';
-import 'package:moxy/screens/dashboard/pages/feedbacks/feedbacks_page.dart';
-import 'package:moxy/screens/dashboard/pages/orders/orders_page.dart';
-import 'package:moxy/screens/dashboard/pages/transactions/transactions_page.dart';
+import 'package:moxy/ui/screens/authentication/authentication_view.dart';
+import 'package:moxy/ui/screens/admin/pages/customers/users_page.dart';
+import 'package:moxy/ui/screens/admin/pages/feedbacks/feedbacks_page.dart';
+import 'package:moxy/ui/screens/admin/pages/orders/orders_page.dart';
+import 'package:moxy/ui/screens/admin/pages/transactions/transactions_page.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../constant/route_name.dart';
-import '../screens/dashboard/pages/create_order/create_order_page.dart';
-import '../screens/dashboard/pages/create_product/create_product_page.dart';
-import '../screens/dashboard/pages/edit_order/edit_order_page.dart';
-import '../screens/dashboard/pages/products/products_page.dart';
-import '../screens/dashboard/pages/overview/overview_page.dart';
+import '../ui/screens/admin/pages/create_order/create_order_page.dart';
+import '../ui/screens/admin/pages/create_product/create_product_page.dart';
+import '../ui/screens/admin/pages/edit_order/edit_order_page.dart';
+import '../ui/screens/admin/pages/products/products_page.dart';
+import '../ui/screens/admin/pages/overview/overview_page.dart';
 import 'get_it.dart';
 import "package:universal_html/html.dart" as html;
 
@@ -66,9 +66,9 @@ class NavigationService {
       case transactionPath:
         return navigateToPageRoute(settings, const TransactionsPage());
       case createOrderPath:
-        return navigateToPageRoute(settings,const CreateOrderPage());
+        return navigateToPageRoute(settings, const CreateOrderPage());
       case editOrderPath:
-        return navigateToPageRoute(settings,const EditOrderPage());
+        return navigateToPageRoute(settings, const EditOrderPage());
       case createProductPath:
         return navigateToPageRoute(
           settings,
