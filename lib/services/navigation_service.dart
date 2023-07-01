@@ -11,6 +11,7 @@ import 'package:moxy/utils/common.dart';
 import '../constant/route_name.dart';
 import '../screens/dashboard/pages/create_order/create_order_page.dart';
 import '../screens/dashboard/pages/create_product/create_product_page.dart';
+import '../screens/dashboard/pages/edit_order/edit_order_page.dart';
 import '../screens/dashboard/pages/products/products_page.dart';
 import '../screens/dashboard/pages/overview/overview_page.dart';
 import 'get_it.dart';
@@ -64,10 +65,10 @@ class NavigationService {
         return navigateToPageRoute(settings, const FeedbacksPage());
       case transactionPath:
         return navigateToPageRoute(settings, const TransactionsPage());
-
       case createOrderPath:
-        return navigateToPageRoute(
-            settings, CreateOrderPage(isEditMode: false));
+        return navigateToPageRoute(settings,const CreateOrderPage());
+      case editOrderPath:
+        return navigateToPageRoute(settings,const EditOrderPage());
       case createProductPath:
         return navigateToPageRoute(
           settings,

@@ -67,7 +67,9 @@ class DashboardViewMobile extends StatelessWidget {
                 )
               : Container()
         ],
-        backgroundColor: AppTheme.pink,
+        backgroundColor: state.runtimeType == EditOrderPageState
+            ? AppTheme.white
+            : AppTheme.pink,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
@@ -81,6 +83,14 @@ class DashboardViewMobile extends StatelessWidget {
                   onPressed: () {
                     context.read<HomeRouterCubit>().navigateTo(
                           const CreateOrderPageState(),
+                        );
+                  },
+                  icon: SvgPicture.asset(IconPath.backArrow));
+            } else if (state.runtimeType == EditOrderPageState) {
+              return IconButton(
+                  onPressed: () {
+                    context.read<HomeRouterCubit>().navigateTo(
+                          const OrdersPageState(),
                         );
                   },
                   icon: SvgPicture.asset(IconPath.backArrow));
@@ -133,6 +143,8 @@ class DashboardViewMobile extends StatelessWidget {
         }
       case CreateOrderPageState:
         return 'Create order';
+      case EditOrderPageState:
+        return 'Edit Order';
       case OrderProductListPageState:
         return 'Order Product List';
       case CreateUserPageState:
@@ -183,6 +195,7 @@ class DashboardViewMobile extends StatelessWidget {
       case CreateProductPageState:
       case CreateUserPageState:
       case CreateOrderPageState:
+      case EditOrderPageState:
         return Container();
     }
     return ExpandableFab(distance: 100, children: [

@@ -1,11 +1,14 @@
 import 'package:moxy/constant/order_constants.dart';
+import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/domain/copyable.dart';
+import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/product.dart';
 
 class Order implements Copyable<Order> {
-  String? id;
-  int? ukrPostNumber;
-  int? novaPostNumber;
+  String? _id;
+  int cashAdvanceValue;
+  NetworkNovaPost novaPost;
+  City city;
   DeliveryType deliveryType;
   String status;
   PaymentType paymentType;
@@ -15,8 +18,10 @@ class Order implements Copyable<Order> {
   String updatedAt;
 
   Order({
-    this.id,
-    required this.ukrPostNumber,
+    String? id,
+    required this.cashAdvanceValue,
+    required this.novaPost,
+    required this.city,
     required this.deliveryType,
     required this.status,
     required this.paymentType,
@@ -24,12 +29,17 @@ class Order implements Copyable<Order> {
     required this.orderedItems,
     required this.createdAt,
     required this.updatedAt,
-  });
+  }) : _id = id;
+
+  String? get id => _id;
 
   static Order defaultOrder() {
     return Order(
         id: '',
-        ukrPostNumber: 0,
+        cashAdvanceValue: 0,
+        city: City.defaultCity(),
+        novaPost: NetworkNovaPost(
+            number: 0, ref: '', postMachineType: '', presentName: ''),
         deliveryType: DeliveryType.novaPost,
         status: '',
         paymentType: PaymentType.cashAdvance,
@@ -42,6 +52,9 @@ class Order implements Copyable<Order> {
   @override
   Order copyWith({
     String? id,
+    int? cashAdvanceValue,
+    NetworkNovaPost? novaPost,
+    City? city,
     int? ukrPostNumber,
     DeliveryType? deliveryType,
     String? status,
@@ -52,8 +65,10 @@ class Order implements Copyable<Order> {
     String? updatedAt,
   }) {
     return Order(
-        id: id ?? this.id,
-        ukrPostNumber: ukrPostNumber ?? this.ukrPostNumber,
+        id: id ?? this._id,
+        cashAdvanceValue: cashAdvanceValue ?? this.cashAdvanceValue,
+        novaPost: novaPost ?? this.novaPost,
+        city: city ?? this.city,
         deliveryType: deliveryType ?? this.deliveryType,
         status: status ?? this.status,
         paymentType: paymentType ?? this.paymentType,
@@ -65,28 +80,34 @@ class Order implements Copyable<Order> {
 }
 
 class Client {
+  String? _id;
   String mobileNumber;
   String firstName;
   String secondName;
   String city;
 
   Client(
-      {required this.city,
+      {String? id,
+      required this.city,
       required this.firstName,
       required this.mobileNumber,
-      required this.secondName});
+      required this.secondName})
+      : _id = id;
+  String? get id => _id;
 
   static Client defaultClient() {
     return Client(
-        mobileNumber: '', firstName: '', secondName: '', city: 'Lviv');
+        id: '', mobileNumber: '', firstName: '', secondName: '', city: 'Lviv');
   }
 
   Client copyWith(
-      {String? mobileNumber,
+      {String? id,
+      String? mobileNumber,
       String? firstName,
       String? secondName,
       String? city}) {
     return Client(
+      id: id ?? this._id,
       mobileNumber: mobileNumber ?? this.mobileNumber,
       firstName: firstName ?? this.firstName,
       secondName: secondName ?? this.secondName,

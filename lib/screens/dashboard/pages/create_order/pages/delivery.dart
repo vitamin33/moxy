@@ -19,12 +19,6 @@ class Delivery extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateOrderCubit, CreateOrderState>(
-        //  BlocConsumer<CreateOrderCubit, CreateOrderState>(
-        //     listener: (context, state) {
-        //   if (state.selectedCity != null) {
-        //     BlocProvider.of<SearchWarehouseCubit>(context).clearWarehouse();
-        //   }
-        // },
         builder: (context, state) {
       final cubit = context.read<CreateOrderCubit>();
       return MultiBlocProvider(
@@ -106,10 +100,21 @@ class Delivery extends StatelessWidget {
                     ? Padding(
                         padding: const EdgeInsets.all(AppTheme.cardPadding),
                         child: Column(
-                          children: const [
-                            SearchCityDropdown(),
+                          children: [
+                            SearchCityDropdown(
+                                selectedCity: state.selectedCity,
+                                selectedWarehouse: state.selectedWarehouse,
+                                onChanged: (city) {
+                                  cubit.selectCity(city);
+                                }),
                             SizedBox(height: 20),
-                            SearchWarehouseDropdown(),
+                            SearchWarehouseDropdown(
+                              selectedCity: state.selectedCity,
+                              selectedWarehouse: state.selectedWarehouse,
+                              onChanged: (warehouse) {
+                                cubit.selectWarehouse(warehouse);
+                              },
+                            ),
                           ],
                         ),
                       )

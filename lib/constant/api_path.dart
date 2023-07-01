@@ -5,5 +5,6 @@ const String getProductByIdUrl = '/products/';
 const String editProductUrl = '/products/edit/';
 const String allOrdersUrl = '/orders';
 const String createOrdersUrl = '/orders/create';
+const String editOrdersUrl = '/orders/edit';
 const String createGuestUserUrl = '/users/create-guest';
 const String allUsersUrl = '/users';

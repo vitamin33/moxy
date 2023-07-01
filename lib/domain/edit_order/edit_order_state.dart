@@ -5,107 +5,105 @@ import '../models/order.dart';
 import '../models/warehouse.dart';
 import '../validation_mixin.dart';
 
-class CreateOrderState implements Copyable<CreateOrderState> {
+class EditOrderState implements Copyable<EditOrderState> {
   bool isLoading;
-  bool isEdit;
   bool isSuccess;
+  bool isEditName;
+  bool isEditPhone;
   String errorMessage;
-  int initialPage;
-  int activePage;
+  String orderId;
   DeliveryType deliveryType;
   PaymentType paymentType;
-  int novaPostNumber;
-  int productListPrice;
   List<OrderedItem> selectedProducts;
   City selectedCity;
   Warehouse selectedWarehouse;
   String status;
   Client client;
-  String prepayment;
+  int prepayment;
+  String createdAt;
+  String updatedAt;
 
   // field errors
   FieldErrors errors;
 
-  CreateOrderState({
+  EditOrderState({
     required this.isLoading,
-    required this.isEdit,
     required this.isSuccess,
+    required this.isEditName,
+    required this.isEditPhone,
     required this.errorMessage,
-    required this.initialPage,
-    required this.activePage,
     required this.errors,
+    required this.orderId,
     required this.deliveryType,
     required this.paymentType,
-    required this.novaPostNumber,
-    required this.productListPrice,
     required this.selectedProducts,
     required this.selectedCity,
     required this.selectedWarehouse,
     required this.client,
     required this.status,
     required this.prepayment,
+    required this.createdAt,
+    required this.updatedAt,
   });
 
-  static CreateOrderState defaultCreateProductState() {
-    return CreateOrderState(
+  static EditOrderState defaultEditOrderState() {
+    return EditOrderState(
         isLoading: false,
-        isEdit: false,
         isSuccess: false,
+        isEditName: false,
+        isEditPhone: false,
         errorMessage: '',
-        initialPage: 0,
-        activePage: 0,
         errors: FieldErrors(),
+        orderId: '',
         deliveryType: DeliveryType.novaPost,
         paymentType: PaymentType.fullPayment,
-        novaPostNumber: 0,
-        productListPrice: 0,
-        selectedProducts: [],
+        selectedProducts: [OrderedItem.defaultOrderedItem()],
         selectedCity: City.defaultCity(),
         selectedWarehouse: Warehouse.defaultWarehouse(),
         client: Client.defaultClient(),
         status: 'New',
-        prepayment: '150');
+        prepayment: 150,
+        createdAt: '',
+        updatedAt: '');
   }
 
   @override
-  CreateOrderState copyWith(
+  EditOrderState copyWith(
       {bool? isLoading,
-      bool? isEdit,
       bool? isSuccess,
+      bool? isEditName,
+      bool? isEditPhone,
       String? errorMessage,
-      int? initialPage,
-      int? activePage,
-      List<String>? images,
-      String? editProductId,
       FieldErrors? errors,
+      String? orderId,
       DeliveryType? deliveryType,
       PaymentType? paymentType,
-      int? novaPostNumber,
-      int? productListPrice,
       List<OrderedItem>? selectedProducts,
       City? selectedCity,
       Warehouse? selectedWarehouse,
       Client? client,
       String? status,
-      String? prepayment}) {
-    return CreateOrderState(
+      int? prepayment,
+      String? createdAt,
+      String? updatedAt}) {
+    return EditOrderState(
       isLoading: isLoading ?? this.isLoading,
-      isEdit: isEdit ?? this.isEdit,
       isSuccess: isSuccess ?? this.isSuccess,
+      isEditName: isEditName ?? this.isEditName,
+      isEditPhone: isEditPhone ?? this.isEditPhone,
       errorMessage: errorMessage ?? this.errorMessage,
-      initialPage: initialPage ?? this.initialPage,
-      activePage: activePage ?? this.activePage,
       errors: errors ?? this.errors,
+      orderId: orderId ?? this.orderId,
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
-      novaPostNumber: novaPostNumber ?? this.novaPostNumber,
-      productListPrice: productListPrice ?? this.productListPrice,
       selectedProducts: selectedProducts ?? this.selectedProducts,
       selectedCity: selectedCity ?? this.selectedCity,
       selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,
       status: status ?? this.status,
       prepayment: prepayment ?? this.prepayment,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 }

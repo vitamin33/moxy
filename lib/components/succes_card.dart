@@ -69,7 +69,7 @@ class _AnimatedLogoState extends State<AnimatedLogo>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration:const Duration(seconds: 1),
     );
     _animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     _controller.forward();

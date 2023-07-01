@@ -8,49 +8,54 @@ import 'package:moxy/domain/create_order/search_cities/search_cities_state.dart'
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/theme/app_theme.dart';
 import '../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
+import '../../../../domain/models/warehouse.dart';
 
 class SearchCityDropdown extends StatelessWidget {
-  const SearchCityDropdown({super.key});
+  final Warehouse? selectedWarehouse;
+  final City selectedCity;
+  final ValueChanged onChanged;
+
+  const SearchCityDropdown({
+    Key? key,
+    required this.selectedWarehouse,
+    required this.onChanged,
+    required this.selectedCity,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        BlocBuilder<CreateOrderCubit, CreateOrderState>(
-            builder: (context, orderState) {
-          return BlocBuilder<SearchCitiesCubit, SearchCitiesState>(
-            builder: (context, state) {
-              if (state.isLoading) {
-                return const CircularProgressIndicator();
-              }
-              final citySearchCubit = context.read<SearchCitiesCubit>();
-              final warehousSearchCubit = context.read<SearchWarehouseCubit>();
-              final selectedCity = orderState.selectedCity;
-              return DropdownSearch<City>(
-                  items: state.cityList,
-                  asyncItems: citySearchCubit.searchCities,
-                  popupProps: PopupPropsMultiSelection.modalBottomSheet(
-                    showSelectedItems: false,
-                    searchFieldProps:
-                        _createSearchFieldProps(citySearchCubit.controller),
-                    itemBuilder: _cityPopupItemBuilder,
-                    showSearchBox: true,
-                    isFilterOnline: true,
-                    modalBottomSheetProps: const ModalBottomSheetProps(
-                        enableDrag: true, shape: BeveledRectangleBorder()),
-                  ),
-                  selectedItem: selectedCity,
-                  itemAsString: selectedCity.presentName != ''
-                      ? (City city) => city.toString()
-                      : (City city) => "City",
-                  onChanged: (City? city) {
-                    final createOrderCubit = context.read<CreateOrderCubit>();
-                    createOrderCubit.selectCity(city);
-                    warehousSearchCubit.clearWarehouse();
-                  });
-            },
-          );
-        })
+        BlocBuilder<SearchCitiesCubit, SearchCitiesState>(
+          builder: (context, state) {
+            if (state.isLoading) {
+              return const CircularProgressIndicator();
+            }
+            final citySearchCubit = context.read<SearchCitiesCubit>();
+            final warehousSearchCubit = context.read<SearchWarehouseCubit>();
+            return DropdownSearch<City>(
+                items: state.cityList,
+                asyncItems: citySearchCubit.searchCities,
+                popupProps: PopupPropsMultiSelection.modalBottomSheet(
+                  showSelectedItems: false,
+                  searchFieldProps:
+                      _createSearchFieldProps(citySearchCubit.controller),
+                  itemBuilder: _cityPopupItemBuilder,
+                  showSearchBox: true,
+                  isFilterOnline: true,
+                  modalBottomSheetProps: const ModalBottomSheetProps(
+                      enableDrag: true, shape: BeveledRectangleBorder()),
+                ),
+                selectedItem: selectedCity,
+                itemAsString: selectedCity.presentName != ''
+                    ? (City city) => city.toString()
+                    : (City city) => "City",
+                onChanged: (City? city) {
+                  onChanged(city);
+                  warehousSearchCubit.clearWarehouse();
+                });
+          },
+        )
       ],
     );
   }

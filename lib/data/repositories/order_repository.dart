@@ -6,6 +6,7 @@ import 'package:rxdart/rxdart.dart';
 import '../../domain/models/city.dart';
 import '../../utils/common.dart';
 import '../models/request/create_order_request.dart';
+import '../models/request/edit_order_request.dart';
 import '../models/response/all_orders_response.dart';
 
 class OrderRepository {
@@ -23,6 +24,19 @@ class OrderRepository {
   Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
     try {
       final result = await client.createOrder(order);
+      if (result != null) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('sd'));
+      }
+    } catch (e) {
+      moxyPrint('Repository Error:$e');
+      return Result.error(Exception('$e'));
+    }
+  }
+  Future<Result<dynamic, Exception>> editOrder(EditOrder order) async {
+    try {
+      final result = await client.editOrder(order);
       if (result != null) {
         return Result.success(result);
       } else {

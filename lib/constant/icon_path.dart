@@ -31,4 +31,7 @@ class IconPath {
   static const String saleStatus = "assets/icons/sale_status.svg";
   static const String canceledStatus = "assets/icons/canceled_status.svg";
   static const String returnedStatus = "assets/icons/returned_status.svg";
+  static const String personName = "assets/icons/person_name.svg";
+  static const String phone = "assets/icons/phone.svg";
+  static const String selectedProduct = "assets/icons/selected_product.svg";
 }

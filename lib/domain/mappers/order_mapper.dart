@@ -4,6 +4,7 @@ import 'package:moxy/domain/models/product.dart';
 
 import '../../constant/order_constants.dart';
 import '../../data/models/request/create_order_request.dart';
+import '../../data/models/request/edit_order_request.dart';
 import '../../data/models/response/all_orders_response.dart';
 import '../../services/get_it.dart';
 import '../models/city.dart';
@@ -15,11 +16,19 @@ class OrderMapper {
   List<Order> mapToOrderList(List<NetworkOrder> networkOrders) {
     return networkOrders.map((o) {
       return Order(
-        ukrPostNumber: o.ukrPostNumber,
+        id: o.id,
+        cashAdvanceValue: o.cashAdvanceValue,
+        novaPost: o.novaPost,
+        city: City(
+            mainDescription: o.city.mainDescription!,
+            ref: o.city.ref!,
+            deliveryCityRef: o.city.deliveryCityRef!,
+            presentName: o.city.presentName!),
         deliveryType: _mapDeliveryType(o.deliveryType),
         status: o.status,
         paymentType: _mapPaymentType(o.paymentType),
         client: Client(
+          id: o.client.id,
           mobileNumber: o.client.mobileNumber,
           firstName: o.client.firstName,
           secondName: o.client.secondName,
@@ -103,13 +112,66 @@ class OrderMapper {
       novaPost: NetworkNovaPost(
           number: novapost.number,
           ref: novapost.ref,
-          postMachineType: novapost.postMachineType),
+          postMachineType: novapost.postMachineType,
+          presentName: novapost.description
+          ),
       status: status,
       client: NetworkClient(
-        client.city,
-        client.firstName,
-        client.mobileNumber,
-        client.secondName,
+        city: client.city,
+        firstName: client.firstName,
+        mobileNumber: client.mobileNumber,
+        secondName: client.secondName,
+      ),
+      city: NetworkCity(
+        ref: city.ref,
+        mainDescription: city.mainDescription,
+        deliveryCityRef: city.deliveryCityRef,
+        presentName: city.presentName,
+      ),
+      products: selectedProduct.map(
+        (e) {
+          List<Dimension> list = e.dimensions;
+          return NetworkOrderedItem(
+            id: e.productId,
+            dimensions: list.map((d) {
+              return NetworkDimension(color: d.color, quantity: d.quantity);
+            }).toList(),
+          );
+        },
+      ).toList(),
+    );
+  }
+
+  EditOrder mapToNetworkEditOrder(
+      String orderId,
+      DeliveryType deliveryType,
+      PaymentType paymentType,
+      List<OrderedItem> selectedProduct,
+      Warehouse novapost,
+      Client client,
+      City city,
+      String status,
+      String prepayment) {
+    return EditOrder(
+      orderId: orderId,
+      cashAdvanceValue: int.parse(prepayment),
+      deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
+      paymentType: _mapPaymentTypeNetwork(paymentType.name),
+      novaPost: NetworkNovaPost(
+          number: novapost.number,
+          ref: novapost.ref,
+          postMachineType: novapost.postMachineType,
+          presentName: novapost.description
+          ),
+      status: status,
+      client:
+          // client,
+          NetworkClient(
+        id: client.id,
+        city: client.city,
+        firstName: client.firstName,
+        mobileNumber: client.mobileNumber,
+        secondName: client.secondName,
       ),
       city: NetworkCity(
         ref: city.ref,

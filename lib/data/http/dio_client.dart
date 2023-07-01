@@ -15,6 +15,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../constant/api_path.dart';
 import '../models/request/create_order_request.dart';
+import '../models/request/edit_order_request.dart';
 import '../models/request/login_request.dart';
 import '../models/request/create_product_request.dart';
 import '../models/request/user_request.dart';
@@ -247,6 +248,23 @@ class DioClient {
     try {
       Response response = await dio.post(
         createOrdersUrl,
+        data: data,
+      );
+      result = response.headers;
+    } catch (e) {
+     moxyPrint('Error during creating order: $e');
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
+  }
+
+
+  Future<Result<Headers, Exception>> editOrder(EditOrder order) async {
+    final Headers? result;
+    final data = order.toJson();
+    try {
+      Response response = await dio.post(
+        editOrdersUrl,
         data: data,
       );
       result = response.headers;
