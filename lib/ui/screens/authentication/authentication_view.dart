@@ -25,7 +25,7 @@ class AuthenticationView extends StatelessWidget {
           showFailureSnackbar(context, 'Unable to login. Please try again.');
           cubit.clearState();
         } else if (state.state is LoginWithCredsSuccess) {
-          rootNavCubit.goToMain();
+          rootNavCubit.goToAdmin();
           cubit.clearState();
         } else if (state.state is Logout) {
           cubit.clearState();

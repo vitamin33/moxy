@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
-import 'package:moxy/domain/create_user/create_user_effects.dart';
+import 'package:moxy/domain/admin/create_user/create_user_effects.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
 import 'package:moxy/domain/models/user.dart';
 import 'package:moxy/domain/ui_effect.dart';
@@ -10,8 +10,8 @@ import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../constant/route_name.dart';
-import '../../services/get_it.dart';
+import '../../../constant/route_name.dart';
+import '../../../services/get_it.dart';
 import 'create_user_state.dart';
 
 class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>

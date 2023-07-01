@@ -1,4 +1,3 @@
-
 part of 'root_router_cubit.dart';
 
 abstract class RootRouterState extends Equatable {
@@ -7,9 +6,9 @@ abstract class RootRouterState extends Equatable {
   List<Object?> get props => [];
 }
 
-class MainPageState extends RootRouterState {
+class AdminPageState extends RootRouterState {
   final String? extraPageContent;
-  const MainPageState([this.extraPageContent]);
+  const AdminPageState([this.extraPageContent]);
   @override
   List<Object?> get props => [extraPageContent];
 }

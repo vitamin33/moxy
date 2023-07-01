@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/http/nova_poshta_client.dart';
-import 'package:moxy/domain/create_order/search_warehouse/search_warehouse_state.dart';
+import 'package:moxy/domain/admin/create_order/search_warehouse/search_warehouse_state.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../models/warehouse.dart';
+import '../../../models/warehouse.dart';
 
 class SearchWarehouseCubit extends Cubit<SearchWarehouseState> {
   final NovaPoshtaClient apiService = locate<NovaPoshtaClient>();

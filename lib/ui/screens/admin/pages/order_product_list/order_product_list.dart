@@ -4,13 +4,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/constant/product_colors.dart';
-import 'package:moxy/domain/order_product_list/order_product_list_state.dart';
+import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../../constant/icon_path.dart';
-import '../../../../../domain/create_product/create_product_cubit.dart';
+import '../../../../../domain/admin/create_product/create_product_cubit.dart';
 import '../../../../../domain/models/product.dart';
-import '../../../../../domain/order_product_list/order_product_list_cubit.dart';
+import '../../../../../domain/admin/order_product_list/order_product_list_cubit.dart';
 import '../../../../theme/app_theme.dart';
 
 class OrderProductList extends StatelessWidget {

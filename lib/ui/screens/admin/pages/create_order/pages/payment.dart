@@ -5,8 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import '../../../../../../constant/icon_path.dart';
 import '../../../../../../constant/order_constants.dart';
-import '../../../../../../domain/create_order/create_order_cubit.dart';
-import '../../../../../../domain/create_order/create_order_state.dart';
+import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
+import '../../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../../theme/app_theme.dart';
 
 class Payment extends StatelessWidget {

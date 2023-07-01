@@ -1,11 +1,11 @@
-import 'package:moxy/domain/all_products/all_products_effects.dart';
+import 'package:moxy/domain/admin/all_products/all_products_effects.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../data/repositories/product_repository.dart';
-import '../../services/get_it.dart';
-import '../ui_effect.dart';
+import '../../../data/repositories/product_repository.dart';
+import '../../../services/get_it.dart';
+import '../../ui_effect.dart';
 import 'all_products_state.dart';
 
 class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {

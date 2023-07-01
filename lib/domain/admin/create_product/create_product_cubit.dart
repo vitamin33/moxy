@@ -4,8 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
-import 'package:moxy/domain/create_product/create_product_effects.dart';
-import 'package:moxy/domain/create_product/create_product_state.dart';
+import 'package:moxy/domain/admin/create_product/create_product_effects.dart';
+import 'package:moxy/domain/admin/create_product/create_product_state.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
@@ -14,8 +14,8 @@ import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../services/get_it.dart';
-import '../mappers/product_mapper.dart';
+import '../../../services/get_it.dart';
+import '../../mappers/product_mapper.dart';
 
 class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {

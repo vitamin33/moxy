@@ -6,9 +6,9 @@ import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import '../../../../components/custom_button.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/snackbar_widgets.dart';
-import '../../../../../domain/create_user/create_user_cubit.dart';
-import '../../../../../domain/create_user/create_user_effects.dart';
-import '../../../../../domain/create_user/create_user_state.dart';
+import '../../../../../domain/admin/create_user/create_user_cubit.dart';
+import '../../../../../domain/admin/create_user/create_user_effects.dart';
+import '../../../../../domain/admin/create_user/create_user_state.dart';
 import '../../../../theme/app_theme.dart';
 import '../../components/paste_text_field.dart';
 

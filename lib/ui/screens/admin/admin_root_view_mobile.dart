@@ -11,8 +11,8 @@ import 'components/flutter_expandable_fab.dart';
 import 'components/navigation_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class DashboardViewMobile extends StatelessWidget {
-  DashboardViewMobile({Key? key}) : super(key: key);
+class AdminRootViewMobile extends StatelessWidget {
+  AdminRootViewMobile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

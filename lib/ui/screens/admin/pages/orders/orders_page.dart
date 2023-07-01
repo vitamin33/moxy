@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/edit_order/edit_order_cubit.dart';
+import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 
 import '../../../../../services/navigation/admin_home_router_cubit.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
-import '../../../../../domain/all_orders/all_orders_cubit.dart';
-import '../../../../../domain/all_orders/all_orders_state.dart';
+import '../../../../../domain/admin/all_orders/all_orders_cubit.dart';
+import '../../../../../domain/admin/all_orders/all_orders_state.dart';
 import '../../../../theme/app_theme.dart';
 
 class OrdersPage extends StatelessWidget {

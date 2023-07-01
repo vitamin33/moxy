@@ -4,8 +4,8 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
-import 'package:moxy/domain/create_product/create_product_cubit.dart';
-import 'package:moxy/domain/create_product/create_product_state.dart';
+import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
+import 'package:moxy/domain/admin/create_product/create_product_state.dart';
 import 'package:moxy/ui/screens/admin/pages/create_product/pages/branding.dart';
 import 'package:moxy/ui/screens/admin/pages/create_product/pages/details.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -13,7 +13,7 @@ import 'package:moxy/utils/common.dart';
 import '../../../../components/app_indicator.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/succes_card.dart';
-import '../../../../../domain/create_product/create_product_effects.dart';
+import '../../../../../domain/admin/create_product/create_product_effects.dart';
 
 const bottomButtonsHeight = 100.0;
 

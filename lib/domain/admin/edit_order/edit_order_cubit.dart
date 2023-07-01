@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/domain/edit_order/edit_order_state.dart';
+import 'package:moxy/domain/admin/edit_order/edit_order_state.dart';
 import 'package:moxy/domain/ui_effect.dart';
 
-import '../../constant/order_constants.dart';
-import '../../data/repositories/order_repository.dart';
-import '../../services/cubit_with_effects.dart';
-import '../../services/get_it.dart';
-import '../../utils/common.dart';
-import '../mappers/order_mapper.dart';
-import '../models/city.dart';
-import '../models/order.dart';
-import '../models/warehouse.dart';
-import '../validation_mixin.dart';
+import '../../../constant/order_constants.dart';
+import '../../../data/repositories/order_repository.dart';
+import '../../../services/cubit_with_effects.dart';
+import '../../../services/get_it.dart';
+import '../../../utils/common.dart';
+import '../../mappers/order_mapper.dart';
+import '../../models/city.dart';
+import '../../models/order.dart';
+import '../../models/warehouse.dart';
+import '../../validation_mixin.dart';
 
 class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     with ValidationMixin {

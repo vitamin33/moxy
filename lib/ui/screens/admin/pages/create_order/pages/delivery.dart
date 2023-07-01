@@ -4,10 +4,10 @@ import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../../constant/image_path.dart';
 import '../../../../../../constant/order_constants.dart';
-import '../../../../../../domain/create_order/create_order_cubit.dart';
-import '../../../../../../domain/create_order/create_order_state.dart';
-import '../../../../../../domain/create_order/search_cities/search_cities_cubit.dart';
-import '../../../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
+import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
+import '../../../../../../domain/admin/create_order/create_order_state.dart';
+import '../../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
+import '../../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../city_dropdown.dart';
 import '../warehouse_dropdown.dart';
 

@@ -1,5 +1,5 @@
-import '../../copyable.dart';
-import '../../models/warehouse.dart';
+import '../../../copyable.dart';
+import '../../../models/warehouse.dart';
 
 class SearchWarehouseState implements Copyable<SearchWarehouseState> {
   bool isLoading;

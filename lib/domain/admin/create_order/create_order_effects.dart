@@ -1,4 +1,4 @@
-import '../ui_effect.dart';
+import '../../ui_effect.dart';
 
 class ValidationFailed implements UiEffect {
   String failureText;

@@ -1,5 +1,5 @@
-import '../copyable.dart';
-import '../models/product.dart';
+import '../../copyable.dart';
+import '../../models/product.dart';
 
 class OrderProductListState implements Copyable<OrderProductListState> {
   final Map<String, List<Product>> productsByColor;
@@ -12,7 +12,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     required this.productsByColor,
     required this.allProducts,
     required this.isLoading,
-    this.isEdit=false,
+    this.isEdit = false,
     this.errorMessage,
   });
 
