@@ -1,5 +1,5 @@
-import '../copyable.dart';
-import '../models/product.dart';
+import '../../copyable.dart';
+import '../../models/product.dart';
 
 class AllProductsState implements Copyable<AllProductsState> {
   final List<Product> allProducts;

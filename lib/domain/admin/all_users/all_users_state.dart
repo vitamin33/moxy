@@ -1,6 +1,6 @@
 import 'package:moxy/domain/models/user.dart';
 
-import '../copyable.dart';
+import '../../copyable.dart';
 
 class AllUsersState implements Copyable<AllUsersState> {
   final List<User> allUsers;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
-import 'package:moxy/ui/screens/admin/dashboard_view_mobile.dart';
+import 'package:moxy/ui/screens/admin/admin_root_view_mobile.dart';
 
 import 'root_router_cubit.dart';
 
@@ -40,12 +40,13 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
   List<Page> get _extraPages {
     // ignore: unused_local_variable
     String? extraPageContent;
-    if (_routerCubit.state is MainPageState) {
-      extraPageContent = (_routerCubit.state as MainPageState).extraPageContent;
+    if (_routerCubit.state is AdminPageState) {
+      extraPageContent =
+          (_routerCubit.state as AdminPageState).extraPageContent;
       return [
         _materialPage(
           valueKey: "main",
-          child: DashboardViewMobile(),
+          child: AdminRootViewMobile(),
         ),
       ];
     }

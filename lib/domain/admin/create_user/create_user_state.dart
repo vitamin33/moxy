@@ -1,7 +1,7 @@
 import 'package:moxy/domain/validation_mixin.dart';
 
-import '../copyable.dart';
-import '../models/user.dart';
+import '../../copyable.dart';
+import '../../models/user.dart';
 
 class CreateUserState implements Copyable<CreateUserState> {
   bool isLoading;

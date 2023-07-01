@@ -2,7 +2,7 @@ import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 
-import '../copyable.dart';
+import '../../copyable.dart';
 
 class CreateProductState implements Copyable<CreateProductState> {
   bool isLoading;

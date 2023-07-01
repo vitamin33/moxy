@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../../../constant/order_status.dart';
-import '../../../../../../domain/create_order/create_order_cubit.dart';
-import '../../../../../../domain/create_order/create_order_state.dart';
+import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
+import '../../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../../theme/app_theme.dart';
 
 class StatusPage extends StatelessWidget {

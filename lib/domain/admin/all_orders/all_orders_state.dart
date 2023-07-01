@@ -1,5 +1,5 @@
-import '../copyable.dart';
-import '../models/order.dart';
+import '../../copyable.dart';
+import '../../models/order.dart';
 
 class AllOrdersState implements Copyable<AllOrdersState> {
   final List<Order> allOrders;

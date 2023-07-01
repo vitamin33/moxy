@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/create_product/create_product_cubit.dart';
+import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../components/custom_textfield.dart';
-import '../../../../../../domain/create_product/create_product_state.dart';
+import '../../../../../../domain/admin/create_product/create_product_state.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);

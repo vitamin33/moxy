@@ -3,16 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/edit_order/edit_order_cubit.dart';
+import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../../constant/order_status.dart';
 import '../../../../../constant/image_path.dart';
 import '../../../../../constant/order_constants.dart';
-import '../../../../../domain/create_order/search_cities/search_cities_cubit.dart';
-import '../../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
-import '../../../../../domain/edit_order/edit_order_state.dart';
+import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
+import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
+import '../../../../../domain/admin/edit_order/edit_order_state.dart';
 import '../../../../../services/navigation/admin_home_router_cubit.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/succes_card.dart';

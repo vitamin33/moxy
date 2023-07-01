@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/create_order/search_cities/search_cities_cubit.dart';
+import 'package:moxy/domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'package:moxy/domain/create_order/search_cities/search_cities_state.dart';
+import 'package:moxy/domain/admin/create_order/search_cities/search_cities_state.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import '../../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
+import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../../../../../domain/models/warehouse.dart';
 
 class SearchCityDropdown extends StatelessWidget {

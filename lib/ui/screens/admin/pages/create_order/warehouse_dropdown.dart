@@ -4,8 +4,8 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import '../../../../../domain/create_order/search_warehouse/search_warehouse_cubit.dart';
-import '../../../../../domain/create_order/search_warehouse/search_warehouse_state.dart';
+import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
+import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_state.dart';
 
 class SearchWarehouseDropdown extends StatelessWidget {
   final Warehouse? selectedWarehouse;

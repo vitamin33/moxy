@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../components/snackbar_widgets.dart';
-import '../../../../../domain/all_users/all_users_cubit.dart';
-import '../../../../../domain/all_users/all_users_effects.dart';
-import '../../../../../domain/all_users/all_users_state.dart';
+import '../../../../../domain/admin/all_users/all_users_cubit.dart';
+import '../../../../../domain/admin/all_users/all_users_effects.dart';
+import '../../../../../domain/admin/all_users/all_users_state.dart';
 
 class UsersPage extends StatelessWidget {
   const UsersPage({Key? key}) : super(key: key);

@@ -1,3 +1,5 @@
+import 'package:moxy/domain/roles.dart';
+
 import '../copyable.dart';
 
 class LoginState implements Copyable<LoginState> {
@@ -43,7 +45,9 @@ class Loading extends AuthState {
 }
 
 class LoginWithCredsSuccess extends AuthState {
-  LoginWithCredsSuccess();
+  LoginWithCredsSuccess({required this.role});
+
+  Role role;
 }
 
 class Logout extends AuthState {

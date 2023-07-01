@@ -7,8 +7,10 @@ class LoginResponse {
   String userId;
   String accessToken;
   String refreshToken;
+  String userRole;
 
-  LoginResponse(this.accessToken, this.refreshToken, this.userId);
+  LoginResponse(
+      this.accessToken, this.refreshToken, this.userId, this.userRole);
 
   factory LoginResponse.fromJson(Map<String, dynamic> json) =>
       _$LoginResponseFromJson(json);

@@ -1,5 +1,5 @@
-import '../../copyable.dart';
-import '../../models/city.dart';
+import '../../../copyable.dart';
+import '../../../models/city.dart';
 
 class SearchCitiesState implements Copyable<SearchCitiesState> {
   bool isLoading;

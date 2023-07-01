@@ -5,6 +5,7 @@ import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import '../../services/get_it.dart';
 import '../../services/navigation_service.dart';
+import '../roles.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -42,8 +43,8 @@ class LoginCubit extends Cubit<LoginState> {
       final result = await authRepository.loginWithCredentials(
           state.mobileNumber, state.password);
 
-      result.when((success) {
-        emit(state.copyWith(state: LoginWithCredsSuccess()));
+      result.when((role) {
+        emit(state.copyWith(state: LoginWithCredsSuccess(role: role)));
       }, (error) {
         emit(state.copyWith(
             state:
@@ -71,8 +72,9 @@ class LoginCubit extends Cubit<LoginState> {
 
   _checkLoggedInState() async {
     bool isLoggedIn = await authRepository.checkLoggedInState();
-    if (isLoggedIn) {
-      emit(state.copyWith(state: LoginWithCredsSuccess()));
+    Role? userRole = await authRepository.getUserRole();
+    if (isLoggedIn && userRole != null) {
+      emit(state.copyWith(state: LoginWithCredsSuccess(role: userRole)));
     }
   }
 }

@@ -12,11 +12,11 @@ class RootRouterCubit extends Cubit<RootRouterState> {
   RootRouterCubit() : super(const AuthPageState()) {
     _checkLoggedInState();
   }
-  void goToMain([String? text]) => emit(MainPageState(text));
+  void goToAdmin([String? text]) => emit(AdminPageState(text));
   void goToAuth([String? text]) => emit(AuthPageState(text));
   void popExtra() {
-    if (state is MainPageState) {
-      goToMain();
+    if (state is AdminPageState) {
+      goToAdmin();
     } else if (state is AuthPageState) {
       goToAuth();
     }
@@ -25,7 +25,7 @@ class RootRouterCubit extends Cubit<RootRouterState> {
   _checkLoggedInState() async {
     bool isLoggedIn = await authRepository.checkLoggedInState();
     if (isLoggedIn) {
-      goToMain();
+      goToAdmin();
     } else {
       goToAuth();
     }

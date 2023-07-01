@@ -1,12 +1,12 @@
 import 'package:moxy/data/repositories/auth_repository.dart';
-import 'package:moxy/domain/all_users/all_users_effects.dart';
-import 'package:moxy/domain/all_users/all_users_state.dart';
+import 'package:moxy/domain/admin/all_users/all_users_effects.dart';
+import 'package:moxy/domain/admin/all_users/all_users_state.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../services/get_it.dart';
-import '../mappers/user_mapper.dart';
-import '../ui_effect.dart';
+import '../../../services/get_it.dart';
+import '../../mappers/user_mapper.dart';
+import '../../ui_effect.dart';
 
 class AllUsersCubit extends CubitWithEffects<AllUsersState, UiEffect> {
   final userMapper = locate<UserMapper>();

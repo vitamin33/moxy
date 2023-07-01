@@ -1,6 +1,8 @@
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/domain/models/user.dart';
+import 'package:moxy/domain/roles.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
@@ -17,18 +19,23 @@ class AuthRepository {
   final userMapper = locate<UserMapper>();
   final tokenService = locate<TokenService>();
 
-  Future<Result<SharedPreferences, Exception>> loginWithCredentials(
+  Future<Result<Role, Exception>> loginWithCredentials(
       String mobileNumber, String password) async {
     try {
       final result = await client.login(mobileNumber, password);
       final accessToken = result?.accessToken;
       final refreshToken = result?.refreshToken;
       final userId = result?.userId;
-      if (accessToken != null && refreshToken != null && userId != null) {
+      final userRole = result?.userRole;
+      if (accessToken != null &&
+          refreshToken != null &&
+          userId != null &&
+          userRole != null) {
         final prefs = await SharedPreferences.getInstance();
         tokenService.saveTokens(accessToken, refreshToken);
         await prefs.setString(userIdKey, userId);
-        return Result.success(prefs);
+        await prefs.setString(userRoleKey, userRole);
+        return Result.success(_mapUserRole(userRole));
       } else {
         moxyPrint('Failed durring login!');
         return Result.error(Exception('Login failed.'));
@@ -50,7 +57,17 @@ class AuthRepository {
 
   Future<bool> checkLoggedInState() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(accessTokenKey) && prefs.containsKey(userIdKey);
+    final containsAuthInfo = prefs.containsKey(accessTokenKey) &&
+        prefs.containsKey(userIdKey) &&
+        prefs.containsKey(userRoleKey);
+
+    return containsAuthInfo;
+  }
+
+  Future<Role?> getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userRole = prefs.getString(userRoleKey);
+    return userRole?.let(_mapUserRole);
   }
 
   Future<Result<User, Exception>> createGuestUser(NetworkUser user) async {
@@ -71,5 +88,17 @@ class AuthRepository {
                   .toList(),
             ),
         (error) => Result.error(error));
+  }
+
+  Role _mapUserRole(String userRole) {
+    switch (userRole) {
+      case 'ADMIN':
+        return Role.admin;
+      case 'MANAGER':
+        return Role.manager;
+      case 'USER':
+        return Role.user;
+    }
+    return Role.guest;
   }
 }

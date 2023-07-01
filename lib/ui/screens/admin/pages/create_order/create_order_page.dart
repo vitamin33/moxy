@@ -12,9 +12,9 @@ import '../../../../components/custom_button.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../components/succes_card.dart';
-import '../../../../../domain/create_order/create_order_cubit.dart';
-import '../../../../../domain/create_order/create_order_effects.dart';
-import '../../../../../domain/create_order/create_order_state.dart';
+import '../../../../../domain/admin/create_order/create_order_cubit.dart';
+import '../../../../../domain/admin/create_order/create_order_effects.dart';
+import '../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../theme/app_theme.dart';
 import '../create_product/create_product_page.dart';
 

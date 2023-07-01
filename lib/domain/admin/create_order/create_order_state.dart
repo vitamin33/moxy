@@ -1,9 +1,9 @@
-import '../../constant/order_constants.dart';
-import '../copyable.dart';
-import '../models/city.dart';
-import '../models/order.dart';
-import '../models/warehouse.dart';
-import '../validation_mixin.dart';
+import '../../../constant/order_constants.dart';
+import '../../copyable.dart';
+import '../../models/city.dart';
+import '../../models/order.dart';
+import '../../models/warehouse.dart';
+import '../../validation_mixin.dart';
 
 class CreateOrderState implements Copyable<CreateOrderState> {
   bool isLoading;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
-import 'package:moxy/domain/create_order/create_order_cubit.dart';
-import 'package:moxy/domain/dashboard/dashboard_cubit.dart';
+import 'package:moxy/domain/admin/create_order/create_order_cubit.dart';
+import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'domain/all_orders/all_orders_cubit.dart';
-import 'domain/all_products/all_products_cubit.dart';
-import 'domain/edit_order/edit_order_cubit.dart';
+import 'domain/admin/all_orders/all_orders_cubit.dart';
+import 'domain/admin/all_products/all_products_cubit.dart';
+import 'domain/admin/edit_order/edit_order_cubit.dart';
 import 'services/navigation/admin_home_router_cubit.dart';
 import 'services/navigation/root_router_cubit.dart';
 import 'services/navigation/root_router_delegate.dart';
