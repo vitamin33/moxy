@@ -1,8 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 
-import '../../../constant/order_constants.dart';
-import '../../../domain/models/city.dart';
 import '../response/all_orders_response.dart';
 
 part 'create_order_request.g.dart';

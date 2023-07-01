@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'domain/all_orders/all_orders_cubit.dart';
 import 'domain/all_products/all_products_cubit.dart';
 import 'domain/edit_order/edit_order_cubit.dart';
-import 'navigation/root_router_cubit.dart';
-import 'navigation/root_router_delegate.dart';
-import 'navigation/home_router_cubit.dart';
+import 'services/navigation/admin_home_router_cubit.dart';
+import 'services/navigation/root_router_cubit.dart';
+import 'services/navigation/root_router_delegate.dart';
 
 // ignore: must_be_immutable
 class MoxyApp extends StatelessWidget {
@@ -31,19 +31,17 @@ class MoxyApp extends StatelessWidget {
         BlocProvider<RootRouterCubit>(
           create: (BuildContext context) => RootRouterCubit(),
         ),
-        BlocProvider<HomeRouterCubit>(
-          create: (BuildContext context) => HomeRouterCubit(),
+        BlocProvider<AdminHomeRouterCubit>(
+          create: (BuildContext context) => AdminHomeRouterCubit(),
         ),
         BlocProvider<AllProductsCubit>(
             create: (BuildContext context) => AllProductsCubit()),
         BlocProvider<AllOrdersCubit>(
             create: (BuildContext context) => AllOrdersCubit()),
         BlocProvider<CreateOrderCubit>(
-            create: (BuildContext context) =>
-                CreateOrderCubit()),
+            create: (BuildContext context) => CreateOrderCubit()),
         BlocProvider<EditOrderCubit>(
-            create: (BuildContext context) =>
-                EditOrderCubit()),
+            create: (BuildContext context) => EditOrderCubit()),
       ],
       child: MaterialApp(
         home: _routers,

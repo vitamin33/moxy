@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/navigation/home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 
 List<Menu> menus = const [
   Menu(
@@ -64,7 +64,7 @@ List<Menu> menus = const [
 class Menu {
   final String title;
   final String icon;
-  final HomeRouterState route;
+  final AdminHomeRouterState route;
   final List<Menu> subRoutes;
 
   const Menu({
