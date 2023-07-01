@@ -45,7 +45,18 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
           (_routerCubit.state as AdminPageState).extraPageContent;
       return [
         _materialPage(
-          valueKey: "main",
+          valueKey: "admin_main",
+          child: AdminRootViewMobile(),
+        ),
+      ];
+    }
+    if (_routerCubit.state is ClientPageState) {
+      extraPageContent =
+          (_routerCubit.state as ClientPageState).extraPageContent;
+      return [
+        _materialPage(
+          valueKey: "client_main",
+          // TODO this should be replaced with client flow widget
           child: AdminRootViewMobile(),
         ),
       ];
