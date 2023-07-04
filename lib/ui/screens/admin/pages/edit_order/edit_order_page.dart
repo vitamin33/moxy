@@ -218,9 +218,8 @@ Widget contactDetails(
                 )),
             TextButton(
                 onPressed: () {
-                  
                   context.read<AdminHomeRouterCubit>().navigateTo(
-                        const OrderProductListPageState(),
+                        OrderProductListPageState(isFromEdit: true),
                       );
                 },
                 child: const Text(
@@ -259,7 +258,8 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                     Column(
                       children: [
                         InkWell(
-                          borderRadius:const BorderRadius.all(Radius.circular(20)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                           onTap: () {
                             cubit.changePayment(PaymentType.fullPayment);
                           },
@@ -292,7 +292,8 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                     Column(
                       children: [
                         InkWell(
-                          borderRadius:const BorderRadius.all(Radius.circular(20)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(20)),
                           onTap: () {
                             cubit.changePayment(PaymentType.cashAdvance);
                           },

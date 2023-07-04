@@ -77,7 +77,8 @@ class About extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 context.read<AdminHomeRouterCubit>().navigateTo(
-                                      const OrderProductListPageState(),
+                                      const OrderProductListPageState(
+                                          isFromEdit: false),
                                     );
                               },
                               child: Row(
@@ -172,7 +173,7 @@ Widget _buildGalleryArea(
             : InkWell(
                 onTap: () {
                   context.read<AdminHomeRouterCubit>().navigateTo(
-                        const OrderProductListPageState(),
+                        const OrderProductListPageState(isFromEdit: false),
                       );
                 },
                 child: Column(
