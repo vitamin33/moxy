@@ -16,9 +16,9 @@ import '../../validation_mixin.dart';
 
 class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     with ValidationMixin {
-  final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
   final productRepository = locate<ProductRepository>();
+  final orderMapper = locate<OrderMapper>();
   late TextEditingController paymentController;
   late TextEditingController dateController;
 
@@ -155,7 +155,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     emit(EditOrderState.defaultEditOrderState());
   }
 
-  // void editSelectedProduct() {
-  //   productRepository.updateSelectedProducts(state.selectedProducts);
-  // }
+  void editSelectedProduct() {
+   productRepository.addToSelectedProductStream(state.selectedProducts);
+  }
 }

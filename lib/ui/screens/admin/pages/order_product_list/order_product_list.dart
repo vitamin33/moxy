@@ -99,10 +99,21 @@ class OrderProductList extends StatelessWidget {
                       CustomButton(
                         title: 'Choose',
                         onTap: () {
+                          final isEditFrom = (context
+                                  .read<AdminHomeRouterCubit>()
+                                  .state as OrderProductListPageState)
+                              .isFromEdit;
                           cubit.productsSelected();
-                          context.read<AdminHomeRouterCubit>().navigateTo(
-                                const CreateOrderPageState(),
-                              );
+
+                          if (isEditFrom) {
+                            context
+                                .read<AdminHomeRouterCubit>()
+                                .navigateTo(const EditOrderPageState());
+                          } else {
+                            context.read<AdminHomeRouterCubit>().navigateTo(
+                                  const CreateOrderPageState(),
+                                );
+                          }
                         },
                         buttonWidth: MediaQuery.of(context).size.width - 90,
                       )

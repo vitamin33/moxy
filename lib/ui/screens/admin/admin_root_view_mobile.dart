@@ -80,7 +80,7 @@ class AdminRootViewMobile extends StatelessWidget {
           builder: (BuildContext context) {
             if (state.runtimeType == OrderProductListPageState) {
               bool fromEdit =
-                  (state as OrderProductListPageState).isFromEdit ?? false;
+                  (state as OrderProductListPageState).isFromEdit;
               return IconButton(
                   onPressed: () {
                     if (fromEdit) {

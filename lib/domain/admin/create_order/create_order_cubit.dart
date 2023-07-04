@@ -19,10 +19,10 @@ import 'create_order_state.dart';
 
 class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     with ValidationMixin {
-  final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
   final productRepository = locate<ProductRepository>();
   final navigationService = locate<NavigationService>();
+  final orderMapper = locate<OrderMapper>();
 
   late final StreamSubscription _selectedProductSubscription;
 
@@ -66,11 +66,8 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void _subscribe() {
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
-        final totalPrice = fullPrice(items);
-        final selectedItems = orderMapper.mapProductsToOrderedItemList(items);
         emit(state.copyWith(
-            selectedProducts: selectedItems,
-            productListPrice: totalPrice,
+            selectedProducts: items,
             isEdit: true));
       },
       onError: (error) =>

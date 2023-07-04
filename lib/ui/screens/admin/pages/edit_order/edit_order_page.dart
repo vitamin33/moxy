@@ -218,6 +218,7 @@ Widget contactDetails(
                 )),
             TextButton(
                 onPressed: () {
+                  cubit.editSelectedProduct();
                   context.read<AdminHomeRouterCubit>().navigateTo(
                         OrderProductListPageState(isFromEdit: true),
                       );
