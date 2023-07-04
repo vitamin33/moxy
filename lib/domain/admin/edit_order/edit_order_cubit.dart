@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_state.dart';
 import 'package:moxy/domain/ui_effect.dart';
 
@@ -17,6 +18,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     with ValidationMixin {
   final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
+  final productRepository = locate<ProductRepository>();
   late TextEditingController paymentController;
   late TextEditingController dateController;
 
@@ -152,4 +154,8 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   void clearState() {
     emit(EditOrderState.defaultEditOrderState());
   }
+
+  // void editSelectedProduct() {
+  //   productRepository.updateSelectedProducts(state.selectedProducts);
+  // }
 }
