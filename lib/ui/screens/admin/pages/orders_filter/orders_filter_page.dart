@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
@@ -13,8 +12,6 @@ import '../../../../../constant/order_constants.dart';
 import '../../../../../domain/admin/filter_orders/filter_orders_cubit.dart';
 import '../../../../../domain/admin/filter_orders/filter_orders_state.dart';
 import '../../../../components/loader.dart';
-import '../create_order/city_dropdown.dart';
-import '../create_order/warehouse_dropdown.dart';
 
 class FilterOrderPage extends StatelessWidget {
   const FilterOrderPage({super.key});
