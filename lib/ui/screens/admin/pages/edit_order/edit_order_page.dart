@@ -67,9 +67,9 @@ class EditOrderPage extends StatelessWidget {
                                   child: SingleChildScrollView(
                                       child: Column(
                                     children: [
-                                      contactDetails(context, state, cubit),
-                                      const SizedBox(height: 10),
                                       dataRange(state),
+                                      const SizedBox(height: 10),
+                                      contactDetails(context, state, cubit),
                                       const SizedBox(height: 20),
                                       typePayment(state, cubit, context),
                                       const SizedBox(height: 20),
@@ -254,7 +254,7 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                     style:
                         TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       children: [
@@ -328,9 +328,9 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
           ),
           AnimatedOpacity(
               opacity: state.paymentType == PaymentType.cashAdvance ? 1 : 0,
-              duration: const Duration(milliseconds: 800),
+              duration: const Duration(milliseconds: 500),
               child: AnimatedSize(
-                  duration: const Duration(milliseconds: 800),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOut,
                   child: state.paymentType == PaymentType.cashAdvance
                       ? Column(
@@ -385,8 +385,12 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(6))),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset(ImageAssets.novaPoshta),
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          width: 60,
+                          height: 30,
+                          ImageAssets.novaPoshta,
+                        ),
                       ),
                     ),
                   ),
@@ -406,7 +410,11 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
                               const BorderRadius.all(Radius.circular(6))),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(ImageAssets.ukrPoshta),
+                        child: Image.asset(
+                          width: 60,
+                          height: 30,
+                          ImageAssets.ukrPoshta,
+                        ),
                       ),
                     ),
                   ),
@@ -418,9 +426,9 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
         AnimatedOpacity(
             curve: Curves.easeOut,
             opacity: state.deliveryType == DeliveryType.novaPost ? 1 : 0,
-            duration: const Duration(milliseconds: 800),
+            duration: const Duration(milliseconds: 500),
             child: AnimatedSize(
-              duration: const Duration(milliseconds: 800),
+              duration: const Duration(milliseconds: 500),
               curve: Curves.easeOut,
               child: Container(
                   child: state.deliveryType == DeliveryType.novaPost
@@ -459,10 +467,16 @@ Widget dataRange(state) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Date Range',
+          const Text('Creation date',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          Text(state.createdAt,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
+          Text(
+            state.createdAt,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: AppTheme.gray,
+            ),
+          ),
         ],
       ),
     ),
