@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
@@ -13,8 +14,43 @@ import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../theme/app_theme.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
+
+  @override
+  _ProductsPageState createState() => _ProductsPageState();
+}
+
+class _ProductsPageState extends State<ProductsPage> {
+  ScrollController _scrollController = ScrollController();
+  bool _isSearchVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      setState(() {
+        _isSearchVisible = false;
+      });
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      setState(() {
+        _isSearchVisible = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +76,25 @@ class ProductsPage extends StatelessWidget {
             color: AppTheme.pink,
             child: Padding(
               padding: const EdgeInsets.all(15.0),
-              child: Column(children: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: SearchTextfield(
-                    title: 'Search',
-                  ),
+              child: CustomScrollView(slivers: [
+                SliverAppBar(
+                  backgroundColor: AppTheme.pink,
+                  surfaceTintColor: AppTheme.pink,
+                  floating: true,
+                  pinned: false,
+                  snap: true,
+                  toolbarHeight: _isSearchVisible ? 56.0 : 0.0,
+                  title: _isSearchVisible
+                      ? const SearchTextfield(title: 'Search')
+                      : null,
                 ),
-                Expanded(
+                SliverToBoxAdapter(
                   child: state.isLoading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
                       : ListView.builder(
+                          controller: _scrollController,
                           shrinkWrap: true,
                           itemCount: state.allProducts.length,
                           itemBuilder: (BuildContext context, int index) {
