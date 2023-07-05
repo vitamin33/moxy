@@ -210,7 +210,7 @@ Widget _listTile(state, products, color, isSelected,
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    '${products.first.dimensions.first.quantity}/$color',
+                    '${products.first.dimensions.first.quantity}/${color[0]}',
                     style: const TextStyle(fontSize: 13),
                   ),
                   const SizedBox(width: 5),

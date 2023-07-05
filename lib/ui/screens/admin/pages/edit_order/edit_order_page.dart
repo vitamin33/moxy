@@ -69,11 +69,11 @@ class EditOrderPage extends StatelessWidget {
                                     children: [
                                       contactDetails(context, state, cubit),
                                       const SizedBox(height: 10),
+                                      dataRange(state),
+                                      const SizedBox(height: 20),
                                       typePayment(state, cubit, context),
                                       const SizedBox(height: 20),
                                       typeDelivery(state, cubit, context),
-                                      const SizedBox(height: 20),
-                                      dataRange(cubit),
                                       const SizedBox(height: 20),
                                       orderStatus(context, state, cubit),
                                       const SizedBox(height: 20),
@@ -363,11 +363,13 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
         SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Type Delivery',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               Row(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   InkWell(
                     onTap: () {
@@ -449,22 +451,20 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
   );
 }
 
-Widget dataRange(EditOrderCubit cubit) {
+Widget dataRange(state) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('Date Range',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        SizedBox(
-            width: 200,
-            height: 40,
-            child: TextField(
-              controller: cubit.dateController,
-              decoration: const InputDecoration(border: OutlineInputBorder()),
-            )),
-      ],
+    child: SizedBox(
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('Date Range',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(state.createdAt,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
+        ],
+      ),
     ),
   );
 }

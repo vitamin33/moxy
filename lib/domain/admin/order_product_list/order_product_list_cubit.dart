@@ -58,7 +58,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
         final color = dimension.color;
         final quantityKey = dimension.quantity;
         const quantity = 1;
-        final key = '$quantityKey';
+        final key = '$quantityKey $color $productName';
 
         if (!productsByColor.containsKey(key)) {
           productsByColor[key] = [];
@@ -96,7 +96,6 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
         dimensions: product.dimensions,
         productId: product.id!,
         productName: product.name);
-
 
     final matchingProducts = selectedProducts.where((selectedProduct) {
       return selectedProduct.productName == productName;

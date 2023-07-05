@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_state.dart';
 import 'package:moxy/domain/ui_effect.dart';
@@ -97,9 +98,16 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
           mobileNumber: order.client.mobileNumber,
           secondName: order.client.secondName),
       selectedProducts: order.orderedItems,
-      createdAt: order.createdAt,
+      createdAt: formattedDateTime(order.createdAt),
       updatedAt: order.updatedAt,
     ));
+  }
+
+  String formattedDateTime(date) {
+    DateTime inputDateTime = DateTime.parse(date);
+    String formattedDateTime =
+        DateFormat('dd.MM.yy HH:mm').format(inputDateTime);
+    return formattedDateTime;
   }
 
   void changeStatus(updateStatus) {
@@ -156,6 +164,6 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   }
 
   void editSelectedProduct() {
-   productRepository.addToSelectedProductStream(state.selectedProducts);
+    productRepository.addToSelectedProductStream(state.selectedProducts);
   }
 }
