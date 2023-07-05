@@ -6,16 +6,20 @@ import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../../domain/mappers/order_mapper.dart';
+import '../../domain/models/order.dart';
 import '../../services/get_it.dart';
 
 class ProductRepository {
   final DioClient client = locate<DioClient>();
-  final _selectedProductSubject = BehaviorSubject<List<Product>>();
-  Stream<List<Product>> get selectedProducts => _selectedProductSubject.stream;
-  List<Product>? get currentSelectedProducts =>
+  final orderMapper = locate<OrderMapper>();
+  final _selectedProductSubject = BehaviorSubject<List<OrderedItem>>();
+  Stream<List<OrderedItem>> get selectedProducts =>
+      _selectedProductSubject.stream;
+  List<OrderedItem>? get currentSelectedProducts =>
       _selectedProductSubject.valueOrNull;
 
-  void addToSelectedProductStream(List<Product> items) =>
+  void addToSelectedProductStream(List<OrderedItem> items) =>
       _selectedProductSubject.sink.add(items);
 
   Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
@@ -83,7 +87,7 @@ class ProductRepository {
     }
   }
 
-  void updateSelectedProducts(List<Product> list) {
+  void updateSelectedProducts(List<OrderedItem> list) {
     addToSelectedProductStream(list);
   }
 }

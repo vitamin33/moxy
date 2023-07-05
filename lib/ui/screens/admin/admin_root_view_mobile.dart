@@ -79,11 +79,19 @@ class AdminRootViewMobile extends StatelessWidget {
         leading: Builder(
           builder: (BuildContext context) {
             if (state.runtimeType == OrderProductListPageState) {
+              bool fromEdit =
+                  (state as OrderProductListPageState).isFromEdit;
               return IconButton(
                   onPressed: () {
-                    context.read<AdminHomeRouterCubit>().navigateTo(
-                          const CreateOrderPageState(),
-                        );
+                    if (fromEdit) {
+                      context.read<AdminHomeRouterCubit>().navigateTo(
+                            const EditOrderPageState(),
+                          );
+                    } else {
+                      context.read<AdminHomeRouterCubit>().navigateTo(
+                            const CreateOrderPageState(),
+                          );
+                    }
                   },
                   icon: SvgPicture.asset(IconPath.backArrow));
             } else if (state.runtimeType == EditOrderPageState) {

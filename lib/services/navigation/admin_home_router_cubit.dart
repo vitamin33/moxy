@@ -15,8 +15,8 @@ class AdminHomeRouterCubit extends Cubit<AdminHomeRouterState> {
       CreateProductPageState(isEditMode: isEdit, editProductId: editProductId));
   void goToCreateOrder([String? text]) => emit(CreateOrderPageState(text));
   void goToEditOrder([String? text]) => emit(EditOrderPageState(text));
-  void goToOrderProductList([String? text]) =>
-      emit(OrderProductListPageState(text));
+  void goToOrderProductList([bool isFromEdit = false]) =>
+      emit(OrderProductListPageState(isFromEdit: isFromEdit));
   void goToCreateUser([String? text]) => emit(CreateUserPageState(text));
   void popExtra() {
     if (state is OverviewPageState) {
@@ -55,7 +55,8 @@ class AdminHomeRouterCubit extends Cubit<AdminHomeRouterState> {
         goToEditOrder();
         break;
       case OrderProductListPageState:
-        goToOrderProductList();
+        final state = initialRoute as OrderProductListPageState;
+        goToOrderProductList(state.isFromEdit);
         break;
       case CreateUserPageState:
         goToCreateUser();

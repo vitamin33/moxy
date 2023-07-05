@@ -3,6 +3,7 @@ import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../data/repositories/product_repository.dart';
 import '../../../services/get_it.dart';
+import '../../models/order.dart';
 import '../../models/product.dart';
 import 'order_product_list_state.dart';
 
@@ -57,7 +58,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
         final color = dimension.color;
         final quantityKey = dimension.quantity;
         const quantity = 1;
-        final key = '$quantityKey';
+        final key = '$quantityKey $color $productName';
 
         if (!productsByColor.containsKey(key)) {
           productsByColor[key] = [];
@@ -86,13 +87,18 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     return productsByColor;
   }
 
-  Set<Product> selectedProducts = {};
+  Set<OrderedItem> selectedProducts = {};
 
   void toggleProductSelection(Product product) {
     final productName = product.name;
 
+    final selectedProduct = OrderedItem(
+        dimensions: product.dimensions,
+        productId: product.id!,
+        productName: product.name);
+
     final matchingProducts = selectedProducts.where((selectedProduct) {
-      return selectedProduct.name == productName;
+      return selectedProduct.productName == productName;
     }).toList();
 
     final matchingProductsWithColor = matchingProducts.where((matchingProduct) {
@@ -103,7 +109,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     if (matchingProductsWithColor.isNotEmpty) {
       selectedProducts.removeAll(matchingProductsWithColor);
     } else {
-      selectedProducts.add(product);
+      selectedProducts.add(selectedProduct);
     }
 
     return emit(state.copyWith());
@@ -113,7 +119,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     final productName = product.name;
 
     return selectedProducts.any((selectedProduct) {
-      return selectedProduct.name == productName &&
+      return selectedProduct.productName == productName &&
           selectedProduct.dimensions.any(
               (dimension) => dimension.color == product.dimensions[0].color);
     });
@@ -154,7 +160,8 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
   }
 
   void initSelectedProductList() {
-    List<Product>? selectedList = _productRepository.currentSelectedProducts;
+    List<OrderedItem>? selectedList =
+        _productRepository.currentSelectedProducts;
     selectedProducts = selectedList?.toSet() ?? {};
   }
 }

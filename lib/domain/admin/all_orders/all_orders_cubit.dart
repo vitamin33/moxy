@@ -7,8 +7,8 @@ import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 
 class AllOrdersCubit extends Cubit<AllOrdersState> {
-  final orderMapper = locate<OrderMapper>();
   final orderRepository = locate<OrderRepository>();
+  final orderMapper = locate<OrderMapper>();
 
   AllOrdersCubit()
       : super(

@@ -20,6 +20,8 @@ class GetItService {
   static final getIt = GetIt.instance;
   static initializeService() {
     final dio = Dio();
+    getIt.registerSingleton<ProductMapper>(ProductMapper());
+    getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
@@ -31,8 +33,6 @@ class GetItService {
     getIt.registerSingleton<ProductRepository>(ProductRepository());
     getIt.registerSingleton<OrderRepository>(OrderRepository());
     getIt.registerSingleton<ImagePickerService>(ImagePickerService());
-    getIt.registerSingleton<ProductMapper>(ProductMapper());
-    getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton(NovaPoshtaClient());
     getIt.registerSingleton(CityMapper());
     getIt.registerSingleton(WarehouseMapper());

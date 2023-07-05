@@ -64,8 +64,10 @@ class EditOrderPageState extends AdminHomeRouterState {
 }
 
 class OrderProductListPageState extends AdminHomeRouterState {
+  final bool isFromEdit;
   final String? extraPageContent;
-  const OrderProductListPageState([this.extraPageContent]);
+  const OrderProductListPageState(
+      {this.extraPageContent, required this.isFromEdit});
   @override
   List<Object?> get props => [extraPageContent];
 }
