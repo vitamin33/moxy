@@ -131,7 +131,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
     if (index >= 0 && index < productsList.length) {
       List<Product> products = productsList[index];
-      int maxQuantity = int.parse(productsListKey[index]);
+      int maxQuantity = int.parse(productsListKey[index][0]);
       Dimension? dimen = products.first.dimensions.first;
       if (products.isNotEmpty && dimen.quantity < maxQuantity) {
         dimen.quantity++;

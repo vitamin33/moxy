@@ -90,8 +90,7 @@ class AdminRootViewMobile extends StatelessWidget {
         leading: Builder(
           builder: (BuildContext context) {
             if (state.runtimeType == OrderProductListPageState) {
-              bool fromEdit =
-                  (state as OrderProductListPageState).isFromEdit;
+              bool fromEdit = (state as OrderProductListPageState).isFromEdit;
               return IconButton(
                   onPressed: () {
                     if (fromEdit) {
@@ -245,6 +244,7 @@ class AdminRootViewMobile extends StatelessWidget {
       case CreateUserPageState:
       case CreateOrderPageState:
       case EditOrderPageState:
+      case OrderProductListPageState:
       case FilterOrderPageState:
         return Container();
     }
