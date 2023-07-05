@@ -18,6 +18,7 @@ class AdminHomeRouterCubit extends Cubit<AdminHomeRouterState> {
   void goToOrderProductList([String? text]) =>
       emit(OrderProductListPageState(text));
   void goToCreateUser([String? text]) => emit(CreateUserPageState(text));
+
   void popExtra() {
     if (state is OverviewPageState) {
       goToOverview();

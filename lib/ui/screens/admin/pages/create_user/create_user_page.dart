@@ -10,7 +10,7 @@ import '../../../../../domain/admin/create_user/create_user_cubit.dart';
 import '../../../../../domain/admin/create_user/create_user_effects.dart';
 import '../../../../../domain/admin/create_user/create_user_state.dart';
 import '../../../../theme/app_theme.dart';
-import '../../components/paste_text_field.dart';
+import '../../../components/paste_text_field.dart';
 
 class CreateUserPage extends StatelessWidget {
   const CreateUserPage({super.key});

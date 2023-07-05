@@ -4,8 +4,8 @@ import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/services/navigation/root_router_cubit.dart';
 import 'package:provider/provider.dart';
-import '../../../../constant/menu.dart';
-import '../../../theme/app_theme.dart';
+import '../../../constant/menu.dart';
+import '../../theme/app_theme.dart';
 import 'navigation_card.dart';
 
 class DashboardDrawer extends StatelessWidget {

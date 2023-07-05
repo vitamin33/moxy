@@ -6,13 +6,13 @@ import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../components/app_scaffold.dart';
-import 'components/action_button.dart';
-import 'components/flutter_expandable_fab.dart';
-import 'components/navigation_drawer.dart';
+import '../components/action_button.dart';
+import '../components/flutter_expandable_fab.dart';
+import '../components/navigation_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class AdminRootViewMobile extends StatelessWidget {
-  AdminRootViewMobile({Key? key}) : super(key: key);
+class AdminRootView extends StatelessWidget {
+  AdminRootView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
