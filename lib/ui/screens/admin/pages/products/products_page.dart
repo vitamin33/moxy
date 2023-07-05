@@ -18,11 +18,12 @@ class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ProductsPageState createState() => _ProductsPageState();
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _isSearchVisible = true;
 
   @override
@@ -85,7 +86,10 @@ class _ProductsPageState extends State<ProductsPage> {
                   snap: true,
                   toolbarHeight: _isSearchVisible ? 56.0 : 0.0,
                   title: _isSearchVisible
-                      ? const SearchTextfield(title: 'Search')
+                      ? SearchTextfield(
+                          title: 'Search',
+                          onChanged: (term) => cubit.searchProducts(term),
+                        )
                       : null,
                 ),
                 SliverToBoxAdapter(
