@@ -35,7 +35,7 @@ class FilterOrderPage extends StatelessWidget {
                           const SizedBox(height: 20),
                           typeDelivery(state, cubit),
                           const SizedBox(height: 20),
-                          dataRange(cubit),
+                          dataRange(cubit, context),
                           const SizedBox(height: 20),
                           orderStatus(context, state, cubit),
                           const SizedBox(height: 20),
@@ -70,12 +70,12 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit) {
                 children: [
                   InkWell(
                     onTap: () {
-                      // cubit.changePayment(PaymentType.fullPayment);
+                      cubit.changePayment(FilterPaymentType.fullPayment);
                     },
                     child: CircleAvatar(
                       radius: 30,
                       backgroundColor:
-                          state.paymentType == PaymentType.fullPayment
+                          state.paymentType == FilterPaymentType.fullPayment
                               ? AppTheme.pinkDark
                               : AppTheme.greyLigth,
                       child: CircleAvatar(
@@ -102,12 +102,12 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit) {
                 children: [
                   InkWell(
                     onTap: () {
-                      // cubit.changePayment(PaymentType.cashAdvance);
+                      cubit.changePayment(FilterPaymentType.cashAdvance);
                     },
                     child: CircleAvatar(
                       radius: 30,
                       backgroundColor:
-                          state.paymentType == PaymentType.cashAdvance
+                          state.paymentType == FilterPaymentType.cashAdvance
                               ? AppTheme.pinkDark
                               : AppTheme.greyLigth,
                       child: CircleAvatar(
@@ -145,13 +145,13 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit) {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           InkWell(
             onTap: () {
-              // cubit.changeDelivery(DeliveryType.novaPost);
+              cubit.changeDelivery(FilterDeliveryType.novaPost);
             },
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
                       width: 2,
-                      color: state.deliveryType == DeliveryType.novaPost
+                      color: state.deliveryType == FilterDeliveryType.novaPost
                           ? AppTheme.pinkDark
                           : AppTheme.greyLigth),
                   borderRadius: const BorderRadius.all(Radius.circular(6))),
@@ -163,13 +163,13 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit) {
           ),
           InkWell(
             onTap: () {
-              // cubit.changeDelivery(DeliveryType.ukrPost);
+              cubit.changeDelivery(FilterDeliveryType.ukrPost);
             },
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
                       width: 2,
-                      color: state.deliveryType == DeliveryType.ukrPost
+                      color: state.deliveryType == FilterDeliveryType.ukrPost
                           ? AppTheme.pinkDark
                           : AppTheme.greyLigth),
                   borderRadius: const BorderRadius.all(Radius.circular(6))),
@@ -185,17 +185,22 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit) {
   );
 }
 
-Widget dataRange(FilterOrdersCubit cubit) {
+Widget dataRange(FilterOrdersCubit cubit, context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: const [
-      Text('Date Range',
+    children: [
+      const Text('Date Range',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
       SizedBox(
           width: 200,
-          height: 40,
+          height: 50,
           child: TextField(
-            decoration: InputDecoration(border: OutlineInputBorder()),
+            controller: cubit.dateController,
+            readOnly: true,
+            onTap: () {
+              cubit.selectDate(context);
+            },
+            decoration: const InputDecoration(border: OutlineInputBorder()),
           )),
     ],
   );

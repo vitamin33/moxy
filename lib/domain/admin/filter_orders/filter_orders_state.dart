@@ -6,9 +6,10 @@ import '../../models/warehouse.dart';
 
 class FilterOrdersState implements Copyable<FilterOrdersState> {
   bool isLoading;
-  DeliveryType deliveryType;
-  PaymentType paymentType;
+  FilterDeliveryType deliveryType;
+  FilterPaymentType paymentType;
   String status;
+  DateTime selectedDate;
   String createdAt;
   String updatedAt;
 
@@ -17,6 +18,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
     required this.deliveryType,
     required this.paymentType,
     required this.status,
+    required this.selectedDate,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -24,29 +26,22 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
   static FilterOrdersState defaultFilterOrdersState() {
     return FilterOrdersState(
         isLoading: false,
-        deliveryType: DeliveryType.novaPost,
-        paymentType: PaymentType.fullPayment,
-        status: 'New',
+        deliveryType: FilterDeliveryType.empty,
+        paymentType: FilterPaymentType.empty,
+        status: '',
+        selectedDate: DateTime.now(),
         createdAt: '',
-        updatedAt: '');
+        updatedAt: ''
+        );
   }
 
   @override
   FilterOrdersState copyWith(
       {bool? isLoading,
-      bool? isSuccess,
-      bool? isEditName,
-      bool? isEditPhone,
-      String? errorMessage,
-      String? orderId,
-      DeliveryType? deliveryType,
-      PaymentType? paymentType,
-      List<OrderedItem>? selectedProducts,
-      City? selectedCity,
-      Warehouse? selectedWarehouse,
-      Client? client,
+      FilterDeliveryType? deliveryType,
+      FilterPaymentType? paymentType,
       String? status,
-      int? prepayment,
+      DateTime? selectedDate,
       String? createdAt,
       String? updatedAt}) {
     return FilterOrdersState(
@@ -54,6 +49,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
       status: status ?? this.status,
+      selectedDate: selectedDate ?? this.selectedDate,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

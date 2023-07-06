@@ -288,7 +288,7 @@ class DioClient {
       );
       result = NetworkUser.fromJson(response.data);
     } catch (e) {
-      print('Error during creating user: $e');
+      moxyPrint('Error during creating user: $e');
 
       return Result.error(_handleHttpException(e));
     }
@@ -305,7 +305,7 @@ class DioClient {
       }
       return Result.success(userList);
     } catch (e) {
-      print('Error during gettting user list: $e');
+      moxyPrint('Error during gettting user list: $e');
 
       return Result.error(_handleHttpException(e));
     }

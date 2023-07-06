@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -223,9 +224,7 @@ class AdminRootViewMobile extends StatelessWidget {
               icon: IconPath.bag,
               text: 'Reset',
               onPress: (ctx) {
-                ctx.read<AdminHomeRouterCubit>().navigateTo(
-                      const FilterOrderPageState(),
-                    );
+                ctx.read<FilterOrdersCubit>().resetFilter();
               })
         ];
       case CreateOrderPageState:
