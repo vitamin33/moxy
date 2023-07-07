@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -46,15 +47,25 @@ class AdminRootViewMobile extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: SizedBox(
-                                width: 38,
+                                width: 50,
                                 height: 38,
                                 child: InkWell(
                                   onTap: () {
-                                    item.onPress();
+                                    item.onPress(ctx);
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: SvgPicture.asset(item.icon),
+                                    child: item.text != null
+                                        ? Text(
+                                            item.text!,
+                                            textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: const TextStyle(
+                                              color: AppTheme.pinkDark,
+                                              fontSize: 14,
+                                            ),
+                                          )
+                                        : SvgPicture.asset(item.icon),
                                   ),
                                 ),
                               ),
@@ -67,7 +78,8 @@ class AdminRootViewMobile extends StatelessWidget {
                 )
               : Container()
         ],
-        backgroundColor: state.runtimeType == EditOrderPageState
+        backgroundColor: state.runtimeType == EditOrderPageState ||
+                state.runtimeType == FilterOrderPageState
             ? AppTheme.white
             : AppTheme.pink,
         title: Align(
@@ -79,8 +91,7 @@ class AdminRootViewMobile extends StatelessWidget {
         leading: Builder(
           builder: (BuildContext context) {
             if (state.runtimeType == OrderProductListPageState) {
-              bool fromEdit =
-                  (state as OrderProductListPageState).isFromEdit;
+              bool fromEdit = (state as OrderProductListPageState).isFromEdit;
               return IconButton(
                   onPressed: () {
                     if (fromEdit) {
@@ -95,6 +106,14 @@ class AdminRootViewMobile extends StatelessWidget {
                   },
                   icon: SvgPicture.asset(IconPath.backArrow));
             } else if (state.runtimeType == EditOrderPageState) {
+              return IconButton(
+                  onPressed: () {
+                    context.read<AdminHomeRouterCubit>().navigateTo(
+                          const OrdersPageState(),
+                        );
+                  },
+                  icon: SvgPicture.asset(IconPath.backArrow));
+            } else if (state.runtimeType == FilterOrderPageState) {
               return IconButton(
                   onPressed: () {
                     context.read<AdminHomeRouterCubit>().navigateTo(
@@ -154,6 +173,8 @@ class AdminRootViewMobile extends StatelessWidget {
         return 'Create order';
       case EditOrderPageState:
         return 'Edit Order';
+      case FilterOrderPageState:
+        return 'Filter';
       case OrderProductListPageState:
         return 'Order Product List';
       case CreateUserPageState:
@@ -174,21 +195,38 @@ class AdminRootViewMobile extends StatelessWidget {
         return [
           AppBarIcon(
               icon: IconPath.plus,
-              onPress: () {
+              onPress: (ctx) {
                 moxyPrint('plus');
               }),
           AppBarIcon(
               icon: IconPath.filter,
-              onPress: () {
+              onPress: (ctx) {
                 moxyPrint('filter');
               })
         ];
       case UsersPageState:
         return [];
       case OrdersPageState:
-        return [];
+        return [
+          AppBarIcon(
+              icon: IconPath.filter,
+              onPress: (ctx) {
+                ctx.read<AdminHomeRouterCubit>().navigateTo(
+                      const FilterOrderPageState(),
+                    );
+              })
+        ];
       case CreateProductPageState:
         return [];
+      case FilterOrderPageState:
+        return [
+          AppBarIcon(
+              icon: IconPath.bag,
+              text: 'Reset',
+              onPress: (ctx) {
+                ctx.read<FilterOrdersCubit>().resetFilter();
+              })
+        ];
       case CreateOrderPageState:
         return [];
       case TransactionsPageState:
@@ -205,6 +243,8 @@ class AdminRootViewMobile extends StatelessWidget {
       case CreateUserPageState:
       case CreateOrderPageState:
       case EditOrderPageState:
+      case OrderProductListPageState:
+      case FilterOrderPageState:
         return Container();
     }
     return ExpandableFab(distance: 100, children: [
@@ -247,6 +287,7 @@ class AdminRootViewMobile extends StatelessWidget {
 
 class AppBarIcon {
   final String icon;
-  final Function() onPress;
-  const AppBarIcon({required this.icon, required this.onPress});
+  final String? text;
+  final Function(BuildContext ctx) onPress;
+  const AppBarIcon({required this.icon, this.text, required this.onPress});
 }

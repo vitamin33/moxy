@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/admin/create_order/create_order_cubit.dart';
 import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
@@ -42,6 +43,8 @@ class MoxyApp extends StatelessWidget {
             create: (BuildContext context) => CreateOrderCubit()),
         BlocProvider<EditOrderCubit>(
             create: (BuildContext context) => EditOrderCubit()),
+        BlocProvider<FilterOrdersCubit>(
+            create: (BuildContext context) => FilterOrdersCubit()),
       ],
       child: MaterialApp(
         home: _routers,

@@ -7,6 +7,7 @@ import 'package:moxy/ui/screens/admin/pages/edit_order/edit_order_page.dart';
 import 'package:moxy/ui/screens/admin/pages/feedbacks/feedbacks_page.dart';
 import 'package:moxy/ui/screens/admin/pages/order_product_list/order_product_list.dart';
 import 'package:moxy/ui/screens/admin/pages/orders/orders_page.dart';
+import 'package:moxy/ui/screens/admin/pages/orders_filter/orders_filter_page.dart';
 import 'package:moxy/ui/screens/admin/pages/overview/overview_page.dart';
 import 'package:moxy/ui/screens/admin/pages/products/products_page.dart';
 import 'package:moxy/ui/screens/admin/pages/transactions/transactions_page.dart';
@@ -128,8 +129,18 @@ class AdminHomeRouterDelegate extends RouterDelegate<AdminHomeRouterState> {
       final state = _routerCubit.state as EditOrderPageState;
       return [
         _materialPage(
-          valueKey: "createOrder",
+          valueKey: "editOrder",
           child: const EditOrderPage(),
+        ),
+      ];
+    }
+    if (_routerCubit.state is FilterOrderPageState) {
+      // ignore: unused_local_variable
+      final state = _routerCubit.state as FilterOrderPageState;
+      return [
+        _materialPage(
+          valueKey: "filterOrder",
+          child: const FilterOrderPage(),
         ),
       ];
     }

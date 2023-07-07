@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, avoid_web_libraries_in_flutter
 
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/screens/admin/pages/orders_filter/orders_filter_page.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
 import 'package:moxy/ui/screens/admin/pages/customers/users_page.dart';
 import 'package:moxy/ui/screens/admin/pages/feedbacks/feedbacks_page.dart';
@@ -69,6 +70,8 @@ class NavigationService {
         return navigateToPageRoute(settings, const CreateOrderPage());
       case editOrderPath:
         return navigateToPageRoute(settings, const EditOrderPage());
+      case filterOrderPath:
+        return navigateToPageRoute(settings, const FilterOrderPage());
       case createProductPath:
         return navigateToPageRoute(
           settings,

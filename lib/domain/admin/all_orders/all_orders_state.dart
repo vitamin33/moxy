@@ -24,11 +24,11 @@ class AllOrdersState implements Copyable<AllOrdersState> {
   AllOrdersState copyWith({
     bool? isLoading,
     String? errorMessage,
-    List<Order>? allUsers,
+    List<Order>? allOrders,
   }) {
     return AllOrdersState(
         isLoading: isLoading ?? this.isLoading,
         errorMessage: errorMessage ?? this.errorMessage,
-        allOrders: allUsers ?? this.allOrders);
+        allOrders: allOrders ?? this.allOrders);
   }
 }
