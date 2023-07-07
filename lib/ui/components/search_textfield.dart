@@ -30,10 +30,9 @@ class SearchTextfield extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            padding: EdgeInsets.all(1),
             decoration: const BoxDecoration(
                 color: AppTheme.white,
-                borderRadius: BorderRadius.all(Radius.circular(6))),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             child: TextField(
               onChanged: onChanged,
               controller: controller,

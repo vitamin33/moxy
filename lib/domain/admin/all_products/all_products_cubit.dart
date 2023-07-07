@@ -5,12 +5,14 @@ import 'package:moxy/utils/common.dart';
 
 import '../../../data/repositories/product_repository.dart';
 import '../../../services/get_it.dart';
+import '../../models/product.dart';
 import '../../ui_effect.dart';
 import 'all_products_state.dart';
 
 class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {
   final produtctMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+  List<Product> allProductsList = [];
 
   AllProductsCubit() : super(AllProductsState.defaultAllProductsState()) {
     allProducts();
@@ -21,8 +23,8 @@ class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {
       emit(state.copyWith(isLoading: true));
       final result = await productRepository.getAllProducts();
       result.when((success) {
-        final products = produtctMapper.mapToProductList(success);
-        emit(state.copyWith(allProducts: products));
+        allProductsList = produtctMapper.mapToProductList(success);
+        emit(state.copyWith(allProducts: allProductsList));
         emit(state.copyWith(isLoading: false));
       }, (error) {
         emitEffect(ProductsLoadingFailed(error.toString()));
@@ -30,5 +32,12 @@ class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {
     } catch (e) {
       moxyPrint('$e');
     }
+  }
+
+  void searchProducts(String searchTerm) {
+    final filteredList = allProductsList.where((element) {
+      return element.name.toLowerCase().contains(searchTerm.toLowerCase());
+    }).toList();
+    emit(state.copyWith(allProducts: filteredList));
   }
 }
