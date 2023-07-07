@@ -1,10 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import '../../../constant/order_constants.dart';
+import '../../../data/repositories/order_repository.dart';
+import '../../../services/get_it.dart';
+import '../../models/order.dart';
+import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
 
 class FilterOrdersCubit extends Cubit<FilterOrdersState> {
+  final orderRepository = locate<OrderRepository>();
   late TextEditingController dateController;
+  late AllOrdersCubit allOrdersCubit;
+
   FilterOrdersCubit()
       : super(FilterOrdersState(
             isLoading: false,
@@ -14,7 +21,28 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
             createdAt: '',
             updatedAt: '',
             selectedDate: DateTime.now())) {
+    loadFilterParams();
     dateController = TextEditingController(text: state.createdAt);
+  }
+
+  void loadFilterParams() {
+    final filterParams = orderRepository.getFilterParams();
+    emit(state.copyWith(
+        deliveryType: filterParams.deliveryType,
+        paymentType: filterParams.paymentType,
+        status: filterParams.status));
+  }
+
+  void saveFilterParams() {
+    final filterParams = FilterOrdersState(
+        deliveryType: state.deliveryType,
+        paymentType: state.paymentType,
+        status: state.status,
+        createdAt: '',
+        isLoading: false,
+        selectedDate: state.selectedDate,
+        updatedAt: state.updatedAt);
+    orderRepository.saveFilterParams(filterParams);
   }
 
   Future<void> selectDate(context) async {

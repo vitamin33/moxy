@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
@@ -42,7 +43,10 @@ class FilterOrderPage extends StatelessWidget {
                           CustomButton(
                             title: 'Show Results',
                             onTap: () {
-                              // cubit.editOrder();
+                              cubit.saveFilterParams();
+                              context.read<AdminHomeRouterCubit>().navigateTo(
+                                    const OrdersPageState(),
+                                  );
                             },
                             buttonWidth: MediaQuery.of(context).size.width,
                           )
