@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
-import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 
 import '../../../../../services/navigation/admin_home_router_cubit.dart';
@@ -23,11 +22,16 @@ class OrdersPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isFilterChipsVisible = true;
+  double _toolbarHeight = 0.0;
+  final GlobalKey _wrapKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _calculateWrapHeight();
+    });
   }
 
   @override
@@ -51,9 +55,19 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
+  void _calculateWrapHeight() {
+    final RenderBox? wrapBox =
+        _wrapKey.currentContext?.findRenderObject() as RenderBox?;
+    if (wrapBox != null && wrapBox.hasSize) {
+      setState(() {
+        _toolbarHeight = wrapBox.size.height;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final filterCubit = context.read<FilterOrdersCubit>();
+    final cubit = context.read<AllOrdersCubit>();
     return BlocConsumer<AllOrdersCubit, AllOrdersState>(
         listener: (context, state) {
       if (state.errorMessage != '') {
@@ -62,73 +76,21 @@ class _OrdersPageState extends State<OrdersPage> {
       }
     }, builder: (context, state) {
       final showTopBar = _isFilterChipsVisible && state.hasFilters();
+      _toolbarHeight = showTopBar
+          ? 75.0
+          : 0.0; // Update the toolbar height based on showTopBar
+
       return Scaffold(
-          body: Material(
-        color: AppTheme.pink,
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: AppTheme.pink,
-              surfaceTintColor: AppTheme.pink,
-              floating: true,
-              pinned: false,
-              snap: true,
-              toolbarHeight: showTopBar ? 75 : 0.0,
-              title: showTopBar
-                  ? Wrap(
-                      direction: Axis.horizontal,
-                      alignment: WrapAlignment.spaceAround,
-                      children: _filterChipsList(context, filterCubit, state),
-                    )
-                  : null,
-            ),
-            SliverToBoxAdapter(
-              child: state.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: state.allOrders.isEmpty
-                          ? const Text('No orders')
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: state.allOrders.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final order = state.allOrders[index];
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListTile(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    contentPadding: const EdgeInsets.all(14.0),
-                                    onTap: () {
-                                      context
-                                          .read<AdminHomeRouterCubit>()
-                                          .navigateTo(
-                                              const EditOrderPageState());
-                                      context
-                                          .read<EditOrderCubit>()
-                                          .getOrder(order);
-                                    },
-                                    tileColor: AppTheme.white,
-                                    leading: ClipOval(
-                                        child: _buildImage(order.orderedItems)),
-                                    title: Text(
-                                        '${order.client.firstName} ${order.client.secondName}'),
-                                    subtitle: Text(
-                                        order.orderedItems.first.productName),
-                                    trailing:
-                                        const Icon(Icons.arrow_forward_ios),
-                                  ),
-                                );
-                              }),
-                    ),
-            ),
-          ],
+        body: Material(
+          color: AppTheme.pink,
+          child: CustomScrollView(
+            slivers: [
+              _buildTopAppBar(cubit, state, showTopBar),
+              _buildOrdersListWidget(cubit, state),
+            ],
+          ),
         ),
-      ));
+      );
     });
   }
 
@@ -151,8 +113,8 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
-  List<Widget> _filterChipsList(BuildContext context,
-      FilterOrdersCubit filterCubit, AllOrdersState state) {
+  List<Widget> _filterChipsList(
+      BuildContext context, AllOrdersCubit cubit, AllOrdersState state) {
     List<Widget> chipsList = [];
 
     if (state.deliveryFilter != FilterDeliveryType.empty) {
@@ -170,7 +132,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearDeliveryTypeFilter();
+                cubit.clearDeliveryTypeFilter();
               }
             },
           ),
@@ -180,7 +142,7 @@ class _OrdersPageState extends State<OrdersPage> {
     if (state.paymentFilter != FilterPaymentType.empty) {
       chipsList.add(
         Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
+          padding: const EdgeInsets.all(5),
           child: FilterChip(
             avatar: InkWell(
               onTap: () {},
@@ -192,7 +154,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearPaymentTypeFilter();
+                cubit.clearPaymentTypeFilter();
               }
             },
           ),
@@ -202,7 +164,7 @@ class _OrdersPageState extends State<OrdersPage> {
     if (state.statusFilter?.isNotEmpty == true) {
       chipsList.add(
         Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
+          padding: const EdgeInsets.all(5),
           child: FilterChip(
             avatar: InkWell(
               onTap: () {},
@@ -214,7 +176,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearStatusFilter();
+                cubit.clearStatusFilter();
               }
             },
           ),
@@ -224,7 +186,7 @@ class _OrdersPageState extends State<OrdersPage> {
     if (state.dateRangeFilter != null) {
       chipsList.add(
         Padding(
-          padding: const EdgeInsets.only(left: 5, right: 5),
+          padding: const EdgeInsets.all(5),
           child: FilterChip(
             avatar: InkWell(
               onTap: () {},
@@ -236,7 +198,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearDateRangeFilter();
+                cubit.clearDateRangeFilter();
               }
             },
           ),
@@ -244,5 +206,92 @@ class _OrdersPageState extends State<OrdersPage> {
       );
     }
     return chipsList;
+  }
+
+  Widget _buildTopAppBar(
+      AllOrdersCubit cubit, AllOrdersState state, bool showTopBar) {
+    return SliverAppBar(
+      backgroundColor: AppTheme.pink,
+      surfaceTintColor: AppTheme.pink,
+      floating: true,
+      pinned: false,
+      snap: true,
+      toolbarHeight: _toolbarHeight,
+      title: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        height: _toolbarHeight,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (showTopBar) {
+              final wrapHeight = constraints.maxHeight;
+              _toolbarHeight = wrapHeight;
+            } else {
+              _toolbarHeight = 0.0;
+            }
+            return showTopBar
+                ? Wrap(
+                    key: _wrapKey,
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.spaceAround,
+                    children: _filterChipsList(context, cubit, state),
+                  )
+                : Container();
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOrdersListWidget(AllOrdersCubit cubit, AllOrdersState state) {
+    return SliverToBoxAdapter(
+      child: state.isLoading
+          ? const Center(
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: CircularProgressIndicator(),
+              ),
+            )
+          : Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: state.allOrders.isEmpty
+                  ? const Text('No orders')
+                  : RefreshIndicator(
+                      onRefresh: cubit.refreshOrderList,
+                      child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          controller: _scrollController,
+                          shrinkWrap: true,
+                          itemCount: state.allOrders.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final order = state.allOrders[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.all(14.0),
+                                onTap: () {
+                                  context
+                                      .read<AdminHomeRouterCubit>()
+                                      .navigateTo(const EditOrderPageState());
+                                  context
+                                      .read<EditOrderCubit>()
+                                      .getOrder(order);
+                                },
+                                tileColor: AppTheme.white,
+                                leading: ClipOval(
+                                    child: _buildImage(order.orderedItems)),
+                                title: Text(
+                                    '${order.client.firstName} ${order.client.secondName}'),
+                                subtitle:
+                                    Text(order.orderedItems.first.productName),
+                                trailing: const Icon(Icons.arrow_forward_ios),
+                              ),
+                            );
+                          }),
+                    ),
+            ),
+    );
   }
 }

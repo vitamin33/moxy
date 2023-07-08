@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import '../../../constant/order_constants.dart';
 import '../../copyable.dart';
 
@@ -6,7 +8,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
   FilterDeliveryType deliveryType;
   FilterPaymentType paymentType;
   String? status;
-  DateTime? selectedDate;
+  DateTimeRange? selectedDate;
   String createdAt;
   String updatedAt;
 
@@ -25,7 +27,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
         isLoading: false,
         deliveryType: FilterDeliveryType.empty,
         paymentType: FilterPaymentType.empty,
-        status: null,
+        status: '',
         selectedDate: null,
         createdAt: '',
         updatedAt: '');
@@ -37,7 +39,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
       FilterDeliveryType? deliveryType,
       FilterPaymentType? paymentType,
       String? status,
-      DateTime? selectedDate,
+      DateTimeRange? selectedDate,
       String? createdAt,
       String? updatedAt}) {
     return FilterOrdersState(

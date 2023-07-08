@@ -4,6 +4,7 @@ import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/http/nova_poshta_client.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
+import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
@@ -14,6 +15,7 @@ import '../data/repositories/order_repository.dart';
 import '../data/repositories/product_repository.dart';
 import '../data/secure_storage_repository.dart';
 import '../domain/mappers/city_mapper.dart';
+import '../domain/mappers/filter_params_mapper.dart';
 import 'image_picker_service.dart';
 
 class GetItService {
@@ -22,6 +24,7 @@ class GetItService {
     final dio = Dio();
     getIt.registerSingleton<ProductMapper>(ProductMapper());
     getIt.registerSingleton<OrderMapper>(OrderMapper());
+    getIt.registerSingleton<FilterParamsMapper>(FilterParamsMapper());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
@@ -29,6 +32,7 @@ class GetItService {
     getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ISecureStorageRepository>(
         SecureStorageRepository.instance);
+    getIt.registerSingleton<FilterRepository>(FilterRepository());
     getIt.registerSingleton<NavigationService>(NavigationService());
     getIt.registerSingleton<ProductRepository>(ProductRepository());
     getIt.registerSingleton<OrderRepository>(OrderRepository());
