@@ -14,6 +14,7 @@ import '../data/repositories/order_repository.dart';
 import '../data/repositories/product_repository.dart';
 import '../data/secure_storage_repository.dart';
 import '../domain/mappers/city_mapper.dart';
+import '../domain/mappers/filter_params_mapper.dart';
 import 'image_picker_service.dart';
 
 class GetItService {
@@ -22,6 +23,7 @@ class GetItService {
     final dio = Dio();
     getIt.registerSingleton<ProductMapper>(ProductMapper());
     getIt.registerSingleton<OrderMapper>(OrderMapper());
+    getIt.registerSingleton<FilterParamsMapper>(FilterParamsMapper());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<DioClient>(DioClient());

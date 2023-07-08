@@ -27,32 +27,40 @@ class FilterOrderPage extends StatelessWidget {
             ? loader()
             : Scaffold(
                 body: Material(
-                    color: AppTheme.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppTheme.cardPadding),
-                      child: SingleChildScrollView(
-                        child: Column(children: [
-                          typePayment(state, cubit),
-                          const SizedBox(height: 20),
-                          typeDelivery(state, cubit),
-                          const SizedBox(height: 20),
-                          dataRange(cubit, context),
-                          const SizedBox(height: 20),
-                          orderStatus(context, state, cubit),
-                          const SizedBox(height: 20),
-                          CustomButton(
-                            title: 'Show Results',
-                            onTap: () {
-                              cubit.saveFilterParams();
-                              context.read<AdminHomeRouterCubit>().navigateTo(
-                                    const OrdersPageState(),
-                                  );
-                            },
-                            buttonWidth: MediaQuery.of(context).size.width,
-                          )
-                        ]),
-                      ),
-                    )));
+                  color: AppTheme.white,
+                  child: FutureBuilder(
+                      future: cubit.loadFilterParams(),
+                      builder: (context, snapshot) {
+                        return Padding(
+                          padding: const EdgeInsets.all(AppTheme.cardPadding),
+                          child: SingleChildScrollView(
+                            child: Column(children: [
+                              typePayment(state, cubit),
+                              const SizedBox(height: 20),
+                              typeDelivery(state, cubit),
+                              const SizedBox(height: 20),
+                              dataRange(cubit, context),
+                              const SizedBox(height: 20),
+                              orderStatus(context, state, cubit),
+                              const SizedBox(height: 20),
+                              CustomButton(
+                                title: 'Show Results',
+                                onTap: () {
+                                  cubit.saveFilterParams();
+                                  context
+                                      .read<AdminHomeRouterCubit>()
+                                      .navigateTo(
+                                        const OrdersPageState(),
+                                      );
+                                },
+                                buttonWidth: MediaQuery.of(context).size.width,
+                              )
+                            ]),
+                          ),
+                        );
+                      }),
+                ),
+              );
       },
     );
   }

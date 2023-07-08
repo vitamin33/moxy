@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
-import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 
 import '../../../../../services/navigation/admin_home_router_cubit.dart';
@@ -53,7 +52,7 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    final filterCubit = context.read<FilterOrdersCubit>();
+    final cubit = context.read<AllOrdersCubit>();
     return BlocConsumer<AllOrdersCubit, AllOrdersState>(
         listener: (context, state) {
       if (state.errorMessage != '') {
@@ -78,7 +77,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   ? Wrap(
                       direction: Axis.horizontal,
                       alignment: WrapAlignment.spaceAround,
-                      children: _filterChipsList(context, filterCubit, state),
+                      children: _filterChipsList(context, cubit, state),
                     )
                   : null,
             ),
@@ -151,8 +150,8 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
-  List<Widget> _filterChipsList(BuildContext context,
-      FilterOrdersCubit filterCubit, AllOrdersState state) {
+  List<Widget> _filterChipsList(
+      BuildContext context, AllOrdersCubit cubit, AllOrdersState state) {
     List<Widget> chipsList = [];
 
     if (state.deliveryFilter != FilterDeliveryType.empty) {
@@ -170,7 +169,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearDeliveryTypeFilter();
+                cubit.clearDeliveryTypeFilter();
               }
             },
           ),
@@ -192,7 +191,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearPaymentTypeFilter();
+                cubit.clearPaymentTypeFilter();
               }
             },
           ),
@@ -214,7 +213,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearStatusFilter();
+                cubit.clearStatusFilter();
               }
             },
           ),
@@ -236,7 +235,7 @@ class _OrdersPageState extends State<OrdersPage> {
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
-                filterCubit.clearDateRangeFilter();
+                cubit.clearDateRangeFilter();
               }
             },
           ),

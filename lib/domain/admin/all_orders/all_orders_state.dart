@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:moxy/constant/order_constants.dart';
 
 import '../../copyable.dart';
@@ -9,7 +10,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
   final FilterDeliveryType deliveryFilter;
   final FilterPaymentType paymentFilter;
   final String? statusFilter;
-  final DateTime? dateRangeFilter;
+  final DateTimeRange? dateRangeFilter;
   final String? errorMessage;
 
   AllOrdersState({
@@ -41,7 +42,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
     FilterDeliveryType? deliveryFilter,
     FilterPaymentType? paymentFilter,
     String? statusFilter,
-    DateTime? dateRangeFilter,
+    DateTimeRange? dateRangeFilter,
     List<Order>? allOrders,
   }) {
     return AllOrdersState(

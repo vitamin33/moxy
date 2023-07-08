@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rxdart/subjects.dart';

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/repositories/order_repository.dart';
 import 'package:moxy/domain/admin/all_orders/all_orders_state.dart';
 import 'package:moxy/utils/common.dart';
@@ -53,7 +54,27 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       paymentFilter: filters.paymentType,
       deliveryFilter: filters.deliveryType,
       statusFilter: filters.status,
-      dateRangeFilter: filters.selectedDate,
+      dateRangeFilter: filters.dateRange,
     ));
+  }
+
+  void clearDeliveryTypeFilter() async {
+    orderRepository.clearDeliveryTypeFilter();
+    emit(state.copyWith(deliveryFilter: FilterDeliveryType.empty));
+  }
+
+  void clearPaymentTypeFilter() {
+    orderRepository.clearPaymentTypeFilter();
+    emit(state.copyWith(paymentFilter: FilterPaymentType.empty));
+  }
+
+  void clearStatusFilter() {
+    orderRepository.clearStatusFilter();
+    emit(state.copyWith(statusFilter: ''));
+  }
+
+  void clearDateRangeFilter() {
+    orderRepository.clearDateRangeFilter();
+    emit(state.copyWith(dateRangeFilter: null));
   }
 }
