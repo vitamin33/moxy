@@ -79,4 +79,8 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     filterRepository.clearDateRangeFilter();
     emit(state.copyWith(dateRangeFilter: null));
   }
+
+  Future<void> refreshOrderList() async {
+    allOrders();
+  }
 }
