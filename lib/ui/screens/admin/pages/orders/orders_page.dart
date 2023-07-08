@@ -1,20 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
+import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 
 import '../../../../../services/navigation/admin_home_router_cubit.dart';
-import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../../domain/admin/all_orders/all_orders_cubit.dart';
 import '../../../../../domain/admin/all_orders/all_orders_state.dart';
 import '../../../../theme/app_theme.dart';
 
-class OrdersPage extends StatelessWidget {
+class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
+  _OrdersPageState createState() => _OrdersPageState();
+}
+
+class _OrdersPageState extends State<OrdersPage> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isFilterChipsVisible = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      setState(() {
+        _isFilterChipsVisible = false;
+      });
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      setState(() {
+        _isFilterChipsVisible = true;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final filterCubit = context.read<FilterOrdersCubit>();
     return BlocConsumer<AllOrdersCubit, AllOrdersState>(
         listener: (context, state) {
       if (state.errorMessage != '') {
@@ -22,18 +61,28 @@ class OrdersPage extends StatelessWidget {
             snackBarFailureText: 'Failed:${state.errorMessage}'));
       }
     }, builder: (context, state) {
+      final showTopBar = _isFilterChipsVisible && state.hasFilters();
       return Scaffold(
           body: Material(
         color: AppTheme.pink,
-        child: Column(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: SearchTextfield(
-                title: 'Search',
-              ),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: AppTheme.pink,
+              surfaceTintColor: AppTheme.pink,
+              floating: true,
+              pinned: false,
+              snap: true,
+              toolbarHeight: showTopBar ? 75 : 0.0,
+              title: showTopBar
+                  ? Wrap(
+                      direction: Axis.horizontal,
+                      alignment: WrapAlignment.spaceAround,
+                      children: _filterChipsList(context, filterCubit, state),
+                    )
+                  : null,
             ),
-            Expanded(
+            SliverToBoxAdapter(
               child: state.isLoading
                   ? const Center(
                       child: CircularProgressIndicator(),
@@ -100,5 +149,100 @@ class OrdersPage extends StatelessWidget {
         fit: BoxFit.cover,
       );
     }
+  }
+
+  List<Widget> _filterChipsList(BuildContext context,
+      FilterOrdersCubit filterCubit, AllOrdersState state) {
+    List<Widget> chipsList = [];
+
+    if (state.deliveryFilter != FilterDeliveryType.empty) {
+      chipsList.add(
+        Padding(
+          padding: const EdgeInsets.all(5),
+          child: FilterChip(
+            avatar: InkWell(
+              onTap: () {},
+              child: const Icon(
+                Icons.close,
+              ),
+            ),
+            label: Text(state.deliveryFilter.name.toString()),
+            side: const BorderSide(color: Colors.white),
+            onSelected: (selected) {
+              if (selected) {
+                filterCubit.clearDeliveryTypeFilter();
+              }
+            },
+          ),
+        ),
+      );
+    }
+    if (state.paymentFilter != FilterPaymentType.empty) {
+      chipsList.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: FilterChip(
+            avatar: InkWell(
+              onTap: () {},
+              child: const Icon(
+                Icons.close,
+              ),
+            ),
+            label: Text(state.paymentFilter.name.toString()),
+            side: const BorderSide(color: Colors.white),
+            onSelected: (selected) {
+              if (selected) {
+                filterCubit.clearPaymentTypeFilter();
+              }
+            },
+          ),
+        ),
+      );
+    }
+    if (state.statusFilter?.isNotEmpty == true) {
+      chipsList.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: FilterChip(
+            avatar: InkWell(
+              onTap: () {},
+              child: const Icon(
+                Icons.close,
+              ),
+            ),
+            label: Text(state.statusFilter.toString()),
+            side: const BorderSide(color: Colors.white),
+            onSelected: (selected) {
+              if (selected) {
+                filterCubit.clearStatusFilter();
+              }
+            },
+          ),
+        ),
+      );
+    }
+    if (state.dateRangeFilter != null) {
+      chipsList.add(
+        Padding(
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: FilterChip(
+            avatar: InkWell(
+              onTap: () {},
+              child: const Icon(
+                Icons.close,
+              ),
+            ),
+            label: Text(state.dateRangeFilter.toString()),
+            side: const BorderSide(color: Colors.white),
+            onSelected: (selected) {
+              if (selected) {
+                filterCubit.clearDateRangeFilter();
+              }
+            },
+          ),
+        ),
+      );
+    }
+    return chipsList;
   }
 }

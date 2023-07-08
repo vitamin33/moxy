@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../../../constant/order_constants.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../services/get_it.dart';
-import '../../models/order.dart';
 import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
 
@@ -12,15 +11,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   late TextEditingController dateController;
   late AllOrdersCubit allOrdersCubit;
 
-  FilterOrdersCubit()
-      : super(FilterOrdersState(
-            isLoading: false,
-            deliveryType: FilterDeliveryType.empty,
-            paymentType: FilterPaymentType.empty,
-            status: '',
-            createdAt: '',
-            updatedAt: '',
-            selectedDate: DateTime.now())) {
+  FilterOrdersCubit() : super(FilterOrdersState.defaultFilterOrdersState()) {
     loadFilterParams();
     dateController = TextEditingController(text: state.createdAt);
   }
@@ -48,7 +39,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   Future<void> selectDate(context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: state.selectedDate,
+      initialDate: state.selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
@@ -84,5 +75,29 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
     } else {
       emit(state.copyWith(deliveryType: FilterDeliveryType.empty));
     }
+  }
+
+  void clearDeliveryTypeFilter() async {
+    orderRepository.clearDeliveryTypeFilter();
+    emit(state.copyWith(deliveryType: FilterDeliveryType.empty));
+    saveFilterParams();
+  }
+
+  void clearPaymentTypeFilter() {
+    orderRepository.clearPaymentTypeFilter();
+    emit(state.copyWith(paymentType: FilterPaymentType.empty));
+    saveFilterParams();
+  }
+
+  void clearStatusFilter() {
+    orderRepository.clearStatusFilter();
+    emit(state.copyWith(status: null));
+    saveFilterParams();
+  }
+
+  void clearDateRangeFilter() {
+    orderRepository.clearDateRangeFilter();
+    emit(state.copyWith(selectedDate: null));
+    saveFilterParams();
   }
 }

@@ -1,15 +1,12 @@
 import '../../../constant/order_constants.dart';
 import '../../copyable.dart';
-import '../../models/city.dart';
-import '../../models/order.dart';
-import '../../models/warehouse.dart';
 
 class FilterOrdersState implements Copyable<FilterOrdersState> {
   bool isLoading;
   FilterDeliveryType deliveryType;
   FilterPaymentType paymentType;
-  String status;
-  DateTime selectedDate;
+  String? status;
+  DateTime? selectedDate;
   String createdAt;
   String updatedAt;
 
@@ -28,11 +25,10 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
         isLoading: false,
         deliveryType: FilterDeliveryType.empty,
         paymentType: FilterPaymentType.empty,
-        status: '',
-        selectedDate: DateTime.now(),
+        status: null,
+        selectedDate: null,
         createdAt: '',
-        updatedAt: ''
-        );
+        updatedAt: '');
   }
 
   @override

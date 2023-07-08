@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:moxy/constants.dart';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -30,16 +31,18 @@ class OrderRepository {
   }
 
   Future<void> saveFilterParams(FilterOrdersState filterState) async {
-    await prefs.setString('deliveryType', filterState.deliveryType.toString());
-    await prefs.setString('paymentType', filterState.paymentType.toString());
-    await prefs.setString('status', filterState.status.toString());
+    await prefs.setString(
+        deliveryTypeKey, filterState.deliveryType.name.toString());
+    await prefs.setString(
+        paymentTypeKey, filterState.paymentType.name.toString());
+    await prefs.setString(statusKey, filterState.status.toString());
     _filterParamsStreamController.add(filterState);
   }
 
   FilterOrdersState getFilterParams() {
-    final deliveryType = prefs.getString('deliveryType');
-    final paymentType = prefs.getString('paymentType');
-    final status = prefs.getString('status');
+    final deliveryType = prefs.getString(deliveryTypeKey);
+    final paymentType = prefs.getString(paymentTypeKey);
+    final status = prefs.getString(statusKey);
 
     return FilterOrdersState(
       paymentType: paymentType != null
@@ -48,9 +51,9 @@ class OrderRepository {
       deliveryType: deliveryType != null
           ? _parseDeliveryType(deliveryType)
           : FilterDeliveryType.empty,
-      status: status ?? '',
+      status: status,
       isLoading: false,
-      selectedDate: DateTime.now(),
+      selectedDate: null,
       createdAt: 'createdAt',
       updatedAt: 'updatedAt',
     );
@@ -82,9 +85,9 @@ class OrderRepository {
     try {
       final result = await client.allOrders();
       final allOrdersList = orderMapper.mapToOrderList(result);
-      final deliveryType = prefs.getString('deliveryType');
-      final paymentType = prefs.getString('paymentType');
-      final status = prefs.getString('status');
+      final deliveryType = prefs.getString(deliveryTypeKey);
+      final paymentType = prefs.getString(paymentTypeKey);
+      final status = prefs.getString(statusKey);
       List<Order> filteredOrders = allOrdersList.where((order) {
         bool matchesDelivery = order.deliveryType != deliveryType;
         bool matchesPayment = order.paymentType != paymentType;
@@ -116,5 +119,21 @@ class OrderRepository {
       moxyPrint('Repository Error:$e');
       return Result.error(Exception('$e'));
     }
+  }
+
+  void clearDeliveryTypeFilter() async {
+    await prefs.remove(deliveryTypeKey);
+  }
+
+  void clearPaymentTypeFilter() async {
+    await prefs.remove(paymentTypeKey);
+  }
+
+  void clearStatusFilter() async {
+    await prefs.remove(statusKey);
+  }
+
+  void clearDateRangeFilter() async {
+    await prefs.remove(dateRangeKey);
   }
 }

@@ -8,16 +8,13 @@ import 'package:moxy/utils/common.dart';
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 
-
 class AllOrdersCubit extends Cubit<AllOrdersState> {
   final orderRepository = locate<OrderRepository>();
   final orderMapper = locate<OrderMapper>();
 
   late final StreamSubscription _filterOrderSubscription;
 
-  AllOrdersCubit()
-      : super(
-            AllOrdersState(allOrders: [], isLoading: false, errorMessage: '')) {
+  AllOrdersCubit() : super(AllOrdersState.defaultAllProductsState()) {
     allOrders();
     _subscribe();
   }
@@ -39,6 +36,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     try {
       emit(state.copyWith(isLoading: true));
       final result = await orderRepository.getAllOrders();
+      checkFilters();
       result.when((success) {
         emit(state.copyWith(allOrders: success, isLoading: false));
       }, (error) {
@@ -47,5 +45,15 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     } catch (e) {
       moxyPrint('$e');
     }
+  }
+
+  checkFilters() {
+    final filters = orderRepository.getFilterParams();
+    emit(state.copyWith(
+      paymentFilter: filters.paymentType,
+      deliveryFilter: filters.deliveryType,
+      statusFilter: filters.status,
+      dateRangeFilter: filters.selectedDate,
+    ));
   }
 }
