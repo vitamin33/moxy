@@ -1,15 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/domain/mappers/filter_params_mapper.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import '../../../constant/order_constants.dart';
-import '../../../data/repositories/order_repository.dart';
 import '../../../services/get_it.dart';
 import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
 
 class FilterOrdersCubit extends Cubit<FilterOrdersState> {
-  final orderRepository = locate<OrderRepository>();
+  final filterRepository = locate<FilterRepository>();
   final filterMapper = locate<FilterParamsMapper>();
   late TextEditingController dateController;
   late AllOrdersCubit allOrdersCubit;
@@ -20,7 +20,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   }
 
   Future<FilterOrderParams> loadFilterParams() async {
-    final filterParams = orderRepository.getFilterParams();
+    final filterParams = filterRepository.getFilterParams();
     emit(state.copyWith(
         deliveryType: filterParams.deliveryType,
         paymentType: filterParams.paymentType,
@@ -37,7 +37,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
         isLoading: false,
         selectedDate: state.selectedDate,
         updatedAt: state.updatedAt);
-    orderRepository
+    filterRepository
         .notifyFilterParams(filterMapper.mapToFilterParams(filterParams));
   }
 
@@ -57,11 +57,12 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   void resetFilter() {
     emit(FilterOrdersState.defaultFilterOrdersState());
+    filterRepository.resetFilterParams();
   }
 
   void changeStatus(String updateStatus) {
     if (updateStatus != state.status) {
-      orderRepository.saveStatusFilterParam(updateStatus);
+      filterRepository.saveStatusFilterParam(updateStatus);
       emit(state.copyWith(status: updateStatus));
     } else {
       emit(state.copyWith(status: ''));
@@ -70,7 +71,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   void changePayment(FilterPaymentType updatePayment) {
     if (updatePayment != state.paymentType) {
-      orderRepository.savePaymentFilterParam(updatePayment);
+      filterRepository.savePaymentFilterParam(updatePayment);
       emit(state.copyWith(paymentType: updatePayment));
     } else {
       emit(state.copyWith(paymentType: FilterPaymentType.empty));
@@ -79,7 +80,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   void changeDelivery(FilterDeliveryType updateDelivery) {
     if (updateDelivery != state.deliveryType) {
-      orderRepository.saveDeliveryFilterParam(updateDelivery);
+      filterRepository.saveDeliveryFilterParam(updateDelivery);
       emit(state.copyWith(deliveryType: updateDelivery));
     } else {
       emit(state.copyWith(deliveryType: FilterDeliveryType.empty));
@@ -89,7 +90,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   void changeDateRange(DateTimeRange range) {
     // TODO check this implementation
     if (range != state.selectedDate) {
-      orderRepository.saveDateRangeFilterParam(range);
+      filterRepository.saveDateRangeFilterParam(range);
       emit(state.copyWith(selectedDate: range));
     } else {
       emit(state.copyWith(selectedDate: null));
