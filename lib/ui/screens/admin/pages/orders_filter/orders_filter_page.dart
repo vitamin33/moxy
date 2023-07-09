@@ -14,51 +14,58 @@ import '../../../../../domain/admin/filter_orders/filter_orders_cubit.dart';
 import '../../../../../domain/admin/filter_orders/filter_orders_state.dart';
 import '../../../../components/loader.dart';
 
-class FilterOrderPage extends StatelessWidget {
+class FilterOrderPage extends StatefulWidget {
   const FilterOrderPage({super.key});
+  @override
+  // ignore: library_private_types_in_public_api
+  _FilterOrderPageState createState() => _FilterOrderPageState();
+}
+
+class _FilterOrderPageState extends State<FilterOrderPage> {
+  late final FilterOrdersCubit cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = context.read<FilterOrdersCubit>();
+    cubit.loadFilterParams();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FilterOrdersCubit, FilterOrdersState>(
       listener: (context, state) {},
       builder: (context, state) {
-        final cubit = context.read<FilterOrdersCubit>();
         return state.isLoading
             ? loader()
             : Scaffold(
                 body: Material(
                   color: AppTheme.white,
-                  child: FutureBuilder(
-                      future: cubit.loadFilterParams(),
-                      builder: (context, snapshot) {
-                        return Padding(
-                          padding: const EdgeInsets.all(AppTheme.cardPadding),
-                          child: SingleChildScrollView(
-                            child: Column(children: [
-                              typePayment(state, cubit),
-                              const SizedBox(height: 20),
-                              typeDelivery(state, cubit),
-                              const SizedBox(height: 20),
-                              dataRange(cubit, context),
-                              const SizedBox(height: 20),
-                              orderStatus(context, state, cubit),
-                              const SizedBox(height: 20),
-                              CustomButton(
-                                title: 'Show Results',
-                                onTap: () {
-                                  cubit.saveFilterParams();
-                                  context
-                                      .read<AdminHomeRouterCubit>()
-                                      .navigateTo(
-                                        const OrdersPageState(),
-                                      );
-                                },
-                                buttonWidth: MediaQuery.of(context).size.width,
-                              )
-                            ]),
-                          ),
-                        );
-                      }),
+                  child: Padding(
+                    padding: const EdgeInsets.all(AppTheme.cardPadding),
+                    child: SingleChildScrollView(
+                      child: Column(children: [
+                        typePayment(state, cubit),
+                        const SizedBox(height: 20),
+                        typeDelivery(state, cubit),
+                        const SizedBox(height: 20),
+                        dataRange(cubit, context),
+                        const SizedBox(height: 20),
+                        orderStatus(context, state, cubit),
+                        const SizedBox(height: 20),
+                        CustomButton(
+                          title: 'Show Results',
+                          onTap: () {
+                            cubit.saveFilterParams();
+                            context.read<AdminHomeRouterCubit>().navigateTo(
+                                  const OrdersPageState(),
+                                );
+                          },
+                          buttonWidth: MediaQuery.of(context).size.width,
+                        )
+                      ]),
+                    ),
+                  ),
                 ),
               );
       },
