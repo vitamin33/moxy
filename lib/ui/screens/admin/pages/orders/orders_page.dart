@@ -29,7 +29,7 @@ class _OrdersPageState extends State<OrdersPage> {
   void initState() {
     super.initState();
     _scrollController.addListener(_onScroll);
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _calculateWrapHeight();
     });
   }

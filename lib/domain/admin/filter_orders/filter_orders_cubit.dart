@@ -22,9 +22,10 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   Future<FilterOrderParams> loadFilterParams() async {
     final filterParams = filterRepository.getFilterParams();
     emit(state.copyWith(
-        deliveryType: filterParams.deliveryType,
-        paymentType: filterParams.paymentType,
-        status: filterParams.status));
+      deliveryType: filterParams.deliveryType,
+      paymentType: filterParams.paymentType,
+      status: filterParams.status,
+    ));
     return filterParams;
   }
 

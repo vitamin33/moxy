@@ -49,7 +49,7 @@ class FilterRepository {
   FilterOrderParams getFilterParams() {
     final deliveryType = prefs.getString(deliveryTypeKey);
     final paymentType = prefs.getString(paymentTypeKey);
-    final status = prefs.getString(statusKey);
+    final status = prefs.getString(statusKey) ?? '';
 
     return FilterOrderParams(
       paymentType: paymentType != null
