@@ -44,7 +44,7 @@ dependencies:
 
   #state management control
   provider: ^6.0.5
-  either_dart: ^0.1.4
+  either_dart: ^0.4.0
   get_it: ^7.2.0
   flutter_bloc: ^8.1.1
 

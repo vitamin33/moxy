@@ -66,9 +66,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void _subscribe() {
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
-        emit(state.copyWith(
-            selectedProducts: items,
-            isEdit: true));
+        emit(state.copyWith(selectedProducts: items, isEdit: true));
       },
       onError: (error) =>
           {moxyPrint('Error during selected products listening.')},
