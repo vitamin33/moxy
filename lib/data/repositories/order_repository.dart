@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -30,16 +32,22 @@ class OrderRepository {
   }
 
   Future<void> saveFilterParams(FilterOrdersState filterState) async {
-    await prefs.setString('deliveryType', filterState.deliveryType.toString());
-    await prefs.setString('paymentType', filterState.paymentType.toString());
-    await prefs.setString('status', filterState.status.toString());
+    await prefs.setString(
+        deliveryTypeKey, filterState.deliveryType.name.toString());
+    await prefs.setString(
+        paymentTypeKey, filterState.paymentType.name.toString());
+    await prefs.setStringList(statusKey, filterState.status);
+    await prefs.setString(dateRangeKey, filterState.selectedDate.toString());
     _filterParamsStreamController.add(filterState);
   }
 
   FilterOrdersState getFilterParams() {
-    final deliveryType = prefs.getString('deliveryType');
-    final paymentType = prefs.getString('paymentType');
-    final status = prefs.getString('status');
+    final deliveryType = prefs.getString(deliveryTypeKey);
+    final paymentType = prefs.getString(paymentTypeKey);
+    final status = prefs.getStringList(statusKey);
+    final dateRange = prefs.getString(dateRangeKey);
+    final startData = dateRange?.split(' - ')[0];
+    final endData = dateRange?.split(' - ')[1];
 
     return FilterOrdersState(
       paymentType: paymentType != null
@@ -48,9 +56,11 @@ class OrderRepository {
       deliveryType: deliveryType != null
           ? _parseDeliveryType(deliveryType)
           : FilterDeliveryType.empty,
-      status: status ?? '',
+      status: status ?? [],
       isLoading: false,
-      selectedDate: DateTime.now(),
+      selectedDate: DateTimeRange(
+          start: DateTime.parse(startData ?? DateTime.now().toString()),
+          end: DateTime.parse(endData ?? DateTime.now().toString())),
       createdAt: 'createdAt',
       updatedAt: 'updatedAt',
     );
@@ -82,14 +92,27 @@ class OrderRepository {
     try {
       final result = await client.allOrders();
       final allOrdersList = orderMapper.mapToOrderList(result);
-      final deliveryType = prefs.getString('deliveryType');
-      final paymentType = prefs.getString('paymentType');
-      final status = prefs.getString('status');
+      final deliveryType = prefs.getString(deliveryTypeKey);
+      final paymentType = prefs.getString(paymentTypeKey);
+      final status = prefs.getStringList(statusKey);
+      final dateRange = prefs.getString(dateRangeKey);
+      final startData = dateRange?.split(' - ')[0].split(' ')[0];
+      final endData = dateRange?.split(' - ')[1].split(' ')[0];
+
       List<Order> filteredOrders = allOrdersList.where((order) {
-        bool matchesDelivery = order.deliveryType != deliveryType;
-        bool matchesPayment = order.paymentType != paymentType;
-        bool matchesStatus = order.status != status;
-        return matchesDelivery && matchesPayment && matchesStatus;
+        bool matchesDelivery =
+            deliveryType == 'empty' || order.deliveryType.name == deliveryType;
+        bool matchesPayment =
+            paymentType == 'empty' || order.paymentType.name == paymentType;
+        bool matchesStatus =
+            status!.isEmpty || status.any((s) => order.status.contains(s));
+        bool matchesData = startData == endData ||
+            (order.createdAt.compareTo(startData!) >= 0 &&
+                order.createdAt.compareTo(endData!) <= 0);
+        return matchesDelivery &&
+            matchesPayment &&
+            matchesStatus &&
+            matchesData;
       }).toList();
 
       return Result.success(filteredOrders);

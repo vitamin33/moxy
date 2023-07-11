@@ -58,9 +58,9 @@ class OrderMapper {
 
   PaymentType _mapPaymentType(String paymentType) {
     switch (paymentType) {
-      case 'cashAdvance':
+      case 'CashAdvance':
         return PaymentType.cashAdvance;
-      case 'fullPayment':
+      case 'FullPayment':
         return PaymentType.fullPayment;
     }
     return PaymentType.fullPayment;
@@ -162,8 +162,7 @@ class OrderMapper {
           postMachineType: novapost.postMachineType,
           presentName: novapost.description),
       status: status,
-      client:
-          NetworkClient(
+      client: NetworkClient(
         id: client.id,
         city: client.city,
         firstName: client.firstName,

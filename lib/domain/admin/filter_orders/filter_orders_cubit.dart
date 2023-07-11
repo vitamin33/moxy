@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../constant/order_constants.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../services/get_it.dart';
-import '../../models/order.dart';
 import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
 
@@ -17,10 +17,11 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
             isLoading: false,
             deliveryType: FilterDeliveryType.empty,
             paymentType: FilterPaymentType.empty,
-            status: '',
+            status: [],
             createdAt: '',
             updatedAt: '',
-            selectedDate: DateTime.now())) {
+            selectedDate:
+                DateTimeRange(start: DateTime.now(), end: DateTime.now()))) {
     loadFilterParams();
     dateController = TextEditingController(text: state.createdAt);
   }
@@ -30,7 +31,9 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
     emit(state.copyWith(
         deliveryType: filterParams.deliveryType,
         paymentType: filterParams.paymentType,
-        status: filterParams.status));
+        status: filterParams.status,
+        selectedDate: filterParams.selectedDate
+        ));
   }
 
   void saveFilterParams() {
@@ -46,27 +49,37 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   }
 
   Future<void> selectDate(context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTimeRange? result = await showDateRangePicker(
       context: context,
-      initialDate: state.selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(2022, 1, 1),
+      lastDate: DateTime(2030, 12, 31),
+      currentDate: DateTime.now(),
+      saveText: 'Done',
     );
-    if (picked != null && picked != state.selectedDate) {
-      state.selectedDate = picked;
-      dateController.text = state.selectedDate.toString();
+
+    if (result != null) {
+      emit(state.copyWith(selectedDate: result));
+      String firstDate = DateFormat('dd MM yyyy')
+          .format(DateTime.parse(result.start.toString()));
+      String lastDate = DateFormat('dd MM yyyy')
+          .format(DateTime.parse(result.end.toString()));
+      dateController.text = '$firstDate - $lastDate';
     }
   }
 
   void resetFilter() {
     emit(FilterOrdersState.defaultFilterOrdersState());
+    dateController.text = '';
   }
 
   void changeStatus(updateStatus) {
-    if (updateStatus != state.status) {
-      emit(state.copyWith(status: updateStatus));
+    List<String> updatedStatus = state.status;
+    if (!state.status.contains(updateStatus)) {
+      updatedStatus.add(updateStatus);
+      emit(state.copyWith(status: updatedStatus));
     } else {
-      emit(state.copyWith(status: ''));
+      updatedStatus.remove(updateStatus);
+      emit(state.copyWith(status: updatedStatus));
     }
   }
 
