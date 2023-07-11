@@ -155,7 +155,7 @@ class AdminRootViewMobile extends StatelessWidget {
   String _mapStateToTitleText(AdminHomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
-        return 'Dashboard';
+        return 'Overview';
       case ProductsPageState:
         return 'Products';
       case UsersPageState:
@@ -190,7 +190,13 @@ class AdminRootViewMobile extends StatelessWidget {
   List<AppBarIcon> _mapStateToActionIcon(AdminHomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
-        return [];
+        return [
+          AppBarIcon(
+              icon: IconPath.dataRange,
+              onPress: (ctx) {
+                moxyPrint('calendar');
+              }),
+        ];
       case ProductsPageState:
         return [
           AppBarIcon(
