@@ -241,7 +241,6 @@ class DioClient {
     }
   }
 
-
   Future<Result<Headers, Exception>> createOrder(CreateOrder order) async {
     final Headers? result;
     final data = order.toJson();
@@ -252,12 +251,11 @@ class DioClient {
       );
       result = response.headers;
     } catch (e) {
-     moxyPrint('Error during creating order: $e');
+      moxyPrint('Error during creating order: $e');
       return Result.error(_handleHttpException(e));
     }
     return Result.success(result);
   }
-
 
   Future<Result<Headers, Exception>> editOrder(EditOrder order) async {
     final Headers? result;
@@ -269,7 +267,7 @@ class DioClient {
       );
       result = response.headers;
     } catch (e) {
-     moxyPrint('Error during creating order: $e');
+      moxyPrint('Error during creating order: $e');
       return Result.error(_handleHttpException(e));
     }
     return Result.success(result);

@@ -37,19 +37,19 @@ dependencies:
     ^1.0.2
     #database
   shared_preferences: ^2.0.17
-  flutter_secure_storage: ^6.1.0
+  flutter_secure_storage: ^8.0.0
 
   #new
-  dio: ^4.0.6
+  dio: ^5.2.1+1
 
   #state management control
   provider: ^6.0.5
-  either_dart: ^0.1.4
+  either_dart: ^0.4.0
   get_it: ^7.2.0
   flutter_bloc: ^8.1.1
 
   #utils
-  intl: ^0.17.0
+  intl: ^0.18.1
   random_string: ^2.3.1
   file_picker: ^5.2.7
   equatable: ^2.0.5
@@ -61,7 +61,7 @@ dependencies:
   universal_html: ^2.2.1
   json_theme: ^4.0.0
   json_serializable: ^6.6.1
-  image_picker: ^0.8.7+4
+  image_picker: ^1.0.0
   multiple_result: ^4.0.0
   flutter_dotenv: ^5.1.0
   freezed: ^2.3.2
