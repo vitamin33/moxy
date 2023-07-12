@@ -72,7 +72,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
 
   void clearStatusFilter() {
     filterRepository.clearStatusFilter();
-    emit(state.copyWith(statusFilter: ''));
+    emit(state.copyWith(statusFilter: []));
   }
 
   void clearDateRangeFilter() {

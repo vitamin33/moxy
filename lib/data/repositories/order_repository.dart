@@ -6,6 +6,9 @@ import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../constant/order_constants.dart';
+import '../../domain/admin/filter_orders/filter_orders_state.dart';
 import '../../domain/mappers/order_mapper.dart';
 import '../../domain/models/order.dart';
 import '../../utils/common.dart';
@@ -29,7 +32,7 @@ class OrderRepository {
     prefs = await SharedPreferences.getInstance();
   }
 
-  Future<void> saveFilterParams(FilterOrdersState filterState) async {
+  Future<void> saveFilterParam(FilterOrdersState filterState) async {
     await prefs.setString(
         deliveryTypeKey, filterState.deliveryType.name.toString());
     await prefs.setString(
@@ -85,27 +88,19 @@ class OrderRepository {
         return FilterDeliveryType.empty;
     }
   }
- 
-
 
   Future<Result<List<Order>, Exception>> getAllOrders() async {
     try {
       final result = await client.allOrders();
       final allOrdersList = orderMapper.mapToOrderList(result);
 
-//       final deliveryType = prefs.getString(deliveryTypeKey);
-//       final paymentType = prefs.getString(paymentTypeKey);
-//       final status = prefs.getStringList(statusKey);
-//       final dateRange = prefs.getString(dateRangeKey);
-      
-      final params = filterRepository.getFilterParams();
-      final deliveryType = params.deliveryType;
-      final paymentType = params.paymentType;
-      final status = params.status;
-      final dateRange = params.dateRange;
+      final deliveryType = prefs.getString(deliveryTypeKey);
+      final paymentType = prefs.getString(paymentTypeKey);
+      final status = prefs.getStringList(statusKey);
+      final dateRange = prefs.getString(dateRangeKey);
       final startData = dateRange?.split(' - ')[0].split(' ')[0];
       final endData = dateRange?.split(' - ')[1].split(' ')[0];
-      
+
       List<Order> filteredOrders = allOrdersList.where((order) {
         bool matchesDelivery =
             deliveryType == 'empty' || order.deliveryType.name == deliveryType;
