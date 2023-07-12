@@ -7,8 +7,8 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
   bool isLoading;
   FilterDeliveryType deliveryType;
   FilterPaymentType paymentType;
-  String? status;
-  DateTimeRange? selectedDate;
+  List<String> status;
+  DateTimeRange selectedDate;
   String createdAt;
   String updatedAt;
 
@@ -27,8 +27,8 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
         isLoading: false,
         deliveryType: FilterDeliveryType.empty,
         paymentType: FilterPaymentType.empty,
-        status: '',
-        selectedDate: null,
+        status: [],
+        selectedDate: DateTimeRange(start: DateTime.now(), end: DateTime.now()),
         createdAt: '',
         updatedAt: '');
   }
@@ -38,7 +38,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
       {bool? isLoading,
       FilterDeliveryType? deliveryType,
       FilterPaymentType? paymentType,
-      String? status,
+      List<String>? status,
       DateTimeRange? selectedDate,
       String? createdAt,
       String? updatedAt}) {

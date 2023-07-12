@@ -40,8 +40,8 @@ class DioClient {
 
     // Set default configs
     dio.options.baseUrl = baseUrl;
-    dio.options.connectTimeout = 10000; //10s
-    dio.options.receiveTimeout = 10000;
+    dio.options.connectTimeout = Duration(seconds: 10) ; //10s
+    dio.options.receiveTimeout = Duration(seconds: 10);
 
     // customization
     dio.interceptors.add(PrettyDioLogger(

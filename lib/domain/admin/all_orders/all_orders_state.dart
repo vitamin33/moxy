@@ -9,7 +9,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
   final bool isLoading;
   final FilterDeliveryType deliveryFilter;
   final FilterPaymentType paymentFilter;
-  final String? statusFilter;
+  final List<String> statusFilter;
   final DateTimeRange? dateRangeFilter;
   final String? errorMessage;
 
@@ -28,7 +28,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
       allOrders: [],
       deliveryFilter: FilterDeliveryType.empty,
       paymentFilter: FilterPaymentType.empty,
-      statusFilter: null,
+      statusFilter: [],
       dateRangeFilter: null,
       isLoading: false,
       errorMessage: '',
@@ -41,7 +41,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
     String? errorMessage,
     FilterDeliveryType? deliveryFilter,
     FilterPaymentType? paymentFilter,
-    String? statusFilter,
+    List<String>? statusFilter,
     DateTimeRange? dateRangeFilter,
     List<Order>? allOrders,
   }) {
@@ -58,7 +58,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
   bool hasFilters() {
     return deliveryFilter != FilterDeliveryType.empty ||
         paymentFilter != FilterPaymentType.empty ||
-        statusFilter?.isNotEmpty == true ||
+        statusFilter.isNotEmpty == true ||
         dateRangeFilter != null;
   }
 }

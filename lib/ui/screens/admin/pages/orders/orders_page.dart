@@ -161,7 +161,7 @@ class _OrdersPageState extends State<OrdersPage> {
         ),
       );
     }
-    if (state.statusFilter?.isNotEmpty == true) {
+    if (state.statusFilter.isNotEmpty == true) {
       chipsList.add(
         Padding(
           padding: const EdgeInsets.all(5),
