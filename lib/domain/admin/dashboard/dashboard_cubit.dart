@@ -14,5 +14,5 @@ class DashboardCubit extends Cubit<DashboardState> {
   late TextEditingController passwordController;
   String walletConnectURI = '';
 
-  DashboardCubit() : super(DashboardState());
+  DashboardCubit() : super(DashboardState(totalBalance: '0', totalProduct: '0'));
 }

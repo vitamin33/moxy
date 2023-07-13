@@ -1,42 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../../../constant/icon_path.dart';
+import '../../../../../domain/admin/dashboard/dashboard_cubit.dart';
+import '../../../../../domain/admin/dashboard/dashboard_state.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Material(
-          color: AppTheme.pink,
-          child: SingleChildScrollView(
-            child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(children: [
-                  totalBalance(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  totalProduct(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  earning(context),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  chart()
-                ])),
-          )),
+    return BlocConsumer<DashboardCubit, DashboardState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          body: Material(
+              color: AppTheme.pink,
+              child: SingleChildScrollView(
+                child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(children: [
+                      totalBalance(state.totalBalance),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      totalProduct(state.totalProduct),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      earning(context),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      chart()
+                    ])),
+              )),
+        );
+      },
     );
   }
 }
 
-totalBalance() {
+totalBalance(totalBalance) {
   return Container(
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -64,18 +73,19 @@ totalBalance() {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text('Total Balance',
+            children: [
+              const Text('Total Balance',
                   style: TextStyle(
                       fontSize: 16,
                       color: AppTheme.gray,
                       fontWeight: FontWeight.w400)),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Text(
-                '\$ 41,210',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                '\$ ${totalBalance.toString()}',
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -85,7 +95,7 @@ totalBalance() {
   );
 }
 
-totalProduct() {
+totalProduct(totalProduct) {
   return Container(
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -113,18 +123,19 @@ totalProduct() {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text('Total Product',
+            children: [
+              const Text('Total Product',
                   style: TextStyle(
                       fontSize: 16,
                       color: AppTheme.gray,
                       fontWeight: FontWeight.w400)),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Text(
-                '210',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                '${totalProduct}',
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -179,7 +190,7 @@ earning(context) {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'from last weak',
+                    'from last mo',
                     style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.w400,
@@ -190,7 +201,7 @@ earning(context) {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Expanded(
@@ -207,7 +218,7 @@ earning(context) {
                   Row(
                     children: const [
                       CircleAvatar(
-                        backgroundColor: AppTheme.green,
+                        backgroundColor: AppTheme.darkPink,
                         radius: 5,
                       ),
                       SizedBox(
@@ -249,27 +260,94 @@ earning(context) {
 }
 
 chart() {
+  // var index;
+
   return Container(
-      color: AppTheme.white,
-      child:
-          SfCartesianChart(primaryXAxis: CategoryAxis(), series: <ChartSeries>[
-        // Initialize line series
-        LineSeries<ChartData, String>(
-            dataSource: [
-              // Bind data source
-              ChartData('Jan', 35),
-              ChartData('Feb', 28),
-              ChartData('Mar', 34),
-              ChartData('Apr', 32),
-              ChartData('May', 40)
+      decoration: const BoxDecoration(
+          color: AppTheme.white,
+          borderRadius: BorderRadius.all(Radius.circular(10))),
+      height: 250,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SfCartesianChart(
+            // onDataLabelRender: (DataLabelRenderArgs args) {
+            //   if (index != null && index == args.pointIndex) {
+            //     args.textStyle = TextStyle(fontSize: 14, color: AppTheme.black);
+            //   }
+            // },
+            primaryYAxis: NumericAxis(
+              majorGridLines: const MajorGridLines(
+                width: 1,
+                dashArray: <double>[5, 5],
+              ),
+              axisLabelFormatter: (axisLabelRenderArgs) {
+                final int value = axisLabelRenderArgs.value.toInt();
+                if (value >= 1000) {
+                  return ChartAxisLabel(
+                      '\$${(value / 1000).toStringAsFixed(0)}k',
+                      const TextStyle(color: AppTheme.gray));
+                } else {
+                  return ChartAxisLabel(
+                      '\$$value', const TextStyle(color: AppTheme.gray));
+                }
+              },
+            ),
+            primaryXAxis: CategoryAxis(
+              labelStyle: const TextStyle(color: AppTheme.gray),
+              majorGridLines: const MajorGridLines(width: 0),
+            ),
+            palette: <Color>[
+              AppTheme.violet,
+              AppTheme.pinkDark,
             ],
-            xValueMapper: (ChartData data, _) => data.x,
-            yValueMapper: (ChartData data, _) => data.y)
-      ]));
+            series: <ChartSeries>[
+              ColumnSeries<ChartData, String>(
+                  dataSource: [
+                    ChartData('Jan', 1000, 800),
+                    ChartData('Feb', 1234, 1100),
+                    ChartData('Mar', 2342, 2000),
+                    ChartData('Apr', 3453, 3000),
+                    ChartData('May', 2321, 2000),
+                  ],
+                  dataLabelSettings: const DataLabelSettings(
+                      isVisible: true, textStyle: TextStyle(fontSize: 0)),
+                  xValueMapper: (ChartData data, _) => data.x,
+                  yValueMapper: (ChartData data, _) => data.y2,
+                  width: 0.4,
+                  // onPointTap: (pointInteractionDetails) {
+                  //   index = pointInteractionDetails.pointIndex!;
+                  //   moxyPrint(index);
+                  // },
+                  spacing: 0.1,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12))),
+              ColumnSeries<ChartData, String>(
+                  dataLabelSettings: DataLabelSettings(
+                      isVisible: true, textStyle: TextStyle(fontSize: 0)),
+                  dataSource: [
+                    ChartData('Jan', 1000, 800),
+                    ChartData('Feb', 1234, 1100),
+                    ChartData('Mar', 2342, 2000),
+                    ChartData('Apr', 3453, 3000),
+                    ChartData('May', 2321, 2000),
+                  ],
+                  xValueMapper: (ChartData data, _) => data.x,
+                  yValueMapper: (ChartData data, _) => data.y,
+                  width: 0.4,
+                  // onPointTap: (pointInteractionDetails) {
+                  //   index = pointInteractionDetails.pointIndex!;
+                  //   moxyPrint(index);
+                  // },
+                  spacing: 0.1,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(12))),
+            ]),
+      ));
 }
 
 class ChartData {
-  ChartData(this.x, this.y);
+  ChartData(this.x, this.y, this.y2);
   final String x;
   final double? y;
+  final double? y2;
 }
