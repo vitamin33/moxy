@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,15 +41,23 @@ class FilterRepository {
     notifyFilterParamsChange();
   }
 
-  Future<void> saveStatusFilterParam(String status) async {
-    await prefs.setString(statusKey, status);
+  Future<void> saveStatusFilterParam(List<String> status) async {
+    await prefs.setStringList(statusKey, status);
+    notifyFilterParamsChange();
+  }
+
+  Future<void> removeItemStatusFilterParam(item) async {
+    List<String> statusList = prefs.getStringList('status') ?? [];
+    statusList.remove(item);
+    await prefs.setStringList(statusKey, statusList);
     notifyFilterParamsChange();
   }
 
   FilterOrderParams getFilterParams() {
     final deliveryType = prefs.getString(deliveryTypeKey);
     final paymentType = prefs.getString(paymentTypeKey);
-    final status = prefs.getStringList(statusKey) ;
+    final status = prefs.getStringList(statusKey);
+    final dateRangeType = prefs.getString(dateRangeKey);
 
     return FilterOrderParams(
       paymentType: paymentType != null
@@ -57,8 +66,10 @@ class FilterRepository {
       deliveryType: deliveryType != null
           ? _parseDeliveryType(deliveryType)
           : FilterDeliveryType.empty,
-      status: status!,
-      dateRange: null,
+      status: status ?? [],
+      dateRange: dateRangeType != null
+          ? _parseDataRange(dateRangeType)
+          : null,
     );
   }
 
@@ -82,6 +93,15 @@ class FilterRepository {
       default:
         return FilterDeliveryType.empty;
     }
+  }
+
+  DateTimeRange _parseDataRange(String dataRange) {
+    List<String> dateParts = dataRange.split(" - ");
+    DateTime startDate =
+        DateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(dateParts[0]);
+    DateTime endDate =
+        DateFormat("yyyy-MM-dd HH:mm:ss.SSS").parse(dateParts[1]);
+    return DateTimeRange(start: startDate, end: endDate);
   }
 
   void clearDeliveryTypeFilter() async {

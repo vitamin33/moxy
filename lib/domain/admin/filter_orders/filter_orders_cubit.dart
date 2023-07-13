@@ -50,7 +50,6 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
         isLoading: false,
         selectedDate: state.selectedDate,
         updatedAt: state.updatedAt);
-    orderRepository.saveFilterParam(filterParams);
     filterRepository
         .notifyFilterParams(filterMapper.mapToFilterParams(filterParams));
   }
@@ -66,6 +65,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
     if (result != null) {
       emit(state.copyWith(selectedDate: result));
+      filterRepository.saveDateRangeFilterParam(result);
       String firstDate = DateFormat('dd MM yyyy')
           .format(DateTime.parse(result.start.toString()));
       String lastDate = DateFormat('dd MM yyyy')
@@ -76,19 +76,20 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   void resetFilter() {
     emit(FilterOrdersState.defaultFilterOrdersState());
-
     dateController.text = '';
     filterRepository.resetFilterParams();
   }
 
   void changeStatus(updateStatus) {
-    List<String> updatedStatus = state.status;
+    List<String> updatedStatusList = state.status;
     if (!state.status.contains(updateStatus)) {
-      updatedStatus.add(updateStatus);
-      emit(state.copyWith(status: updatedStatus));
+      updatedStatusList.add(updateStatus);
+      filterRepository.saveStatusFilterParam(updatedStatusList);
+      emit(state.copyWith(status: updatedStatusList));
     } else {
-      updatedStatus.remove(updateStatus);
-      emit(state.copyWith(status: updatedStatus));
+      updatedStatusList.remove(updateStatus);
+      filterRepository.removeItemStatusFilterParam(updateStatus);
+      emit(state.copyWith(status: updatedStatusList));
     }
   }
 
@@ -110,12 +111,5 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
     }
   }
 
-  void changeDateRange(DateTimeRange range) {
-    if (range != state.selectedDate) {
-      filterRepository.saveDateRangeFilterParam(range);
-      emit(state.copyWith(selectedDate: range));
-    } else {
-      emit(state.copyWith(selectedDate: null));
-    }
-  }
+  
 }

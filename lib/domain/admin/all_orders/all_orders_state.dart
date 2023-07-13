@@ -7,9 +7,9 @@ import '../../models/order.dart';
 class AllOrdersState implements Copyable<AllOrdersState> {
   final List<Order> allOrders;
   final bool isLoading;
-  final FilterDeliveryType deliveryFilter;
-  final FilterPaymentType paymentFilter;
-  final List<String> statusFilter;
+  final FilterDeliveryType? deliveryFilter;
+  final FilterPaymentType? paymentFilter;
+  final List<String>? statusFilter;
   final DateTimeRange? dateRangeFilter;
   final String? errorMessage;
 
@@ -58,7 +58,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
   bool hasFilters() {
     return deliveryFilter != FilterDeliveryType.empty ||
         paymentFilter != FilterPaymentType.empty ||
-        statusFilter.isNotEmpty == true ||
+        statusFilter?.isNotEmpty == true ||
         dateRangeFilter != null;
   }
 }

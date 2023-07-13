@@ -128,7 +128,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 Icons.close,
               ),
             ),
-            label: Text(state.deliveryFilter.name.toString()),
+            label: Text(state.deliveryFilter!.name.toString()),
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
@@ -150,7 +150,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 Icons.close,
               ),
             ),
-            label: Text(state.paymentFilter.name.toString()),
+            label: Text(state.paymentFilter!.name.toString()),
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
@@ -161,7 +161,7 @@ class _OrdersPageState extends State<OrdersPage> {
         ),
       );
     }
-    if (state.statusFilter.isNotEmpty == true) {
+    if (state.statusFilter?.isNotEmpty == true) {
       chipsList.add(
         Padding(
           padding: const EdgeInsets.all(5),
