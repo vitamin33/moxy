@@ -183,7 +183,7 @@ class _OrdersPageState extends State<OrdersPage> {
         ),
       );
     }
-    if (state.dateRangeFilter != null) {
+    if (state.dateRangeFilter != null ) {
       chipsList.add(
         Padding(
           padding: const EdgeInsets.all(5),
