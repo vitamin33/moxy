@@ -7,11 +7,12 @@ import '../../models/order.dart';
 class AllOrdersState implements Copyable<AllOrdersState> {
   final List<Order> allOrders;
   final bool isLoading;
-  final FilterDeliveryType deliveryFilter;
-  final FilterPaymentType paymentFilter;
-  final String? statusFilter;
+  final FilterDeliveryType? deliveryFilter;
+  final FilterPaymentType? paymentFilter;
+  final List<String>? statusFilter;
   final DateTimeRange? dateRangeFilter;
   final String? errorMessage;
+  final bool shouldSetDateRangeFilterToNull;
 
   AllOrdersState({
     required this.allOrders,
@@ -21,6 +22,7 @@ class AllOrdersState implements Copyable<AllOrdersState> {
     required this.dateRangeFilter,
     required this.isLoading,
     this.errorMessage,
+    this.shouldSetDateRangeFilterToNull = false,
   });
 
   static AllOrdersState defaultAllProductsState() {
@@ -28,10 +30,11 @@ class AllOrdersState implements Copyable<AllOrdersState> {
       allOrders: [],
       deliveryFilter: FilterDeliveryType.empty,
       paymentFilter: FilterPaymentType.empty,
-      statusFilter: null,
+      statusFilter: [],
       dateRangeFilter: null,
       isLoading: false,
       errorMessage: '',
+      shouldSetDateRangeFilterToNull:false
     );
   }
 
@@ -41,18 +44,22 @@ class AllOrdersState implements Copyable<AllOrdersState> {
     String? errorMessage,
     FilterDeliveryType? deliveryFilter,
     FilterPaymentType? paymentFilter,
-    String? statusFilter,
+    List<String>? statusFilter,
     DateTimeRange? dateRangeFilter,
     List<Order>? allOrders,
+    bool? shouldSetDateRangeFilterToNull
   }) {
     return AllOrdersState(
         isLoading: isLoading ?? this.isLoading,
         deliveryFilter: deliveryFilter ?? this.deliveryFilter,
         paymentFilter: paymentFilter ?? this.paymentFilter,
         statusFilter: statusFilter ?? this.statusFilter,
-        dateRangeFilter: dateRangeFilter ?? this.dateRangeFilter,
+        dateRangeFilter: shouldSetDateRangeFilterToNull == true ? null : dateRangeFilter ?? this.dateRangeFilter,
         errorMessage: errorMessage ?? this.errorMessage,
-        allOrders: allOrders ?? this.allOrders);
+        allOrders: allOrders ?? this.allOrders,
+        shouldSetDateRangeFilterToNull: shouldSetDateRangeFilterToNull ?? false
+        );
+        
   }
 
   bool hasFilters() {

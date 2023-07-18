@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
@@ -72,12 +73,14 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
 
   void clearStatusFilter() {
     filterRepository.clearStatusFilter();
-    emit(state.copyWith(statusFilter: ''));
+    emit(state.copyWith(statusFilter: []));
+    moxyPrint(state.statusFilter);
   }
 
   void clearDateRangeFilter() {
     filterRepository.clearDateRangeFilter();
-    emit(state.copyWith(dateRangeFilter: null));
+    emit(state.copyWith(shouldSetDateRangeFilterToNull: true));
+    moxyPrint(state.dateRangeFilter);
   }
 
   Future<void> refreshOrderList() async {
