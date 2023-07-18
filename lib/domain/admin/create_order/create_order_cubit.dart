@@ -47,7 +47,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
               selectedWarehouse: Warehouse.defaultWarehouse(),
               client: Client.defaultClient(),
               status: 'New',
-              prepayment: '150'),
+              prepayment: '0'),
         ) {
     _subscribe();
   }
@@ -167,6 +167,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   void selectPaymentType(PaymentType type) {
     emit(state.copyWith(paymentType: type));
+    if (type.name == 'cashAdvance') {
+      emit(state.copyWith(prepayment: '150'));
+    }
   }
 
   void moveToNextPage() {
