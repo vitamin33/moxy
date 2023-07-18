@@ -23,6 +23,29 @@ class OverviewPage extends StatelessWidget {
                 child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(children: [
+                      AnimatedOpacity(
+                        opacity: state.selectedDate != null ? 1 : 0,
+                        duration:const Duration(seconds: 1),
+                        child: AnimatedSize(
+                          duration: const Duration(seconds: 1),
+                          curve: Curves.easeInOut,
+                          child: state.selectedDate != null
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Date Range: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              color: AppTheme.gray),
+                                        ),
+                                      )
+                                    ])
+                              : Container(),
+                        ),
+                      ),
                       totalBalance(state.totalBalance),
                       const SizedBox(
                         height: 20,

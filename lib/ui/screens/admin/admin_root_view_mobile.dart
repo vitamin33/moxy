@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
@@ -194,7 +195,7 @@ class AdminRootViewMobile extends StatelessWidget {
           AppBarIcon(
               icon: IconPath.dataRange,
               onPress: (ctx) {
-                moxyPrint('calendar');
+                ctx.read<DashboardCubit>().selectDate(ctx);
               }),
         ];
       case ProductsPageState:

@@ -7,6 +7,7 @@ import 'package:moxy/domain/mappers/filter_params_mapper.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import '../../../constant/order_constants.dart';
 import '../../../services/get_it.dart';
+import '../../../ui/theme/app_theme.dart';
 import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
 
@@ -56,12 +57,24 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   Future<void> selectDate(context) async {
     final DateTimeRange? result = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(2022, 1, 1),
-      lastDate: DateTime(2030, 12, 31),
-      currentDate: DateTime.now(),
-      saveText: 'Done',
-    );
+        context: context,
+        firstDate: DateTime(2022, 1, 1),
+        lastDate: DateTime(2030, 12, 31),
+        currentDate: DateTime.now(),
+        saveText: 'Done',
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme:const ColorScheme.light(
+                primary: AppTheme.pinkDark,
+                onPrimary: AppTheme.white,
+                onSurface: AppTheme.greyDark,
+              ),
+              dialogBackgroundColor: AppTheme.darkPink,
+            ),
+            child: child!,
+          );
+        });
 
     if (result != null) {
       emit(state.copyWith(selectedDate: result));
@@ -110,6 +123,4 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
       emit(state.copyWith(deliveryType: FilterDeliveryType.empty));
     }
   }
-
-  
 }
