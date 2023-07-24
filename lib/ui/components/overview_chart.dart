@@ -11,6 +11,13 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
+  final List<ChartData> dataSourceList = [
+    ChartData('Jan', 1000, 800),
+    ChartData('Feb', 1234, 1100),
+    ChartData('Mar', 2342, 2000),
+    ChartData('Apr', 3453, 3000),
+    ChartData('May', 2321, 2000),
+  ];
   int? selectedColumnIndex1;
   int? selectedColumnIndex2;
   @override
@@ -67,13 +74,7 @@ class _ChartState extends State<Chart> {
                           selectedColumnIndex2 = null;
                         });
                       },
-                      dataSource: [
-                        ChartData('Jan', 1000, 800),
-                        ChartData('Feb', 1234, 1100),
-                        ChartData('Mar', 2342, 2000),
-                        ChartData('Apr', 3453, 3000),
-                        ChartData('May', 2321, 2000),
-                      ],
+                      dataSource: dataSourceList,
                       markerSettings: MarkerSettings(
                           isVisible:
                               selectedColumnIndex2 != null ? false : true),
@@ -94,13 +95,7 @@ class _ChartState extends State<Chart> {
                           selectedColumnIndex1 = null;
                         });
                       },
-                      dataSource: [
-                        ChartData('Jan', 1000, 800),
-                        ChartData('Feb', 1234, 1100),
-                        ChartData('Mar', 2342, 2000),
-                        ChartData('Apr', 3453, 3000),
-                        ChartData('May', 2321, 2000),
-                      ],
+                      dataSource: dataSourceList,
                       markerSettings: MarkerSettings(
                           isVisible:
                               selectedColumnIndex1 != null ? false : true),

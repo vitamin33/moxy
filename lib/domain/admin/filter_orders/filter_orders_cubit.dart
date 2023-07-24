@@ -75,7 +75,6 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
             child: child!,
           );
         });
-
     if (result != null) {
       emit(state.copyWith(selectedDate: result));
       filterRepository.saveDateRangeFilterParam(result);

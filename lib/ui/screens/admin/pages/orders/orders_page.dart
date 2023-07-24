@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
@@ -22,7 +24,7 @@ class OrdersPage extends StatefulWidget {
 class _OrdersPageState extends State<OrdersPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isFilterChipsVisible = true;
-  double _toolbarHeight = 0.0;
+  double _toolbarHeight = 0;
   final GlobalKey _wrapKey = GlobalKey();
 
   @override
@@ -83,12 +85,13 @@ class _OrdersPageState extends State<OrdersPage> {
       return Scaffold(
         body: Material(
           color: AppTheme.pink,
-          child: CustomScrollView(
-            slivers: [
-              _buildTopAppBar(cubit, state, showTopBar),
-              _buildOrdersListWidget(cubit, state),
-            ],
-          ),
+          child: CustomScrollView(slivers: [
+            _buildTopAppBar(cubit, state, showTopBar),
+            CupertinoSliverRefreshControl(
+              onRefresh: () => cubit.refreshOrderList(),
+            ),
+            _buildOrdersListWidget(cubit, state),
+          ]),
         ),
       );
     });
@@ -183,18 +186,21 @@ class _OrdersPageState extends State<OrdersPage> {
         ),
       );
     }
-    if (state.dateRangeFilter != null ) {
+    if (state.dateRangeFilter != null) {
+      String firstDate = DateFormat('dd MM yyyy')
+          .format(DateTime.parse(state.dateRangeFilter!.start.toString()));
+      String lastDate = DateFormat('dd MM yyyy')
+          .format(DateTime.parse(state.dateRangeFilter!.end.toString()));
       chipsList.add(
         Padding(
           padding: const EdgeInsets.all(5),
           child: FilterChip(
             avatar: InkWell(
-              onTap: () {},
-              child: const Icon(
-                Icons.close,
-              ),
-            ),
-            label: Text(state.dateRangeFilter.toString()),
+                onTap: () {},
+                child: const Icon(
+                  Icons.close,
+                )),
+            label: Text('${firstDate}-${lastDate}'),
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
@@ -207,6 +213,7 @@ class _OrdersPageState extends State<OrdersPage> {
     }
     return chipsList;
   }
+
 
   Widget _buildTopAppBar(
       AllOrdersCubit cubit, AllOrdersState state, bool showTopBar) {
@@ -244,54 +251,45 @@ class _OrdersPageState extends State<OrdersPage> {
 
   Widget _buildOrdersListWidget(AllOrdersCubit cubit, AllOrdersState state) {
     return SliverToBoxAdapter(
-      child: state.isLoading
-          ? const Center(
-              child: Padding(
-                padding: EdgeInsets.all(20),
-                child: CircularProgressIndicator(),
-              ),
-            )
-          : Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: state.allOrders.isEmpty
-                  ? const Text('No orders')
-                  : RefreshIndicator(
-                      onRefresh: cubit.refreshOrderList,
-                      child: ListView.builder(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          controller: _scrollController,
-                          shrinkWrap: true,
-                          itemCount: state.allOrders.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final order = state.allOrders[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                contentPadding: const EdgeInsets.all(14.0),
-                                onTap: () {
-                                  context
-                                      .read<AdminHomeRouterCubit>()
-                                      .navigateTo(const EditOrderPageState());
-                                  context
-                                      .read<EditOrderCubit>()
-                                      .getOrder(order);
-                                },
-                                tileColor: AppTheme.white,
-                                leading: ClipOval(
-                                    child: _buildImage(order.orderedItems)),
-                                title: Text(
-                                    '${order.client.firstName} ${order.client.secondName}'),
-                                subtitle:
-                                    Text(order.orderedItems.first.productName),
-                                trailing: const Icon(Icons.arrow_forward_ios),
-                              ),
-                            );
-                          }),
-                    ),
+      child:
+state.isLoading
+        ? const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: CircularProgressIndicator(),
             ),
-    );
+          )
+        : state.allOrders.isEmpty
+            ? const Text('No orders')
+            : ListView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                primary: false,
+                itemCount: state.allOrders.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final order = state.allOrders[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.all(14.0),
+                      onTap: () {
+                        context
+                            .read<AdminHomeRouterCubit>()
+                            .navigateTo(const EditOrderPageState());
+                        context.read<EditOrderCubit>().getOrder(order);
+                      },
+                      tileColor: AppTheme.white,
+                      leading: ClipOval(child: _buildImage(order.orderedItems)),
+                      title: Text(
+                          '${order.client.firstName} ${order.client.secondName}'),
+                      subtitle: Text(order.orderedItems.first.productName),
+                      trailing: const Icon(Icons.arrow_forward_ios),
+                    ),
+                  );
+                })
+    ) ;
   }
 }
