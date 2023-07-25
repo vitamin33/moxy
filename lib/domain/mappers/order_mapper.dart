@@ -48,11 +48,11 @@ class OrderMapper {
       final firstImage =
           product.images.isEmpty ? null : product.images.first.imagePath;
       return OrderedItem(
-        productId: product.id!,
-        productName: product.name,
-        dimensions: product.dimensions,
-        imageUrl: firstImage,
-      );
+          productId: product.id!,
+          productName: product.name,
+          dimensions: product.dimensions,
+          imageUrl: firstImage,
+          productPrice: product.salePrice.toString());
     }).toList();
   }
 

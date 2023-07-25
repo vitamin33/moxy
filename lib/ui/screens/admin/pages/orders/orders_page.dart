@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 
+import '../../../../../constant/order_status.dart';
 import '../../../../../services/navigation/admin_home_router_cubit.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../../domain/admin/all_orders/all_orders_cubit.dart';
@@ -214,7 +216,6 @@ class _OrdersPageState extends State<OrdersPage> {
     return chipsList;
   }
 
-
   Widget _buildTopAppBar(
       AllOrdersCubit cubit, AllOrdersState state, bool showTopBar) {
     return SliverAppBar(
@@ -251,45 +252,90 @@ class _OrdersPageState extends State<OrdersPage> {
 
   Widget _buildOrdersListWidget(AllOrdersCubit cubit, AllOrdersState state) {
     return SliverToBoxAdapter(
-      child:
-state.isLoading
-        ? const Center(
-            child: Padding(
-              padding: EdgeInsets.all(20),
-              child: CircularProgressIndicator(),
-            ),
-          )
-        : state.allOrders.isEmpty
-            ? const Text('No orders')
-            : ListView.builder(
-                controller: _scrollController,
-                shrinkWrap: true,
-                primary: false,
-                itemCount: state.allOrders.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final order = state.allOrders[index];
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListTile(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      contentPadding: const EdgeInsets.all(14.0),
-                      onTap: () {
-                        context
-                            .read<AdminHomeRouterCubit>()
-                            .navigateTo(const EditOrderPageState());
-                        context.read<EditOrderCubit>().getOrder(order);
-                      },
-                      tileColor: AppTheme.white,
-                      leading: ClipOval(child: _buildImage(order.orderedItems)),
-                      title: Text(
-                          '${order.client.firstName} ${order.client.secondName}'),
-                      subtitle: Text(order.orderedItems.first.productName),
-                      trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                  );
-                })
-    ) ;
+        child: state.isLoading
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(20),
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : state.allOrders.isEmpty
+                ? const Text('No orders')
+                : ListView.builder(
+                    controller: _scrollController,
+                    shrinkWrap: true,
+                    primary: false,
+                    itemCount: state.allOrders.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final order = state.allOrders[index];
+                      final statusSvg = allStatusOrder.firstWhere(
+                          (element) => element.statusTitle == order.status);
+                      final orderPrice = order.orderedItems
+                          .map((item) => int.parse(item.productPrice))
+                          .reduce((total, price) => total + price)
+                          .toString();
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListTile(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          contentPadding: const EdgeInsets.all(14.0),
+                          onTap: () {
+                            context
+                                .read<AdminHomeRouterCubit>()
+                                .navigateTo(const EditOrderPageState());
+                            context.read<EditOrderCubit>().getOrder(order);
+                          },
+                          tileColor: AppTheme.white,
+                          leading: Stack(children: [
+                            ClipOval(child: _buildImage(order.orderedItems)),
+                            Positioned(
+                              top: 22.0,
+                              left: 25.0,
+                              child: CircleAvatar(
+                                radius: 14,
+                                backgroundColor: AppTheme.white,
+                                child: CircleAvatar(
+                                  backgroundColor: AppTheme.pinkDark,
+                                  radius: 12,
+                                  child: SvgPicture.asset(
+                                    statusSvg.iconPath,
+                                    width: 20,
+                                    color: AppTheme.white,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ]),
+                          title: Text(
+                            '${order.client.firstName} ${order.client.secondName}',
+                            style: const TextStyle(
+                                fontSize: 15, fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  order.orderedItems
+                                      .map((item) => item.productName)
+                                      .join(', '),
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                  )),
+                              Text(
+                                '${orderPrice} грн',
+                                style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.black),
+                              ),
+                            ],
+                          ),
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                        ),
+                      );
+                    }));
   }
 }

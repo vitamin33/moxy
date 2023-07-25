@@ -93,6 +93,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     final productName = product.name;
 
     final selectedProduct = OrderedItem(
+      productPrice: product.salePrice.toString(),
         dimensions: product.dimensions,
         productId: product.id!,
         productName: product.name);

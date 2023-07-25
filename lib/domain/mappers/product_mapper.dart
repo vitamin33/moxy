@@ -115,6 +115,7 @@ class ProductMapper {
       List<NetworkOrderedItemResponse> networkOrderedItems) {
     return networkOrderedItems.map((p) {
       return OrderedItem(
+        productPrice: p.productPrice.toString(),
         productId: p.product,
         productName: p.productName,
         imageUrl: p.imageUrl,
