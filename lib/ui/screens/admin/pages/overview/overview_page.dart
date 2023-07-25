@@ -17,57 +17,61 @@ class OverviewPage extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         return Scaffold(
-          body: Material(
-              color: AppTheme.pink,
-              child: SingleChildScrollView(
-                child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Column(children: [
-                      AnimatedOpacity(
-                        opacity: state.selectedDate != null ? 1 : 0,
-                        duration:const Duration(seconds: 1),
-                        child: AnimatedSize(
-                          duration: const Duration(seconds: 1),
-                          curve: Curves.easeInOut,
-                          child: state.selectedDate != null
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Date Range: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              color: AppTheme.gray),
-                                        ),
-                                      )
-                                    ])
-                              : Container(),
-                        ),
-                      ),
-                      totalBalance(state.totalBalance),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      totalProduct(state.totalProduct),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      earning(context),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Chart()
-                    ])),
-              )),
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            color: AppTheme.pink,
+            child: SingleChildScrollView(
+              child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: state.isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(children: [
+                          AnimatedOpacity(
+                            opacity: state.selectedDate != null ? 1 : 0,
+                            duration: const Duration(seconds: 1),
+                            child: AnimatedSize(
+                              duration: const Duration(seconds: 1),
+                              curve: Curves.easeInOut,
+                              child: state.selectedDate != null
+                                  ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              'Date Range: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                                              style: const TextStyle(
+                                                  fontSize: 18,
+                                                  color: AppTheme.gray),
+                                            ),
+                                          )
+                                        ])
+                                  : Container(),
+                            ),
+                          ),
+                          totalSale(state.totalSale),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          totalCost(state.totalCost),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          totalOrdersCount(state.totalOrders),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Chart()
+                        ])),
+            ),
+          ),
         );
       },
     );
   }
 }
 
-totalBalance(totalBalance) {
+totalSale(totalSale) {
   return Container(
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -96,7 +100,7 @@ totalBalance(totalBalance) {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Total Balance',
+              const Text('Total Sale',
                   style: TextStyle(
                       fontSize: 16,
                       color: AppTheme.gray,
@@ -105,7 +109,7 @@ totalBalance(totalBalance) {
                 height: 5,
               ),
               Text(
-                '\$ ${totalBalance.toString()}',
+                '\$ ${totalSale}',
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
@@ -117,7 +121,57 @@ totalBalance(totalBalance) {
   );
 }
 
-totalProduct(totalProduct) {
+totalCost(totalCost) {
+  return Container(
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      color: AppTheme.white,
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              color: AppTheme.black,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: SvgPicture.asset(
+                IconPath.cashPayment,
+                color: Colors.white,
+                width: 30,
+              ),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Total Cost ',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: AppTheme.gray,
+                      fontWeight: FontWeight.w400)),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                '\$ ${totalCost}',
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+totalOrdersCount(totalOrdersCount) {
   return Container(
     decoration: const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -146,7 +200,7 @@ totalProduct(totalProduct) {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Total Product',
+              const Text('Total Orders Count',
                   style: TextStyle(
                       fontSize: 16,
                       color: AppTheme.gray,
@@ -155,7 +209,7 @@ totalProduct(totalProduct) {
                 height: 5,
               ),
               Text(
-                '${totalProduct}',
+                totalOrdersCount.toString(),
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
@@ -163,120 +217,6 @@ totalProduct(totalProduct) {
           ),
         ],
       ),
-    ),
-  );
-}
-
-earning(context) {
-  return Container(
-    child: Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Expanded(
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              color: AppTheme.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      CircleAvatar(
-                        backgroundColor: AppTheme.green,
-                        radius: 5,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        'Earning',
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                            color: AppTheme.gray),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '\$ 23.343',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'from last mo',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400,
-                        color: AppTheme.gray),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-              color: AppTheme.white,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: const [
-                      CircleAvatar(
-                        backgroundColor: AppTheme.darkPink,
-                        radius: 5,
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        'Earning',
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                            color: AppTheme.gray),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '\$ 23.343',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'from last weak',
-                    style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w400,
-                        color: AppTheme.gray),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     ),
   );
 }

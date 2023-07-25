@@ -94,13 +94,14 @@ Map<String, dynamic> _$NetworkClientToJson(NetworkClient instance) =>
 NetworkOrderedItemResponse _$NetworkOrderedItemResponseFromJson(
         Map<String, dynamic> json) =>
     NetworkOrderedItemResponse(
-        json['product'] as String,
-        json['productName'] as String,
-        (json['dimensions'] as List<dynamic>)
-            .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        json['imageUrl'] as String,
-        json['productPrice'] as int);
+      json['product'] as String,
+      json['productName'] as String,
+      (json['dimensions'] as List<dynamic>)
+          .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      json['imageUrl'] as String,
+      json['productPrice'] as int?,
+    );
 
 Map<String, dynamic> _$NetworkOrderedItemResponseToJson(
         NetworkOrderedItemResponse instance) =>
@@ -108,5 +109,6 @@ Map<String, dynamic> _$NetworkOrderedItemResponseToJson(
       'product': instance.product,
       'productName': instance.productName,
       'imageUrl': instance.imageUrl,
+      'productPrice': instance.productPrice,
       'dimensions': instance.dimensions,
     };

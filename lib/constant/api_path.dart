@@ -8,3 +8,4 @@ const String createOrdersUrl = '/orders/create';
 const String editOrdersUrl = '/orders/edit';
 const String createGuestUserUrl = '/users/create-guest';
 const String allUsersUrl = '/users';
+const String ordersDashboard = '/dashboard/orders';

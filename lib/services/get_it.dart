@@ -5,6 +5,7 @@ import 'package:moxy/data/http/nova_poshta_client.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
+import 'package:moxy/data/repositories/overview_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
@@ -40,6 +41,7 @@ class GetItService {
     getIt.registerSingleton(NovaPoshtaClient());
     getIt.registerSingleton(CityMapper());
     getIt.registerSingleton(WarehouseMapper());
+    getIt.registerSingleton(OverviewRepository());
   }
 }
 
