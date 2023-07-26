@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/data/models/response/dashboard_response.dart';
 import 'package:moxy/domain/copyable.dart';
 
 class DashboardState implements Copyable<DashboardState> {
@@ -6,6 +7,9 @@ class DashboardState implements Copyable<DashboardState> {
   final int totalSale;
   final int totalCost;
   final int totalOrders;
+  final List<TotalByTimeFrame> ordersFromTimeFrame;
+  final List<TotalByTimeFrame> saleFromTimeFrame;
+  final List<TotalByTimeFrame> costFromTimeFrame;
   final String errorMessage;
   final DateTimeRange? selectedDate;
 
@@ -14,6 +18,9 @@ class DashboardState implements Copyable<DashboardState> {
       required this.totalSale,
       required this.totalCost,
       required this.totalOrders,
+      required this.ordersFromTimeFrame,
+      required this.saleFromTimeFrame,
+      required this.costFromTimeFrame,
       required this.errorMessage,
       this.selectedDate});
 
@@ -23,6 +30,9 @@ class DashboardState implements Copyable<DashboardState> {
         totalCost: 0,
         totalOrders: 0,
         selectedDate: null,
+        ordersFromTimeFrame: [],
+        saleFromTimeFrame: [],
+        costFromTimeFrame: [],
         isLoading: false,
         errorMessage: '');
   }
@@ -34,12 +44,18 @@ class DashboardState implements Copyable<DashboardState> {
       int? totalSale,
       int? totalCost,
       int? totalOrders,
+      List<TotalByTimeFrame>? ordersFromTimeFrame,
+      List<TotalByTimeFrame>? saleFromTimeFrame,
+      List<TotalByTimeFrame>? costFromTimeFrame,
       DateTimeRange? selectedDate}) {
     return DashboardState(
         totalSale: totalSale ?? this.totalSale,
         isLoading: isLoading ?? this.isLoading,
         totalCost: totalCost ?? this.totalCost,
         totalOrders: totalOrders ?? this.totalOrders,
+        ordersFromTimeFrame: ordersFromTimeFrame ?? this.ordersFromTimeFrame,
+        saleFromTimeFrame: saleFromTimeFrame ?? this.saleFromTimeFrame,
+        costFromTimeFrame: costFromTimeFrame ?? this.costFromTimeFrame,
         selectedDate: selectedDate ?? this.selectedDate,
         errorMessage: errorMessage ?? this.errorMessage);
   }

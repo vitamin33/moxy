@@ -61,7 +61,9 @@ class OverviewPage extends StatelessWidget {
                           const SizedBox(
                             height: 10,
                           ),
-                          Chart()
+                          Chart(
+                              saleFromTimeFrame: state.saleFromTimeFrame,
+                              costFromTimeFrame: state.costFromTimeFrame)
                         ])),
             ),
           ),

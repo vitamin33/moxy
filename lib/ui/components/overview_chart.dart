@@ -2,22 +2,60 @@ import 'package:flutter/material.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../data/models/response/dashboard_response.dart';
+
 class Chart extends StatefulWidget {
-  // ignore: prefer_const_constructors_in_immutables
-  Chart({Key? key}) : super(key: key);
+  final List<TotalByTimeFrame> saleFromTimeFrame;
+  final List<TotalByTimeFrame> costFromTimeFrame;
+
+  const Chart(
+      {super.key,
+      required this.saleFromTimeFrame,
+      required this.costFromTimeFrame});
 
   @override
+  // ignore: library_private_types_in_public_api
   _ChartState createState() => _ChartState();
 }
 
 class _ChartState extends State<Chart> {
-  final List<ChartData> dataSourceList = [
-    ChartData('Jan', 1000, 800),
-    ChartData('Feb', 1234, 1100),
-    ChartData('Mar', 2342, 2000),
-    ChartData('Apr', 3453, 3000),
-    ChartData('May', 2321, 2000),
-  ];
+  // OR This
+
+  // final List<ChartData> dataSourceList = [
+  //   ChartData('Jan', 1000, 800),
+  //   ChartData('Feb', 1234, 1100),
+  //   ChartData('Mar', 2342, 2000),
+  //   ChartData('Apr', 3453, 3000),
+  //   ChartData('May', 2321, 2000),
+  // ];
+
+  ///////////////////////////////////////
+
+  // OR THIS
+  List<ChartData> dataSourceList = [];
+  @override
+  void initState() {
+    super.initState();
+    updateDataSourceList();
+  }
+
+  void updateDataSourceList() {
+    dataSourceList.clear();
+    for (int i = 0; i < widget.saleFromTimeFrame.length; i++) {
+      String date = widget.saleFromTimeFrame[i].date.toString().split(' ')[0];
+      double saleValue = widget.saleFromTimeFrame[i].value.toDouble();
+      double costValue = widget.costFromTimeFrame[i].value.toDouble();
+
+      dataSourceList.add(
+        ChartData(
+          date,
+          saleValue,
+          costValue,
+        ),
+      );
+    }
+  }
+
   int? selectedColumnIndex1;
   int? selectedColumnIndex2;
   @override
