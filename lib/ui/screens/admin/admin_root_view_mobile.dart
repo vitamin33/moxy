@@ -201,11 +201,6 @@ class AdminRootViewMobile extends StatelessWidget {
       case ProductsPageState:
         return [
           AppBarIcon(
-              icon: IconPath.plus,
-              onPress: (ctx) {
-                moxyPrint('plus');
-              }),
-          AppBarIcon(
               icon: IconPath.filter,
               onPress: (ctx) {
                 moxyPrint('filter');

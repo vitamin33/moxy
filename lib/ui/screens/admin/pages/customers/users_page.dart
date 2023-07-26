@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../../domain/admin/all_users/all_users_cubit.dart';
@@ -25,6 +26,7 @@ class UsersPage extends StatelessWidget {
       child:
           BlocBuilder<AllUsersCubit, AllUsersState>(builder: (context, state) {
         return Scaffold(
+          backgroundColor: AppTheme.pink,
           body: Column(
             children: [
               Expanded(
@@ -39,14 +41,27 @@ class UsersPage extends StatelessWidget {
                               itemCount: state.allUsers.length,
                               itemBuilder: (BuildContext context, int index) {
                                 final user = state.allUsers[index];
-                                return Card(
-                                  margin: const EdgeInsets.all(3.0),
-                                  child: ListTile(
-                                    title: Text(
-                                        '${user.firstName} ${user.secondName}'),
-                                    subtitle: Text(user.mobileNumber),
-                                    trailing:
-                                        const Icon(Icons.arrow_forward_ios),
+                                return Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                        color: AppTheme.white,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8))),
+                                    child: ListTile(
+                                      title: Text(
+                                        '${user.firstName} ${user.secondName}',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      subtitle: Text(user.mobileNumber,
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                          )),
+                                      trailing:
+                                          const Icon(Icons.arrow_forward_ios),
+                                    ),
                                   ),
                                 );
                               }),

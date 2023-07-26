@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -19,19 +20,6 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
-  // OR This
-
-  // final List<ChartData> dataSourceList = [
-  //   ChartData('Jan', 1000, 800),
-  //   ChartData('Feb', 1234, 1100),
-  //   ChartData('Mar', 2342, 2000),
-  //   ChartData('Apr', 3453, 3000),
-  //   ChartData('May', 2321, 2000),
-  // ];
-
-  ///////////////////////////////////////
-
-  // OR THIS
   List<ChartData> dataSourceList = [];
   @override
   void initState() {
@@ -42,13 +30,14 @@ class _ChartState extends State<Chart> {
   void updateDataSourceList() {
     dataSourceList.clear();
     for (int i = 0; i < widget.saleFromTimeFrame.length; i++) {
-      String date = widget.saleFromTimeFrame[i].date.toString().split(' ')[0];
+      DateTime dateTime =
+          DateTime.parse(widget.saleFromTimeFrame[i].date.toString());
+      String formattedDate = DateFormat("dd/MM").format(dateTime);
       double saleValue = widget.saleFromTimeFrame[i].value.toDouble();
       double costValue = widget.costFromTimeFrame[i].value.toDouble();
-
       dataSourceList.add(
         ChartData(
-          date,
+          formattedDate,
           saleValue,
           costValue,
         ),
