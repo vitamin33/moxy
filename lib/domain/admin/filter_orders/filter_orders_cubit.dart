@@ -60,6 +60,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
         context: context,
         firstDate: DateTime(2022, 1, 1),
         lastDate: DateTime(2030, 12, 31),
+        initialDateRange: state.selectedDate,
         currentDate: DateTime.now(),
         saveText: 'Done',
         builder: (context, child) {

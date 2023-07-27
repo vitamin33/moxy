@@ -6,6 +6,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/admin/dashboard/dashboard_cubit.dart';
 import '../../../../../domain/admin/dashboard/dashboard_state.dart';
+import '../../../../components/orders_chart.dart';
 import '../../../../components/overview_chart.dart';
 
 class OverviewPage extends StatelessWidget {
@@ -63,7 +64,12 @@ class OverviewPage extends StatelessWidget {
                           ),
                           Chart(
                               saleFromTimeFrame: state.saleFromTimeFrame,
-                              costFromTimeFrame: state.costFromTimeFrame)
+                              costFromTimeFrame: state.costFromTimeFrame),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          OrdersChart(
+                              ordersFromTimeFrame: state.ordersFromTimeFrame)
                         ])),
             ),
           ),

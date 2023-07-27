@@ -292,7 +292,7 @@ class _OrdersPageState extends State<OrdersPage> {
                             ClipOval(child: _buildImage(order.orderedItems)),
                             Positioned(
                               top: 22.0,
-                              left: 25.0,
+                              left: 22.0,
                               child: CircleAvatar(
                                 radius: 14,
                                 backgroundColor: AppTheme.white,

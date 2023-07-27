@@ -67,6 +67,8 @@ class _ChartState extends State<Chart> {
                 ),
               ),
               SfCartesianChart(
+                legend:
+                    Legend(isVisible: true, position: LegendPosition.bottom),
                 primaryYAxis: NumericAxis(
                   majorGridLines: const MajorGridLines(
                     width: 1,
@@ -101,6 +103,7 @@ class _ChartState extends State<Chart> {
                           selectedColumnIndex2 = null;
                         });
                       },
+                      name: 'Total Cost ',
                       dataSource: dataSourceList,
                       markerSettings: MarkerSettings(
                           isVisible:
@@ -122,6 +125,7 @@ class _ChartState extends State<Chart> {
                           selectedColumnIndex1 = null;
                         });
                       },
+                      name: 'Total Sale ',
                       dataSource: dataSourceList,
                       markerSettings: MarkerSettings(
                           isVisible:

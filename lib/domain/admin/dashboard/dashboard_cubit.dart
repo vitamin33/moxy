@@ -14,12 +14,10 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   DashboardCubit() : super(DashboardState.defaultDashboardState()) {
     getDashboard(
-        fromDate: state.selectedDate?.start,
-        toDate: state.selectedDate?.end);
+        fromDate: state.selectedDate?.start, toDate: state.selectedDate?.end);
   }
 
-  void getDashboard(
-      {DateTime? fromDate, DateTime? toDate}) async {
+  void getDashboard({DateTime? fromDate, DateTime? toDate}) async {
     try {
       emit(state.copyWith(isLoading: true));
       final result = await overviewRepository.getOverview(fromDate, toDate);
@@ -45,6 +43,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       context: context,
       firstDate: DateTime(2022, 1, 1),
       lastDate: DateTime(2030, 12, 31),
+      initialDateRange: state.selectedDate,
       currentDate: DateTime.now(),
       saveText: 'Confirm',
       builder: (context, child) {
@@ -64,7 +63,9 @@ class DashboardCubit extends Cubit<DashboardState> {
     if (result != null) {
       emit(state.copyWith(selectedDate: result));
       getDashboard(
-          fromDate: result.start, toDate: result.end, );
+        fromDate: result.start,
+        toDate: result.end,
+      );
     }
   }
 }
