@@ -30,9 +30,15 @@ class _ChartState extends State<Chart> {
   void updateDataSourceList() {
     dataSourceList.clear();
     for (int i = 0; i < widget.saleFromTimeFrame.length; i++) {
-      DateTime dateTime =
-          DateTime.parse(widget.saleFromTimeFrame[i].date.toString());
-      String formattedDate = DateFormat("dd/MM").format(dateTime);
+      String formattedDate = '';
+      //Chek if the key is the date
+      if (widget.saleFromTimeFrame[i].key.length > 4) {
+        DateTime dateTime =
+            DateTime.parse(widget.saleFromTimeFrame[i].key.toString());
+        formattedDate = DateFormat("dd/MM").format(dateTime);
+      } else {
+        formattedDate = widget.saleFromTimeFrame[i].key;
+      }
       double saleValue = widget.saleFromTimeFrame[i].value.toDouble();
       double costValue = widget.costFromTimeFrame[i].value.toDouble();
       dataSourceList.add(

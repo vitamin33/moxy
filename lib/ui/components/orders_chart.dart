@@ -26,9 +26,15 @@ class _OrdersChartState extends State<OrdersChart> {
   void updateDataSourceList() {
     dataSourceList.clear();
     for (int i = 0; i < widget.ordersFromTimeFrame.length; i++) {
-      DateTime dateTime =
-          DateTime.parse(widget.ordersFromTimeFrame[i].date.toString());
-      String formattedDate = DateFormat("dd/MM").format(dateTime);
+      String formattedDate = '';
+      //Chek if the key is the date
+      if (widget.ordersFromTimeFrame[i].key.length > 4) {
+        DateTime dateTime =
+            DateTime.parse(widget.ordersFromTimeFrame[i].key.toString());
+        formattedDate = DateFormat("dd/MM").format(dateTime);
+      } else {
+        formattedDate = widget.ordersFromTimeFrame[i].key;
+      }
       double ordersValue = widget.ordersFromTimeFrame[i].value.toDouble();
       dataSourceList.add(
         OrdersChartData(
@@ -95,8 +101,8 @@ class _OrdersChartState extends State<OrdersChart> {
                       dataSource: dataSourceList,
                       markerSettings: const MarkerSettings(
                           isVisible: true,
-                          height: 28,
-                          width: 28,
+                          height: 12,
+                          width: 12,
                           color: AppTheme.black),
                       dataLabelSettings: const DataLabelSettings(
                           isVisible: true,
@@ -104,7 +110,7 @@ class _OrdersChartState extends State<OrdersChart> {
                           color: AppTheme.black),
                       xValueMapper: (OrdersChartData data, _) => data.x,
                       yValueMapper: (OrdersChartData data, _) => data.y,
-                      width: 0.4,
+                      width: 0.2,
                       spacing: 0.1,
                       borderRadius: const BorderRadius.vertical(
                           top: Radius.circular(12))),

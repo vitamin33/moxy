@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'dashboard_response.g.dart';
@@ -30,12 +28,18 @@ class NetworkDashboard {
 
 @JsonSerializable()
 class TotalByTimeFrame {
-  DateTime date;
+  DateTime fromDate;
+  DateTime toDate;
+  String key;
   int value;
 
-  TotalByTimeFrame({required this.date, required this.value});
+  TotalByTimeFrame(
+      {required this.fromDate,
+      required this.toDate,
+      required this.key,
+      required this.value});
   factory TotalByTimeFrame.fromJson(Map<String, dynamic> json) =>
-  _$TotalByTimeFrameFromJson(json);
+      _$TotalByTimeFrameFromJson(json);
 
   Map<String, dynamic> toJson() => _$TotalByTimeFrameToJson(this);
 }

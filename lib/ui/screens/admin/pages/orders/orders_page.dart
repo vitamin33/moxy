@@ -268,6 +268,10 @@ class _OrdersPageState extends State<OrdersPage> {
                     itemCount: state.allOrders.length,
                     itemBuilder: (BuildContext context, int index) {
                       final order = state.allOrders[index];
+                      DateTime dateTime =
+                          DateTime.parse(order.createdAt.toString());
+                      String orderDate =
+                          DateFormat("hh:mm  dd/MM").format(dateTime);
                       final statusSvg = allStatusOrder.firstWhere(
                           (element) => element.statusTitle == order.status);
                       final orderPrice = order.orderedItems
@@ -277,64 +281,66 @@ class _OrdersPageState extends State<OrdersPage> {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding: const EdgeInsets.all(14.0),
-                          onTap: () {
-                            context
-                                .read<AdminHomeRouterCubit>()
-                                .navigateTo(const EditOrderPageState());
-                            context.read<EditOrderCubit>().getOrder(order);
-                          },
-                          tileColor: AppTheme.white,
-                          leading: Stack(children: [
-                            ClipOval(child: _buildImage(order.orderedItems)),
-                            Positioned(
-                              top: 22.0,
-                              left: 22.0,
-                              child: CircleAvatar(
-                                radius: 14,
-                                backgroundColor: AppTheme.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            contentPadding: const EdgeInsets.all(14.0),
+                            onTap: () {
+                              context
+                                  .read<AdminHomeRouterCubit>()
+                                  .navigateTo(const EditOrderPageState());
+                              context.read<EditOrderCubit>().getOrder(order);
+                            },
+                            tileColor: AppTheme.white,
+                            leading: Stack(children: [
+                              ClipOval(child: _buildImage(order.orderedItems)),
+                              Positioned(
+                                top: 22.0,
+                                left: 22.0,
                                 child: CircleAvatar(
-                                  backgroundColor: AppTheme.pinkDark,
-                                  radius: 12,
-                                  child: SvgPicture.asset(
-                                    statusSvg.iconPath,
-                                    width: 20,
-                                    color: AppTheme.white,
+                                  radius: 14,
+                                  backgroundColor: AppTheme.white,
+                                  child: CircleAvatar(
+                                    backgroundColor: AppTheme.pinkDark,
+                                    radius: 12,
+                                    child: SvgPicture.asset(
+                                      statusSvg.iconPath,
+                                      width: 20,
+                                      color: AppTheme.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
-                          ]),
-                          title: Text(
-                            '${order.client.firstName} ${order.client.secondName}',
-                            style: const TextStyle(
-                                fontSize: 15, fontWeight: FontWeight.w600),
-                          ),
-                          subtitle: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                  order.orderedItems
-                                      .map((item) => item.productName)
-                                      .join(', '),
+                              )
+                            ]),
+                            title: Text(
+                              '${order.client.firstName} ${order.client.secondName}',
+                              style: const TextStyle(
+                                  fontSize: 15, fontWeight: FontWeight.w600),
+                            ),
+                            subtitle: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    order.orderedItems
+                                        .map((item) => item.productName)
+                                        .join(', '),
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                    )),
+                                Text(
+                                  '${orderPrice} грн',
                                   style: const TextStyle(
-                                    fontSize: 13,
-                                  )),
-                              Text(
-                                '${orderPrice} грн',
-                                style: const TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w600,
-                                    color: AppTheme.black),
-                              ),
-                            ],
-                          ),
-                          trailing: const Icon(Icons.arrow_forward_ios),
-                        ),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w600,
+                                      color: AppTheme.black),
+                                ),
+                              ],
+                            ),
+                            trailing: Text(
+                              orderDate,
+                              style: const TextStyle(fontSize: 15),
+                            )),
                       );
                     }));
   }

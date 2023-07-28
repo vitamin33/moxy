@@ -36,12 +36,16 @@ Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
 
 TotalByTimeFrame _$TotalByTimeFrameFromJson(Map<String, dynamic> json) =>
     TotalByTimeFrame(
-      date: DateTime.parse(json['date'] as String),
+      fromDate: DateTime.parse(json['fromDate'] as String),
+      toDate: DateTime.parse(json['toDate'] as String),
+      key: json['key'],
       value: json['value'] as int,
     );
 
 Map<String, dynamic> _$TotalByTimeFrameToJson(TotalByTimeFrame instance) =>
     <String, dynamic>{
-      'date': instance.date.toIso8601String(),
+      'fromDate': instance.fromDate.toIso8601String(),
+      'toDate': instance.toDate.toIso8601String(),
+      'key': instance.key,
       'value': instance.value,
     };
