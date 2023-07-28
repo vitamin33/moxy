@@ -94,29 +94,36 @@ class Delivery extends StatelessWidget {
                     ),
                   ),
                 ),
-                state.deliveryType.index == 0
-                    ? Padding(
-                        padding: const EdgeInsets.all(AppTheme.cardPadding),
-                        child: Column(
-                          children: [
-                            SearchCityDropdown(
-                                selectedCity: state.selectedCity,
-                                selectedWarehouse: state.selectedWarehouse,
-                                onChanged: (city) {
-                                  cubit.selectCity(city);
-                                }),
-                            SizedBox(height: 20),
-                            SearchWarehouseDropdown(
+                AnimatedOpacity(
+                  curve: Curves.easeOut,
+                  opacity: state.deliveryType.index == 0 ? 1 : 0,
+                  duration: const Duration(milliseconds: 500),
+                  child: AnimatedSize(
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeOut,
+                    child: Padding(
+                      padding: const EdgeInsets.all(AppTheme.cardPadding),
+                      child: Column(
+                        children: [
+                          SearchCityDropdown(
                               selectedCity: state.selectedCity,
                               selectedWarehouse: state.selectedWarehouse,
-                              onChanged: (warehouse) {
-                                cubit.selectWarehouse(warehouse);
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    : Container()
+                              onChanged: (city) {
+                                cubit.selectCity(city);
+                              }),
+                          SizedBox(height: 20),
+                          SearchWarehouseDropdown(
+                            selectedCity: state.selectedCity,
+                            selectedWarehouse: state.selectedWarehouse,
+                            onChanged: (warehouse) {
+                              cubit.selectWarehouse(warehouse);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ));

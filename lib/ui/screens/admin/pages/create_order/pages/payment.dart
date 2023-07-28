@@ -105,22 +105,29 @@ class Payment extends StatelessWidget {
                 ),
               ),
             ),
-            state.paymentType.name == 'cashAdvance'
-                ? Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: CustomTextField(
-                      title: 'Prepayment',
-                      controller: cubit.prePaymentController,
-                      onChanged: cubit.prePaymentChanged,
-                      maxLines: 1,
-                      state: state.errors.phoneNumber,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(16),
-                      ],
-                    ),
-                  )
-                : Container()
+            AnimatedOpacity(
+              curve: Curves.easeOut,
+              opacity: state.paymentType.name == 'cashAdvance' ? 1 : 0,
+              duration: const Duration(milliseconds: 500),
+              child: AnimatedSize(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeOut,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: CustomTextField(
+                    title: 'Prepayment',
+                    controller: cubit.prePaymentController,
+                    onChanged: cubit.prePaymentChanged,
+                    maxLines: 1,
+                    state: state.errors.phoneNumber,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       );

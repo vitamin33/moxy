@@ -343,6 +343,9 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                               height: 50,
                               child: TextField(
                                 controller: cubit.paymentController,
+                                onChanged: (value) {
+                                  cubit.cashAdvancePrepayment(value);
+                                },
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                 ),

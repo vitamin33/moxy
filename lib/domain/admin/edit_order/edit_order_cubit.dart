@@ -21,7 +21,6 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   final productRepository = locate<ProductRepository>();
   final orderMapper = locate<OrderMapper>();
   late TextEditingController paymentController;
-  late TextEditingController dateController;
 
   EditOrderCubit()
       : super(EditOrderState(
@@ -39,12 +38,11 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
             selectedWarehouse: Warehouse.defaultWarehouse(),
             client: Client.defaultClient(),
             status: 'New',
-            prepayment: 150,
+            prepayment: 0,
             createdAt: '',
             updatedAt: '')) {
-    paymentController =
-        TextEditingController(text: state.prepayment.toString());
-    dateController = TextEditingController(text: state.createdAt);
+    // paymentController =
+    //     TextEditingController(text: state.prepayment.toString());
   }
 
   final TextEditingController nameEditController = TextEditingController();
@@ -101,6 +99,8 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
       createdAt: formattedDateTime(order.createdAt),
       updatedAt: order.updatedAt,
     ));
+    paymentController =
+        TextEditingController(text: state.prepayment.toString());
   }
 
   String formattedDateTime(date) {
@@ -116,6 +116,16 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
 
   void changePayment(updatePayment) {
     emit(state.copyWith(paymentType: updatePayment));
+    if (updatePayment == PaymentType.fullPayment) {
+      emit(state.copyWith(prepayment: 0));
+    }
+  }
+
+  void cashAdvancePrepayment(value) {
+    if (value != '') {
+      final updatePrepayment = int.parse(value);
+      emit(state.copyWith(prepayment: updatePrepayment));
+    }
   }
 
   void changeDelivery(updateDelivery) {
@@ -161,6 +171,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
 
   void clearState() {
     emit(EditOrderState.defaultEditOrderState());
+    paymentController.clear();
   }
 
   void editSelectedProduct() {
