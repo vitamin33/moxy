@@ -240,12 +240,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   //  EDIT FUNCTION
   void getProductById(id) async {
-    emit(state.copyWith(editProductId: id));
+    emit(state.copyWith(editProductId: id, isLoading: true));
     final productById = await productRepository.getProductById(id);
+    emit(state.copyWith(isLoading: true));
     productById.when((success) {
       final product = productMapper.mapToProduct(success);
       final updatedAllDimens = checkSelectedColors(product.dimensions);
-      emit(state.copyWith(product: product, allDimensions: updatedAllDimens));
+      emit(state.copyWith(
+          product: product, allDimensions: updatedAllDimens, isLoading: false));
     }, (error) {
       moxyPrint(error);
     });

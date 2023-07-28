@@ -20,6 +20,7 @@ import '../models/request/login_request.dart';
 import '../models/request/create_product_request.dart';
 import '../models/request/user_request.dart';
 import '../models/response/all_orders_response.dart';
+import '../models/response/dashboard_response.dart';
 import '../models/response/login_response.dart';
 
 class DioClient {
@@ -40,7 +41,8 @@ class DioClient {
 
     // Set default configs
     dio.options.baseUrl = baseUrl;
-    dio.options.connectTimeout = Duration(seconds: 10) ; //10s
+
+    dio.options.connectTimeout = Duration(seconds: 10); //10s
     dio.options.receiveTimeout = Duration(seconds: 10);
 
     // customization
@@ -315,5 +317,32 @@ class DioClient {
       message = e.response?.data['message'];
     }
     return Exception(message);
+  }
+
+// DASHBOARD
+
+  Future<NetworkDashboard> getDashboard(DateTime?  fromDate,DateTime?  toDate) async {
+    try {
+      final requestData;
+
+      if (toDate != null ||fromDate!=null) {
+        requestData = {
+          "fromDate": fromDate.toString(),
+          "toDate": toDate.toString()
+        };
+      } else {
+        requestData = {
+          "fromDate": "2023-05-22T12:00:00.000Z",
+          "toDate": "2023-07-21T12:00:00.000Z"
+        };
+      }
+
+      final response = await dio.post(ordersDashboard, data: requestData);
+      final data = response.data;
+      final result = NetworkDashboard.fromJson(data);
+      return result;
+    } catch (e) {
+      throw Exception('Failed to load product: $e');
+    }
   }
 }

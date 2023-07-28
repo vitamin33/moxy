@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
@@ -155,7 +156,7 @@ class AdminRootViewMobile extends StatelessWidget {
   String _mapStateToTitleText(AdminHomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
-        return 'Dashboard';
+        return 'Overview';
       case ProductsPageState:
         return 'Products';
       case UsersPageState:
@@ -190,14 +191,15 @@ class AdminRootViewMobile extends StatelessWidget {
   List<AppBarIcon> _mapStateToActionIcon(AdminHomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
-        return [];
-      case ProductsPageState:
         return [
           AppBarIcon(
-              icon: IconPath.plus,
+              icon: IconPath.dataRange,
               onPress: (ctx) {
-                moxyPrint('plus');
+                ctx.read<DashboardCubit>().selectDate(ctx);
               }),
+        ];
+      case ProductsPageState:
+        return [
           AppBarIcon(
               icon: IconPath.filter,
               onPress: (ctx) {

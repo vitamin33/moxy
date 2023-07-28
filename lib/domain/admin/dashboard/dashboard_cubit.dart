@@ -1,18 +1,71 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:moxy/data/repositories/auth_repository.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
+import '../../../data/repositories/overview_repository.dart';
 import '../../../services/get_it.dart';
 import '../../../services/navigation_service.dart';
 import 'dashboard_state.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
-  final authRepository = locate<AuthRepository>();
+  final overviewRepository = locate<OverviewRepository>();
   final navigationService = locate<NavigationService>();
 
-  late TextEditingController emailController;
-  late TextEditingController passwordController;
-  String walletConnectURI = '';
+  DashboardCubit() : super(DashboardState.defaultDashboardState()) {
+    getDashboard(
+        fromDate: state.selectedDate?.start, toDate: state.selectedDate?.end);
+  }
 
-  DashboardCubit() : super(DashboardState());
+  void getDashboard({DateTime? fromDate, DateTime? toDate}) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final result = await overviewRepository.getOverview(fromDate, toDate);
+      result.when((success) {
+        emit(state.copyWith(
+            totalSale: success.totalSaleValue,
+            totalCost: success.totalCostValue,
+            totalOrders: success.totalOrdersCount,
+            saleFromTimeFrame: success.totalSaleValueByTimeFrame,
+            costFromTimeFrame: success.totalCostValueByTimeFrame,
+            ordersFromTimeFrame: success.ordersCountByTimeFrame,
+            isLoading: false));
+      }, (error) {
+        emit(state.copyWith(errorMessage: 'Failed GetDashboard'));
+      });
+    } catch (e) {
+      moxyPrint(e);
+    }
+  }
+
+  Future<void> selectDate(context) async {
+    final DateTimeRange? result = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(2022, 1, 1),
+      lastDate: DateTime(2030, 12, 31),
+      initialDateRange: state.selectedDate,
+      currentDate: DateTime.now(),
+      saveText: 'Confirm',
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light(
+              primary: AppTheme.pinkDark,
+              onPrimary: AppTheme.white,
+              onSurface: AppTheme.greyDark,
+            ),
+            dialogBackgroundColor: AppTheme.darkPink,
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (result != null) {
+      emit(state.copyWith(selectedDate: result));
+      getDashboard(
+        fromDate: result.start,
+        toDate: result.end,
+      );
+    }
+  }
 }

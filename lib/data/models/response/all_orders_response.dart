@@ -95,9 +95,10 @@ class NetworkOrderedItemResponse {
   String product;
   String productName;
   String imageUrl;
+  int? productPrice;
   List<NetworkDimension> dimensions;
   NetworkOrderedItemResponse(
-      this.product, this.productName, this.dimensions, this.imageUrl);
+      this.product, this.productName, this.dimensions, this.imageUrl,this.productPrice );
 
   factory NetworkOrderedItemResponse.fromJson(Map<String, dynamic> json) =>
       _$NetworkOrderedItemResponseFromJson(json);

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
@@ -10,11 +9,13 @@ import 'package:moxy/utils/common.dart';
 
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
+import '../../models/order.dart';
 
 class AllOrdersCubit extends Cubit<AllOrdersState> {
   final filterRepository = locate<FilterRepository>();
   final ordersRepository = locate<OrderRepository>();
   final orderMapper = locate<OrderMapper>();
+  List<Order> allOrdersList = [];
 
   late final StreamSubscription _filterOrderSubscription;
 
@@ -42,6 +43,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       final result = await ordersRepository.getAllOrders();
       checkFilters();
       result.when((success) {
+        allOrdersList = success;
         emit(state.copyWith(allOrders: success, isLoading: false));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
@@ -59,6 +61,24 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       statusFilter: filters.status,
       dateRangeFilter: filters.dateRange,
     ));
+  }
+
+  void searchOrders(String searchTerm) {
+    final filteredList = allOrdersList.where((element) {
+      final client = element.client;
+      final orderedItems = element.orderedItems;
+      return client.firstName
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()) ||
+          client.secondName.toLowerCase().contains(searchTerm.toLowerCase()) ||
+          client.mobileNumber
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()) ||
+          orderedItems.any((item) => item.productName
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()));
+    }).toList();
+    emit(state.copyWith(allOrders: filteredList));
   }
 
   void clearDeliveryTypeFilter() async {

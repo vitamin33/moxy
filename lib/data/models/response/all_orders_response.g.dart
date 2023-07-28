@@ -100,6 +100,7 @@ NetworkOrderedItemResponse _$NetworkOrderedItemResponseFromJson(
           .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['imageUrl'] as String,
+      json['productPrice'] as int?,
     );
 
 Map<String, dynamic> _$NetworkOrderedItemResponseToJson(
@@ -108,5 +109,6 @@ Map<String, dynamic> _$NetworkOrderedItemResponseToJson(
       'product': instance.product,
       'productName': instance.productName,
       'imageUrl': instance.imageUrl,
+      'productPrice': instance.productPrice,
       'dimensions': instance.dimensions,
     };
