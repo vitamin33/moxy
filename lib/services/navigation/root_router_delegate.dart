@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
-import 'package:moxy/ui/screens/admin/admin_root_view_mobile.dart';
+import 'package:moxy/ui/screens/admin/admin_root_view.dart';
+import 'package:moxy/ui/screens/client/root_view.dart';
 
 import 'root_router_cubit.dart';
 
@@ -11,12 +12,14 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
       GlobalKey<NavigatorState> navigatorKey, RootRouterCubit routerCubit)
       : _navigatorKey = navigatorKey,
         _routerCubit = routerCubit;
+
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
   @override
   Widget build(BuildContext context) => Navigator(
         key: navigatorKey,
         pages: List.from([
-          _materialPage(valueKey: "auth", child: const AuthenticationView()),
+          if (_routerCubit.state is AuthPageState)
+            _materialPage(valueKey: "auth", child: const AuthenticationView()),
           ..._extraPages,
         ]),
         onPopPage: _onPopPageParser,
@@ -46,7 +49,7 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
       return [
         _materialPage(
           valueKey: "admin_main",
-          child: AdminRootViewMobile(),
+          child: AdminRootView(),
         ),
       ];
     }
@@ -56,8 +59,7 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
       return [
         _materialPage(
           valueKey: "client_main",
-          // TODO this should be replaced with client flow widget
-          child: AdminRootViewMobile(),
+          child: const RootView(),
         ),
       ];
     }

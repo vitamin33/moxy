@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/domain/roles.dart';
 import 'package:moxy/services/navigation/root_router_cubit.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/constant/icon_path.dart';
@@ -25,7 +26,12 @@ class AuthenticationView extends StatelessWidget {
           showFailureSnackbar(context, 'Unable to login. Please try again.');
           cubit.clearState();
         } else if (state.state is LoginWithCredsSuccess) {
-          rootNavCubit.goToAdminFlow();
+          final role = (state.state as LoginWithCredsSuccess).role;
+          if (role == Role.admin || role == Role.manager) {
+            rootNavCubit.goToAdminFlow();
+          } else {
+            rootNavCubit.goToClientFlow();
+          }
           cubit.clearState();
         } else if (state.state is Logout) {
           cubit.clearState();
