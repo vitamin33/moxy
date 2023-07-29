@@ -12,6 +12,7 @@ import '../../components/custom_button.dart';
 import '../../components/snackbar_widgets.dart';
 import '../../../domain/auth/login_cubit.dart';
 import '../../../domain/auth/login_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthenticationView extends StatelessWidget {
   const AuthenticationView({Key? key}) : super(key: key);
@@ -23,7 +24,8 @@ class AuthenticationView extends StatelessWidget {
       listener: (context, state) {
         final cubit = context.read<LoginCubit>();
         if (state.state is LoginFailed) {
-          showFailureSnackbar(context, 'Unable to login. Please try again.');
+          showFailureSnackbar(
+              context, AppLocalizations.of(context)!.failedLoginError);
           cubit.clearState();
         } else if (state.state is LoginWithCredsSuccess) {
           final role = (state.state as LoginWithCredsSuccess).role;
@@ -51,14 +53,15 @@ class AuthenticationView extends StatelessWidget {
                     width: 150,
                   ),
                   const SizedBox(height: AppTheme.cardPadding * 2),
-                  const Text(
-                    "Login",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                  Text(
+                    AppLocalizations.of(context)!.login,
+                    style: const TextStyle(
+                        fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: AppTheme.cardPadding),
                   CustomTextField(
                     borderColor: AppTheme.greyLigth,
-                    title: "Phone Number ",
+                    title: AppLocalizations.of(context)!.phoneNumber,
                     onChanged: (value) =>
                         context.read<LoginCubit>().mobileNumberChanged(value),
                     autofillHints: const [
@@ -68,7 +71,7 @@ class AuthenticationView extends StatelessWidget {
                   const SizedBox(height: AppTheme.elementSpacing),
                   CustomTextField(
                     borderColor: AppTheme.greyLigth,
-                    title: "Password",
+                    title: AppLocalizations.of(context)!.password,
                     onChanged: (value) =>
                         context.read<LoginCubit>().passwordChanged(value),
                     autofillHints: const [
@@ -80,7 +83,7 @@ class AuthenticationView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 6.0),
                     child: CustomButton(
                       buttonWidth: MediaQuery.of(context).size.width,
-                      title: "Login",
+                      title: AppLocalizations.of(context)!.login,
                       state: state.state is Loading
                           ? ButtonState.loading
                           : (state.mobileNumberIsValid
@@ -90,7 +93,7 @@ class AuthenticationView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: AppTheme.cardPadding * 6),
-                  downText()
+                  downText(context)
                 ],
               ),
             ),
@@ -100,13 +103,13 @@ class AuthenticationView extends StatelessWidget {
     );
   }
 
-  Widget downText() {
+  Widget downText(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
-          'No account yet?',
-          style: TextStyle(fontSize: 18),
+        Text(
+          AppLocalizations.of(context)!.noAccountQuestion,
+          style: const TextStyle(fontSize: 18),
         ),
         const SizedBox(
           width: 2,
@@ -115,9 +118,9 @@ class AuthenticationView extends StatelessWidget {
             onTap: () {
               moxyPrint('Sign up');
             },
-            child: const Text(
-              'Sign up',
-              style: TextStyle(
+            child: Text(
+              AppLocalizations.of(context)!.signup,
+              style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: AppTheme.pinkDark,

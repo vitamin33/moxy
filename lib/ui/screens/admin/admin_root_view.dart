@@ -12,6 +12,7 @@ import '../components/action_button.dart';
 import '../components/flutter_expandable_fab.dart';
 import '../components/navigation_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminRootView extends StatelessWidget {
   AdminRootView({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class AdminRootView extends StatelessWidget {
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            _mapStateToTitleText(state),
+            _mapStateToTitleText(context, state),
           ),
         ),
         leading: Builder(
@@ -153,39 +154,40 @@ class AdminRootView extends StatelessWidget {
         ),
       );
 
-  String _mapStateToTitleText(AdminHomeRouterState state) {
+  String _mapStateToTitleText(
+      BuildContext context, AdminHomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
-        return 'Overview';
+        return AppLocalizations.of(context)!.overview;
       case ProductsPageState:
-        return 'Products';
+        return AppLocalizations.of(context)!.products;
       case UsersPageState:
-        return 'Customers';
+        return AppLocalizations.of(context)!.customers;
       case OrdersPageState:
-        return 'Orders';
+        return AppLocalizations.of(context)!.orders;
       case CreateProductPageState:
         final createProductState = state as CreateProductPageState;
         if (createProductState.isEditMode ?? false) {
-          return 'Edit product';
+          return AppLocalizations.of(context)!.editProduct;
         } else {
-          return 'Create product';
+          return AppLocalizations.of(context)!.createProduct;
         }
       case CreateOrderPageState:
-        return 'Create order';
+        return AppLocalizations.of(context)!.createOrder;
       case EditOrderPageState:
-        return 'Edit Order';
+        return AppLocalizations.of(context)!.editOrder;
       case FilterOrderPageState:
-        return 'Filter';
+        return AppLocalizations.of(context)!.filter;
       case OrderProductListPageState:
-        return 'Order Product List';
+        return AppLocalizations.of(context)!.orderProductList;
       case CreateUserPageState:
-        return 'Create user';
+        return AppLocalizations.of(context)!.createUser;
       case TransactionsPageState:
         return 'Products';
       case FeedbacksPageState:
-        return 'Feedbacks';
+        return AppLocalizations.of(context)!.feedbacks;
     }
-    return 'Dashboard';
+    return AppLocalizations.of(context)!.overview;
   }
 
   List<AppBarIcon> _mapStateToActionIcon(AdminHomeRouterState state) {
