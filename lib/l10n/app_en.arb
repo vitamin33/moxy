@@ -1,0 +1,25 @@
+{
+  "overview": "Overview",
+  "@overview": {
+    "description": "Dashboard overview"
+  },
+  "customers": "Customers",
+  "orders": "Orders",
+  "create": "Create",
+  "createUser": "Create User",
+  "createOrder": "Create Order",
+  "createProduct": "Create Product",
+  "editProduct": "Edit Product",
+  "editOrder": "Edit Order",
+  "products": "Products",
+  "feedbacks": "Feedbacks",
+  "filter": "Filter",
+  "orderProductList": "Order Product List",
+  "logout": "Logout",
+  "failedLoginError": "Unable to login. Please try again later.",
+  "noAccountQuestion": "No account yet?",
+  "login": "Login",
+  "phoneNumber": "Phone Number",
+  "password": "Password",
+  "signup": "Sign up"
+}

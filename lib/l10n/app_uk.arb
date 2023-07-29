@@ -1,0 +1,22 @@
+{
+    "overview": "Швидкий огляд",
+    "customers": "Клієнти",
+    "orders": "Замовлення",
+    "create": "Створити",
+    "createUser": "Створити клієнта",
+    "createOrder": "Створити замовлення",
+    "createProduct": "Створити продукт",
+    "editProduct": "Змінити продукт",
+    "editOrder": "Змінити замовлення",
+    "products": "Продукти",
+    "feedbacks": "Відгуки",
+    "filter": "Фільтрувати",
+    "orderProductList": "Продукти замовлення",
+    "logout": "Вийти",
+    "failedLoginError": "Невдала спроба логіну. Спробуйте ще пізніше.",
+    "noAccountQuestion": "Ще немає аккаунту?",
+    "login": "Логін",
+    "phoneNumber": "Номер телефону",
+    "password": "Пароль",
+    "signup": "Реєстрація"
+}
