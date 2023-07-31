@@ -7,6 +7,12 @@ class NetworkDashboard {
   int totalSaleValue;
   int totalCostValue;
   int totalOrdersCount;
+  int previousTotalSaleValue;
+  int previousTotalCostValue;
+  int previousTotalOrdersCount;
+  double saleValuePercentageChange;
+  double costValuePercentageChange;
+  double ordersCountPercentageChange;
   List<TotalByTimeFrame> ordersCountByTimeFrame;
   List<TotalByTimeFrame> totalSaleValueByTimeFrame;
   List<TotalByTimeFrame> totalCostValueByTimeFrame;
@@ -15,6 +21,12 @@ class NetworkDashboard {
     required this.totalSaleValue,
     required this.totalCostValue,
     required this.totalOrdersCount,
+    required this.previousTotalSaleValue,
+    required this.previousTotalCostValue,
+    required this.previousTotalOrdersCount,
+    required this.saleValuePercentageChange,
+    required this.costValuePercentageChange,
+    required this.ordersCountPercentageChange,
     required this.ordersCountByTimeFrame,
     required this.totalSaleValueByTimeFrame,
     required this.totalCostValueByTimeFrame,
