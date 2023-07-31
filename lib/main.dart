@@ -10,6 +10,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 import 'environment.dart';
 
@@ -27,6 +28,7 @@ void main() {
     final darkTheme = ThemeDecoder.decodeThemeData(themeDarkJson)!;
 
     GetItService.initializeService();
+    usePathUrlStrategy();
     runApp(MoxyApp(
         theme.copyWith(
           floatingActionButtonTheme: const FloatingActionButtonThemeData(

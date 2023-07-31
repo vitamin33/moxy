@@ -1,100 +1,80 @@
 import 'package:flutter/material.dart';
 
-class RootWebWidget extends StatefulWidget {
+class RootWebWidget extends StatelessWidget {
   const RootWebWidget({super.key});
 
   @override
-  _RootWebWidgetState createState() => _RootWebWidgetState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: MyAppBar(),
+      body: Center(
+        child: Text('Content goes here'),
+      ),
+    );
+  }
 }
 
-class _RootWebWidgetState extends State<RootWebWidget> {
-  int _selectedIndex = 0;
-
-  static const List<Widget> _pages = <Widget>[
-    Text('Home Page'),
-    Text('Favorites Page'),
-    Text('Profile Page'),
-    Text('Basket Page'),
-    // Add more pages as needed
-  ];
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: _pages.length,
-      child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: AppBar(
-            title: Row(
-              children: [
-                Image.asset('assets/icons/moxy_icon.png',
-                    height: 40.0), //replace with your asset
-                SizedBox(
-                    width: 50), // spacing between logo and category buttons
-                TabBar(
-                  onTap: (index) {
-                    setState(() {
-                      _selectedIndex = index;
-                    });
-                  },
-                  tabs: [
-                    Tab(text: 'Category 1'),
-                    Tab(text: 'Category 2'),
-                    Tab(text: 'Category 3'),
-                    // add more tabs as needed
-                  ],
-                ),
-              ],
-            ),
-            actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 0;
-                  });
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.favorite),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 1;
-                  });
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.person),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 2;
-                  });
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.shopping_basket),
-                onPressed: () {
-                  setState(() {
-                    _selectedIndex = 3;
-                  });
-                },
-              ),
-            ],
-          ),
+    return AppBar(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AppTabTitle(title: 'Tab 1', isSelected: true),
+          AppTabTitle(title: 'Tab 2', isSelected: false),
+          AppTabTitle(title: 'Tab 3', isSelected: false),
+          AppTabTitle(title: 'Tab 4', isSelected: false),
+        ],
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(Icons.shopping_cart),
+          onPressed: () {
+            // Handle shopping cart button press
+          },
         ),
-        body: Column(
-          children: [
-            Divider(
-              height: 1,
-              thickness: 1,
-            ),
-            Expanded(
-              child: TabBarView(
-                children: _pages,
-              ),
-            ),
-          ],
+        IconButton(
+          icon: Icon(Icons.favorite),
+          onPressed: () {
+            // Handle favorite button press
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.settings),
+          onPressed: () {
+            // Handle settings button press
+          },
+        ),
+        IconButton(
+          icon: Icon(Icons.person),
+          onPressed: () {
+            // Handle profile button press
+          },
+        ),
+      ],
+    );
+  }
+}
+
+class AppTabTitle extends StatelessWidget {
+  final String title;
+  final bool isSelected;
+
+  AppTabTitle({required this.title, required this.isSelected});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: 16.0,
+          color: isSelected ? Colors.blue : Colors.black,
         ),
       ),
     );
