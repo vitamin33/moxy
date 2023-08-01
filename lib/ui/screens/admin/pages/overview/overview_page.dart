@@ -28,10 +28,10 @@ class OverviewPage extends StatelessWidget {
                       ? const Center(child: CircularProgressIndicator())
                       : Column(children: [
                           AnimatedOpacity(
-                            opacity: state.selectedDate != null ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 800),
+                            opacity: state.selectedDate != null ? 1 : 0,
+                            duration: const Duration(seconds: 1),
                             child: AnimatedSize(
-                              duration: const Duration(milliseconds: 800),
+                              duration: const Duration(seconds: 1),
                               curve: Curves.easeInOut,
                               child: state.selectedDate != null
                                   ? Row(
@@ -40,50 +40,27 @@ class OverviewPage extends StatelessWidget {
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Text(
-                                              'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                                              'Date Range: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
                                               style: const TextStyle(
-                                                  color: AppTheme.pinkDark,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500),
+                                                  fontSize: 12,
+                                                  color: AppTheme.gray),
                                             ),
                                           )
                                         ])
                                   : Container(),
                             ),
                           ),
-                          total(context, state),
+                          totalSale(state.totalSale),
                           const SizedBox(
                             height: 10,
                           ),
-                          AnimatedOpacity(
-                            opacity: state.selectedDate != null ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 800),
-                            child: state.selectedDate != null
-                                ? AnimatedSize(
-                                    duration: const Duration(milliseconds: 800),
-                                    curve: Curves.easeInOut,
-                                    child: state.selectedDate != null
-                                        ? Column(
-                                            children: [
-                                              const Text(
-                                                'Previous Same Period',
-                                                style: TextStyle(
-                                                    color: AppTheme.pinkDark,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              const Divider(
-                                                color: AppTheme.pinkDark,
-                                              ),
-                                              previusTotal(context, state),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                            ],
-                                          )
-                                        : Container())
-                                : Container(),
+                          totalCost(state.totalCost),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          totalOrdersCount(state.totalOrders),
+                          const SizedBox(
+                            height: 10,
                           ),
                           Chart(
                               saleFromTimeFrame: state.saleFromTimeFrame,
@@ -102,398 +79,152 @@ class OverviewPage extends StatelessWidget {
   }
 }
 
-total(context, DashboardState state) {
-  return Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: AppTheme.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: AppTheme.black,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          IconPath.wallet,
-                          color: Colors.white,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Sale',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.gray),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '\$ ${state.totalSale.toString()}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
+totalSale(totalSale) {
+  return Container(
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      color: AppTheme.white,
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              color: AppTheme.black,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: SvgPicture.asset(
+                IconPath.wallet,
+                width: 30,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: AppTheme.white,
+          const SizedBox(width: 20),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Total Sale',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: AppTheme.gray,
+                      fontWeight: FontWeight.w400)),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                '\$ ${totalSale}',
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+            ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: AppTheme.black,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          IconPath.cashPayment,
-                          color: Colors.white,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Cost',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.gray),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '\$ ${state.totalCost.toString()}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        ],
       ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: AppTheme.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: AppTheme.black,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          IconPath.orders,
-                          color: Colors.white,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Orders',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.gray),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${state.totalOrders}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ],
+    ),
   );
 }
 
-previusTotal(context, DashboardState state) {
-  return Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: AppTheme.white,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: AppTheme.black,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          IconPath.wallet,
-                          color: Colors.white,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Sale',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.gray),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '\$ ${state.previousTotalSaleValue.toString()}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(state.saleValuePercentageChange > 0
-                        ? IconPath.rightUpArrow
-                        : IconPath.rightDownArrow),
-                    Expanded(
-                      child: Text(
-                          ' ${state.saleValuePercentageChange.toInt()} % from  peroid',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: state.saleValuePercentageChange > 0
-                                  ? AppTheme.greenDark
-                                  : AppTheme.red)),
-                    )
-                  ],
-                )
-              ],
+totalCost(totalCost) {
+  return Container(
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      color: AppTheme.white,
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              color: AppTheme.black,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: SvgPicture.asset(
+                IconPath.cashPayment,
+                color: Colors.white,
+                width: 30,
+              ),
             ),
           ),
-        ),
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: AppTheme.white,
+          const SizedBox(width: 20),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Total Cost ',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: AppTheme.gray,
+                      fontWeight: FontWeight.w400)),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                '\$ ${totalCost}',
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+            ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: AppTheme.black,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          IconPath.cashPayment,
-                          color: Colors.white,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Cost',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.gray),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '\$ ${state.previousTotalCostValue.toString()}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SvgPicture.asset(state.costValuePercentageChange > 0
-                        ? IconPath.rightUpArrow
-                        : IconPath.rightDownArrow),
-                    Expanded(
-                      child: Text(
-                          ' ${state.costValuePercentageChange.toInt()} % from peroid',
-                          style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              color: state.costValuePercentageChange > 0
-                                  ? AppTheme.greenDark
-                                  : AppTheme.red)),
-                    ),
-                  ],
-                )
-              ],
+        ],
+      ),
+    ),
+  );
+}
+
+totalOrdersCount(totalOrdersCount) {
+  return Container(
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(8)),
+      color: AppTheme.white,
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(6)),
+              color: AppTheme.black,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: SvgPicture.asset(
+                IconPath.orders,
+                color: Colors.white,
+                width: 30,
+              ),
             ),
           ),
-        ),
-      ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: Container(
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-            color: AppTheme.white,
+          const SizedBox(width: 20),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Total Orders Count',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: AppTheme.gray,
+                      fontWeight: FontWeight.w400)),
+              const SizedBox(
+                height: 5,
+              ),
+              Text(
+                totalOrdersCount.toString(),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+            ],
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: AppTheme.black,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: SvgPicture.asset(
-                          IconPath.orders,
-                          color: Colors.white,
-                          width: 20,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    const Text(
-                      'Orders',
-                      style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.gray),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  '${state.previousTotalOrdersCount}',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  children: [
-                    SvgPicture.asset(state.ordersCountPercentageChange > 0
-                        ? IconPath.rightUpArrow
-                        : IconPath.rightDownArrow),
-                    Expanded(
-                      child: Text(
-                        ' ${state.ordersCountPercentageChange.toInt()} % from peroid ',
-                        style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                            color: state.ordersCountPercentageChange > 0
-                                ? AppTheme.greenDark
-                                : AppTheme.red),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
+        ],
       ),
-    ],
+    ),
   );
 }
