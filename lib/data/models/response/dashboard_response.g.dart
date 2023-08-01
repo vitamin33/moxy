@@ -11,6 +11,15 @@ NetworkDashboard _$NetworkDashboardFromJson(Map<String, dynamic> json) =>
       totalSaleValue: json['totalSaleValue'] as int,
       totalCostValue: json['totalCostValue'] as int,
       totalOrdersCount: json['totalOrdersCount'] as int,
+      previousTotalSaleValue: json['previousTotalSaleValue'] as int,
+      previousTotalCostValue: json['previousTotalCostValue'] as int,
+      previousTotalOrdersCount: json['previousTotalOrdersCount'] as int,
+      saleValuePercentageChange:
+          (json['saleValuePercentageChange'] as num).toDouble(),
+      costValuePercentageChange:
+          (json['costValuePercentageChange'] as num).toDouble(),
+      ordersCountPercentageChange:
+          (json['ordersCountPercentageChange'] as num).toDouble(),
       ordersCountByTimeFrame: (json['ordersCountByTimeFrame'] as List<dynamic>)
           .map((e) => TotalByTimeFrame.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -29,6 +38,12 @@ Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
       'totalSaleValue': instance.totalSaleValue,
       'totalCostValue': instance.totalCostValue,
       'totalOrdersCount': instance.totalOrdersCount,
+      'previousTotalSaleValue': instance.previousTotalSaleValue,
+      'previousTotalCostValue': instance.previousTotalCostValue,
+      'previousTotalOrdersCount': instance.previousTotalOrdersCount,
+      'saleValuePercentageChange': instance.saleValuePercentageChange,
+      'costValuePercentageChange': instance.costValuePercentageChange,
+      'ordersCountPercentageChange': instance.ordersCountPercentageChange,
       'ordersCountByTimeFrame': instance.ordersCountByTimeFrame,
       'totalSaleValueByTimeFrame': instance.totalSaleValueByTimeFrame,
       'totalCostValueByTimeFrame': instance.totalCostValueByTimeFrame,
@@ -38,7 +53,7 @@ TotalByTimeFrame _$TotalByTimeFrameFromJson(Map<String, dynamic> json) =>
     TotalByTimeFrame(
       fromDate: DateTime.parse(json['fromDate'] as String),
       toDate: DateTime.parse(json['toDate'] as String),
-      key: json['key'],
+      key: json['key'] as String,
       value: json['value'] as int,
     );
 
