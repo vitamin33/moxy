@@ -36,4 +36,6 @@ class IconPath {
   static const String selectedProduct = "assets/icons/selected_product.svg";
   static const String dataRange = "assets/icons/data_range.svg";
   static const String wallet = "assets/icons/wallet.svg";
+  static const String rightUpArrow = "assets/icons/right_up_arrow.svg";
+  static const String rightDownArrow = "assets/icons/right_down_arrow.svg";
 }
