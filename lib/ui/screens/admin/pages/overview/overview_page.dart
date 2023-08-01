@@ -42,7 +42,7 @@ class OverviewPage extends StatelessWidget {
                                             child: Text(
                                               'Date Range: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
                                               style: const TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 12,
                                                   color: AppTheme.gray),
                                             ),
                                           )
