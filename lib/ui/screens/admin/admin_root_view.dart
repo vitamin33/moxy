@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
+import 'package:moxy/domain/admin/dashboard/dashboard_state.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
@@ -31,7 +32,7 @@ class AdminRootView extends StatelessWidget {
   }
 
   Widget mobileWidget(BuildContext context, AdminHomeRouterState state) {
-    final arrIcons = _mapStateToActionIcon(state);
+    final arrIcons = _mapStateToActionIcon(state, context);
 
     return AppScaffold(
       appbar: AppBar(
@@ -56,17 +57,19 @@ class AdminRootView extends StatelessWidget {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: item.text != null
-                                        ? Text(
-                                            item.text!,
-                                            textAlign: TextAlign.center,
-                                            textDirection: TextDirection.rtl,
-                                            style: const TextStyle(
-                                              color: AppTheme.pinkDark,
-                                              fontSize: 14,
-                                            ),
-                                          )
-                                        : SvgPicture.asset(item.icon),
+                                    child:
+                                        item.text != null
+                                            ? Text(
+                                                item.text!,
+                                                textAlign: TextAlign.center,
+                                                textDirection:
+                                                    TextDirection.rtl,
+                                                style: const TextStyle(
+                                                  color: AppTheme.pinkDark,
+                                                  fontSize: 14,
+                                                ),
+                                              )
+                                            : SvgPicture.asset(item.icon),
                                   ),
                                 ),
                               ),
@@ -188,7 +191,8 @@ class AdminRootView extends StatelessWidget {
     return 'Dashboard';
   }
 
-  List<AppBarIcon> _mapStateToActionIcon(AdminHomeRouterState state) {
+  List<AppBarIcon> _mapStateToActionIcon(
+      AdminHomeRouterState state, BuildContext context) {
     switch (state.runtimeType) {
       case OverviewPageState:
         return [
@@ -290,6 +294,8 @@ class AdminRootView extends StatelessWidget {
 class AppBarIcon {
   final String icon;
   final String? text;
+  final bool? loader;
   final Function(BuildContext ctx) onPress;
-  const AppBarIcon({required this.icon, this.text, required this.onPress});
+  const AppBarIcon(
+      {required this.icon, this.text, this.loader, required this.onPress});
 }

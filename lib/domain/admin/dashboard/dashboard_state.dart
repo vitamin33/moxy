@@ -4,6 +4,7 @@ import 'package:moxy/domain/copyable.dart';
 
 class DashboardState implements Copyable<DashboardState> {
   final bool isLoading;
+  final bool animated;
   final int totalSale;
   final int totalCost;
   final int totalOrders;
@@ -21,6 +22,7 @@ class DashboardState implements Copyable<DashboardState> {
 
   DashboardState(
       {required this.isLoading,
+      required this.animated,
       required this.totalSale,
       required this.totalCost,
       required this.totalOrders,
@@ -52,12 +54,15 @@ class DashboardState implements Copyable<DashboardState> {
         saleFromTimeFrame: [],
         costFromTimeFrame: [],
         isLoading: false,
+        animated: false,
         errorMessage: '');
   }
 
   @override
   DashboardState copyWith(
-      {bool? isLoading,
+      {
+        bool? isLoading,
+        bool? animated,
       String? errorMessage,
       int? totalSale,
       int? totalCost,
@@ -75,6 +80,7 @@ class DashboardState implements Copyable<DashboardState> {
     return DashboardState(
         totalSale: totalSale ?? this.totalSale,
         isLoading: isLoading ?? this.isLoading,
+        animated: animated ?? this.animated,
         totalCost: totalCost ?? this.totalCost,
         totalOrders: totalOrders ?? this.totalOrders,
         previousTotalSaleValue:
