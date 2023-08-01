@@ -30,71 +30,78 @@ class OverviewPage extends StatelessWidget {
                         backgroundColor: AppTheme.pink,
                       )
                     : Container(),
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 800),
-                  opacity: state.animated == true ? 1.0 : 0.0,
-                  child: SingleChildScrollView(
-                    child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Column(children: [
-                          state.selectedDate != null
-                              ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
-                                          style: const TextStyle(
-                                              color: AppTheme.pinkDark,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                      )
-                                    ])
-                              : Container(),
-                          total(context, state),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          state.selectedDate != null
-                              ? Column(
-                                  children: [
-                                    const Text(
-                                      'Previous Same Period',
-                                      style: TextStyle(
-                                          color: AppTheme.pinkDark,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const Divider(
-                                      color: AppTheme.pinkDark,
-                                    ),
-                                    previusTotal(context, state),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                  ],
-                                )
-                              : Container(),
-                          state.isLoading != true
-                              ? Column(
-                                  children: [
-                                    Chart(
-                                        saleFromTimeFrame:
-                                            state.saleFromTimeFrame,
-                                        costFromTimeFrame:
-                                            state.costFromTimeFrame),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    OrdersChart(
-                                        ordersFromTimeFrame:
-                                            state.ordersFromTimeFrame)
-                                  ],
-                                )
-                              : Container(),
-                        ])),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        state.selectedDate != null
+                            ? AnimatedSize(
+                                duration: const Duration(milliseconds: 200),
+                                child: state.isLoading
+                                    ? Container()
+                                    : Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                                                style: const TextStyle(
+                                                    color: AppTheme.pinkDark,
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
+                                            )
+                                          ]),
+                              )
+                            : Container(),
+                        total(context, state),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        state.selectedDate != null
+                            ? AnimatedSize(
+                                duration: const Duration(milliseconds: 200),
+                                child: state.isLoading
+                                    ? Container()
+                                    : Column(
+                                        children: [
+                                          const Text(
+                                            'Previous Same Period',
+                                            style: TextStyle(
+                                                color: AppTheme.pinkDark,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                          const Divider(
+                                            color: AppTheme.pinkDark,
+                                          ),
+                                          previusTotal(context, state),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      ),
+                              )
+                            : Container(),
+                        Column(
+                          children: [
+                            Chart(
+                                saleFromTimeFrame: state.saleFromTimeFrame,
+                                costFromTimeFrame: state.costFromTimeFrame),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            OrdersChart(
+                                ordersFromTimeFrame: state.ordersFromTimeFrame)
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
