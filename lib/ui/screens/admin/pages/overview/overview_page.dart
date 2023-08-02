@@ -88,18 +88,23 @@ class OverviewPage extends StatelessWidget {
                                       ),
                               )
                             : Container(),
-                        Column(
-                          children: [
-                            Chart(
-                                saleFromTimeFrame: state.saleFromTimeFrame,
-                                costFromTimeFrame: state.costFromTimeFrame),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            OrdersChart(
-                                ordersFromTimeFrame: state.ordersFromTimeFrame)
-                          ],
-                        ),
+                        state.isLoading != true
+                            ? Column(
+                                children: [
+                                  Chart(
+                                      saleFromTimeFrame:
+                                          state.saleFromTimeFrame,
+                                      costFromTimeFrame:
+                                          state.costFromTimeFrame),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  OrdersChart(
+                                      ordersFromTimeFrame:
+                                          state.ordersFromTimeFrame)
+                                ],
+                              )
+                            : Container()
                       ],
                     ),
                   ),

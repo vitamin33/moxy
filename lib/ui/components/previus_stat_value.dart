@@ -75,7 +75,8 @@ class PreviusStatValue extends StatelessWidget {
                       ? IconPath.rightUpArrow
                       : IconPath.rightDownArrow),
                   Expanded(
-                    child: Text(' ${percentageValue} % from  peroid',
+                    child: Text(
+                        ' ${percentageValue.toStringAsFixed(2)}% from  peroid',
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
