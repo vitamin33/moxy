@@ -35,76 +35,32 @@ class OverviewPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
-                        state.selectedDate != null
-                            ? AnimatedSize(
-                                duration: const Duration(milliseconds: 200),
-                                child: state.isLoading
-                                    ? Container()
-                                    : Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Text(
-                                                'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
-                                                style: const TextStyle(
-                                                    color: AppTheme.pinkDark,
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                            )
-                                          ]),
-                              )
-                            : Container(),
-                        total(context, state),
+                        selectedDateTextWidget(state),
+                        totalSelectedDataWidget(context, state),
                         const SizedBox(
                           height: 10,
                         ),
-                        state.selectedDate != null
-                            ? AnimatedSize(
-                                duration: const Duration(milliseconds: 200),
-                                child: state.isLoading
-                                    ? Container()
-                                    : Column(
-                                        children: [
-                                          const Text(
-                                            'Previous Same Period',
-                                            style: TextStyle(
-                                                color: AppTheme.pinkDark,
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                          const Divider(
-                                            color: AppTheme.pinkDark,
-                                          ),
-                                          previusTotal(context, state),
-                                          const SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
-                                      ),
-                              )
-                            : Container(),
-                        state.isLoading != true
-                            ? Column(
-                                children: [
-                                  Chart(
-                                      saleFromTimeFrame:
-                                          state.saleFromTimeFrame,
-                                      costFromTimeFrame:
-                                          state.costFromTimeFrame),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  OrdersChart(
-                                      ordersFromTimeFrame:
-                                          state.ordersFromTimeFrame)
-                                ],
-                              )
-                            : Container()
+                        previousPeriodDataWidget(context, state),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 200),
+                          child: state.isLoading
+                              ? Container()
+                              : Column(
+                                  children: [
+                                    Chart(
+                                        saleFromTimeFrame:
+                                            state.saleFromTimeFrame,
+                                        costFromTimeFrame:
+                                            state.costFromTimeFrame),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    OrdersChart(
+                                        ordersFromTimeFrame:
+                                            state.ordersFromTimeFrame)
+                                  ],
+                                ),
+                        ),
                       ],
                     ),
                   ),
@@ -116,9 +72,60 @@ class OverviewPage extends StatelessWidget {
       },
     );
   }
+
+  Widget selectedDateTextWidget(DashboardState state) {
+    return state.selectedDate != null
+        ? AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: state.isLoading
+                ? Container()
+                : Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
+                      ),
+                    )
+                  ]),
+          )
+        : Container();
+  }
+
+  Widget previousPeriodDataWidget(BuildContext context, DashboardState state) {
+    return state.selectedDate != null
+        ? AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: state.isLoading
+                ? Container()
+                : Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Previous Same Period',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      previusTotal(context, state),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+          )
+        : Container();
+  }
 }
 
-total(context, DashboardState state) {
+Widget totalSelectedDataWidget(context, DashboardState state) {
   return Row(
     mainAxisSize: MainAxisSize.max,
     mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -143,6 +150,7 @@ total(context, DashboardState state) {
         value: state.totalOrders.toString(),
         iconPath: IconPath.orders,
         title: 'Orders',
+        showCurrency: false,
       ),
     ],
   );
@@ -154,7 +162,7 @@ previusTotal(context, DashboardState state) {
     mainAxisAlignment: MainAxisAlignment.spaceAround,
     children: [
       PreviusStatValue(
-        value: state.totalSale.toString(),
+        value: state.previousTotalSaleValue.toString(),
         iconPath: IconPath.wallet,
         title: 'Sale',
         percentageValue: state.saleValuePercentageChange,
@@ -163,18 +171,21 @@ previusTotal(context, DashboardState state) {
         width: 10,
       ),
       PreviusStatValue(
-          value: state.totalCost.toString(),
-          iconPath: IconPath.cashPayment,
-          title: 'Cost',
-          percentageValue: state.costValuePercentageChange),
+        value: state.previousTotalCostValue.toString(),
+        iconPath: IconPath.cashPayment,
+        title: 'Cost',
+        percentageValue: state.costValuePercentageChange,
+      ),
       const SizedBox(
         width: 10,
       ),
       PreviusStatValue(
-          value: state.totalOrders.toString(),
-          iconPath: IconPath.orders,
-          title: 'Orders',
-          percentageValue: state.ordersCountPercentageChange),
+        value: state.previousTotalOrdersCount.toString(),
+        iconPath: IconPath.orders,
+        title: 'Orders',
+        percentageValue: state.ordersCountPercentageChange,
+        showCurrency: false,
+      ),
     ],
   );
 }

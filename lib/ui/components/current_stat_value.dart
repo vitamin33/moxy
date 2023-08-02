@@ -6,12 +6,14 @@ class CurrentStatValue extends StatelessWidget {
   final String title;
   final String iconPath;
   final String value;
+  final bool showCurrency;
 
   const CurrentStatValue({
     Key? key,
     required this.title,
     required this.iconPath,
     required this.value,
+    this.showCurrency = true,
   }) : super(key: key);
 
   @override
@@ -56,7 +58,7 @@ class CurrentStatValue extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '\$ ${value}',
+                '${showCurrency ? '\$ ' : ''}$value',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,

@@ -8,6 +8,7 @@ class PreviusStatValue extends StatelessWidget {
   final String iconPath;
   final String value;
   final double percentageValue;
+  final bool showCurrency;
 
   const PreviusStatValue({
     Key? key,
@@ -15,6 +16,7 @@ class PreviusStatValue extends StatelessWidget {
     required this.iconPath,
     required this.value,
     required this.percentageValue,
+    this.showCurrency = true,
   }) : super(key: key);
 
   @override
@@ -59,7 +61,7 @@ class PreviusStatValue extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                '\$ ${value}',
+                '${showCurrency ? '\$ ' : ''}$value',
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
