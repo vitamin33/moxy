@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/admin/dashboard/dashboard_cubit.dart';
 import '../../../../../domain/admin/dashboard/dashboard_state.dart';
+import '../../../../components/current_stat_value.dart';
 import '../../../../components/orders_chart.dart';
 import '../../../../components/overview_chart.dart';
+import '../../../../components/previus_stat_value.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({Key? key}) : super(key: key);
@@ -21,210 +22,170 @@ class OverviewPage extends StatelessWidget {
           body: Container(
             height: MediaQuery.of(context).size.height,
             color: AppTheme.pink,
-            child: SingleChildScrollView(
-              child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: state.isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : Column(children: [
-                          AnimatedOpacity(
-                            opacity: state.selectedDate != null ? 1 : 0,
-                            duration: const Duration(seconds: 1),
-                            child: AnimatedSize(
-                              duration: const Duration(seconds: 1),
-                              curve: Curves.easeInOut,
-                              child: state.selectedDate != null
-                                  ? Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Text(
-                                              'Date Range: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
-                                              style: const TextStyle(
-                                                  fontSize: 12,
-                                                  color: AppTheme.gray),
-                                            ),
-                                          )
-                                        ])
-                                  : Container(),
-                            ),
-                          ),
-                          totalSale(state.totalSale),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          totalCost(state.totalCost),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          totalOrdersCount(state.totalOrders),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Chart(
-                              saleFromTimeFrame: state.saleFromTimeFrame,
-                              costFromTimeFrame: state.costFromTimeFrame),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          OrdersChart(
-                              ordersFromTimeFrame: state.ordersFromTimeFrame)
-                        ])),
+            child: ListView(
+              children: [
+                state.isLoading
+                    ? const LinearProgressIndicator(
+                        color: AppTheme.pinkDark,
+                        backgroundColor: AppTheme.pink,
+                      )
+                    : Container(),
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        selectedDateTextWidget(state),
+                        totalSelectedDataWidget(context, state),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        previousPeriodDataWidget(context, state),
+                        AnimatedSize(
+                          duration: const Duration(milliseconds: 200),
+                          child: state.isLoading
+                              ? Container()
+                              : Column(
+                                  children: [
+                                    Chart(
+                                        saleFromTimeFrame:
+                                            state.saleFromTimeFrame,
+                                        costFromTimeFrame:
+                                            state.costFromTimeFrame),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    OrdersChart(
+                                        ordersFromTimeFrame:
+                                            state.ordersFromTimeFrame)
+                                  ],
+                                ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
       },
     );
   }
-}
 
-totalSale(totalSale) {
-  return Container(
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-      color: AppTheme.white,
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              color: AppTheme.black,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
-                IconPath.wallet,
-                width: 30,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Total Sale',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: AppTheme.gray,
-                      fontWeight: FontWeight.w400)),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                '\$ ${totalSale}',
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
+  Widget selectedDateTextWidget(DashboardState state) {
+    return state.selectedDate != null
+        ? AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: state.isLoading
+                ? Container()
+                : Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                        style: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w500),
+                      ),
+                    )
+                  ]),
+          )
+        : Container();
+  }
 
-totalCost(totalCost) {
-  return Container(
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-      color: AppTheme.white,
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              color: AppTheme.black,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
-                IconPath.cashPayment,
-                color: Colors.white,
-                width: 30,
-              ),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Total Cost ',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: AppTheme.gray,
-                      fontWeight: FontWeight.w400)),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                '\$ ${totalCost}',
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
-}
+  Widget previousPeriodDataWidget(BuildContext context, DashboardState state) {
+    return state.selectedDate != null
+        ? AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            child: state.isLoading
+                ? Container()
+                : Column(
+                    children: [
+                      const Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Previous Same Period',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      previusTotal(context, state),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                    ],
+                  ),
+          )
+        : Container();
+  }
 
-totalOrdersCount(totalOrdersCount) {
-  return Container(
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(8)),
-      color: AppTheme.white,
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(6)),
-              color: AppTheme.black,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
-                IconPath.orders,
-                color: Colors.white,
-                width: 30,
-              ),
-            ),
-          ),
-          const SizedBox(width: 20),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Total Orders Count',
-                  style: TextStyle(
-                      fontSize: 16,
-                      color: AppTheme.gray,
-                      fontWeight: FontWeight.w400)),
-              const SizedBox(
-                height: 5,
-              ),
-              Text(
-                totalOrdersCount.toString(),
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
+  Widget totalSelectedDataWidget(context, DashboardState state) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        CurrentStatValue(
+          value: state.totalSale.toString(),
+          iconPath: IconPath.wallet,
+          title: 'Sale',
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        CurrentStatValue(
+          value: state.totalCost.toString(),
+          iconPath: IconPath.cashPayment,
+          title: 'Cost',
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        CurrentStatValue(
+          value: state.totalOrders.toString(),
+          iconPath: IconPath.orders,
+          title: 'Orders',
+          showCurrency: false,
+        ),
+      ],
+    );
+  }
+
+  previusTotal(context, DashboardState state) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        PreviusStatValue(
+          value: state.previousTotalSaleValue.toString(),
+          iconPath: IconPath.wallet,
+          title: 'Sale',
+          percentageValue: state.saleValuePercentageChange,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        PreviusStatValue(
+          value: state.previousTotalCostValue.toString(),
+          iconPath: IconPath.cashPayment,
+          title: 'Cost',
+          percentageValue: state.costValuePercentageChange,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        PreviusStatValue(
+          value: state.previousTotalOrdersCount.toString(),
+          iconPath: IconPath.orders,
+          title: 'Orders',
+          percentageValue: state.ordersCountPercentageChange,
+          showCurrency: false,
+        ),
+      ],
+    );
+  }
 }
