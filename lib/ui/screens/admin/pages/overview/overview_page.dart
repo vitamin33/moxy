@@ -123,69 +123,69 @@ class OverviewPage extends StatelessWidget {
           )
         : Container();
   }
-}
 
-Widget totalSelectedDataWidget(context, DashboardState state) {
-  return Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      CurrentStatValue(
-        value: state.totalSale.toString(),
-        iconPath: IconPath.wallet,
-        title: 'Sale',
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      CurrentStatValue(
-        value: state.totalCost.toString(),
-        iconPath: IconPath.cashPayment,
-        title: 'Cost',
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      CurrentStatValue(
-        value: state.totalOrders.toString(),
-        iconPath: IconPath.orders,
-        title: 'Orders',
-        showCurrency: false,
-      ),
-    ],
-  );
-}
+  Widget totalSelectedDataWidget(context, DashboardState state) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        CurrentStatValue(
+          value: state.totalSale.toString(),
+          iconPath: IconPath.wallet,
+          title: 'Sale',
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        CurrentStatValue(
+          value: state.totalCost.toString(),
+          iconPath: IconPath.cashPayment,
+          title: 'Cost',
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        CurrentStatValue(
+          value: state.totalOrders.toString(),
+          iconPath: IconPath.orders,
+          title: 'Orders',
+          showCurrency: false,
+        ),
+      ],
+    );
+  }
 
-previusTotal(context, DashboardState state) {
-  return Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-      PreviusStatValue(
-        value: state.previousTotalSaleValue.toString(),
-        iconPath: IconPath.wallet,
-        title: 'Sale',
-        percentageValue: state.saleValuePercentageChange,
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      PreviusStatValue(
-        value: state.previousTotalCostValue.toString(),
-        iconPath: IconPath.cashPayment,
-        title: 'Cost',
-        percentageValue: state.costValuePercentageChange,
-      ),
-      const SizedBox(
-        width: 10,
-      ),
-      PreviusStatValue(
-        value: state.previousTotalOrdersCount.toString(),
-        iconPath: IconPath.orders,
-        title: 'Orders',
-        percentageValue: state.ordersCountPercentageChange,
-        showCurrency: false,
-      ),
-    ),
-  );
+  previusTotal(context, DashboardState state) {
+    return Row(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        PreviusStatValue(
+          value: state.previousTotalSaleValue.toString(),
+          iconPath: IconPath.wallet,
+          title: 'Sale',
+          percentageValue: state.saleValuePercentageChange,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        PreviusStatValue(
+          value: state.previousTotalCostValue.toString(),
+          iconPath: IconPath.cashPayment,
+          title: 'Cost',
+          percentageValue: state.costValuePercentageChange,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        PreviusStatValue(
+          value: state.previousTotalOrdersCount.toString(),
+          iconPath: IconPath.orders,
+          title: 'Orders',
+          percentageValue: state.ordersCountPercentageChange,
+          showCurrency: false,
+        ),
+      ],
+    );
+  }
 }
