@@ -186,6 +186,6 @@ previusTotal(context, DashboardState state) {
         percentageValue: state.ordersCountPercentageChange,
         showCurrency: false,
       ),
-    ],
+    ),
   );
 }
