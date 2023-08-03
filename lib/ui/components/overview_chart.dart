@@ -86,11 +86,11 @@ class _ChartState extends State<Chart> {
                     final int value = axisLabelRenderArgs.value.toInt();
                     if (value >= 1000) {
                       return ChartAxisLabel(
-                          '\$${(value / 1000).toStringAsFixed(0)}k',
+                          '\₴${(value / 1000).toStringAsFixed(0)}k',
                           const TextStyle(color: AppTheme.gray));
                     } else {
                       return ChartAxisLabel(
-                          '\$$value', const TextStyle(color: AppTheme.gray));
+                          '\₴$value', const TextStyle(color: AppTheme.gray));
                     }
                   },
                 ),
@@ -152,7 +152,7 @@ class _ChartState extends State<Chart> {
                   final int pointIndex = args.pointIndex!;
                   if (pointIndex == selectedColumnIndex1 ||
                       pointIndex == selectedColumnIndex2) {
-                    args.text = '\$ ${args.text}';
+                    args.text = '\₴ ${args.text}';
                     args.color = AppTheme.black;
                     args.textStyle = const TextStyle(fontSize: 14);
                   }

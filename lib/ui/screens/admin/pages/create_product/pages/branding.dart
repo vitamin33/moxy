@@ -40,9 +40,9 @@ class Branding extends StatelessWidget {
                               const SizedBox(
                                 width: 2,
                               ),
-                               Text(
+                              Text(
                                 AppLocalizations.of(context)!.pickImage,
-                                style:const TextStyle(
+                                style: const TextStyle(
                                     color: AppTheme.black,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500),
@@ -54,7 +54,8 @@ class Branding extends StatelessWidget {
                   _buildGalleryArea(context, state, cubit),
                   const SizedBox(height: 20),
                   CustomTextField(
-                    title: AppLocalizations.of(context)!.createProductPrice,
+                    title:
+                        ' ${AppLocalizations.of(context)!.createProductPrice} (\₴)',
                     controller: cubit.costPriceController,
                     onChanged: cubit.costPriceChanged,
                     state: state.errors.costPrice,
@@ -67,7 +68,7 @@ class Branding extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomTextField(
                     title:
-                        '${AppLocalizations.of(context)!.createProductPrice}(\$)',
+                        '${AppLocalizations.of(context)!.createProductSalePrice} (\₴)',
                     controller: cubit.salePriceController,
                     onChanged: cubit.salePriceChanged,
                     state: state.errors.salePrice,
@@ -300,7 +301,8 @@ class Branding extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(IconPath.pickImage),
-                                 Text( AppLocalizations.of(context)!.createProductPickImage)
+                                Text(AppLocalizations.of(context)!
+                                    .createProductPickImage)
                               ]),
                         ),
                       ),
