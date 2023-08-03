@@ -26,6 +26,7 @@ class AppTheme {
   static const Color greyDark = Color(0xFFB3B3B3);
   static const Color violet = Color(0xFFD5C0F9);
   static const Color green = Color(0xFFBEFAA8);
+  static const Color greenDark = Color.fromARGB(255, 91, 203, 50);
 
   static const double buttonHeight = 50;
   static Size size(BuildContext context) => MediaQuery.of(context).size;

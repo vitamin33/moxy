@@ -19,17 +19,25 @@ class DashboardCubit extends Cubit<DashboardState> {
 
   void getDashboard({DateTime? fromDate, DateTime? toDate}) async {
     try {
-      emit(state.copyWith(isLoading: true));
+      emit(state.copyWith(isLoading: true, animated: false));
       final result = await overviewRepository.getOverview(fromDate, toDate);
       result.when((success) {
         emit(state.copyWith(
-            totalSale: success.totalSaleValue,
-            totalCost: success.totalCostValue,
-            totalOrders: success.totalOrdersCount,
-            saleFromTimeFrame: success.totalSaleValueByTimeFrame,
-            costFromTimeFrame: success.totalCostValueByTimeFrame,
-            ordersFromTimeFrame: success.ordersCountByTimeFrame,
-            isLoading: false));
+          totalSale: success.totalSaleValue,
+          totalCost: success.totalCostValue,
+          totalOrders: success.totalOrdersCount,
+          previousTotalSaleValue: success.previousTotalSaleValue,
+          previousTotalCostValue: success.previousTotalCostValue,
+          previousTotalOrdersCount: success.previousTotalOrdersCount,
+          saleValuePercentageChange: success.saleValuePercentageChange,
+          costValuePercentageChange: success.costValuePercentageChange,
+          ordersCountPercentageChange: success.ordersCountPercentageChange,
+          saleFromTimeFrame: success.totalSaleValueByTimeFrame,
+          costFromTimeFrame: success.totalCostValueByTimeFrame,
+          ordersFromTimeFrame: success.ordersCountByTimeFrame,
+          isLoading: false,
+          animated: true,
+        ));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed GetDashboard'));
       });
@@ -39,6 +47,7 @@ class DashboardCubit extends Cubit<DashboardState> {
   }
 
   Future<void> selectDate(context) async {
+    // emit(state.copyWith(animated: false));
     final DateTimeRange? result = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2022, 1, 1),
@@ -61,11 +70,21 @@ class DashboardCubit extends Cubit<DashboardState> {
       },
     );
     if (result != null) {
-      emit(state.copyWith(selectedDate: result));
+      emit(state.copyWith(
+        selectedDate: result,
+        animated: false,
+      ));
+      emit(state.copyWith(
+        animated: true,
+      ));
       getDashboard(
         fromDate: result.start,
         toDate: result.end,
       );
     }
+  }
+
+  bool changeLoading() {
+    return state.isLoading;
   }
 }
