@@ -10,6 +10,8 @@ import '../../../services/get_it.dart';
 import '../../../ui/theme/app_theme.dart';
 import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   final orderRepository = locate<OrderRepository>();
@@ -62,7 +64,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
         lastDate: DateTime(2030, 12, 31),
         initialDateRange: state.selectedDate,
         currentDate: DateTime.now(),
-        saveText: 'Done',
+        saveText:  AppLocalizations.of(context)!.confirm,
         builder: (context, child) {
           return Theme(
             data: ThemeData.light().copyWith(

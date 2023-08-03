@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../constant/icon_path.dart';
 import '../theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PreviusStatValue extends StatelessWidget {
   final String title;
@@ -45,15 +46,15 @@ class PreviusStatValue extends StatelessWidget {
                       child: SvgPicture.asset(
                         iconPath,
                         color: Colors.white,
-                        width: 20,
+                        width: 16,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 3),
                   Text(
                     title,
                     style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: AppTheme.gray),
                   ),
@@ -78,7 +79,7 @@ class PreviusStatValue extends StatelessWidget {
                       : IconPath.rightDownArrow),
                   Expanded(
                     child: Text(
-                        ' ${percentageValue.toStringAsFixed(2)}% from  peroid',
+                        ' ${percentageValue.toStringAsFixed(2)}% ${AppLocalizations.of(context)!.overviewFromPeriod}',
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w400,

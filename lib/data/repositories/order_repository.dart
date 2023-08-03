@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:moxy/constants.dart';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/services/get_it.dart';

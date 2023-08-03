@@ -9,11 +9,11 @@ import 'package:moxy/domain/admin/create_product/create_product_state.dart';
 import 'package:moxy/ui/screens/admin/pages/create_product/pages/branding.dart';
 import 'package:moxy/ui/screens/admin/pages/create_product/pages/details.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import '../../../../components/app_indicator.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/succes_card.dart';
 import '../../../../../domain/admin/create_product/create_product_effects.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 const bottomButtonsHeight = 100.0;
 
@@ -38,7 +38,7 @@ class CreateProductPage extends StatelessWidget {
     cubit.effectStream.listen((effect) {
       if (effect is ValidationFailed) {
         ScaffoldMessenger.of(mainContext).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText: 'Wrong input, please check text fields.'));
+            snackBarFailureText:AppLocalizations.of(mainContext)!.wrongInput));
       }
     });
     return BlocProvider<CreateProductCubit>(
@@ -49,7 +49,7 @@ class CreateProductPage extends StatelessWidget {
           if (state.errorMessage != '')
             {
               ScaffoldMessenger.of(context).showSnackBar(
-                  snackBarWhenFailure(snackBarFailureText: 'Failed')),
+                  snackBarWhenFailure(snackBarFailureText: AppLocalizations.of(context)!.failed)),
               context.read<CreateProductCubit>().clearErrorState(),
             }
         },
@@ -82,9 +82,11 @@ class CreateProductPage extends StatelessWidget {
                                               horizontal: 20),
                                           child: AppIndicator(
                                               activePage: state.activePage,
-                                              inadicatorName: const [
-                                                'About',
-                                                'Sale'
+                                              inadicatorName: [
+                                                AppLocalizations.of(context)!
+                                                    .about,
+                                                AppLocalizations.of(context)!
+                                                    .sale,
                                               ],
                                               pages: const [
                                                 ProductDetails(),
@@ -112,7 +114,7 @@ class CreateProductPage extends StatelessWidget {
                       ),
                       !state.isSuccess
                           ? positionProductButton(
-                              state, cubit, isKeyboardVisible)
+                              state, cubit, isKeyboardVisible, context)
                           : Container(),
                     ],
                   ),
@@ -138,16 +140,15 @@ class CreateProductPage extends StatelessWidget {
             cubit.createNew();
           }
         },
-        title: 'Product Added',
-        titleButton: state.isEdit ? 'Back To Product' : 'Create New');
+        title: AppLocalizations.of(context)!.productAdded,
+        titleButton: state.isEdit ?  AppLocalizations.of(context)!.backToProduct : AppLocalizations.of(context)!.createNew);
   }
 }
 
 Widget positionProductButton(CreateProductState state, CreateProductCubit cubit,
-    bool isKeyboardVisible) {
+    bool isKeyboardVisible, context) {
   double buttonsHeight = isKeyboardVisible ? 0 : bottomButtonsHeight;
-  moxyPrint(
-      'Buttons height: $buttonsHeight, isKeyboardVisible: $isKeyboardVisible');
+
   return SizedBox(
     height: buttonsHeight,
     child: Row(
@@ -156,7 +157,7 @@ Widget positionProductButton(CreateProductState state, CreateProductCubit cubit,
       children: [
         state.activePage != 0
             ? CustomButton(
-                title: 'Previus',
+                title: AppLocalizations.of(context)!.previusButton,
                 onTap: cubit.moveToPreviustPage,
                 buttonWidth: 150,
                 outline: true,
@@ -165,7 +166,9 @@ Widget positionProductButton(CreateProductState state, CreateProductCubit cubit,
                 width: 150,
               ),
         CustomButton(
-          title: state.activePage != 1 ? 'Next' : 'Add',
+          title: state.activePage != 1
+              ? AppLocalizations.of(context)!.nextButton
+              : AppLocalizations.of(context)!.addButton,
           onTap: cubit.moveToNextPage,
           buttonWidth: 150,
         )

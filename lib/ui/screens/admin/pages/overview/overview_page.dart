@@ -9,6 +9,7 @@ import '../../../../components/current_stat_value.dart';
 import '../../../../components/orders_chart.dart';
 import '../../../../components/overview_chart.dart';
 import '../../../../components/previus_stat_value.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OverviewPage extends StatelessWidget {
   const OverviewPage({Key? key}) : super(key: key);
@@ -35,7 +36,7 @@ class OverviewPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
-                        selectedDateTextWidget(state),
+                        selectedDateTextWidget(state,context),
                         totalSelectedDataWidget(context, state),
                         const SizedBox(
                           height: 10,
@@ -73,7 +74,7 @@ class OverviewPage extends StatelessWidget {
     );
   }
 
-  Widget selectedDateTextWidget(DashboardState state) {
+  Widget selectedDateTextWidget(DashboardState state,context) {
     return state.selectedDate != null
         ? AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -83,7 +84,7 @@ class OverviewPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Selected Date: ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                        '${AppLocalizations.of(context)!.overviewSelectedDate} ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
                         style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w500),
                       ),
@@ -101,13 +102,13 @@ class OverviewPage extends StatelessWidget {
                 ? Container()
                 : Column(
                     children: [
-                      const Align(
+                       Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
+                          padding:const EdgeInsets.all(8.0),
                           child: Text(
-                            'Previous Same Period',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.overviewPreviusPeriod,
+                            style:const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -132,7 +133,7 @@ class OverviewPage extends StatelessWidget {
         CurrentStatValue(
           value: state.totalSale.toString(),
           iconPath: IconPath.wallet,
-          title: 'Sale',
+          title: AppLocalizations.of(context)!.overviewSale,
         ),
         const SizedBox(
           width: 10,
@@ -140,7 +141,7 @@ class OverviewPage extends StatelessWidget {
         CurrentStatValue(
           value: state.totalCost.toString(),
           iconPath: IconPath.cashPayment,
-          title: 'Cost',
+          title:  AppLocalizations.of(context)!.overviewCost,
         ),
         const SizedBox(
           width: 10,
@@ -148,7 +149,7 @@ class OverviewPage extends StatelessWidget {
         CurrentStatValue(
           value: state.totalOrders.toString(),
           iconPath: IconPath.orders,
-          title: 'Orders',
+          title:  AppLocalizations.of(context)!.overviewOrders,
           showCurrency: false,
         ),
       ],
@@ -163,7 +164,7 @@ class OverviewPage extends StatelessWidget {
         PreviusStatValue(
           value: state.previousTotalSaleValue.toString(),
           iconPath: IconPath.wallet,
-          title: 'Sale',
+          title:  AppLocalizations.of(context)!.overviewSale,
           percentageValue: state.saleValuePercentageChange,
         ),
         const SizedBox(
@@ -172,7 +173,7 @@ class OverviewPage extends StatelessWidget {
         PreviusStatValue(
           value: state.previousTotalCostValue.toString(),
           iconPath: IconPath.cashPayment,
-          title: 'Cost',
+          title: AppLocalizations.of(context)!.overviewCost,
           percentageValue: state.costValuePercentageChange,
         ),
         const SizedBox(
@@ -181,7 +182,7 @@ class OverviewPage extends StatelessWidget {
         PreviusStatValue(
           value: state.previousTotalOrdersCount.toString(),
           iconPath: IconPath.orders,
-          title: 'Orders',
+          title: AppLocalizations.of(context)!.overviewOrders,
           percentageValue: state.ordersCountPercentageChange,
           showCurrency: false,
         ),

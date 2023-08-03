@@ -63,6 +63,7 @@ class MoxyApp extends StatelessWidget {
       ),
     );
   }
+  
 
   Widget get _routers => BlocBuilder<RootRouterCubit, RootRouterState>(
         builder: (context, state) => Router(

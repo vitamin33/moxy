@@ -8,7 +8,7 @@ class RootWebWidget extends StatefulWidget {
 }
 
 class _RootWebWidgetState extends State<RootWebWidget> {
-  int _selectedIndex = 0;
+  int selectedIndex = 0;
 
   static const List<Widget> _pages = <Widget>[
     Text('Home Page'),
@@ -35,7 +35,7 @@ class _RootWebWidgetState extends State<RootWebWidget> {
                 TabBar(
                   onTap: (index) {
                     setState(() {
-                      _selectedIndex = index;
+                      selectedIndex = index;
                     });
                   },
                   tabs: [
@@ -52,7 +52,7 @@ class _RootWebWidgetState extends State<RootWebWidget> {
                 icon: const Icon(Icons.search),
                 onPressed: () {
                   setState(() {
-                    _selectedIndex = 0;
+                    selectedIndex = 0;
                   });
                 },
               ),
@@ -60,7 +60,7 @@ class _RootWebWidgetState extends State<RootWebWidget> {
                 icon: const Icon(Icons.favorite),
                 onPressed: () {
                   setState(() {
-                    _selectedIndex = 1;
+                    selectedIndex = 1;
                   });
                 },
               ),
@@ -68,7 +68,7 @@ class _RootWebWidgetState extends State<RootWebWidget> {
                 icon: const Icon(Icons.person),
                 onPressed: () {
                   setState(() {
-                    _selectedIndex = 2;
+                    selectedIndex = 2;
                   });
                 },
               ),
@@ -76,7 +76,7 @@ class _RootWebWidgetState extends State<RootWebWidget> {
                 icon: const Icon(Icons.shopping_basket),
                 onPressed: () {
                   setState(() {
-                    _selectedIndex = 3;
+                    selectedIndex = 3;
                   });
                 },
               ),

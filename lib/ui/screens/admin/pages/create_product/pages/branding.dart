@@ -11,6 +11,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../../constant/icon_path.dart';
 import '../../../../../../domain/admin/create_product/create_product_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Branding extends StatelessWidget {
   const Branding({Key? key}) : super(key: key);
@@ -39,9 +40,9 @@ class Branding extends StatelessWidget {
                               const SizedBox(
                                 width: 2,
                               ),
-                              const Text(
-                                'Pick Image',
-                                style: TextStyle(
+                               Text(
+                                AppLocalizations.of(context)!.pickImage,
+                                style:const TextStyle(
                                     color: AppTheme.black,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500),
@@ -53,7 +54,7 @@ class Branding extends StatelessWidget {
                   _buildGalleryArea(context, state, cubit),
                   const SizedBox(height: 20),
                   CustomTextField(
-                    title: ' Price(\$)',
+                    title: AppLocalizations.of(context)!.createProductPrice,
                     controller: cubit.costPriceController,
                     onChanged: cubit.costPriceChanged,
                     state: state.errors.costPrice,
@@ -65,7 +66,8 @@ class Branding extends StatelessWidget {
                   ),
                   const SizedBox(height: 20),
                   CustomTextField(
-                    title: 'Sale Price(\$)',
+                    title:
+                        '${AppLocalizations.of(context)!.createProductPrice}(\$)',
                     controller: cubit.salePriceController,
                     onChanged: cubit.salePriceChanged,
                     state: state.errors.salePrice,
@@ -298,7 +300,7 @@ class Branding extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 SvgPicture.asset(IconPath.pickImage),
-                                const Text('Pick Image From Gallery')
+                                 Text( AppLocalizations.of(context)!.createProductPickImage)
                               ]),
                         ),
                       ),

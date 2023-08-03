@@ -505,6 +505,7 @@ Widget orderStatus(context, EditOrderState state, cubit) {
                   scrollDirection: Axis.horizontal,
                   itemCount: allStatusOrder.length,
                   itemBuilder: (context, index) {
+                    final allStatusOrder = getAllStatusOrder(context);
                     final status = allStatusOrder[index];
                     final isSelected = status.statusTitle == state.status;
                     return Padding(

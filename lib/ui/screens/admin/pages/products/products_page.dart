@@ -13,6 +13,8 @@ import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({Key? key}) : super(key: key);
@@ -60,14 +62,14 @@ class _ProductsPageState extends State<ProductsPage> {
       if (effect is ProductsLoadingFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText:
-                'Products loading failed: ${effect.failureText}'));
+                '${AppLocalizations.of(context)!.productsLoadingFailed} ${effect.failureText}'));
       }
     });
     return BlocConsumer<AllProductsCubit, AllProductsState>(
       listener: (context, state) {
         if (state.errorMessage != '') {
           ScaffoldMessenger.of(context)
-              .showSnackBar(snackBarWhenFailure(snackBarFailureText: 'Failed'));
+              .showSnackBar(snackBarWhenFailure(snackBarFailureText: AppLocalizations.of(context)!.failed));
           context.read<CreateProductCubit>().clearErrorState();
         }
       },
@@ -87,7 +89,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   toolbarHeight: _isSearchVisible ? 56.0 : 0.0,
                   title: _isSearchVisible
                       ? SearchTextfield(
-                          title: 'Search',
+                          title: AppLocalizations.of(context)!.search,
                           onChanged: (term) => cubit.searchProducts(term),
                         )
                       : null,

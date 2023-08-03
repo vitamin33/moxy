@@ -7,6 +7,8 @@ import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../../../../../domain/models/warehouse.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class SearchCityDropdown extends StatelessWidget {
   final Warehouse? selectedWarehouse;
@@ -47,7 +49,7 @@ class SearchCityDropdown extends StatelessWidget {
                 selectedItem: selectedCity,
                 itemAsString: selectedCity.presentName != ''
                     ? (City city) => city.toString()
-                    : (City city) => "City",
+                    : (City city) =>AppLocalizations.of(context)!.city ,
                 onChanged: (City? city) {
                   onChanged(city);
                   warehousSearchCubit.clearWarehouse();

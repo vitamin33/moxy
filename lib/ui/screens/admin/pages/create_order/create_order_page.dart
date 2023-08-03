@@ -17,6 +17,8 @@ import '../../../../../domain/admin/create_order/create_order_effects.dart';
 import '../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../theme/app_theme.dart';
 import '../create_product/create_product_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 // ignore: must_be_immutable
 class CreateOrderPage extends StatelessWidget {
@@ -29,7 +31,7 @@ class CreateOrderPage extends StatelessWidget {
     cubit.effectStream.listen((effect) {
       if (effect is ValidationFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText: 'Wrong input, please check text fields.'));
+            snackBarFailureText:AppLocalizations.of(context)!.wrongInput));
       }
     });
 
@@ -38,7 +40,7 @@ class CreateOrderPage extends StatelessWidget {
         if (state.errorMessage != '')
           {
             ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenFailure(snackBarFailureText: 'Failed')),
+                snackBarWhenFailure(snackBarFailureText: AppLocalizations.of(context)!.failed)),
             context.read<CreateOrderCubit>().clearErrorState(),
           }
       },
@@ -62,9 +64,9 @@ class CreateOrderPage extends StatelessWidget {
                               );
                         }
                       },
-                      title: 'Order Added',
+                      title: AppLocalizations.of(context)!.orderAdded,
                       titleButton:
-                          state.isEdit ? 'Create New' : 'Back To Product')
+                          state.isEdit ?AppLocalizations.of(context)!.createNew  : AppLocalizations.of(context)!.backToOrder)
                   : state.isLoading
                       ? loader()
                       : Column(
@@ -83,11 +85,11 @@ class CreateOrderPage extends StatelessWidget {
                                           horizontal: 20),
                                       child: AppIndicator(
                                           activePage: state.activePage,
-                                          inadicatorName: const [
-                                            'About',
-                                            'Payment',
-                                            'Delivery',
-                                            'Status'
+                                          inadicatorName:  [
+                                            AppLocalizations.of(context)!.about,
+                                            AppLocalizations.of(context)!.payment,
+                                            AppLocalizations.of(context)!.delivery,
+                                            AppLocalizations.of(context)!.status,
                                           ],
                                           pages: const [
                                             About(),
@@ -113,7 +115,7 @@ class CreateOrderPage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            positionOrderButton(state, cubit, isKeyboardVisible)
+                            positionOrderButton(state, cubit, isKeyboardVisible,context)
                           ],
                         );
             });
@@ -125,7 +127,7 @@ class CreateOrderPage extends StatelessWidget {
 }
 
 Widget positionOrderButton(
-    CreateOrderState state, CreateOrderCubit cubit, bool isKeyboardVisible) {
+    CreateOrderState state, CreateOrderCubit cubit, bool isKeyboardVisible,context) {
   double buttonsHeight = isKeyboardVisible ? 0 : bottomButtonsHeight;
   return SizedBox(
       height: buttonsHeight,
@@ -135,7 +137,7 @@ Widget positionOrderButton(
         children: [
           state.activePage != 0
               ? CustomButton(
-                  title: 'Previus',
+                  title: AppLocalizations.of(context)!.previusButton,
                   onTap: cubit.moveToPreviustPage,
                   buttonWidth: 150,
                   outline: true,
@@ -144,7 +146,7 @@ Widget positionOrderButton(
                   width: 150,
                 ),
           CustomButton(
-            title: state.activePage != 3 ? 'Next' : 'Add',
+            title: state.activePage != 3 ? AppLocalizations.of(context)!.nextButton : AppLocalizations.of(context)!.addButton,
             onTap: cubit.moveToNextPage,
             buttonWidth: 150,
           )

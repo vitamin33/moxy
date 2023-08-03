@@ -42,15 +42,15 @@ class CurrentStatValue extends StatelessWidget {
                       child: SvgPicture.asset(
                         iconPath,
                         color: Colors.white,
-                        width: 20,
+                        width: 16,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(width: 3),
                   Text(
                     title,
                     style: const TextStyle(
-                        fontSize: 17,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: AppTheme.gray),
                   ),
