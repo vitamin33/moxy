@@ -11,7 +11,6 @@ import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
-import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../../services/get_it.dart';
@@ -21,7 +20,6 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
-  final navigationService = locate<NavigationService>();
   final bool isEditMode;
   final String? productId;
 

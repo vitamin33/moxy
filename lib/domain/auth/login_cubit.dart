@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import '../../services/get_it.dart';
-import '../../services/navigation_service.dart';
 import '../roles.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   final storage = locate<ISecureStorageRepository>();
   final authRepository = locate<AuthRepository>();
-  final navigationService = locate<NavigationService>();
 
   late TextEditingController emailController;
   late TextEditingController passwordController;

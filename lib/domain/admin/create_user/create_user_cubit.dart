@@ -7,10 +7,8 @@ import 'package:moxy/domain/models/user.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
-import 'package:moxy/services/navigation_service.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../../constant/route_name.dart';
 import '../../../services/get_it.dart';
 import 'create_user_state.dart';
 
@@ -18,7 +16,6 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
     with ValidationMixin {
   final userMapper = locate<UserMapper>();
   final userRepository = locate<AuthRepository>();
-  final navigationService = locate<NavigationService>();
 
   CreateUserCubit()
       : super(
@@ -55,12 +52,6 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
     } catch (e) {
       moxyPrint(e);
     }
-  }
-
-  // Thisss function!!!
-  void backToProduct() {
-    clearState();
-    navigationService.navigatePushReplaceName(productsPath); //doesnt work
   }
 
   void firstNameChanged(value) {
