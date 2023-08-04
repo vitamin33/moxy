@@ -12,6 +12,8 @@ import '../../../../../domain/admin/create_product/create_product_cubit.dart';
 import '../../../../../domain/models/product.dart';
 import '../../../../../domain/admin/order_product_list/order_product_list_cubit.dart';
 import '../../../../theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class OrderProductList extends StatelessWidget {
   const OrderProductList({Key? key});
@@ -39,10 +41,10 @@ class OrderProductList extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
-                      const Padding(
+                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: SearchTextfield(
-                          title: 'Search',
+                          title: AppLocalizations.of(context)!.search,
                         ),
                       ),
                       Expanded(
@@ -97,7 +99,7 @@ class OrderProductList extends StatelessWidget {
                                   },
                                 )),
                       CustomButton(
-                        title: 'Choose',
+                        title:AppLocalizations.of(context)!.choose,
                         onTap: () {
                           final isEditFrom = (context
                                   .read<AdminHomeRouterCubit>()

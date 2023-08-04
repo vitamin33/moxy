@@ -4,6 +4,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/response/dashboard_response.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Chart extends StatefulWidget {
   final List<TotalByTimeFrame> saleFromTimeFrame;
@@ -65,11 +66,11 @@ class _ChartState extends State<Chart> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(5.0),
+               Padding(
+                padding:const EdgeInsets.all(5.0),
                 child: Text(
-                  'Activity',
-                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+                  AppLocalizations.of(context)!.overviewChartTitle,
+                  style:const TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
                 ),
               ),
               SfCartesianChart(
@@ -85,11 +86,11 @@ class _ChartState extends State<Chart> {
                     final int value = axisLabelRenderArgs.value.toInt();
                     if (value >= 1000) {
                       return ChartAxisLabel(
-                          '\$${(value / 1000).toStringAsFixed(0)}k',
+                          '\₴${(value / 1000).toStringAsFixed(0)}k',
                           const TextStyle(color: AppTheme.gray));
                     } else {
                       return ChartAxisLabel(
-                          '\$$value', const TextStyle(color: AppTheme.gray));
+                          '\₴$value', const TextStyle(color: AppTheme.gray));
                     }
                   },
                 ),
@@ -109,7 +110,7 @@ class _ChartState extends State<Chart> {
                           selectedColumnIndex2 = null;
                         });
                       },
-                      name: 'Total Cost ',
+                      name: AppLocalizations.of(context)!.overviewTotalCost,
                       dataSource: dataSourceList,
                       markerSettings: MarkerSettings(
                           isVisible:
@@ -131,7 +132,7 @@ class _ChartState extends State<Chart> {
                           selectedColumnIndex1 = null;
                         });
                       },
-                      name: 'Total Sale ',
+                      name:AppLocalizations.of(context)!.overviewTotalSale,
                       dataSource: dataSourceList,
                       markerSettings: MarkerSettings(
                           isVisible:
@@ -151,7 +152,7 @@ class _ChartState extends State<Chart> {
                   final int pointIndex = args.pointIndex!;
                   if (pointIndex == selectedColumnIndex1 ||
                       pointIndex == selectedColumnIndex2) {
-                    args.text = '\$ ${args.text}';
+                    args.text = '\₴ ${args.text}';
                     args.color = AppTheme.black;
                     args.textStyle = const TextStyle(fontSize: 14);
                   }

@@ -11,6 +11,7 @@ import '../../../../../domain/admin/create_user/create_user_effects.dart';
 import '../../../../../domain/admin/create_user/create_user_state.dart';
 import '../../../../theme/app_theme.dart';
 import '../../../components/paste_text_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateUserPage extends StatelessWidget {
   const CreateUserPage({super.key});
@@ -21,7 +22,7 @@ class CreateUserPage extends StatelessWidget {
     cubit.effectStream.listen((effect) {
       if (effect is DataParseFailed) {
         ScaffoldMessenger.of(context).showSnackBar(
-            snackBarWhenFailure(snackBarFailureText: 'Unable to parse data.'));
+            snackBarWhenFailure(snackBarFailureText: AppLocalizations.of(context)!.unableToParseData));
       }
       if (effect is ApiRequestFailed) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -29,7 +30,7 @@ class CreateUserPage extends StatelessWidget {
       }
       if (effect is UserValidationFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText: 'Wrong input, please check text fields.'));
+            snackBarFailureText: AppLocalizations.of(context)!.wrongInput));
       }
       if (effect is UserCreatedSuccess) {
         context.read<AdminHomeRouterCubit>().goToCustomers();
@@ -55,11 +56,12 @@ class CreateUserPage extends StatelessWidget {
                         ? loader()
                         : Column(
                             children: [
-                              _buildUserDataWidget(cubit, state),
+                              _buildUserDataWidget(cubit, state, context),
                               Expanded(
                                 child: Align(
                                   alignment: Alignment.bottomCenter,
-                                  child: _buildAddUserButton(state, cubit),
+                                  child: _buildAddUserButton(
+                                      state, cubit, context),
                                 ),
                               ),
                               const SizedBox(
@@ -77,13 +79,14 @@ class CreateUserPage extends StatelessWidget {
     );
   }
 
-  Widget _buildUserDataWidget(CreateUserCubit cubit, CreateUserState state) {
+  Widget _buildUserDataWidget(
+      CreateUserCubit cubit, CreateUserState state, context) {
     return Padding(
       padding: const EdgeInsets.all(AppTheme.cardPadding),
       child: Column(
         children: [
           PasteTextField(
-            title: ' First Name',
+            title: AppLocalizations.of(context)!.userFirstName,
             maxLines: 1,
             controller: cubit.firstNameController,
             onChanged: cubit.firstNameChanged,
@@ -94,7 +97,7 @@ class CreateUserPage extends StatelessWidget {
             height: 10,
           ),
           PasteTextField(
-            title: 'Second Name',
+            title: AppLocalizations.of(context)!.userSecondName,
             maxLines: 1,
             controller: cubit.secondNameController,
             onChanged: cubit.secondNameChanged,
@@ -105,7 +108,7 @@ class CreateUserPage extends StatelessWidget {
             height: 10,
           ),
           PasteTextField(
-            title: 'Phone Number',
+            title: AppLocalizations.of(context)!.userPhoneNumber,
             controller: cubit.mobileNumberController,
             onChanged: cubit.mobileNumberChanged,
             state: state.errors.phoneNumber,
@@ -120,7 +123,7 @@ class CreateUserPage extends StatelessWidget {
             height: 10,
           ),
           PasteTextField(
-            title: 'City',
+            title: AppLocalizations.of(context)!.city,
             maxLines: 1,
             controller: cubit.cityController,
             onChanged: cubit.cityChanged,
@@ -131,7 +134,7 @@ class CreateUserPage extends StatelessWidget {
             height: 10,
           ),
           PasteTextField(
-            title: 'Instagram',
+            title: AppLocalizations.of(context)!.userInstagram,
             maxLines: 1,
             controller: cubit.instagramController,
             onChanged: cubit.instagramChanged,
@@ -159,12 +162,13 @@ class CreateUserPage extends StatelessWidget {
     );
   }
 
-  Widget _buildAddUserButton(CreateUserState state, CreateUserCubit cubit) {
+  Widget _buildAddUserButton(
+      CreateUserState state, CreateUserCubit cubit, context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
       child: CustomButton(
         buttonWidth: 200,
-        title: "Create user",
+        title: AppLocalizations.of(context)!.createUser,
         state: state.isLoading ? ButtonState.loading : ButtonState.idle,
         onTap: cubit.createGuestUser,
       ),

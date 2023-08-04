@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
-import 'package:moxy/domain/admin/dashboard/dashboard_state.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
 import 'package:moxy/services/navigation/admin_home_router_delegate.dart';
@@ -13,6 +12,7 @@ import '../components/action_button.dart';
 import '../components/flutter_expandable_fab.dart';
 import '../components/navigation_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminRootView extends StatelessWidget {
   AdminRootView({Key? key}) : super(key: key);
@@ -49,7 +49,7 @@ class AdminRootView extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.all(5),
                               child: SizedBox(
-                                width: 50,
+                                width: 60,
                                 height: 38,
                                 child: InkWell(
                                   onTap: () {
@@ -57,19 +57,17 @@ class AdminRootView extends StatelessWidget {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child:
-                                        item.text != null
-                                            ? Text(
-                                                item.text!,
-                                                textAlign: TextAlign.center,
-                                                textDirection:
-                                                    TextDirection.rtl,
-                                                style: const TextStyle(
-                                                  color: AppTheme.pinkDark,
-                                                  fontSize: 14,
-                                                ),
-                                              )
-                                            : SvgPicture.asset(item.icon),
+                                    child: item.text != null
+                                        ? Text(
+                                            item.text!,
+                                            textAlign: TextAlign.center,
+                                            textDirection: TextDirection.rtl,
+                                            style: const TextStyle(
+                                                color: AppTheme.pinkDark,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500),
+                                          )
+                                        : SvgPicture.asset(item.icon),
                                   ),
                                 ),
                               ),
@@ -89,7 +87,7 @@ class AdminRootView extends StatelessWidget {
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            _mapStateToTitleText(state),
+            _mapStateToTitleText(context, state),
           ),
         ),
         leading: Builder(
@@ -156,39 +154,40 @@ class AdminRootView extends StatelessWidget {
         ),
       );
 
-  String _mapStateToTitleText(AdminHomeRouterState state) {
+  String _mapStateToTitleText(
+      BuildContext context, AdminHomeRouterState state) {
     switch (state.runtimeType) {
       case OverviewPageState:
-        return 'Overview';
+        return AppLocalizations.of(context)!.overview;
       case ProductsPageState:
-        return 'Products';
+        return AppLocalizations.of(context)!.products;
       case UsersPageState:
-        return 'Customers';
+        return AppLocalizations.of(context)!.customers;
       case OrdersPageState:
-        return 'Orders';
+        return AppLocalizations.of(context)!.orders;
       case CreateProductPageState:
         final createProductState = state as CreateProductPageState;
         if (createProductState.isEditMode ?? false) {
-          return 'Edit product';
+          return AppLocalizations.of(context)!.editProduct;
         } else {
-          return 'Create product';
+          return AppLocalizations.of(context)!.createProduct;
         }
       case CreateOrderPageState:
-        return 'Create order';
+        return AppLocalizations.of(context)!.createOrder;
       case EditOrderPageState:
-        return 'Edit Order';
+        return AppLocalizations.of(context)!.editOrder;
       case FilterOrderPageState:
-        return 'Filter';
+        return AppLocalizations.of(context)!.filter;
       case OrderProductListPageState:
-        return 'Order Product List';
+        return AppLocalizations.of(context)!.orderProductList;
       case CreateUserPageState:
-        return 'Create user';
+        return AppLocalizations.of(context)!.createUser;
       case TransactionsPageState:
         return 'Products';
       case FeedbacksPageState:
-        return 'Feedbacks';
+        return AppLocalizations.of(context)!.feedbacks;
     }
-    return 'Dashboard';
+    return AppLocalizations.of(context)!.overview;
   }
 
   List<AppBarIcon> _mapStateToActionIcon(
@@ -228,7 +227,7 @@ class AdminRootView extends StatelessWidget {
         return [
           AppBarIcon(
               icon: IconPath.bag,
-              text: 'Reset',
+              text: AppLocalizations.of(context)!.reset,
               onPress: (ctx) {
                 ctx.read<FilterOrdersCubit>().resetFilter();
               })

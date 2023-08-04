@@ -16,6 +16,7 @@ class StatusPage extends StatelessWidget {
       builder: (context, state) {
         // ignore: unused_local_variable
         final cubit = context.read<CreateOrderCubit>();
+        final allStatusOrder = getAllStatusOrder(context);
         return Padding(
           padding: const EdgeInsets.all(9.0),
           child: SingleChildScrollView(

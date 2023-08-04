@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:json_theme/json_theme.dart';
 
-import 'package:moxy/main.dart';
+// import 'package:moxy/main.dart';
 import 'package:moxy/moxy_app.dart';
 
 void main() {

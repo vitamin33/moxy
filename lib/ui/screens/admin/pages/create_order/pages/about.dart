@@ -10,6 +10,7 @@ import '../../../../../../constant/icon_path.dart';
 import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
 import '../../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../../theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class About extends StatelessWidget {
   const About({super.key});
@@ -25,7 +26,7 @@ class About extends StatelessWidget {
           child: Column(
             children: [
               CustomTextField(
-                title: 'First Name',
+                title: AppLocalizations.of(context)!.userFirstName,
                 maxLines: 1,
                 controller: cubit.firstNameController,
                 onChanged: cubit.firstNameChanged,
@@ -36,7 +37,7 @@ class About extends StatelessWidget {
                 height: 10,
               ),
               CustomTextField(
-                title: 'Second Name',
+                title: AppLocalizations.of(context)!.userSecondName,
                 maxLines: 1,
                 controller: cubit.secondNameController,
                 onChanged: cubit.secondNameChanged,
@@ -46,7 +47,7 @@ class About extends StatelessWidget {
                 height: 10,
               ),
               CustomTextField(
-                title: 'Phone Number',
+                title: AppLocalizations.of(context)!.userPhoneNumber,
                 controller: cubit.phoneNumberController,
                 onChanged: cubit.phoneNumberChanged,
                 maxLines: 1,
@@ -67,7 +68,7 @@ class About extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'List Price:${state.productListPrice}',
+                              '${AppLocalizations.of(context)!.createOrderListPrice}:${state.productListPrice}',
                               textAlign: TextAlign.start,
                               style: const TextStyle(
                                   color: AppTheme.black,
@@ -87,9 +88,10 @@ class About extends StatelessWidget {
                                   const SizedBox(
                                     width: 2,
                                   ),
-                                  const Text(
-                                    'Add Product',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .createOrderAddProduct,
+                                    style: const TextStyle(
                                         color: AppTheme.black,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w500),
@@ -100,7 +102,8 @@ class About extends StatelessWidget {
                           ],
                         )
                       : Text(
-                          'List of products',
+                          AppLocalizations.of(context)!
+                              .createOrderListOfProduct,
                           textAlign: TextAlign.start,
                           style: renderTitleStyle(
                               context, isValid(state.errors.selectedProduct)),
@@ -159,7 +162,7 @@ Widget _buildGalleryArea(
                                       Text(state.selectedProducts[index]
                                           .dimensions.first.color),
                                       Text(
-                                          ' quantity:${state.selectedProducts[index].dimensions.first.quantity}'),
+                                          '${AppLocalizations.of(context)!.quantity}:${state.selectedProducts[index].dimensions.first.quantity}'),
                                     ]),
                               ),
                             ),
@@ -198,7 +201,8 @@ Widget _buildGalleryArea(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SvgPicture.asset(IconPath.plus),
-                              const Text('Add Product')
+                              Text(AppLocalizations.of(context)!
+                                  .createOrderAddProduct)
                             ]),
                       ),
                     ),

@@ -4,6 +4,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../data/models/response/dashboard_response.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersChart extends StatefulWidget {
   final List<TotalByTimeFrame> ordersFromTimeFrame;
@@ -58,16 +59,15 @@ class _OrdersChartState extends State<OrdersChart> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(5.0),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
                 child: Text(
-                  'Orders',
-                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+                  AppLocalizations.of(context)!.overviewOrders,
+                  style: const TextStyle(
+                      fontSize: 19, fontWeight: FontWeight.w500),
                 ),
               ),
               SfCartesianChart(
-                legend:
-                    Legend(isVisible: true, position: LegendPosition.bottom),
                 primaryYAxis: NumericAxis(
                   majorGridLines: const MajorGridLines(
                     width: 1,
@@ -97,7 +97,6 @@ class _OrdersChartState extends State<OrdersChart> {
                           }
                         });
                       },
-                      name: 'Total Orders ',
                       dataSource: dataSourceList,
                       markerSettings: const MarkerSettings(
                           isVisible: true,

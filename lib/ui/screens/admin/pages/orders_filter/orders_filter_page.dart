@@ -13,6 +13,7 @@ import '../../../../../constant/order_constants.dart';
 import '../../../../../domain/admin/filter_orders/filter_orders_cubit.dart';
 import '../../../../../domain/admin/filter_orders/filter_orders_state.dart';
 import '../../../../components/loader.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilterOrderPage extends StatefulWidget {
   const FilterOrderPage({super.key});
@@ -54,7 +55,7 @@ class _FilterOrderPageState extends State<FilterOrderPage> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: CustomButton(
-                        title: 'Show Results',
+                        title: AppLocalizations.of(context)!.filterButton,
                         onTap: () {
                           cubit.saveFilterParams();
                           context.read<AdminHomeRouterCubit>().navigateTo(
@@ -85,8 +86,9 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Type Payment',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              Text(AppLocalizations.of(context)!.filterTypePayment,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w600)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -111,11 +113,11 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(5.0),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
                         child: Text(
-                          'Full payment',
-                          style: TextStyle(fontWeight: FontWeight.w500),
+                          AppLocalizations.of(context)!.fullPayment,
+                          style: const TextStyle(fontWeight: FontWeight.w500),
                         ),
                       )
                     ],
@@ -145,10 +147,11 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text('Cash Advance',
-                            style: TextStyle(fontWeight: FontWeight.w500)),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(AppLocalizations.of(context)!.cashAdvance,
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w500)),
                       )
                     ],
                   )
@@ -173,8 +176,9 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit, context) {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Type Delivery',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+              Text(AppLocalizations.of(context)!.filterTypeDelivery,
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w600)),
               InkWell(
                 onTap: () {
                   cubit.changeDelivery(FilterDeliveryType.novaPost);
@@ -227,8 +231,8 @@ Widget dataRange(FilterOrdersCubit cubit, context) {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Text('Date Range',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        Text(AppLocalizations.of(context)!.filterDateRange,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         Row(
           children: [
             SizedBox(
@@ -268,13 +272,14 @@ Widget dataRange(FilterOrdersCubit cubit, context) {
 }
 
 Widget orderStatus(context, FilterOrdersState state, FilterOrdersCubit cubit) {
+  final allStatusOrder = getAllStatusOrder(context);
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Order Status',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        Text(AppLocalizations.of(context)!.filterOrderStatus,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 100,
