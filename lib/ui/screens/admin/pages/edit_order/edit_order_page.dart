@@ -20,6 +20,7 @@ import '../../../../components/succes_card.dart';
 import '../create_order/city_dropdown.dart';
 import '../create_order/warehouse_dropdown.dart';
 import '../create_product/create_product_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditOrderPage extends StatelessWidget {
   const EditOrderPage({super.key});
@@ -53,8 +54,8 @@ class EditOrderPage extends StatelessWidget {
                                 );
                             cubit.clearState();
                           },
-                          title: 'Order Edited',
-                          titleButton: 'Back To Order')
+                          title: AppLocalizations.of(context)!.orderEdited,
+                          titleButton: AppLocalizations.of(context)!.backToOrder)
                       : state.isLoading
                           ? loader()
                           : Column(
@@ -67,7 +68,7 @@ class EditOrderPage extends StatelessWidget {
                                   child: SingleChildScrollView(
                                       child: Column(
                                     children: [
-                                      dataRange(state),
+                                      dataRange(state,context),
                                       const SizedBox(height: 10),
                                       contactDetails(context, state, cubit),
                                       const SizedBox(height: 20),
@@ -104,9 +105,9 @@ Widget contactDetails(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          'Contact Details',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+         Text(
+          AppLocalizations.of(context)!.contactDetails,
+          style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
         Padding(
@@ -150,9 +151,9 @@ Widget contactDetails(
                           onPressed: () {
                             cubit.changeEditName();
                           },
-                          child: const Text(
-                            'Change',
-                            style: TextStyle(
+                          child:  Text(
+                            AppLocalizations.of(context)!.change,
+                            style:const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: AppTheme.pinkDark,
@@ -195,9 +196,9 @@ Widget contactDetails(
                           onPressed: () {
                             cubit.changeEditPhone();
                           },
-                          child: const Text(
-                            'Change',
-                            style: TextStyle(
+                          child:  Text(
+                            AppLocalizations.of(context)!.change,
+                            style:const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: AppTheme.pinkDark,
@@ -220,12 +221,12 @@ Widget contactDetails(
                 onPressed: () {
                   cubit.editSelectedProduct();
                   context.read<AdminHomeRouterCubit>().navigateTo(
-                        OrderProductListPageState(isFromEdit: true),
+                       const OrderProductListPageState(isFromEdit: true),
                       );
                 },
-                child: const Text(
-                  'Change',
-                  style: TextStyle(
+                child:  Text(
+                  AppLocalizations.of(context)!.change,
+                  style:const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: AppTheme.pinkDark,
@@ -250,9 +251,9 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Type Payment',
+                 Text(AppLocalizations.of(context)!.filterTypePayment,
                     style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                       const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -278,11 +279,11 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                             ),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.all(5.0),
+                         Padding(
+                          padding:const EdgeInsets.all(5.0),
                           child: Text(
-                            'Full payment',
-                            style: TextStyle(fontWeight: FontWeight.w500),
+                            AppLocalizations.of(context)!.fullPayment,
+                            style:const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         )
                       ],
@@ -314,10 +315,10 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                             ),
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.all(5.0),
-                          child: Text('Cash Advance',
-                              style: TextStyle(fontWeight: FontWeight.w500)),
+                         Padding(
+                          padding:const EdgeInsets.all(5.0),
+                          child: Text(AppLocalizations.of(context)!.cashAdvance,
+                              style:const TextStyle(fontWeight: FontWeight.w500)),
                         )
                       ],
                     )
@@ -369,7 +370,7 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Type Delivery',
+               Text(AppLocalizations.of(context)!.filterTypeDelivery,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -462,7 +463,7 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
   );
 }
 
-Widget dataRange(state) {
+Widget dataRange(state,context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
     child: SizedBox(
@@ -470,8 +471,8 @@ Widget dataRange(state) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text('Creation date',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+           Text(AppLocalizations.of(context)!.creationDate,
+              style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           Text(
             state.createdAt,
             style: const TextStyle(
@@ -492,8 +493,8 @@ Widget orderStatus(context, EditOrderState state, cubit) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Order Status',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+         Text(AppLocalizations.of(context)!.filterOrderStatus,
+            style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 100,
