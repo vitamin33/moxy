@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/screens/client/web/root_web.dart';
 
 import 'mobile/root_mobile.dart';

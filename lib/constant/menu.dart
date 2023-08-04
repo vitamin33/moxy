@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 
 List<Menu> menus = const [
   Menu(
