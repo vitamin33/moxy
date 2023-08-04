@@ -1,0 +1,35 @@
+part of 'web_home_router_cubit.dart';
+
+abstract class ClientHomeRouterState extends Equatable {
+  const ClientHomeRouterState();
+  @override
+  List<Object?> get props => [];
+}
+
+class HomeRouteState extends ClientHomeRouterState {
+  final String? extraPageContent;
+  const HomeRouteState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}
+
+class FavouritesRouteState extends ClientHomeRouterState {
+  final String? extraPageContent;
+  const FavouritesRouteState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}
+
+class BasketRouteState extends ClientHomeRouterState {
+  final String? extraPageContent;
+  const BasketRouteState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}
+
+class ProfilePageState extends ClientHomeRouterState {
+  final String? extraPageContent;
+  const ProfilePageState([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+}

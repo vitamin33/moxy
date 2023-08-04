@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'domain/admin/all_orders/all_orders_cubit.dart';
 import 'domain/admin/all_products/all_products_cubit.dart';
 import 'domain/admin/edit_order/edit_order_cubit.dart';
-import 'services/navigation/admin_home_router_cubit.dart';
+import 'services/navigation/admin/admin_home_router_cubit.dart';
 import 'services/navigation/root_router_cubit.dart';
 import 'services/navigation/root_router_delegate.dart';
 
