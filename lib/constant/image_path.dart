@@ -6,4 +6,5 @@ class ImageAssets {
   static const String fries = "assets/images/fry.png";
   static const String novaPoshta = "assets/images/nova_poshta.png";
   static const String ukrPoshta = "assets/images/ukr_poshta.png";
+  static const String moxyIcLauncher = "assets/icons/ic_launcher.png";
 }

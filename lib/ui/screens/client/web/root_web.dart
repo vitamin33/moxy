@@ -1,81 +1,82 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/constant/image_path.dart';
+import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 class RootWebWidget extends StatelessWidget {
   const RootWebWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(),
-      body: Center(
-        child: Text('Content goes here'),
+    return DefaultTabController(
+      length: 4,
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 8.0,
+          titleSpacing: 0.0,
+          leading: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Image.asset(
+              width: 30,
+              height: 30,
+              ImageAssets.moxyIcLauncher,
+            ),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const SizedBox(
+                width: 100,
+              ),
+              const SizedBox(
+                width: 400, // Adjust the width as needed
+                child: SegmentedTabControl(
+                  backgroundColor: AppTheme.white,
+                  tabPadding: EdgeInsets.all(10.0),
+                  radius: Radius.circular(15.0),
+                  indicatorColor: AppTheme.pinkDark,
+                  tabTextColor: AppTheme.textColor,
+                  selectedTabTextColor: AppTheme.white,
+                  splashColor: AppTheme.pink,
+                  tabs: [
+                    SegmentTab(label: 'Tab 1'),
+                    SegmentTab(label: 'Tab 2'),
+                    SegmentTab(label: 'Tab 3'),
+                    SegmentTab(label: 'Tab 4'),
+                  ],
+                ),
+              ),
+              Row(
+                children: [
+                  _buildPaddedIconButton(Icons.shopping_cart),
+                  _buildPaddedIconButton(Icons.favorite),
+                  _buildPaddedIconButton(Icons.settings),
+                  _buildPaddedIconButton(Icons.person),
+                ],
+              ),
+            ],
+          ),
+        ),
+        body: const TabBarView(
+          children: [
+            Icon(Icons.directions_car),
+            Icon(Icons.directions_transit),
+            Icon(Icons.directions_bike),
+            Icon(Icons.directions_boat_filled),
+          ],
+        ),
       ),
     );
   }
-}
 
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AppTabTitle(title: 'Tab 1', isSelected: true),
-          AppTabTitle(title: 'Tab 2', isSelected: false),
-          AppTabTitle(title: 'Tab 3', isSelected: false),
-          AppTabTitle(title: 'Tab 4', isSelected: false),
-        ],
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {
-            // Handle shopping cart button press
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.favorite),
-          onPressed: () {
-            // Handle favorite button press
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {
-            // Handle settings button press
-          },
-        ),
-        IconButton(
-          icon: Icon(Icons.person),
-          onPressed: () {
-            // Handle profile button press
-          },
-        ),
-      ],
-    );
-  }
-}
-
-class AppTabTitle extends StatelessWidget {
-  final String title;
-  final bool isSelected;
-
-  AppTabTitle({required this.title, required this.isSelected});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildPaddedIconButton(IconData iconData) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16.0,
-          color: isSelected ? Colors.blue : Colors.black,
-        ),
+      padding: const EdgeInsets.all(8.0),
+      child: IconButton(
+        icon: Icon(iconData),
+        onPressed: () {
+          // Handle button press
+        },
       ),
     );
   }
