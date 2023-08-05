@@ -8,7 +8,7 @@ import 'package:moxy/domain/admin/all_products/all_products_effects.dart';
 import 'package:moxy/domain/admin/all_products/all_products_state.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
-import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';

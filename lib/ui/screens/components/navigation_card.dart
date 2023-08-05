@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 
 import '../../components/custom_expansion_tile.dart';
 import '../admin/menu.dart';

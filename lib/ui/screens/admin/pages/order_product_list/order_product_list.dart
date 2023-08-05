@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';

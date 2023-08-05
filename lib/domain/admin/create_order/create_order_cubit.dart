@@ -8,7 +8,6 @@ import '../../../constant/order_constants.dart';
 import '../../../data/repositories/order_repository.dart';
 import '../../../data/repositories/product_repository.dart';
 import '../../../services/get_it.dart';
-import '../../../services/navigation_service.dart';
 import '../../mappers/order_mapper.dart';
 import '../../models/order.dart';
 import '../../models/product.dart';
@@ -21,7 +20,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     with ValidationMixin {
   final orderRepository = locate<OrderRepository>();
   final productRepository = locate<ProductRepository>();
-  final navigationService = locate<NavigationService>();
   final orderMapper = locate<OrderMapper>();
 
   late final StreamSubscription _selectedProductSubscription;

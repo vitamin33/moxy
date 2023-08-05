@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:moxy/services/navigation/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';

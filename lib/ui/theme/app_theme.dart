@@ -9,12 +9,15 @@ class AppTheme {
   static BorderRadius cardRadius = BorderRadius.circular(14);
   static const double iconSize = cardPadding;
 
+  static const Color textColor = Color(0xFF0C0C0C);
   static const Color blackLight = Color(0xFF292031);
   static const Color secondaryColor = Color(0xFF75565B);
+  static const Color selectedColor = Color(0xFF5E1133);
   static const Color primaryColor = Color(0xFFBC004B);
   static const Color onPrimaryContainerColor = Color(0xFF400014);
   static const Color primaryContainerColor = Color(0xFFFFD9DE);
   static const Color surfaceColor = Color(0xFFF3DDDF);
+  static const Color pinkAvarage = Color(0xFFF489C0);
   static const Color pink = Color(0xFFFFEBFD);
   static const Color black = Color(0xFF0C0C0C);
   static const Color white = Color(0xFFFFFFFF);

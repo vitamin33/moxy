@@ -69,8 +69,7 @@ dependencies:
   flutter_keyboard_visibility: ^5.4.1
   dropdown_search: ^5.0.6
   syncfusion_flutter_charts: ^21.2.4
-  flutter_localizations:
-    sdk: flutter
+  animated_segmented_tab_control: ^1.0.1
 
 dev_dependencies:
   flutter_test:
@@ -84,6 +83,9 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   build_runner: ^2.3.3
   flutter_launcher_icons: ^0.13.1
+
+  flutter_localizations:
+    sdk: flutter
 
 flutter_launcher_icons:
   android: true

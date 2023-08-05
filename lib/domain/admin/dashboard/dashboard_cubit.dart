@@ -5,13 +5,11 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../data/repositories/overview_repository.dart';
 import '../../../services/get_it.dart';
-import '../../../services/navigation_service.dart';
 import 'dashboard_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
   final overviewRepository = locate<OverviewRepository>();
-  final navigationService = locate<NavigationService>();
 
   DashboardCubit() : super(DashboardState.defaultDashboardState()) {
     getDashboard(

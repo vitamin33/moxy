@@ -8,9 +8,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'domain/admin/all_orders/all_orders_cubit.dart';
 import 'domain/admin/all_products/all_products_cubit.dart';
 import 'domain/admin/edit_order/edit_order_cubit.dart';
-import 'services/navigation/admin_home_router_cubit.dart';
+import 'services/navigation/admin/admin_home_router_cubit.dart';
 import 'services/navigation/root_router_cubit.dart';
 import 'services/navigation/root_router_delegate.dart';
+import 'services/navigation/web/web_home_router_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
@@ -36,6 +37,9 @@ class MoxyApp extends StatelessWidget {
         ),
         BlocProvider<AdminHomeRouterCubit>(
           create: (BuildContext context) => AdminHomeRouterCubit(),
+        ),
+        BlocProvider<ClientHomeRouterCubit>(
+          create: (BuildContext context) => ClientHomeRouterCubit(),
         ),
         BlocProvider<AllProductsCubit>(
             create: (BuildContext context) => AllProductsCubit()),
@@ -63,7 +67,6 @@ class MoxyApp extends StatelessWidget {
       ),
     );
   }
-  
 
   Widget get _routers => BlocBuilder<RootRouterCubit, RootRouterState>(
         builder: (context, state) => Router(
