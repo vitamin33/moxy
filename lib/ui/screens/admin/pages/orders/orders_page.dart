@@ -329,7 +329,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                       fontSize: 13,
                                     )),
                                 Text(
-                                  '${orderPrice} грн',
+                                  '${orderPrice} \₴',
                                   style: const TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w600,

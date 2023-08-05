@@ -5,6 +5,8 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../../domain/admin/create_product/create_product_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class ProductDetails extends StatelessWidget {
             child: SizedBox(
               child: Column(children: [
                 CustomTextField(
-                  title: 'Name',
+                  title: AppLocalizations.of(context)!.createProductName,
                   maxLines: 1,
                   controller: cubit.nameController,
                   onChanged: cubit.nameChanged,
@@ -30,7 +32,7 @@ class ProductDetails extends StatelessWidget {
                 const SizedBox(height: 30),
                 CustomTextField(
                   maxLines: 6,
-                  title: 'Description',
+                  title: AppLocalizations.of(context)!.createProductDescription,
                   controller: cubit.descriptionController,
                   onChanged: cubit.descriptionChanged,
                   validation: true,
@@ -38,7 +40,7 @@ class ProductDetails extends StatelessWidget {
                 ),
                 const SizedBox(height: 30),
                 CustomTextField(
-                  title: 'IdName',
+                  title: AppLocalizations.of(context)!.createProductIdName,
                   maxLines: 1,
                   controller: cubit.idNameController,
                   onChanged: cubit.idNameChanged,

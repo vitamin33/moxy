@@ -8,6 +8,8 @@ import '../../../../../../constant/order_constants.dart';
 import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
 import '../../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../../theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class Payment extends StatelessWidget {
   const Payment({super.key});
@@ -55,8 +57,8 @@ class Payment extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
-                              const Text('Full Payment',
-                                  style: TextStyle(
+                               Text(AppLocalizations.of(context)!.fullPayment,
+                                  style:const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600)),
                             ],
@@ -92,8 +94,8 @@ class Payment extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
-                              const Text('Cash advance',
-                                  style: TextStyle(
+                               Text(AppLocalizations.of(context)!.cashAdvance,
+                                  style:const TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w600)),
                             ],
@@ -115,7 +117,7 @@ class Payment extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: CustomTextField(
-                    title: 'Prepayment',
+                    title: AppLocalizations.of(context)!.prepayment,
                     controller: cubit.prePaymentController,
                     onChanged: cubit.prePaymentChanged,
                     maxLines: 1,

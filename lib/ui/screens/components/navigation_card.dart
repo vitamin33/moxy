@@ -5,15 +5,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 
 import '../../components/custom_expansion_tile.dart';
-import '../../../constant/menu.dart';
+import '../admin/menu.dart';
 import '../../theme/app_theme.dart';
 
 class NavigationBarCard extends StatefulWidget {
   const NavigationBarCard({
     Key? key,
     required this.menu,
+    required this.showIcon,
   }) : super(key: key);
   final Menu menu;
+  final bool showIcon;
 
   @override
   State<NavigationBarCard> createState() => _NavigationBarCardState();
@@ -33,7 +35,8 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
       builder: (context, state) {
         final isTapped = initialRoute == state;
         if (subItems.isNotEmpty) {
-          return NavigationBarCardList(menu: widget.menu, isTapped: isTapped);
+          return NavigationBarCardList(
+              menu: widget.menu, isTapped: isTapped, showLeadingIcons: false);
         }
         return Padding(
           padding: const EdgeInsets.symmetric(
@@ -62,10 +65,14 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        SvgPicture.asset(icon,
-                            colorFilter: ColorFilter.mode(
-                                isTapped ? AppTheme.pinkDark : AppTheme.black,
-                                BlendMode.srcIn)),
+                        widget.showIcon
+                            ? SvgPicture.asset(icon,
+                                colorFilter: ColorFilter.mode(
+                                    isTapped
+                                        ? AppTheme.pinkDark
+                                        : AppTheme.black,
+                                    BlendMode.srcIn))
+                            : Container(),
                         const SizedBox(width: AppTheme.elementSpacing),
                         Text(
                           title,
@@ -93,15 +100,17 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
 }
 
 class NavigationBarCardList extends StatelessWidget {
-  const NavigationBarCardList({
-    Key? key,
-    required this.menu,
-    required,
-    required this.isTapped,
-  }) : super(key: key);
+  const NavigationBarCardList(
+      {Key? key,
+      required this.menu,
+      required,
+      required this.isTapped,
+      required this.showLeadingIcons})
+      : super(key: key);
 
   final Menu menu;
   final bool isTapped;
+  final bool showLeadingIcons;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +147,8 @@ class NavigationBarCardList extends StatelessWidget {
               menu.subRoutes.length,
               (index) {
                 final menu1 = menu.subRoutes[index];
-                return NavigationBarCard(menu: menu1);
+                return NavigationBarCard(
+                    menu: menu1, showIcon: showLeadingIcons);
               },
             ),
           ),

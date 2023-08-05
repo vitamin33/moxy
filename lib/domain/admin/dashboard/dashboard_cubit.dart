@@ -6,6 +6,7 @@ import 'package:moxy/utils/common.dart';
 import '../../../data/repositories/overview_repository.dart';
 import '../../../services/get_it.dart';
 import 'dashboard_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
   final overviewRepository = locate<OverviewRepository>();
@@ -52,7 +53,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       lastDate: DateTime(2030, 12, 31),
       initialDateRange: state.selectedDate,
       currentDate: DateTime.now(),
-      saveText: 'Confirm',
+      saveText: AppLocalizations.of(context)!.confirm,
       builder: (context, child) {
         return Theme(
           data: ThemeData.light().copyWith(

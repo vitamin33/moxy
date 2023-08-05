@@ -4,9 +4,10 @@ import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/services/navigation/root_router_cubit.dart';
 import 'package:provider/provider.dart';
-import '../../../constant/menu.dart';
+import '../admin/menu.dart';
 import '../../theme/app_theme.dart';
 import 'navigation_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardDrawer extends StatelessWidget {
   const DashboardDrawer({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class DashboardDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
     final navRootCubit = context.read<RootRouterCubit>();
+    final menus = getLocalizedMenus(context);
 
     return ClipRRect(
       child: Material(
@@ -54,7 +56,7 @@ class DashboardDrawer extends StatelessWidget {
                   itemCount: menus.length,
                   itemBuilder: (_, index) {
                     final menu = menus[index];
-                    return NavigationBarCard(menu: menu);
+                    return NavigationBarCard(menu: menu, showIcon: true);
                   },
                 ),
               ),
@@ -79,7 +81,7 @@ class DashboardDrawer extends StatelessWidget {
                       SvgPicture.asset(IconPath.logout),
                       const SizedBox(width: AppTheme.elementSpacing),
                       Text(
-                        'Logout',
+                        AppLocalizations.of(context)!.logout,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
