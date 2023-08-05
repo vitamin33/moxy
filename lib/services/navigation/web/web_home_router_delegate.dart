@@ -10,11 +10,14 @@ import 'web_home_router_cubit.dart';
 class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRouterState> {
   final GlobalKey<NavigatorState> _navigatorKey;
   final ClientHomeRouterCubit _routerCubit;
-  ClientHomeRouterDelegate(
-      GlobalKey<NavigatorState> navigatorKey, ClientHomeRouterCubit routerCubit)
+  final TabController _tabController;
+  ClientHomeRouterDelegate(GlobalKey<NavigatorState> navigatorKey,
+      ClientHomeRouterCubit routerCubit, TabController tabController)
       : _navigatorKey = navigatorKey,
-        _routerCubit = routerCubit;
+        _routerCubit = routerCubit,
+        _tabController = tabController;
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
   @override
   Widget build(BuildContext context) => Navigator(
         key: navigatorKey,
@@ -51,7 +54,7 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRouterState> {
       return [
         _materialPage(
           valueKey: "home",
-          child: HomePage(),
+          child: HomePage(tabController: _tabController),
         ),
       ];
     }
@@ -75,9 +78,9 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRouterState> {
         ),
       ];
     }
-    if (_routerCubit.state is ProfilePageState) {
+    if (_routerCubit.state is ProfileRouteState) {
       extraPageContent =
-          (_routerCubit.state as ProfilePageState).extraPageContent;
+          (_routerCubit.state as ProfileRouteState).extraPageContent;
       return [
         _materialPage(
           valueKey: "profile",

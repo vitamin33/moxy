@@ -8,7 +8,7 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRouterState> {
   void goToFavourites([String? text]) => emit(FavouritesRouteState(text));
   void goToHome([String? text]) => emit(HomeRouteState(text));
   void goToBasket([String? text]) => emit(BasketRouteState(text));
-  void goToProfile([String? text]) => emit(ProfilePageState(text));
+  void goToProfile([String? text]) => emit(ProfileRouteState(text));
 
   void popExtra() {
     if (state is HomeRouteState) {
@@ -29,9 +29,37 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRouterState> {
       case BasketRouteState:
         goToBasket();
         break;
-      case ProfilePageState:
+      case ProfileRouteState:
         goToProfile();
         break;
+    }
+  }
+
+  void favouritesPressed() {
+    if (state is! FavouritesRouteState) {
+      goToFavourites();
+    }
+  }
+
+  void profilePressed() {
+    if (state is! ProfileRouteState) {
+      goToProfile();
+    }
+  }
+
+  void basketPressed() {
+    if (state is! BasketRouteState) {
+      goToBasket();
+    }
+  }
+
+  void searchPressed() {
+    // TODO impl search state
+  }
+
+  void tabControlPressed() {
+    if (state is! HomeRouteState) {
+      goToHome();
     }
   }
 }

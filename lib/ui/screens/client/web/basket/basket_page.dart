@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/client/profile/profile_cubit.dart';
-import 'package:moxy/domain/client/profile/profile_state.dart';
+import 'package:moxy/domain/client/basket/basket_cubit.dart';
+import 'package:moxy/domain/client/basket/basket_state.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class BasketPage extends StatelessWidget {
@@ -9,15 +9,17 @@ class BasketPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Container(
-          height: MediaQuery.of(context).size.height,
-          color: AppTheme.pink,
-          child: Text('Basket'),
-        );
-      },
+    return BlocProvider<BasketCubit>(
+      create: (BuildContext context) => BasketCubit(),
+      child: BlocBuilder<BasketCubit, BasketState>(
+        builder: (context, state) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            color: AppTheme.pink,
+            child: Text('Basket'),
+          );
+        },
+      ),
     );
   }
 }

@@ -18,7 +18,7 @@ class RootView extends StatelessWidget {
             return BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
                 builder: (context, state) {
               if (kIsWeb) {
-                return const RootWebWidget();
+                return RootWebWidget();
               } else {
                 return const RootMobileWidget();
               }

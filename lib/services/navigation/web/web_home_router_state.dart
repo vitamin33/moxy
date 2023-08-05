@@ -27,9 +27,9 @@ class BasketRouteState extends ClientHomeRouterState {
   List<Object?> get props => [extraPageContent];
 }
 
-class ProfilePageState extends ClientHomeRouterState {
+class ProfileRouteState extends ClientHomeRouterState {
   final String? extraPageContent;
-  const ProfilePageState([this.extraPageContent]);
+  const ProfileRouteState([this.extraPageContent]);
   @override
   List<Object?> get props => [extraPageContent];
 }

@@ -9,15 +9,17 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<ProfileCubit, ProfileState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Container(
-          height: MediaQuery.of(context).size.height,
-          color: AppTheme.pink,
-          child: Text('Profile'),
-        );
-      },
+    return BlocProvider<ProfileCubit>(
+      create: (BuildContext context) => ProfileCubit(),
+      child: BlocBuilder<ProfileCubit, ProfileState>(
+        builder: (context, state) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            color: AppTheme.pink,
+            child: Text('Profile'),
+          );
+        },
+      ),
     );
   }
 }

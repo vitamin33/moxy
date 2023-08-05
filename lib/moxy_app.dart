@@ -10,6 +10,7 @@ import 'domain/admin/edit_order/edit_order_cubit.dart';
 import 'services/navigation/admin/admin_home_router_cubit.dart';
 import 'services/navigation/root_router_cubit.dart';
 import 'services/navigation/root_router_delegate.dart';
+import 'services/navigation/web/web_home_router_cubit.dart';
 
 // ignore: must_be_immutable
 class MoxyApp extends StatelessWidget {
@@ -34,6 +35,9 @@ class MoxyApp extends StatelessWidget {
         ),
         BlocProvider<AdminHomeRouterCubit>(
           create: (BuildContext context) => AdminHomeRouterCubit(),
+        ),
+        BlocProvider<ClientHomeRouterCubit>(
+          create: (BuildContext context) => ClientHomeRouterCubit(),
         ),
         BlocProvider<AllProductsCubit>(
             create: (BuildContext context) => AllProductsCubit()),

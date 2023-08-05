@@ -9,15 +9,17 @@ class FavouritesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<FavouritesCubit, FavouritesState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Container(
-          height: MediaQuery.of(context).size.height,
-          color: AppTheme.pink,
-          child: Text('Favourites'),
-        );
-      },
+    return BlocProvider<FavouritesCubit>(
+      create: (BuildContext context) => FavouritesCubit(),
+      child: BlocBuilder<FavouritesCubit, FavouritesState>(
+        builder: (context, state) {
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            color: AppTheme.pink,
+            child: Text('Favourites'),
+          );
+        },
+      ),
     );
   }
 }
