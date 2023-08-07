@@ -36,6 +36,7 @@ class AdminRootView extends StatelessWidget {
 
     return AppScaffold(
       appbar: AppBar(
+        elevation: 0,
         actions: [
           arrIcons.isNotEmpty
               ? Padding(
@@ -88,6 +89,7 @@ class AdminRootView extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             _mapStateToTitleText(context, state),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
         leading: Builder(
