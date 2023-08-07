@@ -7,6 +7,7 @@ import 'package:moxy/data/repositories/order_repository.dart';
 import 'package:moxy/domain/admin/all_orders/all_orders_state.dart';
 import 'package:moxy/utils/common.dart';
 
+import '../../../data/models/request/edit_order_request.dart';
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 import '../../models/order.dart';
@@ -105,5 +106,43 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
 
   Future<void> refreshOrderList() async {
     allOrders();
+  }
+
+  void changedStatus(status, id) {
+    final updateAllOrders = state.allOrders.map((element) {
+      if (element.id == id) {
+        return Order(
+            cashAdvanceValue: element.cashAdvanceValue,
+            novaPost: element.novaPost,
+            city: element.city,
+            deliveryType: element.deliveryType,
+            status: status,
+            paymentType: element.paymentType,
+            client: element.client,
+            orderedItems: element.orderedItems,
+            createdAt: element.createdAt,
+            updatedAt: element.createdAt);
+      } else {
+        return element;
+      }
+    }).toList();
+    emit(state.copyWith(allOrders: updateAllOrders));
+    editOrderStatus(status, id);
+  }
+
+  void editOrderStatus(status, id) async {
+    try {
+      final order = orderMapper.mapToNetworkEditStatusOrder(id, status);
+      final result = await ordersRepository.editOrderStatus(order);
+      result.when((success) {
+        moxyPrint(success);
+      }, (error) {
+        emit(state.copyWith(
+          errorMessage: 'Failed',
+        ));
+      });
+    } catch (e) {
+      moxyPrint(e);
+    }
   }
 }

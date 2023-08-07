@@ -34,3 +34,17 @@ class EditOrder {
 
   Map<String, dynamic> toJson() => _$EditOrderToJson(this);
 }
+
+@JsonSerializable()
+class EditStatusOrder {
+  final String orderId;
+  final String status;
+
+  EditStatusOrder({required this.orderId, required this.status});
+
+
+  factory EditStatusOrder.fromJson(Map<String, dynamic> json) =>
+      _$EditStatusOrderFromJson(json);
+
+  Map<String, dynamic> toJson() => _$EditStatusOrderToJson(this);
+}

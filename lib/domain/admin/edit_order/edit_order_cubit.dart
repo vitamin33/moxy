@@ -40,11 +40,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
             status: 'New',
             prepayment: 0,
             createdAt: '',
-            updatedAt: '')) {
-    // paymentController =
-    //     TextEditingController(text: state.prepayment.toString());
-  }
-
+            updatedAt: ''));
   final TextEditingController nameEditController = TextEditingController();
   final TextEditingController phoneEditController = TextEditingController();
 
