@@ -17,7 +17,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
   }
 
   void productsSelected() {
-    _productRepository.updateSelectedProducts(selectedProducts.toList());
+    _productRepository.updateSelectedProducts(state.selectedProducts.toList());
   }
 
   void orderProductsList() async {
@@ -26,13 +26,15 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       final result = await _productRepository.getAllProducts();
       result.when(
         (success) {
-          initSelectedProductList();
+          final selectedProducts = getSelectedProductList();
           final products = _produtctMapper.mapToProductList(success);
-          final productsByColor = groupProductsByColor(products);
+          final productByColor = groupProductsByColor(products);
           emit(state.copyWith(
-              allProducts: products,
-              isLoading: false,
-              productsByColor: productsByColor));
+            allProducts: products,
+            isLoading: false,
+            productByColor: productByColor,
+            selectedProducts: selectedProducts.toSet(),
+          ));
         },
         (error) {
           emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
@@ -43,8 +45,8 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     }
   }
 
-  Map<String, List<Product>> groupProductsByColor(List<Product> products) {
-    final productsByColor = <String, List<Product>>{};
+  Map<String, Product> groupProductsByColor(List<Product> products) {
+    final productsByColor = <String, Product>{};
 
     for (final product in products) {
       final productName = product.name;
@@ -57,11 +59,11 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       for (final dimension in product.dimensions) {
         final color = dimension.color;
         final quantityKey = dimension.quantity;
-        const quantity = 1;
-        final key = '$quantityKey $color $productName';
+        final quantity = dimension.quantity;
+        final key = productColorKey(product.name, quantityKey, color);
 
         if (!productsByColor.containsKey(key)) {
-          productsByColor[key] = [];
+          //productsByColor[key] = [];
         }
 
         final newDimension = Dimension(
@@ -80,25 +82,24 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
           dimensions: [newDimension],
         );
 
-        productsByColor[key]?.add(newProduct);
+        productsByColor[key] = newProduct;
       }
     }
 
     return productsByColor;
   }
 
-  Set<OrderedItem> selectedProducts = {};
-
   void toggleProductSelection(Product product) {
     final productName = product.name;
 
     final selectedProduct = OrderedItem(
       productPrice: product.salePrice.toString(),
-        dimensions: product.dimensions,
-        productId: product.id!,
-        productName: product.name);
+      dimensions: product.dimensions,
+      productId: product.id!,
+      productName: product.name,
+    );
 
-    final matchingProducts = selectedProducts.where((selectedProduct) {
+    final matchingProducts = state.selectedProducts.where((selectedProduct) {
       return selectedProduct.productName == productName;
     }).toList();
 
@@ -108,18 +109,18 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     }).toList();
 
     if (matchingProductsWithColor.isNotEmpty) {
-      selectedProducts.removeAll(matchingProductsWithColor);
+      state.selectedProducts.removeAll(matchingProductsWithColor);
     } else {
-      selectedProducts.add(selectedProduct);
+      state.selectedProducts.add(selectedProduct);
     }
 
-    return emit(state.copyWith());
+    return emit(state.copyWith(selectedProducts: state.selectedProducts));
   }
 
   bool isProductSelected(Product product) {
     final productName = product.name;
 
-    return selectedProducts.any((selectedProduct) {
+    return state.selectedProducts.any((selectedProduct) {
       return selectedProduct.productName == productName &&
           selectedProduct.dimensions.any(
               (dimension) => dimension.color == product.dimensions[0].color);
@@ -127,42 +128,42 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
   }
 
   void quantityAdd(int index) {
-    List<List<Product>> productsList = state.productsByColor.values.toList();
-    List<String> productsListKey = state.productsByColor.keys.toList();
+    List<Product> productsList = state.productByColor.values.toList();
+    List<String> productsListKey = state.productByColor.keys.toList();
 
     if (index >= 0 && index < productsList.length) {
-      List<Product> products = productsList[index];
+      Product product = productsList[index];
       int maxQuantity = int.parse(productsListKey[index][0]);
-      Dimension? dimen = products.first.dimensions.first;
-      if (products.isNotEmpty && dimen.quantity < maxQuantity) {
+      Dimension? dimen = product.dimensions.first;
+      if (dimen.quantity < maxQuantity) {
         dimen.quantity++;
-        Map<String, List<Product>> newProductsByColor =
-            Map.from(state.productsByColor);
-        newProductsByColor.values.toList()[index] = List.from(products);
-        emit(state.copyWith(productsByColor: newProductsByColor));
+        Map<String, Product> newProductsByColor = state.productByColor;
+        newProductsByColor.values.toList()[index] = product;
+        emit(state.copyWith(productByColor: newProductsByColor));
       }
     }
   }
 
   void quantityRemove(int index) {
-    List<List<Product>> productsList = state.productsByColor.values.toList();
+    List<Product> productsList = state.productByColor.values.toList();
 
     if (index >= 0 && index < productsList.length) {
-      List<Product> products = productsList[index];
-      Dimension? dimen = products.first.dimensions.first;
-      if (products.isNotEmpty && dimen.quantity > 1) {
+      Product product = productsList[index];
+      Dimension? dimen = product.dimensions.first;
+      if (dimen.quantity > 1) {
         dimen.quantity--;
-        Map<String, List<Product>> newProductsByColor =
-            Map.from(state.productsByColor);
-        newProductsByColor.values.toList()[index] = List.from(products);
-        emit(state.copyWith(productsByColor: newProductsByColor));
+        Map<String, Product> newProductsByColor = state.productByColor;
+        newProductsByColor.values.toList()[index] = product;
+        emit(state.copyWith(productByColor: newProductsByColor));
       }
     }
   }
 
-  void initSelectedProductList() {
-    List<OrderedItem>? selectedList =
-        _productRepository.currentSelectedProducts;
-    selectedProducts = selectedList?.toSet() ?? {};
+  List<OrderedItem> getSelectedProductList() {
+    return _productRepository.currentSelectedProducts ?? [];
+  }
+
+  String productColorKey(String producName, int quantity, String color) {
+    return '$producName $color $quantity';
   }
 }

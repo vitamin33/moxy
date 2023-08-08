@@ -14,7 +14,6 @@ import '../../../../../domain/admin/order_product_list/order_product_list_cubit.
 import '../../../../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class OrderProductList extends StatelessWidget {
   const OrderProductList({Key? key});
 
@@ -41,7 +40,7 @@ class OrderProductList extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
-                       Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
                         child: SearchTextfield(
                           title: AppLocalizations.of(context)!.search,
@@ -54,52 +53,48 @@ class OrderProductList extends StatelessWidget {
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: state.productsByColor.keys.length,
+                                  itemCount: state.productByColor.keys.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    final color = state.productsByColor.keys
+                                    final colorKey = state.productByColor.keys
                                         .elementAt(index);
-                                    final Dimension colorAvatar =
-                                        allColorsDimens.firstWhere((e) =>
-                                            e.color ==
-                                            state.productsByColor[color]?.first
-                                                .dimensions.first.color);
-                                    final products =
-                                        state.productsByColor[color]!;
+
+                                    final product =
+                                        state.productByColor[colorKey]!;
                                     final isSelected =
-                                        cubit.isProductSelected(products.first);
+                                        cubit.isProductSelected(product);
                                     return Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: InkWell(
                                         onTap: () {
-                                          cubit.toggleProductSelection(
-                                              products.first);
+                                          cubit.toggleProductSelection(product);
                                         },
                                         child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: isSelected
-                                                    ? Colors.black
-                                                    : Colors.transparent,
-                                                width: 2.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: isSelected
+                                                  ? Colors.black
+                                                  : Colors.transparent,
+                                              width: 2.0,
                                             ),
-                                            child: _listTile(
-                                                state,
-                                                products,
-                                                color,
-                                                isSelected,
-                                                cubit,
-                                                index,
-                                                colorAvatar)),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: _listTile(
+                                            state,
+                                            product,
+                                            colorKey,
+                                            isSelected,
+                                            cubit,
+                                            index,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
                                 )),
                       CustomButton(
-                        title:AppLocalizations.of(context)!.choose,
+                        title: AppLocalizations.of(context)!.choose,
                         onTap: () {
                           final isEditFrom = (context
                                   .read<AdminHomeRouterCubit>()
@@ -156,9 +151,14 @@ String _generateImagePath(Dimension dimen) {
   }
 }
 
-Widget _listTile(state, products, color, isSelected,
-    OrderProductListCubit cubit, index, colorAvatar) {
+Widget _listTile(OrderProductListState state, Product product, String colorKey,
+    isSelected, OrderProductListCubit cubit, int index) {
+  final Dimension colorAvatar = allColorsDimens.firstWhere(
+      (e) => e.color == state.productByColor[colorKey]?.dimensions.first.color);
   final colorAvatarImage = _generateImagePath(colorAvatar);
+  final chosenQuantity = product.dimensions.first.quantity;
+  final fullQuantity = product.dimensions.first.quantity;
+
   return ListTile(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
@@ -168,7 +168,7 @@ Widget _listTile(state, products, color, isSelected,
     leading: Stack(
       children: [
         ClipOval(
-          child: _buildProductImage(products.first),
+          child: _buildProductImage(product),
         ),
         Positioned(
           top: 22.0,
@@ -184,8 +184,8 @@ Widget _listTile(state, products, color, isSelected,
         ),
       ],
     ),
-    title: Text('${products.first.name}'),
-    subtitle: Text('${products.first.salePrice} '),
+    title: Text(product.name),
+    subtitle: Text('${product.salePrice} '),
     trailing: isSelected
         ? SizedBox(
             width: 110,
@@ -212,7 +212,7 @@ Widget _listTile(state, products, color, isSelected,
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    '${products.first.dimensions.first.quantity}/${color[0]}',
+                    '$chosenQuantity/$fullQuantity',
                     style: const TextStyle(fontSize: 13),
                   ),
                   const SizedBox(width: 5),

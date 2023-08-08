@@ -257,7 +257,8 @@ class AdminRootView extends StatelessWidget {
     return ExpandableFab(distance: 100, children: [
       ActionButton(
         icon: const Icon(
-          Icons.add_business,
+          Icons.add_shopping_cart,
+          size: 20,
           color: Colors.white,
         ),
         onPressed: () {
@@ -268,7 +269,8 @@ class AdminRootView extends StatelessWidget {
       ),
       ActionButton(
         icon: const Icon(
-          Icons.people,
+          Icons.person_add,
+          size: 20,
           color: Colors.white,
         ),
         onPressed: () {
@@ -279,7 +281,8 @@ class AdminRootView extends StatelessWidget {
       ),
       ActionButton(
         icon: const Icon(
-          Icons.add_box,
+          Icons.card_giftcard,
+          size: 20,
           color: Colors.white,
         ),
         onPressed: () {
