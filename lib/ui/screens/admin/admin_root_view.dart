@@ -36,6 +36,7 @@ class AdminRootView extends StatelessWidget {
 
     return AppScaffold(
       appbar: AppBar(
+        elevation: 0,
         actions: [
           arrIcons.isNotEmpty
               ? Padding(
@@ -88,6 +89,7 @@ class AdminRootView extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             _mapStateToTitleText(context, state),
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
         leading: Builder(
@@ -255,7 +257,8 @@ class AdminRootView extends StatelessWidget {
     return ExpandableFab(distance: 100, children: [
       ActionButton(
         icon: const Icon(
-          Icons.add_business,
+          Icons.add_shopping_cart,
+          size: 20,
           color: Colors.white,
         ),
         onPressed: () {
@@ -266,7 +269,8 @@ class AdminRootView extends StatelessWidget {
       ),
       ActionButton(
         icon: const Icon(
-          Icons.people,
+          Icons.person_add,
+          size: 20,
           color: Colors.white,
         ),
         onPressed: () {
@@ -277,7 +281,8 @@ class AdminRootView extends StatelessWidget {
       ),
       ActionButton(
         icon: const Icon(
-          Icons.add_box,
+          Icons.card_giftcard,
+          size: 20,
           color: Colors.white,
         ),
         onPressed: () {

@@ -32,3 +32,15 @@ Map<String, dynamic> _$EditOrderToJson(EditOrder instance) => <String, dynamic>{
       'status': instance.status,
       'cashAdvanceValue': instance.cashAdvanceValue,
     };
+
+EditStatusOrder _$EditStatusOrderFromJson(Map<String, dynamic> json) =>
+    EditStatusOrder(
+      orderId: json['orderId'] as String,
+      status: json['status'] as String,
+    );
+
+Map<String, dynamic> _$EditStatusOrderToJson(EditStatusOrder instance) =>
+    <String, dynamic>{
+      'orderId': instance.orderId,
+      'status': instance.status,
+    };

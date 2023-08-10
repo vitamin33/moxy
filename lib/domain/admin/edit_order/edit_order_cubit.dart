@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
@@ -21,32 +23,30 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   final productRepository = locate<ProductRepository>();
   final orderMapper = locate<OrderMapper>();
   late TextEditingController paymentController;
-
-  EditOrderCubit()
-      : super(EditOrderState(
-            isLoading: false,
-            isSuccess: false,
-            isEditName: false,
-            isEditPhone: false,
-            errorMessage: '',
-            errors: FieldErrors(),
-            orderId: '',
-            deliveryType: DeliveryType.novaPost,
-            paymentType: PaymentType.fullPayment,
-            selectedProducts: [],
-            selectedCity: City.defaultCity(),
-            selectedWarehouse: Warehouse.defaultWarehouse(),
-            client: Client.defaultClient(),
-            status: 'New',
-            prepayment: 0,
-            createdAt: '',
-            updatedAt: '')) {
-    // paymentController =
-    //     TextEditingController(text: state.prepayment.toString());
-  }
-
   final TextEditingController nameEditController = TextEditingController();
   final TextEditingController phoneEditController = TextEditingController();
+  late final StreamSubscription _selectedProductSubscription;
+
+  EditOrderCubit() : super(EditOrderState.defaultEditOrderState()) {
+    _subscribe();
+  }
+
+  void _subscribe() {
+    _selectedProductSubscription = productRepository.selectedProducts.listen(
+      (items) {
+        emit(state.copyWith(selectedProducts: items));
+      },
+      onError: (error) =>
+          {moxyPrint('Error during selected products listening.')},
+    );
+  }
+
+  @override
+  Future<void> close() {
+    _selectedProductSubscription.cancel();
+    moxyPrint('Cubit closed');
+    return super.close();
+  }
 
   void editOrder() async {
     try {
@@ -63,7 +63,6 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
           state.prepayment.toString());
       final pushOrder = await orderRepository.editOrder(order);
       pushOrder.when((success) {
-        emit(state.copyWith(isLoading: false));
         emit(state.copyWith(isSuccess: true, isLoading: false));
       }, (error) {
         emit(state.copyWith(

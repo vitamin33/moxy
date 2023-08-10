@@ -275,6 +275,23 @@ class DioClient {
     return Result.success(result);
   }
 
+  Future<Result<Headers, Exception>> editOrderStatus(
+      EditStatusOrder order) async {
+    final Headers? result;
+    final data = order.toJson();
+    try {
+      Response response = await dio.post(
+        editOrdersUrl,
+        data: data,
+      );
+      result = response.headers;
+    } catch (e) {
+      moxyPrint('Error during edit status order: $e');
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
+  }
+
   // USERS
 
   Future<Result<NetworkUser, Exception>> createGuestUser(
@@ -321,11 +338,12 @@ class DioClient {
 
 // DASHBOARD
 
-  Future<NetworkDashboard> getDashboard(DateTime?  fromDate,DateTime?  toDate) async {
+  Future<NetworkDashboard> getDashboard(
+      DateTime? fromDate, DateTime? toDate) async {
     try {
       final requestData;
 
-      if (toDate != null ||fromDate!=null) {
+      if (toDate != null || fromDate != null) {
         requestData = {
           "fromDate": fromDate.toString(),
           "toDate": toDate.toString()

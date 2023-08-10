@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
-import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
@@ -13,7 +13,6 @@ import '../../../../../domain/models/product.dart';
 import '../../../../../domain/admin/order_product_list/order_product_list_cubit.dart';
 import '../../../../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class OrderProductList extends StatelessWidget {
   const OrderProductList({Key? key});
@@ -41,7 +40,7 @@ class OrderProductList extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: Column(
                     children: [
-                       Padding(
+                      Padding(
                         padding: EdgeInsets.all(8.0),
                         child: SearchTextfield(
                           title: AppLocalizations.of(context)!.search,
@@ -54,52 +53,43 @@ class OrderProductList extends StatelessWidget {
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: state.productsByColor.keys.length,
+                                  itemCount: state.productsByDimension.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    final color = state.productsByColor.keys
+                                    final dimenProduct = state
+                                        .productsByDimension
                                         .elementAt(index);
-                                    final Dimension colorAvatar =
-                                        allColorsDimens.firstWhere((e) =>
-                                            e.color ==
-                                            state.productsByColor[color]?.first
-                                                .dimensions.first.color);
-                                    final products =
-                                        state.productsByColor[color]!;
-                                    final isSelected =
-                                        cubit.isProductSelected(products.first);
+
                                     return Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: InkWell(
                                         onTap: () {
-                                          cubit.toggleProductSelection(
-                                              products.first);
+                                          cubit.toggleProductSelection(index);
                                         },
                                         child: Container(
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                color: isSelected
-                                                    ? Colors.black
-                                                    : Colors.transparent,
-                                                width: 2.0,
-                                              ),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: dimenProduct.isSelected
+                                                  ? Colors.black
+                                                  : Colors.transparent,
+                                              width: 2.0,
                                             ),
-                                            child: _listTile(
-                                                state,
-                                                products,
-                                                color,
-                                                isSelected,
-                                                cubit,
-                                                index,
-                                                colorAvatar)),
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: _listTile(
+                                            state,
+                                            dimenProduct,
+                                            cubit,
+                                            index,
+                                          ),
+                                        ),
                                       ),
                                     );
                                   },
                                 )),
                       CustomButton(
-                        title:AppLocalizations.of(context)!.choose,
+                        title: AppLocalizations.of(context)!.choose,
                         onTap: () {
                           final isEditFrom = (context
                                   .read<AdminHomeRouterCubit>()
@@ -129,11 +119,11 @@ class OrderProductList extends StatelessWidget {
   }
 }
 
-Widget _buildProductImage(Product product) {
-  if (product.images.isNotEmpty) {
+Widget _buildProductImage(DimensionProduct product) {
+  if (product.image != null) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.images.first.imagePath,
+      image: product.image!.imagePath,
       width: 50,
       height: 50,
       fit: BoxFit.cover,
@@ -156,9 +146,13 @@ String _generateImagePath(Dimension dimen) {
   }
 }
 
-Widget _listTile(state, products, color, isSelected,
-    OrderProductListCubit cubit, index, colorAvatar) {
+Widget _listTile(OrderProductListState state, DimensionProduct product,
+    OrderProductListCubit cubit, int index) {
+  final Dimension colorAvatar = state.productsByDimension[index].dimension;
   final colorAvatarImage = _generateImagePath(colorAvatar);
+  final chosenQuantity = product.selectedQuantity;
+  final fullQuantity = product.dimension.quantity;
+
   return ListTile(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
@@ -168,7 +162,7 @@ Widget _listTile(state, products, color, isSelected,
     leading: Stack(
       children: [
         ClipOval(
-          child: _buildProductImage(products.first),
+          child: _buildProductImage(product),
         ),
         Positioned(
           top: 22.0,
@@ -184,9 +178,9 @@ Widget _listTile(state, products, color, isSelected,
         ),
       ],
     ),
-    title: Text('${products.first.name}'),
-    subtitle: Text('${products.first.salePrice} '),
-    trailing: isSelected
+    title: Text(product.name),
+    subtitle: Text('${product.salePrice} '),
+    trailing: product.isSelected
         ? SizedBox(
             width: 110,
             child: Padding(
@@ -212,7 +206,7 @@ Widget _listTile(state, products, color, isSelected,
                   ),
                   const SizedBox(width: 2),
                   Text(
-                    '${products.first.dimensions.first.quantity}/${color[0]}',
+                    '$chosenQuantity/$fullQuantity',
                     style: const TextStyle(fontSize: 13),
                   ),
                   const SizedBox(width: 5),

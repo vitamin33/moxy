@@ -87,4 +87,13 @@ class OrderRepository {
       return Result.error(Exception('$e'));
     }
   }
+  Future<Result<dynamic, Exception>> editOrderStatus(EditStatusOrder order) async {
+    try {
+      final result = await client.editOrderStatus(order);
+      return Result.success(result);
+    } catch (e) {
+      moxyPrint('Repository Error:$e');
+      return Result.error(Exception('$e'));
+    }
+  }
 }

@@ -1,25 +1,31 @@
+import 'package:moxy/domain/models/dimension_product.dart';
+
 import '../../copyable.dart';
+import '../../models/order.dart';
 import '../../models/product.dart';
 
 class OrderProductListState implements Copyable<OrderProductListState> {
-  final Map<String, List<Product>> productsByColor;
+  final List<DimensionProduct> productsByDimension;
   final bool isLoading;
   final bool isEdit;
   final String? errorMessage;
   final List<Product> allProducts;
+  Set<OrderedItem> selectedProducts = {};
 
   OrderProductListState({
-    required this.productsByColor,
+    required this.productsByDimension,
     required this.allProducts,
     required this.isLoading,
+    required this.selectedProducts,
     this.isEdit = false,
     this.errorMessage,
   });
 
   static OrderProductListState defaultAllProductsState() {
     return OrderProductListState(
-      productsByColor: {},
+      productsByDimension: [],
       allProducts: [],
+      selectedProducts: {},
       isLoading: false,
       isEdit: false,
       errorMessage: '',
@@ -32,13 +38,15 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     bool? isEdit,
     String? errorMessage,
     List<Product>? allProducts,
-    Map<String, List<Product>>? productsByColor,
+    List<DimensionProduct>? productsByDimension,
+    Set<OrderedItem>? selectedProducts,
   }) {
     return OrderProductListState(
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
       errorMessage: errorMessage ?? this.errorMessage,
-      productsByColor: productsByColor ?? this.productsByColor,
+      productsByDimension: productsByDimension ?? this.productsByDimension,
+      selectedProducts: selectedProducts ?? this.selectedProducts,
       allProducts: allProducts ?? this.allProducts,
     );
   }

@@ -188,4 +188,15 @@ class OrderMapper {
       ).toList(),
     );
   }
+
+
+  EditStatusOrder mapToNetworkEditStatusOrder(
+      String orderId,
+      String status,
+      ) {
+    return EditStatusOrder(
+      orderId: orderId,
+      status: status,
+    );
+  }
 }

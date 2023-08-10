@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
+import 'package:moxy/domain/models/status.dart';
 
 import '../../../../../constant/order_status.dart';
 import '../../../../../services/navigation/admin/admin_home_router_cubit.dart';
@@ -27,6 +28,8 @@ class _OrdersPageState extends State<OrdersPage> {
   final ScrollController _scrollController = ScrollController();
   bool _isFilterChipsVisible = true;
   double _toolbarHeight = 0;
+  Status? selectedMenu;
+
   final GlobalKey _wrapKey = GlobalKey();
 
   @override
@@ -238,7 +241,6 @@ class _OrdersPageState extends State<OrdersPage> {
             }
             return showTopBar
                 ? Wrap(
-                    key: _wrapKey,
                     direction: Axis.horizontal,
                     alignment: WrapAlignment.spaceAround,
                     children: _filterChipsList(context, cubit, state),
@@ -279,69 +281,119 @@ class _OrdersPageState extends State<OrdersPage> {
                           .reduce((total, price) => total + price)
                           .toString();
                       return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListTile(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            contentPadding: const EdgeInsets.all(14.0),
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
+                            onLongPressStart: (details) =>
+                                showPopupMenu(context, order, cubit, details),
                             onTap: () {
                               context
                                   .read<AdminHomeRouterCubit>()
                                   .navigateTo(const EditOrderPageState());
                               context.read<EditOrderCubit>().getOrder(order);
                             },
-                            tileColor: AppTheme.white,
-                            leading: Stack(children: [
-                              ClipOval(child: _buildImage(order.orderedItems)),
-                              Positioned(
-                                top: 22.0,
-                                left: 22.0,
-                                child: CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: AppTheme.white,
-                                  child: CircleAvatar(
-                                    backgroundColor: AppTheme.pinkDark,
-                                    radius: 12,
-                                    child: SvgPicture.asset(
-                                      statusSvg.iconPath,
-                                      width: 20,
-                                      color: AppTheme.white,
+                            child: ListTile(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                contentPadding: const EdgeInsets.all(14.0),
+                                tileColor: AppTheme.white,
+                                leading: Stack(children: [
+                                  ClipOval(
+                                      child: _buildImage(order.orderedItems)),
+                                  Positioned(
+                                    top: 22.0,
+                                    left: 22.0,
+                                    child: CircleAvatar(
+                                      radius: 14,
+                                      backgroundColor: AppTheme.white,
+                                      child: CircleAvatar(
+                                        backgroundColor: AppTheme.pinkDark,
+                                        radius: 12,
+                                        child: SvgPicture.asset(
+                                          statusSvg.iconPath,
+                                          width: 20,
+                                          color: AppTheme.white,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              )
-                            ]),
-                            title: Text(
-                              '${order.client.firstName} ${order.client.secondName}',
-                              style: const TextStyle(
-                                  fontSize: 15, fontWeight: FontWeight.w600),
-                            ),
-                            subtitle: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    order.orderedItems
-                                        .map((item) => item.productName)
-                                        .join(', '),
-                                    style: const TextStyle(
-                                      fontSize: 13,
-                                    )),
-                                Text(
-                                  '${orderPrice} \₴',
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      color: AppTheme.black),
-                                ),
-                              ],
-                            ),
-                            trailing: Text(
-                              orderDate,
-                              style: const TextStyle(fontSize: 15),
-                            )),
-                      );
+                                  )
+                                ]),
+                                title: listTileTitle(order),
+                                subtitle: listTileSubtitle(order, orderPrice),
+                                trailing: listTileTrailing(order, orderDate)),
+                          ));
                     }));
   }
+}
+
+listTileTitle(Order order) {
+  return Text(
+    '${order.client.firstName} ${order.client.secondName}',
+    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+  );
+}
+
+listTileSubtitle(Order order, String orderPrice) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(order.orderedItems.map((item) => item.productName).join(', '),
+          style: const TextStyle(
+            fontSize: 13,
+          )),
+      Text(
+        '${orderPrice} грн',
+        style: const TextStyle(
+            fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
+      ),
+    ],
+  );
+}
+
+listTileTrailing(Order order, String orderDate) {
+  return Column(
+    children: [
+      Text(order.status,
+          style: const TextStyle(fontSize: 16, color: AppTheme.pinkDark)),
+      const SizedBox(height: 8),
+      Text(
+        orderDate,
+        style: const TextStyle(fontSize: 13),
+      ),
+    ],
+  );
+}
+
+void showPopupMenu(BuildContext context, Order order, AllOrdersCubit cubit,
+    LongPressStartDetails details) {
+  final offset = details.globalPosition;
+
+  final RelativeRect position = RelativeRect.fromLTRB(
+    offset.dx,
+    offset.dy,
+    MediaQuery.of(context).size.width - offset.dx,
+    MediaQuery.of(context).size.height - offset.dy,
+  );
+
+  showMenu(
+      color: AppTheme.pinkDark,
+      surfaceTintColor: AppTheme.gray,
+      context: context,
+      position: position,
+      initialValue: order.status,
+      items: allStatusOrder
+          .map(
+            (status) => PopupMenuItem<String>(
+              onTap: () {
+                cubit.changedStatus(status.statusTitle, order.id);
+              },
+              value: status.statusTitle,
+              child: Text(
+                status.statusTitle,
+                style: const TextStyle(fontSize: 18, color: AppTheme.white),
+              ),
+            ),
+          )
+          .toList());
 }
