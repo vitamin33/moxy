@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/models/status.dart';
 
 import '../../../constant/order_constants.dart';
 import '../../copyable.dart';
@@ -7,7 +8,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
   bool isLoading;
   FilterDeliveryType deliveryType;
   FilterPaymentType paymentType;
-  List<String> status;
+  List<Status> status;
   DateTimeRange selectedDate;
   String createdAt;
   String updatedAt;
@@ -38,7 +39,7 @@ class FilterOrdersState implements Copyable<FilterOrdersState> {
       {bool? isLoading,
       FilterDeliveryType? deliveryType,
       FilterPaymentType? paymentType,
-      List<String>? status,
+      List<Status>? status,
       DateTimeRange? selectedDate,
       String? createdAt,
       String? updatedAt}) {

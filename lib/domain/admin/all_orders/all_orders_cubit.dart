@@ -10,6 +10,7 @@ import 'package:moxy/utils/common.dart';
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 import '../../models/order.dart';
+import '../../models/status.dart';
 
 class AllOrdersCubit extends Cubit<AllOrdersState> {
   final filterRepository = locate<FilterRepository>();
@@ -81,6 +82,25 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     emit(state.copyWith(allOrders: filteredList));
   }
 
+  void updateStatusTitles(
+      List<Status> allOrdersStatus, List<Status> filterOrder) {
+    List<Status> result = [];
+    for (var firstStatus in allOrdersStatus) {
+      for (var secondStatus in filterOrder) {
+        if (firstStatus.statusValue == secondStatus.statusValue) {
+          result.add(Status(
+              iconPath: firstStatus.iconPath,
+              isSelected: firstStatus.isSelected,
+              statusTitle: secondStatus.statusTitle,
+              statusValue: secondStatus.statusValue));
+
+          break;
+        }
+      }
+    }
+    emit(state.copyWith(statusFilter: result));
+  }
+
   void clearDeliveryTypeFilter() async {
     filterRepository.clearDeliveryTypeFilter();
     emit(state.copyWith(deliveryFilter: FilterDeliveryType.empty));
@@ -100,14 +120,13 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
   void clearDateRangeFilter() {
     filterRepository.clearDateRangeFilter();
     emit(state.copyWith(shouldSetDateRangeFilterToNull: true));
-    moxyPrint(state.dateRangeFilter);
   }
 
   Future<void> refreshOrderList() async {
     allOrders();
   }
 
-  void changedStatus(status, id) {
+  void changedStatus(Status status, String id) {
     final updateAllOrders = state.allOrders.map((element) {
       if (element.id == id) {
         return Order(
@@ -129,9 +148,10 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     editOrderStatus(status, id);
   }
 
-  void editOrderStatus(status, id) async {
+  void editOrderStatus(Status status, String id) async {
     try {
-      final order = orderMapper.mapToNetworkEditStatusOrder(id, status);
+      final order =
+          orderMapper.mapToNetworkEditStatusOrder(id, status.statusValue.name);
       final result = await ordersRepository.editOrderStatus(order);
       result.when((success) {
         moxyPrint(success);

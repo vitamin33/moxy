@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/order_constants.dart';
+import 'package:moxy/domain/models/status.dart';
 
 import '../copyable.dart';
 
 class FilterOrderParams implements Copyable<FilterOrderParams> {
   final FilterDeliveryType deliveryType;
   final FilterPaymentType paymentType;
-  final List<String> status;
+  final List<Status> status;
   final DateTimeRange? dateRange;
 
   FilterOrderParams({
@@ -31,7 +32,7 @@ class FilterOrderParams implements Copyable<FilterOrderParams> {
   FilterOrderParams copyWith({
     FilterDeliveryType? deliveryType,
     FilterPaymentType? paymentType,
-    List<String>? status,
+    List<Status>? status,
     DateTimeRange? dateRange,
   }) {
     return FilterOrderParams(

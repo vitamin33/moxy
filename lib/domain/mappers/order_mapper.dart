@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/domain/admin/all_orders/all_orders_state.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
 
@@ -9,6 +12,7 @@ import '../../data/models/response/all_orders_response.dart';
 import '../../services/get_it.dart';
 import '../models/city.dart';
 import '../models/order.dart';
+import '../models/status.dart';
 import '../models/warehouse.dart';
 
 class OrderMapper {
@@ -25,7 +29,7 @@ class OrderMapper {
             deliveryCityRef: o.city.deliveryCityRef!,
             presentName: o.city.presentName!),
         deliveryType: _mapDeliveryType(o.deliveryType),
-        status: o.status,
+        status: _mapStatus(o.status),
         paymentType: _mapPaymentType(o.paymentType),
         client: Client(
           id: o.client.id,
@@ -84,6 +88,19 @@ class OrderMapper {
         return DeliveryType.ukrPost;
     }
     return DeliveryType.novaPost;
+  }
+
+  Status _mapStatus(String status) {
+    for (var item in allStatusOrder) {
+      if (item.statusTitle == status) {
+        return Status(
+            iconPath: item.iconPath,
+            isSelected: item.isSelected,
+            statusTitle: item.statusTitle,
+            statusValue: item.statusValue);
+      }
+    }
+    throw Exception("No matching status found for '$status'");
   }
 
   String _mapDeliveryTypeNetwork(String paymentType) {
@@ -189,11 +206,10 @@ class OrderMapper {
     );
   }
 
-
   EditStatusOrder mapToNetworkEditStatusOrder(
-      String orderId,
-      String status,
-      ) {
+    String orderId,
+    String status,
+  ) {
     return EditStatusOrder(
       orderId: orderId,
       status: status,

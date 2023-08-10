@@ -292,15 +292,15 @@ Widget orderStatus(context, FilterOrdersState state, FilterOrdersCubit cubit) {
                   itemCount: allStatusOrder.length,
                   itemBuilder: (context, index) {
                     final status = allStatusOrder[index];
-                    final isSelected =
-                        state.status.contains(status.statusTitle);
+                    final isSelected = state.status
+                        .any((item) => item.statusValue == status.statusValue);
                     return Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Column(
                           children: [
                             InkWell(
                               onTap: () {
-                                cubit.changeStatus(status.statusTitle);
+                                cubit.changeStatus(status);
                               },
                               child: CircleAvatar(
                                 radius: 30,

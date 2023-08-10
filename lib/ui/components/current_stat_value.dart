@@ -42,7 +42,7 @@ class CurrentStatValue extends StatelessWidget {
                       child: SvgPicture.asset(
                         iconPath,
                         color: Colors.white,
-                        width: 16,
+                        width: 15,
                       ),
                     ),
                   ),
@@ -50,7 +50,7 @@ class CurrentStatValue extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         color: AppTheme.gray),
                   ),

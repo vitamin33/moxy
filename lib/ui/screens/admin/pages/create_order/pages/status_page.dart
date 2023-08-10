@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/domain/models/status.dart';
 
 import '../../../../../../constant/order_status.dart';
 import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
@@ -29,7 +30,8 @@ class StatusPage extends StatelessWidget {
                     itemCount: allStatusOrder.length,
                     itemBuilder: (context, index) {
                       final status = allStatusOrder[index];
-                      final isSelected = status.statusTitle == state.status;
+                      final isSelected =
+                          status.statusValue == state.status.statusValue;
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Container(
@@ -63,12 +65,12 @@ class StatusPage extends StatelessWidget {
                             ),
                             activeColor: AppTheme.black,
                             tileColor: AppTheme.white,
-                            groupValue: state.status,
-                            value: status.statusTitle,
+                            groupValue: state.status.statusValue,
+                            value: status.statusValue,
                             onChanged: (newValue) {
                               context
                                   .read<CreateOrderCubit>()
-                                  .updateSelectedStatusTitle(newValue!);
+                                  .updateSelectedStatusTitle(newValue);
                             },
                           ),
                         ),

@@ -50,7 +50,7 @@ class OrderRepository {
             order.paymentType.name == paymentType;
         bool matchesStatus = status == null ||
             status.isEmpty ||
-            status.any((s) => order.status.contains(s));
+            status.any((s) => order.status.statusTitle.contains(s.statusTitle));
         bool matchesData = startData == null ||
             endData == null ||
             startData == endData ||
@@ -87,7 +87,9 @@ class OrderRepository {
       return Result.error(Exception('$e'));
     }
   }
-  Future<Result<dynamic, Exception>> editOrderStatus(EditStatusOrder order) async {
+
+  Future<Result<dynamic, Exception>> editOrderStatus(
+      EditStatusOrder order) async {
     try {
       final result = await client.editOrderStatus(order);
       return Result.success(result);
