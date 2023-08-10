@@ -84,7 +84,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
       selectedCity: order.city,
       deliveryType: order.deliveryType,
       paymentType: order.paymentType,
-      status: order.status,
+      status: order.status.statusTitle,
       client: Client(
           id: order.client.id,
           city: order.client.city,

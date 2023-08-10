@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../constant/order_constants.dart';
+import '../../domain/models/status.dart';
 
 class FilterRepository {
   late SharedPreferences prefs;
@@ -41,8 +43,10 @@ class FilterRepository {
     notifyFilterParamsChange();
   }
 
-  Future<void> saveStatusFilterParam(List<String> status) async {
-    await prefs.setStringList(statusKey, status);
+  Future<void> saveStatusFilterParam(List<Status> status) async {
+    final List<String> valueStatusList =
+        status.map((e) => e.statusValue.name).toList();
+    await prefs.setStringList(statusKey, valueStatusList);
     notifyFilterParamsChange();
   }
 
@@ -66,10 +70,8 @@ class FilterRepository {
       deliveryType: deliveryType != null
           ? _parseDeliveryType(deliveryType)
           : FilterDeliveryType.empty,
-      status: status ?? [],
-      dateRange: dateRangeType != null
-          ? _parseDataRange(dateRangeType)
-          : null,
+      status: status != null ? _parseStatus(status) : [],
+      dateRange: dateRangeType != null ? _parseDataRange(dateRangeType) : null,
     );
   }
 
@@ -93,6 +95,24 @@ class FilterRepository {
       default:
         return FilterDeliveryType.empty;
     }
+  }
+
+
+  List<Status> _parseStatus(List<String> statusList) {
+    List<Status> result = [];
+    for (var status in statusList) {
+      for (var item in allStatusOrder) {
+        if (item.statusTitle == status) {
+          result.add(Status(
+              iconPath: item.iconPath,
+              isSelected: item.isSelected,
+              statusTitle: item.statusTitle,
+              statusValue: item.statusValue));
+          break;
+        }
+      }
+    }
+    return result;
   }
 
   DateTimeRange _parseDataRange(String dataRange) {

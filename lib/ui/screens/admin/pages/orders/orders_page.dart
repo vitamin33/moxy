@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
@@ -15,6 +16,7 @@ import '../../../../components/snackbar_widgets.dart';
 import '../../../../../domain/admin/all_orders/all_orders_cubit.dart';
 import '../../../../../domain/admin/all_orders/all_orders_state.dart';
 import '../../../../theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -174,13 +176,16 @@ class _OrdersPageState extends State<OrdersPage> {
         Padding(
           padding: const EdgeInsets.all(5),
           child: FilterChip(
+            backgroundColor: AppTheme.white,
             avatar: InkWell(
               onTap: () {},
               child: const Icon(
                 Icons.close,
               ),
             ),
-            label: Text(state.statusFilter.toString()),
+            label: Text(state.statusFilter!
+                .map((status) => _mapStatusToStringValue(status, context))
+                .join(', ')),
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
@@ -274,8 +279,6 @@ class _OrdersPageState extends State<OrdersPage> {
                           DateTime.parse(order.createdAt.toString());
                       String orderDate =
                           DateFormat("hh:mm  dd/MM").format(dateTime);
-                      final statusSvg = allStatusOrder.firstWhere(
-                          (element) => element.statusTitle == order.status);
                       final orderPrice = order.orderedItems
                           .map((item) => int.parse(item.productPrice))
                           .reduce((total, price) => total + price)
@@ -310,7 +313,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                         backgroundColor: AppTheme.pinkDark,
                                         radius: 12,
                                         child: SvgPicture.asset(
-                                          statusSvg.iconPath,
+                                          order.status.iconPath,
                                           width: 20,
                                           color: AppTheme.white,
                                         ),
@@ -324,76 +327,94 @@ class _OrdersPageState extends State<OrdersPage> {
                           ));
                     }));
   }
-}
 
-listTileTitle(Order order) {
-  return Text(
-    '${order.client.firstName} ${order.client.secondName}',
-    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-  );
-}
+  _mapStatusToStringValue(Status status, BuildContext context) {
+    switch (status.statusValue) {
+      case OrderStatus.New:
+        return AppLocalizations.of(context)!.statusNew;
+      case OrderStatus.Paid:
+        return AppLocalizations.of(context)!.statusPaid;
+      case OrderStatus.Sent:
+        return AppLocalizations.of(context)!.statusSent;
+      case OrderStatus.Sale:
+        return AppLocalizations.of(context)!.statusSale;
+      case OrderStatus.Canceled:
+        return AppLocalizations.of(context)!.statusCanceled;
+      case OrderStatus.Returned:
+        return AppLocalizations.of(context)!.statusReturned;
+    }
+  }
 
-listTileSubtitle(Order order, String orderPrice) {
-  return Column(
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(order.orderedItems.map((item) => item.productName).join(', '),
+  listTileTitle(Order order) {
+    return Text(
+      '${order.client.firstName} ${order.client.secondName}',
+      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+    );
+  }
+
+  listTileSubtitle(Order order, String orderPrice) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(order.orderedItems.map((item) => item.productName).join(', '),
+            style: const TextStyle(
+              fontSize: 13,
+            )),
+        Text(
+          '${orderPrice} грн',
           style: const TextStyle(
-            fontSize: 13,
-          )),
-      Text(
-        '${orderPrice} грн',
-        style: const TextStyle(
-            fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
-      ),
-    ],
-  );
-}
+              fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
+        ),
+      ],
+    );
+  }
 
-listTileTrailing(Order order, String orderDate) {
-  return Column(
-    children: [
-      Text(order.status,
-          style: const TextStyle(fontSize: 16, color: AppTheme.pinkDark)),
-      const SizedBox(height: 8),
-      Text(
-        orderDate,
-        style: const TextStyle(fontSize: 13),
-      ),
-    ],
-  );
-}
+  listTileTrailing(Order order, String orderDate) {
+    return Column(
+      children: [
+        Text(_mapStatusToStringValue(order.status, context),
+            style: const TextStyle(fontSize: 16, color: AppTheme.pinkDark)),
+        const SizedBox(height: 8),
+        Text(
+          orderDate,
+          style: const TextStyle(fontSize: 13),
+        ),
+      ],
+    );
+  }
 
-void showPopupMenu(BuildContext context, Order order, AllOrdersCubit cubit,
-    LongPressStartDetails details) {
-  final offset = details.globalPosition;
+  void showPopupMenu(BuildContext context, Order order, AllOrdersCubit cubit,
+      LongPressStartDetails details) {
+    final offset = details.globalPosition;
+    final allStatusOrder = getAllStatusOrder(context);
 
-  final RelativeRect position = RelativeRect.fromLTRB(
-    offset.dx,
-    offset.dy,
-    MediaQuery.of(context).size.width - offset.dx,
-    MediaQuery.of(context).size.height - offset.dy,
-  );
+    final RelativeRect position = RelativeRect.fromLTRB(
+      offset.dx,
+      offset.dy,
+      MediaQuery.of(context).size.width - offset.dx,
+      MediaQuery.of(context).size.height - offset.dy,
+    );
 
-  showMenu(
-      color: AppTheme.pinkDark,
-      surfaceTintColor: AppTheme.gray,
-      context: context,
-      position: position,
-      initialValue: order.status,
-      items: allStatusOrder
-          .map(
-            (status) => PopupMenuItem<String>(
-              onTap: () {
-                cubit.changedStatus(status.statusTitle, order.id);
-              },
-              value: status.statusTitle,
-              child: Text(
-                status.statusTitle,
-                style: const TextStyle(fontSize: 18, color: AppTheme.white),
+    showMenu(
+        color: AppTheme.pinkDark,
+        surfaceTintColor: AppTheme.gray,
+        context: context,
+        position: position,
+        initialValue: order.status.statusValue.name,
+        items: allStatusOrder
+            .map(
+              (status) => PopupMenuItem<String>(
+                onTap: () {
+                  cubit.changedStatus(status, order.id!);
+                },
+                value: status.statusTitle,
+                child: Text(
+                  status.statusTitle,
+                  style: const TextStyle(fontSize: 18, color: AppTheme.white),
+                ),
               ),
-            ),
-          )
-          .toList());
+            )
+            .toList());
+  }
 }

@@ -5,13 +5,13 @@ import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/data/repositories/order_repository.dart';
 import 'package:moxy/domain/mappers/filter_params_mapper.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
+import 'package:moxy/domain/models/status.dart';
 import '../../../constant/order_constants.dart';
 import '../../../services/get_it.dart';
 import '../../../ui/theme/app_theme.dart';
 import '../all_orders/all_orders_cubit.dart';
 import 'filter_orders_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class FilterOrdersCubit extends Cubit<FilterOrdersState> {
   final orderRepository = locate<OrderRepository>();
@@ -64,11 +64,11 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
         lastDate: DateTime(2030, 12, 31),
         initialDateRange: state.selectedDate,
         currentDate: DateTime.now(),
-        saveText:  AppLocalizations.of(context)!.confirm,
+        saveText: AppLocalizations.of(context)!.confirm,
         builder: (context, child) {
           return Theme(
             data: ThemeData.light().copyWith(
-              colorScheme:const ColorScheme.light(
+              colorScheme: const ColorScheme.light(
                 primary: AppTheme.pinkDark,
                 onPrimary: AppTheme.white,
                 onSurface: AppTheme.greyDark,
@@ -95,9 +95,9 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
     filterRepository.resetFilterParams();
   }
 
-  void changeStatus(updateStatus) {
-    List<String> updatedStatusList = state.status;
-    if (!state.status.contains(updateStatus)) {
+  void changeStatus(Status updateStatus) {
+    List<Status> updatedStatusList = state.status;
+    if (!state.status.contains(updateStatus.statusValue)) {
       updatedStatusList.add(updateStatus);
       filterRepository.saveStatusFilterParam(updatedStatusList);
       emit(state.copyWith(status: updatedStatusList));

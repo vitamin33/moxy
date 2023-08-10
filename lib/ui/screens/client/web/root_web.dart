@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:moxy/services/navigation/web/web_home_router_cubit.dart';
 import 'package:moxy/services/navigation/web/web_home_router_delegate.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+
+import '../../../../constant/icon_path.dart';
 
 class RootWebWidget extends StatefulWidget {
   const RootWebWidget({Key? key}) : super(key: key);
@@ -48,15 +51,16 @@ class _RootWebWidgetState extends State<RootWebWidget>
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: AppTheme.white,
               elevation: 8.0,
               titleSpacing: 0.0,
               leading: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Image.asset(
-                  width: 30,
-                  height: 30,
-                  ImageAssets.moxyIcLauncher,
-                ),
+                child: SvgPicture.asset(
+                    width: 160,
+                    height: 160,
+                    // ImageAssets.moxyIcLauncher,
+                    IconPath.moxylogo),
               ),
               title: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,

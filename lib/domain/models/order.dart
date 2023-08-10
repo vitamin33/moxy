@@ -3,6 +3,7 @@ import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/status.dart';
 
 class Order implements Copyable<Order> {
   String? _id;
@@ -10,7 +11,7 @@ class Order implements Copyable<Order> {
   NetworkNovaPost novaPost;
   City city;
   DeliveryType deliveryType;
-  String status;
+  Status status;
   PaymentType paymentType;
   Client client;
   List<OrderedItem> orderedItems;
@@ -41,7 +42,7 @@ class Order implements Copyable<Order> {
         novaPost: NetworkNovaPost(
             number: 0, ref: '', postMachineType: '', presentName: ''),
         deliveryType: DeliveryType.novaPost,
-        status: '',
+        status: Status.defaultStatus(),
         paymentType: PaymentType.cashAdvance,
         client: Client.defaultClient(),
         orderedItems: [],
@@ -57,7 +58,7 @@ class Order implements Copyable<Order> {
     City? city,
     int? ukrPostNumber,
     DeliveryType? deliveryType,
-    String? status,
+    Status? status,
     PaymentType? paymentType,
     Client? client,
     List<OrderedItem>? orderedItems,
@@ -128,7 +129,7 @@ class OrderedItem {
       required this.productName,
       required this.dimensions,
       this.imageUrl,
-     required this.productPrice});
+      required this.productPrice});
 
   static OrderedItem defaultOrderedItem() {
     return OrderedItem(

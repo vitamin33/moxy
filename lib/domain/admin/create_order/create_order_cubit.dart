@@ -11,6 +11,7 @@ import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 import '../../models/order.dart';
 import '../../models/product.dart';
+import '../../models/status.dart';
 import '../../models/warehouse.dart';
 import '../../ui_effect.dart';
 import '../../validation_mixin.dart';
@@ -44,7 +45,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
               selectedCity: City.defaultCity(),
               selectedWarehouse: Warehouse.defaultWarehouse(),
               client: Client.defaultClient(),
-              status: 'New',
+              status: Status.defaultStatus(),
               prepayment: '0'),
         ) {
     _subscribe();
@@ -81,10 +82,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void addOrder() async {
     try {
       emit(state.copyWith(isLoading: true));
-
-      // TODO here should be validation in order to have all needed data
-      // before creating order - like state.selectedCity should't be null
-
       final order = orderMapper.mapToNetworkCreateOrder(
           state.deliveryType,
           state.paymentType,
@@ -92,7 +89,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
           state.selectedWarehouse,
           state.client,
           state.selectedCity,
-          state.status,
+          state.status.statusValue.name,
           state.prepayment);
       final pushOrder = await orderRepository.addOrder(order);
       pushOrder.when((success) {
@@ -155,8 +152,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     emit(state.copyWith(prepayment: prepayment));
   }
 
-  void updateSelectedStatusTitle(String newSelectedStatusTitle) {
-    emit(state.copyWith(status: newSelectedStatusTitle));
+  void updateSelectedStatusTitle(newSelectedStatusTitle) {
+    emit(state.copyWith(
+        status: state.status.copyWith(statusValue: newSelectedStatusTitle)));
   }
 
   void selectDeliveryType(DeliveryType type) {

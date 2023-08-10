@@ -2,6 +2,7 @@ import '../../../constant/order_constants.dart';
 import '../../copyable.dart';
 import '../../models/city.dart';
 import '../../models/order.dart';
+import '../../models/status.dart';
 import '../../models/warehouse.dart';
 import '../../validation_mixin.dart';
 
@@ -19,7 +20,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   List<OrderedItem> selectedProducts;
   City selectedCity;
   Warehouse selectedWarehouse;
-  String status;
+  Status status;
   Client client;
   String prepayment;
 
@@ -63,7 +64,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         selectedCity: City.defaultCity(),
         selectedWarehouse: Warehouse.defaultWarehouse(),
         client: Client.defaultClient(),
-        status: 'New',
+        status: Status.defaultStatus(),
         prepayment: '150');
   }
 
@@ -86,7 +87,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       City? selectedCity,
       Warehouse? selectedWarehouse,
       Client? client,
-      String? status,
+      Status? status,
       String? prepayment}) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
