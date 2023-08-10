@@ -117,7 +117,7 @@ class Client {
 }
 
 class OrderedItem {
-  String productId;
+  String? productId;
   String productName;
   List<Dimension> dimensions;
   String? imageUrl;
@@ -128,7 +128,7 @@ class OrderedItem {
       required this.productName,
       required this.dimensions,
       this.imageUrl,
-     required this.productPrice});
+      required this.productPrice});
 
   static OrderedItem defaultOrderedItem() {
     return OrderedItem(

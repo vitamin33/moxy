@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
-import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
@@ -53,26 +53,23 @@ class OrderProductList extends StatelessWidget {
                                 )
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: state.productByColor.keys.length,
+                                  itemCount: state.productsByDimension.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    final colorKey = state.productByColor.keys
+                                    final dimenProduct = state
+                                        .productsByDimension
                                         .elementAt(index);
 
-                                    final product =
-                                        state.productByColor[colorKey]!;
-                                    final isSelected =
-                                        cubit.isProductSelected(product);
                                     return Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: InkWell(
                                         onTap: () {
-                                          cubit.toggleProductSelection(product);
+                                          cubit.toggleProductSelection(index);
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: isSelected
+                                              color: dimenProduct.isSelected
                                                   ? Colors.black
                                                   : Colors.transparent,
                                               width: 2.0,
@@ -82,9 +79,7 @@ class OrderProductList extends StatelessWidget {
                                           ),
                                           child: _listTile(
                                             state,
-                                            product,
-                                            colorKey,
-                                            isSelected,
+                                            dimenProduct,
                                             cubit,
                                             index,
                                           ),
@@ -124,11 +119,11 @@ class OrderProductList extends StatelessWidget {
   }
 }
 
-Widget _buildProductImage(Product product) {
-  if (product.images.isNotEmpty) {
+Widget _buildProductImage(DimensionProduct product) {
+  if (product.image != null) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.images.first.imagePath,
+      image: product.image!.imagePath,
       width: 50,
       height: 50,
       fit: BoxFit.cover,
@@ -151,13 +146,12 @@ String _generateImagePath(Dimension dimen) {
   }
 }
 
-Widget _listTile(OrderProductListState state, Product product, String colorKey,
-    isSelected, OrderProductListCubit cubit, int index) {
-  final Dimension colorAvatar = allColorsDimens.firstWhere(
-      (e) => e.color == state.productByColor[colorKey]?.dimensions.first.color);
+Widget _listTile(OrderProductListState state, DimensionProduct product,
+    OrderProductListCubit cubit, int index) {
+  final Dimension colorAvatar = state.productsByDimension[index].dimension;
   final colorAvatarImage = _generateImagePath(colorAvatar);
-  final chosenQuantity = product.dimensions.first.quantity;
-  final fullQuantity = product.dimensions.first.quantity;
+  final chosenQuantity = product.selectedQuantity;
+  final fullQuantity = product.dimension.quantity;
 
   return ListTile(
     shape: RoundedRectangleBorder(
@@ -186,7 +180,7 @@ Widget _listTile(OrderProductListState state, Product product, String colorKey,
     ),
     title: Text(product.name),
     subtitle: Text('${product.salePrice} '),
-    trailing: isSelected
+    trailing: product.isSelected
         ? SizedBox(
             width: 110,
             child: Padding(

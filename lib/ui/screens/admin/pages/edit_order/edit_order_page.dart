@@ -4,6 +4,7 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/admin/all_orders/all_orders_cubit.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -53,9 +54,11 @@ class EditOrderPage extends StatelessWidget {
                                   const OrdersPageState(),
                                 );
                             cubit.clearState();
+                            context.read<AllOrdersCubit>().refreshOrderList();
                           },
                           title: AppLocalizations.of(context)!.orderEdited,
-                          titleButton: AppLocalizations.of(context)!.backToOrder)
+                          titleButton:
+                              AppLocalizations.of(context)!.backToOrder)
                       : state.isLoading
                           ? loader()
                           : Column(
@@ -68,7 +71,7 @@ class EditOrderPage extends StatelessWidget {
                                   child: SingleChildScrollView(
                                       child: Column(
                                     children: [
-                                      dataRange(state,context),
+                                      dataRange(state, context),
                                       const SizedBox(height: 10),
                                       contactDetails(context, state, cubit),
                                       const SizedBox(height: 20),
@@ -105,9 +108,9 @@ Widget contactDetails(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(
+        Text(
           AppLocalizations.of(context)!.contactDetails,
-          style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
         ),
         const SizedBox(height: 10),
         Padding(
@@ -151,9 +154,9 @@ Widget contactDetails(
                           onPressed: () {
                             cubit.changeEditName();
                           },
-                          child:  Text(
+                          child: Text(
                             AppLocalizations.of(context)!.change,
-                            style:const TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: AppTheme.pinkDark,
@@ -196,9 +199,9 @@ Widget contactDetails(
                           onPressed: () {
                             cubit.changeEditPhone();
                           },
-                          child:  Text(
+                          child: Text(
                             AppLocalizations.of(context)!.change,
-                            style:const TextStyle(
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: AppTheme.pinkDark,
@@ -221,12 +224,12 @@ Widget contactDetails(
                 onPressed: () {
                   cubit.editSelectedProduct();
                   context.read<AdminHomeRouterCubit>().navigateTo(
-                       const OrderProductListPageState(isFromEdit: true),
+                        const OrderProductListPageState(isFromEdit: true),
                       );
                 },
-                child:  Text(
+                child: Text(
                   AppLocalizations.of(context)!.change,
-                  style:const TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                     color: AppTheme.pinkDark,
@@ -251,9 +254,9 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 Text(AppLocalizations.of(context)!.filterTypePayment,
-                    style:
-                       const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                Text(AppLocalizations.of(context)!.filterTypePayment,
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.w600)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -279,11 +282,11 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                             ),
                           ),
                         ),
-                         Padding(
-                          padding:const EdgeInsets.all(5.0),
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
                           child: Text(
                             AppLocalizations.of(context)!.fullPayment,
-                            style:const TextStyle(fontWeight: FontWeight.w500),
+                            style: const TextStyle(fontWeight: FontWeight.w500),
                           ),
                         )
                       ],
@@ -315,10 +318,11 @@ Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
                             ),
                           ),
                         ),
-                         Padding(
-                          padding:const EdgeInsets.all(5.0),
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
                           child: Text(AppLocalizations.of(context)!.cashAdvance,
-                              style:const TextStyle(fontWeight: FontWeight.w500)),
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.w500)),
                         )
                       ],
                     )
@@ -370,7 +374,7 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-               Text(AppLocalizations.of(context)!.filterTypeDelivery,
+              Text(AppLocalizations.of(context)!.filterTypeDelivery,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -463,7 +467,7 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
   );
 }
 
-Widget dataRange(state,context) {
+Widget dataRange(state, context) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
     child: SizedBox(
@@ -471,8 +475,9 @@ Widget dataRange(state,context) {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-           Text(AppLocalizations.of(context)!.creationDate,
-              style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(AppLocalizations.of(context)!.creationDate,
+              style:
+                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           Text(
             state.createdAt,
             style: const TextStyle(
@@ -493,8 +498,8 @@ Widget orderStatus(context, EditOrderState state, cubit) {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(AppLocalizations.of(context)!.filterOrderStatus,
-            style:const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+        Text(AppLocalizations.of(context)!.filterOrderStatus,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 100,

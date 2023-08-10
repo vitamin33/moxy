@@ -1,6 +1,7 @@
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/domain/models/order.dart';
 
 import '../models/product.dart';
@@ -27,7 +28,7 @@ class ProductMapper {
               .map((e) => Dimension(
                     color: e.color,
                     quantity: e.quantity,
-                    image: _mapColorDimensionImage(e),
+                    image: _mapColorDimensionImage(e.color),
                   ))
               .toList(),
           idName: p.idName,
@@ -41,8 +42,8 @@ class ProductMapper {
     ).toList();
   }
 
-  String _mapColorDimensionImage(NetworkDimension dimension) {
-    switch (dimension.color) {
+  String _mapColorDimensionImage(String color) {
+    switch (color) {
       case 'Black':
         return 'assets/images/black_background.png';
       case 'White':
@@ -99,7 +100,7 @@ class ProductMapper {
           .map((e) => Dimension(
                 color: e.color,
                 quantity: e.quantity,
-                image: _mapColorDimensionImage(e),
+                image: _mapColorDimensionImage(e.color),
               ))
           .toList(),
       idName: success.idName,
@@ -124,11 +125,53 @@ class ProductMapper {
               (e) => Dimension(
                 color: e.color,
                 quantity: e.quantity,
-                image: _mapColorDimensionImage(e),
+                image: _mapColorDimensionImage(e.color),
               ),
             )
             .toList(),
       );
     }).toList();
+  }
+
+  List<OrderedItem> mapProductListToOrderedItemList(
+      List<DimensionProduct> productItems) {
+    List<OrderedItem> finalList = [];
+
+    for (int i = 0; i < productItems.length; i++) {
+      DimensionProduct dimenItem = productItems[i];
+      if (!dimenItem.isSelected) {
+        continue;
+      }
+      if (finalList.any((element) => element.productId == dimenItem.id)) {
+        OrderedItem item = finalList.firstWhere(
+          (element) => element.productId == dimenItem.id,
+        );
+        item.dimensions.add(
+          Dimension(
+            color: dimenItem.dimension.color,
+            quantity: dimenItem.selectedQuantity,
+            image: _mapColorDimensionImage(dimenItem.dimension.color),
+          ),
+        );
+      } else {
+        finalList.add(
+          OrderedItem(
+            productPrice: dimenItem.salePrice.toString(),
+            productId: dimenItem.id,
+            productName: dimenItem.name,
+            imageUrl: dimenItem.image?.imagePath,
+            dimensions: [
+              Dimension(
+                color: dimenItem.dimension.color,
+                quantity: dimenItem.selectedQuantity,
+                image: _mapColorDimensionImage(dimenItem.dimension.color),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    return finalList;
   }
 }
