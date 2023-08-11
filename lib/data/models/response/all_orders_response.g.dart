@@ -99,7 +99,7 @@ NetworkOrderedItemResponse _$NetworkOrderedItemResponseFromJson(
       (json['dimensions'] as List<dynamic>)
           .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['imageUrl'] as String,
+      json['imageUrl'] as String?,
       json['productPrice'] as int?,
     );
 
