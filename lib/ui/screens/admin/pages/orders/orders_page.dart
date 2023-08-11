@@ -91,12 +91,19 @@ class _OrdersPageState extends State<OrdersPage> {
       return Scaffold(
         body: Material(
           color: AppTheme.pink,
-          child: CustomScrollView(slivers: [
-            _buildTopAppBar(cubit, state, showTopBar),
-            CupertinoSliverRefreshControl(
-              onRefresh: () => cubit.refreshOrderList(),
+          child: Stack(children: [
+            _buildLoadingIfNeeded(state),
+            CustomScrollView(
+              slivers: [
+                _buildTopAppBar(cubit, state, showTopBar),
+                CupertinoSliverRefreshControl(
+                  refreshTriggerPullDistance: 80,
+                  refreshIndicatorExtent: 50,
+                  onRefresh: () => cubit.refreshOrderList(),
+                ),
+                _buildOrdersListWidget(cubit, state),
+              ],
             ),
-            _buildOrdersListWidget(cubit, state),
           ]),
         ),
       );
@@ -244,10 +251,15 @@ class _OrdersPageState extends State<OrdersPage> {
               _toolbarHeight = 0.0;
             }
             return showTopBar
-                ? Wrap(
-                    direction: Axis.horizontal,
-                    alignment: WrapAlignment.spaceAround,
-                    children: _filterChipsList(context, cubit, state),
+                ? Stack(
+                    children: [
+                      _buildLoadingIfNeeded(state),
+                      Wrap(
+                        direction: Axis.horizontal,
+                        alignment: WrapAlignment.spaceAround,
+                        children: _filterChipsList(context, cubit, state),
+                      ),
+                    ],
                   )
                 : Container();
           },
@@ -258,73 +270,63 @@ class _OrdersPageState extends State<OrdersPage> {
 
   Widget _buildOrdersListWidget(AllOrdersCubit cubit, AllOrdersState state) {
     return SliverToBoxAdapter(
-        child: state.isLoading
-            ? const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(20),
-                  child: CircularProgressIndicator(),
-                ),
-              )
-            : state.allOrders.isEmpty
-                ? const Text('No orders')
-                : ListView.builder(
-                    controller: _scrollController,
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: state.allOrders.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final order = state.allOrders[index];
-                      DateTime dateTime =
-                          DateTime.parse(order.createdAt.toString());
-                      String orderDate =
-                          DateFormat("hh:mm  dd/MM").format(dateTime);
-                      final orderPrice = order.orderedItems
-                          .map((item) => int.parse(item.productPrice))
-                          .reduce((total, price) => total + price)
-                          .toString();
-                      return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onLongPressStart: (details) =>
-                                showPopupMenu(context, order, cubit, details),
-                            onTap: () {
-                              context
-                                  .read<AdminHomeRouterCubit>()
-                                  .navigateTo(const EditOrderPageState());
-                              context.read<EditOrderCubit>().getOrder(order);
-                            },
-                            child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                contentPadding: const EdgeInsets.all(14.0),
-                                tileColor: AppTheme.white,
-                                leading: Stack(children: [
-                                  ClipOval(
-                                      child: _buildImage(order.orderedItems)),
-                                  Positioned(
-                                    top: 22.0,
-                                    left: 22.0,
-                                    child: CircleAvatar(
-                                      radius: 14,
-                                      backgroundColor: AppTheme.white,
-                                      child: CircleAvatar(
-                                        backgroundColor: AppTheme.pinkDark,
-                                        radius: 12,
-                                        child: SvgPicture.asset(
-                                          order.status.iconPath,
-                                          width: 20,
-                                          color: AppTheme.white,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ]),
-                                title: listTileTitle(order),
-                                subtitle: listTileSubtitle(order, orderPrice),
-                                trailing: listTileTrailing(order, orderDate)),
-                          ));
-                    }));
+      child: ListView.builder(
+        controller: _scrollController,
+        shrinkWrap: true,
+        primary: false,
+        itemCount: state.allOrders.length,
+        itemBuilder: (BuildContext context, int index) {
+          final order = state.allOrders[index];
+          DateTime dateTime = DateTime.parse(order.createdAt.toString());
+          String orderDate = DateFormat("hh:mm  dd/MM").format(dateTime);
+          final orderPrice = order.orderedItems
+              .map((item) => int.parse(item.productPrice))
+              .reduce((total, price) => total + price)
+              .toString();
+          return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: GestureDetector(
+                onLongPressStart: (details) =>
+                    showPopupMenu(context, order, cubit, details),
+                onTap: () {
+                  context
+                      .read<AdminHomeRouterCubit>()
+                      .navigateTo(const EditOrderPageState());
+                  context.read<EditOrderCubit>().getOrder(order);
+                },
+                child: ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    contentPadding: const EdgeInsets.all(14.0),
+                    tileColor: AppTheme.white,
+                    leading: Stack(children: [
+                      ClipOval(child: _buildImage(order.orderedItems)),
+                      Positioned(
+                        top: 22.0,
+                        left: 22.0,
+                        child: CircleAvatar(
+                          radius: 14,
+                          backgroundColor: AppTheme.white,
+                          child: CircleAvatar(
+                            backgroundColor: _mapStatusToColor(order.status),
+                            radius: 12,
+                            child: SvgPicture.asset(
+                              order.status.iconPath,
+                              width: 20,
+                              color: AppTheme.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ]),
+                    title: listTileTitle(order),
+                    subtitle: listTileSubtitle(order, orderPrice),
+                    trailing: listTileTrailing(order, orderDate)),
+              ));
+        },
+      ),
+    );
   }
 
   _mapStatusToStringValue(Status status, BuildContext context) {
@@ -373,7 +375,8 @@ class _OrdersPageState extends State<OrdersPage> {
     return Column(
       children: [
         Text(_mapStatusToStringValue(order.status, context),
-            style: const TextStyle(fontSize: 16, color: AppTheme.pinkDark)),
+            style: TextStyle(
+                fontSize: 16, color: _mapStatusToColor(order.status))),
         const SizedBox(height: 8),
         Text(
           orderDate,
@@ -415,5 +418,27 @@ class _OrdersPageState extends State<OrdersPage> {
               ),
             )
             .toList());
+  }
+
+  Color _mapStatusToColor(Status status) {
+    switch (status.statusValue) {
+      case OrderStatus.Returned:
+      case OrderStatus.Canceled:
+        return AppTheme.red;
+      case OrderStatus.Sale:
+      case OrderStatus.Sent:
+        return AppTheme.greenDark;
+      default:
+        return AppTheme.pinkDark;
+    }
+  }
+
+  Widget _buildLoadingIfNeeded(AllOrdersState state) {
+    return state.isLoading
+        ? const LinearProgressIndicator(
+            color: AppTheme.pinkDark,
+            backgroundColor: AppTheme.pink,
+          )
+        : Container();
   }
 }

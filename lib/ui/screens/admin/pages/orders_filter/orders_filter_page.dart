@@ -64,7 +64,7 @@ class _FilterOrderPageState extends State<FilterOrderPage> {
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
                       ),
-                    )
+                    ),
                   ]),
                 ),
               ));
@@ -88,7 +88,7 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
             children: [
               Text(AppLocalizations.of(context)!.filterTypePayment,
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w600)),
+                      fontSize: 16, fontWeight: FontWeight.w600)),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -100,16 +100,16 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                           cubit.changePayment(FilterPaymentType.fullPayment);
                         },
                         child: CircleAvatar(
-                          radius: 30,
+                          radius: 25,
                           backgroundColor:
                               state.paymentType == FilterPaymentType.fullPayment
                                   ? AppTheme.pinkDark
                                   : AppTheme.greyLigth,
                           child: CircleAvatar(
-                            radius: 28,
+                            radius: 23,
                             backgroundColor: AppTheme.white,
                             child: SvgPicture.asset(IconPath.fullPayment,
-                                width: 30),
+                                width: 25),
                           ),
                         ),
                       ),
@@ -117,7 +117,10 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                         padding: const EdgeInsets.all(5.0),
                         child: Text(
                           AppLocalizations.of(context)!.fullPayment,
-                          style: const TextStyle(fontWeight: FontWeight.w500),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                          ),
                         ),
                       )
                     ],
@@ -126,32 +129,37 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                     width: 20,
                   ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       InkWell(
                         onTap: () {
                           cubit.changePayment(FilterPaymentType.cashAdvance);
                         },
                         child: CircleAvatar(
-                          radius: 30,
+                          radius: 25,
                           backgroundColor:
                               state.paymentType == FilterPaymentType.cashAdvance
                                   ? AppTheme.pinkDark
                                   : AppTheme.greyLigth,
                           child: CircleAvatar(
-                            radius: 28,
+                            radius: 23,
                             backgroundColor: AppTheme.white,
                             child: SvgPicture.asset(
                               IconPath.cashPayment,
-                              width: 30,
+                              width: 25,
                             ),
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Text(AppLocalizations.of(context)!.cashAdvance,
-                            style:
-                                const TextStyle(fontWeight: FontWeight.w500)),
+                        child: Text(
+                          AppLocalizations.of(context)!.cashAdvance,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                        ),
                       )
                     ],
                   )
@@ -176,47 +184,72 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit, context) {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(AppLocalizations.of(context)!.filterTypeDelivery,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.w600)),
-              InkWell(
-                onTap: () {
-                  cubit.changeDelivery(FilterDeliveryType.novaPost);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2,
-                          color:
-                              state.deliveryType == FilterDeliveryType.novaPost
+              Expanded(
+                flex: 3,
+                child: Text(AppLocalizations.of(context)!.filterTypeDelivery,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w600)),
+              ),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: InkWell(
+                    onTap: () {
+                      cubit.changeDelivery(FilterDeliveryType.novaPost);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2,
+                              color: state.deliveryType ==
+                                      FilterDeliveryType.novaPost
                                   ? AppTheme.pinkDark
                                   : AppTheme.greyLigth),
-                      borderRadius: const BorderRadius.all(Radius.circular(6))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(ImageAssets.novaPoshta),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(6))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Image.asset(
+                          ImageAssets.novaPoshta,
+                          width: 60,
+                          height: 35,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  cubit.changeDelivery(FilterDeliveryType.ukrPost);
-                },
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                          width: 2,
-                          color:
-                              state.deliveryType == FilterDeliveryType.ukrPost
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: InkWell(
+                    onTap: () {
+                      cubit.changeDelivery(FilterDeliveryType.ukrPost);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2,
+                              color: state.deliveryType ==
+                                      FilterDeliveryType.ukrPost
                                   ? AppTheme.pinkDark
                                   : AppTheme.greyLigth),
-                      borderRadius: const BorderRadius.all(Radius.circular(6))),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Image.asset(ImageAssets.ukrPoshta),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(6))),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Image.asset(
+                          ImageAssets.ukrPoshta,
+                          width: 60,
+                          height: 35,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -232,28 +265,31 @@ Widget dataRange(FilterOrdersCubit cubit, context) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(AppLocalizations.of(context)!.filterDateRange,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         Row(
           children: [
             SizedBox(
-                width: 210,
-                height: 35,
-                child: TextField(
-                  textAlignVertical: TextAlignVertical.top,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w500),
-                  controller: cubit.dateController,
-                  readOnly: true,
-                  onTap: () {
-                    cubit.selectDate(context);
-                  },
-                  decoration: const InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppTheme.gray, width: 1)),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: AppTheme.gray, width: 1)),
-                  ),
-                )),
+              width: 210,
+              height: 35,
+              child: TextField(
+                textAlignVertical: TextAlignVertical.top,
+                style:
+                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                controller: cubit.dateController,
+                readOnly: true,
+                onTap: () {
+                  cubit.selectDate(context);
+                },
+                decoration: const InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppTheme.gray, width: 1)),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppTheme.gray, width: 1)),
+                ),
+              ),
+            ),
             const SizedBox(width: 10),
             InkWell(
               onTap: () {
@@ -274,12 +310,12 @@ Widget dataRange(FilterOrdersCubit cubit, context) {
 Widget orderStatus(context, FilterOrdersState state, FilterOrdersCubit cubit) {
   final allStatusOrder = getAllStatusOrder(context);
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+    padding: const EdgeInsets.all(10.0),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(AppLocalizations.of(context)!.filterOrderStatus,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 100,
