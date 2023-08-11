@@ -164,7 +164,7 @@ class ProductMapper {
               Dimension(
                 color: dimenItem.dimension.color,
                 quantity: dimenItem.selectedQuantity,
-                image: _mapColorDimensionImage(dimenItem.dimension.color),
+                image: dimenItem.dimension.image,
               ),
             ],
           ),

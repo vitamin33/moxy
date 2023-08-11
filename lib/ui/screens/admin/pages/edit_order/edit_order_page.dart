@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/admin/all_orders/all_orders_cubit.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/screens/admin/pages/edit_order/contact_details.dart';
+import 'package:moxy/ui/screens/admin/pages/edit_order/type_payment.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../../constant/order_status.dart';
@@ -33,20 +34,20 @@ class EditOrderPage extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<EditOrderCubit>();
         return MultiBlocProvider(
-            providers: [
-              BlocProvider<SearchCitiesCubit>(
-                create: (BuildContext context) => SearchCitiesCubit(),
-              ),
-              BlocProvider<SearchWarehouseCubit>(
-                create: (BuildContext context) => SearchWarehouseCubit(),
-              ),
-            ],
-            child: Material(
-              color: AppTheme.white,
-              child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                return KeyboardVisibilityBuilder(
-                    builder: (context, isKeyboardVisible) {
+          providers: [
+            BlocProvider<SearchCitiesCubit>(
+              create: (BuildContext context) => SearchCitiesCubit(),
+            ),
+            BlocProvider<SearchWarehouseCubit>(
+              create: (BuildContext context) => SearchWarehouseCubit(),
+            ),
+          ],
+          child: Material(
+            color: AppTheme.white,
+            child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+              return KeyboardVisibilityBuilder(
+                builder: (context, isKeyboardVisible) {
                   return state.isSuccess
                       ? succsess(
                           onTap: () {
@@ -69,20 +70,25 @@ class EditOrderPage extends StatelessWidget {
                                       : constraints.maxHeight -
                                           bottomButtonsHeight,
                                   child: SingleChildScrollView(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16.0),
                                       child: Column(
-                                    children: [
-                                      dataRange(state, context),
-                                      const SizedBox(height: 10),
-                                      contactDetails(context, state, cubit),
-                                      const SizedBox(height: 20),
-                                      typePayment(state, cubit, context),
-                                      const SizedBox(height: 20),
-                                      typeDelivery(state, cubit, context),
-                                      const SizedBox(height: 20),
-                                      orderStatus(context, state, cubit),
-                                      const SizedBox(height: 20),
-                                    ],
-                                  )),
+                                        children: [
+                                          dataRange(state, context),
+                                          const SizedBox(height: 10),
+                                          ContactDetails(state: state),
+                                          const SizedBox(height: 20),
+                                          TypePayment(state: state),
+                                          const SizedBox(height: 20),
+                                          typeDelivery(state, cubit, context),
+                                          const SizedBox(height: 20),
+                                          orderStatus(context, state, cubit),
+                                          const SizedBox(height: 20),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 !state.isSuccess
                                     ? positionEditOrderButton(state, cubit,
@@ -90,471 +96,200 @@ class EditOrderPage extends StatelessWidget {
                                     : Container(),
                               ],
                             );
-                });
-              }),
-            ));
+                },
+              );
+            }),
+          ),
+        );
       },
     );
   }
 }
 
-Widget contactDetails(
-  BuildContext context,
-  EditOrderState state,
-  EditOrderCubit cubit,
-) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.contactDetails,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
-        const SizedBox(height: 10),
-        Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: state.isEditName
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SvgPicture.asset(
-                        IconPath.personName,
-                      ),
-                      SizedBox(
-                          width: 130,
-                          height: 50,
-                          child: TextField(
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder()),
-                            controller: cubit.nameEditController,
-                          )),
-                      IconButton(
-                          onPressed: () {
-                            cubit.addEditName();
-                          },
-                          icon: const Icon(Icons.check))
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SvgPicture.asset(
-                        IconPath.personName,
-                      ),
-                      Text(
-                          '${state.client.firstName}  ${state.client.secondName}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppTheme.gray,
-                          )),
-                      TextButton(
-                          onPressed: () {
-                            cubit.changeEditName();
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.change,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppTheme.pinkDark,
-                            ),
-                          ))
-                    ],
-                  )),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child: state.isEditPhone
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                      SvgPicture.asset(IconPath.phone),
-                      SizedBox(
-                          width: 130,
-                          height: 50,
-                          child: TextField(
-                            controller: cubit.phoneEditController,
-                            decoration: const InputDecoration(
-                                border: OutlineInputBorder()),
-                          )),
-                      IconButton(
-                          onPressed: () {
-                            cubit.addEditPhone();
-                          },
-                          icon: const Icon(Icons.check))
-                    ])
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                      SvgPicture.asset(IconPath.phone),
-                      Text(state.client.mobileNumber,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppTheme.gray,
-                          )),
-                      TextButton(
-                          onPressed: () {
-                            cubit.changeEditPhone();
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.change,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppTheme.pinkDark,
-                            ),
-                          ))
-                    ]),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25.0),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            SvgPicture.asset(IconPath.selectedProduct),
-            Text(state.selectedProducts.first.productName,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.gray,
-                )),
-            TextButton(
-                onPressed: () {
-                  cubit.editSelectedProduct();
-                  context.read<AdminHomeRouterCubit>().navigateTo(
-                        const OrderProductListPageState(isFromEdit: true),
-                      );
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.change,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppTheme.pinkDark,
-                  ),
-                ))
-          ]),
-        )
-      ],
-    ),
-  );
-}
-
-Widget typePayment(EditOrderState state, EditOrderCubit cubit, context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(AppLocalizations.of(context)!.filterTypePayment,
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w600)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          onTap: () {
-                            cubit.changePayment(PaymentType.fullPayment);
-                          },
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor:
-                                state.paymentType == PaymentType.fullPayment
-                                    ? AppTheme.pinkDark
-                                    : AppTheme.greyLigth,
-                            child: CircleAvatar(
-                              radius: 28,
-                              backgroundColor: AppTheme.white,
-                              child: SvgPicture.asset(IconPath.fullPayment,
-                                  width: 30),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                            AppLocalizations.of(context)!.fullPayment,
-                            style: const TextStyle(fontWeight: FontWeight.w500),
-                          ),
-                        )
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Column(
-                      children: [
-                        InkWell(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(20)),
-                          onTap: () {
-                            cubit.changePayment(PaymentType.cashAdvance);
-                          },
-                          child: CircleAvatar(
-                            radius: 30,
-                            backgroundColor:
-                                state.paymentType == PaymentType.cashAdvance
-                                    ? AppTheme.pinkDark
-                                    : AppTheme.greyLigth,
-                            child: CircleAvatar(
-                              radius: 28,
-                              backgroundColor: AppTheme.white,
-                              child: SvgPicture.asset(
-                                IconPath.cashPayment,
-                                width: 30,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(AppLocalizations.of(context)!.cashAdvance,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w500)),
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
-          ),
-          AnimatedOpacity(
-              opacity: state.paymentType == PaymentType.cashAdvance ? 1 : 0,
-              duration: const Duration(milliseconds: 500),
-              child: AnimatedSize(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  child: state.paymentType == PaymentType.cashAdvance
-                      ? Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              width: 150,
-                              height: 50,
-                              child: TextField(
-                                controller: cubit.paymentController,
-                                onChanged: (value) {
-                                  cubit.cashAdvancePrepayment(value);
-                                },
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container()))
-        ]),
-  );
-}
-
 Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    child: Column(
-      children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(AppLocalizations.of(context)!.filterTypeDelivery,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      cubit.changeDelivery(DeliveryType.novaPost);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 2,
-                              color: state.deliveryType == DeliveryType.novaPost
-                                  ? AppTheme.pinkDark
-                                  : AppTheme.greyLigth),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(6))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(
-                          width: 60,
-                          height: 30,
-                          ImageAssets.novaPoshta,
-                        ),
+  return Column(
+    children: [
+      SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(AppLocalizations.of(context)!.filterTypeDelivery,
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                InkWell(
+                  onTap: () {
+                    cubit.changeDelivery(DeliveryType.novaPost);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 2,
+                            color: state.deliveryType == DeliveryType.novaPost
+                                ? AppTheme.pinkDark
+                                : AppTheme.greyLigth),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(6))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Image.asset(
+                        width: 60,
+                        height: 30,
+                        ImageAssets.novaPoshta,
                       ),
                     ),
                   ),
-                  const SizedBox(width: 20),
-                  InkWell(
-                    onTap: () {
-                      cubit.changeDelivery(DeliveryType.ukrPost);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              width: 2,
-                              color: state.deliveryType == DeliveryType.ukrPost
-                                  ? AppTheme.pinkDark
-                                  : AppTheme.greyLigth),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(6))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(
-                          width: 60,
-                          height: 30,
-                          ImageAssets.ukrPoshta,
-                        ),
+                ),
+                const SizedBox(width: 28),
+                InkWell(
+                  onTap: () {
+                    cubit.changeDelivery(DeliveryType.ukrPost);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                            width: 2,
+                            color: state.deliveryType == DeliveryType.ukrPost
+                                ? AppTheme.pinkDark
+                                : AppTheme.greyLigth),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(6))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Image.asset(
+                        width: 60,
+                        height: 30,
+                        ImageAssets.ukrPoshta,
                       ),
                     ),
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
-        AnimatedOpacity(
+      ),
+      AnimatedOpacity(
+          curve: Curves.easeOut,
+          opacity: state.deliveryType == DeliveryType.novaPost ? 1 : 0,
+          duration: const Duration(milliseconds: 300),
+          child: AnimatedSize(
+            duration: const Duration(milliseconds: 300),
             curve: Curves.easeOut,
-            opacity: state.deliveryType == DeliveryType.novaPost ? 1 : 0,
-            duration: const Duration(milliseconds: 500),
-            child: AnimatedSize(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeOut,
-              child: Container(
-                  child: state.deliveryType == DeliveryType.novaPost
-                      ? Column(
-                          children: [
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            SearchCityDropdown(
-                                selectedCity: state.selectedCity,
-                                selectedWarehouse: state.selectedWarehouse,
-                                onChanged: (city) {
-                                  cubit.selectCity(city);
-                                }),
-                            const SizedBox(height: 20),
-                            SearchWarehouseDropdown(
-                                selectedCity: state.selectedCity,
-                                selectedWarehouse: state.selectedWarehouse,
-                                onChanged: (warehouse) {
-                                  cubit.selectWarehouse(warehouse);
-                                })
-                          ],
-                        )
-                      : Container()),
-            ))
-      ],
-    ),
+            child: Container(
+                child: state.deliveryType == DeliveryType.novaPost
+                    ? Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          SearchCityDropdown(
+                              selectedCity: state.selectedCity,
+                              selectedWarehouse: state.selectedWarehouse,
+                              onChanged: (city) {
+                                cubit.selectCity(city);
+                              }),
+                          const SizedBox(height: 20),
+                          SearchWarehouseDropdown(
+                              selectedCity: state.selectedCity,
+                              selectedWarehouse: state.selectedWarehouse,
+                              onChanged: (warehouse) {
+                                cubit.selectWarehouse(warehouse);
+                              })
+                        ],
+                      )
+                    : Container()),
+          ))
+    ],
   );
 }
 
 Widget dataRange(state, context) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    child: SizedBox(
-      width: double.infinity,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(AppLocalizations.of(context)!.creationDate,
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          Text(
-            state.createdAt,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-              color: AppTheme.gray,
-            ),
+  return SizedBox(
+    width: double.infinity,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(AppLocalizations.of(context)!.creationDate,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+        Text(
+          state.createdAt,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: AppTheme.gray,
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
 
 Widget orderStatus(context, EditOrderState state, cubit) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(AppLocalizations.of(context)!.filterOrderStatus,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 100,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: allStatusOrder.length,
-                  itemBuilder: (context, index) {
-                    final allStatusOrder = getAllStatusOrder(context);
-                    final status = allStatusOrder[index];
-                    final isSelected = status.statusTitle == state.status;
-                    return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Column(
-                          children: [
-                            InkWell(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                              onTap: () {
-                                cubit.changeStatus(status.statusTitle);
-                              },
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: isSelected
-                                    ? AppTheme.pinkDark
-                                    : AppTheme.greyLigth,
-                                child: InkWell(
-                                  child: CircleAvatar(
-                                    radius: 28,
-                                    backgroundColor: AppTheme.white,
-                                    child: SvgPicture.asset(status.iconPath,
-                                        width: 30),
-                                  ),
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(AppLocalizations.of(context)!.filterOrderStatus,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      const SizedBox(height: 5),
+      SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: 100,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: allStatusOrder.length,
+                itemBuilder: (context, index) {
+                  final allStatusOrder = getAllStatusOrder(context);
+                  final status = allStatusOrder[index];
+                  final isSelected = status.statusTitle == state.status;
+                  return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
+                        children: [
+                          InkWell(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                            onTap: () {
+                              cubit.changeStatus(status.statusTitle);
+                            },
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: isSelected
+                                  ? AppTheme.pinkDark
+                                  : AppTheme.greyLigth,
+                              child: InkWell(
+                                child: CircleAvatar(
+                                  radius: 28,
+                                  backgroundColor: AppTheme.white,
+                                  child: SvgPicture.asset(status.iconPath,
+                                      width: 30),
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: Text(status.statusTitle,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500)),
-                            )
-                          ],
-                        ));
-                  },
-                ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Text(status.statusTitle,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.w500)),
+                          )
+                        ],
+                      ));
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ],
-    ),
+      ),
+    ],
   );
 }
 
@@ -563,7 +298,7 @@ Widget positionEditOrderButton(EditOrderState state, EditOrderCubit cubit,
   double buttonsHeight = isKeyboardVisible ? 0 : 70;
 
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    padding: const EdgeInsets.symmetric(horizontal: 12.0),
     child: SizedBox(
         height: buttonsHeight,
         child: CustomButton(
