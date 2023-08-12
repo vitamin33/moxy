@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/home/home_cubit.dart';
 import 'package:moxy/domain/client/home/home_state.dart';
+import 'package:moxy/ui/screens/components/footer_web.dart';
+
+import '../../../components/promo.dart';
 
 class HomePage extends StatelessWidget {
   late TabController _tabController;
@@ -18,7 +21,16 @@ class HomePage extends StatelessWidget {
           return TabBarView(
             controller: _tabController,
             children: const [
-              Icon(Icons.directions_car),
+              Scaffold(
+                body: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    Promo(),
+                    SizedBox(height: 30),
+                    Footer(),
+                  ],
+                )),
+              ),
               Icon(Icons.directions_transit),
               Icon(Icons.directions_bike),
               Icon(Icons.directions_boat_filled),
