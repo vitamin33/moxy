@@ -4,7 +4,7 @@ import 'package:moxy/domain/client/home/home_cubit.dart';
 import 'package:moxy/domain/client/home/home_state.dart';
 import 'package:moxy/ui/screens/components/footer_web.dart';
 
-import '../../../components/promo.dart';
+import '../../../components/promo_container.dart';
 
 class HomePage extends StatelessWidget {
   late TabController _tabController;
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
                 body: SingleChildScrollView(
                     child: Column(
                   children: [
-                    Promo(),
+                    PromoContainer(),
                     SizedBox(height: 30),
                     Footer(),
                   ],

@@ -1,107 +1,139 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/ui/screens/components/onhover_text.dart';
-import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/ui/components/custom_textfield.dart';
+
+import '../../../constant/icon_path.dart';
+import '../../../domain/client/footer/footer_cubit.dart';
+import '../../../domain/client/footer/footer_state.dart';
+import '../../theme/app_theme.dart';
+import 'onhover_text.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          color: AppTheme.pink,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(30))),
-      width: double.infinity,
-      height: 400,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Padding(padding: const EdgeInsets.all(20.0), child: emailColumn()),
-          menuColumn(),
-          contactColumn()
-        ],
+    return BlocProvider(
+      create: (BuildContext context) => FooterCubit(),
+      child: BlocBuilder<FooterCubit, FooterState>(
+        builder: (context, state) {
+          final cubit = context.read<FooterCubit>();
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: AppTheme.pink,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(15))),
+              width: double.infinity,
+              height: 400,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  emailColumn(cubit, state),
+                  menuColumn(),
+                  contactColumn()
+                ],
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-emailColumn() {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SvgPicture.asset(IconPath.moxyLogoWeb),
-      const SizedBox(height: 40),
-      const SizedBox(
-        width: 440,
-        child: Text(
-          'ПІДПИШИСЬ ЩОБ ОТРИМАТИ КАШБЕК -15% ВІД ПЕРШОГО ЗАМОВЛЕННЯ',
-          style: TextStyle(
-            color: Color(0xFF0C0C0C),
-            fontSize: 22,
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.w400,
+Widget emailColumn(FooterCubit cubit, FooterState state) {
+  return Padding(
+    padding: const EdgeInsets.all(20.0),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SvgPicture.asset(IconPath.moxyLogoWeb),
+        const SizedBox(height: 40),
+        const SizedBox(
+          width: 440,
+          child: Text(
+            'ПІДПИШИСЬ ЩОБ ОТРИМАТИ КАШБЕК -15% ВІД ПЕРШОГО ЗАМОВЛЕННЯ',
+            style: TextStyle(
+              color: Color(0xFF0C0C0C),
+              fontSize: 22,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
-      ),
-      const SizedBox(height: 40),
-      SizedBox(
-          width: 440,
-          child: Stack(
-            children: [
-              TextField(),
-              Positioned(
-                  top: 20,
-                  right: 0,
-                  child: GestureDetector(
-                      onTap: () {},
-                      child: SvgPicture.asset(IconPath.textFieldArrowWeb)))
-            ],
-          )),
-      const SizedBox(height: 40),
-      Row(
-        children: [
-          GestureDetector(
-              onTap: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                    color: AppTheme.black,
-                    borderRadius: BorderRadius.circular(50)),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset(
-                    IconPath.instagramIcon,
-                    color: AppTheme.white,
-                  ),
+        const SizedBox(height: 40),
+        SizedBox(
+            width: 440,
+            child: Stack(
+              children: [
+                TextField(
+                  controller: cubit.userEmailController,
+                  maxLines: 1,
+                  onChanged: cubit.emailChanged,
+                  decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: isValid(state.errors.emailUser)
+                                  ? AppTheme.pinkDark
+                                  : AppTheme.red))),
                 ),
-              )),
-          const SizedBox(
-            width: 10,
-          ),
-          GestureDetector(
-              onTap: () {},
-              child: Container(
-                decoration: BoxDecoration(
-                    color: AppTheme.black,
-                    borderRadius: BorderRadius.circular(50)),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: SvgPicture.asset(
-                    IconPath.tikTokIcon,
-                    color: AppTheme.white,
+                Positioned(
+                    top: 20,
+                    right: 0,
+                    child: GestureDetector(
+                        onTap: () {
+                          cubit.sendEmail();
+                        },
+                        child: SvgPicture.asset(IconPath.textFieldArrowWeb)))
+              ],
+            )),
+        const SizedBox(height: 40),
+        Row(
+          children: [
+            GestureDetector(
+                onTap: () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: AppTheme.black,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(
+                      IconPath.instagramIcon,
+                      color: AppTheme.white,
+                    ),
                   ),
-                ),
-              )),
-        ],
-      ),
-    ],
+                )),
+            const SizedBox(
+              width: 10,
+            ),
+            GestureDetector(
+                onTap: () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: AppTheme.black,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SvgPicture.asset(
+                      IconPath.tikTokIcon,
+                      color: AppTheme.white,
+                    ),
+                  ),
+                )),
+          ],
+        ),
+      ],
+    ),
   );
 }
 
-menuColumn() {
+Widget menuColumn() {
   return Column(
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
@@ -216,13 +248,13 @@ menuColumn() {
   );
 }
 
-contactColumn() {
-  return const Column(
+Widget contactColumn() {
+  return Column(
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Column(
+      const Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,13 +290,13 @@ contactColumn() {
           ),
         ],
       ),
-      SizedBox(height: 58),
+      const SizedBox(height: 58),
       Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'ПІДТРИМКА',
             style: TextStyle(
               color: Color(0xFF0C0C0C),
@@ -273,15 +305,34 @@ contactColumn() {
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(height: 22),
-          Text(
-            'E-mail: Support@moxy.ua',
-            style: TextStyle(
-              color: Color(0xFF0C0C0C),
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
+          const SizedBox(height: 22),
+          Row(
+            children: [
+              const Text(
+                'E-mail: ',
+                style: TextStyle(
+                  color: Color(0xFF0C0C0C),
+                  fontSize: 14,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              OnHoverText(
+                builder: ((isHovered) {
+                  return Text(
+                    'Support@moxy.ua',
+                    style: TextStyle(
+                        color: isHovered ? AppTheme.gray : AppTheme.black,
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w400,
+                        decoration: isHovered
+                            ? TextDecoration.underline
+                            : TextDecoration.none),
+                  );
+                }),
+              ),
+            ],
           ),
         ],
       ),

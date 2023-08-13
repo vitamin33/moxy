@@ -6,11 +6,13 @@ import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/data/repositories/overview_repository.dart';
+import 'package:moxy/data/repositories/promo_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
+import '../data/repositories/footer_repository.dart';
 import '../data/repositories/order_repository.dart';
 import '../data/repositories/product_repository.dart';
 import '../data/secure_storage_repository.dart';
@@ -40,6 +42,8 @@ class GetItService {
     getIt.registerSingleton(CityMapper());
     getIt.registerSingleton(WarehouseMapper());
     getIt.registerSingleton(OverviewRepository());
+    getIt.registerSingleton(FooterRepository());
+    getIt.registerSingleton(PromoRepository());
   }
 }
 
