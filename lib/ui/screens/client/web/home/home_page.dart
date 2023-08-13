@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/home/home_cubit.dart';
 import 'package:moxy/domain/client/home/home_state.dart';
 
+@immutable
 class HomePage extends StatelessWidget {
   late TabController _tabController;
   HomePage({required tabController, Key? key}) : super(key: key) {

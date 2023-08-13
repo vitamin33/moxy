@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moxy/constant/image_path.dart';
 import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:moxy/services/navigation/web/web_home_router_cubit.dart';
 import 'package:moxy/services/navigation/web/web_home_router_delegate.dart';
