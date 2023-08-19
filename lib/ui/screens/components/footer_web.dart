@@ -7,7 +7,7 @@ import '../../../constant/icon_path.dart';
 import '../../../domain/client/footer/footer_cubit.dart';
 import '../../../domain/client/footer/footer_state.dart';
 import '../../theme/app_theme.dart';
-import 'onhover_text.dart';
+import 'onhover.dart';
 
 class Footer extends StatelessWidget {
   const Footer({super.key});
@@ -149,7 +149,7 @@ Widget menuColumn() {
         ),
       ),
       const SizedBox(height: 22),
-      OnHoverText(
+      OnHover(
         builder: ((isHovered) {
           return Text(
             'Доставка і оплата',
@@ -165,7 +165,7 @@ Widget menuColumn() {
         }),
       ),
       const SizedBox(height: 22),
-      OnHoverText(
+      OnHover(
         builder: ((isHovered) {
           return Text(
             'Обмін та повернення ',
@@ -181,7 +181,7 @@ Widget menuColumn() {
         }),
       ),
       const SizedBox(height: 22),
-      OnHoverText(
+      OnHover(
         builder: ((isHovered) {
           return Text(
             'Як обрати розмір?',
@@ -197,7 +197,7 @@ Widget menuColumn() {
         }),
       ),
       const SizedBox(height: 22),
-      OnHoverText(
+      OnHover(
         builder: ((isHovered) {
           return Text(
             'Як отримати кешбек?',
@@ -213,7 +213,7 @@ Widget menuColumn() {
         }),
       ),
       const SizedBox(height: 22),
-      OnHoverText(
+      OnHover(
         builder: ((isHovered) {
           return Text(
             'Запитання',
@@ -229,7 +229,7 @@ Widget menuColumn() {
         }),
       ),
       const SizedBox(height: 22),
-      OnHoverText(
+      OnHover(
         builder: ((isHovered) {
           return Text(
             'Політика конфеденційності',
@@ -317,7 +317,7 @@ Widget contactColumn() {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              OnHoverText(
+              OnHover(
                 builder: ((isHovered) {
                   return Text(
                     'Support@moxy.ua',

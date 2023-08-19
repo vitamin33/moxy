@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../services/get_it.dart';

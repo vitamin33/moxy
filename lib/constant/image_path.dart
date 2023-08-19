@@ -8,4 +8,6 @@ class ImageAssets {
   static const String ukrPoshta = "assets/images/ukr_poshta.png";
   static const String moxyIcLauncher = "assets/icons/ic_launcher.png";
   static const String promoBackground = "assets/images/promo_background.png";
+  static const String bigPictureHome = "assets/images/big_picture_home.png";
+  static const String smallPictureHome = "assets/images/small_picture.png";
 }

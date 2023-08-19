@@ -8,14 +8,25 @@ import 'package:moxy/services/get_it.dart';
 import '../../../utils/common.dart';
 
 class PromoCubit extends Cubit<PromoState> {
-  PromoCubit() : super(PromoState.defaultPromoState()) {
-    allPromo();
-  }
+  PromoCubit() : super(PromoState.defaultPromoState());
+
   final promoRepository = locate<PromoRepository>();
 
-  final pageController = PageController();
+  final pageController = PageController(initialPage: 0);
 
-  void onChangePage() {}
+  void onChangePage(page) {
+    emit(state.copyWith(activePage: page));
+  }
+
+  void moveToPreviustPage() {
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
+
+  void moveToNextPage() {
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
 
   void allPromo() async {
     try {

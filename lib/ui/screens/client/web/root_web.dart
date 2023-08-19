@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
 import 'package:moxy/services/navigation/web/web_home_router_cubit.dart';
 import 'package:moxy/services/navigation/web/web_home_router_delegate.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -23,7 +22,7 @@ class _RootWebWidgetState extends State<RootWebWidget>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController?.addListener(_handleTabSelection);
   }
 
@@ -44,54 +43,67 @@ class _RootWebWidgetState extends State<RootWebWidget>
   Widget build(BuildContext context) {
     routerCubit = context.read<ClientHomeRouterCubit>();
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: BlocBuilder<ClientHomeRouterCubit, ClientHomeRouterState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: AppTheme.white,
-              elevation: 8.0,
-              titleSpacing: 0.0,
-              title: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(width: 5),
-                  SvgPicture.asset(
-                    IconPath.moxyLogoWeb,
+          return Material(
+            child: Scaffold(
+              appBar: AppBar(
+                  leadingWidth: 150,
+                  leading: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: SvgPicture.asset(
+                      IconPath.moxyLogoWeb,
+                      width: 50,
+                    ),
                   ),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      routerCubit?.tabControlPressed();
-                    },
-                    child: SizedBox(
-                      width: 400, // Adjust the width as needed
-                      child: SegmentedTabControl(
-                        controller: _tabController,
-                        backgroundColor: AppTheme.white,
-                        tabPadding: const EdgeInsets.all(10.0),
-                        radius: const Radius.circular(15.0),
-                        indicatorColor: AppTheme.pinkAvarage,
-                        tabTextColor: AppTheme.textColor,
-                        selectedTabTextColor: AppTheme.white,
-                        splashColor: AppTheme.pink,
-                        tabs: const [
-                          SegmentTab(label: 'Новинки'),
-                          SegmentTab(label: 'Сумки'),
-                          SegmentTab(label: 'Одяг'),
-                          SegmentTab(label: 'Шапки'),
+                  centerTitle: true,
+                  backgroundColor: AppTheme.white,
+                  elevation: 8.0,
+                  title: SizedBox(
+                    width: 380,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              routerCubit?.tabControlPressed();
+                            },
+                            child: SizedBox(
+                              width: 350, // Adjust the width as needed
+                              child: TabBar(
+                                overlayColor:
+                                    MaterialStateProperty.resolveWith<Color?>(
+                                  (Set<MaterialState> states) {
+                                    if (states
+                                        .contains(MaterialState.hovered)) {
+                                      return AppTheme.greyLigth;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                controller: _tabController,
+                                indicatorColor: AppTheme.black,
+                                labelColor: AppTheme.black,
+                                tabs: const [
+                                  Tab(text: 'Новинки'),
+                                  Tab(text: 'Сумки'),
+                                  Tab(
+                                    text: 'Аксесуари',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                  _buildActions(context, state),
-                ],
-              ),
+                  actions: _buildActions(context, state)),
+              body: _buildRouter(context, _tabController!),
             ),
-            body: _buildRouter(context, _tabController!),
           );
         },
       ),
@@ -145,38 +157,37 @@ class _RootWebWidgetState extends State<RootWebWidget>
     );
   }
 
-  Widget _buildActions(BuildContext context, ClientHomeRouterState state) {
-    return Row(
-      children: [
-        _buildPaddedIconButton(
-          IconPath.searchWeb,
-          false,
-          () {
-            routerCubit?.searchPressed();
-          },
-        ),
-        _buildPaddedIconButton(
-          IconPath.favouritesWeb,
-          state is FavouritesRouteState,
-          () {
-            routerCubit?.favouritesPressed();
-          },
-        ),
-        _buildPaddedIconButton(
-          IconPath.profileWeb,
-          state is ProfileRouteState,
-          () {
-            routerCubit?.profilePressed();
-          },
-        ),
-        _buildPaddedIconButton(
-          IconPath.bagWeb,
-          state is BasketRouteState,
-          () {
-            routerCubit?.basketPressed();
-          },
-        ),
-      ],
-    );
+  List<Widget> _buildActions(
+      BuildContext context, ClientHomeRouterState state) {
+    return [
+      _buildPaddedIconButton(
+        IconPath.searchWeb,
+        false,
+        () {
+          routerCubit?.searchPressed();
+        },
+      ),
+      _buildPaddedIconButton(
+        IconPath.favouritesWeb,
+        state is FavouritesRouteState,
+        () {
+          routerCubit?.favouritesPressed();
+        },
+      ),
+      _buildPaddedIconButton(
+        IconPath.profileWeb,
+        state is ProfileRouteState,
+        () {
+          routerCubit?.profilePressed();
+        },
+      ),
+      _buildPaddedIconButton(
+        IconPath.bagWeb,
+        state is BasketRouteState,
+        () {
+          routerCubit?.basketPressed();
+        },
+      ),
+    ];
   }
 }

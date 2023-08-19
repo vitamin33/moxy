@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class OnHoverText extends StatefulWidget {
-  final Widget Function(bool isHovered) builder ;
-  const OnHoverText({Key? key, required this.builder}) : super(key: key);
+class OnHover extends StatefulWidget {
+  final Widget Function(bool isHovered) builder;
+  const OnHover({Key? key, required this.builder}) : super(key: key);
 
   @override
-  State<OnHoverText> createState() => _OnHoverTextState();
+  State<OnHover> createState() => _OnHoverState();
 }
 
-class _OnHoverTextState extends State<OnHoverText> {
+class _OnHoverState extends State<OnHover> {
   bool isHovered = false;
   @override
   Widget build(BuildContext context) {
