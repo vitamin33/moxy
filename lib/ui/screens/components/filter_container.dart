@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+
+import '../../../constant/product_colors.dart';
 
 class FilterContainer extends StatelessWidget {
   const FilterContainer({super.key});
@@ -30,31 +33,12 @@ class FilterContainer extends StatelessWidget {
               SizedBox(
                 width: 20,
               ),
-              DropdownButtonExample(),
-              SizedBox(
-                width: 20,
-              ),
-              DropdownButtonExample(),
             ],
           )
         ]),
       ),
     );
   }
-}
-
-const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
-
-enum ColorLabel {
-  blue('Blue', Colors.blue),
-  pink('Pink', Colors.pink),
-  green('Green', Colors.green),
-  yellow('Yellow', Colors.yellow),
-  grey('Grey', Colors.grey);
-
-  const ColorLabel(this.label, this.color);
-  final String label;
-  final Color color;
 }
 
 class DropdownButtonExample extends StatefulWidget {
@@ -65,35 +49,38 @@ class DropdownButtonExample extends StatefulWidget {
 }
 
 class _DropdownButtonExampleState extends State<DropdownButtonExample> {
-  ColorLabel dropdownValue = ColorLabel.blue;
-  final TextEditingController colorController = TextEditingController();
+  ProductColor dropdownValue = ProductColor.black;
 
   @override
   Widget build(BuildContext context) {
-    final List<DropdownMenuEntry<ColorLabel>> colorEntries =
-        <DropdownMenuEntry<ColorLabel>>[];
-    for (final ColorLabel color in ColorLabel.values) {
-      colorEntries.add(
-        DropdownMenuEntry<ColorLabel>(
-          value: color,
-          label: color.label,
+    return OnHover(builder: (isHovered) {
+      return Container(
+        color: isHovered ? AppTheme.white : AppTheme.white,
+        child: DropdownButton<ProductColor>(
+          focusColor: AppTheme.white,
+          dropdownColor: AppTheme.white,
+          iconEnabledColor: AppTheme.black,
+          iconDisabledColor: AppTheme.black,
+          value: dropdownValue,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.black,
+          ),
+          onChanged: (ProductColor? color) {
+            setState(() {
+              dropdownValue = color!;
+            });
+          },
+          items: ProductColor.values.map((ProductColor color) {
+            return DropdownMenuItem<ProductColor>(
+              value: color,
+              child: Text(
+                color.color,
+              ),
+            );
+          }).toList(),
         ),
       );
-    }
-
-    return DropdownMenu<ColorLabel>(
-      inputDecorationTheme: const InputDecorationTheme(
-          fillColor: AppTheme.black,
-          border: UnderlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.black))),
-      initialSelection: ColorLabel.green,
-      controller: colorController,
-      dropdownMenuEntries: colorEntries,
-      onSelected: (ColorLabel? color) {
-        setState(() {
-          dropdownValue = color!;
-        });
-      },
-    );
+    });
   }
 }
