@@ -38,4 +38,12 @@ class IconPath {
   static const String wallet = "assets/icons/wallet.svg";
   static const String rightUpArrow = "assets/icons/right_up_arrow.svg";
   static const String rightDownArrow = "assets/icons/right_down_arrow.svg";
+  static const String moxyLogoWeb = "assets/icons/moxy_logo_web.svg";
+  static const String searchWeb = "assets/icons/search_web.svg";
+  static const String favouritesWeb = "assets/icons/favourites_web.svg";
+  static const String profileWeb = "assets/icons/profile_web.svg";
+  static const String bagWeb = "assets/icons/bag_web.svg";
+  static const String instagramIcon = "assets/icons/instagram_icon.svg";
+  static const String tikTokIcon = "assets/icons/tiktok_icon.svg";
+  static const String textFieldArrowWeb = "assets/icons/textfield_arrow_web.svg";
 }

@@ -355,7 +355,7 @@ class DioClient {
         };
       }
 
-      final response = await dio.post(ordersDashboard, data: requestData);
+      final response = await dio.post(ordersDashboardUrl, data: requestData);
       final data = response.data;
       final result = NetworkDashboard.fromJson(data);
       return result;
@@ -363,4 +363,44 @@ class DioClient {
       throw Exception('Failed to load product: $e');
     }
   }
+// WEB
+
+// FOOTER
+ Future<Result<Headers, Exception>> sendFooterEmail(String email) async {
+    final Headers? result;
+    // final data = order.toJson();
+    try {
+      Response response = await dio.post(
+        sendFooterEmailUrl,
+        data: email,
+      );
+      result = response.headers;
+    } catch (e) {
+      moxyPrint('Error send user email: $e');
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
+  }
+
+
+
+  // PROMO
+
+  Future<Result<Headers, Exception>> getAllPromo() async {
+    final Headers? result;
+    try {
+      Response response = await dio.post(
+        getPromoUrl,
+      );
+      result = response.headers;
+    } catch (e) {
+      moxyPrint('Error send user email: $e');
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
+  }
+
+
 }
+
+

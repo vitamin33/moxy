@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/home/home_cubit.dart';
 import 'package:moxy/domain/client/home/home_state.dart';
+import 'package:moxy/ui/screens/components/footer_web.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
+
+import '../../../components/filter_container.dart';
+import '../../../components/product_list.dart';
+import '../../../components/promo_container.dart';
 
 @immutable
 class HomePage extends StatelessWidget {
@@ -18,11 +24,23 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           return TabBarView(
             controller: _tabController,
+            physics: const NeverScrollableScrollPhysics(),
             children: const [
-              Icon(Icons.directions_car),
+              Scaffold(
+                backgroundColor: AppTheme.white,
+                body: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    FilterContainer(),
+                    ProductList(),
+                    PromoContainer(),
+                    SizedBox(height: 30),
+                    Footer(),
+                  ],
+                )),
+              ),
               Icon(Icons.directions_transit),
               Icon(Icons.directions_bike),
-              Icon(Icons.directions_boat_filled),
             ],
           );
         },
