@@ -43,13 +43,10 @@ class OrderRepository {
 
       List<Order> filteredOrders = allOrdersList.where((order) {
         bool matchesDelivery = deliveryType == 'empty' ||
-            deliveryType == null ||
             order.deliveryType.name == deliveryType;
         bool matchesPayment = paymentType == 'empty' ||
-            paymentType == null ||
             order.paymentType.name == paymentType;
-        bool matchesStatus = status == null ||
-            status.isEmpty ||
+        bool matchesStatus = status.isEmpty ||
             status.any((s) => order.status.statusTitle.contains(s.statusTitle));
         bool matchesData = startData == null ||
             endData == null ||

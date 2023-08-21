@@ -9,6 +9,7 @@ import '../../../components/filter_container.dart';
 import '../../../components/product_list.dart';
 import '../../../components/promo_container.dart';
 
+@immutable
 class HomePage extends StatelessWidget {
   late TabController _tabController;
   HomePage({required tabController, Key? key}) : super(key: key) {

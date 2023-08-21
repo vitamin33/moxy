@@ -169,7 +169,7 @@ class DioClient {
 
   Future<NetworkProduct> getProductById(String id) async {
     try {
-      final response = await dio.get('$baseUrl/products/$id');
+      final response = await dio.get('$baseUrl$getProductByIdUrl$id');
       final data = response.data;
       final result = NetworkProduct.fromJson(data);
       return result;
