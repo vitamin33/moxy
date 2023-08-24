@@ -52,7 +52,7 @@ class _RootWebWidgetState extends State<RootWebWidget>
               appBar: AppBar(
                   leadingWidth: 150,
                   leading: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: SvgPicture.asset(
                       IconPath.moxyLogoWeb,
                       width: 50,

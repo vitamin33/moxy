@@ -29,14 +29,17 @@ class HomePage extends StatelessWidget {
               Scaffold(
                 backgroundColor: AppTheme.white,
                 body: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    FilterContainer(),
-                    ProductList(),
-                    PromoContainer(),
-                    SizedBox(height: 30),
-                    Footer(),
-                  ],
+                    child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    children: [
+                      FilterContainer(),
+                      ProductList(),
+                      PromoContainer(),
+                      SizedBox(height: 30),
+                      Footer(),
+                    ],
+                  ),
                 )),
               ),
               Icon(Icons.directions_transit),

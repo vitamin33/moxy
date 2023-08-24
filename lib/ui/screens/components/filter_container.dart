@@ -15,15 +15,26 @@ class FilterContainer extends StatelessWidget {
         width: double.infinity,
         height: 150,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            "Сумки",
-            style: TextStyle(
-              color: Color(0xFF0C0C0C),
-              fontSize: 42,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w500,
+          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(
+              "Сумки ",
+              style: TextStyle(
+                color: Color(0xFF0C0C0C),
+                fontSize: 42,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
+            Text(
+              "(34)",
+              style: TextStyle(
+                color: Color(0xFF0C0C0C),
+                fontSize: 20,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ]),
           SizedBox(
             height: 20,
           ),
