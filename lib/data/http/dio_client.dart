@@ -366,7 +366,7 @@ class DioClient {
 // WEB
 
 // FOOTER
- Future<Result<Headers, Exception>> sendFooterEmail(String email) async {
+  Future<Result<Headers, Exception>> sendFooterEmail(String email) async {
     final Headers? result;
     // final data = order.toJson();
     try {
@@ -381,8 +381,6 @@ class DioClient {
     }
     return Result.success(result);
   }
-
-
 
   // PROMO
 
@@ -399,8 +397,4 @@ class DioClient {
     }
     return Result.success(result);
   }
-
-
 }
-
-
