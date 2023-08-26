@@ -7,7 +7,7 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRouterState> {
   ClientHomeRouterCubit() : super(const HomeRouteState());
   void goToFavourites([String? text]) => emit(FavouritesRouteState(text));
   void goToHome([String? text]) => emit(HomeRouteState(text));
-  void goToBasket([String? text]) => emit(BasketRouteState(text));
+  void goToCheckout([String? text]) => emit(CheckoutRouteState(text));
   void goToProfile([String? text]) => emit(ProfileRouteState(text));
 
   void popExtra() {
@@ -26,8 +26,8 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRouterState> {
       case FavouritesRouteState:
         goToFavourites();
         break;
-      case BasketRouteState:
-        goToBasket();
+      case CheckoutRouteState:
+        goToCheckout();
         break;
       case ProfileRouteState:
         goToProfile();
@@ -48,8 +48,8 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRouterState> {
   }
 
   void basketPressed() {
-    if (state is! BasketRouteState) {
-      goToBasket();
+    if (state is! CheckoutRouteState) {
+      goToCheckout();
     }
   }
 

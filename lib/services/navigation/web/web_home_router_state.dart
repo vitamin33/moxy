@@ -20,9 +20,9 @@ class FavouritesRouteState extends ClientHomeRouterState {
   List<Object?> get props => [extraPageContent];
 }
 
-class BasketRouteState extends ClientHomeRouterState {
+class CheckoutRouteState extends ClientHomeRouterState {
   final String? extraPageContent;
-  const BasketRouteState([this.extraPageContent]);
+  const CheckoutRouteState([this.extraPageContent]);
   @override
   List<Object?> get props => [extraPageContent];
 }

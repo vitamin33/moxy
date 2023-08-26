@@ -68,12 +68,12 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRouterState> {
         ),
       ];
     }
-    if (_routerCubit.state is BasketRouteState) {
+    if (_routerCubit.state is CheckoutRouteState) {
       extraPageContent =
-          (_routerCubit.state as BasketRouteState).extraPageContent;
+          (_routerCubit.state as CheckoutRouteState).extraPageContent;
       return [
         _materialPage(
-          valueKey: "basket",
+          valueKey: "checkout",
           child: const BasketPage(),
         ),
       ];

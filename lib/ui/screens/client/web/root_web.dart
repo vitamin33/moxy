@@ -184,7 +184,7 @@ class _RootWebWidgetState extends State<RootWebWidget>
       ),
       _buildPaddedIconButton(
         IconPath.bagWeb,
-        state is BasketRouteState,
+        state is CheckoutRouteState,
         () {
           routerCubit?.basketPressed();
         },
