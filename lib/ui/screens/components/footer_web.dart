@@ -24,8 +24,7 @@ class Footer extends StatelessWidget {
             child: Container(
               decoration: const BoxDecoration(
                   color: AppTheme.pink,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(15))),
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
               width: double.infinity,
               height: 400,
               child: Row(

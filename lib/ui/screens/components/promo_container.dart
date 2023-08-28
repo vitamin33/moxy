@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/client/promo/promo_cubit.dart';
 import 'package:moxy/ui/screens/components/promo_page.dart';
 
@@ -16,8 +17,16 @@ class PromoContainer extends StatelessWidget {
         listener: (context, state) {},
         builder: (context, state) {
           final pages = [
-            const PromoPage(),
-            const PromoPage(),
+            PromoPage(
+              backgroundImage: ImageAssets.promoBackground,
+              discountPercentage: '50',
+              collectionName: "COZY STYLE",
+            ),
+            PromoPage(
+              backgroundImage: ImageAssets.promoBackground,
+              discountPercentage: '50',
+              collectionName: "COZY STYLE",
+            ),
           ];
           final cubit = context.read<PromoCubit>();
           return SizedBox(

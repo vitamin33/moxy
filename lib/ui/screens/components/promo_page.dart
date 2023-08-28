@@ -5,12 +5,15 @@ import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/promo/promo_cubit.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 
-import '../../../constant/image_path.dart';
 import '../../../domain/client/promo/promo_state.dart';
 import '../../theme/app_theme.dart';
 
 class PromoPage extends StatelessWidget {
-  const PromoPage({super.key});
+  final String backgroundImage;
+  final String discountPercentage;
+  final String collectionName;
+
+  PromoPage({required this.backgroundImage, required this.discountPercentage, required this.collectionName });
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +23,12 @@ class PromoPage extends StatelessWidget {
         return Container(
             width: double.infinity,
             height: 500,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
                 image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                      ImageAssets.promoBackground,
-                    ))),
+                    fit: BoxFit.cover, image: AssetImage(backgroundImage))),
             child: Stack(children: [
-              textPromo(cubit),
+              textPromo(cubit,discountPercentage,collectionName),
               Positioned(
                   bottom: 0,
                   left: 0,
@@ -73,7 +73,7 @@ class PromoPage extends StatelessWidget {
   }
 }
 
-Widget textPromo(PromoCubit cubit) {
+Widget textPromo(PromoCubit cubit,String discountPercentage,String collectionName) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -112,9 +112,9 @@ Widget textPromo(PromoCubit cubit) {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  '-50%',
-                  style: TextStyle(
+                 Text(
+                  '-${discountPercentage}%',
+                  style:const TextStyle(
                     color: Colors.white,
                     fontSize: 105.60,
                     fontFamily: 'Poppins',
@@ -133,9 +133,9 @@ Widget textPromo(PromoCubit cubit) {
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
-                  'COZY STYLE',
-                  style: TextStyle(
+                 Text(
+                  collectionName,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 41.99,
                     fontFamily: 'Poppins',
