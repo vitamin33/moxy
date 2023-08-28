@@ -32,7 +32,7 @@ class AuthenticationView extends StatelessWidget {
           if (role == Role.admin || role == Role.manager) {
             rootNavCubit.goToAdminFlow();
           } else {
-            rootNavCubit.goToClientFlow();
+            rootNavCubit.goToClientHomeFlow();
           }
           cubit.clearState();
         } else if (state.state is Logout) {

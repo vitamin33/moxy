@@ -8,19 +8,20 @@ import '../get_it.dart';
 
 part 'root_router_state.dart';
 
-class RootRouterCubit extends Cubit<RootRouterState> {
+class RootRouterCubit extends Cubit<RootRoute> {
   final authRepository = locate<AuthRepository>();
 
-  RootRouterCubit() : super(const AuthPageState()) {
+  RootRouterCubit() : super(const LoginRoute()) {
     _checkLoggedInState();
   }
-  void goToAdminFlow([String? text]) => emit(AdminPageState(text));
-  void goToClientFlow([String? text]) => emit(ClientPageState(text));
-  void goToAuthFlow([String? text]) => emit(AuthPageState(text));
+  void goToAdminFlow([String? text]) => emit(AdminHomeRoute(text));
+  void goToClientHomeFlow([String? text]) => emit(ShopRoute(text));
+  void goToAuthFlow([String? text]) => emit(LoginRoute(text));
+
   void popExtra() {
-    if (state is AdminPageState) {
+    if (state is AdminHomeRoute) {
       goToAdminFlow();
-    } else if (state is AuthPageState) {
+    } else if (state is LoginRoute) {
       goToAuthFlow();
     }
   }
@@ -38,7 +39,7 @@ class RootRouterCubit extends Cubit<RootRouterState> {
               break;
             case Role.user:
             case Role.guest:
-              goToClientFlow();
+              goToClientHomeFlow();
               break;
           }
         },

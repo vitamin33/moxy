@@ -5,20 +5,21 @@ import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/admin/create_order/create_order_cubit.dart';
 import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/services/navigation/root_info_parser.dart';
+import 'package:moxy/ui/theme/theme_provider.dart';
 import 'domain/admin/all_orders/all_orders_cubit.dart';
 import 'domain/admin/all_products/all_products_cubit.dart';
 import 'domain/admin/edit_order/edit_order_cubit.dart';
 import 'services/navigation/admin/admin_home_router_cubit.dart';
 import 'services/navigation/root_router_cubit.dart';
 import 'services/navigation/root_router_delegate.dart';
-import 'services/navigation/web/web_home_router_cubit.dart';
+import 'services/navigation/web/client_home_router_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class MoxyApp extends StatelessWidget {
-  ThemeData theme;
-  ThemeData darkTheme;
-  MoxyApp(this.theme, this.darkTheme, {Key? key}) : super(key: key);
+  AppThemeData theme;
+  MoxyApp(this.theme, {Key? key}) : super(key: key);
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -52,29 +53,24 @@ class MoxyApp extends StatelessWidget {
         BlocProvider<FilterOrdersCubit>(
             create: (BuildContext context) => FilterOrdersCubit()),
       ],
-      child: MaterialApp(
-        home: _routers,
-        theme: theme,
-        darkTheme: darkTheme,
-        debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: AppLocalizations.supportedLocales,
-      ),
+      child: BlocBuilder<RootRouterCubit, RootRoute>(builder: (context, state) {
+        return MaterialApp.router(
+          routerDelegate:
+              RootRouterDelegate(navigatorKey, context.read<RootRouterCubit>()),
+          backButtonDispatcher: RootBackButtonDispatcher(),
+          routeInformationParser: RootRouteInfoParser(),
+          theme: theme.theme,
+          darkTheme: theme.darkTheme,
+          debugShowCheckedModeBanner: false,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+        );
+      }),
     );
   }
-
-  Widget get _routers => BlocBuilder<RootRouterCubit, RootRouterState>(
-        builder: (context, state) => Router(
-          routerDelegate: RootRouterDelegate(
-            navigatorKey,
-            context.read<RootRouterCubit>(),
-          ),
-          backButtonDispatcher: RootBackButtonDispatcher(),
-        ),
-      );
 }
