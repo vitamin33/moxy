@@ -112,6 +112,13 @@ class ProductMapper {
     );
   }
 
+  Dimension mapToDimension(NetworkDimension network) {
+    return Dimension(
+      color: network.color,
+      quantity: network.quantity,
+    );
+  }
+
   List<OrderedItem> mapToOrderedItemList(
       List<NetworkOrderedItemResponse> networkOrderedItems) {
     return networkOrderedItems.map((p) {

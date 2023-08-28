@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:animated_segmented_tab_control/animated_segmented_tab_control.dart';
-import 'package:moxy/services/navigation/web/web_home_router_cubit.dart';
-import 'package:moxy/services/navigation/web/web_home_router_delegate.dart';
+import 'package:moxy/services/navigation/web/client_home_info_parser.dart';
+import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
+import 'package:moxy/services/navigation/web/client_home_router_delegate.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/ui/theme/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class RootWebWidget extends StatefulWidget {
-  const RootWebWidget({Key? key}) : super(key: key);
+  final ClientHomeRouterCubit routerCubit;
+  const RootWebWidget(this.routerCubit, {Key? key}) : super(key: key);
 
   @override
   _RootWebWidgetState createState() => _RootWebWidgetState();
@@ -16,14 +19,19 @@ class RootWebWidget extends StatefulWidget {
 
 class _RootWebWidgetState extends State<RootWebWidget>
     with SingleTickerProviderStateMixin {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   TabController? _tabController;
-  ClientHomeRouterCubit? routerCubit;
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    final state = widget.routerCubit.state;
+    int initialIndex = 0;
+    if (state.runtimeType == HomeRoute) {
+      initialIndex = (state as HomeRoute).tabIndex ?? 0;
+    }
+    _tabController =
+        TabController(length: 3, vsync: this, initialIndex: initialIndex);
     _tabController?.addListener(_handleTabSelection);
   }
 
@@ -36,17 +44,17 @@ class _RootWebWidgetState extends State<RootWebWidget>
 
   void _handleTabSelection() {
     if (_tabController?.indexIsChanging == true) {
-      routerCubit?.tabControlPressed();
+      int index = _tabController?.index ?? 0;
+      widget.routerCubit.tabControlSelected(index);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    routerCubit = context.read<ClientHomeRouterCubit>();
     return DefaultTabController(
       length: 3,
-      child: BlocBuilder<ClientHomeRouterCubit, ClientHomeRouterState>(
-        builder: (context, state) {
+      child: BlocBuilder<ClientHomeRouterCubit, ClientHomeRoute>(
+        builder: (context, route) {
           return Material(
             child: Scaffold(
               appBar: AppBar(
@@ -68,41 +76,12 @@ class _RootWebWidgetState extends State<RootWebWidget>
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              routerCubit?.tabControlPressed();
-                            },
-                            child: SizedBox(
-                              width: 350, // Adjust the width as needed
-                              child: TabBar(
-                                overlayColor:
-                                    MaterialStateProperty.resolveWith<Color?>(
-                                  (Set<MaterialState> states) {
-                                    if (states
-                                        .contains(MaterialState.hovered)) {
-                                      return AppTheme.greyLigth;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                                controller: _tabController,
-                                indicatorColor: AppTheme.black,
-                                labelColor: AppTheme.black,
-                                tabs: const [
-                                  Tab(text: 'Новинки'),
-                                  Tab(text: 'Сумки'),
-                                  Tab(
-                                    text: 'Аксесуари',
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          _buildTabsWidget(),
                         ],
                       ),
                     ),
                   ),
-                  actions: _buildActions(context, state)),
+                  actions: _buildActions(context, route)),
               body: _buildRouter(context, _tabController!),
             ),
           );
@@ -112,10 +91,18 @@ class _RootWebWidgetState extends State<RootWebWidget>
   }
 
   Widget _buildRouter(BuildContext context, TabController controller) {
-    return Router(
-      routerDelegate: ClientHomeRouterDelegate(
-          navigatorKey, context.read<ClientHomeRouterCubit>(), controller),
-      backButtonDispatcher: RootBackButtonDispatcher(),
+    return Consumer<ThemeProvider>(
+      builder: (context, themeProvider, child) {
+        return MaterialApp.router(
+          routerDelegate: ClientHomeRouterDelegate(
+              navigatorKey, context.read<ClientHomeRouterCubit>(), controller),
+          backButtonDispatcher: RootBackButtonDispatcher(),
+          routeInformationParser: ClientHomeRouteInfoParser(),
+          theme: themeProvider.themeData.theme,
+          darkTheme: themeProvider.themeData.darkTheme,
+          debugShowCheckedModeBanner: false,
+        );
+      },
     );
   }
 
@@ -158,37 +145,81 @@ class _RootWebWidgetState extends State<RootWebWidget>
     );
   }
 
-  List<Widget> _buildActions(
-      BuildContext context, ClientHomeRouterState state) {
+  List<Widget> _buildActions(BuildContext context, ClientHomeRoute route) {
     return [
       _buildPaddedIconButton(
         IconPath.searchWeb,
         false,
         () {
-          routerCubit?.searchPressed();
+          widget.routerCubit.searchPressed();
         },
       ),
       _buildPaddedIconButton(
         IconPath.favouritesWeb,
-        state is FavouritesRouteState,
+        route is FavouritesRoute,
         () {
-          routerCubit?.favouritesPressed();
+          widget.routerCubit.favouritesPressed();
         },
       ),
       _buildPaddedIconButton(
         IconPath.profileWeb,
-        state is ProfileRouteState,
+        route is ProfileRoute,
         () {
-          routerCubit?.profilePressed();
+          widget.routerCubit.profilePressed();
         },
       ),
       _buildPaddedIconButton(
         IconPath.bagWeb,
-        state is BasketRouteState,
+        route is CheckoutRoute,
         () {
-          routerCubit?.basketPressed();
+          widget.routerCubit.basketPressed();
         },
       ),
     ];
+  }
+
+  Widget _buildTabsWidget() {
+    int controllerIndex = _tabController?.index ?? 0;
+    return SizedBox(
+      width: 350, // Adjust the width as needed
+      child: TabBar(
+        overlayColor: MaterialStateProperty.resolveWith<Color?>(
+          (Set<MaterialState> states) {
+            if (states.contains(MaterialState.hovered)) {
+              return AppTheme.greyLigth;
+            }
+            return null;
+          },
+        ),
+        controller: _tabController,
+        indicatorColor: AppTheme.black,
+        labelColor: AppTheme.black,
+        tabs: [
+          Listener(
+            onPointerDown: (_) {
+              widget.routerCubit.tabControlTouched(
+                  controllerIndex: controllerIndex, newIndex: 0);
+            },
+            child: const Tab(text: 'Новинки'),
+          ),
+          Listener(
+            onPointerDown: (_) {
+              widget.routerCubit.tabControlTouched(
+                  controllerIndex: controllerIndex, newIndex: 1);
+            },
+            child: const Tab(text: 'Сумки'),
+          ),
+          Listener(
+            onPointerDown: (_) {
+              widget.routerCubit.tabControlTouched(
+                  controllerIndex: controllerIndex, newIndex: 2);
+            },
+            child: const Tab(
+              text: 'Аксесуари',
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

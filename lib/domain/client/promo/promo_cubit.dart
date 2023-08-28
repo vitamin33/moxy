@@ -35,7 +35,7 @@ class PromoCubit extends Cubit<PromoState> {
       result.when((success) {
         emit(state.copyWith(allPromo: success, isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
+        emit(state.copyWith(errorMessage: 'Failed getAllPromos'));
       });
     } catch (e) {
       moxyPrint('$e');

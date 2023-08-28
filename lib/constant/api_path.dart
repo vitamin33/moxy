@@ -11,3 +11,4 @@ const String allUsersUrl = '/users';
 const String ordersDashboardUrl = '/dashboard/orders';
 const String sendFooterEmailUrl = '/sendfootetemail';
 const String getPromoUrl = '/getPromoUrl';
+const String getBasketUrl = '/basket';

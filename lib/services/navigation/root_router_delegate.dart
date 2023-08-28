@@ -1,11 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
 import 'package:moxy/ui/screens/admin/admin_root_view.dart';
 import 'package:moxy/ui/screens/client/root_view.dart';
+import 'package:moxy/utils/common.dart';
 
 import 'root_router_cubit.dart';
 
-class RootRouterDelegate extends RouterDelegate<RootRouterState> {
+class RootRouterDelegate extends RouterDelegate<RootRoute>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<RootRoute> {
   final GlobalKey<NavigatorState> _navigatorKey;
   final RootRouterCubit _routerCubit;
   RootRouterDelegate(
@@ -13,21 +16,24 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
       : _navigatorKey = navigatorKey,
         _routerCubit = routerCubit;
 
+  @override
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+
+  @override
+  RootRoute? get currentConfiguration => _routerCubit.state;
+
   @override
   Widget build(BuildContext context) => Navigator(
         key: navigatorKey,
         pages: List.from([
-          if (_routerCubit.state is AuthPageState)
+          if (_routerCubit.state is LoginRoute)
             _materialPage(valueKey: "auth", child: const AuthenticationView()),
           ..._extraPages,
         ]),
         onPopPage: _onPopPageParser,
       );
   bool _onPopPageParser(Route<dynamic> route, dynamic result) {
-    if (!route.didPop(result)) return false;
-    popRoute();
-    return true;
+    return false;
   }
 
   @override
@@ -43,9 +49,9 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
   List<Page> get _extraPages {
     // ignore: unused_local_variable
     String? extraPageContent;
-    if (_routerCubit.state is AdminPageState) {
+    if (_routerCubit.state is AdminHomeRoute) {
       extraPageContent =
-          (_routerCubit.state as AdminPageState).extraPageContent;
+          (_routerCubit.state as AdminHomeRoute).extraPageContent;
       return [
         _materialPage(
           valueKey: "admin_main",
@@ -53,9 +59,8 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
         ),
       ];
     }
-    if (_routerCubit.state is ClientPageState) {
-      extraPageContent =
-          (_routerCubit.state as ClientPageState).extraPageContent;
+    if (_routerCubit.state is ShopRoute) {
+      extraPageContent = (_routerCubit.state as ShopRoute).extraPageContent;
       return [
         _materialPage(
           valueKey: "client_main",
@@ -102,5 +107,20 @@ class RootRouterDelegate extends RouterDelegate<RootRouterState> {
   void removeListener(VoidCallback listener) {}
 //It's not needed for now
   @override
-  Future<void> setNewRoutePath(RootRouterState configuration) async {}
+  Future<void> setNewRoutePath(RootRoute configuration) async {
+    switch (configuration.runtimeType) {
+      case AdminHomeRoute:
+        _routerCubit.goToAdminFlow();
+        break;
+      case ShopRoute:
+        _routerCubit.goToClientHomeFlow();
+        break;
+      case LoginRoute:
+        _routerCubit.goToAuthFlow();
+        break;
+    }
+
+    moxyPrint('root_router_delegate, setNewRoutePath() called, $configuration');
+    return SynchronousFuture<void>(null);
+  }
 }
