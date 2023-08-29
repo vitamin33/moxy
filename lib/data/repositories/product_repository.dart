@@ -89,4 +89,18 @@ class ProductRepository {
   void updateSelectedProducts(List<OrderedItem> list) {
     addToSelectedProductStream(list);
   }
+
+  Future<Result<bool, Exception>> deleteProduct(String productId) async {
+    try {
+      final result = await client.deleteProduct(productId);
+      if (result) {
+        return Result.success(result);
+      } else {
+        return Result.error(Exception('Unable to delete product'));
+      }
+    } catch (e) {
+      moxyPrint('Repository Error:$e');
+      return Result.error(Exception('$e'));
+    }
+  }
 }
