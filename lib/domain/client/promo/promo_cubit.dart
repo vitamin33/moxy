@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/promo_repository.dart';
 import 'package:moxy/domain/client/promo/promo_state.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 import '../../../utils/common.dart';
+import '../../mappers/promo_mapper.dart';
 
 class PromoCubit extends Cubit<PromoState> {
-  PromoCubit() : super(PromoState.defaultPromoState());
+  PromoCubit() : super(PromoState.defaultPromoState()) {
+    allPromo();
+  }
 
   final promoRepository = locate<PromoRepository>();
+  final promoMapper = locate<PromoMapper>();
 
   final pageController = PageController(initialPage: 0);
 
@@ -33,7 +38,9 @@ class PromoCubit extends Cubit<PromoState> {
       emit(state.copyWith(isLoading: true));
       final result = await promoRepository.getPromo();
       result.when((success) {
-        emit(state.copyWith(allPromo: success, isLoading: false));
+        final mappedPromo = promoMapper.mapToPromo(success);
+        emit(state.copyWith(allPromo: mappedPromo, isLoading: false));
+        moxyPrint(state.allPromo.first);
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed getAllPromos'));
       });

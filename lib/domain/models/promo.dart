@@ -1,34 +1,47 @@
-import 'package:moxy/constant/icon_path.dart';
-
-import '../../constant/order_status.dart';
+import 'package:moxy/domain/models/product.dart';
 
 class Promo {
   final String imageUrl;
-  final int salePrecentage;
+  final int discount;
   final String title;
-  final String productName;
+  final String productId;
+  final Product? product;
+  final String? finalDate;
 
-  Promo(
-      {required this.imageUrl,
-      required this.salePrecentage,
-      required this.title,
-      required this.productName});
+  Promo({
+    required this.imageUrl,
+    required this.discount,
+    required this.title,
+    required this.productId,
+    this.product,
+    this.finalDate,
+  });
 
   static Promo defaultPromo() {
-    return Promo(imageUrl: '', salePrecentage: 0, title: '', productName: '');
+    return Promo(
+        imageUrl: '',
+        discount: 0,
+        title: '',
+        productId: '',
+        product: null,
+        finalDate: '');
   }
 
   Promo copyWith({
     String? imageUrl,
-    int? salePrecentage,
+    int? discount,
     String? title,
-    String? productName,
+    String? productId,
+    Product? product,
+    String? finalDate,
   }) {
     return Promo(
       imageUrl: imageUrl ?? this.imageUrl,
-      salePrecentage: salePrecentage ?? this.salePrecentage,
+      discount: discount ?? this.discount,
       title: title ?? this.title,
-      productName: productName ?? this.productName,
+      productId: productId ?? this.productId,
+      product: product ?? this.product,
+      finalDate: finalDate ?? this.finalDate,
     );
   }
 }

@@ -48,6 +48,7 @@ class ProfileTabPage extends StatelessWidget {
     ProfileAdress(),
   ];
 
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
@@ -104,6 +105,7 @@ class ProfileTabPage extends StatelessWidget {
                                     ? AppTheme.pinkDark
                                     : AppTheme.black),
                           ),
+
                         ),
                       );
                     }),
@@ -129,6 +131,7 @@ class ProfileTabPage extends StatelessWidget {
                           itemCount: tabPages.length,
                           itemBuilder: (context, index) {
                             return tabPages[index % tabPages.length];
+
                           },
                         ),
                       ),

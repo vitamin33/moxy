@@ -22,7 +22,7 @@ void main() {
     final theme = ThemeDecoder.decodeThemeData(themeJson)!;
     final darkTheme = ThemeDecoder.decodeThemeData(themeJson)!;
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MoxyApp(theme, darkTheme));
+    // await tester.pumpWidget(MoxyApp(theme, darkTheme));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

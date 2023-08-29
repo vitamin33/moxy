@@ -10,5 +10,6 @@ const String createGuestUserUrl = '/users/create-guest';
 const String allUsersUrl = '/users';
 const String ordersDashboardUrl = '/dashboard/orders';
 const String sendFooterEmailUrl = '/sendfootetemail';
-const String getPromoUrl = '/getPromoUrl';
 const String getBasketUrl = '/basket';
+const String getPromosUrl = '/promos';
+const String getProfileUrl = '/profile';
