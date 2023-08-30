@@ -34,10 +34,28 @@ class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {
     }
   }
 
+  void refreshAllProducts() {
+    allProducts();
+  }
+
   void searchProducts(String searchTerm) {
     final filteredList = allProductsList.where((element) {
       return element.name.toLowerCase().contains(searchTerm.toLowerCase());
     }).toList();
     emit(state.copyWith(allProducts: filteredList));
+  }
+
+  void deleteProduct(String productId) async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final result = await productRepository.deleteProduct(productId);
+      result.when((success) {
+        allProducts();
+      }, (error) {
+        emitEffect(DeleteProductFailed(error.toString()));
+      });
+    } catch (e) {
+      moxyPrint('$e');
+    }
   }
 }

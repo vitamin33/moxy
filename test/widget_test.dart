@@ -14,6 +14,7 @@ import 'package:json_theme/json_theme.dart';
 
 // import 'package:moxy/main.dart';
 import 'package:moxy/moxy_app.dart';
+import 'package:moxy/ui/theme/theme_provider.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
@@ -21,8 +22,9 @@ void main() {
     final themeJson = jsonDecode(themeStr);
     final theme = ThemeDecoder.decodeThemeData(themeJson)!;
     final darkTheme = ThemeDecoder.decodeThemeData(themeJson)!;
+    final appTheme = AppThemeData(theme, darkTheme);
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MoxyApp(theme, darkTheme));
+    await tester.pumpWidget(MoxyApp(appTheme));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
