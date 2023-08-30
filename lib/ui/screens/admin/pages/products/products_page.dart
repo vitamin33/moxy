@@ -80,65 +80,75 @@ class _ProductsPageState extends State<ProductsPage> {
                 _buildLoadingIfNeeded(state),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: CustomScrollView(slivers: [
-                    SliverAppBar(
-                      backgroundColor: AppTheme.pink,
-                      surfaceTintColor: AppTheme.pink,
-                      floating: true,
-                      pinned: false,
-                      snap: true,
-                      toolbarHeight: _isSearchVisible ? 56.0 : 0.0,
-                      title: _isSearchVisible
-                          ? SearchTextfield(
-                              title: AppLocalizations.of(context)!.search,
-                              onChanged: (term) => cubit.searchProducts(term),
-                            )
-                          : null,
-                    ),
-                    SliverToBoxAdapter(
-                      child: ListView.builder(
-                          controller: _scrollController,
-                          shrinkWrap: true,
-                          itemCount: state.allProducts.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            final product = state.allProducts[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: GestureDetector(
-                                onLongPressStart:
-                                    (LongPressStartDetails details) {
-                                  showDeleteContextMenu(
-                                      context, product.id, details);
-                                },
-                                child: ListTile(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      cubit.refreshAllProducts();
+                    },
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverAppBar(
+                          backgroundColor: AppTheme.pink,
+                          surfaceTintColor: AppTheme.pink,
+                          floating: true,
+                          pinned: false,
+                          snap: true,
+                          toolbarHeight: _isSearchVisible ? 56.0 : 0.0,
+                          title: _isSearchVisible
+                              ? SearchTextfield(
+                                  title: AppLocalizations.of(context)!.search,
+                                  onChanged: (term) =>
+                                      cubit.searchProducts(term),
+                                )
+                              : null,
+                        ),
+                        SliverToBoxAdapter(
+                          child: ListView.builder(
+                              controller: _scrollController,
+                              shrinkWrap: true,
+                              itemCount: state.allProducts.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final product = state.allProducts[index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: GestureDetector(
+                                    onLongPressStart:
+                                        (LongPressStartDetails details) {
+                                      showDeleteContextMenu(
+                                          context, product.id, details);
+                                    },
+                                    child: ListTile(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.all(14.0),
+                                      onTap: () {
+                                        context
+                                            .read<AdminHomeRouterCubit>()
+                                            .navigateTo(
+                                              CreateProductPageState(
+                                                editProductId: product.id,
+                                                isEditMode: true,
+                                              ),
+                                            );
+                                      },
+                                      tileColor: AppTheme.white,
+                                      leading: ClipOval(
+                                        child: _buildProductImage(product),
+                                      ),
+                                      title: Text(product.name),
+                                      subtitle:
+                                          Text('${product.salePrice} UAH'),
+                                      trailing: SvgPicture.asset(
+                                          IconPath.forwardArrow),
+                                    ),
                                   ),
-                                  contentPadding: const EdgeInsets.all(14.0),
-                                  onTap: () {
-                                    context
-                                        .read<AdminHomeRouterCubit>()
-                                        .navigateTo(
-                                          CreateProductPageState(
-                                            editProductId: product.id,
-                                            isEditMode: true,
-                                          ),
-                                        );
-                                  },
-                                  tileColor: AppTheme.white,
-                                  leading: ClipOval(
-                                    child: _buildProductImage(product),
-                                  ),
-                                  title: Text(product.name),
-                                  subtitle: Text('${product.salePrice} UAH'),
-                                  trailing:
-                                      SvgPicture.asset(IconPath.forwardArrow),
-                                ),
-                              ),
-                            );
-                          }),
+                                );
+                              }),
+                        ),
+                      ],
                     ),
-                  ]),
+                  ),
                 ),
               ],
             ),
