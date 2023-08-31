@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppTheme {
+class AppTheme extends InheritedWidget {
   //spaces
   static const double cardPadding = 24;
   static const double elementSpacing = cardPadding * 0.5;
@@ -32,6 +32,22 @@ class AppTheme {
   static const Color greenDark = Color.fromARGB(255, 91, 203, 50);
 
   static const double buttonHeight = 50;
+
+  static const double chekoutPadding = 48.0;
   static Size size(BuildContext context) => MediaQuery.of(context).size;
   static const double drawerWidth = 280;
+
+  final TextStyle checkoutHeadingText =
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+
+  const AppTheme({super.key, required Widget child}) : super(child: child);
+
+  static AppTheme? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<AppTheme>();
+  }
+
+  @override
+  bool updateShouldNotify(covariant AppTheme oldWidget) {
+    return false;
+  }
 }

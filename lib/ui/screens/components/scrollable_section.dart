@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 class ScrollableSection extends StatelessWidget {
   final Widget content;
@@ -10,7 +11,10 @@ class ScrollableSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: content,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppTheme.chekoutPadding),
+        child: content,
+      ),
     );
   }
 }

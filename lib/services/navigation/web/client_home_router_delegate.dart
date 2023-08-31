@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/screens/client/web/checkout/checkout_page.dart';
 import 'package:moxy/ui/screens/client/web/favourites/favourites_page.dart';
 import 'package:moxy/ui/screens/client/web/home/home_page.dart';
 import 'package:moxy/utils/common.dart';
 
-import '../../../ui/screens/client/web/basket/basket_page.dart';
 import '../../../ui/screens/client/web/profile/profile_page.dart';
 import 'client_home_router_cubit.dart';
 
@@ -62,7 +62,7 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRoute>
       return [
         _materialPage(
           valueKey: "checkout",
-          child: const BasketPage(),
+          child: const CheckoutPage(),
         ),
       ];
     }
