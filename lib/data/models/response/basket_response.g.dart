@@ -23,12 +23,13 @@ Map<String, dynamic> _$NetworkBasketToJson(NetworkBasket instance) =>
 NetworkBasketItem _$NetworkBasketItemFromJson(Map<String, dynamic> json) =>
     NetworkBasketItem(
       product: NetworkProduct.fromJson(json['product'] as Map<String, dynamic>),
-      dimension:
-          NetworkDimension.fromJson(json['dimension'] as Map<String, dynamic>),
+      dimensions: (json['dimensions'] as List<dynamic>)
+          .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$NetworkBasketItemToJson(NetworkBasketItem instance) =>
     <String, dynamic>{
       'product': instance.product,
-      'dimension': instance.dimension,
+      'dimensions': instance.dimensions,
     };

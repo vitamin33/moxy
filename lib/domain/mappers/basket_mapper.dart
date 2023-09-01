@@ -6,15 +6,16 @@ import 'package:moxy/services/get_it.dart';
 class BasketMapper {
   final productMapper = locate<ProductMapper>();
 
-  Basket mapToUser(NetworkBasket network) {
+  Basket mapToBasket(NetworkBasket network) {
     return Basket(
       client: network.client,
       basketItems: network.basketItems
           .map(
             (e) => BasketItem(
-              product: productMapper.mapToProduct(e.product),
-              dimension: productMapper.mapToDimension(e.dimension),
-            ),
+                product: productMapper.mapToProduct(e.product),
+                dimensions: e.dimensions
+                    .map((d) => productMapper.mapToDimension(d))
+                    .toList()),
           )
           .toList(),
     );
