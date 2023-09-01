@@ -26,9 +26,6 @@ import '../models/response/login_response.dart';
 import '../models/response/profile_response.dart';
 
 class DioClient {
-  //static const String baseUrl = 'http://10.0.2.2:3000';
-  //static const String baseUrl = 'http://localhost:3000';
-
   late String baseUrl;
 
   final Dio dio = locate<Dio>();
@@ -408,6 +405,22 @@ class DioClient {
       return profile;
     } catch (e) {
       throw Exception('Failed to load promos: $e');
+    }
+  }
+
+  //NEW PRODUCT SELLING LIST
+
+  Future<List<NetworkProduct>> getSellingProducts() async {
+    try {
+      final response = await dio.get('$baseUrl $allSellingProductsUrl');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      throw Exception('Failed to load getSellingProducts: $e');
     }
   }
 }

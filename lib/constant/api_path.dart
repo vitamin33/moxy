@@ -13,3 +13,4 @@ const String sendFooterEmailUrl = '/sendfootetemail';
 const String getBasketUrl = '/basket';
 const String getPromosUrl = '/promos';
 const String getProfileUrl = '/profile';
+const String allSellingProductsUrl = '/products/selling-products';

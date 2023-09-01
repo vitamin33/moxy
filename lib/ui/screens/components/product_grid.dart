@@ -3,9 +3,15 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moxy/ui/screens/components/big_block_grid.dart';
 import 'package:moxy/ui/screens/components/small_block_grid.dart';
 
-class ProductListGrid extends StatelessWidget {
+import '../../../domain/models/product.dart';
+
+class NewProductListGrid extends StatelessWidget {
   final bool bigBlockLeading;
-  const ProductListGrid({super.key, required this.bigBlockLeading});
+  final List<Product> allSellingProduct;
+  const NewProductListGrid(
+      {super.key,
+      required this.bigBlockLeading,
+      required this.allSellingProduct});
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +27,27 @@ class ProductListGrid extends StatelessWidget {
             crossAxisSpacing: 10,
             children: [
               if (bigBlockLeading == true) const BigBlockGrid(),
-              const SmallBlockGrid(),
-              const SmallBlockGrid(),
+              SmallBlockGrid(
+                productName: allSellingProduct.first.name,
+                imageUrl: allSellingProduct.first.images.first.imagePath,
+                productPrice: allSellingProduct.first.salePrice.toString(),
+              ),
+              SmallBlockGrid(
+                productName: allSellingProduct.first.name,
+                imageUrl: allSellingProduct.first.images.first.imagePath,
+                productPrice: allSellingProduct.first.salePrice.toString(),
+              ),
               if (bigBlockLeading == false) const BigBlockGrid(),
-              const SmallBlockGrid(),
-              const SmallBlockGrid()
+              SmallBlockGrid(
+                productName: allSellingProduct.first.name,
+                imageUrl: allSellingProduct.first.images.first.imagePath,
+                productPrice: allSellingProduct.first.salePrice.toString(),
+              ),
+              SmallBlockGrid(
+                productName: allSellingProduct.first.name,
+                imageUrl: allSellingProduct.first.images.first.imagePath,
+                productPrice: allSellingProduct.first.salePrice.toString(),
+              ),
             ],
           )),
         ],

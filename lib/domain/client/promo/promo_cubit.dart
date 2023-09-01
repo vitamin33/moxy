@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/promo_repository.dart';
 import 'package:moxy/domain/client/promo/promo_state.dart';
 import 'package:moxy/services/get_it.dart';
-import 'package:multiple_result/multiple_result.dart';
 
 import '../../../utils/common.dart';
 import '../../mappers/promo_mapper.dart';
@@ -33,6 +32,11 @@ class PromoCubit extends Cubit<PromoState> {
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
+  void animatedToPage(int index) {
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
+
   void allPromo() async {
     try {
       emit(state.copyWith(isLoading: true));
@@ -40,7 +44,6 @@ class PromoCubit extends Cubit<PromoState> {
       result.when((success) {
         final mappedPromo = promoMapper.mapToPromo(success);
         emit(state.copyWith(allPromo: mappedPromo, isLoading: false));
-        moxyPrint(state.allPromo.first);
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed getAllPromos'));
       });

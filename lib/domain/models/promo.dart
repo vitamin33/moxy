@@ -6,7 +6,7 @@ class Promo {
   final String title;
   final String productId;
   final Product? product;
-  final String? finalDate;
+  final DateTime? finalDate;
 
   Promo({
     required this.imageUrl,
@@ -24,7 +24,7 @@ class Promo {
         title: '',
         productId: '',
         product: null,
-        finalDate: '');
+        finalDate: null);
   }
 
   Promo copyWith({
@@ -33,7 +33,7 @@ class Promo {
     String? title,
     String? productId,
     Product? product,
-    String? finalDate,
+    DateTime? finalDate,
   }) {
     return Promo(
       imageUrl: imageUrl ?? this.imageUrl,

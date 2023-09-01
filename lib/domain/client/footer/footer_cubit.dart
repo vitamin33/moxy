@@ -1,5 +1,4 @@
 // ignore: depend_on_referenced_packages
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:moxy/data/repositories/footer_repository.dart';
 import 'package:moxy/domain/client/footer/footer_state.dart';
@@ -9,7 +8,7 @@ import '../../../services/cubit_with_effects.dart';
 import '../../../services/get_it.dart';
 import '../../../utils/common.dart';
 
-class FooterCubit extends CubitWithEffects<FooterState,UiEffect> {
+class FooterCubit extends CubitWithEffects<FooterState, UiEffect> {
   FooterCubit() : super(FooterState.defaultFooterState());
 
   final footerRepository = locate<FooterRepository>();

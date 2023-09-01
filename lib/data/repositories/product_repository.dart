@@ -89,4 +89,14 @@ class ProductRepository {
   void updateSelectedProducts(List<OrderedItem> list) {
     addToSelectedProductStream(list);
   }
+
+  Future<Result<List<NetworkProduct>, Exception>>
+      getAllSellingProducts() async {
+    try {
+      final result = await client.getSellingProducts();
+      return Result.success(result);
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
+  }
 }
