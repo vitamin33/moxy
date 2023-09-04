@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
@@ -64,7 +65,7 @@ class DioClient {
 
         return handler.next(options);
       },
-      onError: (DioError error, handler) async {
+      onError: (DioException error, handler) async {
         if (error.response?.statusCode == 401) {
           // Token expired or invalid, attempt to refresh it
           Result<String, Exception> newAccessTokenResult =
@@ -329,7 +330,7 @@ class DioClient {
 
   Exception _handleHttpException(Object e) {
     var message = e.toString();
-    if (e is DioError) {
+    if (e is DioException) {
       message = e.response?.data['message'];
     }
     return Exception(message);
@@ -422,5 +423,19 @@ class DioClient {
     } catch (e) {
       throw Exception('Failed to load getSellingProducts: $e');
     }
+  }
+
+  Future<bool> deleteProduct(String productId) async {
+    try {
+      Response response = await dio.delete('$allProductsUrl/$productId');
+      if (response.statusCode == HttpStatus.ok) {
+        return true;
+      }
+    } catch (e) {
+      moxyPrint('Error during deleting product: $e');
+
+      return false;
+    }
+    return false;
   }
 }

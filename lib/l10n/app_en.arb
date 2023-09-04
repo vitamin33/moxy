@@ -16,6 +16,7 @@
   "filter": "Filter",
   "search": "Search",
   "choose": "Choose",
+  "delete": "Delete",
   "orderProductList": "Order Product List",
   "logout": "Logout",
   "failedLoginError": "Unable to login. Please try again later.",
@@ -88,6 +89,7 @@
   "backToProduct":"Back To Product",
   "createNew":"Create New",
   "productsLoadingFailed":"Products Loading Failed",
+  "deleteProductFailed":"Product deleting Failed",
   "failed":"Failed",
   "wrongInput":"Wrong input, please check text fields.",
   "unableToParseData":"Unable To Parse Data"

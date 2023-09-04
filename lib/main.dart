@@ -10,6 +10,7 @@ import 'package:moxy/services/get_it.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:provider/provider.dart';
 
