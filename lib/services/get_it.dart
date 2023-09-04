@@ -13,6 +13,7 @@ import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/mappers/profile_mapper.dart';
 import 'package:moxy/domain/mappers/promo_mapper.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
@@ -45,15 +46,16 @@ class GetItService {
     getIt.registerSingleton<ProductRepository>(ProductRepository());
     getIt.registerSingleton<OrderRepository>(OrderRepository());
     getIt.registerSingleton<ImagePickerService>(ImagePickerService());
-    getIt.registerSingleton(NovaPoshtaClient());
-    getIt.registerSingleton(CityMapper());
-    getIt.registerSingleton(PromoMapper());
-    getIt.registerSingleton(WarehouseMapper());
-    getIt.registerSingleton(OverviewRepository());
-    getIt.registerSingleton(FooterRepository());
-    getIt.registerSingleton(PromoRepository());
-    getIt.registerSingleton(BasketRepository());
-    getIt.registerSingleton(ProfileRepository());
+    getIt.registerSingleton<NovaPoshtaClient>(NovaPoshtaClient());
+    getIt.registerSingleton<CityMapper>(CityMapper());
+    getIt.registerSingleton<PromoMapper>(PromoMapper());
+    getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
+    getIt.registerSingleton<OverviewRepository>(OverviewRepository());
+    getIt.registerSingleton<FooterRepository>(FooterRepository());
+    getIt.registerSingleton<PromoRepository>(PromoRepository());
+    getIt.registerSingleton<BasketRepository>(BasketRepository());
+    getIt.registerSingleton<ProfileRepository>(ProfileRepository());
+    getIt.registerSingleton<ProfileMapper>(ProfileMapper());
   }
 }
 
