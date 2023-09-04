@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/home/home_cubit.dart';
 import 'package:moxy/domain/client/home/home_state.dart';
-import 'package:moxy/ui/screens/components/footer_web.dart';
-import 'package:moxy/ui/theme/app_theme.dart';
-
-import '../../../components/filter_container.dart';
-import '../../../components/product_list.dart';
-import '../../../components/promo_container.dart';
+import 'package:moxy/ui/screens/client/web/home/pages/accessories_product_page.dart';
+import 'package:moxy/ui/screens/client/web/home/pages/bags_product_page.dart';
+import 'package:moxy/ui/screens/client/web/home/pages/new_product_page.dart';
 
 // ignore: must_be_immutable
 class HomePage extends StatelessWidget {
@@ -28,24 +25,9 @@ class HomePage extends StatelessWidget {
             controller: _tabController,
             physics: const NeverScrollableScrollPhysics(),
             children: const [
-              Scaffold(
-                backgroundColor: AppTheme.white,
-                body: SingleChildScrollView(
-                    child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.0),
-                  child: Column(
-                    children: [
-                      FilterContainer(),
-                      ProductList(),
-                      PromoContainer(),
-                      SizedBox(height: 30),
-                      Footer(),
-                    ],
-                  ),
-                )),
-              ),
-              Icon(Icons.directions_transit),
-              Icon(Icons.directions_bike),
+              NewProductPage(),
+              BagsProductPage(),
+              AccessoriesProductPage(),
             ],
           );
         },

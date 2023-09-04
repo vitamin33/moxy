@@ -6,11 +6,15 @@ import 'package:moxy/domain/client/promo/promo_state.dart';
 import 'package:moxy/services/get_it.dart';
 
 import '../../../utils/common.dart';
+import '../../mappers/promo_mapper.dart';
 
 class PromoCubit extends Cubit<PromoState> {
-  PromoCubit() : super(PromoState.defaultPromoState());
+  PromoCubit() : super(PromoState.defaultPromoState()) {
+    allPromo();
+  }
 
   final promoRepository = locate<PromoRepository>();
+  final promoMapper = locate<PromoMapper>();
 
   final pageController = PageController(initialPage: 0);
 
@@ -28,12 +32,18 @@ class PromoCubit extends Cubit<PromoState> {
         duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
   }
 
+  void animatedToPage(int index) {
+    pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+  }
+
   void allPromo() async {
     try {
       emit(state.copyWith(isLoading: true));
       final result = await promoRepository.getPromo();
       result.when((success) {
-        emit(state.copyWith(allPromo: success, isLoading: false));
+        final mappedPromo = promoMapper.mapToPromo(success);
+        emit(state.copyWith(allPromo: mappedPromo, isLoading: false));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed getAllPromos'));
       });

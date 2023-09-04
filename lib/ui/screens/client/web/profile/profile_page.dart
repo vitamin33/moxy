@@ -8,6 +8,7 @@ import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.d
 import 'package:moxy/ui/screens/components/footer_web.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import '../../../../components/snackbar_widgets.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,7 +17,14 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<ProfileCubit>(
       create: (BuildContext context) => ProfileCubit(),
-      child: BlocBuilder<ProfileCubit, ProfileState>(
+      child: BlocConsumer<ProfileCubit, ProfileState>(
+        listener: (context, state) {
+          if (state.errorMessage != '') {
+            ScaffoldMessenger.of(context).showSnackBar(
+                snackBarWhenFailure(snackBarFailureText: 'Failed'));
+            context.read<ProfileCubit>().clearErrorState();
+          }
+        },
         builder: (context, state) {
           return Container(
               height: MediaQuery.of(context).size.height,
@@ -25,7 +33,9 @@ class ProfilePage extends StatelessWidget {
               child: SingleChildScrollView(
                   child: Column(
                 children: [
-                  ProfileTabPage(),
+                  state.isLoading
+                      ? const CircularProgressIndicator()
+                      : ProfileTabPage(),
                   const PromoContainer(),
                   const Footer()
                 ],
@@ -48,6 +58,8 @@ class ProfileTabPage extends StatelessWidget {
     ProfileAdress(),
   ];
 
+  ProfileTabPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
@@ -61,7 +73,7 @@ class ProfileTabPage extends StatelessWidget {
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
-                child: Container(
+                child: SizedBox(
                   width: 250,
                   height: 600,
                   child: Column(
@@ -81,19 +93,19 @@ class ProfileTabPage extends StatelessWidget {
                           width: double.infinity,
                           decoration: BoxDecoration(
                             border: state.activePage == index
-                                ? Border(
+                                ? const Border(
                                     right: BorderSide(
                                         color: AppTheme.black,
                                         width: 2,
                                         style: BorderStyle.solid),
                                   )
-                                : Border(
+                                : const Border(
                                     right: BorderSide(
                                         color: AppTheme.greyLigth,
                                         width: 2,
                                         style: BorderStyle.solid)),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 25),
+                          padding: const EdgeInsets.symmetric(vertical: 25),
                           child: Text(
                             tabTitles[index],
                             style: TextStyle(
@@ -112,7 +124,7 @@ class ProfileTabPage extends StatelessWidget {
               ),
               // Selected Tab Content
               Expanded(
-                child: Container(
+                child: SizedBox(
                   height: 600,
                   child: Column(children: [
                     Padding(
@@ -120,7 +132,7 @@ class ProfileTabPage extends StatelessWidget {
                       child: SizedBox(
                         height: 600,
                         child: PageView.builder(
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           controller: cubit.pageController,
                           onPageChanged: (int page) {

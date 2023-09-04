@@ -1,84 +1,97 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/client/promo/promo_cubit.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
+import 'package:moxy/ui/screens/components/promo_timer.dart';
 
-import '../../../domain/client/promo/promo_state.dart';
+import '../../../domain/models/product.dart';
 import '../../theme/app_theme.dart';
 
 class PromoPage extends StatelessWidget {
   final String backgroundImage;
   final String discountPercentage;
   final String collectionName;
+  final Product? product;
+  final DateTime? finalDate;
+  final int activePage;
+  final int allPromoCounth;
+  final Function() moveToNextPage;
+  final Function() moveToPreviusPage;
+  final Function(int index) animatedToPage;
 
-  PromoPage({required this.backgroundImage, required this.discountPercentage, required this.collectionName });
+  const PromoPage({
+    required this.backgroundImage,
+    required this.discountPercentage,
+    required this.collectionName,
+    required this.activePage,
+    required this.allPromoCounth,
+    this.product,
+    this.finalDate,
+    required this.moveToNextPage,
+    required this.moveToPreviusPage,
+    required this.animatedToPage,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PromoCubit, PromoState>(
-      builder: (context, state) {
-        final cubit = context.read<PromoCubit>();
-        return Container(
-            width: double.infinity,
-            height: 500,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                image: DecorationImage(
-                    fit: BoxFit.cover, image: AssetImage(backgroundImage))),
-            child: Stack(children: [
-              textPromo(cubit,discountPercentage,collectionName),
-              Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: SizedBox(
-                      height: 50,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List<Widget>.generate(
-                              2,
-                              (index) => Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    child: InkWell(
-                                      onTap: () {
-                                        cubit.pageController.animateToPage(
-                                            index,
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            curve: Curves.easeIn);
-                                      },
-                                      child: CircleAvatar(
-                                        radius: 7,
-                                        backgroundColor: AppTheme.white,
-                                        child: CircleAvatar(
-                                          radius: 5,
-                                          backgroundColor:
-                                              state.activePage == index
-                                                  ? AppTheme.white
-                                                  : Colors.transparent
-                                                      .withOpacity(0.9),
-                                        ),
-                                      ),
+    return Container(
+        width: double.infinity,
+        height: 500,
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            image: DecorationImage(
+                fit: BoxFit.cover, image: NetworkImage(backgroundImage))),
+        child: Stack(children: [
+          textPromo(discountPercentage, collectionName, product, finalDate,
+              moveToNextPage, moveToPreviusPage),
+          Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: SizedBox(
+                  height: 50,
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List<Widget>.generate(
+                          allPromoCounth,
+                          (index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: InkWell(
+                                  onTap: () {
+                                    animatedToPage(index);
+                                  },
+                                  child: CircleAvatar(
+                                    radius: 7,
+                                    backgroundColor: AppTheme.white,
+                                    child: CircleAvatar(
+                                      radius: 5,
+                                      backgroundColor: activePage == index
+                                          ? AppTheme.white
+                                          : Colors.transparent.withOpacity(0.9),
                                     ),
-                                  )),
-                        ),
-                      )))
-            ]));
-      },
-    );
+                                  ),
+                                ),
+                              )),
+                    ),
+                  )))
+        ]));
   }
 }
 
-Widget textPromo(PromoCubit cubit,String discountPercentage,String collectionName) {
+Widget textPromo(
+    String discountPercentage,
+    String collectionName,
+    Product? product,
+    DateTime? finalDate,
+    Function moveToNextPage,
+    Function moveToPreviustPage) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
       Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(40.0),
         child: OnHover(builder: ((isHovered) {
           return Container(
             decoration: BoxDecoration(
@@ -89,7 +102,7 @@ Widget textPromo(PromoCubit cubit,String discountPercentage,String collectionNam
             width: 50,
             child: InkWell(
                 onTap: () {
-                  cubit.moveToPreviustPage();
+                  moveToPreviustPage();
                 },
                 child: Center(
                   child: SvgPicture.asset(
@@ -107,61 +120,74 @@ Widget textPromo(PromoCubit cubit,String discountPercentage,String collectionNam
         child: Align(
           alignment: Alignment.centerRight,
           child: Padding(
-            padding: const EdgeInsets.all(AppTheme.cardPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                 Text(
-                  '-${discountPercentage}%',
-                  style:const TextStyle(
-                    color: Colors.white,
-                    fontSize: 105.60,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: 11.62,
-                  ),
-                ),
-                const SizedBox(height: 25),
-                const Text(
-                  'Знижка на колекцію',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 41.99,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                 Text(
-                  collectionName,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 41.99,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 20)),
-                      backgroundColor:
-                          MaterialStateProperty.all(AppTheme.white)),
-                  child: const Text(
-                    "Перейти в каталог",
-                    style: TextStyle(
-                      color: Color(0xFF0C0C0C),
-                      fontSize: 19.20,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w400,
+            padding: const EdgeInsets.symmetric(vertical: 70),
+            child: Container(
+              decoration: const BoxDecoration(
+                  color: Color.fromARGB(157, 255, 235, 253),
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (finalDate != null)
+                      AttendanceScreen(
+                        finalDate: finalDate,
+                      ),
+                    const SizedBox(height: 20),
+                    Text(
+                      '-${discountPercentage}%',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 60,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 11.62,
+                      ),
                     ),
-                  ),
-                )
-              ],
+                    const SizedBox(height: 20),
+                    Text(
+                      collectionName,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 30.99,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    if (product != null)
+                      Text(
+                        product.name,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 41.99,
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    const SizedBox(height: 20),
+                    TextButton(
+                        onPressed: () {},
+                        style: ButtonStyle(
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.symmetric(
+                                    horizontal: 50, vertical: 20)),
+                            backgroundColor:
+                                MaterialStateProperty.all(AppTheme.white)),
+                        child: const Text(
+                          "Перейти в каталог",
+                          style: TextStyle(
+                            color: Color(0xFF0C0C0C),
+                            fontSize: 19.20,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        )),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -178,7 +204,7 @@ Widget textPromo(PromoCubit cubit,String discountPercentage,String collectionNam
             width: 50,
             child: InkWell(
                 onTap: () {
-                  cubit.moveToNextPage();
+                  moveToNextPage();
                 },
                 child: Center(
                   child: SvgPicture.asset(

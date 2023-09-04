@@ -9,7 +9,7 @@ class ProfileAdress extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 100,
-      padding: EdgeInsets.all(AppTheme.cardPadding),
+      padding:const EdgeInsets.all(AppTheme.cardPadding),
       child: const Text(
         'Адресна Книга',
         style: TextStyle(

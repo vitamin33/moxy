@@ -36,6 +36,7 @@ class Footer extends StatelessWidget {
                 ],
               ),
             ),
+            // ),
           );
         },
       ),
@@ -47,27 +48,30 @@ Widget emailColumn(FooterCubit cubit, FooterState state) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
     child: Column(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 60),
         SvgPicture.asset(IconPath.moxyLogoWeb),
         const SizedBox(height: 40),
         const SizedBox(
-          width: 440,
+          width: 290,
           child: Text(
-            'ПІДПИШИСЬ ЩОБ ОТРИМАТИ КАШБЕК -15% ВІД ПЕРШОГО ЗАМОВЛЕННЯ',
+            "ПІДПИШИСЬ ЩОБ ОТРИМАТИ КАШБЕК \n -15% ВІД ПЕРШОГО ЗАМОВЛЕННЯ",
+            overflow: TextOverflow.visible,
+            maxLines: 5,
+            softWrap: true,
             style: TextStyle(
-              color: Color(0xFF0C0C0C),
               fontSize: 22,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
+              fontWeight: FontWeight.normal,
             ),
+            textAlign: TextAlign.start,
           ),
         ),
-        const SizedBox(height: 40),
+        const SizedBox(height: 20),
         SizedBox(
-            width: 440,
+            width: 300,
             child: Stack(
               children: [
                 TextField(
@@ -91,7 +95,7 @@ Widget emailColumn(FooterCubit cubit, FooterState state) {
                         child: SvgPicture.asset(IconPath.textFieldArrowWeb)))
               ],
             )),
-        const SizedBox(height: 40),
+        const SizedBox(height: 20),
         Row(
           children: [
             GestureDetector(
@@ -253,41 +257,43 @@ Widget contactColumn() {
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'ГРАФІК РОБОТИ',
-            style: TextStyle(
-              color: Color(0xFF0C0C0C),
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
+      const Flexible(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'ГРАФІК РОБОТИ',
+              style: TextStyle(
+                color: Color(0xFF0C0C0C),
+                fontSize: 14,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w700,
+              ),
             ),
-          ),
-          SizedBox(height: 22),
-          Text(
-            'Понеділок - п’ятниця з 9:00 до 21:00',
-            style: TextStyle(
-              color: Color(0xFF0C0C0C),
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
+            SizedBox(height: 22),
+            Text(
+              'Понеділок - п’ятниця з 9:00 до 21:00',
+              style: TextStyle(
+                color: Color(0xFF0C0C0C),
+                fontSize: 14,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-          SizedBox(height: 22),
-          Text(
-            'Субота - п’ятниця з 10:00 до 19:00',
-            style: TextStyle(
-              color: Color(0xFF0C0C0C),
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
+            SizedBox(height: 22),
+            Text(
+              'Субота - п’ятниця з 10:00 до 19:00',
+              style: TextStyle(
+                color: Color(0xFF0C0C0C),
+                fontSize: 14,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       const SizedBox(height: 58),
       Column(

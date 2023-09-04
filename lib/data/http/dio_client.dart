@@ -21,13 +21,12 @@ import '../models/request/login_request.dart';
 import '../models/request/create_product_request.dart';
 import '../models/request/user_request.dart';
 import '../models/response/all_orders_response.dart';
+import '../models/response/all_promos_response.dart';
 import '../models/response/dashboard_response.dart';
 import '../models/response/login_response.dart';
+import '../models/response/profile_response.dart';
 
 class DioClient {
-  //static const String baseUrl = 'http://10.0.2.2:3000';
-  //static const String baseUrl = 'http://localhost:3000';
-
   late String baseUrl;
 
   final Dio dio = locate<Dio>();
@@ -364,6 +363,7 @@ class DioClient {
       throw Exception('Failed to load product: $e');
     }
   }
+
 // WEB
 
 // FOOTER
@@ -384,19 +384,45 @@ class DioClient {
   }
 
   // PROMO
-
-  Future<Result<Headers, Exception>> getAllPromo() async {
-    final Headers? result;
+  Future<List<NetworkPromos>> getPromos() async {
     try {
-      Response response = await dio.post(
-        getPromoUrl,
-      );
-      result = response.headers;
+      final response = await dio.get('$baseUrl $getPromosUrl');
+      final data = response.data;
+      final promosList = <NetworkPromos>[];
+      for (var value in (data as List)) {
+        promosList.add(NetworkPromos.fromJson(value));
+      }
+      return promosList;
     } catch (e) {
-      moxyPrint('Error send user email: $e');
-      return Result.error(_handleHttpException(e));
+      throw Exception('Failed to load promos: $e');
     }
-    return Result.success(result);
+  }
+
+  //PROFILE
+  Future<NetworkProfile> getProfile() async {
+    try {
+      final response = await dio.get('$baseUrl $getProfileUrl');
+      final profile = NetworkProfile.fromJson(response.data);
+      return profile;
+    } catch (e) {
+      throw Exception('Failed to load promos: $e');
+    }
+  }
+
+  //NEW PRODUCT SELLING LIST
+
+  Future<List<NetworkProduct>> getSellingProducts() async {
+    try {
+      final response = await dio.get('$baseUrl $allSellingProductsUrl');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      throw Exception('Failed to load getSellingProducts: $e');
+    }
   }
 
   Future<bool> deleteProduct(String productId) async {

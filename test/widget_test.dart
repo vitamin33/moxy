@@ -24,6 +24,7 @@ void main() {
     final darkTheme = ThemeDecoder.decodeThemeData(themeJson)!;
     final appTheme = AppThemeData(theme, darkTheme);
     // Build our app and trigger a frame.
+
     await tester.pumpWidget(MoxyApp(appTheme));
 
     // Verify that our counter starts at 0.

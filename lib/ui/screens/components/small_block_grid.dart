@@ -3,12 +3,18 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constant/icon_path.dart';
-import '../../../constant/image_path.dart';
 import '../../theme/app_theme.dart';
 import 'onhover.dart';
 
 class SmallBlockGrid extends StatelessWidget {
-  const SmallBlockGrid({super.key});
+  final String imageUrl;
+  final String productName;
+  final String productPrice;
+  const SmallBlockGrid(
+      {super.key,
+      required this.imageUrl,
+      required this.productName,
+      required this.productPrice});
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +25,11 @@ class SmallBlockGrid extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: AssetImage(
-                        ImageAssets.smallPictureHome,
+                      image: NetworkImage(
+                        imageUrl,
                       ))),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -49,18 +55,18 @@ class SmallBlockGrid extends StatelessWidget {
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 3.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 3.0),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Сумка Чіз Чорна',
-                    style: TextStyle(
+                    productName,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Text('765 грн')
+                  Text(productPrice)
                 ]),
           )
         ],
