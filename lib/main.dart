@@ -46,7 +46,9 @@ void main() {
     runApp(
       ChangeNotifierProvider(
         create: (_) => ThemeProvider(appThemeData),
-        child: MoxyApp(appThemeData),
+        child: AppTheme(
+          child: MoxyApp(appThemeData),
+        ),
       ),
     );
   }, (error, stack) => moxyPrint(error));

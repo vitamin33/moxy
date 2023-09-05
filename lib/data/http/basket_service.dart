@@ -13,7 +13,7 @@ class BasketService {
 
   Future<Result<NetworkBasket, Exception>> getBasket() async {
     try {
-      final response = await _dio.get('$baseUrl$getProductByIdUrl');
+      final response = await _dio.get('$baseUrl$getBasketUrl');
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
       return Result.success(result);

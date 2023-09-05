@@ -19,8 +19,8 @@ import '../../../../../domain/admin/edit_order/edit_order_state.dart';
 import '../../../../../services/navigation/admin/admin_home_router_cubit.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/succes_card.dart';
-import '../create_order/city_dropdown.dart';
-import '../create_order/warehouse_dropdown.dart';
+import '../create_order/bottom_sheet_city_dropdown.dart';
+import '../create_order/bottom_sheet_warehouse_dropdown.dart';
 import '../create_product/create_product_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -187,14 +187,14 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
                           const SizedBox(
                             height: 20,
                           ),
-                          SearchCityDropdown(
+                          BottomSearchCityDropdown(
                               selectedCity: state.selectedCity,
                               selectedWarehouse: state.selectedWarehouse,
                               onChanged: (city) {
                                 cubit.selectCity(city);
                               }),
                           const SizedBox(height: 20),
-                          SearchWarehouseDropdown(
+                          BottomSearchWarehouseDropdown(
                               selectedCity: state.selectedCity,
                               selectedWarehouse: state.selectedWarehouse,
                               onChanged: (warehouse) {

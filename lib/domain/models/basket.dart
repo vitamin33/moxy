@@ -32,28 +32,28 @@ class Basket implements Copyable<Basket> {
 
 class BasketItem implements Copyable<BasketItem> {
   Product product;
-  Dimension dimension;
+  List<Dimension> dimensions;
 
   BasketItem({
     required this.product,
-    required this.dimension,
+    required this.dimensions,
   });
 
   static BasketItem defaultBasket() {
     return BasketItem(
       product: Product.defaultProduct(),
-      dimension: Dimension.defaultDimension(),
+      dimensions: [],
     );
   }
 
   @override
   BasketItem copyWith({
     Product? product,
-    Dimension? dimension,
+    List<Dimension>? dimensions,
   }) {
     return BasketItem(
       product: product ?? this.product,
-      dimension: dimension ?? this.dimension,
+      dimensions: dimensions ?? this.dimensions,
     );
   }
 }

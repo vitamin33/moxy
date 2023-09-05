@@ -8,8 +8,8 @@ import '../../../../../../domain/admin/create_order/create_order_cubit.dart';
 import '../../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
-import '../city_dropdown.dart';
-import '../warehouse_dropdown.dart';
+import '../bottom_sheet_city_dropdown.dart';
+import '../bottom_sheet_warehouse_dropdown.dart';
 
 class Delivery extends StatelessWidget {
   const Delivery({super.key});
@@ -105,14 +105,15 @@ class Delivery extends StatelessWidget {
                       padding: const EdgeInsets.all(AppTheme.cardPadding),
                       child: Column(
                         children: [
-                          SearchCityDropdown(
-                              selectedCity: state.selectedCity,
-                              selectedWarehouse: state.selectedWarehouse,
-                              onChanged: (city) {
-                                cubit.selectCity(city);
-                              }),
+                          BottomSearchCityDropdown(
+                            selectedCity: state.selectedCity,
+                            selectedWarehouse: state.selectedWarehouse,
+                            onChanged: (city) {
+                              cubit.selectCity(city);
+                            },
+                          ),
                           SizedBox(height: 20),
-                          SearchWarehouseDropdown(
+                          BottomSearchWarehouseDropdown(
                             selectedCity: state.selectedCity,
                             selectedWarehouse: state.selectedWarehouse,
                             onChanged: (warehouse) {

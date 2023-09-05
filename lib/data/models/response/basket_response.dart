@@ -23,11 +23,11 @@ class NetworkBasket {
 @JsonSerializable()
 class NetworkBasketItem {
   NetworkProduct product;
-  NetworkDimension dimension;
+  List<NetworkDimension> dimensions;
 
   NetworkBasketItem({
     required this.product,
-    required this.dimension,
+    required this.dimensions,
   });
   factory NetworkBasketItem.fromJson(Map<String, dynamic> json) =>
       _$NetworkBasketItemFromJson(json);
