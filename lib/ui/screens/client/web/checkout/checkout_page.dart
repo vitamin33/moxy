@@ -61,14 +61,19 @@ class CheckoutPage extends StatelessWidget {
                   ),
                 ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
+                      flex: 1,
                       child: CheckoutInfo(state: state),
                     ),
                     const VerticalDivider(width: 1, thickness: 1),
                     Expanded(
-                      child: ScrollableSection(
-                          content: CheckoutProducts(state: state)),
+                      flex: 1,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: CheckoutProducts(state: state),
+                      ),
                     ),
                   ],
                 )

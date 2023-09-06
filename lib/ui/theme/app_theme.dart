@@ -39,6 +39,18 @@ class AppTheme extends InheritedWidget {
 
   final TextStyle checkoutHeadingText =
       const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  final TextStyle checkoutProductText =
+      const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
+  final TextStyle checkoutPriceText =
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  final TextStyle checkoutColorText =
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+  final TextStyle removeButtonText = const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+    color: gray,
+    decoration: TextDecoration.underline,
+  );
 
   const AppTheme({super.key, required Widget child}) : super(child: child);
 
