@@ -28,32 +28,40 @@ class Basket implements Copyable<Basket> {
       basketItems: basketItems ?? this.basketItems,
     );
   }
+
+  int totalValue() {
+    double result = 0;
+    for (var element in basketItems) {
+      result += element.product.salePrice * element.dimension.quantity;
+    }
+    return result.toInt();
+  }
 }
 
 class BasketItem implements Copyable<BasketItem> {
   Product product;
-  List<Dimension> dimensions;
+  Dimension dimension;
 
   BasketItem({
     required this.product,
-    required this.dimensions,
+    required this.dimension,
   });
 
   static BasketItem defaultBasket() {
     return BasketItem(
       product: Product.defaultProduct(),
-      dimensions: [],
+      dimension: Dimension.defaultDimension(),
     );
   }
 
   @override
   BasketItem copyWith({
     Product? product,
-    List<Dimension>? dimensions,
+    Dimension? dimension,
   }) {
     return BasketItem(
       product: product ?? this.product,
-      dimensions: dimensions ?? this.dimensions,
+      dimension: dimension ?? this.dimension,
     );
   }
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/domain/models/basket.dart';
+import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
@@ -14,10 +16,9 @@ class CheckoutProducts extends StatelessWidget {
     final theme = AppTheme.of(context)!;
     final cubit = context.read<CheckoutCubit>();
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.all(16),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           ..._buildYourOrderWidget(theme, cubit),
           ..._buildCheckoutArea(theme, cubit),
@@ -33,7 +34,7 @@ class CheckoutProducts extends StatelessWidget {
 
     for (int i = 0; i < rowCount; i++) {
       productWidgets.add(
-        _buildProductItem(i),
+        _buildProductItem(cubit, theme, i),
       );
     }
     return [
@@ -69,15 +70,107 @@ class CheckoutProducts extends StatelessWidget {
     ];
   }
 
-  Widget _buildProductItem(int index) {
+  Widget _buildProductItem(CheckoutCubit cubit, AppTheme theme, int index) {
     BasketItem item = state.basket.basketItems[index];
+    String productName = item.product.name.toUpperCase();
+    String color = item.dimension.color.toUpperCase();
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildProductImage(item),
         const SizedBox(width: 20),
-        const Text('Orders'),
+        Expanded(
+          child: SizedBox(
+            height: 180,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$productName $color}',
+                        style: theme.checkoutProductText,
+                      ),
+                      Text(
+                        '${item.product.salePrice} UAH',
+                        style: theme.checkoutPriceText,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Color:', style: theme.checkoutColorText),
+                      Text('${item.product.salePrice} UAH'),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      QuantityPicker(
+                        quantity: item.dimension.quantity,
+                        onPlus: () {
+                          cubit.addQuantityOfProduct(item);
+                        },
+                        onMinus: () {
+                          cubit.removeQuantityOfProduct(item);
+                        },
+                      ),
+                      InkWell(
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Text(
+                            'Remove',
+                            style: theme.removeButtonText,
+                          ),
+                        ),
+                        onTap: () {
+                          cubit.removeProductFromBasket(item);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget _buildColorWidget(Dimension dimen) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          style: BorderStyle.solid,
+          color: Colors.transparent,
+          width: 1,
+        ),
+      ),
+      child: CircleAvatar(
+        radius: 20,
+        backgroundColor: AppTheme.white,
+        child: CircleAvatar(
+          radius: 15,
+          backgroundColor: AppTheme.pink,
+          backgroundImage: AssetImage(dimen.image!),
+        ),
+      ),
     );
   }
 
@@ -86,14 +179,14 @@ class CheckoutProducts extends StatelessWidget {
       return FadeInImage.assetNetwork(
         placeholder: 'assets/images/placeholder.jpg',
         image: item.product.images.first.imagePath,
-        width: 50,
-        height: 50,
+        width: 180,
+        height: 180,
         fit: BoxFit.cover,
       );
     } else {
       return Image.asset(
-        width: 50,
-        height: 50,
+        width: 180,
+        height: 180,
         'assets/images/placeholder.jpg',
         fit: BoxFit.cover,
       );

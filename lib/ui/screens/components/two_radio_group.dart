@@ -38,6 +38,7 @@ class TwoRadioGroup extends StatelessWidget {
               ? Text(firstOption.subtitle!)
               : Container(),
           leading: firstOption.icon,
+          selectedColor: AppTheme.textColor,
           trailing: Radio<RadioItem>(
             value: firstOption,
             groupValue: _getSelectedItem(),
@@ -62,6 +63,7 @@ class TwoRadioGroup extends StatelessWidget {
             onItemSelected(secondOption);
           },
           selected: secondSelected,
+          selectedColor: AppTheme.textColor,
           title: Text(secondOption.label),
           subtitle: secondOption.subtitle != null
               ? Text(secondOption.subtitle!)
