@@ -37,6 +37,7 @@ class ProductMapper {
                 (e) => ImagePath(type: Type.network, imagePath: e),
               )
               .toList(),
+          forSale: p.forSale,
         );
       },
     ).toList();
@@ -78,20 +79,23 @@ class ProductMapper {
 
   NetworkProduct mapToNetworkProduct(Product p, List<Dimension> dimensions) {
     return NetworkProduct(
-        id: p.id,
-        name: p.name,
-        description: p.description,
-        costPrice: p.costPrice,
-        salePrice: p.salePrice,
-        dimensions: dimensions
-            .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
-            .toList(),
-        idName: p.idName,
-        images: p.images.map((e) => e.imagePath).toList());
+      id: p.id,
+      name: p.name,
+      description: p.description,
+      costPrice: p.costPrice,
+      salePrice: p.salePrice,
+      dimensions: dimensions
+          .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
+          .toList(),
+      idName: p.idName,
+      images: p.images.map((e) => e.imagePath).toList(),
+      forSale: p.forSale,
+    );
   }
 
   Product mapToProduct(NetworkProduct success) {
     return Product(
+      id: success.id,
       name: success.name,
       description: success.description ?? '',
       costPrice: success.costPrice,
@@ -109,6 +113,7 @@ class ProductMapper {
             (e) => ImagePath(type: Type.network, imagePath: e),
           )
           .toList(),
+      forSale: success.forSale,
     );
   }
 
@@ -116,6 +121,14 @@ class ProductMapper {
     return Dimension(
       color: network.color,
       quantity: network.quantity,
+      image: _mapColorDimensionImage(network.color),
+    );
+  }
+
+  NetworkDimension mapToNetworkDimension(Dimension dimen) {
+    return NetworkDimension(
+      color: dimen.color,
+      quantity: dimen.quantity,
     );
   }
 

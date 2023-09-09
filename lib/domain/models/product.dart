@@ -11,6 +11,7 @@ class Product implements Copyable<Product> {
   List<Dimension> dimensions;
   List<ImagePath> images;
   String idName;
+  bool forSale;
 
   Product({
     this.id,
@@ -21,17 +22,20 @@ class Product implements Copyable<Product> {
     required this.dimensions,
     required this.idName,
     required this.images,
+    required this.forSale,
   });
 
   static Product defaultProduct() {
     return Product(
-        name: '',
-        description: '',
-        costPrice: 0,
-        salePrice: 0,
-        dimensions: [],
-        idName: '',
-        images: []);
+      name: '',
+      description: '',
+      costPrice: 0,
+      salePrice: 0,
+      dimensions: [],
+      idName: '',
+      images: [],
+      forSale: false,
+    );
   }
 
   @override
@@ -43,15 +47,18 @@ class Product implements Copyable<Product> {
     double? salePrice,
     List<Dimension>? dimensions,
     List<ImagePath>? images,
+    bool? forSale,
   }) {
     return Product(
-        name: name ?? this.name,
-        description: description ?? this.description,
-        costPrice: costPrice ?? this.costPrice,
-        salePrice: salePrice ?? this.salePrice,
-        dimensions: dimensions ?? this.dimensions,
-        idName: idName ?? this.idName,
-        images: images ?? this.images);
+      name: name ?? this.name,
+      description: description ?? this.description,
+      costPrice: costPrice ?? this.costPrice,
+      salePrice: salePrice ?? this.salePrice,
+      dimensions: dimensions ?? this.dimensions,
+      idName: idName ?? this.idName,
+      images: images ?? this.images,
+      forSale: forSale ?? this.forSale,
+    );
   }
 }
 
@@ -69,10 +76,11 @@ class Dimension implements Copyable<Dimension> {
 
   static Dimension defaultDimension() {
     return Dimension(
-        color: ProductColor.black.color,
-        quantity: 0,
-        isSelected: false,
-        image: 'assets/images/logo.png');
+      color: ProductColor.black.color,
+      quantity: 0,
+      isSelected: false,
+      image: 'assets/images/logo.png',
+    );
   }
 
   @override

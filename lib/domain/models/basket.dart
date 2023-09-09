@@ -5,16 +5,19 @@ import '../copyable.dart';
 class Basket implements Copyable<Basket> {
   String client;
   List<BasketItem> basketItems;
+  int freeShippingThreshold;
 
   Basket({
     required this.client,
     required this.basketItems,
+    required this.freeShippingThreshold,
   });
 
   static Basket defaultBasket() {
     return Basket(
       client: '',
       basketItems: [],
+      freeShippingThreshold: 2000,
     );
   }
 
@@ -22,10 +25,13 @@ class Basket implements Copyable<Basket> {
   Basket copyWith({
     String? client,
     List<BasketItem>? basketItems,
+    int? freeShippingThreshold,
   }) {
     return Basket(
       client: client ?? this.client,
       basketItems: basketItems ?? this.basketItems,
+      freeShippingThreshold:
+          freeShippingThreshold ?? this.freeShippingThreshold,
     );
   }
 
@@ -35,6 +41,14 @@ class Basket implements Copyable<Basket> {
       result += element.product.salePrice * element.dimension.quantity;
     }
     return result.toInt();
+  }
+
+  int amountForFreeShipping() {
+    if (freeShippingThreshold > totalValue()) {
+      return freeShippingThreshold - totalValue();
+    } else {
+      return 0;
+    }
   }
 }
 

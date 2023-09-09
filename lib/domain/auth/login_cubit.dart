@@ -11,13 +11,14 @@ class LoginCubit extends Cubit<LoginState> {
   final storage = locate<ISecureStorageRepository>();
   final authRepository = locate<AuthRepository>();
 
-  late TextEditingController emailController;
+  late TextEditingController phoneController;
   late TextEditingController passwordController;
   String walletConnectURI = '';
 
   LoginCubit()
       : super(LoginState(mobileNumber: '', password: '', state: AuthState())) {
     //_checkLoggedInState();
+    emit(state.copyWith(mobileNumber: '0938795984', password: '123123'));
   }
 
   void mobileNumberChanged(String value) {
