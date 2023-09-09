@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/ui/screens/components/expandable_text.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutProducts extends StatelessWidget {
+  final double productRowHeight = 150;
   final CheckoutState state;
   const CheckoutProducts({super.key, required this.state});
 
@@ -50,13 +53,62 @@ class CheckoutProducts extends StatelessWidget {
   }
 
   List<Widget> _buildCheckoutArea(AppTheme theme, CheckoutCubit cubit) {
+    String freeShippingText = state.isFreeShipping
+        ? 'You have free shipping.'
+        : 'In order to have free shipping you need to order more for ';
+
     return [
-      Text('Total value to pay'.toUpperCase(),
-          style: theme.checkoutHeadingText),
+      Divider(
+        color: AppTheme.gray.withOpacity(0.3),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Total value to pay'.toUpperCase(),
+              style: theme.checkoutHeadingText,
+            ),
+            Text(
+              '${state.basket.totalValue()} $uah',
+              style: theme.checkoutPriceText,
+            )
+          ],
+        ),
+      ),
+      Divider(
+        color: AppTheme.gray.withOpacity(0.3),
+      ),
       const SizedBox(height: 30),
-      const Text('You need to free shepping'),
-      const SizedBox(height: 16),
-      ElevatedButton(onPressed: () {}, child: const Text('Checkout')),
+      ExpandableShippingText(
+        collapsedText: freeShippingText,
+        price: state.isFreeShipping
+            ? null
+            : '${state.basket.amountForFreeShipping()} $uah',
+        additionalText:
+            'For free shipping you need to order at least for ${state.basket.freeShippingThreshold} $uah.',
+      ),
+      const SizedBox(height: 32),
+      ElevatedButton(
+        onPressed: () {
+          // Add your onPressed logic here
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppTheme.textColor, // Background color
+          foregroundColor: Colors.white, // Text color
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0), // Rounded corners
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            'Checkout',
+            style: theme.checkoutButtonText,
+          ),
+        ),
+      ),
       const SizedBox(height: 20),
     ];
   }
@@ -64,9 +116,39 @@ class CheckoutProducts extends StatelessWidget {
   List<Widget> _buildWarningsAndTerms(AppTheme theme, CheckoutCubit cubit) {
     return [
       const SizedBox(height: 10),
-      const Text('Warning Warning Warning'),
+      Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+                text: 'Ordering on MOXY.UA you agreed with ',
+                style: theme.checkoutWarningText),
+            TextSpan(
+              text: 'Privacy And Policy',
+              style: theme.checkoutWarningText.copyWith(
+                color: AppTheme.pinkDark,
+                fontWeight: FontWeight.w600,
+                decoration: TextDecoration.underline,
+              ),
+            ),
+          ],
+        ),
+      ),
       const SizedBox(height: 10),
-      const Text('Warning Warning Warning')
+      Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(
+              text: 'Warning: ',
+              style: theme.checkoutWarningText
+                  .copyWith(fontWeight: FontWeight.w600),
+            ),
+            TextSpan(
+                text:
+                    'Your order is keeping for 5 days in post warehouse. On 6th day it will be returned back to the sender.',
+                style: theme.checkoutWarningText),
+          ],
+        ),
+      ),
     ];
   }
 
@@ -74,80 +156,83 @@ class CheckoutProducts extends StatelessWidget {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
     String color = item.dimension.color.toUpperCase();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildProductImage(item),
-        const SizedBox(width: 20),
-        Expanded(
-          child: SizedBox(
-            height: 180,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '$productName $color}',
-                        style: theme.checkoutProductText,
-                      ),
-                      Text(
-                        '${item.product.salePrice} UAH',
-                        style: theme.checkoutPriceText,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Color:', style: theme.checkoutColorText),
-                      Text('${item.product.salePrice} UAH'),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      QuantityPicker(
-                        quantity: item.dimension.quantity,
-                        onPlus: () {
-                          cubit.addQuantityOfProduct(item);
-                        },
-                        onMinus: () {
-                          cubit.removeQuantityOfProduct(item);
-                        },
-                      ),
-                      InkWell(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Text(
-                            'Remove',
-                            style: theme.removeButtonText,
-                          ),
+    return Padding(
+      padding: EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildProductImage(item),
+          const SizedBox(width: 30),
+          Expanded(
+            child: SizedBox(
+              height: productRowHeight,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$productName $color',
+                          style: theme.checkoutProductText,
                         ),
-                        onTap: () {
-                          cubit.removeProductFromBasket(item);
-                        },
-                      ),
-                    ],
+                        Text(
+                          '${item.product.salePrice} $uah',
+                          style: theme.checkoutPriceText,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                  Expanded(
+                    flex: 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Color:', style: theme.checkoutColorText),
+                        _buildColorWidget(item.dimension),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        QuantityPicker(
+                          quantity: item.dimension.quantity,
+                          onPlus: () {
+                            cubit.addQuantityOfProduct(item);
+                          },
+                          onMinus: () {
+                            cubit.removeQuantityOfProduct(item);
+                          },
+                        ),
+                        InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              'Remove',
+                              style: theme.removeButtonText,
+                            ),
+                          ),
+                          onTap: () {
+                            cubit.removeProductFromBasket(item);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -158,15 +243,15 @@ class CheckoutProducts extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(
           style: BorderStyle.solid,
-          color: Colors.transparent,
+          color: AppTheme.gray.withOpacity(0.4),
           width: 1,
         ),
       ),
       child: CircleAvatar(
-        radius: 20,
-        backgroundColor: AppTheme.white,
+        radius: 15,
+        backgroundColor: AppTheme.greyLigth,
         child: CircleAvatar(
-          radius: 15,
+          radius: 13,
           backgroundColor: AppTheme.pink,
           backgroundImage: AssetImage(dimen.image!),
         ),
@@ -179,14 +264,14 @@ class CheckoutProducts extends StatelessWidget {
       return FadeInImage.assetNetwork(
         placeholder: 'assets/images/placeholder.jpg',
         image: item.product.images.first.imagePath,
-        width: 180,
-        height: 180,
+        width: productRowHeight,
+        height: productRowHeight,
         fit: BoxFit.cover,
       );
     } else {
       return Image.asset(
-        width: 180,
-        height: 180,
+        width: productRowHeight,
+        height: productRowHeight,
         'assets/images/placeholder.jpg',
         fit: BoxFit.cover,
       );

@@ -65,7 +65,7 @@ class AuthenticationView extends StatelessWidget {
                     onChanged: (value) =>
                         context.read<LoginCubit>().mobileNumberChanged(value),
                     autofillHints: const [
-                      AutofillHints.email,
+                      AutofillHints.telephoneNumber,
                     ],
                   ),
                   const SizedBox(height: AppTheme.elementSpacing),

@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/admin/all_products/all_products_effects.dart';
 import 'package:moxy/domain/admin/all_products/all_products_state.dart';
@@ -138,7 +139,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                       ),
                                       title: Text(product.name),
                                       subtitle:
-                                          Text('${product.salePrice} UAH'),
+                                          Text('${product.salePrice} $uah'),
                                       trailing: SvgPicture.asset(
                                           IconPath.forwardArrow),
                                     ),

@@ -37,6 +37,8 @@ class AppTheme extends InheritedWidget {
   static Size size(BuildContext context) => MediaQuery.of(context).size;
   static const double drawerWidth = 280;
 
+  // CHECKOUT
+
   final TextStyle checkoutHeadingText =
       const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   final TextStyle checkoutProductText =
@@ -45,6 +47,10 @@ class AppTheme extends InheritedWidget {
       const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   final TextStyle checkoutColorText =
       const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+  final TextStyle checkoutButtonText =
+      const TextStyle(fontSize: 22, fontWeight: FontWeight.w600);
+  final TextStyle checkoutWarningText =
+      const TextStyle(fontSize: 12, fontWeight: FontWeight.w400);
   final TextStyle removeButtonText = const TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w400,
