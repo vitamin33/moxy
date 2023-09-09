@@ -26,6 +26,7 @@ class NetworkProduct {
   List<NetworkDimension> dimensions;
   List<String> images;
   String idName;
+  bool forSale;
 
   NetworkProduct({
     this.id,
@@ -36,6 +37,7 @@ class NetworkProduct {
     required this.dimensions,
     required this.idName,
     required this.images,
+    required this.forSale,
   });
 
   factory NetworkProduct.fromJson(Map<String, dynamic> json) =>

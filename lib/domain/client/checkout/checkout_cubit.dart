@@ -96,6 +96,7 @@ class CheckoutCubit extends Cubit<CheckoutState> {
     List<BasketItem> items = state.basket.basketItems;
     items.removeWhere((element) => element.product.id == item.product.id);
     emit(state.copyWith(basket: state.basket.copyWith(basketItems: items)));
+    removeProductFromCart(item);
   }
 
   bool checkQuantityAvailability(BasketItem basketItem) {
@@ -109,8 +110,7 @@ class CheckoutCubit extends Cubit<CheckoutState> {
   }
 
   void updateCart(BasketItem basketItem) async {
-    NetworkChangeBasketDimen item =
-        basketMapper.mapToNetworkBasketChangeDimen(basketItem);
+    NetworkAddOrChange item = basketMapper.mapToNetworkBasketChange(basketItem);
     final result = await basketRepository.changeBasketProductDimen(item);
     result.when((success) {
       emitSuccessBasket(success);

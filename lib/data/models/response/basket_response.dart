@@ -8,10 +8,12 @@ part 'basket_response.g.dart';
 class NetworkBasket {
   String client;
   List<NetworkBasketItem> basketItems;
+  int freeShippingThreshold;
 
   NetworkBasket({
     required this.client,
     required this.basketItems,
+    required this.freeShippingThreshold,
   });
 
   factory NetworkBasket.fromJson(Map<String, dynamic> json) =>

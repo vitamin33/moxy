@@ -36,10 +36,12 @@ class BasketMapper {
         freeShippingThreshold: network.freeShippingThreshold);
   }
 
-  NetworkChangeBasketDimen mapToNetworkBasketChangeDimen(BasketItem item) {
-    return NetworkChangeBasketDimen(
-      productId: item.product.id!,
-      dimension: productMapper.mapToNetworkDimension(item.dimension),
+  NetworkAddOrChange mapToNetworkBasketChange(BasketItem item) {
+    return NetworkAddOrChange(
+      product: NetworkChangeBasketDimen(
+        productId: item.product.id!,
+        dimension: productMapper.mapToNetworkDimension(item.dimension),
+      ),
     );
   }
 }

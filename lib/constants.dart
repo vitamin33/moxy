@@ -13,3 +13,6 @@ const dateRangeKey = 'dateRange';
 // GET params keys
 const uniqueIdKey = 'uniqueId';
 const codeKey = 'secretCode';
+
+// Fiat signs
+const uah = 'UAH';
