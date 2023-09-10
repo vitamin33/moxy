@@ -14,17 +14,18 @@ class CheckoutState implements Copyable<CheckoutState> {
   City selectedCity;
   Warehouse selectedWarehouse;
   Client client;
+  bool isFreeShipping;
 
-  CheckoutState({
-    required this.isLoading,
-    required this.basketProductsError,
-    required this.basket,
-    required this.deliveryType,
-    required this.paymentType,
-    required this.selectedCity,
-    required this.selectedWarehouse,
-    required this.client,
-  });
+  CheckoutState(
+      {required this.isLoading,
+      required this.basketProductsError,
+      required this.basket,
+      required this.deliveryType,
+      required this.paymentType,
+      required this.selectedCity,
+      required this.selectedWarehouse,
+      required this.client,
+      required this.isFreeShipping});
 
   static defaultState() {
     return CheckoutState(
@@ -36,6 +37,7 @@ class CheckoutState implements Copyable<CheckoutState> {
       selectedWarehouse: Warehouse.defaultWarehouse(),
       client: Client.defaultClient(),
       basketProductsError: null,
+      isFreeShipping: false,
     );
   }
 
@@ -49,6 +51,7 @@ class CheckoutState implements Copyable<CheckoutState> {
     City? selectedCity,
     Warehouse? selectedWarehouse,
     Client? client,
+    bool? isFreeShipping,
   }) {
     return CheckoutState(
       isLoading: isLoading ?? this.isLoading,
@@ -59,6 +62,7 @@ class CheckoutState implements Copyable<CheckoutState> {
       selectedCity: selectedCity ?? this.selectedCity,
       selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,
+      isFreeShipping: isFreeShipping ?? this.isFreeShipping,
     );
   }
 }

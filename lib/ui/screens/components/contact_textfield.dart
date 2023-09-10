@@ -6,6 +6,7 @@ class ContactTextField extends StatelessWidget {
   final TextEditingController controller;
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
+  final ValueChanged<String>? onChanged;
 
   const ContactTextField({
     required this.labelText,
@@ -13,6 +14,7 @@ class ContactTextField extends StatelessWidget {
     required this.controller,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.onChanged,
   });
 
   @override
@@ -28,6 +30,11 @@ class ContactTextField extends StatelessWidget {
         ),
       ),
       validator: validator,
+      onChanged: (value) {
+        if (onChanged != null) {
+          onChanged!(value);
+        }
+      },
     );
   }
 }

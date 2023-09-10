@@ -1,3 +1,4 @@
+import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
@@ -29,6 +30,18 @@ class BasketMapper {
         );
       }
     }
-    return Basket(client: network.client, basketItems: items);
+    return Basket(
+        client: network.client,
+        basketItems: items,
+        freeShippingThreshold: network.freeShippingThreshold);
+  }
+
+  NetworkAddOrChange mapToNetworkBasketChange(BasketItem item) {
+    return NetworkAddOrChange(
+      product: NetworkChangeBasketDimen(
+        productId: item.product.id!,
+        dimension: productMapper.mapToNetworkDimension(item.dimension),
+      ),
+    );
   }
 }
