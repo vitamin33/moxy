@@ -52,6 +52,7 @@ class CheckoutInfo extends StatelessWidget {
             child: ContactTextField(
               labelText: 'First Name',
               controller: cubit.firstNameController,
+              onChanged: cubit.firstNameChanged,
             ),
           ),
           const SizedBox(width: 20),
@@ -60,6 +61,7 @@ class CheckoutInfo extends StatelessWidget {
             child: ContactTextField(
               labelText: 'Second Name',
               controller: cubit.secondNameController,
+              onChanged: cubit.secondNameChanged,
             ),
           ),
         ],
@@ -69,6 +71,7 @@ class CheckoutInfo extends StatelessWidget {
         labelText: 'Phone Number',
         prefixText: '+38',
         controller: cubit.phoneNumberController,
+        onChanged: cubit.phoneNumberChanged,
       ),
       const SizedBox(
         height: 30,

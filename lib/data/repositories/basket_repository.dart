@@ -37,4 +37,13 @@ class BasketRepository {
       return Result.error(Exception('$e'));
     }
   }
+
+  Future<Result<NetworkBasket, Exception>> startPayment() async {
+    try {
+      final result = await client.startPayment();
+      return result;
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
+  }
 }

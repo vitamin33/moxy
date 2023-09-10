@@ -50,4 +50,16 @@ class BasketService {
       return Result.error(e);
     }
   }
+
+  Future<Result<NetworkBasket, Exception>> startPayment() async {
+    try {
+      _dio.options.headers['Content-Type'] = Headers.jsonContentType;
+      final response = await _dio.post('$baseUrl$changeBasketUrl');
+      final data = response.data;
+      final result = NetworkBasket.fromJson(data);
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
 }

@@ -11,11 +11,12 @@ import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 import 'checkout_state.dart';
 
-class CheckoutCubit extends Cubit<CheckoutState> {
+class CheckoutCubit extends Cubit<CheckoutState> with ValidationMixin {
   final basketRepository = locate<BasketRepository>();
   final basketMapper = locate<BasketMapper>();
   final cityMapper = locate<CityMapper>();
@@ -141,5 +142,33 @@ class CheckoutCubit extends Cubit<CheckoutState> {
         isLoading: false,
       ),
     );
+  }
+
+  void firstNameChanged(String value) {
+    final String firstName = value;
+    emit(state.copyWith(client: state.client.copyWith(firstName: firstName)));
+  }
+
+  void secondNameChanged(String value) {
+    final String secondName = value;
+    emit(state.copyWith(client: state.client.copyWith(secondName: secondName)));
+  }
+
+  void phoneNumberChanged(String value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String mobileNumber = value;
+    emit(state.copyWith(
+        client: state.client.copyWith(mobileNumber: mobileNumber)));
+  }
+
+  void clickCheckout() async {
+    final result = await basketRepository.startPayment();
+    result.when((success) {
+      // TODO update UI with success
+    }, (error) {
+      emit(state.copyWith(basketProductsError: 'Failed to perform checkout'));
+    });
   }
 }
