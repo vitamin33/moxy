@@ -2,44 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
+import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_adress.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_contact_info.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.dart';
 import 'package:moxy/ui/screens/components/footer_web.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import '../../../../components/snackbar_widgets.dart';
+import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
+import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ProfileCubit>(
-      create: (BuildContext context) => ProfileCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProfileCubit>(
+          create: (BuildContext context) => ProfileCubit(),
+        ),
+        BlocProvider<SearchCitiesCubit>(
+          create: (BuildContext context) => SearchCitiesCubit(),
+        ),
+        BlocProvider<SearchWarehouseCubit>(
+          create: (BuildContext context) => SearchWarehouseCubit(),
+        ),
+      ],
       child: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state.errorMessage != '') {
             ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenFailure(snackBarFailureText: 'Failed'));
+                snackBarWhenFailure(snackBarFailureText: state.errorMessage));
             context.read<ProfileCubit>().clearErrorState();
+          } else if (state.successMessage != '') {
+            ScaffoldMessenger.of(context).showSnackBar(
+                snackBarWhenSuccess(snackBarSuccessText: state.successMessage));
+            context.read<ProfileCubit>().clearSuccesState();
           }
         },
         builder: (context, state) {
-          return Container(
-              height: MediaQuery.of(context).size.height,
-              width: double.infinity,
-              color: AppTheme.white,
-              child: SingleChildScrollView(
-                  child: Column(
-                children: [
-                  state.isLoading
-                      ? const CircularProgressIndicator()
-                      : ProfileTabPage(),
-                  const PromoContainer(),
-                  const Footer()
-                ],
-              )));
+          return Scaffold(
+            body: Container(
+                height: MediaQuery.of(context).size.height,
+                width: double.infinity,
+                color: AppTheme.white,
+                child: SingleChildScrollView(
+                    child: Column(
+                  children: [
+                    state.isLoading
+                        ? const CircularProgressIndicator()
+                        : ProfileTabPage(),
+                    const PromoContainer(),
+                    const Footer()
+                  ],
+                ))),
+          );
         },
       ),
     );
@@ -52,7 +71,7 @@ class ProfileTabPage extends StatelessWidget {
     'Історія замовлень',
     'Адресна книга',
   ];
-  final List<Widget> tabPages = [
+  final List<Widget> tabPages = const [
     ProfileContactInfo(),
     ProfileHistoryOrder(),
     ProfileAdress(),
@@ -126,26 +145,42 @@ class ProfileTabPage extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   height: 600,
-                  child: Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SizedBox(
-                        height: 600,
-                        child: PageView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          controller: cubit.pageController,
-                          onPageChanged: (int page) {
-                            cubit.onChangePage(page);
-                          },
-                          itemCount: tabPages.length,
-                          itemBuilder: (context, index) {
-                            return tabPages[index % tabPages.length];
-                          },
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: SizedBox(
+                            height: 350,
+                            child: PageView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              controller: cubit.pageController,
+                              onPageChanged: (int page) {
+                                cubit.onChangePage(page);
+                              },
+                              itemCount: tabPages.length,
+                              itemBuilder: (context, index) {
+                                return tabPages[index % tabPages.length];
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    )
-                  ]),
+                        const SizedBox(height: 30),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 100),
+                          child: CustomButton(
+                            title: 'Зберегти',
+                            onTap: () {
+                              if (cubit.validateFields()) {
+                                cubit.editProfile();
+                                cubit.editPassword();
+                              }
+                            },
+                            buttonWidth: 200,
+                          ),
+                        )
+                      ]),
                 ),
               ),
             ],

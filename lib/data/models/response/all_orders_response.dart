@@ -19,28 +19,28 @@ class AllOrdersResponse {
 @JsonSerializable()
 class NetworkOrder {
   @JsonKey(name: '_id')
-  String id;
+  String? id;
   int cashAdvanceValue;
   NetworkNovaPost novaPost;
   NetworkCity city;
   String deliveryType;
   String status;
   String paymentType;
-  CreateNetworkClient client;
-  List<NetworkOrderedItemResponse> orderedItems;
+  // CreateNetworkClient? client;
+  // List<NetworkOrderedItemResponse> orderedItems;
   String createdAt;
   String updatedAt;
 
   NetworkOrder({
-    required this.id,
+     this.id,
     required this.cashAdvanceValue,
     required this.novaPost,
     required this.city,
     required this.deliveryType,
     required this.status,
     required this.paymentType,
-    required this.client,
-    required this.orderedItems,
+    // required this.client,
+    // required this.orderedItems,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -61,8 +61,8 @@ class CreateNetworkClient {
   String firstName;
   String secondName;
   String city;
-  List<String> orders;
-  CreateNetworkClient(this.id, this.city, this.firstName, this.mobileNumber,
+  List<String>? orders;
+  CreateNetworkClient( this.id, this.city, this.firstName, this.mobileNumber,
       this.secondName, this.orders);
 
   factory CreateNetworkClient.fromJson(Map<String, dynamic> json) =>

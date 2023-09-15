@@ -14,9 +14,13 @@ NetworkProfile _$NetworkProfileFromJson(Map<String, dynamic> json) =>
       firstName: json['firstName'] as String,
       secondName: json['secondName'] as String,
       mobileNumber: json['mobileNumber'] as String,
+      instagram: json['instagram'] as String,
       orders: (json['orders'] as List<dynamic>)
           .map((e) => NetworkOrder.fromJson(e as Map<String, dynamic>))
           .toList(),
+      city: NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
+      novaPost:
+          NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       role: json['role'] as String,
       password: json['password'] as String,
       id: json['id'] as String,
@@ -24,12 +28,15 @@ NetworkProfile _$NetworkProfileFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$NetworkProfileToJson(NetworkProfile instance) =>
     <String, dynamic>{
-      'favoriteProducts': instance.favoriteProducts,
       'firstName': instance.firstName,
       'secondName': instance.secondName,
       'mobileNumber': instance.mobileNumber,
+      'instagram': instance.instagram,
       'orders': instance.orders,
       'role': instance.role,
+      'favoriteProducts': instance.favoriteProducts,
+      'city': instance.city,
+      'novaPost': instance.novaPost,
       'password': instance.password,
       'id': instance.id,
     };

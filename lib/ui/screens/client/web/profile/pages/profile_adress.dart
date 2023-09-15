@@ -1,23 +1,67 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/client/profile/profile_cubit.dart';
+import 'package:moxy/ui/screens/client/web/checkout/search_city_dropdown.dart';
+import 'package:moxy/ui/screens/client/web/checkout/search_warehouse_dropdown.dart';
+
+import '../../../../../../domain/client/profile/profile_state.dart';
 
 class ProfileAdress extends StatelessWidget {
   const ProfileAdress({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 100,
-      padding:const EdgeInsets.all(AppTheme.cardPadding),
-      child: const Text(
-        'Адресна Книга',
-        style: TextStyle(
-          fontSize: 28,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w600,
-        ),
-      ),
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        final cubit = context.read<ProfileCubit>();
+        return SizedBox(
+          width: double.infinity,
+          height: 100,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Адресна Книга',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                const Text(
+                  'Місто',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SearchCityDropdown(
+                    selectedWarehouse: state.profile.warehouse,
+                    onChanged: (city) {
+                      cubit.selectCity(city);
+                    },
+                    selectedCity: state.profile.city),
+                const SizedBox(height: 30),
+                const Text(
+                  'Відділення',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SearchWarehouseDropdown(
+                    selectedWarehouse: state.profile.warehouse,
+                    onChanged: (warehouse) {
+                      cubit.selectWarehouse(warehouse);
+                    },
+                    selectedCity: state.profile.city),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
