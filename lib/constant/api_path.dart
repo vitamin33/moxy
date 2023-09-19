@@ -17,4 +17,5 @@ const String changeBasketUrl = '/basket/add-change';
 const String removeProductBasketUrl = '/basket/remove';
 const String getPromosUrl = '/promos';
 const String getProfileUrl = '/profile';
+const String getProfileOrdersUrl = '/profile/orders';
 const String allSellingProductsUrl = '/products/selling-products';

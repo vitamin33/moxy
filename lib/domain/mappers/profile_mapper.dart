@@ -1,6 +1,4 @@
-import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
-import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/data/models/response/profile_response.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
@@ -27,8 +25,7 @@ class ProfileMapper {
       firstName: networkProfile.firstName,
       secondName: networkProfile.secondName,
       mobileNumber: networkProfile.mobileNumber,
-      instagram: networkProfile.instagram,
-      orders: orderMapper.mapToOrderList(networkProfile.orders),
+      instagram: networkProfile.instagram ?? '',
       city: cityMapper.mapToCity(networkProfile.city) ?? City.defaultCity(),
       warehouse: warehouseMapper.mapToWarehouse(networkProfile.novaPost) ??
           Warehouse.defaultWarehouse(),
@@ -55,41 +52,6 @@ class ProfileMapper {
         secondName: profile.secondName,
         mobileNumber: profile.mobileNumber,
         instagram: profile.instagram,
-        orders: profile.orders
-            .map((e) => NetworkOrder(
-                id: e.id ?? '',
-                cashAdvanceValue: e.cashAdvanceValue,
-                novaPost: e.novaPost,
-                city: NetworkCity(
-                    deliveryCityRef: e.city.deliveryCityRef,
-                    ref: e.city.ref,
-                    presentName: e.city.presentName,
-                    mainDescription: e.city.mainDescription),
-                deliveryType: e.deliveryType.name,
-                status: e.status.statusTitle,
-                paymentType: e.paymentType.name,
-                // client: CreateNetworkClient(
-                //     e.client.id,
-                //     e.client.city,
-                //     e.client.firstName,
-                //     e.client.mobileNumber,
-                //     e.client.secondName,
-                //     []),
-                // orderedItems: e.orderedItems
-                //     .map((e) => NetworkOrderedItemResponse(
-                //         e.productId ?? '',
-                //         e.productName,
-                //         e.dimensions
-                //             .map((d) => NetworkDimension(
-                //                 color: d.color, quantity: d.quantity))
-                //             .toList(),
-                //         e.imageUrl,
-                //         int.parse(e.productPrice)))
-                //     .toList(),
-
-                createdAt: e.createdAt,
-                updatedAt: e.updatedAt))
-            .toList(),
         city: cityMapper.mapToNetworkCity(profile.city),
         novaPost: warehouseMapper.mapToNetworkNovaPost(profile.warehouse),
         role: '',

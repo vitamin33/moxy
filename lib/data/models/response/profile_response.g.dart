@@ -15,9 +15,6 @@ NetworkProfile _$NetworkProfileFromJson(Map<String, dynamic> json) =>
       secondName: json['secondName'] as String,
       mobileNumber: json['mobileNumber'] as String,
       instagram: json['instagram'] as String?,
-      orders: (json['orders'] as List<dynamic>)
-          .map((e) => NetworkOrder.fromJson(e as Map<String, dynamic>))
-          .toList(),
       city: json['city'] == null
           ? null
           : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
@@ -35,7 +32,6 @@ Map<String, dynamic> _$NetworkProfileToJson(NetworkProfile instance) =>
       'secondName': instance.secondName,
       'mobileNumber': instance.mobileNumber,
       'instagram': instance.instagram,
-      'orders': instance.orders,
       'role': instance.role,
       'favoriteProducts': instance.favoriteProducts,
       'city': instance.city,

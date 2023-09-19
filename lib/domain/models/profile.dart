@@ -1,4 +1,3 @@
-import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 
@@ -11,7 +10,6 @@ class Profile {
   final String secondName;
   final String mobileNumber;
   final String? instagram;
-  final List<Order> orders;
   final City city;
   final Warehouse warehouse;
 
@@ -22,7 +20,6 @@ class Profile {
     required this.secondName,
     required this.mobileNumber,
     required this.instagram,
-    required this.orders,
     required this.city,
     required this.warehouse,
   });
@@ -35,7 +32,6 @@ class Profile {
       secondName: '',
       mobileNumber: '',
       instagram: '',
-      orders: [],
       city: City.defaultCity(),
       warehouse: Warehouse.defaultWarehouse(),
     );
@@ -48,7 +44,6 @@ class Profile {
     String? secondName,
     String? mobileNumber,
     String? instagram,
-    List<Order>? orders,
     City? city,
     Warehouse? warehouse,
   }) {
@@ -59,7 +54,6 @@ class Profile {
       secondName: secondName ?? this.secondName,
       mobileNumber: mobileNumber ?? this.mobileNumber,
       instagram: instagram ?? this.instagram,
-      orders: orders ?? this.orders,
       city: city ?? this.city,
       warehouse: warehouse ?? this.warehouse,
     );

@@ -54,8 +54,8 @@ class GetItService {
     getIt.registerSingleton<FooterRepository>(FooterRepository());
     getIt.registerSingleton<PromoRepository>(PromoRepository());
     getIt.registerSingleton<BasketRepository>(BasketRepository());
-    getIt.registerSingleton<ProfileRepository>(ProfileRepository());
     getIt.registerSingleton<ProfileMapper>(ProfileMapper());
+    getIt.registerSingleton<ProfileRepository>(ProfileRepository());
   }
 }
 

@@ -409,6 +409,17 @@ class DioClient {
     }
   }
 
+  Future<ProfileOrdersResponse> getProfileOrders() async {
+    try {
+      final response = await dio.get('$baseUrl $getProfileOrdersUrl');
+      final data = response.data;
+      final orderList = ProfileOrdersResponse.fromJson(data);
+      return orderList;
+    } catch (e) {
+      throw Exception('Failed to load profile order history: $e');
+    }
+  }
+
   //NEW PRODUCT SELLING LIST
 
   Future<List<NetworkProduct>> getSellingProducts() async {
@@ -441,8 +452,7 @@ class DioClient {
 
 // EDIT USER
 
-  Future<Result<Headers, Exception>> editUser(
-      NetworkProfileUser user) async {
+  Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
     final Headers? result;
 
     try {
@@ -459,9 +469,9 @@ class DioClient {
     return Result.success(result);
   }
 
-  Future<Result<Headers, Exception>> editUserPassword(NetworkPasswordUser password
-      ) async {
-    final Headers  result;
+  Future<Result<Headers, Exception>> editUserPassword(
+      NetworkPasswordUser password) async {
+    final Headers result;
 
     try {
       Response response = await dio.post(

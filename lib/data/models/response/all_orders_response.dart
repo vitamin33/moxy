@@ -1,6 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/data/models/response/all_products_response.dart';
 
 part 'all_orders_response.g.dart';
 
@@ -17,6 +18,18 @@ class AllOrdersResponse {
 }
 
 @JsonSerializable()
+class ProfileOrdersResponse {
+  List<NetworkProfileOrder>? profileOrders;
+
+  ProfileOrdersResponse(this.profileOrders);
+
+  factory ProfileOrdersResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProfileOrdersResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProfileOrdersResponseToJson(this);
+}
+
+@JsonSerializable()
 class NetworkOrder {
   @JsonKey(name: '_id')
   String? id;
@@ -26,21 +39,21 @@ class NetworkOrder {
   String deliveryType;
   String status;
   String paymentType;
-  // CreateNetworkClient? client;
-  // List<NetworkOrderedItemResponse> orderedItems;
+  CreateNetworkClient client;
+  List<NetworkOrderedItemResponse> orderedItems;
   String createdAt;
   String updatedAt;
 
   NetworkOrder({
-     this.id,
+    this.id,
     required this.cashAdvanceValue,
     required this.novaPost,
     required this.city,
     required this.deliveryType,
     required this.status,
     required this.paymentType,
-    // required this.client,
-    // required this.orderedItems,
+    required this.client,
+    required this.orderedItems,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -54,6 +67,43 @@ class NetworkOrder {
 }
 
 @JsonSerializable()
+class NetworkProfileOrder {
+  @JsonKey(name: '_id')
+  String? id;
+  int cashAdvanceValue;
+  NetworkNovaPost? novaPost;
+  NetworkCity? city;
+  String deliveryType;
+  String status;
+  String paymentType;
+  List<NetworkOrderedProductResponse> orderedItems;
+  String? client;
+  String createdAt;
+  String updatedAt;
+
+  NetworkProfileOrder({
+    this.id,
+    required this.cashAdvanceValue,
+    required this.novaPost,
+    required this.city,
+    required this.deliveryType,
+    required this.status,
+    required this.paymentType,
+    required this.client,
+    required this.orderedItems,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory NetworkProfileOrder.fromJson(Map<String, dynamic> json) =>
+      _$NetworkProfileOrderFromJson(json);
+
+  get ukrPostNumber => null;
+
+  Map<String, dynamic> toJson() => _$NetworkProfileOrderToJson(this);
+}
+
+@JsonSerializable()
 class CreateNetworkClient {
   @JsonKey(name: '_id')
   String? id;
@@ -62,7 +112,7 @@ class CreateNetworkClient {
   String secondName;
   String city;
   List<String>? orders;
-  CreateNetworkClient( this.id, this.city, this.firstName, this.mobileNumber,
+  CreateNetworkClient(this.id, this.city, this.firstName, this.mobileNumber,
       this.secondName, this.orders);
 
   factory CreateNetworkClient.fromJson(Map<String, dynamic> json) =>
@@ -93,7 +143,7 @@ class NetworkClient {
 @JsonSerializable()
 class NetworkOrderedItemResponse {
   String product;
-  String productName;
+  String? productName;
   String? imageUrl;
   int? productPrice;
   List<NetworkDimension> dimensions;
@@ -102,4 +152,17 @@ class NetworkOrderedItemResponse {
 
   factory NetworkOrderedItemResponse.fromJson(Map<String, dynamic> json) =>
       _$NetworkOrderedItemResponseFromJson(json);
+}
+
+@JsonSerializable()
+class NetworkOrderedProductResponse {
+  NetworkProduct product;
+  List<NetworkDimension> dimensions;
+  NetworkOrderedProductResponse(
+    this.product,
+    this.dimensions,
+  );
+
+  factory NetworkOrderedProductResponse.fromJson(Map<String, dynamic> json) =>
+      _$NetworkOrderedProductResponseFromJson(json);
 }

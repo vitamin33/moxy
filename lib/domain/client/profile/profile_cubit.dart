@@ -24,6 +24,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
 
   ProfileCubit() : super(ProfileState.defaultState()) {
     getProfile();
+    getProfileOrders();
     firstnameController = TextEditingController(text: state.profile.firstName);
     secondnameController =
         TextEditingController(text: state.profile.secondName);
@@ -50,14 +51,28 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
       emit(state.copyWith(isLoading: true));
       final result = await profileRepository.getProfile();
       result.when((success) {
-        final profile = profileMapper.mapToProfile(success);
-        firstnameController.text = profile.firstName;
-        secondnameController.text = profile.secondName;
-        mobileNumberController.text = profile.mobileNumber;
-        emit(state.copyWith(profile: profile, isLoading: false));
+        firstnameController.text = success.firstName;
+        secondnameController.text = success.secondName;
+        mobileNumberController.text = success.mobileNumber;
+        emit(state.copyWith(profile: success, isLoading: false));
       }, (error) {
         emit(state.copyWith(
-            errorMessage: 'Failed getProfile: ${error.toString()}'));
+            errorMessage: 'Failed get profile: ${error.toString()}'));
+      });
+    } catch (e) {
+      moxyPrint('$e');
+    }
+  }
+
+  void getProfileOrders() async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final result = await profileRepository.getProfileOrders();
+      result.when((success) {
+        emit(state.copyWith(historyOrders: success, isLoading: false));
+      }, (error) {
+        emit(state.copyWith(
+            errorMessage: 'Failed get profile orders ${error.toString()}'));
       });
     } catch (e) {
       moxyPrint('$e');
@@ -151,8 +166,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   }
 
   void editPassword() async {
-    if (newPasswordController.text == repeatNewPasswordController.text &&
-        oldPasswordController.text.isNotEmpty) {
+    if (oldPasswordController.text.isNotEmpty) {
       try {
         final result = await authRepository.editUserPassword(state.password);
         result.when((success) {

@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 
 import '../request/create_order_request.dart';
@@ -12,7 +11,6 @@ class NetworkProfile {
   String secondName;
   String mobileNumber;
   String? instagram;
-  List<NetworkOrder> orders;
   String role;
   List<NetworkProduct> favoriteProducts;
   NetworkCity? city;
@@ -26,7 +24,6 @@ class NetworkProfile {
     required this.secondName,
     required this.mobileNumber,
     required this.instagram,
-    required this.orders,
     required this.city,
     required this.novaPost,
     required this.role,
