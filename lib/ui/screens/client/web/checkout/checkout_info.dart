@@ -5,6 +5,7 @@ import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
+import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/ui/components/rounded_text.dart';
 import 'package:moxy/ui/screens/client/web/checkout/search_city_dropdown.dart';
 import 'package:moxy/ui/screens/client/web/checkout/search_warehouse_dropdown.dart';
@@ -50,29 +51,29 @@ class CheckoutInfo extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ContactTextField(
-              labelText: 'First Name',
-              controller: cubit.firstNameController,
-              onChanged: cubit.firstNameChanged,
-            ),
+                labelText: 'First Name',
+                controller: cubit.firstNameController,
+                onChanged: cubit.firstNameChanged,
+                hasError: state.errors.firstName != null),
           ),
           const SizedBox(width: 20),
           Expanded(
             flex: 1,
             child: ContactTextField(
-              labelText: 'Second Name',
-              controller: cubit.secondNameController,
-              onChanged: cubit.secondNameChanged,
-            ),
+                labelText: 'Second Name',
+                controller: cubit.secondNameController,
+                onChanged: cubit.secondNameChanged,
+                hasError: state.errors.secondName != null),
           ),
         ],
       ),
       const SizedBox(height: 30),
       ContactTextField(
-        labelText: 'Phone Number',
-        prefixText: '+38',
-        controller: cubit.phoneNumberController,
-        onChanged: cubit.phoneNumberChanged,
-      ),
+          labelText: 'Phone Number',
+          prefixText: '+38',
+          controller: cubit.phoneNumberController,
+          onChanged: cubit.phoneNumberChanged,
+          hasError: state.errors.phoneNumber != null),
       const SizedBox(
         height: 30,
       ),
@@ -194,6 +195,14 @@ class CheckoutInfo extends StatelessWidget {
       return PaymentType.fullPayment;
     } else {
       return PaymentType.cashAdvance;
+    }
+  }
+
+  String? _validatorForTextField(FieldError? errorField, String errorMessage) {
+    if (errorField != null) {
+      return errorMessage;
+    } else {
+      return null;
     }
   }
 }
