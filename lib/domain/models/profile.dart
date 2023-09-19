@@ -10,7 +10,7 @@ class Profile {
   final String firstName;
   final String secondName;
   final String mobileNumber;
-  final String instagram;
+  final String? instagram;
   final List<Order> orders;
   final City city;
   final Warehouse warehouse;
@@ -29,16 +29,16 @@ class Profile {
 
   static Profile defaultProfile() {
     return Profile(
-        favoriteProducts: [],
-        id: '',
-        firstName: '',
-        secondName: '',
-        mobileNumber: '',
-        instagram: '',
-        orders: [],
-        city: City.defaultCity(),
-        warehouse: Warehouse.defaultWarehouse(),
-        );
+      favoriteProducts: [],
+      id: '',
+      firstName: '',
+      secondName: '',
+      mobileNumber: '',
+      instagram: '',
+      orders: [],
+      city: City.defaultCity(),
+      warehouse: Warehouse.defaultWarehouse(),
+    );
   }
 
   Profile copyWith({

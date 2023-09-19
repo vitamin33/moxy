@@ -11,12 +11,12 @@ class NetworkProfile {
   String firstName;
   String secondName;
   String mobileNumber;
-  String instagram;
+  String? instagram;
   List<NetworkOrder> orders;
   String role;
   List<NetworkProduct> favoriteProducts;
-  NetworkCity city;
-  NetworkNovaPost novaPost;
+  NetworkCity? city;
+  NetworkNovaPost? novaPost;
   String password;
   String id;
 

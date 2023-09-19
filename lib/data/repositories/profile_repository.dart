@@ -10,7 +10,7 @@ class ProfileRepository {
 
   Future<Result<NetworkProfile, Exception>> getProfile() async {
     try {
-      final result =await client.getProfile();
+      final result = await client.getProfile();
       return Result.success(result);
     } catch (e) {
       return Result.error(Exception('$e'));

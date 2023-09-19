@@ -56,7 +56,8 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
         mobileNumberController.text = profile.mobileNumber;
         emit(state.copyWith(profile: profile, isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
+        emit(state.copyWith(
+            errorMessage: 'Failed getProfile: ${error.toString()}'));
       });
     } catch (e) {
       moxyPrint('$e');
@@ -127,15 +128,16 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   void editProfile() async {
     try {
       final networkUser = userMapper.mapToNetworkProfileUser(
-          User(
-              id: state.profile.id,
-              firstName: state.profile.firstName,
-              secondName: state.profile.secondName,
-              mobileNumber: state.profile.mobileNumber,
-              city: state.profile.city.presentName,
-              instagram: ''),
-          state.profile.city,
-          state.profile.warehouse);
+        User(
+            id: state.profile.id,
+            firstName: state.profile.firstName,
+            secondName: state.profile.secondName,
+            mobileNumber: state.profile.mobileNumber,
+            city: state.profile.city.presentName,
+            instagram: ''),
+        state.profile.city,
+        state.profile.warehouse,
+      );
 
       final result = await authRepository.editUser(networkUser);
       result.when((success) {

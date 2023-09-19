@@ -1,3 +1,5 @@
+import 'package:moxy/data/models/request/create_order_request.dart';
+
 import '../../data/models/response/nova_network.dart';
 import '../models/city.dart';
 
@@ -13,5 +15,29 @@ class CityMapper {
           ),
         )
         .toList();
+  }
+
+  NetworkCity? mapToNetworkCity(City? city) {
+    if (city == null) {
+      return null;
+    }
+    return NetworkCity(
+      ref: city.ref,
+      mainDescription: city.mainDescription,
+      deliveryCityRef: city.deliveryCityRef,
+      presentName: city.presentName,
+    );
+  }
+
+  City? mapToCity(NetworkCity? city) {
+    if (city == null) {
+      return null;
+    }
+    return City(
+      mainDescription: city.mainDescription!,
+      ref: city.ref!,
+      deliveryCityRef: city.deliveryCityRef!,
+      presentName: city.presentName!,
+    );
   }
 }

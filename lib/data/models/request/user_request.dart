@@ -33,8 +33,8 @@ class NetworkProfileUser {
   final String? firstName;
   final String? secondName;
   final String mobileNumber;
-  final  NetworkCity city;
-  final  NetworkNovaPost novaPost;
+  final NetworkCity? city;
+  final NetworkNovaPost? novaPost;
   final String? instagram;
 
   NetworkProfileUser({
@@ -57,7 +57,6 @@ class NetworkProfileUser {
 class NetworkPasswordUser {
   final String? oldPassword;
   final String? newPassword;
-  
 
   NetworkPasswordUser({
     required this.oldPassword,

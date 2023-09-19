@@ -14,13 +14,16 @@ NetworkProfile _$NetworkProfileFromJson(Map<String, dynamic> json) =>
       firstName: json['firstName'] as String,
       secondName: json['secondName'] as String,
       mobileNumber: json['mobileNumber'] as String,
-      instagram: json['instagram'] as String,
+      instagram: json['instagram'] as String?,
       orders: (json['orders'] as List<dynamic>)
           .map((e) => NetworkOrder.fromJson(e as Map<String, dynamic>))
           .toList(),
-      city: NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
-      novaPost:
-          NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
+      city: json['city'] == null
+          ? null
+          : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
+      novaPost: json['novaPost'] == null
+          ? null
+          : NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       role: json['role'] as String,
       password: json['password'] as String,
       id: json['id'] as String,

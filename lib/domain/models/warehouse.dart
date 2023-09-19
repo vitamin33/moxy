@@ -2,7 +2,7 @@ import '../copyable.dart';
 
 class Warehouse implements Copyable<Warehouse> {
   final String ref;
-  final String postMachineType;
+  final String? postMachineType;
   final String description;
   final int number;
 

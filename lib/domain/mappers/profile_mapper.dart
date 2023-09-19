@@ -3,6 +3,7 @@ import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/data/models/response/profile_response.dart';
+import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
@@ -15,28 +16,23 @@ import '../models/profile.dart';
 class ProfileMapper {
   final productMapper = locate<ProductMapper>();
   final orderMapper = locate<OrderMapper>();
+  final cityMapper = locate<CityMapper>();
   final warehouseMapper = locate<WarehouseMapper>();
 
   Profile mapToProfile(NetworkProfile networkProfile) {
     return Profile(
-        favoriteProducts:
-            productMapper.mapToProductList(networkProfile.favoriteProducts),
-            id: networkProfile.id,
-        firstName: networkProfile.firstName,
-        secondName: networkProfile.secondName,
-        mobileNumber: networkProfile.mobileNumber,
-        instagram: networkProfile.instagram,
-        orders: orderMapper.mapToOrderList(networkProfile.orders),
-        city: City(
-            mainDescription: networkProfile.city.mainDescription ?? '',
-            ref: networkProfile.city.ref ?? '',
-            deliveryCityRef: networkProfile.city.deliveryCityRef ?? '',
-            presentName: networkProfile.city.presentName ?? ''),
-        warehouse: Warehouse(
-            description: networkProfile.novaPost.presentName,
-            ref: networkProfile.novaPost.ref,
-            postMachineType: networkProfile.novaPost.postMachineType ?? '',
-            number: networkProfile.novaPost.number));
+      favoriteProducts:
+          productMapper.mapToProductList(networkProfile.favoriteProducts),
+      id: networkProfile.id,
+      firstName: networkProfile.firstName,
+      secondName: networkProfile.secondName,
+      mobileNumber: networkProfile.mobileNumber,
+      instagram: networkProfile.instagram,
+      orders: orderMapper.mapToOrderList(networkProfile.orders),
+      city: cityMapper.mapToCity(networkProfile.city) ?? City.defaultCity(),
+      warehouse: warehouseMapper.mapToWarehouse(networkProfile.novaPost) ??
+          Warehouse.defaultWarehouse(),
+    );
   }
 
   NetworkProfile mapToNetworkProfile(Profile profile) {
@@ -90,19 +86,12 @@ class ProfileMapper {
                 //         e.imageUrl,
                 //         int.parse(e.productPrice)))
                 //     .toList(),
-                
+
                 createdAt: e.createdAt,
                 updatedAt: e.updatedAt))
             .toList(),
-        city: NetworkCity(
-            ref: profile.city.ref,
-            mainDescription: profile.city.mainDescription,
-            deliveryCityRef: profile.city.deliveryCityRef,
-            presentName: profile.city.presentName),
-        novaPost: NetworkNovaPost(
-            ref: profile.warehouse.ref,
-            presentName: profile.warehouse.description,
-            number: profile.warehouse.number),
+        city: cityMapper.mapToNetworkCity(profile.city),
+        novaPost: warehouseMapper.mapToNetworkNovaPost(profile.warehouse),
         role: '',
         password: '',
         id: '');

@@ -5,8 +5,8 @@ class User implements Copyable<User> {
   String firstName;
   String secondName;
   String mobileNumber;
-  String city;
-  String instagram;
+  String? city;
+  String? instagram;
 
   User({
     this.id,

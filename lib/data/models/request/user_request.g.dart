@@ -31,9 +31,12 @@ NetworkProfileUser _$NetworkProfileUserFromJson(Map<String, dynamic> json) =>
       firstName: json['firstName'] as String?,
       secondName: json['secondName'] as String?,
       mobileNumber: json['mobileNumber'] as String,
-      city: NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
-      novaPost:
-          NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
+      city: json['city'] == null
+          ? null
+          : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
+      novaPost: json['novaPost'] == null
+          ? null
+          : NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       instagram: json['instagram'] as String?,
     );
 
