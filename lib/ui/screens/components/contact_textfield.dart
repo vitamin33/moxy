@@ -7,6 +7,7 @@ class ContactTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final FormFieldValidator<String>? validator;
   final ValueChanged<String>? onChanged;
+  final bool hasError;
 
   const ContactTextField({
     required this.labelText,
@@ -15,6 +16,7 @@ class ContactTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.onChanged,
+    required this.hasError,
   });
 
   @override
@@ -26,6 +28,11 @@ class ContactTextField extends StatelessWidget {
         labelText: labelText,
         prefixText: prefixText,
         border: OutlineInputBorder(
+          borderSide: hasError
+              ? const BorderSide(
+                  color: Colors.red,
+                )
+              : const BorderSide(),
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),

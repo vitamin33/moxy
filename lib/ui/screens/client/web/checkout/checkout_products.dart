@@ -92,7 +92,7 @@ class CheckoutProducts extends StatelessWidget {
       const SizedBox(height: 32),
       ElevatedButton(
         onPressed: () {
-          // Add your onPressed logic here
+          cubit.clickCheckout();
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppTheme.textColor, // Background color
