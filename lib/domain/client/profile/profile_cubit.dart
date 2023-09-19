@@ -56,8 +56,8 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
         mobileNumberController.text = success.mobileNumber;
         emit(state.copyWith(profile: success, isLoading: false));
       }, (error) {
-        emit(state.copyWith(
-            errorMessage: 'Failed get profile: ${error.toString()}'));
+        emitEffect(
+            ProfileApiRequestFailed('Failed get profile ${error.toString()}'));
       });
     } catch (e) {
       moxyPrint('$e');
@@ -71,24 +71,12 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
       result.when((success) {
         emit(state.copyWith(historyOrders: success, isLoading: false));
       }, (error) {
-        emit(state.copyWith(
-            errorMessage: 'Failed get profile orders ${error.toString()}'));
+        emitEffect(ProfileApiRequestFailed(
+            'Failed  get profile orders ${error.toString()}'));
       });
     } catch (e) {
       moxyPrint('$e');
     }
-  }
-
-  void clearErrorState() {
-    emit(state.copyWith(errorMessage: ''));
-  }
-
-  void clearSuccesState() {
-    emit(state.copyWith(successMessage: ''));
-  }
-
-  void passwordEqualError() {
-    emit(state.copyWith(errorMessage: 'password not Equal'));
   }
 
   void firstNameChanged(value) {
@@ -156,9 +144,9 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
 
       final result = await authRepository.editUser(networkUser);
       result.when((success) {
-        emit(state.copyWith(successMessage: 'Success edit profile'));
+        emitEffect(ProfileSuccess('Success edit profile'));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed edit profile'));
+        emitEffect(ProfileApiRequestFailed('Failed edit profile'));
       });
     } catch (e) {
       moxyPrint('$e');
@@ -173,11 +161,11 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
           newPasswordController.text = '';
           oldPasswordController.text = '';
           repeatNewPasswordController.text = '';
+          emitEffect(ProfileSuccess('Success edit profile password'));
           emit(state.copyWith(
-              successMessage: 'Success edit profile password',
               password: ProfilePassword.defaultProfilePassword()));
         }, (error) {
-          emit(state.copyWith(errorMessage: 'Failed edit profile password'));
+          emitEffect(ProfileApiRequestFailed('Failed edit profile password'));
         });
       } catch (e) {
         moxyPrint('$e');
@@ -186,7 +174,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   }
 
   bool validateFields() {
-    final errors = FieldErrors.noErrors();
+    final errors = ProfileFieldErrors.noErrors();
     var noErrors = true;
     if (isFieldEmpty(state.profile.firstName)) {
       errors.firstName = FieldError.empty;
@@ -206,7 +194,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
       noErrors = false;
     }
     if (!noErrors) {
-      emitEffect(ValidationFailed(errors.formErrorMessageFields()));
+      emitEffect(ProfileValidationFailed(errors.formErrorMessageFields()));
     }
     emit(state.copyWith(errors: errors));
     return noErrors;

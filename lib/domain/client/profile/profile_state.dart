@@ -9,20 +9,16 @@ class ProfileState implements Copyable<ProfileState> {
   final int activePage;
   final Profile profile;
   final List<Order> historyOrders;
-  final String errorMessage;
-  final String successMessage;
   final ProfilePassword password;
 
   // Field errors
-  final FieldErrors errors;
+  final ProfileFieldErrors errors;
 
   ProfileState({
     required this.isLoading,
     required this.activePage,
     required this.profile,
     required this.historyOrders,
-    required this.errorMessage,
-    required this.successMessage,
     required this.password,
     required this.errors,
   });
@@ -33,10 +29,8 @@ class ProfileState implements Copyable<ProfileState> {
         activePage: 0,
         profile: Profile.defaultProfile(),
         historyOrders: [],
-        errorMessage: '',
-        successMessage: '',
         password: ProfilePassword.defaultProfilePassword(),
-        errors: FieldErrors());
+        errors: ProfileFieldErrors.noErrors());
   }
 
   @override
@@ -45,25 +39,21 @@ class ProfileState implements Copyable<ProfileState> {
     int? activePage,
     Profile? profile,
     List<Order>? historyOrders,
-    String? errorMessage,
-    String? successMessage,
     ProfilePassword? password,
-    FieldErrors? errors,
+    ProfileFieldErrors? errors,
   }) {
     return ProfileState(
       isLoading: isLoading ?? this.isLoading,
       activePage: activePage ?? this.activePage,
       profile: profile ?? this.profile,
       historyOrders: historyOrders ?? this.historyOrders,
-      errorMessage: errorMessage ?? this.errorMessage,
-      successMessage: successMessage ?? this.successMessage,
       password: password ?? this.password,
       errors: errors ?? this.errors,
     );
   }
 }
 
-class FieldErrors {
+class ProfileFieldErrors {
   FieldError? firstName;
   FieldError? secondName;
   FieldError? phoneNumber;
@@ -71,7 +61,7 @@ class FieldErrors {
   FieldError? newPassword;
   FieldError? reapeatNewPassword;
 
-  FieldErrors({
+  ProfileFieldErrors({
     this.firstName,
     this.secondName,
     this.phoneNumber,
@@ -80,8 +70,8 @@ class FieldErrors {
     this.reapeatNewPassword,
   });
 
-  static FieldErrors noErrors() {
-    return FieldErrors();
+  static ProfileFieldErrors noErrors() {
+    return ProfileFieldErrors();
   }
 
   String formErrorMessageFields() {

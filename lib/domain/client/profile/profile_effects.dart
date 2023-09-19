@@ -1,6 +1,16 @@
 import '../../ui_effect.dart';
 
-class ValidationFailed implements UiEffect {
+class ProfileValidationFailed implements UiEffect {
   String failureText;
-  ValidationFailed(this.failureText);
+  ProfileValidationFailed(this.failureText);
+}
+
+class ProfileSuccess implements UiEffect {
+   String successText;
+   ProfileSuccess(this.successText);
+}
+
+class ProfileApiRequestFailed implements UiEffect {
+  String failureText;
+  ProfileApiRequestFailed(this.failureText);
 }

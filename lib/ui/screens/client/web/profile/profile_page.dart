@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
+import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
@@ -30,19 +31,23 @@ class ProfilePage extends StatelessWidget {
           create: (BuildContext context) => SearchWarehouseCubit(),
         ),
       ],
-      child: BlocConsumer<ProfileCubit, ProfileState>(
-        listener: (context, state) {
-          if (state.errorMessage != '') {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenFailure(snackBarFailureText: state.errorMessage));
-            context.read<ProfileCubit>().clearErrorState();
-          } else if (state.successMessage != '') {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenSuccess(snackBarSuccessText: state.successMessage));
-            context.read<ProfileCubit>().clearSuccesState();
-          }
-        },
+      child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
+          final ProfileCubit cubit = context.read<ProfileCubit>();
+          cubit.effectStream.listen((effect) {
+            if (effect is ProfileApiRequestFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarWhenFailure(snackBarFailureText: effect.failureText));
+            }
+            if (effect is ProfileSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
+                  snackBarSuccessText: effect.successText));
+            }
+            if (effect is ProfileValidationFailed) {
+              ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+                  snackBarFailureText: 'Wrong input, please check fields.'));
+            }
+          });
           return Scaffold(
             body: Container(
                 height: MediaQuery.of(context).size.height,

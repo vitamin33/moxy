@@ -21,8 +21,9 @@ class CreateUserPage extends StatelessWidget {
     final CreateUserCubit cubit = CreateUserCubit();
     cubit.effectStream.listen((effect) {
       if (effect is DataParseFailed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            snackBarWhenFailure(snackBarFailureText: AppLocalizations.of(context)!.unableToParseData));
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                AppLocalizations.of(context)!.unableToParseData));
       }
       if (effect is ApiRequestFailed) {
         ScaffoldMessenger.of(context).showSnackBar(
