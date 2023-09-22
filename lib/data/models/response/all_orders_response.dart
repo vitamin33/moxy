@@ -77,13 +77,14 @@ class NetworkClient {
   String mobileNumber;
   String firstName;
   String secondName;
-  String city;
-  NetworkClient(
-      {this.id,
-      required this.city,
-      required this.firstName,
-      required this.mobileNumber,
-      required this.secondName});
+  NetworkCity city;
+  NetworkClient({
+    this.id,
+    required this.city,
+    required this.firstName,
+    required this.mobileNumber,
+    required this.secondName,
+  });
 
   factory NetworkClient.fromJson(Map<String, dynamic> json) =>
       _$NetworkClientFromJson(json);

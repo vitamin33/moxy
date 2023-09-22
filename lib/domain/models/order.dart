@@ -85,7 +85,7 @@ class Client {
   String mobileNumber;
   String firstName;
   String secondName;
-  String city;
+  City city;
 
   Client(
       {String? id,
@@ -98,7 +98,12 @@ class Client {
 
   static Client defaultClient() {
     return Client(
-        id: '', mobileNumber: '', firstName: '', secondName: '', city: 'Lviv');
+      id: '',
+      mobileNumber: '',
+      firstName: '',
+      secondName: '',
+      city: City.defaultCity(),
+    );
   }
 
   Client copyWith(
@@ -106,7 +111,7 @@ class Client {
       String? mobileNumber,
       String? firstName,
       String? secondName,
-      String? city}) {
+      City? city}) {
     return Client(
       id: id ?? this._id,
       mobileNumber: mobileNumber ?? this.mobileNumber,

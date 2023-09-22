@@ -42,8 +42,8 @@ class DioClient {
     // Set default configs
     dio.options.baseUrl = baseUrl;
 
-    dio.options.connectTimeout = Duration(seconds: 10); //10s
-    dio.options.receiveTimeout = Duration(seconds: 10);
+    dio.options.connectTimeout = Duration(seconds: 15); //15s
+    dio.options.receiveTimeout = Duration(seconds: 15);
 
     // customization
     dio.interceptors.add(PrettyDioLogger(
@@ -231,7 +231,7 @@ class DioClient {
 
   Future<List<NetworkOrder>> allOrders() async {
     try {
-      final response = await dio.get('$baseUrl/orders');
+      final response = await dio.get('$baseUrl$allOrdersUrl');
       final data = response.data;
       final orderList = <NetworkOrder>[];
       for (var value in (data as List)) {
