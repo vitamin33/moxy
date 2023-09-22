@@ -6,116 +6,100 @@ import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';
 import '../../../../components/search_textfield.dart';
-import '../../../../components/snackbar_widgets.dart';
 import '../../../../../constant/icon_path.dart';
-import '../../../../../domain/admin/create_product/create_product_cubit.dart';
 import '../../../../../domain/models/product.dart';
 import '../../../../../domain/admin/order_product_list/order_product_list_cubit.dart';
 import '../../../../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrderProductList extends StatelessWidget {
-  const OrderProductList({Key? key});
+  final OrderProductListState state;
+  final OrderProductListCubit cubit;
+  const OrderProductList({
+    Key? key,
+    required this.state,
+    required this.cubit,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OrderProductListCubit>(
-        create: (BuildContext context) => OrderProductListCubit(
-              OrderProductListState.defaultAllProductsState(),
-            ),
-        child: BlocConsumer<OrderProductListCubit, OrderProductListState>(
-          listener: (context, state) {
-            if (state.errorMessage != '') {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  snackBarWhenFailure(snackBarFailureText: 'Failed'));
-              context.read<CreateProductCubit>().clearErrorState();
-            }
-          },
-          builder: (context, state) {
-            final cubit = context.read<OrderProductListCubit>();
-            return Scaffold(
-              body: Material(
-                color: AppTheme.pink,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: SearchTextfield(
-                          title: AppLocalizations.of(context)!.search,
-                        ),
-                      ),
-                      Expanded(
-                          child: state.isLoading
-                              ? const Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: state.productsByDimension.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    final dimenProduct = state
-                                        .productsByDimension
-                                        .elementAt(index);
-
-                                    return Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: InkWell(
-                                        onTap: () {
-                                          cubit.toggleProductSelection(index);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: dimenProduct.isSelected
-                                                  ? Colors.black
-                                                  : Colors.transparent,
-                                              width: 2.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: _listTile(
-                                            state,
-                                            dimenProduct,
-                                            cubit,
-                                            index,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )),
-                      CustomButton(
-                        title: AppLocalizations.of(context)!.choose,
-                        onTap: () {
-                          final isEditFrom = (context
-                                  .read<AdminHomeRouterCubit>()
-                                  .state as OrderProductListPageState)
-                              .isFromEdit;
-                          cubit.productsSelected();
-
-                          if (isEditFrom) {
-                            context
-                                .read<AdminHomeRouterCubit>()
-                                .navigateTo(const EditOrderPageState());
-                          } else {
-                            context.read<AdminHomeRouterCubit>().navigateTo(
-                                  const CreateOrderPageState(),
-                                );
-                          }
-                        },
-                        buttonWidth: MediaQuery.of(context).size.width - 90,
-                      )
-                    ],
-                  ),
+    return Scaffold(
+      body: Material(
+        color: AppTheme.pink,
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: SearchTextfield(
+                  title: AppLocalizations.of(context)!.search,
                 ),
               ),
-            );
-          },
-        ));
+              Expanded(
+                  child: state.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.productsByDimension.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final dimenProduct =
+                                state.productsByDimension.elementAt(index);
+
+                            return Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: InkWell(
+                                onTap: () {
+                                  cubit.toggleProductSelection(index);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: dimenProduct.isSelected
+                                          ? Colors.black
+                                          : Colors.transparent,
+                                      width: 2.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: _listTile(
+                                    state,
+                                    dimenProduct,
+                                    cubit,
+                                    index,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        )),
+              CustomButton(
+                title: AppLocalizations.of(context)!.choose,
+                onTap: () {
+                  final isEditFrom = (context.read<AdminHomeRouterCubit>().state
+                          as OrderProductListPageState)
+                      .isFromEdit;
+                  cubit.productsSelected();
+
+                  if (isEditFrom) {
+                    context
+                        .read<AdminHomeRouterCubit>()
+                        .navigateTo(const EditOrderPageState());
+                  } else {
+                    context.read<AdminHomeRouterCubit>().navigateTo(
+                          const CreateOrderPageState(),
+                        );
+                  }
+                },
+                buttonWidth: MediaQuery.of(context).size.width - 90,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

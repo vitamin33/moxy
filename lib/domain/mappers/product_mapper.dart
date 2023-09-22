@@ -194,4 +194,94 @@ class ProductMapper {
 
     return finalList;
   }
+
+  List<DimensionProduct> mapToGroupProductsByDimension(
+      List<Product> allProducts, List<OrderedItem> selectedItems) {
+    final productsByDimension = <DimensionProduct>[];
+
+    for (final product in allProducts) {
+      final productName = product.name;
+      final productDescription = product.description;
+      final productCostPrice = product.costPrice;
+      final productSalePrice = product.salePrice;
+      final productIdName = product.idName;
+      List<ImagePath> productImages = product.images;
+      ImagePath? path = productImages.isNotEmpty ? productImages.first : null;
+
+      for (final dimension in product.dimensions) {
+        final color = dimension.color;
+        final quantity = dimension.quantity;
+
+        final newDimension =
+            Dimension(color: color, quantity: quantity, image: dimension.image);
+        int selectedQuantity = 1;
+        bool isSelected = selectedItems.any((element) {
+          bool isDimenSelected =
+              element.dimensions.any((d) => d.color == color);
+          return element.productId == product.id && isDimenSelected;
+        });
+        if (isSelected) {
+          final selectedItem = selectedItems
+              .firstWhere((element) => element.productId == product.id);
+
+          final selectedDimension = selectedItem.dimensions
+              .firstWhere((element) => element.color == color);
+          selectedQuantity = selectedDimension.quantity;
+        }
+        final newProduct = DimensionProduct(
+          id: product.id,
+          name: productName,
+          description: productDescription,
+          costPrice: productCostPrice,
+          salePrice: productSalePrice,
+          idName: productIdName,
+          image: path,
+          dimension: newDimension,
+          selectedQuantity: selectedQuantity,
+          isSelected: isSelected,
+        );
+
+        productsByDimension.add(newProduct);
+      }
+    }
+
+    return productsByDimension;
+  }
+
+  List<DimensionProduct> mapToProductDimensionList(List<OrderedItem> items) {
+    final productsByDimension = <DimensionProduct>[];
+
+    for (final item in items) {
+      final productName = item.productName;
+      final productSalePrice = double.parse(item.productPrice);
+      ImagePath? path;
+      if (item.imageUrl != null) {
+        path = ImagePath(imagePath: item.imageUrl!, type: Type.network);
+      }
+
+      for (final dimension in item.dimensions) {
+        final color = dimension.color;
+        final quantity = dimension.quantity;
+
+        final newDimension =
+            Dimension(color: color, quantity: quantity, image: dimension.image);
+
+        final newProduct = DimensionProduct(
+          id: item.productId,
+          name: productName,
+          description: '',
+          costPrice: 0,
+          salePrice: productSalePrice,
+          idName: '',
+          image: path,
+          dimension: newDimension,
+          selectedQuantity: 1,
+          isSelected: true,
+        );
+
+        productsByDimension.add(newProduct);
+      }
+    }
+    return productsByDimension;
+  }
 }

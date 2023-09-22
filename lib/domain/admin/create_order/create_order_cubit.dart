@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/admin/create_order/create_order_effects.dart';
+import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../constant/order_constants.dart';
@@ -10,7 +12,6 @@ import '../../../data/repositories/product_repository.dart';
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 import '../../models/order.dart';
-import '../../models/product.dart';
 import '../../models/status.dart';
 import '../../models/warehouse.dart';
 import '../../ui_effect.dart';
@@ -22,6 +23,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   final orderRepository = locate<OrderRepository>();
   final productRepository = locate<ProductRepository>();
   final orderMapper = locate<OrderMapper>();
+  final _productMapper = locate<ProductMapper>();
 
   late final StreamSubscription _selectedProductSubscription;
 
@@ -33,7 +35,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
               isLoading: false,
               isEdit: false,
               isSuccess: false,
-              errorMessage: '',
               initialPage: 0,
               activePage: 0,
               errors: FieldErrors(),
@@ -65,7 +66,15 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void _subscribe() {
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
-        emit(state.copyWith(selectedProducts: items, isEdit: true));
+        final productDimensList =
+            _productMapper.mapToProductDimensionList(items);
+        final price = fullPrice(productDimensList);
+        emit(
+          state.copyWith(
+              selectedProducts: productDimensList,
+              isEdit: true,
+              productListPrice: price),
+        );
       },
       onError: (error) =>
           {moxyPrint('Error during selected products listening.')},
@@ -82,10 +91,12 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void addOrder() async {
     try {
       emit(state.copyWith(isLoading: true));
+      List<OrderedItem> selectedProducts =
+          productRepository.currentSelectedProducts ?? [];
       final order = orderMapper.mapToNetworkCreateOrder(
           state.deliveryType,
           state.paymentType,
-          state.selectedProducts,
+          selectedProducts,
           state.selectedWarehouse,
           state.client,
           state.selectedCity,
@@ -93,26 +104,28 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
           state.prepayment);
       final pushOrder = await orderRepository.addOrder(order);
       pushOrder.when((success) {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isLoading: false, isSuccess: true));
+        emitEffect(SuccessCreation());
         firstNameController.clear();
         secondNameController.clear();
         phoneNumberController.clear();
-        emit(state.copyWith(isSuccess: true, isLoading: false));
       }, (error) {
         emit(state.copyWith(
-            errorMessage: 'Failed', isLoading: false, activePage: 0));
+          isLoading: false,
+          isSuccess: false,
+          activePage: 0,
+        ));
+        emitEffect(FailedCreation(error.toString()));
       });
     } catch (e) {
       moxyPrint(e);
     }
   }
 
-  int fullPrice(List<Product> selectProduct) {
+  int fullPrice(List<DimensionProduct> selectedProducts) {
     int totalPrice = 0;
-    for (final product in selectProduct) {
-      for (final dimension in product.dimensions) {
-        totalPrice += product.costPrice.toInt() * dimension.quantity;
-      }
+    for (final product in selectedProducts) {
+      totalPrice += (product.salePrice * product.dimension.quantity).toInt();
     }
     return totalPrice;
   }
@@ -188,10 +201,6 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   void clearState() {
     emit(CreateOrderState.defaultCreateProductState());
-  }
-
-  void clearErrorState() {
-    emit(state.copyWith(errorMessage: ''));
   }
 
   void selectCity(City? city) {

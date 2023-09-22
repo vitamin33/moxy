@@ -91,6 +91,7 @@
   "deleteProductFailed": "Product deleting Failed",
   "failed": "Failed",
   "wrongInput": "Wrong input, please check text fields.",
+  "failedToCreateOrder": "Failed to create order.",
   "unableToParseData": "Unable To Parse Data",
   "backToBasket": "Back to basket",
   "contactInfo": "Contact information",

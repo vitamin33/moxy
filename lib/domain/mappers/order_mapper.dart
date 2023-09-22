@@ -82,7 +82,10 @@ class OrderMapper {
                 productId: e.product.id,
                 productName: e.product.name,
                 dimensions: e.product.dimensions
-                    .map((d) => Dimension(color: d.color, quantity: d.quantity))
+                    .map((d) => Dimension(
+                          color: d.color,
+                          quantity: d.quantity,
+                        ))
                     .toList(),
                 imageUrl: e.product.images.first,
                 productPrice: e.product.salePrice.toString()))

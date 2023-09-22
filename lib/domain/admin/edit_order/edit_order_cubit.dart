@@ -68,6 +68,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
         emit(state.copyWith(
           errorMessage: 'Failed',
           isLoading: false,
+          isSuccess: false,
         ));
       });
     } catch (e) {
