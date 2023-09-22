@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:moxy/data/http/token_service.dart';
+import 'package:moxy/domain/models/profile.dart';
 import 'package:moxy/domain/models/user.dart';
 import 'package:moxy/domain/roles.dart';
 import 'package:moxy/utils/common.dart';
@@ -100,5 +102,19 @@ class AuthRepository {
         return Role.user;
     }
     return Role.guest;
+  }
+
+  Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
+    final resultCase = await client.editUser(user);
+    return resultCase.when(
+        (success) => Result.success(success), (error) => Result.error(error));
+  }
+
+  Future<Result<Headers, Exception>> editUserPassword(
+      ProfilePassword password) async {
+    final resultCase = await client
+        .editUserPassword(userMapper.maptoNetworkPassword(password));
+    return resultCase.when(
+        (success) => Result.success(success), (error) => Result.error(error));
   }
 }

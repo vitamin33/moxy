@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
@@ -15,6 +16,7 @@ import '../models/warehouse.dart';
 
 class OrderMapper {
   final productMapper = locate<ProductMapper>();
+
   List<Order> mapToOrderList(List<NetworkOrder> networkOrders) {
     return networkOrders.map((o) {
       return Order(
@@ -39,6 +41,37 @@ class OrderMapper {
         orderedItems: productMapper.mapToOrderedItemList(o.orderedItems),
         createdAt: o.createdAt,
         updatedAt: o.updatedAt,
+      );
+    }).toList();
+  }
+
+  List<Order> mapToProfileOrderList(List<NetworkProfileOrder> networkOrders) {
+    return networkOrders.map((o) {
+      return Order(
+        id: o.id,
+        cashAdvanceValue: o.cashAdvanceValue,
+        novaPost: o.novaPost!,
+        city: City(
+            mainDescription: o.city!.mainDescription!,
+            ref: o.city!.ref!,
+            deliveryCityRef: o.city!.deliveryCityRef!,
+            presentName: o.city!.presentName!),
+        deliveryType: _mapDeliveryType(o.deliveryType),
+        status: _mapStatus(o.status),
+        paymentType: _mapPaymentType(o.paymentType),
+        client: Client.defaultClient(),
+        orderedItems: o.orderedItems
+            .map((e) => OrderedItem(
+                productId: e.product.id,
+                productName: e.product.name,
+                dimensions: e.product.dimensions
+                    .map((d) => Dimension(color: d.color, quantity: d.quantity))
+                    .toList(),
+                imageUrl: e.product.images.first,
+                productPrice: e.product.salePrice.toString()))
+            .toList(),
+        createdAt: _parseDataTime(o.createdAt),
+        updatedAt: _parseDataTime(o.updatedAt),
       );
     }).toList();
   }
@@ -213,4 +246,10 @@ class OrderMapper {
       status: status,
     );
   }
+}
+
+String _parseDataTime(String dataRange) {
+  final startDate =
+      DateFormat("yyyy-MM-dd").parse(dataRange).toString().split(' ');
+  return startDate[0].toString();
 }

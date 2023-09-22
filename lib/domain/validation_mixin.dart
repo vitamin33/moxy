@@ -1,8 +1,6 @@
-
 import 'package:moxy/domain/models/product.dart';
 
 import 'models/order.dart';
-
 
 mixin ValidationMixin {
   bool isFieldEmpty(String? fieldValue) => fieldValue?.isEmpty ?? true;
@@ -14,7 +12,6 @@ mixin ValidationMixin {
     return price > 0;
   }
 
-
   bool isValidQuantity(List<Dimension> dimension) {
     for (var item in dimension) {
       if (item.quantity == 0) {
@@ -23,8 +20,17 @@ mixin ValidationMixin {
     }
     return true;
   }
+
   bool isValidSelectedProduct(List<OrderedItem> selectedProducts) {
     if (selectedProducts.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool validateRepeatPassword(String newPassword, String repeatPassword) {
+    if ( newPassword == repeatPassword ) {
       return false;
     } else {
       return true;

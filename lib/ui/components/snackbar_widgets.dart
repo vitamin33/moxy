@@ -7,9 +7,9 @@ SnackBar snackBarWhenFailure({required String snackBarFailureText}) {
   );
 }
 
-SnackBar snackBarWhenSuccess() {
-  return const SnackBar(
-    content: Text("Success!"),
+SnackBar snackBarWhenSuccess({required String snackBarSuccessText}) {
+  return SnackBar(
+    content: Text(snackBarSuccessText),
     backgroundColor: Colors.green,
   );
 }

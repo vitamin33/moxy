@@ -38,6 +38,8 @@ class GetItService {
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<BasketService>(BasketService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
+    getIt.registerSingleton<CityMapper>(CityMapper());
+    getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
     getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ISecureStorageRepository>(
@@ -47,15 +49,13 @@ class GetItService {
     getIt.registerSingleton<OrderRepository>(OrderRepository());
     getIt.registerSingleton<ImagePickerService>(ImagePickerService());
     getIt.registerSingleton<NovaPoshtaClient>(NovaPoshtaClient());
-    getIt.registerSingleton<CityMapper>(CityMapper());
     getIt.registerSingleton<PromoMapper>(PromoMapper());
-    getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
     getIt.registerSingleton<OverviewRepository>(OverviewRepository());
     getIt.registerSingleton<FooterRepository>(FooterRepository());
     getIt.registerSingleton<PromoRepository>(PromoRepository());
     getIt.registerSingleton<BasketRepository>(BasketRepository());
-    getIt.registerSingleton<ProfileRepository>(ProfileRepository());
     getIt.registerSingleton<ProfileMapper>(ProfileMapper());
+    getIt.registerSingleton<ProfileRepository>(ProfileRepository());
   }
 }
 

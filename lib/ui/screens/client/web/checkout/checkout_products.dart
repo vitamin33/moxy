@@ -156,6 +156,7 @@ class CheckoutProducts extends StatelessWidget {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
     String color = item.dimension.color.toUpperCase();
+// <<<<<<< Updated upstream
     return Padding(
       padding: EdgeInsets.all(8),
       child: Row(
@@ -186,6 +187,75 @@ class CheckoutProducts extends StatelessWidget {
                         ),
                       ],
                     ),
+// =======
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: [
+//         _buildProductImage(item),
+//         const SizedBox(width: 20),
+//         Expanded(
+//           child: SizedBox(
+//             height: 180,
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//               children: [
+//                 Expanded(
+//                   flex: 1,
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.start,
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       Text(
+//                         '$productName $color}',
+//                         style: theme.checkoutProductText,
+//                       ),
+//                       Text(
+//                         '${item.product.salePrice} UAH',
+//                         style: theme.checkoutPriceText,
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//                 Expanded(
+//                   flex: 1,
+//                   child: Row(
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       Text('Color:', style: theme.checkoutColorText),
+//                       Text('${item.product.salePrice} UAH'),
+//                     ],
+//                   ),
+//                 ),
+//                 Expanded(
+//                   flex: 3,
+//                   child: Row(
+//                     crossAxisAlignment: CrossAxisAlignment.end,
+//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                     children: [
+//                       QuantityPicker(
+//                         quantity: item.dimension.quantity,
+//                         onPlus: () {
+//                           // cubit.addQuantityOfProduct(item);
+//                         },
+//                         onMinus: () {
+//                           // cubit.removeQuantityOfProduct(item);
+//                         },
+//                       ),
+//                       InkWell(
+//                         child: Padding(
+//                           padding: EdgeInsets.all(8),
+//                           child: Text(
+//                             'Remove',
+//                             style: theme.removeButtonText,
+//                           ),
+//                         ),
+//                         onTap: () {
+//                           // cubit.removeProductFromBasket(item);
+//                         },
+//                       ),
+//                     ],
+// >>>>>>> Stashed changes
                   ),
                   Expanded(
                     flex: 1,

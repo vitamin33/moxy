@@ -405,7 +405,18 @@ class DioClient {
       final profile = NetworkProfile.fromJson(response.data);
       return profile;
     } catch (e) {
-      throw Exception('Failed to load promos: $e');
+      throw Exception('Failed to load profile: $e');
+    }
+  }
+
+  Future<ProfileOrdersResponse> getProfileOrders() async {
+    try {
+      final response = await dio.get('$baseUrl $getProfileOrdersUrl');
+      final data = response.data;
+      final orderList = ProfileOrdersResponse.fromJson(data);
+      return orderList;
+    } catch (e) {
+      throw Exception('Failed to load profile order history: $e');
     }
   }
 
@@ -437,5 +448,42 @@ class DioClient {
       return false;
     }
     return false;
+  }
+
+// EDIT USER
+
+  Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
+    final Headers? result;
+
+    try {
+      Response response = await dio.post(
+        editUserUrl,
+        data: user.toJson(),
+      );
+      result = response.headers;
+    } catch (e) {
+      moxyPrint('Error during creating user: $e');
+
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
+  }
+
+  Future<Result<Headers, Exception>> editUserPassword(
+      NetworkPasswordUser password) async {
+    final Headers result;
+
+    try {
+      Response response = await dio.post(
+        editUserPasswordUrl,
+        data: password.toJson(),
+      );
+      result = response.headers;
+    } catch (e) {
+      moxyPrint('Error during creating user: $e');
+
+      return Result.error(_handleHttpException(e));
+    }
+    return Result.success(result);
   }
 }

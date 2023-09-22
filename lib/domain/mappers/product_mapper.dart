@@ -138,7 +138,7 @@ class ProductMapper {
       return OrderedItem(
         productPrice: p.productPrice.toString(),
         productId: p.product,
-        productName: p.productName,
+        productName: p.productName ?? '',
         imageUrl: p.imageUrl,
         dimensions: p.dimensions
             .map(

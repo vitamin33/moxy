@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/ui/components/custom_button.dart';
 
 import '../../../../../../domain/client/profile/profile_cubit.dart';
 import '../../../../../../domain/client/profile/profile_state.dart';
@@ -15,80 +14,111 @@ class ProfileContactInfo extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final cubit = context.read<ProfileCubit>();
-        return Container(
+        return SizedBox(
           width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Контактна інформація',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w600,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Контактна інформація',
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 40),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        ProfileTextField(
-                          title: 'Ваше імя',
-                          controller: cubit.firstnameController,
-                          maxLines: 1,
-                          onChanged: (value) {
-                            cubit.firstNameChanged(value);
-                          },
-                        ),
-                        const SizedBox(height: 5),
-                        ProfileTextField(
-                          title: 'Прізвище',
-                          controller: cubit.secondnameController,
-                          maxLines: 1,
-                          onChanged: (value) {
-                            cubit.secondNameChanged(value);
-                          },
-                        ),
-                        const SizedBox(height: 5),
-                        ProfileTextField(
-                          title: 'Телефон',
-                          controller: cubit.mobileNumberController,
-                          maxLines: 1,
-                          onChanged: (value) {
-                            cubit.phoneNumberChanged(value);
-                          },
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(16),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ProfileTextField(title: 'Старий пароль'),
-                        SizedBox(height: 5),
-                        ProfileTextField(title: 'Новий пароль'),
-                      ],
-                    )
-                  ],
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          ProfileTextField(
+                            title: 'Ваше імя',
+                            controller: cubit.firstnameController,
+                            maxLines: 1,
+                            onChanged: (value) {
+                              cubit.firstNameChanged(value);
+                            },
+                            validation: true,
+                            state: state.errors.firstName,
+                          ),
+                          const SizedBox(height: 5),
+                          ProfileTextField(
+                            title: 'Прізвище',
+                            controller: cubit.secondnameController,
+                            maxLines: 1,
+                            onChanged: (value) {
+                              cubit.secondNameChanged(value);
+                            },
+                            validation: true,
+                            state: state.errors.secondName,
+                          ),
+                          const SizedBox(height: 5),
+                          ProfileTextField(
+                            title: 'Телефон',
+                            controller: cubit.mobileNumberController,
+                            maxLines: 1,
+                            onChanged: (value) {
+                              cubit.phoneNumberChanged(value);
+                            },
+                            validation: true,
+                            state: state.errors.phoneNumber,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(16),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProfileTextField(
+                            title: 'Старий пароль',
+                            controller: cubit.oldPasswordController,
+                            maxLines: 1,
+                            onChanged: (value) {
+                              cubit.oldPasswordChanged(value);
+                            },
+                            validation: true,
+                            state: state.errors.oldPassword,
+                          ),
+                          const SizedBox(height: 5),
+                          ProfileTextField(
+                            title: 'Новий пароль',
+                            controller: cubit.newPasswordController,
+                            maxLines: 1,
+                            onChanged: (value) {
+                              cubit.newPasswordChanged(value);
+                            },
+                            validation: true,
+                            state: state.errors.newPassword,
+                          ),
+                          const SizedBox(height: 5),
+                          ProfileTextField(
+                            title: 'Підтвердити новий пароль',
+                            controller: cubit.repeatNewPasswordController,
+                            maxLines: 1,
+                            onChanged: (value) {
+                              cubit.repeatNewPasswordChanged(value);
+                            },
+                            validation: true,
+                            state: state.errors.reapeatNewPassword,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 30),
-              CustomButton(
-                title: 'Зберегти',
-                onTap: () {},
-                buttonWidth: 200,
-              )
-            ],
+              ],
+            ),
           ),
         );
       },

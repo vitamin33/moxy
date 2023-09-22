@@ -1,19 +1,30 @@
 // ignore: depend_on_referenced_packages
-import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:moxy/data/repositories/auth_repository.dart';
+import 'package:moxy/domain/client/profile/profile_effects.dart';
+import 'package:moxy/domain/mappers/user_mapper.dart';
+import 'package:moxy/domain/models/profile.dart';
+import 'package:moxy/domain/models/user.dart';
+import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/domain/validation_mixin.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
 import '../../../data/repositories/profile_repository.dart';
 import '../../../utils/common.dart';
 import '../../mappers/profile_mapper.dart';
+import '../../models/city.dart';
+import '../../models/warehouse.dart';
 import 'profile_state.dart';
 
-class ProfileCubit extends Cubit<ProfileState> {
+class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
+    with ValidationMixin {
   late TextEditingController firstnameController;
   late TextEditingController secondnameController;
   late TextEditingController mobileNumberController;
-  
+
   ProfileCubit() : super(ProfileState.defaultState()) {
     getProfile();
+    getProfileOrders();
     firstnameController = TextEditingController(text: state.profile.firstName);
     secondnameController =
         TextEditingController(text: state.profile.secondName);
@@ -21,9 +32,15 @@ class ProfileCubit extends Cubit<ProfileState> {
         TextEditingController(text: state.profile.mobileNumber);
   }
   final profileRepository = locate<ProfileRepository>();
+  final authRepository = locate<AuthRepository>();
   final profileMapper = locate<ProfileMapper>();
+  final userMapper = locate<UserMapper>();
 
   final PageController pageController = PageController(initialPage: 0);
+  final TextEditingController oldPasswordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController repeatNewPasswordController =
+      TextEditingController();
 
   void onChangePage(int page) {
     emit(state.copyWith(activePage: page));
@@ -34,21 +51,32 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(state.copyWith(isLoading: true));
       final result = await profileRepository.getProfile();
       result.when((success) {
-        final profile = profileMapper.mapToProfile(success);
-        firstnameController.text = profile.firstName;
-        secondnameController.text = profile.secondName;
-        mobileNumberController.text = profile.mobileNumber;
-        emit(state.copyWith(profile: profile, isLoading: false));
+        firstnameController.text = success.firstName;
+        secondnameController.text = success.secondName;
+        mobileNumberController.text = success.mobileNumber;
+        emit(state.copyWith(profile: success, isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
+        emitEffect(
+            ProfileApiRequestFailed('Failed get profile ${error.toString()}'));
       });
     } catch (e) {
       moxyPrint('$e');
     }
   }
 
-  void clearErrorState() {
-    emit(state.copyWith(errorMessage: ''));
+  void getProfileOrders() async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final result = await profileRepository.getProfileOrders();
+      result.when((success) {
+        emit(state.copyWith(historyOrders: success, isLoading: false));
+      }, (error) {
+        emitEffect(ProfileApiRequestFailed(
+            'Failed  get profile orders ${error.toString()}'));
+      });
+    } catch (e) {
+      moxyPrint('$e');
+    }
   }
 
   void firstNameChanged(value) {
@@ -69,5 +97,106 @@ class ProfileCubit extends Cubit<ProfileState> {
     final String mobileNumber = value;
     emit(state.copyWith(
         profile: state.profile.copyWith(mobileNumber: mobileNumber)));
+  }
+
+  void oldPasswordChanged(value) {
+    final String oldPassword = value;
+    emit(state.copyWith(
+        password: state.password.copyWith(oldPassword: oldPassword)));
+  }
+
+  void newPasswordChanged(value) {
+    final String newPassword = value;
+    emit(state.copyWith(
+        password: state.password.copyWith(newPassword: newPassword)));
+  }
+
+  void repeatNewPasswordChanged(value) {
+    final String repeatNewPassword = value;
+    emit(state.copyWith(
+        password:
+            state.password.copyWith(repeatNewPassword: repeatNewPassword)));
+  }
+
+  void selectCity(City? city) {
+    emit(state.copyWith(
+        profile: state.profile
+            .copyWith(city: city, warehouse: Warehouse.defaultWarehouse())));
+  }
+
+  void selectWarehouse(Warehouse? warehouse) {
+    emit(state.copyWith(profile: state.profile.copyWith(warehouse: warehouse)));
+  }
+
+  void editProfile() async {
+    try {
+      final networkUser = userMapper.mapToNetworkProfileUser(
+        User(
+            id: state.profile.id,
+            firstName: state.profile.firstName,
+            secondName: state.profile.secondName,
+            mobileNumber: state.profile.mobileNumber,
+            city: state.profile.city.presentName,
+            instagram: ''),
+        state.profile.city,
+        state.profile.warehouse,
+      );
+
+      final result = await authRepository.editUser(networkUser);
+      result.when((success) {
+        emitEffect(ProfileSuccess('Success edit profile'));
+      }, (error) {
+        emitEffect(ProfileApiRequestFailed('Failed edit profile'));
+      });
+    } catch (e) {
+      moxyPrint('$e');
+    }
+  }
+
+  void editPassword() async {
+    if (oldPasswordController.text.isNotEmpty) {
+      try {
+        final result = await authRepository.editUserPassword(state.password);
+        result.when((success) {
+          newPasswordController.text = '';
+          oldPasswordController.text = '';
+          repeatNewPasswordController.text = '';
+          emitEffect(ProfileSuccess('Success edit profile password'));
+          emit(state.copyWith(
+              password: ProfilePassword.defaultProfilePassword()));
+        }, (error) {
+          emitEffect(ProfileApiRequestFailed('Failed edit profile password'));
+        });
+      } catch (e) {
+        moxyPrint('$e');
+      }
+    }
+  }
+
+  bool validateFields() {
+    final errors = ProfileFieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.profile.firstName)) {
+      errors.firstName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.profile.secondName)) {
+      errors.secondName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.profile.mobileNumber)) {
+      errors.phoneNumber = FieldError.empty;
+      noErrors = false;
+    }
+    if (validateRepeatPassword(
+        state.password.newPassword, state.password.repeatNewPassword)) {
+      errors.reapeatNewPassword = FieldError.empty;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(ProfileValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(errors: errors));
+    return noErrors;
   }
 }

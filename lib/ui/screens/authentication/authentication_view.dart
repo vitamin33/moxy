@@ -130,8 +130,8 @@ class AuthenticationView extends StatelessWidget {
     );
   }
 
-  void showSuccessSnackbar(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess());
+  void showSuccessSnackbar(BuildContext context,String message) {
+    ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(snackBarSuccessText: message));
   }
 
   void showFailureSnackbar(BuildContext context, String message) {
