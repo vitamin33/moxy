@@ -110,7 +110,7 @@ class CreateNetworkClient {
   String mobileNumber;
   String firstName;
   String secondName;
-  String city;
+  NetworkCity? city;
   List<String>? orders;
   CreateNetworkClient(this.id, this.city, this.firstName, this.mobileNumber,
       this.secondName, this.orders);
@@ -127,7 +127,7 @@ class NetworkClient {
   String mobileNumber;
   String firstName;
   String secondName;
-  NetworkCity city;
+  NetworkCity? city;
   NetworkClient({
     this.id,
     required this.city,

@@ -85,7 +85,7 @@ class Client {
   String mobileNumber;
   String firstName;
   String secondName;
-  City city;
+  City? city;
 
   Client(
       {String? id,
