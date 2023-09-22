@@ -31,7 +31,6 @@ class GetItService {
   static initializeService() {
     final dio = Dio();
     getIt.registerSingleton<ProductMapper>(ProductMapper());
-    getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton<FilterParamsMapper>(FilterParamsMapper());
     getIt.registerSingleton<BasketMapper>(BasketMapper());
     getIt.registerSingleton<Dio>(dio);
@@ -40,6 +39,7 @@ class GetItService {
     getIt.registerSingleton<DioClient>(DioClient());
     getIt.registerSingleton<CityMapper>(CityMapper());
     getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
+    getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ISecureStorageRepository>(

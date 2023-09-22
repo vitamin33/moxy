@@ -14,7 +14,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
 
   OrderProductListCubit(OrderProductListState orderProductListState)
       : super(OrderProductListState.defaultAllProductsState()) {
-    state.isEdit ? moxyPrint('habadga') : orderProductsList();
+    //state.isEdit ? moxyPrint('habadga') : orderProductsList();
   }
 
   void productsSelected() {
@@ -30,7 +30,11 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       result.when(
         (success) {
           final products = _produtctMapper.mapToProductList(success);
-          final productsByDimen = groupProductsByDimension(products);
+          final selectedItems = getSelectedProductList();
+          final productsByDimen = _produtctMapper.mapToGroupProductsByDimension(
+            products,
+            selectedItems,
+          );
           emit(state.copyWith(
             allProducts: products,
             isLoading: false,
@@ -63,16 +67,18 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
         final color = dimension.color;
         final quantity = dimension.quantity;
 
-        final newDimension = Dimension(
-          color: color,
-          quantity: quantity,
-        );
+        final newDimension =
+            Dimension(color: color, quantity: quantity, image: dimension.image);
         int selectedQuantity = 1;
-        bool isSelected =
-            selectedItems.any((element) => element.productId == product.id);
+        bool isSelected = selectedItems.any((element) {
+          bool isDimenSelected =
+              element.dimensions.any((d) => d.color == color);
+          return element.productId == product.id && isDimenSelected;
+        });
         if (isSelected) {
           final selectedItem = selectedItems
               .firstWhere((element) => element.productId == product.id);
+
           final selectedDimension = selectedItem.dimensions
               .firstWhere((element) => element.color == color);
           selectedQuantity = selectedDimension.quantity;

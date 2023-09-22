@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moxy/domain/models/order.dart';
+import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../components/dashed_path_painter.dart';
@@ -144,6 +144,7 @@ Widget _buildGalleryArea(
                         scrollDirection: Axis.horizontal,
                         itemCount: state.selectedProducts.length,
                         itemBuilder: (context, index) {
+                          final item = state.selectedProducts[index];
                           return Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Container(
@@ -154,15 +155,11 @@ Widget _buildGalleryArea(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
-                                      ClipOval(
-                                          child: _buildProductImage(
-                                              state.selectedProducts[index])),
-                                      Text(state
-                                          .selectedProducts[index].productName),
-                                      Text(state.selectedProducts[index]
-                                          .dimensions.first.color),
+                                      ClipOval(child: _buildProductImage(item)),
+                                      Text(item.name),
+                                      Text(item.dimension.color),
                                       Text(
-                                          '${AppLocalizations.of(context)!.quantity}:${state.selectedProducts[index].dimensions.first.quantity}'),
+                                          '${AppLocalizations.of(context)!.quantity}:${item.dimension.quantity}'),
                                     ]),
                               ),
                             ),
@@ -214,11 +211,11 @@ Widget _buildGalleryArea(
   });
 }
 
-Widget _buildProductImage(OrderedItem product) {
-  if (product.imageUrl != null) {
+Widget _buildProductImage(DimensionProduct product) {
+  if (product.image != null) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.imageUrl!,
+      image: product.image!.imagePath,
       width: 50,
       height: 50,
       fit: BoxFit.cover,

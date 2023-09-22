@@ -107,7 +107,9 @@ Map<String, dynamic> _$NetworkProfileOrderToJson(
 CreateNetworkClient _$CreateNetworkClientFromJson(Map<String, dynamic> json) =>
     CreateNetworkClient(
       json['_id'] as String?,
-      json['city'] as String,
+      json['city'] == null
+          ? null
+          : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
       json['firstName'] as String,
       json['mobileNumber'] as String,
       json['secondName'] as String,
@@ -128,7 +130,9 @@ Map<String, dynamic> _$CreateNetworkClientToJson(
 NetworkClient _$NetworkClientFromJson(Map<String, dynamic> json) =>
     NetworkClient(
       id: json['_id'] as String?,
-      city: json['city'] as String,
+      city: json['city'] == null
+          ? null
+          : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
       firstName: json['firstName'] as String,
       mobileNumber: json['mobileNumber'] as String,
       secondName: json['secondName'] as String,

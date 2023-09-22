@@ -5,7 +5,7 @@ import 'package:moxy/ui/screens/admin/pages/create_user/create_user_page.dart';
 import 'package:moxy/ui/screens/admin/pages/customers/users_page.dart';
 import 'package:moxy/ui/screens/admin/pages/edit_order/edit_order_page.dart';
 import 'package:moxy/ui/screens/admin/pages/feedbacks/feedbacks_page.dart';
-import 'package:moxy/ui/screens/admin/pages/order_product_list/order_product_list.dart';
+import 'package:moxy/ui/screens/admin/pages/order_product_list/order_product_list_screen.dart';
 import 'package:moxy/ui/screens/admin/pages/orders/orders_page.dart';
 import 'package:moxy/ui/screens/admin/pages/orders_filter/orders_filter_page.dart';
 import 'package:moxy/ui/screens/admin/pages/overview/overview_page.dart';
@@ -149,8 +149,8 @@ class AdminHomeRouterDelegate extends RouterDelegate<AdminHomeRouterState> {
           (_routerCubit.state as OrderProductListPageState).extraPageContent;
       return [
         _materialPage(
-          valueKey: "createOrder",
-          child: const OrderProductList(),
+          valueKey: "orderProductsList",
+          child: OrderProductListScreen(),
         ),
       ];
     }

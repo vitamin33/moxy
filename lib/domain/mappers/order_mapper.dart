@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
 
@@ -16,6 +17,7 @@ import '../models/warehouse.dart';
 
 class OrderMapper {
   final productMapper = locate<ProductMapper>();
+  final cityMapper = locate<CityMapper>();
 
   List<Order> mapToOrderList(List<NetworkOrder> networkOrders) {
     return networkOrders.map((o) {
@@ -36,12 +38,27 @@ class OrderMapper {
           mobileNumber: o.client.mobileNumber,
           firstName: o.client.firstName,
           secondName: o.client.secondName,
-          city: o.client.city,
+          city: cityMapper.mapToCity(o.client.city),
         ),
         orderedItems: productMapper.mapToOrderedItemList(o.orderedItems),
         createdAt: o.createdAt,
         updatedAt: o.updatedAt,
       );
+    }).toList();
+  }
+
+  List<OrderedItem> mapProductsToOrderedItemList(List<Product> products) {
+    return products.where((source) {
+      return source.id != null;
+    }).map((product) {
+      final firstImage =
+          product.images.isEmpty ? null : product.images.first.imagePath;
+      return OrderedItem(
+          productId: product.id!,
+          productName: product.name,
+          dimensions: product.dimensions,
+          imageUrl: firstImage,
+          productPrice: product.salePrice.toString());
     }).toList();
   }
 
@@ -65,7 +82,10 @@ class OrderMapper {
                 productId: e.product.id,
                 productName: e.product.name,
                 dimensions: e.product.dimensions
-                    .map((d) => Dimension(color: d.color, quantity: d.quantity))
+                    .map((d) => Dimension(
+                          color: d.color,
+                          quantity: d.quantity,
+                        ))
                     .toList(),
                 imageUrl: e.product.images.first,
                 productPrice: e.product.salePrice.toString()))
@@ -73,21 +93,6 @@ class OrderMapper {
         createdAt: _parseDataTime(o.createdAt),
         updatedAt: _parseDataTime(o.updatedAt),
       );
-    }).toList();
-  }
-
-  List<OrderedItem> mapProductsToOrderedItemList(List<Product> products) {
-    return products.where((source) {
-      return source.id != null;
-    }).map((product) {
-      final firstImage =
-          product.images.isEmpty ? null : product.images.first.imagePath;
-      return OrderedItem(
-          productId: product.id!,
-          productName: product.name,
-          dimensions: product.dimensions,
-          imageUrl: firstImage,
-          productPrice: product.salePrice.toString());
     }).toList();
   }
 
@@ -164,7 +169,7 @@ class OrderMapper {
           presentName: novapost.description),
       status: status,
       client: NetworkClient(
-        city: client.city,
+        city: cityMapper.mapToNetworkCity(client.city),
         firstName: client.firstName,
         mobileNumber: client.mobileNumber,
         secondName: client.secondName,
@@ -212,7 +217,7 @@ class OrderMapper {
       status: status,
       client: NetworkClient(
         id: client.id,
-        city: client.city,
+        city: cityMapper.mapToNetworkCity(client.city),
         firstName: client.firstName,
         mobileNumber: client.mobileNumber,
         secondName: client.secondName,
@@ -246,10 +251,10 @@ class OrderMapper {
       status: status,
     );
   }
-}
 
-String _parseDataTime(String dataRange) {
-  final startDate =
-      DateFormat("yyyy-MM-dd").parse(dataRange).toString().split(' ');
-  return startDate[0].toString();
+  String _parseDataTime(String dataRange) {
+    final startDate =
+        DateFormat("yyyy-MM-dd").parse(dataRange).toString().split(' ');
+    return startDate[0].toString();
+  }
 }

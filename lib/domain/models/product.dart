@@ -68,11 +68,12 @@ class Dimension implements Copyable<Dimension> {
   bool isSelected;
   String? image;
 
-  Dimension(
-      {required this.color,
-      required this.quantity,
-      this.isSelected = false,
-      this.image});
+  Dimension({
+    required this.color,
+    required this.quantity,
+    this.isSelected = false,
+    this.image,
+  });
 
   static Dimension defaultDimension() {
     return Dimension(

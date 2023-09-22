@@ -1,22 +1,25 @@
 // ignore: depend_on_referenced_packages
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
+import 'package:moxy/domain/admin/create_order/create_order_effects.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
 import 'checkout_state.dart';
 
-class CheckoutCubit extends Cubit<CheckoutState> with ValidationMixin {
+class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
+    with ValidationMixin {
   final basketRepository = locate<BasketRepository>();
   final basketMapper = locate<BasketMapper>();
   final cityMapper = locate<CityMapper>();
@@ -60,7 +63,7 @@ class CheckoutCubit extends Cubit<CheckoutState> with ValidationMixin {
   }
 
   void addQuantityOfProduct(BasketItem basketItem) {
-    if (!checkQuantityAvailability(basketItem)) {
+    if (!checkMaxQuantityAvailability(basketItem)) {
       return;
     }
     String? productId = basketItem.product.id;
@@ -77,7 +80,7 @@ class CheckoutCubit extends Cubit<CheckoutState> with ValidationMixin {
   }
 
   void removeQuantityOfProduct(BasketItem basketItem) {
-    if (!checkQuantityAvailability(basketItem)) {
+    if (!checkMinQuantityAvailability(basketItem)) {
       return;
     }
     String? productId = basketItem.product.id;
@@ -100,11 +103,18 @@ class CheckoutCubit extends Cubit<CheckoutState> with ValidationMixin {
     removeProductFromCart(item);
   }
 
-  bool checkQuantityAvailability(BasketItem basketItem) {
+  bool checkMaxQuantityAvailability(BasketItem basketItem) {
     Dimension dimen = basketItem.dimension;
     Dimension currentDimen =
         basketItem.product.dimensions.firstWhere((d) => d.color == dimen.color);
-    if (dimen.quantity > 0 && dimen.quantity < currentDimen.quantity) {
+    if (dimen.quantity < currentDimen.quantity) {
+      return true;
+    }
+    return false;
+  }
+
+  bool checkMinQuantityAvailability(BasketItem basketItem) {
+    if (basketItem.dimension.quantity > 1) {
       return true;
     }
     return false;
@@ -164,11 +174,44 @@ class CheckoutCubit extends Cubit<CheckoutState> with ValidationMixin {
   }
 
   void clickCheckout() async {
+    if (!validateFields()) {
+      return;
+    }
     final result = await basketRepository.startPayment();
     result.when((success) {
       // TODO update UI with success
     }, (error) {
       emit(state.copyWith(basketProductsError: 'Failed to perform checkout'));
     });
+  }
+
+  bool validateFields() {
+    final errors = FieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.client.firstName)) {
+      errors.firstName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.selectedCity.presentName)) {
+      errors.selectedCity = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.client.secondName)) {
+      errors.secondName = FieldError.empty;
+      noErrors = false;
+    }
+    if (!phoneNumberRegExp.hasMatch(state.client.mobileNumber)) {
+      errors.phoneNumber = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isFieldEmpty(state.selectedWarehouse.ref)) {
+      errors.selectedWarehouse = FieldError.empty;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(ValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(errors: errors));
+    return noErrors;
   }
 }

@@ -1,3 +1,5 @@
+import 'package:moxy/domain/models/dimension_product.dart';
+
 import '../../../constant/order_constants.dart';
 import '../../copyable.dart';
 import '../../models/city.dart';
@@ -10,14 +12,13 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   bool isLoading;
   bool isEdit;
   bool isSuccess;
-  String errorMessage;
   int initialPage;
   int activePage;
   DeliveryType deliveryType;
   PaymentType paymentType;
   int novaPostNumber;
   int productListPrice;
-  List<OrderedItem> selectedProducts;
+  List<DimensionProduct> selectedProducts;
   City selectedCity;
   Warehouse selectedWarehouse;
   Status status;
@@ -31,7 +32,6 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.isLoading,
     required this.isEdit,
     required this.isSuccess,
-    required this.errorMessage,
     required this.initialPage,
     required this.activePage,
     required this.errors,
@@ -52,7 +52,6 @@ class CreateOrderState implements Copyable<CreateOrderState> {
         isLoading: false,
         isEdit: false,
         isSuccess: false,
-        errorMessage: '',
         initialPage: 0,
         activePage: 0,
         errors: FieldErrors(),
@@ -73,7 +72,6 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       {bool? isLoading,
       bool? isEdit,
       bool? isSuccess,
-      String? errorMessage,
       int? initialPage,
       int? activePage,
       List<String>? images,
@@ -83,7 +81,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       PaymentType? paymentType,
       int? novaPostNumber,
       int? productListPrice,
-      List<OrderedItem>? selectedProducts,
+      List<DimensionProduct>? selectedProducts,
       City? selectedCity,
       Warehouse? selectedWarehouse,
       Client? client,
@@ -93,7 +91,6 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
       isSuccess: isSuccess ?? this.isSuccess,
-      errorMessage: errorMessage ?? this.errorMessage,
       initialPage: initialPage ?? this.initialPage,
       activePage: activePage ?? this.activePage,
       errors: errors ?? this.errors,
