@@ -39,7 +39,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
     emit(state.copyWith(
         deliveryType: filterParams.deliveryType,
         paymentType: filterParams.paymentType,
-        status: filterParams.status,
+        status: filterParams.statuses,
         selectedDate: filterParams.selectedDate));
     return filterParams;
   }

@@ -84,11 +84,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
 
   void getOrder(Order order) {
     emit(state.copyWith(
-      selectedWarehouse: Warehouse(
-          ref: order.novaPost.ref,
-          postMachineType: order.novaPost.postMachineType!,
-          description: order.novaPost.presentName,
-          number: order.novaPost.number),
+      selectedWarehouse: order.novaPost,
       orderId: order.id,
       prepayment: order.cashAdvanceValue,
       selectedCity: order.city,

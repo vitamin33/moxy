@@ -7,13 +7,13 @@ import '../copyable.dart';
 class FilterOrderParams implements Copyable<FilterOrderParams> {
   final FilterDeliveryType deliveryType;
   final FilterPaymentType paymentType;
-  final List<Status> status;
+  final List<Status> statuses;
   final DateTimeRange? dateRange;
 
   FilterOrderParams({
     required this.deliveryType,
     required this.paymentType,
-    required this.status,
+    required this.statuses,
     required this.dateRange,
   });
 
@@ -23,7 +23,7 @@ class FilterOrderParams implements Copyable<FilterOrderParams> {
     return FilterOrderParams(
       deliveryType: FilterDeliveryType.empty,
       paymentType: FilterPaymentType.empty,
-      status: [],
+      statuses: [],
       dateRange: null,
     );
   }
@@ -38,7 +38,7 @@ class FilterOrderParams implements Copyable<FilterOrderParams> {
     return FilterOrderParams(
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
-      status: status ?? this.status,
+      statuses: status ?? this.statuses,
       dateRange: dateRange ?? this.dateRange,
     );
   }
@@ -47,10 +47,10 @@ class FilterOrderParams implements Copyable<FilterOrderParams> {
   bool isEqual(FilterOrderParams params) {
     return paymentType == params.paymentType &&
         deliveryType == params.deliveryType &&
-        status == params.status &&
+        statuses == params.statuses &&
         dateRange == params.dateRange;
   }
 
   @override
-  String toString() => '$paymentType, $deliveryType, $status, $dateRange';
+  String toString() => '$paymentType, $deliveryType, $statuses, $dateRange';
 }

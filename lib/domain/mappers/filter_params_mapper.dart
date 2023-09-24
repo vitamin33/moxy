@@ -7,7 +7,7 @@ class FilterParamsMapper {
     return FilterOrderParams(
         deliveryType: state.deliveryType,
         paymentType: state.paymentType,
-        status: state.status,
+        statuses: state.status,
         dateRange: state.selectedDate);
   }
 }

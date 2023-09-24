@@ -3,6 +3,7 @@ import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/mappers/warehouse_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
 
 import '../../constant/order_constants.dart';
@@ -18,18 +19,15 @@ import '../models/warehouse.dart';
 class OrderMapper {
   final productMapper = locate<ProductMapper>();
   final cityMapper = locate<CityMapper>();
+  final warehouseMapper = locate<WarehouseMapper>();
 
   List<Order> mapToOrderList(List<NetworkOrder> networkOrders) {
     return networkOrders.map((o) {
       return Order(
         id: o.id,
         cashAdvanceValue: o.cashAdvanceValue,
-        novaPost: o.novaPost,
-        city: City(
-            mainDescription: o.city.mainDescription!,
-            ref: o.city.ref!,
-            deliveryCityRef: o.city.deliveryCityRef!,
-            presentName: o.city.presentName!),
+        novaPost: warehouseMapper.mapToWarehouse(o.novaPost),
+        city: cityMapper.mapToCity(o.city),
         deliveryType: _mapDeliveryType(o.deliveryType),
         status: _mapStatus(o.status),
         paymentType: _mapPaymentType(o.paymentType),
@@ -67,7 +65,7 @@ class OrderMapper {
       return Order(
         id: o.id,
         cashAdvanceValue: o.cashAdvanceValue,
-        novaPost: o.novaPost!,
+        novaPost: warehouseMapper.mapToWarehouse(o.novaPost),
         city: City(
             mainDescription: o.city!.mainDescription!,
             ref: o.city!.ref!,

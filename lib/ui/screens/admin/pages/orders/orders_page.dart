@@ -30,12 +30,14 @@ class _OrdersPageState extends State<OrdersPage> {
   bool _isFilterChipsVisible = true;
   double _toolbarHeight = 0;
   Status? selectedMenu;
+  late AllOrdersCubit cubit;
 
   final GlobalKey _wrapKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
+    cubit = context.read<AllOrdersCubit>();
     _scrollController.addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _calculateWrapHeight();
@@ -60,6 +62,12 @@ class _OrdersPageState extends State<OrdersPage> {
       setState(() {
         _isFilterChipsVisible = true;
       });
+    }
+    if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 200 &&
+        cubit.state.hasMoreOrders &&
+        !cubit.state.isLoading) {
+      cubit.fetchOrders(cubit.state.currentPage + 1);
     }
   }
 
@@ -94,6 +102,7 @@ class _OrdersPageState extends State<OrdersPage> {
           child: Stack(children: [
             _buildLoadingIfNeeded(state),
             CustomScrollView(
+              controller: _scrollController,
               slivers: [
                 _buildTopAppBar(cubit, state, showTopBar),
                 CupertinoSliverRefreshControl(
@@ -103,7 +112,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
                 _buildOrdersListWidget(cubit, state),
               ],
-            ),
+            )
           ]),
         ),
       );
@@ -236,7 +245,7 @@ class _OrdersPageState extends State<OrdersPage> {
       backgroundColor: AppTheme.pink,
       surfaceTintColor: AppTheme.pink,
       floating: true,
-      pinned: false,
+      pinned: true,
       snap: true,
       toolbarHeight: _toolbarHeight,
       title: AnimatedContainer(
@@ -271,59 +280,27 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget _buildOrdersListWidget(AllOrdersCubit cubit, AllOrdersState state) {
     return SliverToBoxAdapter(
       child: ListView.builder(
-        controller: _scrollController,
         shrinkWrap: true,
         primary: false,
-        itemCount: state.allOrders.length,
+        itemCount: state.hasMoreOrders
+            ? state.allOrders.length + 1
+            : state.allOrders.length,
         itemBuilder: (BuildContext context, int index) {
-          final order = state.allOrders[index];
-          DateTime dateTime = DateTime.parse(order.createdAt.toString());
-          String orderDate = DateFormat("hh:mm  dd/MM").format(dateTime);
-          final orderPrice = order.orderedItems
-              .map((item) => int.parse(item.productPrice))
-              .reduce((total, price) => total + price)
-              .toString();
-          return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onLongPressStart: (details) =>
-                    showPopupMenu(context, order, cubit, details),
-                onTap: () {
-                  context
-                      .read<AdminHomeRouterCubit>()
-                      .navigateTo(const EditOrderPageState());
-                  context.read<EditOrderCubit>().getOrder(order);
-                },
-                child: ListTile(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    contentPadding: const EdgeInsets.all(14.0),
-                    tileColor: AppTheme.white,
-                    leading: Stack(children: [
-                      ClipOval(child: _buildImage(order.orderedItems)),
-                      Positioned(
-                        top: 22.0,
-                        left: 22.0,
-                        child: CircleAvatar(
-                          radius: 14,
-                          backgroundColor: AppTheme.white,
-                          child: CircleAvatar(
-                            backgroundColor: _mapStatusToColor(order.status),
-                            radius: 12,
-                            child: SvgPicture.asset(
-                              order.status.iconPath,
-                              width: 20,
-                              color: AppTheme.white,
-                            ),
-                          ),
-                        ),
-                      )
-                    ]),
-                    title: listTileTitle(order),
-                    subtitle: listTileSubtitle(order, orderPrice),
-                    trailing: listTileTrailing(order, orderDate)),
-              ));
+          if (index < state.allOrders.length) {
+            final order = state.allOrders[index];
+            DateTime dateTime = DateTime.parse(order.createdAt.toString());
+            String orderDate = DateFormat("hh:mm  dd/MM").format(dateTime);
+            final orderPrice = order.orderedItems
+                .map((item) => int.parse(item.productPrice))
+                .reduce((total, price) => total + price)
+                .toString();
+            return _buildOrderItemWidget(cubit, order, orderDate, orderPrice);
+          } else if (state.hasMoreOrders) {
+            return const Center(
+              child: LinearProgressIndicator(),
+            );
+          }
+          return Container();
         },
       ),
     );
@@ -440,5 +417,51 @@ class _OrdersPageState extends State<OrdersPage> {
             backgroundColor: AppTheme.pink,
           )
         : Container();
+  }
+
+  Widget _buildOrderItemWidget(
+      AllOrdersCubit cubit, Order order, String orderDate, String orderPrice) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onLongPressStart: (details) =>
+            showPopupMenu(context, order, cubit, details),
+        onTap: () {
+          context
+              .read<AdminHomeRouterCubit>()
+              .navigateTo(const EditOrderPageState());
+          context.read<EditOrderCubit>().getOrder(order);
+        },
+        child: ListTile(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding: const EdgeInsets.all(14.0),
+            tileColor: AppTheme.white,
+            leading: Stack(children: [
+              ClipOval(child: _buildImage(order.orderedItems)),
+              Positioned(
+                top: 22.0,
+                left: 22.0,
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: AppTheme.white,
+                  child: CircleAvatar(
+                    backgroundColor: _mapStatusToColor(order.status),
+                    radius: 12,
+                    child: SvgPicture.asset(
+                      order.status.iconPath,
+                      width: 20,
+                      color: AppTheme.white,
+                    ),
+                  ),
+                ),
+              )
+            ]),
+            title: listTileTitle(order),
+            subtitle: listTileSubtitle(order, orderPrice),
+            trailing: listTileTrailing(order, orderDate)),
+      ),
+    );
   }
 }

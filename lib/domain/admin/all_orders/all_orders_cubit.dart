@@ -6,6 +6,7 @@ import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/data/repositories/order_repository.dart';
 import 'package:moxy/domain/admin/all_orders/all_orders_state.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
@@ -21,14 +22,15 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
   late final StreamSubscription _filterOrderSubscription;
 
   AllOrdersCubit() : super(AllOrdersState.defaultAllProductsState()) {
-    allOrders();
+    checkFilters();
+    fetchOrders();
     _subscribe();
   }
 
   void _subscribe() {
     _filterOrderSubscription =
         filterRepository.filterParamsStream.listen((filterState) {
-      allOrders();
+      fetchOrders();
     });
   }
 
@@ -38,28 +40,41 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     return super.close();
   }
 
-  void allOrders() async {
+  void fetchOrders([int page = 1, bool fromRefresh = false]) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final result = await ordersRepository.getAllOrders();
-      checkFilters();
+      Result<List<Order>, Exception> result;
+
+      if (state.hasFilters()) {
+        result = await ordersRepository.getPaginatedFilterOrders(page);
+      } else {
+        result = await ordersRepository.getPaginatedAllOrders(page);
+      }
+
       result.when((success) {
-        allOrdersList = success;
-        emit(state.copyWith(allOrders: success, isLoading: false));
+        List<Order> fullList;
+        fullList = state.allOrders.combineOrders(success);
+        allOrdersList = fullList;
+        emit(state.copyWith(
+          allOrders: fullList,
+          currentPage: fromRefresh ? state.currentPage : page,
+          hasMoreOrders: fromRefresh ? state.hasMoreOrders : success.isNotEmpty,
+          isLoading: false,
+        ));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed getAllProduct'));
+        emit(state.copyWith(errorMessage: 'Failed getAllOrders'));
       });
     } catch (e) {
-      moxyPrint('$e');
+      rethrow;
     }
   }
 
-  checkFilters() {
+  void checkFilters() {
     final filters = filterRepository.getFilterParams();
     emit(state.copyWith(
       paymentFilter: filters.paymentType,
       deliveryFilter: filters.deliveryType,
-      statusFilter: filters.status,
+      statusFilter: filters.statuses,
       dateRangeFilter: filters.dateRange,
     ));
   }
@@ -123,7 +138,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
   }
 
   Future<void> refreshOrderList() async {
-    allOrders();
+    fetchOrders(1, true);
   }
 
   void changedStatus(Status status, String id) {

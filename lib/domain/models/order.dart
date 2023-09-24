@@ -1,15 +1,15 @@
 import 'package:moxy/constant/order_constants.dart';
-import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/models/status.dart';
+import 'package:moxy/domain/models/warehouse.dart';
 
 class Order implements Copyable<Order> {
   String? _id;
   int cashAdvanceValue;
-  NetworkNovaPost novaPost;
-  City city;
+  Warehouse? novaPost;
+  City? city;
   DeliveryType deliveryType;
   Status status;
   PaymentType paymentType;
@@ -39,8 +39,7 @@ class Order implements Copyable<Order> {
         id: '',
         cashAdvanceValue: 0,
         city: City.defaultCity(),
-        novaPost: NetworkNovaPost(
-            number: 0, ref: '', postMachineType: '', presentName: ''),
+        novaPost: Warehouse.defaultWarehouse(),
         deliveryType: DeliveryType.novaPost,
         status: Status.defaultStatus(),
         paymentType: PaymentType.cashAdvance,
@@ -54,7 +53,7 @@ class Order implements Copyable<Order> {
   Order copyWith({
     String? id,
     int? cashAdvanceValue,
-    NetworkNovaPost? novaPost,
+    Warehouse? novaPost,
     City? city,
     int? ukrPostNumber,
     DeliveryType? deliveryType,
@@ -158,5 +157,27 @@ class OrderedItem {
       imageUrl: imageUrl ?? this.imageUrl,
       productPrice: productPrice ?? this.productPrice,
     );
+  }
+}
+
+extension OrderListExtensions on List<Order> {
+  List<Order> combineOrders(List<Order> otherList) {
+    // Create a map to store unique orders based on their IDs
+    final Map<String, Order> uniqueOrders = {};
+
+    // Add orders from this list to the map
+    for (final order in this) {
+      uniqueOrders[order.id!] = order;
+    }
+
+    // Add orders from the other list to the map
+    for (final order in otherList) {
+      uniqueOrders[order.id!] = order;
+    }
+
+    // Convert the map values back to a list
+    final List<Order> combinedList = uniqueOrders.values.toList();
+
+    return combinedList;
   }
 }
