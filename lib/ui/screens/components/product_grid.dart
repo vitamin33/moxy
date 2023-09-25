@@ -28,25 +28,17 @@ class NewProductListGrid extends StatelessWidget {
             children: [
               if (bigBlockLeading == true) const BigBlockGrid(),
               SmallBlockGrid(
-                productName: allSellingProduct.first.name,
-                imageUrl: allSellingProduct.first.images.first.imagePath,
-                productPrice: allSellingProduct.first.salePrice.toString(),
+                product: allSellingProduct.first,
               ),
               SmallBlockGrid(
-                productName: allSellingProduct.first.name,
-                imageUrl: allSellingProduct.first.images.first.imagePath,
-                productPrice: allSellingProduct.first.salePrice.toString(),
+                product: allSellingProduct.first,
               ),
               if (bigBlockLeading == false) const BigBlockGrid(),
               SmallBlockGrid(
-                productName: allSellingProduct.first.name,
-                imageUrl: allSellingProduct.first.images.first.imagePath,
-                productPrice: allSellingProduct.first.salePrice.toString(),
+                product: allSellingProduct.first,
               ),
               SmallBlockGrid(
-                productName: allSellingProduct.first.name,
-                imageUrl: allSellingProduct.first.images.first.imagePath,
-                productPrice: allSellingProduct.first.salePrice.toString(),
+                product: allSellingProduct.first,
               ),
             ],
           )),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/client/basket/basket_cubit.dart';
+import 'package:moxy/domain/client/basket/basket_state.dart';
 import 'package:moxy/services/navigation/web/client_home_info_parser.dart';
 import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/services/navigation/web/client_home_router_delegate.dart';
@@ -145,6 +147,54 @@ class _RootWebWidgetState extends State<RootWebWidget>
     );
   }
 
+  Widget _buildBasketIconButton(
+    String iconData,
+    Function onPressed,
+  ) {
+    const double finalSize = 46.0;
+
+    return BlocBuilder<BasketCubit, BasketState>(
+      builder: (context, state) {
+        final cubit = context.read<BasketCubit>();
+
+        return Stack(children: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              alignment: Alignment.center,
+              width: finalSize,
+              height: finalSize,
+              child: GestureDetector(
+                onTap: () {
+                  onPressed.call();
+                },
+                child: SvgPicture.asset(
+                  iconData,
+                ),
+              ),
+            ),
+          ),
+          if (state.basket.basketItems.isNotEmpty)
+            Positioned(
+              top: 10,
+              right: 10,
+              child: CircleAvatar(
+                radius: 8,
+                backgroundColor: AppTheme.red,
+                child: Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Text(
+                    cubit.getBasketCount(),
+                    style: const TextStyle(color: AppTheme.white, fontSize: 10),
+                  ),
+                ),
+              ),
+            ),
+        ]);
+      },
+    );
+  }
+
   List<Widget> _buildActions(BuildContext context, ClientHomeRoute route) {
     return [
       _buildPaddedIconButton(
@@ -168,13 +218,12 @@ class _RootWebWidgetState extends State<RootWebWidget>
           widget.routerCubit.profilePressed();
         },
       ),
-      _buildPaddedIconButton(
+      _buildBasketIconButton(
         IconPath.bagWeb,
-        route is CheckoutRoute,
         () {
-          widget.routerCubit.basketPressed();
+          widget.routerCubit.basketPressed(context);
         },
-      ),
+      )
     ];
   }
 

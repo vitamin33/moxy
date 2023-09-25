@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_adress.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_contact_info.dart';
@@ -40,8 +42,8 @@ class ProfilePage extends StatelessWidget {
                   snackBarWhenFailure(snackBarFailureText: effect.failureText));
             }
             if (effect is ProfileSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
-                  snackBarSuccessText: effect.successText));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  snackBarWhenSuccess(snackBarSuccessText: effect.successText));
             }
             if (effect is ProfileValidationFailed) {
               ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
@@ -57,7 +59,9 @@ class ProfilePage extends StatelessWidget {
                     child: Column(
                   children: [
                     state.isLoading
-                        ? const CircularProgressIndicator()
+                        ? const MoxyLoader(
+                            iconSize: 40,
+                          )
                         : ProfileTabPage(),
                     const PromoContainer(),
                     const Footer()

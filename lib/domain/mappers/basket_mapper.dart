@@ -44,4 +44,12 @@ class BasketMapper {
       ),
     );
   }
+  NetworkAddOrChange productMapToNetworkBasketChange(Product product) {
+    return NetworkAddOrChange(
+      product: NetworkChangeBasketDimen(
+        productId: product.id!,
+        dimension: productMapper.mapToNetworkDimension(product.dimensions.first),
+      ),
+    );
+  }
 }
