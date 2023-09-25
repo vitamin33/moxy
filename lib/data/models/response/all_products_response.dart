@@ -23,7 +23,7 @@ class NetworkProduct {
   String? description;
   double costPrice;
   double salePrice;
-  List<NetworkDimension> dimensions;
+  List<NetworkDimension>? dimensions;
   List<String> images;
   String idName;
   bool forSale;

@@ -469,7 +469,7 @@ class DioClient {
       final orderList = ProfileOrdersResponse.fromJson(data);
       return orderList;
     } catch (e) {
-      throw Exception('Failed to load profile order history: $e');
+      rethrow;
     }
   }
 
@@ -485,7 +485,7 @@ class DioClient {
       }
       return productList;
     } catch (e) {
-      throw Exception('Failed to load getSellingProducts: $e');
+      rethrow;
     }
   }
 

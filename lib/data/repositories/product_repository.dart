@@ -28,7 +28,7 @@ class ProductRepository {
         product.description,
         product.costPrice,
         product.salePrice,
-        product.dimensions,
+        product.dimensions ?? [],
         product.images,
         product.idName,
       );
@@ -69,7 +69,7 @@ class ProductRepository {
         product.name,
         product.description,
         product.idName,
-        product.dimensions,
+        product.dimensions ?? [],
         product.costPrice,
         product.salePrice,
         product.images,
@@ -95,12 +95,12 @@ class ProductRepository {
     try {
       final result = await client.getSellingProducts();
       return Result.success(result);
-    } catch (e) {
-      moxyPrint('Repository Error:$e');
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
-      
+
   Future<Result<bool, Exception>> deleteProduct(String productId) async {
     try {
       final result = await client.deleteProduct(productId);

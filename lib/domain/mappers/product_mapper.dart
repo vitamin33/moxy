@@ -11,12 +11,12 @@ class ProductMapper {
     return networkProducts.map(
       (p) {
         Map<int, Dimension> dimenMap = {};
-        for (var i = 0; i < p.dimensions.length; i++) {
+        List<NetworkDimension> dimens = p.dimensions ?? [];
+        for (var i = 0; i < dimens.length; i++) {
           dimenMap.putIfAbsent(
               i,
               () => Dimension(
-                  color: p.dimensions[i].color,
-                  quantity: p.dimensions[i].quantity));
+                  color: dimens[i].color, quantity: dimens[i].quantity));
         }
         return Product(
           id: p.id,
@@ -24,7 +24,7 @@ class ProductMapper {
           description: p.description ?? '',
           costPrice: p.costPrice,
           salePrice: p.salePrice,
-          dimensions: p.dimensions
+          dimensions: dimens
               .map((e) => Dimension(
                     color: e.color,
                     quantity: e.quantity,
@@ -94,18 +94,21 @@ class ProductMapper {
   }
 
   Product mapToProduct(NetworkProduct success) {
+    List<NetworkDimension> dimens = success.dimensions ?? [];
     return Product(
       id: success.id,
       name: success.name,
       description: success.description ?? '',
       costPrice: success.costPrice,
       salePrice: success.salePrice,
-      dimensions: success.dimensions
-          .map((e) => Dimension(
-                color: e.color,
-                quantity: e.quantity,
-                image: _mapColorDimensionImage(e.color),
-              ))
+      dimensions: dimens
+          .map(
+            (e) => Dimension(
+              color: e.color,
+              quantity: e.quantity,
+              image: _mapColorDimensionImage(e.color),
+            ),
+          )
           .toList(),
       idName: success.idName,
       images: success.images

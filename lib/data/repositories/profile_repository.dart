@@ -2,6 +2,7 @@ import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/profile_mapper.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/profile.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../services/get_it.dart';
@@ -29,8 +30,9 @@ class ProfileRepository {
       final profileHistoryOrders =
           orderMapper.mapToProfileOrderList(result.profileOrders!);
       return Result.success(profileHistoryOrders);
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 }

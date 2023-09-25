@@ -75,19 +75,20 @@ class OrderMapper {
         status: _mapStatus(o.status),
         paymentType: _mapPaymentType(o.paymentType),
         client: Client.defaultClient(),
-        orderedItems: o.orderedItems
-            .map((e) => OrderedItem(
-                productId: e.product.id,
-                productName: e.product.name,
-                dimensions: e.product.dimensions
-                    .map((d) => Dimension(
-                          color: d.color,
-                          quantity: d.quantity,
-                        ))
-                    .toList(),
-                imageUrl: e.product.images.first,
-                productPrice: e.product.salePrice.toString()))
-            .toList(),
+        orderedItems: o.orderedItems.map((e) {
+          List<NetworkDimension> dimens = e.product.dimensions ?? [];
+          return OrderedItem(
+              productId: e.product.id,
+              productName: e.product.name,
+              dimensions: dimens
+                  .map((d) => Dimension(
+                        color: d.color,
+                        quantity: d.quantity,
+                      ))
+                  .toList(),
+              imageUrl: e.product.images.first,
+              productPrice: e.product.salePrice.toString());
+        }).toList(),
         createdAt: _parseDataTime(o.createdAt),
         updatedAt: _parseDataTime(o.updatedAt),
       );
