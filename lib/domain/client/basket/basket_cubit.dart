@@ -1,13 +1,151 @@
 // ignore: depend_on_referenced_packages
-import 'package:bloc/bloc.dart';
+import 'package:moxy/data/models/request/change_basket_dimen.dart';
+import 'package:moxy/data/models/response/basket_response.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
+import 'package:moxy/domain/client/basket/basket_effect.dart';
+import 'package:moxy/domain/mappers/basket_mapper.dart';
+import 'package:moxy/domain/mappers/city_mapper.dart';
+import 'package:moxy/domain/models/basket.dart';
+import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/domain/validation_mixin.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/utils/common.dart';
 import 'basket_state.dart';
 
-class BasketCubit extends Cubit<BasketState> {
-  final BasketRepository repository = locate<BasketRepository>();
-
+class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
+    with ValidationMixin {
+  final BasketRepository basketRepository = locate<BasketRepository>();
+  final basketMapper = locate<BasketMapper>();
+  final cityMapper = locate<CityMapper>();
   BasketCubit() : super(BasketState.defaultState()) {
-    repository.getBasket();
+    getBasketInfo();
+  }
+
+  void getBasketInfo() async {
+    try {
+      emit(state.copyWith(isLoading: true));
+      final result = await basketRepository.getBasket();
+      result.when((success) {
+        emitSuccessBasket(success);
+      }, (error) {
+        emitEffect(BasketApiRequestFailed(
+            'Failed get basket info ${error.toString()}'));
+      });
+    } catch (e) {
+      moxyPrint('$e');
+    }
+  }
+
+  void emitSuccessBasket(NetworkBasket success) {
+    Basket basket = basketMapper.mapToBasket(success);
+    bool isFreeShipping =
+        basket.amountForFreeShipping() > basket.freeShippingThreshold;
+    emit(
+      state.copyWith(
+        basket: basket,
+        isFreeShipping: isFreeShipping,
+        isLoading: false,
+      ),
+    );
+  }
+
+  void addQuantityOfProduct(BasketItem basketItem) {
+    if (checkQuantityAvailability(basketItem)) {
+      return;
+    }
+    String? productId = basketItem.product.id;
+    BasketItem item = state.basket.basketItems
+        .firstWhere((element) => element.product.id == productId);
+    basketItem.dimension.quantity++;
+    item.dimension = basketItem.dimension;
+    emit(
+      state.copyWith(
+        basket: state.basket.copyWith(basketItems: state.basket.basketItems),
+      ),
+    );
+    updateCart(item);
+  }
+
+  void removeQuantityOfProduct(BasketItem basketItem) {
+    if (!checkQuantityAvailability(basketItem)) {
+      return;
+    }
+    String? productId = basketItem.product.id;
+    BasketItem item = state.basket.basketItems
+        .firstWhere((element) => element.product.id == productId);
+    basketItem.dimension.quantity--;
+    item.dimension = basketItem.dimension;
+    emit(
+      state.copyWith(
+        basket: state.basket.copyWith(basketItems: state.basket.basketItems),
+      ),
+    );
+    updateCart(item);
+  }
+
+  void updateCart(BasketItem basketItem) async {
+    NetworkAddOrChange item = basketMapper.mapToNetworkBasketChange(basketItem);
+    final result = await basketRepository.changeBasketProductDimen(item);
+    result.when((success) {
+      emitSuccessBasket(success);
+    }, (error) {
+      emitEffect(
+          BasketApiRequestFailed('Failed update cart ${error.toString()}'));
+    });
+  }
+
+  bool checkQuantityAvailability(BasketItem basketItem) {
+    Dimension dimen = basketItem.dimension;
+    Dimension currentDimen =
+        basketItem.product.dimensions.firstWhere((d) => d.color == dimen.color);
+    if (dimen.quantity > 0 && dimen.quantity < currentDimen.quantity) {
+      return true;
+    }
+    return false;
+  }
+
+  void removeProductFromBasket(BasketItem item) {
+    List<BasketItem> items = state.basket.basketItems;
+    items.removeWhere((element) => element.product.id == item.product.id);
+    emit(state.copyWith(basket: state.basket.copyWith(basketItems: items)));
+    removeProductFromCart(item);
+  }
+
+  void removeProductFromCart(BasketItem basketItem) async {
+    NetworkRemoveProduct remove =
+        NetworkRemoveProduct(productId: basketItem.product.id!);
+    final result = await basketRepository.removeProductFromBasket(remove);
+    result.when((success) {
+      emitSuccessBasket(success);
+    }, (error) {
+      emitEffect(
+          BasketApiRequestFailed('Failed remove product ${error.toString()}'));
+    });
+  }
+
+  void addProductToBasket(Product product) async {
+    NetworkAddOrChange item =
+        basketMapper.productMapToNetworkBasketChange(product);
+    final result = await basketRepository.addProductToBasket(item);
+    result.when((success) {
+      final List<BasketItem> updateBasketItemsList = [
+        BasketItem(product: product, dimension: product.dimensions.first)
+      ];
+      emit(state.copyWith(
+          basket: state.basket.copyWith(basketItems: updateBasketItemsList)));
+    }, (error) {
+      emitEffect(BasketApiRequestFailed(
+          'Failed add product to basket  ${error.toString()}'));
+    });
+  }
+
+  String getBasketCount() {
+    int basketCount = 0;
+    for (BasketItem item in state.basket.basketItems) {
+      basketCount += item.dimension.quantity;
+    }
+    return basketCount.toString();
   }
 }

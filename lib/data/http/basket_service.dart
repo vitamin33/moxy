@@ -14,7 +14,7 @@ class BasketService {
 
   Future<Result<NetworkBasket, Exception>> getBasket() async {
     try {
-      final response = await _dio.get('$baseUrl$getBasketUrl');
+      final response = await _dio.get('$baseUrl $getBasketUrl');
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
       return Result.success(result);
@@ -37,7 +37,7 @@ class BasketService {
     }
   }
 
-  Future<Result<NetworkBasket, Exception>> changeQuantityOfProduct(
+  Future<Result<NetworkBasket, Exception>> addOrChangeQuantityOfProduct(
       NetworkAddOrChange change) async {
     try {
       _dio.options.headers['Content-Type'] = Headers.jsonContentType;
@@ -45,6 +45,19 @@ class BasketService {
           await _dio.post('$baseUrl$changeBasketUrl', data: change.toJson());
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
+      return Result.success(result);
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<Headers, Exception>> addProductToBasket(
+      NetworkAddOrChange change) async {
+    try {
+      _dio.options.headers['Content-Type'] = Headers.jsonContentType;
+      final response =
+          await _dio.post('$baseUrl$changeBasketUrl', data: change.toJson());
+      final result = response.headers;
       return Result.success(result);
     } on Exception catch (e) {
       return Result.error(e);

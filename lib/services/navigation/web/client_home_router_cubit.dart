@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/ui/components/sidesheet.dart';
+import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
 
 part 'client_home_router_state.dart';
 
@@ -47,10 +49,8 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     }
   }
 
-  void basketPressed() {
-    if (state is! CheckoutRoute) {
-      goToCheckout();
-    }
+  void basketPressed(context) {
+    SideSheet.right(body: const BasketPage(), context: context);
   }
 
   void searchPressed() {

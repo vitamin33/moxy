@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/domain/client/basket/basket_cubit.dart';
+import 'package:moxy/domain/models/product.dart';
 
 import '../../../constant/icon_path.dart';
 import '../../theme/app_theme.dart';
 import 'onhover.dart';
 
 class SmallBlockGrid extends StatelessWidget {
-  final String imageUrl;
-  final String productName;
-  final String productPrice;
+  final Product product;
+  
   const SmallBlockGrid(
       {super.key,
-      required this.imageUrl,
-      required this.productName,
-      required this.productPrice});
+      required this.product,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class SmallBlockGrid extends StatelessWidget {
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        imageUrl,
+                        product.images.first.imagePath,
                       ))),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -61,12 +62,24 @@ class SmallBlockGrid extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    productName,
+                   product.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  Text(productPrice)
+                  Row(
+                    children: [
+                      InkWell(
+                          onTap: () {
+                            context
+                                .read<BasketCubit>()
+                                .addProductToBasket(product);
+                          },
+                          child: SvgPicture.asset(IconPath.orders, width: 20)),
+                    const SizedBox(width: 10),
+                      Text(product.salePrice.toString()),
+                    ],
+                  )
                 ]),
           )
         ],

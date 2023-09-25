@@ -21,7 +21,17 @@ class BasketRepository {
   Future<Result<NetworkBasket, Exception>> changeBasketProductDimen(
       NetworkAddOrChange change) async {
     try {
-      final result = await client.changeQuantityOfProduct(change);
+      final result = await client.addOrChangeQuantityOfProduct(change);
+      return result;
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
+  }
+
+  Future<Result<Object, Exception>> addProductToBasket(
+      NetworkAddOrChange change) async {
+    try {
+      final result = await client.addProductToBasket(change);
       return result;
     } catch (e) {
       return Result.error(Exception('$e'));
