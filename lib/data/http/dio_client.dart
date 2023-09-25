@@ -252,11 +252,11 @@ class DioClient {
         FindOrders(statuses: [], paymentTypes: [], deliveryTypes: []);
     final deliveryType = params.deliveryType;
     if (deliveryType != FilterDeliveryType.empty) {
-      find.deliveryTypes.add(deliveryType.name);
+      find.deliveryTypes.add(deliveryType.capitalizedName);
     }
     final paymentType = params.paymentType;
     if (paymentType != FilterPaymentType.empty) {
-      find.paymentTypes.add(paymentType.name);
+      find.paymentTypes.add(paymentType.capitalizedName);
     }
     final statuses = params.statuses;
     if (statuses.isNotEmpty) {

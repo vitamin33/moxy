@@ -158,6 +158,13 @@ class OrderedItem {
       productPrice: productPrice ?? this.productPrice,
     );
   }
+
+  int fullOrderPrice() {
+    double productPrice = double.parse(this.productPrice);
+    return dimensions
+        .map((e) => (e.quantity * productPrice).toInt())
+        .reduce((total, element) => total + element);
+  }
 }
 
 extension OrderListExtensions on List<Order> {
@@ -177,6 +184,15 @@ extension OrderListExtensions on List<Order> {
 
     // Convert the map values back to a list
     final List<Order> combinedList = uniqueOrders.values.toList();
+    // Sort the combined list based on the createdAt field
+    combinedList.sort((a, b) {
+      // Convert the createdAt strings to DateTime objects for comparison
+      final DateTime dateTimeA = DateTime.parse(a.createdAt);
+      final DateTime dateTimeB = DateTime.parse(b.createdAt);
+
+      // Compare DateTime objects
+      return dateTimeB.compareTo(dateTimeA);
+    });
 
     return combinedList;
   }

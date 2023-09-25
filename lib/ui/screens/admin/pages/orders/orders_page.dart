@@ -291,11 +291,11 @@ class _OrdersPageState extends State<OrdersPage> {
             DateTime dateTime = DateTime.parse(order.createdAt.toString());
             String orderDate = DateFormat("hh:mm  dd/MM").format(dateTime);
             final orderPrice = order.orderedItems
-                .map((item) => int.parse(item.productPrice))
+                .map((item) => item.fullOrderPrice())
                 .reduce((total, price) => total + price)
                 .toString();
             return _buildOrderItemWidget(cubit, order, orderDate, orderPrice);
-          } else if (state.hasMoreOrders) {
+          } else if (state.isLoading) {
             return const Center(
               child: LinearProgressIndicator(),
             );

@@ -97,7 +97,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   void changeStatus(Status updateStatus) {
     List<Status> updatedStatusList = state.status;
-    if (!state.status.contains(updateStatus.statusValue)) {
+    if (!state.status.contains(updateStatus)) {
       updatedStatusList.add(updateStatus);
       filterRepository.saveStatusFilterParam(updatedStatusList);
       emit(state.copyWith(status: updatedStatusList));

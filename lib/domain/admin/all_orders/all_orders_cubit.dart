@@ -30,7 +30,8 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
   void _subscribe() {
     _filterOrderSubscription =
         filterRepository.filterParamsStream.listen((filterState) {
-      fetchOrders();
+      checkFilters();
+      fetchOrders(1, false, true);
     });
   }
 
@@ -40,7 +41,11 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     return super.close();
   }
 
-  void fetchOrders([int page = 1, bool fromRefresh = false]) async {
+  void fetchOrders([
+    int page = 1,
+    bool fromRefresh = false,
+    bool clearOldHistory = false,
+  ]) async {
     try {
       emit(state.copyWith(isLoading: true));
       Result<List<Order>, Exception> result;
@@ -53,7 +58,11 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
 
       result.when((success) {
         List<Order> fullList;
-        fullList = state.allOrders.combineOrders(success);
+        if (clearOldHistory) {
+          fullList = success;
+        } else {
+          fullList = state.allOrders.combineOrders(success);
+        }
         allOrdersList = fullList;
         emit(state.copyWith(
           allOrders: fullList,
@@ -62,7 +71,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
           isLoading: false,
         ));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed getAllOrders'));
+        emit(state.copyWith(errorMessage: 'Failed fetching orders'));
       });
     } catch (e) {
       rethrow;
