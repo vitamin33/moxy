@@ -255,4 +255,26 @@ class OrderMapper {
         DateFormat("yyyy-MM-dd").parse(dataRange).toString().split(' ');
     return startDate[0].toString();
   }
+
+  Order mapToOrder(NetworkOrder o) {
+    return Order(
+      id: o.id,
+      cashAdvanceValue: o.cashAdvanceValue,
+      novaPost: warehouseMapper.mapToWarehouse(o.novaPost),
+      city: cityMapper.mapToCity(o.city),
+      deliveryType: _mapDeliveryType(o.deliveryType),
+      status: _mapStatus(o.status),
+      paymentType: _mapPaymentType(o.paymentType),
+      client: Client(
+        id: o.client.id,
+        mobileNumber: o.client.mobileNumber,
+        firstName: o.client.firstName,
+        secondName: o.client.secondName,
+        city: cityMapper.mapToCity(o.client.city),
+      ),
+      orderedItems: productMapper.mapToOrderedItemList(o.orderedItems),
+      createdAt: o.createdAt,
+      updatedAt: o.updatedAt,
+    );
+  }
 }

@@ -405,8 +405,10 @@ class _OrdersPageState extends State<OrdersPage> {
       case OrderStatus.Sale:
       case OrderStatus.Sent:
         return AppTheme.greenDark;
+      case OrderStatus.Paid:
+        return AppTheme.orange;
       default:
-        return AppTheme.pinkDark;
+        return AppTheme.greyDark;
     }
   }
 

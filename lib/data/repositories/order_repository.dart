@@ -55,6 +55,17 @@ class OrderRepository {
     }
   }
 
+  Future<Result<Order, Exception>> getOrderById(String orderId) async {
+    try {
+      final result = await client.getOrderById(orderId);
+
+      return Result.success(orderMapper.mapToOrder(result));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+
   Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
     try {
       final result = await client.createOrder(order);

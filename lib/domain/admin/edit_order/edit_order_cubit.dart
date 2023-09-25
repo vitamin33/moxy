@@ -83,28 +83,11 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   }
 
   void getOrder(Order order) {
-    emit(state.copyWith(
-      selectedWarehouse: order.novaPost,
-      orderId: order.id,
-      prepayment: order.cashAdvanceValue,
-      selectedCity: order.city,
-      deliveryType: order.deliveryType,
-      paymentType: order.paymentType,
-      status: order.status.statusTitle,
-      client: Client(
-          id: order.client.id,
-          city: order.client.city,
-          firstName: order.client.firstName,
-          mobileNumber: order.client.mobileNumber,
-          secondName: order.client.secondName),
-      selectedProducts:
-          _productMapper.mapToProductDimensionList(order.orderedItems),
-      orderedItems: order.orderedItems,
-      createdAt: formattedDateTime(order.createdAt),
-      updatedAt: order.updatedAt,
-    ));
+    emitOrder(order);
     paymentController =
         TextEditingController(text: state.prepayment.toString());
+
+    requestOrderFromNetwork(order.id);
   }
 
   String formattedDateTime(date) {
@@ -180,5 +163,44 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
 
   void editSelectedProduct() {
     productRepository.addToSelectedProductStream(state.orderedItems);
+  }
+
+  void requestOrderFromNetwork(String? id) async {
+    if (id != null) {
+      final result = await orderRepository.getOrderById(id);
+      result.when((success) {
+        emitOrder(success);
+      }, (error) {
+        emit(state.copyWith(
+          errorMessage: 'Failed to load order details',
+          isLoading: false,
+          isSuccess: false,
+        ));
+      });
+    }
+  }
+
+  void emitOrder(Order order) {
+    emit(state.copyWith(
+      isLoading: false,
+      selectedWarehouse: order.novaPost,
+      orderId: order.id,
+      prepayment: order.cashAdvanceValue,
+      selectedCity: order.city,
+      deliveryType: order.deliveryType,
+      paymentType: order.paymentType,
+      status: order.status.statusTitle,
+      client: Client(
+          id: order.client.id,
+          city: order.client.city,
+          firstName: order.client.firstName,
+          mobileNumber: order.client.mobileNumber,
+          secondName: order.client.secondName),
+      selectedProducts:
+          _productMapper.mapToProductDimensionList(order.orderedItems),
+      orderedItems: order.orderedItems,
+      createdAt: formattedDateTime(order.createdAt),
+      updatedAt: order.updatedAt,
+    ));
   }
 }

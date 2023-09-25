@@ -286,6 +286,16 @@ class DioClient {
     }
   }
 
+  Future<NetworkOrder> getOrderById(String orderId) async {
+    try {
+      final response = await dio.get('$baseUrl$orderByIdUrl$orderId');
+      final data = response.data;
+      return NetworkOrder.fromJson(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<Result<Headers, Exception>> createOrder(CreateOrder order) async {
     final Headers? result;
     final data = order.toJson();
