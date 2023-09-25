@@ -70,7 +70,7 @@ class FilterRepository {
       deliveryType: deliveryType != null
           ? _parseDeliveryType(deliveryType)
           : FilterDeliveryType.empty,
-      status: status != null ? _parseStatus(status) : [],
+      statuses: status != null ? _parseStatus(status) : [],
       dateRange: dateRangeType != null ? _parseDataRange(dateRangeType) : null,
     );
   }
@@ -96,7 +96,6 @@ class FilterRepository {
         return FilterDeliveryType.empty;
     }
   }
-
 
   List<Status> _parseStatus(List<String> statusList) {
     List<Status> result = [];

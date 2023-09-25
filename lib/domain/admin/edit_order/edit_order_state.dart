@@ -1,3 +1,5 @@
+import 'package:moxy/domain/models/dimension_product.dart';
+
 import '../../../constant/order_constants.dart';
 import '../../copyable.dart';
 import '../../models/city.dart';
@@ -14,7 +16,8 @@ class EditOrderState implements Copyable<EditOrderState> {
   String orderId;
   DeliveryType deliveryType;
   PaymentType paymentType;
-  List<OrderedItem> selectedProducts;
+  List<OrderedItem> orderedItems;
+  List<DimensionProduct> selectedProducts;
   City selectedCity;
   Warehouse selectedWarehouse;
   String status;
@@ -36,6 +39,7 @@ class EditOrderState implements Copyable<EditOrderState> {
     required this.orderId,
     required this.deliveryType,
     required this.paymentType,
+    required this.orderedItems,
     required this.selectedProducts,
     required this.selectedCity,
     required this.selectedWarehouse,
@@ -57,7 +61,8 @@ class EditOrderState implements Copyable<EditOrderState> {
         orderId: '',
         deliveryType: DeliveryType.novaPost,
         paymentType: PaymentType.fullPayment,
-        selectedProducts: [OrderedItem.defaultOrderedItem()],
+        selectedProducts: [],
+        orderedItems: [],
         selectedCity: City.defaultCity(),
         selectedWarehouse: Warehouse.defaultWarehouse(),
         client: Client.defaultClient(),
@@ -78,7 +83,8 @@ class EditOrderState implements Copyable<EditOrderState> {
       String? orderId,
       DeliveryType? deliveryType,
       PaymentType? paymentType,
-      List<OrderedItem>? selectedProducts,
+      List<OrderedItem>? orderedItems,
+      List<DimensionProduct>? selectedProducts,
       City? selectedCity,
       Warehouse? selectedWarehouse,
       Client? client,
@@ -97,6 +103,7 @@ class EditOrderState implements Copyable<EditOrderState> {
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
       selectedProducts: selectedProducts ?? this.selectedProducts,
+      orderedItems: orderedItems ?? this.orderedItems,
       selectedCity: selectedCity ?? this.selectedCity,
       selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,

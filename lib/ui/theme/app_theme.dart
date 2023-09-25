@@ -26,9 +26,10 @@ class AppTheme extends InheritedWidget {
   static const Color red = Color(0xFFF14336);
   static const Color greyLigth = Color(0xFFF0F1F5);
   static const Color pinkDark = Color(0xFFEF5DA8);
-  static const Color greyDark = Color(0xFFB3B3B3);
+  static const Color greyDark = Color(0xFF555555);
   static const Color violet = Color(0xFFD5C0F9);
   static const Color green = Color(0xFFBEFAA8);
+  static const Color orange = Color(0xFFFFA500);
   static const Color greenDark = Color.fromARGB(255, 91, 203, 50);
 
   static const double buttonHeight = 50;

@@ -12,3 +12,9 @@ enum FilterDeliveryType {
   novaPost,
   ukrPost,
 }
+
+extension CapitalizeEnumb on Enum {
+  String get capitalizedName {
+    return name[0].toUpperCase() + name.substring(1);
+  }
+}

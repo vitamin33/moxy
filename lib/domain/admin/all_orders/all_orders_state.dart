@@ -8,6 +8,8 @@ import '../../models/status.dart';
 class AllOrdersState implements Copyable<AllOrdersState> {
   final List<Order> allOrders;
   final bool isLoading;
+  final int currentPage;
+  final bool hasMoreOrders;
   final FilterDeliveryType? deliveryFilter;
   final FilterPaymentType? paymentFilter;
   final List<Status>? statusFilter;
@@ -22,44 +24,54 @@ class AllOrdersState implements Copyable<AllOrdersState> {
     required this.statusFilter,
     required this.dateRangeFilter,
     required this.isLoading,
+    this.currentPage = 1, // paging starting from 1'st
+    this.hasMoreOrders = true,
     this.errorMessage,
     this.shouldSetDateRangeFilterToNull = false,
   });
 
   static AllOrdersState defaultAllProductsState() {
     return AllOrdersState(
-        allOrders: [],
-        deliveryFilter: FilterDeliveryType.empty,
-        paymentFilter: FilterPaymentType.empty,
-        statusFilter: [],
-        dateRangeFilter: null,
-        isLoading: false,
-        errorMessage: '',
-        shouldSetDateRangeFilterToNull: false);
+      allOrders: [],
+      deliveryFilter: FilterDeliveryType.empty,
+      paymentFilter: FilterPaymentType.empty,
+      statusFilter: [],
+      dateRangeFilter: null,
+      isLoading: false,
+      errorMessage: '',
+      shouldSetDateRangeFilterToNull: false,
+      hasMoreOrders: true,
+      currentPage: 1, // paging starting from 1'st
+    );
   }
 
   @override
-  AllOrdersState copyWith(
-      {bool? isLoading,
-      String? errorMessage,
-      FilterDeliveryType? deliveryFilter,
-      FilterPaymentType? paymentFilter,
-      List<Status>? statusFilter,
-      DateTimeRange? dateRangeFilter,
-      List<Order>? allOrders,
-      bool? shouldSetDateRangeFilterToNull}) {
+  AllOrdersState copyWith({
+    bool? isLoading,
+    String? errorMessage,
+    FilterDeliveryType? deliveryFilter,
+    FilterPaymentType? paymentFilter,
+    List<Status>? statusFilter,
+    DateTimeRange? dateRangeFilter,
+    List<Order>? allOrders,
+    bool? shouldSetDateRangeFilterToNull,
+    int? currentPage,
+    bool? hasMoreOrders,
+  }) {
     return AllOrdersState(
-        isLoading: isLoading ?? this.isLoading,
-        deliveryFilter: deliveryFilter ?? this.deliveryFilter,
-        paymentFilter: paymentFilter ?? this.paymentFilter,
-        statusFilter: statusFilter ?? this.statusFilter,
-        dateRangeFilter: shouldSetDateRangeFilterToNull == true
-            ? null
-            : dateRangeFilter ?? this.dateRangeFilter,
-        errorMessage: errorMessage ?? this.errorMessage,
-        allOrders: allOrders ?? this.allOrders,
-        shouldSetDateRangeFilterToNull:
-            shouldSetDateRangeFilterToNull ?? false);
+      isLoading: isLoading ?? this.isLoading,
+      deliveryFilter: deliveryFilter ?? this.deliveryFilter,
+      paymentFilter: paymentFilter ?? this.paymentFilter,
+      statusFilter: statusFilter ?? this.statusFilter,
+      dateRangeFilter: shouldSetDateRangeFilterToNull == true
+          ? null
+          : dateRangeFilter ?? this.dateRangeFilter,
+      errorMessage: errorMessage ?? this.errorMessage,
+      allOrders: allOrders ?? this.allOrders,
+      shouldSetDateRangeFilterToNull: shouldSetDateRangeFilterToNull ?? false,
+      hasMoreOrders: hasMoreOrders ?? this.hasMoreOrders,
+      currentPage: currentPage ?? this.currentPage,
+    );
   }
 
   bool hasFilters() {

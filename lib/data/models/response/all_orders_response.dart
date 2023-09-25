@@ -31,11 +31,10 @@ class ProfileOrdersResponse {
 
 @JsonSerializable()
 class NetworkOrder {
-  @JsonKey(name: '_id')
   String? id;
   int cashAdvanceValue;
-  NetworkNovaPost novaPost;
-  NetworkCity city;
+  NetworkNovaPost? novaPost;
+  NetworkCity? city;
   String deliveryType;
   String status;
   String paymentType;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_state.dart';
+import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/ui_effect.dart';
 
 import '../../../constant/order_constants.dart';
@@ -22,6 +23,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   final orderRepository = locate<OrderRepository>();
   final productRepository = locate<ProductRepository>();
   final orderMapper = locate<OrderMapper>();
+  final _productMapper = locate<ProductMapper>();
   late TextEditingController paymentController;
   final TextEditingController nameEditController = TextEditingController();
   final TextEditingController phoneEditController = TextEditingController();
@@ -34,7 +36,9 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   void _subscribe() {
     _selectedProductSubscription = productRepository.selectedProducts.listen(
       (items) {
-        emit(state.copyWith(selectedProducts: items));
+        final productDimensList =
+            _productMapper.mapToProductDimensionList(items);
+        emit(state.copyWith(selectedProducts: productDimensList));
       },
       onError: (error) =>
           {moxyPrint('Error during selected products listening.')},
@@ -51,11 +55,13 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   void editOrder() async {
     try {
       emit(state.copyWith(isLoading: true));
+      List<OrderedItem> selectedProducts =
+          productRepository.currentSelectedProducts ?? [];
       final order = orderMapper.mapToNetworkEditOrder(
           state.orderId,
           state.deliveryType,
           state.paymentType,
-          state.selectedProducts,
+          selectedProducts,
           state.selectedWarehouse,
           state.client,
           state.selectedCity,
@@ -77,30 +83,11 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   }
 
   void getOrder(Order order) {
-    emit(state.copyWith(
-      selectedWarehouse: Warehouse(
-          ref: order.novaPost.ref,
-          postMachineType: order.novaPost.postMachineType!,
-          description: order.novaPost.presentName,
-          number: order.novaPost.number),
-      orderId: order.id,
-      prepayment: order.cashAdvanceValue,
-      selectedCity: order.city,
-      deliveryType: order.deliveryType,
-      paymentType: order.paymentType,
-      status: order.status.statusTitle,
-      client: Client(
-          id: order.client.id,
-          city: order.client.city,
-          firstName: order.client.firstName,
-          mobileNumber: order.client.mobileNumber,
-          secondName: order.client.secondName),
-      selectedProducts: order.orderedItems,
-      createdAt: formattedDateTime(order.createdAt),
-      updatedAt: order.updatedAt,
-    ));
+    emitOrder(order);
     paymentController =
         TextEditingController(text: state.prepayment.toString());
+
+    requestOrderFromNetwork(order.id);
   }
 
   String formattedDateTime(date) {
@@ -175,6 +162,45 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   }
 
   void editSelectedProduct() {
-    productRepository.addToSelectedProductStream(state.selectedProducts);
+    productRepository.addToSelectedProductStream(state.orderedItems);
+  }
+
+  void requestOrderFromNetwork(String? id) async {
+    if (id != null) {
+      final result = await orderRepository.getOrderById(id);
+      result.when((success) {
+        emitOrder(success);
+      }, (error) {
+        emit(state.copyWith(
+          errorMessage: 'Failed to load order details',
+          isLoading: false,
+          isSuccess: false,
+        ));
+      });
+    }
+  }
+
+  void emitOrder(Order order) {
+    emit(state.copyWith(
+      isLoading: false,
+      selectedWarehouse: order.novaPost,
+      orderId: order.id,
+      prepayment: order.cashAdvanceValue,
+      selectedCity: order.city,
+      deliveryType: order.deliveryType,
+      paymentType: order.paymentType,
+      status: order.status.statusTitle,
+      client: Client(
+          id: order.client.id,
+          city: order.client.city,
+          firstName: order.client.firstName,
+          mobileNumber: order.client.mobileNumber,
+          secondName: order.client.secondName),
+      selectedProducts:
+          _productMapper.mapToProductDimensionList(order.orderedItems),
+      orderedItems: order.orderedItems,
+      createdAt: formattedDateTime(order.createdAt),
+      updatedAt: order.updatedAt,
+    ));
   }
 }

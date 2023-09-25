@@ -178,6 +178,8 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     emit(state.copyWith(paymentType: type));
     if (type.name == 'cashAdvance') {
       emit(state.copyWith(prepayment: '150'));
+    } else {
+      emit(state.copyWith(prepayment: null));
     }
   }
 

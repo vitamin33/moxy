@@ -31,7 +31,7 @@ class ContactDetails extends StatelessWidget {
   }
 
   String _formSelectedProductsName(EditOrderState state) {
-    return state.selectedProducts.map((item) => item.productName).join(', ');
+    return state.selectedProducts.map((item) => item.name).join(', ');
   }
 
   Widget _buildClientNameWidget(

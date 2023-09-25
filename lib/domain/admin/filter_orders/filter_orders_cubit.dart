@@ -39,7 +39,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
     emit(state.copyWith(
         deliveryType: filterParams.deliveryType,
         paymentType: filterParams.paymentType,
-        status: filterParams.status,
+        status: filterParams.statuses,
         selectedDate: filterParams.selectedDate));
     return filterParams;
   }
@@ -97,7 +97,7 @@ class FilterOrdersCubit extends Cubit<FilterOrdersState> {
 
   void changeStatus(Status updateStatus) {
     List<Status> updatedStatusList = state.status;
-    if (!state.status.contains(updateStatus.statusValue)) {
+    if (!state.status.contains(updateStatus)) {
       updatedStatusList.add(updateStatus);
       filterRepository.saveStatusFilterParam(updatedStatusList);
       emit(state.copyWith(status: updatedStatusList));

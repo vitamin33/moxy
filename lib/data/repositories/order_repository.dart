@@ -29,39 +29,40 @@ class OrderRepository {
     prefs = await SharedPreferences.getInstance();
   }
 
-  Future<Result<List<Order>, Exception>> getAllOrders() async {
+  Future<Result<List<Order>, Exception>> getPaginatedAllOrders(
+      [int page = 1]) async {
     try {
-      final result = await client.allOrders();
+      final result = await client.paginatedAllOrders(page);
       final allOrdersList = orderMapper.mapToOrderList(result);
-      final params = filterRepository.getFilterParams();
-      final deliveryType = params.deliveryType.name.toString();
-      final paymentType = params.paymentType.name.toString();
-      final status = params.status;
-      final dateRange = params.dateRange?.toString();
-      final startData = dateRange?.split(' - ')[0].split(' ')[0];
-      final endData = dateRange?.split(' - ')[1].split(' ')[0];
 
-      List<Order> filteredOrders = allOrdersList.where((order) {
-        bool matchesDelivery = deliveryType == 'empty' ||
-            order.deliveryType.name == deliveryType;
-        bool matchesPayment = paymentType == 'empty' ||
-            order.paymentType.name == paymentType;
-        bool matchesStatus = status.isEmpty ||
-            status.any((s) => order.status.statusTitle.contains(s.statusTitle));
-        bool matchesData = startData == null ||
-            endData == null ||
-            startData == endData ||
-            (order.createdAt.compareTo(startData) >= 0 &&
-                order.createdAt.compareTo(endData) <= 0);
-        return matchesDelivery &&
-            matchesPayment &&
-            matchesStatus &&
-            matchesData;
-      }).toList();
-
-      return Result.success(filteredOrders);
+      return Result.success(allOrdersList);
     } catch (e) {
       return Result.error(Exception('$e'));
+    }
+  }
+
+  Future<Result<List<Order>, Exception>> getPaginatedFilterOrders(
+      [int page = 1]) async {
+    try {
+      final filterParams = filterRepository.getFilterParams();
+      final result = await client.paginatedFilterOrders(filterParams, page);
+      final filterOrdersList = orderMapper.mapToOrderList(result);
+
+      return Result.success(filterOrdersList);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+
+  Future<Result<Order, Exception>> getOrderById(String orderId) async {
+    try {
+      final result = await client.getOrderById(orderId);
+
+      return Result.success(orderMapper.mapToOrder(result));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
