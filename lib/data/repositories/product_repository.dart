@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:moxy/data/http/dio_client.dart';
+import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -10,7 +10,7 @@ import '../../domain/models/order.dart';
 import '../../services/get_it.dart';
 
 class ProductRepository {
-  final DioClient client = locate<DioClient>();
+  final ProductsService client = locate<ProductsService>();
   final orderMapper = locate<OrderMapper>();
   final _selectedProductSubject = BehaviorSubject<List<OrderedItem>>();
   Stream<List<OrderedItem>> get selectedProducts =>
@@ -26,7 +26,8 @@ class ProductRepository {
       final result = await client.createProduct(
         product.name,
         product.description,
-        product.costPrice,
+        product.costPriceInUsd,
+        product.weightInGrams,
         product.salePrice,
         product.dimensions ?? [],
         product.images,
@@ -38,8 +39,7 @@ class ProductRepository {
         return Result.error(Exception('sd'));
       }
     } catch (e) {
-      moxyPrint('Repository Error:$e');
-      return Result.error(Exception('$e'));
+      rethrow;
     }
   }
 
@@ -70,7 +70,8 @@ class ProductRepository {
         product.description,
         product.idName,
         product.dimensions ?? [],
-        product.costPrice,
+        product.costPriceInUsd,
+        product.weightInGrams,
         product.salePrice,
         product.images,
         editProductId,

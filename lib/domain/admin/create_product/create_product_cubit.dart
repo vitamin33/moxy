@@ -2,7 +2,6 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/create_product/create_product_effects.dart';
 import 'package:moxy/domain/admin/create_product/create_product_state.dart';
@@ -25,20 +24,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   CreateProductCubit({required this.productId, required this.isEditMode})
       : super(
-          CreateProductState(
-            isLoading: false,
-            isEdit: isEditMode,
-            isSuccess: false,
-            errorMessage: '',
-            editProduct: Product.defaultProduct(),
-            initialPage: 0,
-            activePage: 0,
-            product: Product.defaultProduct(),
-            images: [],
-            editProductId: productId,
-            errors: FieldErrors.noErrors(),
-            allDimensions: allColorsDimens,
-          ),
+          CreateProductState.defaultCreateProductState(),
         ) {
     if (isEditMode && productId != null) {
       getProductById(productId);
@@ -47,7 +33,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   List<TextEditingController> quantityControllers = [];
 
   final TextEditingController salePriceController = TextEditingController();
-  final TextEditingController costPriceController = TextEditingController();
+  final TextEditingController costPriceInUsdController =
+      TextEditingController();
+  final TextEditingController weightController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController idNameController = TextEditingController();
@@ -64,7 +52,8 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
         emit(state.copyWith(isLoading: false));
         nameController.clear();
         descriptionController.clear();
-        costPriceController.clear();
+        costPriceInUsdController.clear();
+        weightController.clear();
         salePriceController.clear();
         colorController.clear();
         idNameController.clear();
@@ -116,11 +105,17 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void nameChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
     final String name = value;
     emit(state.copyWith(product: state.product.copyWith(name: name)));
   }
 
-  void descriptionChanged(value) {
+  void descriptionChanged(String value) {
+    if (value.isEmpty) {
+      return;
+    }
     List<String> lines = value.split('\n');
     if (lines.length > 6) {
       lines.removeRange(6, lines.length);
@@ -134,16 +129,26 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
         product: state.product.copyWith(description: description)));
   }
 
-  void idNameChanged(value) {
-    final String idName = value;
-    emit(state.copyWith(product: state.product.copyWith(idName: idName)));
+  void idNameChanged(String value) {
+    if (value.isNotEmpty) {
+      final String idName = value;
+      emit(state.copyWith(product: state.product.copyWith(idName: idName)));
+    }
   }
 
-  void costPriceChanged(value) {
-    if (value != null) {
+  void costPriceInUsdChanged(String value) {
+    if (value.isNotEmpty) {
       final double costPrice = double.parse(value);
       emit(state.copyWith(
-          product: state.product.copyWith(costPrice: costPrice)));
+          product: state.product.copyWith(costPriceInUsd: costPrice)));
+    }
+  }
+
+  void weightInGramsChanged(String value) {
+    if (value.isNotEmpty) {
+      final int weightInGrams = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(weightInGrams: weightInGrams)));
     }
   }
 
@@ -202,7 +207,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
           duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
     } else {
       if (validateFields()) {
-        if (state.isEdit) {
+        if (isEditMode) {
           editProduct(state.editProductId);
         } else {
           addProduct();
@@ -255,7 +260,8 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void fillFields(Product product) {
     nameController.text = product.name;
     descriptionController.text = product.description;
-    costPriceController.text = product.costPrice.toString();
+    costPriceInUsdController.text = product.costPriceInUsd.toString();
+    weightController.text = product.weightInGrams.toString();
     salePriceController.text = product.salePrice.toString();
     idNameController.text = product.idName.toString();
   }
@@ -290,14 +296,13 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();
-        costPriceController.clear();
+        costPriceInUsdController.clear();
         salePriceController.clear();
         colorController.clear();
         idNameController.clear();
         for (var element in quantityControllers) {
           element.clear();
         }
-        emit(state.copyWith(isSuccess: true));
         emit(state.copyWith(isLoading: false));
       }, (error) {
         emit(state.copyWith(
@@ -323,8 +328,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       errors.productIdName = FieldError.empty;
       noErrors = false;
     }
-    if (!isValidPrice(state.product.costPrice)) {
-      errors.costPrice = FieldError.invalid;
+    if (!isValidPrice(state.product.costPriceInUsd)) {
+      errors.costPriceInUsd = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidWeight(state.product.weightInGrams)) {
+      errors.costPriceInUsd = FieldError.invalid;
       noErrors = false;
     }
     if (!isValidQuantity(state.product.dimensions)) {

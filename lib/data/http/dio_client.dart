@@ -1,16 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/find_orders_request.dart';
-import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path/path.dart';
 // ignore: depend_on_referenced_packages
 import 'package:multiple_result/multiple_result.dart';
 
@@ -21,7 +15,6 @@ import '../../constant/api_path.dart';
 import '../models/request/create_order_request.dart';
 import '../models/request/edit_order_request.dart';
 import '../models/request/login_request.dart';
-import '../models/request/create_product_request.dart';
 import '../models/request/user_request.dart';
 import '../models/response/all_orders_response.dart';
 import '../models/response/all_promos_response.dart';
@@ -109,122 +102,6 @@ class DioClient {
       result = LoginResponse.fromJson(response.data);
     } catch (e) {
       moxyPrint('During login: $e');
-      return null;
-    }
-    return result;
-  }
-
-  Future<CreateProduct?> createProduct(
-    String name,
-    String? description,
-    double costPrice,
-    double salePrice,
-    List<NetworkDimension> dimensions,
-    List<String> images,
-    String idName,
-  ) async {
-    final CreateProduct? result;
-    List<MultipartFile> imageFiles = [];
-    for (String image in images) {
-      String fileName = basename(image);
-      imageFiles.add(
-        await MultipartFile.fromFile(
-          image,
-          filename: fileName,
-        ),
-      );
-    }
-    FormData formData = FormData.fromMap({
-      'name': name,
-      'description': description ?? '',
-      'costPrice': costPrice,
-      'salePrice': salePrice,
-      'dimensions': jsonDecode(jsonEncode(dimensions)),
-      'images': imageFiles,
-      'idName': idName
-    });
-    try {
-      Response response = await dio.post(
-        createProductUrl,
-        data: formData,
-      );
-      result = CreateProduct.fromJson(response.data);
-    } catch (e) {
-      moxyPrint('Request product :$e');
-      return null;
-    }
-    return result;
-  }
-
-  Future<List<NetworkProduct>> allProducts() async {
-    try {
-      final response = await dio.get(allProductsUrl);
-      final data = response.data;
-      final productList = <NetworkProduct>[];
-      for (var value in (data as List)) {
-        productList.add(NetworkProduct.fromJson(value));
-      }
-      return productList;
-    } catch (e) {
-      throw Exception('Failed to load product: $e');
-    }
-  }
-
-  Future<NetworkProduct> getProductById(String id) async {
-    try {
-      final response = await dio.get('$baseUrl$getProductByIdUrl$id');
-      final data = response.data;
-      final result = NetworkProduct.fromJson(data);
-      return result;
-    } catch (e) {
-      throw Exception('Failed to load product: $e');
-    }
-  }
-
-  Future<NetworkProduct?> editProduct(
-      String? id,
-      String name,
-      String? description,
-      String idName,
-      List<NetworkDimension> dimensions,
-      double costPrice,
-      double salePrice,
-      List<String> images,
-      editProductId) async {
-    final NetworkProduct? result;
-    List<MultipartFile> newImage = [];
-    List<String> currentImage = [];
-    for (String image in images) {
-      if (image.contains('http')) {
-        currentImage.add(image);
-      } else {
-        String fileName = basename(image);
-        newImage.add(
-          await MultipartFile.fromFile(
-            image,
-            filename: fileName,
-          ),
-        );
-      }
-    }
-    FormData formData = FormData.fromMap({
-      'name': name,
-      'description': description ?? '',
-      'costPrice': costPrice,
-      'salePrice': salePrice,
-      'idName': idName,
-      'newImages': newImage,
-      'currentImages': currentImage,
-      'dimensions': jsonDecode(jsonEncode(dimensions)),
-    });
-    try {
-      Response response = await dio.post(
-        '$baseUrl/products/edit/$editProductId',
-        data: formData,
-      );
-      result = NetworkProduct.fromJson(response.data);
-    } catch (e) {
-      moxyPrint('Request product :$e');
       return null;
     }
     return result;
@@ -471,36 +348,6 @@ class DioClient {
     } catch (e) {
       rethrow;
     }
-  }
-
-  //NEW PRODUCT SELLING LIST
-
-  Future<List<NetworkProduct>> getSellingProducts() async {
-    try {
-      final response = await dio.get('$baseUrl $allSellingProductsUrl');
-      final data = response.data;
-      final productList = <NetworkProduct>[];
-      for (var value in (data as List)) {
-        productList.add(NetworkProduct.fromJson(value));
-      }
-      return productList;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<bool> deleteProduct(String productId) async {
-    try {
-      Response response = await dio.delete('$allProductsUrl/$productId');
-      if (response.statusCode == HttpStatus.ok) {
-        return true;
-      }
-    } catch (e) {
-      moxyPrint('Error during deleting product: $e');
-
-      return false;
-    }
-    return false;
   }
 
 // EDIT USER

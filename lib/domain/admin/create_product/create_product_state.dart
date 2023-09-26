@@ -93,7 +93,8 @@ class FieldErrors {
   FieldError? productDescription;
   FieldError? productIdName;
   FieldError? salePrice;
-  FieldError? costPrice;
+  FieldError? costPriceInUsd;
+  FieldError? weightInGrams;
   FieldError? quantity;
 
   FieldErrors({
@@ -101,7 +102,8 @@ class FieldErrors {
     this.productDescription,
     this.productIdName,
     this.salePrice,
-    this.costPrice,
+    this.costPriceInUsd,
+    this.weightInGrams,
     this.quantity,
   });
 
@@ -121,8 +123,11 @@ class FieldErrors {
     if (productIdName != null) {
       buffer.write('productIdName ');
     }
-    if (costPrice != null) {
-      buffer.write('costPrice ');
+    if (costPriceInUsd != null) {
+      buffer.write('costPriceInUsd ');
+    }
+    if (weightInGrams != null) {
+      buffer.write('weightInGrams ');
     }
     if (salePrice != null) {
       buffer.write('salePrice ');

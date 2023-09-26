@@ -24,7 +24,9 @@ NetworkProduct _$NetworkProductFromJson(Map<String, dynamic> json) =>
       id: json['_id'] as String?,
       name: json['name'] as String,
       description: json['description'] as String?,
-      costPrice: (json['costPrice'] as num).toDouble(),
+      costPriceInUsd: (json['costPriceInUsd'] as num).toDouble(),
+      weightInGrams: json['weightInGrams'] as int,
+      costPrice: (json['costPrice'] as num?)?.toDouble(),
       salePrice: (json['salePrice'] as num).toDouble(),
       dimensions: (json['dimensions'] as List<dynamic>?)
           ?.map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
@@ -40,6 +42,8 @@ Map<String, dynamic> _$NetworkProductToJson(NetworkProduct instance) =>
       '_id': instance.id,
       'name': instance.name,
       'description': instance.description,
+      'costPriceInUsd': instance.costPriceInUsd,
+      'weightInGrams': instance.weightInGrams,
       'costPrice': instance.costPrice,
       'salePrice': instance.salePrice,
       'dimensions': instance.dimensions,

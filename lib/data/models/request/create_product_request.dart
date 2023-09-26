@@ -6,7 +6,8 @@ part 'create_product_request.g.dart';
 class CreateProduct {
   final String name;
   final String description;
-  final double costPrice;
+  final double costPriceInUsd;
+  final int weightInGrams;
   final double salePrice;
   final List<NetworkDimension> dimensions;
   final List<String> images;
@@ -15,7 +16,8 @@ class CreateProduct {
   CreateProduct({
     required this.name,
     required this.description,
-    required this.costPrice,
+    required this.costPriceInUsd,
+    required this.weightInGrams,
     required this.salePrice,
     required this.dimensions,
     required this.images,

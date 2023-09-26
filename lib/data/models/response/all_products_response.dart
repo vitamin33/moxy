@@ -21,7 +21,9 @@ class NetworkProduct {
   String? id;
   String name;
   String? description;
-  double costPrice;
+  double costPriceInUsd;
+  int weightInGrams;
+  double? costPrice;
   double salePrice;
   List<NetworkDimension>? dimensions;
   List<String> images;
@@ -32,6 +34,8 @@ class NetworkProduct {
     this.id,
     required this.name,
     required this.description,
+    required this.costPriceInUsd,
+    required this.weightInGrams,
     required this.costPrice,
     required this.salePrice,
     required this.dimensions,

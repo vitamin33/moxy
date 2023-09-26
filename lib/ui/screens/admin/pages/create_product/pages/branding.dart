@@ -55,10 +55,10 @@ class Branding extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomTextField(
                     title:
-                        ' ${AppLocalizations.of(context)!.createProductPrice} (\₴)',
-                    controller: cubit.costPriceController,
-                    onChanged: cubit.costPriceChanged,
-                    state: state.errors.costPrice,
+                        ' ${AppLocalizations.of(context)!.createProductWeight}',
+                    controller: cubit.weightController,
+                    onChanged: cubit.weightInGramsChanged,
+                    state: state.errors.weightInGrams,
                     maxLines: 1,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -68,7 +68,31 @@ class Branding extends StatelessWidget {
                   const SizedBox(height: 20),
                   CustomTextField(
                     title:
-                        '${AppLocalizations.of(context)!.createProductSalePrice} (\₴)',
+                        ' ${AppLocalizations.of(context)!.createProductPrice} (\$)',
+                    controller: cubit.costPriceInUsdController,
+                    onChanged: cubit.costPriceInUsdChanged,
+                    state: state.errors.costPriceInUsd,
+                    maxLines: 1,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(
+                          RegExp(r'^\d+\.?\d{0,2}$')),
+                      LengthLimitingTextInputFormatter(16),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.createProductCostPrice,
+                      ),
+                      Text('${state.product.costPrice.toString()} UAH'),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                    title:
+                        '${AppLocalizations.of(context)!.createProductSalePrice} (UAH)',
                     controller: cubit.salePriceController,
                     onChanged: cubit.salePriceChanged,
                     state: state.errors.salePrice,

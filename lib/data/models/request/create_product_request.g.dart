@@ -10,7 +10,8 @@ CreateProduct _$CreateProductFromJson(Map<String, dynamic> json) =>
     CreateProduct(
       name: json['name'] as String,
       description: json['description'] as String,
-      costPrice: (json['costPrice'] as num).toDouble(),
+      costPriceInUsd: (json['costPriceInUsd'] as num).toDouble(),
+      weightInGrams: json['weightInGrams'] as int,
       salePrice: (json['salePrice'] as num).toDouble(),
       dimensions: (json['dimensions'] as List<dynamic>)
           .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
@@ -24,7 +25,8 @@ Map<String, dynamic> _$CreateProductToJson(CreateProduct instance) =>
     <String, dynamic>{
       'name': instance.name,
       'description': instance.description,
-      'costPrice': instance.costPrice,
+      'costPriceInUsd': instance.costPriceInUsd,
+      'weightInGrams': instance.weightInGrams,
       'salePrice': instance.salePrice,
       'dimensions': instance.dimensions,
       'images': instance.images,

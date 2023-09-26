@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:moxy/data/http/basket_service.dart';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/http/nova_poshta_client.dart';
+import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
@@ -35,6 +36,7 @@ class GetItService {
     getIt.registerSingleton<BasketMapper>(BasketMapper());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
+    getIt.registerSingleton<ProductsService>(ProductsService(dio));
     getIt.registerSingleton<BasketService>(BasketService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
     getIt.registerSingleton<CityMapper>(CityMapper());
