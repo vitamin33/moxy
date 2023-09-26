@@ -32,7 +32,7 @@ class DimensionProduct implements Copyable<DimensionProduct> {
     String? name,
     String? idName,
     String? description,
-    double? costPrice,
+    double? costPriceInUsd,
     double? salePrice,
     Dimension? dimension,
     ImagePath? image,
@@ -42,7 +42,7 @@ class DimensionProduct implements Copyable<DimensionProduct> {
     return DimensionProduct(
       name: name ?? this.name,
       description: description ?? this.description,
-      costPrice: costPrice ?? this.costPrice,
+      costPrice: costPriceInUsd ?? this.costPrice,
       salePrice: salePrice ?? this.salePrice,
       dimension: dimension ?? this.dimension,
       idName: idName ?? this.idName,

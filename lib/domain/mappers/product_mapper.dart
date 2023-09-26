@@ -22,7 +22,9 @@ class ProductMapper {
           id: p.id,
           name: p.name,
           description: p.description ?? '',
-          costPrice: p.costPrice,
+          costPriceInUsd: p.costPriceInUsd,
+          weightInGrams: p.weightInGrams,
+          costPrice: p.costPrice ?? 0,
           salePrice: p.salePrice,
           dimensions: dimens
               .map((e) => Dimension(
@@ -82,13 +84,18 @@ class ProductMapper {
       id: p.id,
       name: p.name,
       description: p.description,
+      costPriceInUsd: p.costPriceInUsd,
+      weightInGrams: p.weightInGrams,
       costPrice: p.costPrice,
       salePrice: p.salePrice,
       dimensions: dimensions
           .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
           .toList(),
       idName: p.idName,
-      images: p.images.map((e) => e.imagePath).toList(),
+      images: p.images
+          .where((element) => element.type == Type.file)
+          .map((e) => e.imagePath)
+          .toList(),
       forSale: p.forSale,
     );
   }
@@ -99,7 +106,9 @@ class ProductMapper {
       id: success.id,
       name: success.name,
       description: success.description ?? '',
-      costPrice: success.costPrice,
+      costPriceInUsd: success.costPriceInUsd,
+      weightInGrams: success.weightInGrams,
+      costPrice: success.costPrice ?? 0,
       salePrice: success.salePrice,
       dimensions: dimens
           .map(
@@ -205,7 +214,7 @@ class ProductMapper {
     for (final product in allProducts) {
       final productName = product.name;
       final productDescription = product.description;
-      final productCostPrice = product.costPrice;
+      final productCostPrice = product.costPriceInUsd;
       final productSalePrice = product.salePrice;
       final productIdName = product.idName;
       List<ImagePath> productImages = product.images;

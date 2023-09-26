@@ -138,8 +138,15 @@ class _ProductsPageState extends State<ProductsPage> {
                                         child: _buildProductImage(product),
                                       ),
                                       title: Text(product.name),
-                                      subtitle:
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
                                           Text('${product.salePrice} $uah'),
+                                          Text(
+                                              '${AppLocalizations.of(context)!.createProductCostPrice}: ${product.costPrice} $uah')
+                                        ],
+                                      ),
                                       trailing: SvgPicture.asset(
                                           IconPath.forwardArrow),
                                     ),

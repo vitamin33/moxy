@@ -11,6 +11,13 @@ mixin ValidationMixin {
     return price > 0;
   }
 
+  bool isValidWeight(int? weight) {
+    if (weight == null) {
+      return false;
+    }
+    return weight > 0;
+  }
+
   bool isValidQuantity(List<Dimension> dimension) {
     for (var item in dimension) {
       if (item.quantity == 0) {

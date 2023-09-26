@@ -57,7 +57,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     for (final product in products) {
       final productName = product.name;
       final productDescription = product.description;
-      final productCostPrice = product.costPrice;
+      final productCostPrice = product.costPriceInUsd;
       final productSalePrice = product.salePrice;
       final productIdName = product.idName;
       List<ImagePath> productImages = product.images;
