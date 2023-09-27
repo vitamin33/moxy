@@ -10,4 +10,5 @@ class ImageAssets {
   static const String promoBackground = "assets/images/promo_background.png";
   static const String bigPictureHome = "assets/images/big_picture_home.png";
   static const String smallPictureHome = "assets/images/small_picture.png";
+  static const String loginWeb = "assets/images/login_web.png";
 }
