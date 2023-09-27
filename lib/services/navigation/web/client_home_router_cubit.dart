@@ -11,6 +11,7 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
   void goToHome([int? tabIndex = 0]) => emit(HomeRoute(tabIndex));
   void goToCheckout([String? text]) => emit(CheckoutRoute(text));
   void goToProfile([String? text]) => emit(ProfileRoute(text));
+  void goToProductDetails([String? text]) => emit(ProductDetailsRoute(text));
 
   void popExtra() {
     if (state is HomeRoute) {
@@ -33,6 +34,9 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
         break;
       case ProfileRoute:
         goToProfile();
+        break;
+      case ProductDetailsRoute:
+        goToProductDetails();
         break;
     }
   }

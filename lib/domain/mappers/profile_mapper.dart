@@ -40,7 +40,6 @@ class ProfileMapper {
                 description: e.description,
                 costPriceInUsd: e.costPriceInUsd,
                 weightInGrams: e.weightInGrams,
-                costPrice: e.costPrice,
                 salePrice: e.salePrice,
                 dimensions: e.dimensions
                     .map((e) =>

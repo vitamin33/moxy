@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moxy/ui/screens/client/web/checkout/checkout_page.dart';
 import 'package:moxy/ui/screens/client/web/favourites/favourites_page.dart';
 import 'package:moxy/ui/screens/client/web/home/home_page.dart';
+import 'package:moxy/ui/screens/client/web/product_details.dart/product_details.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../../ui/screens/client/web/profile/profile_page.dart';
@@ -75,6 +76,15 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRoute>
         ),
       ];
     }
+    if (_routerCubit.state is ProductDetailsRoute) {
+      extraPageContent = (_routerCubit.state as ProductDetailsRoute).extraPageContent;
+      return [
+        _materialPage(
+          valueKey: "productDetails",
+          child: const ProductDetailsPage(),
+        ),
+      ];
+    }
     return [];
   }
 
@@ -105,6 +115,9 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRoute>
         _routerCubit.goToProfile();
         break;
       case CheckoutRoute:
+        _routerCubit.goToCheckout();
+        break;
+      case ProductDetailsRoute:
         _routerCubit.goToCheckout();
         break;
       case HomeRoute:

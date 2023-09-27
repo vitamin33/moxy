@@ -24,7 +24,6 @@ class ProductMapper {
           description: p.description ?? '',
           costPriceInUsd: p.costPriceInUsd,
           weightInGrams: p.weightInGrams,
-          costPrice: p.costPrice ?? 0,
           salePrice: p.salePrice,
           dimensions: dimens
               .map((e) => Dimension(
@@ -86,7 +85,6 @@ class ProductMapper {
       description: p.description,
       costPriceInUsd: p.costPriceInUsd,
       weightInGrams: p.weightInGrams,
-      costPrice: p.costPrice,
       salePrice: p.salePrice,
       dimensions: dimensions
           .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
@@ -108,7 +106,6 @@ class ProductMapper {
       description: success.description ?? '',
       costPriceInUsd: success.costPriceInUsd,
       weightInGrams: success.weightInGrams,
-      costPrice: success.costPrice ?? 0,
       salePrice: success.salePrice,
       dimensions: dimens
           .map(

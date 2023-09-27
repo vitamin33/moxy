@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
@@ -86,7 +87,9 @@ class OrderMapper {
                         quantity: d.quantity,
                       ))
                   .toList(),
-              imageUrl: e.product.images.first,
+              imageUrl: e.product.images.isNotEmpty
+                  ? e.product.images.first
+                  : ImageAssets.moxyIcLauncher,
               productPrice: e.product.salePrice.toString());
         }).toList(),
         createdAt: _parseDataTime(o.createdAt),

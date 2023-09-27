@@ -86,7 +86,7 @@ class Branding extends StatelessWidget {
                       Text(
                         AppLocalizations.of(context)!.createProductCostPrice,
                       ),
-                      Text('${state.product.costPrice.toString()} UAH'),
+                      Text('${state.product.costPriceInUsd.toString()} UAH'),
                     ],
                   ),
                   const SizedBox(height: 20),

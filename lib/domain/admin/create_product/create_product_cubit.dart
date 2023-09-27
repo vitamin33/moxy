@@ -149,6 +149,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       final int weightInGrams = int.parse(value);
       emit(state.copyWith(
           product: state.product.copyWith(weightInGrams: weightInGrams)));
+
     }
   }
 

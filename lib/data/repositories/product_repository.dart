@@ -115,4 +115,15 @@ class ProductRepository {
       return Result.error(Exception('$e'));
     }
   }
+
+  Future<Result<NetworkProduct, Exception>> getProductsDetails(
+      String productId) async {
+    try {
+      final result = await client.getProductsDetails(productId);
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
 }

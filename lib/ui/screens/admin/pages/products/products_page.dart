@@ -144,7 +144,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                         children: [
                                           Text('${product.salePrice} $uah'),
                                           Text(
-                                              '${AppLocalizations.of(context)!.createProductCostPrice}: ${product.costPrice} $uah')
+                                              '${AppLocalizations.of(context)!.createProductCostPrice}: ${product.costPriceInUsd} $uah')
                                         ],
                                       ),
                                       trailing: SvgPicture.asset(
