@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
 import 'package:moxy/ui/screens/admin/admin_root_view.dart';
 import 'package:moxy/ui/screens/client/root_view.dart';
+import 'package:moxy/ui/screens/splash/splash_page.dart';
 import 'package:moxy/utils/common.dart';
 
 import 'root_router_cubit.dart';
@@ -26,8 +27,8 @@ class RootRouterDelegate extends RouterDelegate<RootRoute>
   Widget build(BuildContext context) => Navigator(
         key: navigatorKey,
         pages: List.from([
-          if (_routerCubit.state is LoginRoute)
-            _materialPage(valueKey: "auth", child: const AuthenticationView()),
+          if (_routerCubit.state is SplashRoute)
+            _materialPage(valueKey: "splash", child: const SplashPage()),
           ..._extraPages,
         ]),
         onPopPage: _onPopPageParser,
@@ -49,6 +50,15 @@ class RootRouterDelegate extends RouterDelegate<RootRoute>
   List<Page> get _extraPages {
     // ignore: unused_local_variable
     String? extraPageContent;
+    if (_routerCubit.state is LoginRoute) {
+      extraPageContent = (_routerCubit.state as LoginRoute).extraPageContent;
+      return [
+        _materialPage(
+          valueKey: "login",
+          child: const AuthenticationView(),
+        ),
+      ];
+    }
     if (_routerCubit.state is AdminHomeRoute) {
       extraPageContent =
           (_routerCubit.state as AdminHomeRoute).extraPageContent;

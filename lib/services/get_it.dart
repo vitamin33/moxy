@@ -8,6 +8,7 @@ import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
+import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/data/repositories/overview_repository.dart';
 import 'package:moxy/data/repositories/promo_repository.dart';
@@ -48,6 +49,7 @@ class GetItService {
     getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<AuthRepository>(AuthRepository());
+    getIt.registerSingleton<ConfigRepository>(ConfigRepository());
     getIt.registerSingleton<ISecureStorageRepository>(
         SecureStorageRepository.instance);
     getIt.registerSingleton<FilterRepository>(FilterRepository());

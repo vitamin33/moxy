@@ -2,6 +2,7 @@ part of 'root_router_cubit.dart';
 
 abstract class RootRoute extends Equatable {
   static const String loginPath = 'login';
+  static const String splashPath = '#';
   static const String adminPath = 'admin';
   static const String shopPath = 'shop';
 
@@ -56,4 +57,11 @@ class LoginRoute extends RootRoute {
 
   @override
   String urlPath() => RootRoute.loginPath;
+}
+
+class SplashRoute extends RootRoute {
+  const SplashRoute();
+
+  @override
+  String urlPath() => RootRoute.splashPath;
 }
