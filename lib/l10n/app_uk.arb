@@ -18,7 +18,7 @@
   "logout": "Вийти",
   "failedLoginError": "Невдала спроба логіну. Спробуйте ще пізніше.",
   "noAccountQuestion": "Ще немає аккаунту?",
-  "login": "Логін",
+  "login": "Увійти",
   "phoneNumber": "Номер телефону",
   "password": "Пароль",
   "signup": "Реєстрація",
