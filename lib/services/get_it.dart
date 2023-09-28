@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:moxy/data/http/basket_service.dart';
+import 'package:moxy/data/http/config_service.dart';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/http/nova_poshta_client.dart';
 import 'package:moxy/data/http/products_service.dart';
@@ -12,6 +13,7 @@ import 'package:moxy/data/repositories/overview_repository.dart';
 import 'package:moxy/data/repositories/promo_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
+import 'package:moxy/domain/mappers/config_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/mappers/profile_mapper.dart';
@@ -34,10 +36,12 @@ class GetItService {
     getIt.registerSingleton<ProductMapper>(ProductMapper());
     getIt.registerSingleton<FilterParamsMapper>(FilterParamsMapper());
     getIt.registerSingleton<BasketMapper>(BasketMapper());
+    getIt.registerSingleton<ConfigMapper>(ConfigMapper());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<ProductsService>(ProductsService(dio));
     getIt.registerSingleton<BasketService>(BasketService(dio));
+    getIt.registerSingleton<ConfigService>(ConfigService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
     getIt.registerSingleton<CityMapper>(CityMapper());
     getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
