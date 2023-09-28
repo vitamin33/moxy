@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/roles.dart';
 import 'package:moxy/services/navigation/root_router_cubit.dart';
@@ -38,25 +40,61 @@ class AuthenticationView extends StatelessWidget {
       },
       builder: (context, state) => Scaffold(
         backgroundColor: AppTheme.white,
-        body: SingleChildScrollView(
+        body: Container(
           child: kIsWeb
-              ? Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                          width: MediaQuery.of(context).size.width / 2,
-                          child: AuthenticationContainer()),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Image.asset(ImageAssets.loginWeb),
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Align(
+                              alignment: Alignment.topLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: SvgPicture.asset(
+                                  IconPath.moxylogo,
+                                  width: 100,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width / 3,
+                                child: const AuthenticationContainer()),
+                          ],
+                        ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: Image.asset(
+                          ImageAssets.loginWeb,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 50),
+                      Padding(
+                        padding: const EdgeInsets.all(AppTheme.cardPadding),
+                        child: SvgPicture.asset(
+                          IconPath.moxylogo,
+                          width: 150,
+                        ),
+                      ),
+                      const AuthenticationContainer(),
                     ],
                   ),
-                )
-              : AuthenticationContainer(),
+                ),
         ),
       ),
     );
