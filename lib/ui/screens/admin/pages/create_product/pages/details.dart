@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../../domain/admin/create_product/create_product_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
@@ -100,9 +100,12 @@ Widget _buildColorQuantityRow(
               backgroundColor: AppTheme.white,
               child: CircleAvatar(
                 radius: 15,
-                backgroundColor: AppTheme.pink,
-                backgroundImage: AssetImage(colorDimen.image!),
+                backgroundColor: _generateColor(colorDimen),
               ),
             )),
       ));
+}
+
+Color _generateColor(Dimension dimen) {
+  return hexToColor(dimen.color.hexCode);
 }

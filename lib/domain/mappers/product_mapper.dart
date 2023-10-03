@@ -13,134 +13,151 @@ class ProductMapper {
         Map<int, Dimension> dimenMap = {};
         List<NetworkDimension> dimens = p.dimensions ?? [];
         for (var i = 0; i < dimens.length; i++) {
-          dimenMap.putIfAbsent(
-              i,
-              () => Dimension(
-                  color: dimens[i].color, quantity: dimens[i].quantity));
+          dimenMap.putIfAbsent(i, () => mapToDimension(dimens[i]));
         }
-        return Product(
-          id: p.id,
-          name: p.name,
-          description: p.description ?? '',
-          costPriceInUsd: p.costPriceInUsd,
-          weightInGrams: p.weightInGrams,
-          costPrice: p.costPrice ?? 0,
-          salePrice: p.salePrice,
-          dimensions: dimens
-              .map((e) => Dimension(
-                    color: e.color,
-                    quantity: e.quantity,
-                    image: _mapColorDimensionImage(e.color),
-                  ))
-              .toList(),
-          idName: p.idName,
-          images: p.images
-              .map(
-                (e) => ImagePath(type: Type.network, imagePath: e),
-              )
-              .toList(),
-          forSale: p.forSale,
-        );
+        return mapToProduct(p);
       },
     ).toList();
   }
 
-  String _mapColorDimensionImage(String color) {
-    switch (color) {
-      case 'Black':
-        return 'assets/images/black_background.png';
-      case 'White':
-        return 'assets/images/white_background.png';
-      case 'Grey':
-        return 'assets/images/grey_background.png';
-      case 'Pink':
-        return 'assets/images/pink_background.png';
-      case 'PinkLeo':
-        return 'assets/images/pinkLeo_background.png';
-      case 'Leo':
-        return 'assets/images/leo_background.png';
-      case 'Brown':
-        return 'assets/images/brown_background.png';
-      case 'Beige':
-        return 'assets/images/beige_background.png';
-      case 'Purple':
-        return 'assets/images/purple_background.png';
-      case 'Zebra':
-        return 'assets/images/zebra_background.png';
-      case 'Jeans':
-        return 'assets/images/jeans_background.png';
-      case 'Green':
-        return 'assets/images/green_background.png';
-      case 'Bars':
-        return 'assets/images/bars_background.png';
-      case 'Unified':
-        return 'assets/images/unified_background.png';
-    }
-    return 'assets/images/black_background.png';
-  }
-
-  NetworkProduct mapToNetworkProduct(Product p, List<Dimension> dimensions) {
+  NetworkProduct mapToNetworkProduct(Product p) {
     return NetworkProduct(
       id: p.id,
       name: p.name,
       description: p.description,
       costPriceInUsd: p.costPriceInUsd,
-      weightInGrams: p.weightInGrams,
       costPrice: p.costPrice,
       salePrice: p.salePrice,
-      dimensions: dimensions
-          .map((d) => NetworkDimension(color: d.color, quantity: d.quantity))
-          .toList(),
+      dimensions: p.dimensions.map((d) => mapToNetworkDimension(d)).toList(),
       idName: p.idName,
-      images: p.images
-          .where((element) => element.type == Type.file)
-          .map((e) => e.imagePath)
-          .toList(),
       forSale: p.forSale,
+      attributes: mapToNetworkAttributes(p.attributes),
     );
   }
 
-  Product mapToProduct(NetworkProduct success) {
-    List<NetworkDimension> dimens = success.dimensions ?? [];
+  Product mapToProduct(NetworkProduct network) {
+    List<NetworkDimension> dimens = network.dimensions ?? [];
     return Product(
-      id: success.id,
-      name: success.name,
-      description: success.description ?? '',
-      costPriceInUsd: success.costPriceInUsd,
-      weightInGrams: success.weightInGrams,
-      costPrice: success.costPrice ?? 0,
-      salePrice: success.salePrice,
+      id: network.id,
+      name: network.name,
+      description: network.description ?? '',
+      costPriceInUsd: network.costPriceInUsd,
+      discountPrice: network.discountPrice ?? 0,
+      costPrice: network.costPrice ?? 0,
+      salePrice: network.salePrice,
       dimensions: dimens
           .map(
-            (e) => Dimension(
-              color: e.color,
-              quantity: e.quantity,
-              image: _mapColorDimensionImage(e.color),
-            ),
+            (e) => mapToDimension(e),
           )
           .toList(),
-      idName: success.idName,
-      images: success.images
-          .map(
-            (e) => ImagePath(type: Type.network, imagePath: e),
-          )
-          .toList(),
-      forSale: success.forSale,
+      idName: network.idName,
+      forSale: network.forSale,
+      attributes: mapToAttributes(network.attributes),
     );
   }
 
   Dimension mapToDimension(NetworkDimension network) {
     return Dimension(
-      color: network.color,
+      color: mapToColor(network.color),
+      size: mapToSize(network.size),
+      material: mapToMaterial(network.material),
       quantity: network.quantity,
-      image: _mapColorDimensionImage(network.color),
+      images: network.images
+          .map(
+            (e) => ImagePath(type: Type.network, imagePath: e),
+          )
+          .toList(),
+    );
+  }
+
+  ProductAttributes mapToAttributes(NetworkProductAttributes network) {
+    return ProductAttributes(
+      weightInGrams: network.weightInGrams,
+      heightInCm: network.heightInCm,
+      widthInCm: network.widthInCm,
+      lengthInCm: network.lengthInCm,
+      depthInCm: network.depthInCm,
+      season: network.season,
+      furniture: network.furniture,
+      strap: network.strap,
+      producer: network.producer,
+    );
+  }
+
+  NetworkProductAttributes mapToNetworkAttributes(ProductAttributes item) {
+    return NetworkProductAttributes(
+      weightInGrams: item.weightInGrams,
+      heightInCm: item.heightInCm,
+      widthInCm: item.widthInCm,
+      lengthInCm: item.lengthInCm,
+      depthInCm: item.depthInCm,
+      season: item.season,
+      furniture: item.furniture,
+      strap: item.strap,
+      producer: item.producer,
     );
   }
 
   NetworkDimension mapToNetworkDimension(Dimension dimen) {
     return NetworkDimension(
-      color: dimen.color,
+      color: mapToNetworkColor(dimen.color),
+      size: mapToNetworkSize(dimen.size),
+      material: mapToNetworkMaterial(dimen.material),
       quantity: dimen.quantity,
+      images: dimen.images
+          .where((element) => element.type == Type.file)
+          .map((e) => e.imagePath)
+          .toList(),
+    );
+  }
+
+  NetworkColor mapToNetworkColor(ProductColor item) {
+    return NetworkColor(
+      name: item.name,
+      hexCode: item.hexCode,
+    );
+  }
+
+  NetworkMaterial? mapToNetworkMaterial(ProductMaterial? item) {
+    if (item == null) {
+      return null;
+    }
+    return NetworkMaterial(
+      name: item.name,
+    );
+  }
+
+  NetworkSize? mapToNetworkSize(Size? item) {
+    if (item == null) {
+      return null;
+    }
+    return NetworkSize(
+      name: item.name,
+    );
+  }
+
+  ProductColor mapToColor(NetworkColor network) {
+    return ProductColor(
+      name: network.name,
+      hexCode: network.hexCode,
+    );
+  }
+
+  Size? mapToSize(NetworkSize? network) {
+    if (network == null) {
+      return null;
+    }
+    return Size(
+      name: network.name,
+    );
+  }
+
+  ProductMaterial? mapToMaterial(NetworkMaterial? network) {
+    if (network == null) {
+      return null;
+    }
+    return ProductMaterial(
+      name: network.name,
     );
   }
 
@@ -152,15 +169,7 @@ class ProductMapper {
         productId: p.product,
         productName: p.productName ?? '',
         imageUrl: p.imageUrl,
-        dimensions: p.dimensions
-            .map(
-              (e) => Dimension(
-                color: e.color,
-                quantity: e.quantity,
-                image: _mapColorDimensionImage(e.color),
-              ),
-            )
-            .toList(),
+        dimensions: p.dimensions.map((e) => mapToDimension(e)).toList(),
       );
     }).toList();
   }
@@ -174,6 +183,7 @@ class ProductMapper {
       if (!dimenItem.isSelected) {
         continue;
       }
+
       if (finalList.any((element) => element.productId == dimenItem.id)) {
         OrderedItem item = finalList.firstWhere(
           (element) => element.productId == dimenItem.id,
@@ -181,22 +191,27 @@ class ProductMapper {
         item.dimensions.add(
           Dimension(
             color: dimenItem.dimension.color,
+            material: dimenItem.dimension.material,
+            size: dimenItem.dimension.size,
             quantity: dimenItem.selectedQuantity,
-            image: _mapColorDimensionImage(dimenItem.dimension.color),
+            images: dimenItem.dimension.images,
           ),
         );
       } else {
+        final item = dimenItem.dimension.images.first;
         finalList.add(
           OrderedItem(
             productPrice: dimenItem.salePrice.toString(),
             productId: dimenItem.id,
             productName: dimenItem.name,
-            imageUrl: dimenItem.image?.imagePath,
+            imageUrl: item.imagePath,
             dimensions: [
               Dimension(
                 color: dimenItem.dimension.color,
+                material: dimenItem.dimension.material,
+                size: dimenItem.dimension.size,
                 quantity: dimenItem.selectedQuantity,
-                image: dimenItem.dimension.image,
+                images: dimenItem.dimension.images,
               ),
             ],
           ),
@@ -217,15 +232,18 @@ class ProductMapper {
       final productCostPrice = product.costPriceInUsd;
       final productSalePrice = product.salePrice;
       final productIdName = product.idName;
-      List<ImagePath> productImages = product.images;
-      ImagePath? path = productImages.isNotEmpty ? productImages.first : null;
 
       for (final dimension in product.dimensions) {
         final color = dimension.color;
         final quantity = dimension.quantity;
 
-        final newDimension =
-            Dimension(color: color, quantity: quantity, image: dimension.image);
+        final newDimension = Dimension(
+          color: color,
+          material: dimension.material,
+          size: dimension.size,
+          quantity: quantity,
+          images: dimension.images,
+        );
         int selectedQuantity = 1;
         bool isSelected = selectedItems.any((element) {
           bool isDimenSelected =
@@ -247,7 +265,6 @@ class ProductMapper {
           costPrice: productCostPrice,
           salePrice: productSalePrice,
           idName: productIdName,
-          image: path,
           dimension: newDimension,
           selectedQuantity: selectedQuantity,
           isSelected: isSelected,
@@ -266,17 +283,18 @@ class ProductMapper {
     for (final item in items) {
       final productName = item.productName;
       final productSalePrice = double.parse(item.productPrice);
-      ImagePath? path;
-      if (item.imageUrl != null) {
-        path = ImagePath(imagePath: item.imageUrl!, type: Type.network);
-      }
 
       for (final dimension in item.dimensions) {
         final color = dimension.color;
         final quantity = dimension.quantity;
 
-        final newDimension =
-            Dimension(color: color, quantity: quantity, image: dimension.image);
+        final newDimension = Dimension(
+          color: color,
+          material: dimension.material,
+          size: dimension.size,
+          quantity: quantity,
+          images: dimension.images,
+        );
 
         final newProduct = DimensionProduct(
           id: item.productId,
@@ -285,7 +303,6 @@ class ProductMapper {
           costPrice: 0,
           salePrice: productSalePrice,
           idName: '',
-          image: path,
           dimension: newDimension,
           selectedQuantity: 1,
           isSelected: true,

@@ -11,11 +11,11 @@ import 'onhover.dart';
 
 class SmallBlockGrid extends StatelessWidget {
   final Product product;
-  
-  const SmallBlockGrid(
-      {super.key,
-      required this.product,
-      });
+
+  const SmallBlockGrid({
+    super.key,
+    required this.product,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class SmallBlockGrid extends StatelessWidget {
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(
-                        product.images.first.imagePath,
+                        product.dimensions.first.images.first.imagePath,
                       ))),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
@@ -62,7 +62,7 @@ class SmallBlockGrid extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                   product.name,
+                    product.name,
                     style: const TextStyle(
                       fontWeight: FontWeight.w500,
                     ),
@@ -76,7 +76,7 @@ class SmallBlockGrid extends StatelessWidget {
                                 .addProductToBasket(product);
                           },
                           child: SvgPicture.asset(IconPath.orders, width: 20)),
-                    const SizedBox(width: 10),
+                      const SizedBox(width: 10),
                       Text(product.salePrice.toString()),
                     ],
                   )

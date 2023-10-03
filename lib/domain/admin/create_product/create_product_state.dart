@@ -1,4 +1,3 @@
-import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 
@@ -13,7 +12,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   int initialPage;
   int activePage;
   Product product;
-  List<String> images;
+  List<ImagePath> chosenImages;
   String? editProductId;
   List<Dimension> allDimensions;
 
@@ -29,18 +28,13 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.initialPage,
     required this.activePage,
     required this.product,
-    required this.images,
+    required this.chosenImages,
     required this.editProductId,
     required this.errors,
     required this.allDimensions,
   });
 
   static CreateProductState defaultCreateProductState() {
-    for (var element in allColorsDimens) {
-      if (element.isSelected == true) {
-        element.isSelected = false;
-      }
-    }
     return CreateProductState(
       isLoading: false,
       isEdit: false,
@@ -50,10 +44,10 @@ class CreateProductState implements Copyable<CreateProductState> {
       initialPage: 0,
       activePage: 0,
       product: Product.defaultProduct(),
-      images: [],
+      chosenImages: [],
       editProductId: '',
       errors: FieldErrors(),
-      allDimensions: allColorsDimens,
+      allDimensions: [],
     );
   }
 
@@ -67,7 +61,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     int? initialPage,
     int? activePage,
     Product? product,
-    List<String>? images,
+    List<ImagePath>? chosenImages,
     String? editProductId,
     FieldErrors? errors,
     List<Dimension>? allDimensions,
@@ -81,7 +75,7 @@ class CreateProductState implements Copyable<CreateProductState> {
         initialPage: initialPage ?? this.initialPage,
         activePage: activePage ?? this.activePage,
         product: product ?? this.product,
-        images: images ?? this.images,
+        chosenImages: chosenImages ?? this.chosenImages,
         editProductId: editProductId ?? this.editProductId,
         errors: errors ?? this.errors,
         allDimensions: allDimensions ?? this.allDimensions);

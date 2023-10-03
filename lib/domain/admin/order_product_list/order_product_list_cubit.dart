@@ -60,15 +60,18 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       final productCostPrice = product.costPriceInUsd;
       final productSalePrice = product.salePrice;
       final productIdName = product.idName;
-      List<ImagePath> productImages = product.images;
-      ImagePath? path = productImages.isNotEmpty ? productImages.first : null;
 
       for (final dimension in product.dimensions) {
         final color = dimension.color;
         final quantity = dimension.quantity;
 
-        final newDimension =
-            Dimension(color: color, quantity: quantity, image: dimension.image);
+        final newDimension = Dimension(
+          color: color,
+          size: dimension.size,
+          material: dimension.material,
+          quantity: quantity,
+          images: dimension.images,
+        );
         int selectedQuantity = 1;
         bool isSelected = selectedItems.any((element) {
           bool isDimenSelected =
@@ -90,7 +93,6 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
           costPrice: productCostPrice,
           salePrice: productSalePrice,
           idName: productIdName,
-          image: path,
           dimension: newDimension,
           selectedQuantity: selectedQuantity,
           isSelected: isSelected,

@@ -7,6 +7,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/screens/components/expandable_text.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutProducts extends StatelessWidget {
@@ -155,10 +156,9 @@ class CheckoutProducts extends StatelessWidget {
   Widget _buildProductItem(CheckoutCubit cubit, AppTheme theme, int index) {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
-    String color = item.dimension.color.toUpperCase();
-// <<<<<<< Updated upstream
+    String color = item.dimension.color.name.toUpperCase();
     return Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,75 +187,6 @@ class CheckoutProducts extends StatelessWidget {
                         ),
                       ],
                     ),
-// =======
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         _buildProductImage(item),
-//         const SizedBox(width: 20),
-//         Expanded(
-//           child: SizedBox(
-//             height: 180,
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//               children: [
-//                 Expanded(
-//                   flex: 1,
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Text(
-//                         '$productName $color}',
-//                         style: theme.checkoutProductText,
-//                       ),
-//                       Text(
-//                         '${item.product.salePrice} UAH',
-//                         style: theme.checkoutPriceText,
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//                 Expanded(
-//                   flex: 1,
-//                   child: Row(
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       Text('Color:', style: theme.checkoutColorText),
-//                       Text('${item.product.salePrice} UAH'),
-//                     ],
-//                   ),
-//                 ),
-//                 Expanded(
-//                   flex: 3,
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.end,
-//                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                     children: [
-//                       QuantityPicker(
-//                         quantity: item.dimension.quantity,
-//                         onPlus: () {
-//                           // cubit.addQuantityOfProduct(item);
-//                         },
-//                         onMinus: () {
-//                           // cubit.removeQuantityOfProduct(item);
-//                         },
-//                       ),
-//                       InkWell(
-//                         child: Padding(
-//                           padding: EdgeInsets.all(8),
-//                           child: Text(
-//                             'Remove',
-//                             style: theme.removeButtonText,
-//                           ),
-//                         ),
-//                         onTap: () {
-//                           // cubit.removeProductFromBasket(item);
-//                         },
-//                       ),
-//                     ],
-// >>>>>>> Stashed changes
                   ),
                   Expanded(
                     flex: 1,
@@ -307,6 +238,7 @@ class CheckoutProducts extends StatelessWidget {
   }
 
   Widget _buildColorWidget(Dimension dimen) {
+    final color = _generateColor(dimen);
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
@@ -320,20 +252,16 @@ class CheckoutProducts extends StatelessWidget {
       child: CircleAvatar(
         radius: 15,
         backgroundColor: AppTheme.greyLigth,
-        child: CircleAvatar(
-          radius: 13,
-          backgroundColor: AppTheme.pink,
-          backgroundImage: AssetImage(dimen.image!),
-        ),
+        child: CircleAvatar(radius: 13, backgroundColor: color),
       ),
     );
   }
 
   Widget _buildProductImage(BasketItem item) {
-    if (item.product.images.isNotEmpty) {
+    if (item.dimension.images.isNotEmpty) {
       return FadeInImage.assetNetwork(
         placeholder: 'assets/images/placeholder.jpg',
-        image: item.product.images.first.imagePath,
+        image: item.dimension.images.first.imagePath,
         width: productRowHeight,
         height: productRowHeight,
         fit: BoxFit.cover,
@@ -347,4 +275,8 @@ class CheckoutProducts extends StatelessWidget {
       );
     }
   }
+}
+
+Color _generateColor(Dimension dimen) {
+  return hexToColor(dimen.color.hexCode);
 }

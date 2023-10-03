@@ -157,7 +157,7 @@ Widget _buildGalleryArea(
                                     children: [
                                       ClipOval(child: _buildProductImage(item)),
                                       Text(item.name),
-                                      Text(item.dimension.color),
+                                      Text(item.dimension.color.name),
                                       Text(
                                           '${AppLocalizations.of(context)!.quantity}:${item.dimension.quantity}'),
                                     ]),
@@ -212,10 +212,10 @@ Widget _buildGalleryArea(
 }
 
 Widget _buildProductImage(DimensionProduct product) {
-  if (product.image != null) {
+  if (product.dimension.images.isNotEmpty) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.image!.imagePath,
+      image: product.dimension.images.first.imagePath,
       width: 50,
       height: 50,
       fit: BoxFit.cover,

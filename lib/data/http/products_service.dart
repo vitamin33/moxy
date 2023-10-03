@@ -20,15 +20,15 @@ class ProductsService {
     String name,
     String? description,
     double costPrice,
-    int weightInGrams,
     double salePrice,
     List<NetworkDimension> dimensions,
-    List<String> images,
     String idName,
+    NetworkProductAttributes attributes,
+    List<String> choosenImages,
   ) async {
     final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
-    for (String image in images) {
+    for (String image in choosenImages) {
       String fileName = basename(image);
       imageFiles.add(
         await MultipartFile.fromFile(
@@ -41,11 +41,12 @@ class ProductsService {
       'name': name,
       'description': description ?? '',
       'costPriceInUsd': costPrice,
-      'weightInGrams': weightInGrams,
       'salePrice': salePrice,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
+      'numberOfImagesForDimensions': formImageDimensionIndexes(dimensions),
       'images': imageFiles,
-      'idName': idName
+      'idName': idName,
+      'attributes': jsonDecode(jsonEncode(attributes))
     });
     try {
       Response response = await _dio.post(
@@ -93,14 +94,14 @@ class ProductsService {
       String idName,
       List<NetworkDimension> dimensions,
       double costPriceInUsd,
-      int weightInGrams,
       double salePrice,
-      List<String> images,
+      NetworkProductAttributes attributes,
+      List<String> choosenImages,
       editProductId) async {
     final NetworkProduct? result;
     List<MultipartFile> newImage = [];
     List<String> currentImage = [];
-    for (String image in images) {
+    for (String image in choosenImages) {
       if (image.contains('http')) {
         currentImage.add(image);
       } else {
@@ -117,12 +118,13 @@ class ProductsService {
       'name': name,
       'description': description ?? '',
       'costPriceInUsd': costPriceInUsd,
-      'weightInGrams': weightInGrams,
       'salePrice': salePrice,
       'idName': idName,
       'newImages': newImage,
       'currentImages': currentImage,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
+      'numberOfImagesForDimensions': formImageDimensionIndexes(dimensions),
+      'attributes': jsonDecode(jsonEncode(attributes))
     });
     try {
       Response response = await _dio.post(
@@ -163,5 +165,15 @@ class ProductsService {
       return false;
     }
     return false;
+  }
+
+  List<int> formImageDimensionIndexes(List<NetworkDimension> dimensions) {
+    return dimensions.map((e) {
+      if (e.images.isNotEmpty) {
+        return e.images.length;
+      } else {
+        return 0;
+      }
+    }).toList();
   }
 }
