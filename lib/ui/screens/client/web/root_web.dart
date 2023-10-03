@@ -201,7 +201,7 @@ class _RootWebWidgetState extends State<RootWebWidget>
         IconPath.searchWeb,
         false,
         () {
-          widget.routerCubit.searchPressed();
+          widget.routerCubit.searchPressed(context);
         },
       ),
       _buildPaddedIconButton(

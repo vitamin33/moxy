@@ -388,6 +388,4 @@ class DioClient {
     return Result.success(result);
   }
 
-  // PRODUCT DETAILS
- 
 }

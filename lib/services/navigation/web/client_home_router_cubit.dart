@@ -57,8 +57,9 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     SideSheet.right(body: const BasketPage(), context: context);
   }
 
-  void searchPressed() {
+  void searchPressed(context) {
     // TODO impl search state
+    goToProductDetails();
   }
 
   void tabControlTouched({
