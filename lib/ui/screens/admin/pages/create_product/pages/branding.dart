@@ -8,6 +8,7 @@ import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../../constant/icon_path.dart';
 import '../../../../../../domain/admin/create_product/create_product_state.dart';
@@ -28,7 +29,7 @@ class Branding extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
               child: Column(
                 children: [
-                  state.product.images.isNotEmpty
+                  state.product.hasImages()
                       ? InkWell(
                           onTap: () {
                             cubit.pickImage();
@@ -51,7 +52,8 @@ class Branding extends StatelessWidget {
                           ),
                         )
                       : Container(),
-                  _buildGalleryArea(context, state, cubit),
+                  _buildGalleryArea(
+                      context, state, cubit, state.product.dimensions.first),
                   const SizedBox(height: 20),
                   CustomTextField(
                     title:
@@ -112,8 +114,8 @@ class Branding extends StatelessWidget {
     );
   }
 
-  _buildImage(Product product, int index, CreateProductCubit cubit) {
-    final images = product.images;
+  _buildImage(Dimension dimension, int index, CreateProductCubit cubit) {
+    final images = dimension.images;
     if (images.isEmpty) {
       return Container();
     } else {
@@ -195,7 +197,7 @@ class Branding extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: List.generate(state.product.dimensions.length, (index) {
           Dimension dimen = state.product.dimensions[index];
-          final imagePath = _generateImagePath(dimen);
+          final color = _generateColor(dimen);
           return Padding(
             padding: const EdgeInsets.all(5.0),
             child: Row(
@@ -210,8 +212,7 @@ class Branding extends StatelessWidget {
                           _renderBorder(isValid(state.errors.quantity)),
                       child: CircleAvatar(
                         radius: 15,
-                        backgroundColor: AppTheme.pink,
-                        backgroundImage: AssetImage(imagePath),
+                        backgroundColor: color,
                       ),
                     )),
                 GestureDetector(
@@ -269,13 +270,13 @@ class Branding extends StatelessWidget {
   }
 
   Widget _buildGalleryArea(BuildContext context, CreateProductState state,
-      CreateProductCubit cubit) {
+      CreateProductCubit cubit, Dimension dimension) {
     return LayoutBuilder(builder: (context, constraints) {
       final lineWidth = constraints.maxWidth;
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          state.product.images.isNotEmpty
+          dimension.images.isNotEmpty
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -285,12 +286,12 @@ class Branding extends StatelessWidget {
                         width: double.maxFinite,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.product.images.length,
+                          itemCount: dimension.images.length,
                           itemBuilder: (context, index) {
                             return Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: SizedBox(
-                                child: _buildImage(state.product, index, cubit),
+                                child: _buildImage(dimension, index, cubit),
                               ),
                             );
                           },
@@ -338,12 +339,8 @@ class Branding extends StatelessWidget {
     });
   }
 
-  String _generateImagePath(Dimension dimen) {
-    if (dimen.image != null) {
-      return dimen.image!;
-    } else {
-      return 'assets/images/logo.png';
-    }
+  Color _generateColor(Dimension dimen) {
+    return hexToColor(dimen.color.hexCode);
   }
 }
 

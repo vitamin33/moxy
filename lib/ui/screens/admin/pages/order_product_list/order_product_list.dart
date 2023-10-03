@@ -5,6 +5,7 @@ import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';
+import 'package:moxy/utils/common.dart';
 import '../../../../components/search_textfield.dart';
 import '../../../../../constant/icon_path.dart';
 import '../../../../../domain/models/product.dart';
@@ -104,10 +105,10 @@ class OrderProductList extends StatelessWidget {
 }
 
 Widget _buildProductImage(DimensionProduct product) {
-  if (product.image != null) {
+  if (product.dimension.images.isNotEmpty) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.image!.imagePath,
+      image: product.dimension.images.first.imagePath,
       width: 50,
       height: 50,
       fit: BoxFit.cover,
@@ -122,18 +123,14 @@ Widget _buildProductImage(DimensionProduct product) {
   }
 }
 
-String _generateImagePath(Dimension dimen) {
-  if (dimen.image != null) {
-    return dimen.image!;
-  } else {
-    return 'assets/images/logo.png';
-  }
+Color _generateColor(Dimension dimen) {
+  return hexToColor(dimen.color.hexCode);
 }
 
 Widget _listTile(OrderProductListState state, DimensionProduct product,
     OrderProductListCubit cubit, int index) {
   final Dimension colorAvatar = state.productsByDimension[index].dimension;
-  final colorAvatarImage = _generateImagePath(colorAvatar);
+  final color = _generateColor(colorAvatar);
   final chosenQuantity = product.selectedQuantity;
   final fullQuantity = product.dimension.quantity;
 
@@ -156,7 +153,7 @@ Widget _listTile(OrderProductListState state, DimensionProduct product,
             backgroundColor: AppTheme.white,
             child: CircleAvatar(
               radius: 10,
-              backgroundImage: AssetImage(colorAvatarImage),
+              backgroundColor: color,
             ),
           ),
         ),

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rxdart/subjects.dart';
@@ -21,17 +22,21 @@ class ProductRepository {
   void addToSelectedProductStream(List<OrderedItem> items) =>
       _selectedProductSubject.sink.add(items);
 
-  Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
+  Future<Result<dynamic, Exception>> addProduct(
+      NetworkProduct product, List<ImagePath> chosenImages) async {
     try {
       final result = await client.createProduct(
         product.name,
         product.description,
         product.costPriceInUsd,
-        product.weightInGrams,
         product.salePrice,
         product.dimensions ?? [],
-        product.images,
         product.idName,
+        product.attributes,
+        chosenImages
+            .where((e) => e.type == Type.file)
+            .map((e) => e.imagePath)
+            .toList(),
       );
       if (result != null) {
         return Result.success(result);
@@ -61,8 +66,8 @@ class ProductRepository {
     }
   }
 
-  Future<Result<NetworkProduct, Exception>> editProduct(
-      NetworkProduct product, editProductId) async {
+  Future<Result<NetworkProduct, Exception>> editProduct(NetworkProduct product,
+      List<ImagePath> chosenImages, String editProductId) async {
     try {
       final result = (await client.editProduct(
         product.id,
@@ -71,9 +76,12 @@ class ProductRepository {
         product.idName,
         product.dimensions ?? [],
         product.costPriceInUsd,
-        product.weightInGrams,
         product.salePrice,
-        product.images,
+        product.attributes,
+        chosenImages
+            .where((e) => e.type == Type.file)
+            .map((e) => e.imagePath)
+            .toList(),
         editProductId,
       ));
       if (result != null) {

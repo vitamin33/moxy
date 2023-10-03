@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';

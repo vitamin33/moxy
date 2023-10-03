@@ -45,9 +45,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final product = productMapper.mapToNetworkProduct(
-          state.product, state.product.dimensions);
-      final pushProduct = await productRepository.addProduct(product);
+      final product = productMapper.mapToNetworkProduct(state.product);
+      final pushProduct =
+          await productRepository.addProduct(product, state.chosenImages);
       pushProduct.when((success) {
         emit(state.copyWith(isLoading: false));
         nameController.clear();
@@ -74,14 +74,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   Future<void> pickImage() async {
     try {
       final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
-      final images = <ImagePath>[...state.product.images];
+      final images = <ImagePath>[...state.chosenImages];
       if (pickedFiles.isNotEmpty) {
         for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
           images.add(ImagePath(type: Type.file, imagePath: imagePath));
         }
-        emit(state.copyWith(product: state.product.copyWith(images: images)));
+        emit(state.copyWith(chosenImages: images));
       }
     } catch (e) {
       moxyPrint('$e');
@@ -148,7 +148,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     if (value.isNotEmpty) {
       final int weightInGrams = int.parse(value);
       emit(state.copyWith(
-          product: state.product.copyWith(weightInGrams: weightInGrams)));
+          product: state.product.copyWith(
+              attributes: state.product.attributes
+                  .copyWith(weightInGrams: weightInGrams))));
     }
   }
 
@@ -227,10 +229,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void removeImage(index) {
-    final updatedImages = List<ImagePath>.from(state.product.images);
+    List<ImagePath> updatedImages = List<ImagePath>.from(state.chosenImages);
     updatedImages.removeAt(index);
-    final updatedProduct = state.product.copyWith(images: updatedImages);
-    emit(state.copyWith(product: updatedProduct));
+    emit(state.copyWith(chosenImages: updatedImages));
   }
 
   void clearState() {
@@ -261,7 +262,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     nameController.text = product.name;
     descriptionController.text = product.description;
     costPriceInUsdController.text = product.costPriceInUsd.toString();
-    weightController.text = product.weightInGrams.toString();
+    weightController.text = product.attributes.weightInGrams.toString();
     salePriceController.text = product.salePrice.toString();
     idNameController.text = product.idName.toString();
   }
@@ -289,10 +290,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void editProduct(editProductId) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final product = productMapper.mapToNetworkProduct(
-          state.product, state.product.dimensions);
-      final pushProduct =
-          await productRepository.editProduct(product, editProductId);
+      final product = productMapper.mapToNetworkProduct(state.product);
+      final pushProduct = await productRepository.editProduct(
+          product, state.chosenImages, editProductId);
       pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();
@@ -332,7 +332,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       errors.costPriceInUsd = FieldError.invalid;
       noErrors = false;
     }
-    if (!isValidWeight(state.product.weightInGrams)) {
+    if (!isValidWeight(state.product.attributes.weightInGrams)) {
       errors.costPriceInUsd = FieldError.invalid;
       noErrors = false;
     }
