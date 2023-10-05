@@ -12,9 +12,8 @@ class CreateProductState implements Copyable<CreateProductState> {
   int initialPage;
   int activePage;
   Product product;
-  List<ImagePath> chosenImages;
   String? editProductId;
-  List<Dimension> allDimensions;
+  List<ProductColor> allConfigColors;
 
   // field errors
   FieldErrors errors;
@@ -28,10 +27,9 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.initialPage,
     required this.activePage,
     required this.product,
-    required this.chosenImages,
     required this.editProductId,
     required this.errors,
-    required this.allDimensions,
+    required this.allConfigColors,
   });
 
   static CreateProductState defaultCreateProductState() {
@@ -44,10 +42,9 @@ class CreateProductState implements Copyable<CreateProductState> {
       initialPage: 0,
       activePage: 0,
       product: Product.defaultProduct(),
-      chosenImages: [],
       editProductId: '',
       errors: FieldErrors(),
-      allDimensions: [],
+      allConfigColors: [],
     );
   }
 
@@ -61,10 +58,9 @@ class CreateProductState implements Copyable<CreateProductState> {
     int? initialPage,
     int? activePage,
     Product? product,
-    List<ImagePath>? chosenImages,
     String? editProductId,
     FieldErrors? errors,
-    List<Dimension>? allDimensions,
+    List<ProductColor>? allConfigColors,
   }) {
     return CreateProductState(
         isLoading: isLoading ?? this.isLoading,
@@ -75,10 +71,9 @@ class CreateProductState implements Copyable<CreateProductState> {
         initialPage: initialPage ?? this.initialPage,
         activePage: activePage ?? this.activePage,
         product: product ?? this.product,
-        chosenImages: chosenImages ?? this.chosenImages,
         editProductId: editProductId ?? this.editProductId,
         errors: errors ?? this.errors,
-        allDimensions: allDimensions ?? this.allDimensions);
+        allConfigColors: allConfigColors ?? this.allConfigColors);
   }
 }
 

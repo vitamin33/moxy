@@ -56,10 +56,10 @@ class ProductDetails extends StatelessWidget {
                       Expanded(
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.allDimensions.length,
+                          itemCount: state.allConfigColors.length,
                           itemBuilder: (context, index) {
-                            final dimen = state.allDimensions[index];
-                            return _buildColorQuantityRow(dimen, cubit, index);
+                            final color = state.allConfigColors[index];
+                            return _buildColorQuantityRow(color, cubit, index);
                           },
                         ),
                       ),
@@ -76,7 +76,7 @@ class ProductDetails extends StatelessWidget {
 }
 
 Widget _buildColorQuantityRow(
-    Dimension colorDimen, CreateProductCubit cubit, int index) {
+    ProductColor color, CreateProductCubit cubit, int index) {
   return GestureDetector(
       onTap: () {
         cubit.toggleColorField(index);
@@ -87,11 +87,10 @@ Widget _buildColorQuantityRow(
             padding: const EdgeInsets.all(2),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: colorDimen.isSelected ? AppTheme.black : null,
+              color: color.isSelected ? AppTheme.black : null,
               border: Border.all(
                 style: BorderStyle.solid,
-                color:
-                    colorDimen.isSelected ? AppTheme.black : Colors.transparent,
+                color: color.isSelected ? AppTheme.black : Colors.transparent,
                 width: 1,
               ),
             ),
@@ -100,12 +99,12 @@ Widget _buildColorQuantityRow(
               backgroundColor: AppTheme.white,
               child: CircleAvatar(
                 radius: 15,
-                backgroundColor: _generateColor(colorDimen),
+                backgroundColor: _generateColor(color),
               ),
             )),
       ));
 }
 
-Color _generateColor(Dimension dimen) {
-  return hexToColor(dimen.color.hexCode);
+Color _generateColor(ProductColor color) {
+  return hexToColor(color.hexCode);
 }

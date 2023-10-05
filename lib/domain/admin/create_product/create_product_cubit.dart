@@ -2,6 +2,7 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/create_product/create_product_effects.dart';
 import 'package:moxy/domain/admin/create_product/create_product_state.dart';
@@ -19,6 +20,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+  final configRepository = locate<ConfigRepository>();
   final bool isEditMode;
   final String? productId;
 
@@ -29,6 +31,8 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     if (isEditMode && productId != null) {
       getProductById(productId);
     }
+    final colors = configRepository.attributes?.colors ?? [];
+    emit(state.copyWith(allConfigColors: colors));
   }
   List<TextEditingController> quantityControllers = [];
 
@@ -45,9 +49,9 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
+      final images = _getAllDimenImages();
       final product = productMapper.mapToNetworkProduct(state.product);
-      final pushProduct =
-          await productRepository.addProduct(product, state.chosenImages);
+      final pushProduct = await productRepository.addProduct(product, images);
       pushProduct.when((success) {
         emit(state.copyWith(isLoading: false));
         nameController.clear();
@@ -71,17 +75,24 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
-  Future<void> pickImage() async {
+  Future<void> pickImage(int dimenIndex) async {
     try {
+      Dimension dimension = state.product.dimensions[dimenIndex];
       final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
-      final images = <ImagePath>[...state.chosenImages];
+      final images = <ImagePath>[...dimension.images];
       if (pickedFiles.isNotEmpty) {
         for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
           images.add(ImagePath(type: Type.file, imagePath: imagePath));
         }
-        emit(state.copyWith(chosenImages: images));
+        dimension.images = images;
+        emit(
+          state.copyWith(
+            product:
+                state.product.copyWith(dimensions: state.product.dimensions),
+          ),
+        );
       }
     } catch (e) {
       moxyPrint('$e');
@@ -228,10 +239,13 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
-  void removeImage(index) {
-    List<ImagePath> updatedImages = List<ImagePath>.from(state.chosenImages);
-    updatedImages.removeAt(index);
-    emit(state.copyWith(chosenImages: updatedImages));
+  void removeImage(int dimenIndex, int imageIndex) {
+    Dimension dimension = state.product.dimensions[dimenIndex];
+    List<ImagePath> updatedImages = List<ImagePath>.from(dimension.images);
+    updatedImages.removeAt(imageIndex);
+    dimension.images = updatedImages;
+    emit(state.copyWith(
+        product: state.product.copyWith(dimensions: state.product.dimensions)));
   }
 
   void clearState() {
@@ -249,9 +263,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(isLoading: true));
     productById.when((success) {
       final product = productMapper.mapToProduct(success);
-      final updatedAllDimens = checkSelectedColors(product.dimensions);
+      final updatedAllDimens =
+          checkSelectedColors(product.dimensions.map((e) => e.color).toList());
       emit(state.copyWith(
-          product: product, allDimensions: updatedAllDimens, isLoading: false));
+          product: product,
+          allConfigColors: updatedAllDimens,
+          isLoading: false));
     }, (error) {
       moxyPrint(error);
     });
@@ -272,27 +289,25 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void toggleColorField(int index) {
-    state.allDimensions[index].isSelected =
-        !state.allDimensions[index].isSelected;
-    final updatedDimens = state.allDimensions;
-
-    final selectedDimensions = state.allDimensions
-        .where(
-          (element) => element.isSelected,
-        )
-        .toList();
+    state.allConfigColors[index].isSelected =
+        !state.allConfigColors[index].isSelected;
+    final updatedColors = state.allConfigColors;
+    final updatedDimens = createSelectedDimensions(
+      state.allConfigColors,
+    );
     emit(state.copyWith(
-      allDimensions: updatedDimens,
-      product: state.product.copyWith(dimensions: selectedDimensions),
+      allConfigColors: updatedColors,
+      product: state.product.copyWith(dimensions: updatedDimens),
     ));
   }
 
   void editProduct(editProductId) async {
     try {
       emit(state.copyWith(isLoading: true));
+      List<ImagePath> allDimenImages = _getAllDimenImages();
       final product = productMapper.mapToNetworkProduct(state.product);
       final pushProduct = await productRepository.editProduct(
-          product, state.chosenImages, editProductId);
+          product, allDimenImages, editProductId);
       pushProduct.when((success) {
         nameController.clear();
         descriptionController.clear();
@@ -351,16 +366,38 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     return noErrors;
   }
 
-  List<Dimension> checkSelectedColors(List<Dimension> dimensions) {
-    for (var element in state.allDimensions) {
-      element.isSelected = dimensions.contains(element);
-      element.quantity = dimensions
-          .firstWhere(
-            (e) => e.color == element.color,
-            orElse: () => element,
-          )
-          .quantity;
+  List<ProductColor> checkSelectedColors(List<ProductColor> colors) {
+    for (var element in state.allConfigColors) {
+      element.isSelected = colors.contains(element);
     }
-    return state.allDimensions;
+    return state.allConfigColors;
+  }
+
+  List<Dimension> createSelectedDimensions(
+    List<ProductColor> colors,
+  ) {
+    final dimensions = colors
+        .where((color) => color.isSelected)
+        .map(
+          (color) => Dimension(
+            color: color,
+            quantity: 1,
+            material: null,
+            size: null,
+            images: [],
+          ),
+        )
+        .toList();
+
+    return dimensions;
+  }
+
+  List<ImagePath> _getAllDimenImages() {
+    return state.product.dimensions
+        .map((e) => e.images)
+        .reduce((value, element) {
+      value.addAll(element);
+      return value;
+    });
   }
 }

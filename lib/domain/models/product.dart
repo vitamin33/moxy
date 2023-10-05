@@ -137,7 +137,7 @@ class Dimension implements Copyable<Dimension> {
   ProductMaterial? material;
   bool isSelected;
   int quantity;
-  Size? size;
+  ProductSize? size;
   List<ImagePath> images;
 
   Dimension({
@@ -153,7 +153,7 @@ class Dimension implements Copyable<Dimension> {
     return Dimension(
       color: ProductColor.defaultColor(),
       material: ProductMaterial.defaultMaterial(),
-      size: Size.defaultSize(),
+      size: ProductSize.defaultSize(),
       isSelected: false,
       quantity: 0,
       images: [],
@@ -166,7 +166,7 @@ class Dimension implements Copyable<Dimension> {
     int? quantity,
     bool? isSelected,
     ProductMaterial? material,
-    Size? size,
+    ProductSize? size,
     List<ImagePath>? chosenImages,
   }) {
     return Dimension(
@@ -194,36 +194,47 @@ class Dimension implements Copyable<Dimension> {
 }
 
 class ProductColor {
+  final String id;
   final String name;
   final String hexCode;
+  bool isSelected;
 
-  ProductColor({required this.name, required this.hexCode});
+  ProductColor({
+    required this.id,
+    required this.name,
+    required this.hexCode,
+    this.isSelected = false,
+  });
 
   static ProductColor defaultColor() {
-    return ProductColor(name: 'Black', hexCode: '000000');
+    return ProductColor(id: '', name: 'Black', hexCode: '000000');
   }
 }
 
-class Size {
+class ProductSize {
+  final String id;
   final String name;
 
-  Size({
+  ProductSize({
+    required this.id,
     required this.name,
   });
 
-  static Size defaultSize() {
-    return Size(name: 'M');
+  static ProductSize defaultSize() {
+    return ProductSize(id: '', name: 'M');
   }
 }
 
 class ProductMaterial {
   final String name;
+  final String id;
 
   ProductMaterial({
+    required this.id,
     required this.name,
   });
   static ProductMaterial defaultMaterial() {
-    return ProductMaterial(name: 'Leather');
+    return ProductMaterial(id: '', name: 'Leather');
   }
 }
 
