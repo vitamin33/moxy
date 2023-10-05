@@ -1,7 +1,6 @@
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/find_orders_request.dart';
-import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';

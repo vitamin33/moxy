@@ -32,7 +32,6 @@ class ProductDetailsContainer extends StatelessWidget {
                   ImageCarousel(images: images),
                   const SizedBox(
                     width: 400,
-                    height: 400,
                     child: Column(children: [
                       SizedBox(height: 10),
                       CustomAccordion(
@@ -100,10 +99,10 @@ class ProductDetailsContainer extends StatelessWidget {
                   ),
                   const SizedBox(
                     width: 400,
-                    height: 400,
                     child: Column(children: [
                       Divider(),
                       CustomAccordion(
+                        showIcon: false,
                         title: 'Харкатеристика',
                         contentChild: Column(
                           children: [
@@ -137,9 +136,9 @@ class ProductDetailsContainer extends StatelessWidget {
                       ),
                       Divider(),
                       CustomAccordion(
+                        showIcon: false,
                         title: 'Розмірна сітка',
-                        content:
-                            '',
+                        content: '',
                       ),
                       Divider(),
                     ]),
@@ -174,16 +173,5 @@ Widget _buildColorWidget(String color) {
         backgroundImage: AssetImage(color),
       ),
     ),
-  );
-}
-
-AnimatedContainer slider(images, pagePosition, active) {
-  double margin = active ? 10 : 20;
-  return AnimatedContainer(
-    duration: const Duration(milliseconds: 500),
-    curve: Curves.easeInOutCubic,
-    margin: EdgeInsets.all(margin),
-    decoration: BoxDecoration(
-        image: DecorationImage(image: NetworkImage(images[pagePosition]))),
   );
 }

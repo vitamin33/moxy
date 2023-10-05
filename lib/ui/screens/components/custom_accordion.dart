@@ -20,6 +20,7 @@ class CustomAccordion extends StatefulWidget {
       this.titleBorder = const Border(),
       this.contentBorder = const Border(),
       this.boxShadow = false,
+      this.showIcon = true,
       this.margin,
       this.showAccordion = false,
       this.onToggleCollapsed,
@@ -78,6 +79,9 @@ class CustomAccordion extends StatefulWidget {
   /// boxShadow of type [bool] which is used to change the boxshadow of content
   final bool boxShadow;
 
+  /// showIcon of type [bool] which is used to change the icon of content
+  final bool showIcon;
+
   /// titleBorderRadius of type  [Radius]  which is used to change the border radius of title
   final BorderRadius titleBorderRadius;
 
@@ -126,62 +130,60 @@ class _CustomAccordionState extends State<CustomAccordion>
   }
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: BoxDecoration(boxShadow: [
-          if (widget.boxShadow)
-            const BoxShadow(
-              color: AppTheme.greyLigth,
-              spreadRadius: 5,
-              blurRadius: 7,
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-        ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            InkWell(
-              onTap: _toggleCollapsed,
-              borderRadius: widget.titleBorderRadius,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: widget.titleBorderRadius,
-                  border: widget.titleBorder,
-                  color: showAccordion
-                      ? widget.expandedTitleBackgroundColor
-                      : widget.collapsedTitleBackgroundColor,
-                ),
-                padding: widget.titlePadding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Expanded(
-                      child: widget.title != null
-                          ? Text(widget.title!, style: widget.textStyle)
-                          : (widget.titleChild ?? Container()),
+  Widget build(BuildContext context) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          InkWell(
+            onTap: _toggleCollapsed,
+            borderRadius: widget.titleBorderRadius,
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  if (widget.boxShadow)
+                    const BoxShadow(
+                      color: AppTheme.pink,
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3), // changes position of shadow
                     ),
-                    showAccordion ? widget.expandedIcon : widget.collapsedIcon
-                  ],
-                ),
+                ],
+                borderRadius: widget.titleBorderRadius,
+                border: widget.titleBorder,
+                color: showAccordion
+                    ? widget.expandedTitleBackgroundColor
+                    : widget.collapsedTitleBackgroundColor,
+              ),
+              padding: widget.titlePadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: widget.title != null
+                        ? Text(widget.title!, style: widget.textStyle)
+                        : (widget.titleChild ?? Container()),
+                  ),
+                if(widget.showIcon)  showAccordion ? widget.expandedIcon : widget.collapsedIcon
+                ],
               ),
             ),
-            showAccordion
-                ? Container(
-                    decoration: BoxDecoration(
-                      borderRadius: widget.contentBorderRadius,
-                      border: widget.contentBorder,
-                      color: widget.contentBackgroundColor ?? Colors.white70,
-                    ),
-                    width: MediaQuery.of(context).size.width,
-                    padding: widget.contentPadding,
-                    child: SlideTransition(
-                      position: offset,
-                      child: widget.content != null
-                          ? Text(widget.content!)
-                          : (widget.contentChild ?? Container()),
-                    ))
-                : Container()
-          ],
-        ),
+          ),
+          showAccordion
+              ? Container(
+                  decoration: BoxDecoration(
+                    borderRadius: widget.contentBorderRadius,
+                    border: widget.contentBorder,
+                    color: widget.contentBackgroundColor ?? Colors.white70,
+                  ),
+                  width: MediaQuery.of(context).size.width,
+                  padding: widget.contentPadding,
+                  child: SlideTransition(
+                    position: offset,
+                    child: widget.content != null
+                        ? Text(widget.content!)
+                        : (widget.contentChild ?? Container()),
+                  ))
+              : Container()
+        ],
       );
 
   void _toggleCollapsed() {
