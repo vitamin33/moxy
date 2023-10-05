@@ -10,6 +10,7 @@ class Product implements Copyable<Product> {
   double salePrice;
   List<Dimension> dimensions;
   String idName;
+  String category;
   bool forSale;
   ProductAttributes attributes;
 
@@ -23,6 +24,7 @@ class Product implements Copyable<Product> {
     required this.salePrice,
     required this.dimensions,
     required this.idName,
+    required this.category,
     required this.forSale,
     required this.attributes,
   });
@@ -37,6 +39,7 @@ class Product implements Copyable<Product> {
       salePrice: 0,
       dimensions: [],
       idName: '',
+      category: '',
       forSale: false,
       attributes: ProductAttributes.defaultAttributes(),
     );
@@ -46,6 +49,7 @@ class Product implements Copyable<Product> {
   Product copyWith({
     String? name,
     String? idName,
+    String? category,
     String? description,
     double? costPriceInUsd,
     double? discountPrice,
@@ -64,6 +68,7 @@ class Product implements Copyable<Product> {
       salePrice: salePrice ?? this.salePrice,
       dimensions: dimensions ?? this.dimensions,
       idName: idName ?? this.idName,
+      category: category ?? this.category,
       forSale: forSale ?? this.forSale,
       attributes: attributes ?? this.attributes,
     );
@@ -84,6 +89,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
   int lengthInCm;
   int? depthInCm;
   String? producer;
+  String? style;
 
   ProductAttributes({
     required this.weightInGrams,
@@ -95,6 +101,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
     this.furniture,
     this.strap,
     this.producer,
+    this.style,
   });
 
   static ProductAttributes defaultAttributes() {
@@ -117,6 +124,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
     String? furniture,
     String? strap,
     String? producer,
+    String? style,
   }) {
     return ProductAttributes(
       weightInGrams: weightInGrams ?? this.weightInGrams,
@@ -128,6 +136,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
       furniture: furniture ?? this.furniture,
       strap: strap ?? this.strap,
       producer: producer ?? this.producer,
+      style: style ?? this.style,
     );
   }
 }

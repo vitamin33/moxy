@@ -104,6 +104,7 @@ NetworkProductAttributes _$NetworkProductAttributesFromJson(
       depthInCm: json['depthInCm'] as int?,
       producer: json['producer'] as String?,
       strap: json['strap'] as String?,
+      style: json['style'] as String?,
     );
 
 Map<String, dynamic> _$NetworkProductAttributesToJson(
@@ -118,4 +119,5 @@ Map<String, dynamic> _$NetworkProductAttributesToJson(
       'lengthInCm': instance.lengthInCm,
       'depthInCm': instance.depthInCm,
       'producer': instance.producer,
+      'style': instance.style,
     };

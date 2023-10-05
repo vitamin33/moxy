@@ -28,11 +28,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       : super(
           CreateProductState.defaultCreateProductState(),
         ) {
+    final colors = configRepository.attributes?.colors ?? [];
+    final categories = configRepository.attributes?.productCategories ?? [];
+    emit(
+      state.copyWith(allConfigColors: colors, productCategories: categories),
+    );
     if (isEditMode && productId != null) {
       getProductById(productId);
     }
-    final colors = configRepository.attributes?.colors ?? [];
-    emit(state.copyWith(allConfigColors: colors));
   }
   List<TextEditingController> quantityControllers = [];
 
@@ -44,6 +47,15 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController idNameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController widthController = TextEditingController();
+  final TextEditingController lengthController = TextEditingController();
+  final TextEditingController depthController = TextEditingController();
+  final TextEditingController seasonController = TextEditingController();
+  final TextEditingController furnitureController = TextEditingController();
+  final TextEditingController strapController = TextEditingController();
+  final TextEditingController producerController = TextEditingController();
+  final TextEditingController styleController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
   void addProduct() async {
@@ -53,19 +65,8 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       final product = productMapper.mapToNetworkProduct(state.product);
       final pushProduct = await productRepository.addProduct(product, images);
       pushProduct.when((success) {
-        emit(state.copyWith(isLoading: false));
-        nameController.clear();
-        descriptionController.clear();
-        costPriceInUsdController.clear();
-        weightController.clear();
-        salePriceController.clear();
-        colorController.clear();
-        idNameController.clear();
-        for (var element in quantityControllers) {
-          element.clear();
-        }
-        emit(state.copyWith(isLoading: false));
-        emit(state.copyWith(isSuccess: true));
+        _clearFieldsControllers();
+        emit(state.copyWith(isLoading: false, isSuccess: true));
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
@@ -113,6 +114,10 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void onChangePage(int page) {
     emit(state.copyWith(activePage: page));
+  }
+
+  void categorySelected(String category) {
+    emit(state.copyWith(product: state.product.copyWith(category: category)));
   }
 
   void nameChanged(value) {
@@ -163,6 +168,101 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
               attributes: state.product.attributes
                   .copyWith(weightInGrams: weightInGrams))));
     }
+  }
+
+  void heightInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int heightInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(heightInCm: heightInCm))));
+    }
+  }
+
+  void widthInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int widthInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(widthInCm: widthInCm))));
+    }
+  }
+
+  void lengthInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int lengthInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(lengthInCm: lengthInCm))));
+    }
+  }
+
+  void depthInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int depthInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(depthInCm: depthInCm))));
+    }
+  }
+
+  void seasonChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String season = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(season: season),
+    )));
+  }
+
+  void furnitureChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String furniture = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(furniture: furniture),
+    )));
+  }
+
+  void strapChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String strap = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(strap: strap),
+    )));
+  }
+
+  void producerChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String producer = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(producer: producer),
+    )));
+  }
+
+  void styleChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String style = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(style: style),
+    )));
   }
 
   void quantityLongAdd(int index, int? quantity) {
@@ -282,6 +382,15 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     weightController.text = product.attributes.weightInGrams.toString();
     salePriceController.text = product.salePrice.toString();
     idNameController.text = product.idName.toString();
+    heightController.text = product.attributes.heightInCm.toString();
+    widthController.text = product.attributes.widthInCm.toString();
+    lengthController.text = product.attributes.lengthInCm.toString();
+    depthController.text = (product.attributes.depthInCm ?? '').toString();
+    seasonController.text = product.attributes.season ?? '';
+    furnitureController.text = product.attributes.furniture ?? '';
+    strapController.text = product.attributes.strap ?? '';
+    producerController.text = product.attributes.producer ?? '';
+    styleController.text = product.attributes.style ?? '';
   }
 
   void changeEdit() {
@@ -309,15 +418,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       final pushProduct = await productRepository.editProduct(
           product, allDimenImages, editProductId);
       pushProduct.when((success) {
-        nameController.clear();
-        descriptionController.clear();
-        costPriceInUsdController.clear();
-        salePriceController.clear();
-        colorController.clear();
-        idNameController.clear();
-        for (var element in quantityControllers) {
-          element.clear();
-        }
+        _clearFieldsControllers();
         emit(state.copyWith(isLoading: false));
       }, (error) {
         emit(state.copyWith(
@@ -348,11 +449,23 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       noErrors = false;
     }
     if (!isValidWeight(state.product.attributes.weightInGrams)) {
-      errors.costPriceInUsd = FieldError.invalid;
+      errors.weightInGrams = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSizeValues(state.product.attributes.heightInCm)) {
+      errors.heightInCm = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSizeValues(state.product.attributes.widthInCm)) {
+      errors.widthInCm = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSizeValues(state.product.attributes.lengthInCm)) {
+      errors.lengthInCm = FieldError.invalid;
       noErrors = false;
     }
     if (!isValidQuantity(state.product.dimensions)) {
-      errors.quantity = FieldError.invalid;
+      errors.dimensions = FieldError.invalid;
       noErrors = false;
     }
     if (!isValidPrice(state.product.salePrice)) {
@@ -399,5 +512,27 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       value.addAll(element);
       return value;
     });
+  }
+
+  void _clearFieldsControllers() {
+    nameController.clear();
+    descriptionController.clear();
+    costPriceInUsdController.clear();
+    weightController.clear();
+    salePriceController.clear();
+    colorController.clear();
+    idNameController.clear();
+    heightController.clear();
+    widthController.clear();
+    lengthController.clear();
+    depthController.clear();
+    seasonController.clear();
+    furnitureController.clear();
+    strapController.clear();
+    producerController.clear();
+    styleController.clear();
+    for (var element in quantityControllers) {
+      element.clear();
+    }
   }
 }

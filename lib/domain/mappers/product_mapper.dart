@@ -30,6 +30,7 @@ class ProductMapper {
       salePrice: p.salePrice,
       dimensions: p.dimensions.map((d) => mapToNetworkDimension(d)).toList(),
       idName: p.idName,
+      category: p.category,
       forSale: p.forSale,
       attributes: mapToNetworkAttributes(p.attributes),
     );
@@ -51,6 +52,7 @@ class ProductMapper {
           )
           .toList(),
       idName: network.idName,
+      category: network.category,
       forSale: network.forSale,
       attributes: mapToAttributes(network.attributes),
     );
@@ -81,6 +83,7 @@ class ProductMapper {
       furniture: network.furniture,
       strap: network.strap,
       producer: network.producer,
+      style: network.style,
     );
   }
 
@@ -95,6 +98,7 @@ class ProductMapper {
       furniture: item.furniture,
       strap: item.strap,
       producer: item.producer,
+      style: item.style,
     );
   }
 

@@ -18,6 +18,9 @@ NetworkAttributesResponse _$NetworkAttributesResponseFromJson(
       (json['materials'] as List<dynamic>)
           .map((e) => NetworkMaterial.fromJson(e as Map<String, dynamic>))
           .toList(),
+      (json['productCategories'] as List<dynamic>)
+          .map((e) => e as String)
+          .toList(),
     );
 
 Map<String, dynamic> _$NetworkAttributesResponseToJson(
@@ -26,6 +29,7 @@ Map<String, dynamic> _$NetworkAttributesResponseToJson(
       'colors': instance.colors,
       'sizes': instance.sizes,
       'materials': instance.materials,
+      'productCategories': instance.productCategories,
     };
 
 NetworkSize _$NetworkSizeFromJson(Map<String, dynamic> json) => NetworkSize(

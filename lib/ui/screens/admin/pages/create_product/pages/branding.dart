@@ -278,7 +278,7 @@ class Branding extends StatelessWidget {
             padding: const EdgeInsets.all(3),
             child: CircleAvatar(
               radius: 20,
-              backgroundColor: _renderBorder(isValid(state.errors.quantity)),
+              backgroundColor: _renderBorder(isValid(state.errors.dimensions)),
               child: CircleAvatar(
                 radius: 15,
                 backgroundColor: color,
@@ -366,4 +366,10 @@ Color _renderBorder(bool isValid) {
   return isValid ? AppTheme.white : Colors.red;
 }
 
-bool isValid(state) => state == null;
+bool isValid(error) {
+  if (error == null) {
+    return true;
+  } else {
+    return false;
+  }
+}

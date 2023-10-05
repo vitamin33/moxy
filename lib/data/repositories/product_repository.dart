@@ -32,6 +32,7 @@ class ProductRepository {
         product.salePrice,
         product.dimensions ?? [],
         product.idName,
+        product.category,
         product.attributes,
         chosenImages
             .where((e) => e.type == Type.file)

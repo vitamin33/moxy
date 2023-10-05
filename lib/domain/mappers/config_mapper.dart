@@ -5,6 +5,7 @@ import 'package:moxy/domain/models/product.dart';
 class ConfigMapper {
   Attributes mapToAttributes(NetworkAttributesResponse network) {
     return Attributes(
+      productCategories: network.productCategories,
       colors: network.colors.map((e) => mapToColor(e)).toList(),
       sizes: network.sizes.map((e) => mapToSize(e)).toList(),
       materials: network.materials.map((e) => mapToMaterial(e)).toList(),

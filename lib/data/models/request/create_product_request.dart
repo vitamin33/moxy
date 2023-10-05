@@ -109,6 +109,7 @@ class NetworkProductAttributes {
   int lengthInCm;
   int? depthInCm;
   String? producer;
+  String? style;
 
   NetworkProductAttributes({
     required this.weightInGrams,
@@ -120,6 +121,7 @@ class NetworkProductAttributes {
     this.depthInCm,
     this.producer,
     this.strap,
+    this.style,
   });
 
   factory NetworkProductAttributes.fromJson(Map<String, dynamic> json) =>

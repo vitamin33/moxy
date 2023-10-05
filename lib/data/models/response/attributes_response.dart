@@ -7,8 +7,10 @@ class NetworkAttributesResponse {
   List<NetworkColor> colors;
   List<NetworkSize> sizes;
   List<NetworkMaterial> materials;
+  List<String> productCategories;
 
-  NetworkAttributesResponse(this.colors, this.sizes, this.materials);
+  NetworkAttributesResponse(
+      this.colors, this.sizes, this.materials, this.productCategories);
 
   factory NetworkAttributesResponse.fromJson(Map<String, dynamic> json) =>
       _$NetworkAttributesResponseFromJson(json);

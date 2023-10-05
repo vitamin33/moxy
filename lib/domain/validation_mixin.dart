@@ -18,8 +18,18 @@ mixin ValidationMixin {
     return weight > 0;
   }
 
-  bool isValidQuantity(List<Dimension> dimension) {
-    for (var item in dimension) {
+  bool isValidSizeValues(int? value) {
+    if (value == null) {
+      return false;
+    }
+    return value > 0;
+  }
+
+  bool isValidQuantity(List<Dimension> dimensions) {
+    if (dimensions.isEmpty) {
+      return false;
+    }
+    for (var item in dimensions) {
       if (item.quantity == 0) {
         return false;
       }
