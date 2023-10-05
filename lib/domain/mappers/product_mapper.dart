@@ -30,6 +30,7 @@ class ProductMapper {
       salePrice: p.salePrice,
       dimensions: p.dimensions.map((d) => mapToNetworkDimension(d)).toList(),
       idName: p.idName,
+      category: p.category,
       forSale: p.forSale,
       attributes: mapToNetworkAttributes(p.attributes),
     );
@@ -51,6 +52,7 @@ class ProductMapper {
           )
           .toList(),
       idName: network.idName,
+      category: network.category,
       forSale: network.forSale,
       attributes: mapToAttributes(network.attributes),
     );
@@ -81,6 +83,7 @@ class ProductMapper {
       furniture: network.furniture,
       strap: network.strap,
       producer: network.producer,
+      style: network.style,
     );
   }
 
@@ -95,6 +98,7 @@ class ProductMapper {
       furniture: item.furniture,
       strap: item.strap,
       producer: item.producer,
+      style: item.style,
     );
   }
 
@@ -113,6 +117,7 @@ class ProductMapper {
 
   NetworkColor mapToNetworkColor(ProductColor item) {
     return NetworkColor(
+      id: item.id,
       name: item.name,
       hexCode: item.hexCode,
     );
@@ -123,31 +128,35 @@ class ProductMapper {
       return null;
     }
     return NetworkMaterial(
+      id: item.id,
       name: item.name,
     );
   }
 
-  NetworkSize? mapToNetworkSize(Size? item) {
+  NetworkSize? mapToNetworkSize(ProductSize? item) {
     if (item == null) {
       return null;
     }
     return NetworkSize(
+      id: item.id,
       name: item.name,
     );
   }
 
   ProductColor mapToColor(NetworkColor network) {
     return ProductColor(
+      id: network.id,
       name: network.name,
       hexCode: network.hexCode,
     );
   }
 
-  Size? mapToSize(NetworkSize? network) {
+  ProductSize? mapToSize(NetworkSize? network) {
     if (network == null) {
       return null;
     }
-    return Size(
+    return ProductSize(
+      id: network.id,
       name: network.name,
     );
   }
@@ -157,6 +166,7 @@ class ProductMapper {
       return null;
     }
     return ProductMaterial(
+      id: network.id,
       name: network.name,
     );
   }

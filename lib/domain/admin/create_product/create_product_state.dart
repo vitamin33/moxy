@@ -12,9 +12,9 @@ class CreateProductState implements Copyable<CreateProductState> {
   int initialPage;
   int activePage;
   Product product;
-  List<ImagePath> chosenImages;
   String? editProductId;
-  List<Dimension> allDimensions;
+  List<ProductColor> allConfigColors;
+  List<String> productCategories;
 
   // field errors
   FieldErrors errors;
@@ -28,10 +28,10 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.initialPage,
     required this.activePage,
     required this.product,
-    required this.chosenImages,
     required this.editProductId,
     required this.errors,
-    required this.allDimensions,
+    required this.allConfigColors,
+    required this.productCategories,
   });
 
   static CreateProductState defaultCreateProductState() {
@@ -44,10 +44,10 @@ class CreateProductState implements Copyable<CreateProductState> {
       initialPage: 0,
       activePage: 0,
       product: Product.defaultProduct(),
-      chosenImages: [],
       editProductId: '',
       errors: FieldErrors(),
-      allDimensions: [],
+      allConfigColors: [],
+      productCategories: [],
     );
   }
 
@@ -61,24 +61,25 @@ class CreateProductState implements Copyable<CreateProductState> {
     int? initialPage,
     int? activePage,
     Product? product,
-    List<ImagePath>? chosenImages,
     String? editProductId,
     FieldErrors? errors,
-    List<Dimension>? allDimensions,
+    List<ProductColor>? allConfigColors,
+    List<String>? productCategories,
   }) {
     return CreateProductState(
-        isLoading: isLoading ?? this.isLoading,
-        isEdit: isEdit ?? this.isEdit,
-        isSuccess: isSuccess ?? this.isSuccess,
-        errorMessage: errorMessage ?? this.errorMessage,
-        editProduct: editProduct ?? this.editProduct,
-        initialPage: initialPage ?? this.initialPage,
-        activePage: activePage ?? this.activePage,
-        product: product ?? this.product,
-        chosenImages: chosenImages ?? this.chosenImages,
-        editProductId: editProductId ?? this.editProductId,
-        errors: errors ?? this.errors,
-        allDimensions: allDimensions ?? this.allDimensions);
+      isLoading: isLoading ?? this.isLoading,
+      isEdit: isEdit ?? this.isEdit,
+      isSuccess: isSuccess ?? this.isSuccess,
+      errorMessage: errorMessage ?? this.errorMessage,
+      editProduct: editProduct ?? this.editProduct,
+      initialPage: initialPage ?? this.initialPage,
+      activePage: activePage ?? this.activePage,
+      product: product ?? this.product,
+      editProductId: editProductId ?? this.editProductId,
+      errors: errors ?? this.errors,
+      allConfigColors: allConfigColors ?? this.allConfigColors,
+      productCategories: productCategories ?? this.productCategories,
+    );
   }
 }
 
@@ -89,7 +90,11 @@ class FieldErrors {
   FieldError? salePrice;
   FieldError? costPriceInUsd;
   FieldError? weightInGrams;
-  FieldError? quantity;
+  FieldError? weightInCm;
+  FieldError? heightInCm;
+  FieldError? widthInCm;
+  FieldError? lengthInCm;
+  FieldError? dimensions;
 
   FieldErrors({
     this.productName,
@@ -98,7 +103,10 @@ class FieldErrors {
     this.salePrice,
     this.costPriceInUsd,
     this.weightInGrams,
-    this.quantity,
+    this.heightInCm,
+    this.widthInCm,
+    this.lengthInCm,
+    this.dimensions,
   });
 
   static FieldErrors noErrors() {
@@ -123,11 +131,20 @@ class FieldErrors {
     if (weightInGrams != null) {
       buffer.write('weightInGrams ');
     }
+    if (heightInCm != null) {
+      buffer.write('heightInCm ');
+    }
+    if (widthInCm != null) {
+      buffer.write('widthInCm ');
+    }
+    if (lengthInCm != null) {
+      buffer.write('lengthInCm ');
+    }
     if (salePrice != null) {
       buffer.write('salePrice ');
     }
-    if (quantity != null) {
-      buffer.write('quantity ');
+    if (dimensions != null) {
+      buffer.write('wrong dimensions ');
     }
     buffer.write('.');
     return buffer.toString();

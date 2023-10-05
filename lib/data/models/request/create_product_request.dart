@@ -54,10 +54,11 @@ class NetworkDimension {
 
 @JsonSerializable()
 class NetworkColor {
+  final String id;
   final String name;
   final String hexCode;
 
-  NetworkColor({required this.name, required this.hexCode});
+  NetworkColor({required this.id, required this.name, required this.hexCode});
 
   factory NetworkColor.fromJson(Map<String, dynamic> json) =>
       _$NetworkColorFromJson(json);
@@ -67,9 +68,11 @@ class NetworkColor {
 
 @JsonSerializable()
 class NetworkSize {
+  final String id;
   final String name;
 
   NetworkSize({
+    required this.id,
     required this.name,
   });
 
@@ -81,9 +84,11 @@ class NetworkSize {
 
 @JsonSerializable()
 class NetworkMaterial {
+  final String id;
   final String name;
 
   NetworkMaterial({
+    required this.id,
     required this.name,
   });
 
@@ -104,6 +109,7 @@ class NetworkProductAttributes {
   int lengthInCm;
   int? depthInCm;
   String? producer;
+  String? style;
 
   NetworkProductAttributes({
     required this.weightInGrams,
@@ -115,6 +121,7 @@ class NetworkProductAttributes {
     this.depthInCm,
     this.producer,
     this.strap,
+    this.style,
   });
 
   factory NetworkProductAttributes.fromJson(Map<String, dynamic> json) =>

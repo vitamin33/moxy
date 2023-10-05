@@ -23,6 +23,7 @@ class ProductsService {
     double salePrice,
     List<NetworkDimension> dimensions,
     String idName,
+    String category,
     NetworkProductAttributes attributes,
     List<String> choosenImages,
   ) async {
@@ -46,6 +47,7 @@ class ProductsService {
       'numberOfImagesForDimensions': formImageDimensionIndexes(dimensions),
       'images': imageFiles,
       'idName': idName,
+      'category': category,
       'attributes': jsonDecode(jsonEncode(attributes))
     });
     try {

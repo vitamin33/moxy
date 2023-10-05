@@ -27,6 +27,7 @@ class NetworkProduct {
   double salePrice;
   List<NetworkDimension>? dimensions;
   String idName;
+  String category;
   bool forSale;
   NetworkProductAttributes attributes;
 
@@ -40,6 +41,7 @@ class NetworkProduct {
     required this.salePrice,
     required this.dimensions,
     required this.idName,
+    required this.category,
     required this.forSale,
     required this.attributes,
   });

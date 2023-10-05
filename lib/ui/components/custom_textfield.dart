@@ -79,6 +79,7 @@ OutlineInputBorder _renderBorder(bool isValid, bool focused, borderColor) {
 }
 
 bool isValid(state) => state == null;
+
 TextStyle renderTitleStyle(BuildContext context, bool isValid) {
   return TextStyle(
     color: isValid ? Colors.black : Colors.red,

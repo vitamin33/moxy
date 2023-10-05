@@ -1,32 +1,34 @@
 import 'package:moxy/data/models/response/attributes_response.dart';
 import 'package:moxy/domain/models/attributes.dart';
+import 'package:moxy/domain/models/product.dart';
 
 class ConfigMapper {
   Attributes mapToAttributes(NetworkAttributesResponse network) {
     return Attributes(
+      productCategories: network.productCategories,
       colors: network.colors.map((e) => mapToColor(e)).toList(),
       sizes: network.sizes.map((e) => mapToSize(e)).toList(),
       materials: network.materials.map((e) => mapToMaterial(e)).toList(),
     );
   }
 
-  Color mapToColor(NetworkColor network) {
-    return Color(
+  ProductColor mapToColor(NetworkColor network) {
+    return ProductColor(
       id: network.id,
       name: network.name,
       hexCode: network.hexCode,
     );
   }
 
-  Size mapToSize(NetworkSize network) {
-    return Size(
+  ProductSize mapToSize(NetworkSize network) {
+    return ProductSize(
       id: network.id,
       name: network.name,
     );
   }
 
-  Material mapToMaterial(NetworkMaterial network) {
-    return Material(
+  ProductMaterial mapToMaterial(NetworkMaterial network) {
+    return ProductMaterial(
       id: network.id,
       name: network.name,
     );
