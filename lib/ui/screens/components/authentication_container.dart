@@ -7,7 +7,6 @@ import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthenticationContainer extends StatelessWidget {
@@ -17,6 +16,7 @@ class AuthenticationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
+        final cubit = context.read<LoginCubit>();
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -59,6 +59,9 @@ class AuthenticationContainer extends StatelessWidget {
                   ],
                 ),
                 InkWell(
+                  onTap: () {
+                    cubit.moveToPage(3);
+                  },
                   child: OnHover(
                     builder: (isHovered) {
                       return Text(
@@ -111,7 +114,7 @@ class AuthenticationContainer extends StatelessWidget {
         ),
         InkWell(
             onTap: () {
-              moxyPrint('Sign up');
+              context.read<LoginCubit>().nextPage();
             },
             child: Text(
               AppLocalizations.of(context)!.signup,

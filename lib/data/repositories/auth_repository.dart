@@ -117,4 +117,14 @@ class AuthRepository {
     return resultCase.when(
         (success) => Result.success(success), (error) => Result.error(error));
   }
+
+
+  Future<Result<Headers, Exception>> sendVerCode(
+      String verCode) async {
+    final resultCase = await client
+        .sendVerCode(verCode);
+    return resultCase.when(
+        (success) => Result.success(success), (error) => Result.error(error));
+  }
+
 }

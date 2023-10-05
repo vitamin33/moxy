@@ -49,7 +49,7 @@ class EditOrderPage extends StatelessWidget {
               return KeyboardVisibilityBuilder(
                 builder: (context, isKeyboardVisible) {
                   return state.isSuccess
-                      ? succsess(
+                      ? SuccessCard(
                           onTap: () {
                             context.read<AdminHomeRouterCubit>().navigateTo(
                                   const OrdersPageState(),

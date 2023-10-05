@@ -386,4 +386,17 @@ class DioClient {
     }
     return Result.success(result);
   }
+
+  //REGISTRATION
+  Future<dynamic> sendVerCode(String verCode) async {
+    try {
+      Response response = await dio.post(
+        loginUserUrl,
+        data: verCode,
+      );
+    } catch (e) {
+      moxyPrint('During login: $e');
+      return null;
+    }
+  }
 }
