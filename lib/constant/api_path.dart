@@ -1,5 +1,8 @@
 const String createProductUrl = '/products/create';
 const String loginUserUrl = '/auth/login';
+const String registerUserUrl = '/auth/register';
+const String verifyUserUrl = '/auth/verify-confirmation';
+const String resendVerifyUserUrl = '/auth/resend-confirmation';
 const String allProductsUrl = '/products';
 const String getProductByIdUrl = '/products/details/';
 const String editProductUrl = '/products/edit/';

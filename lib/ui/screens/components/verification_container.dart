@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
@@ -27,13 +28,12 @@ class VerificationContainer extends StatelessWidget {
               ),
               const SizedBox(height: AppTheme.cardPadding),
               OtpTextField(
-                numberOfFields: 5,
+                numberOfFields: 4,
                 borderColor: AppTheme.pink,
                 showFieldAsBox: true,
                 focusedBorderColor: AppTheme.pinkAvarage,
-                onCodeChanged: (String code) {},
-                onSubmit: (String verificationCode) {
-                  cubit.changeVarCode(verificationCode);
+                onSubmit: (String code) {
+                  cubit.changeVarCode(code);
                 },
               ),
               Row(
@@ -41,7 +41,9 @@ class VerificationContainer extends StatelessWidget {
                 children: [
                   const Text('Didnt receive a code?'),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      cubit.resendConfirmationCode();
+                    },
                     child: const Text(
                       'Try Again',
                       style: TextStyle(
@@ -62,12 +64,16 @@ class VerificationContainer extends StatelessWidget {
                 child: CustomButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити код',
-                  state: state.state is Loading
-                      ? ButtonState.loading
-                      : (state.mobileNumberIsValid
-                          ? ButtonState.idle
-                          : ButtonState.disabled),
-                  onTap: () {},
+                  // state:
+                  // //  state.state is Loading
+                  //     ? ButtonState.loading
+                  //     : (state.mobileNumberIsValid
+                  //         ? ButtonState.idle
+                  //         : ButtonState.disabled),
+                  onTap: () {
+                    context.read<RegistrationCubit>().sendConfirmationCode();
+                    context.read<LoginCubit>().moveToPage(0);
+                  },
                 ),
               ),
             ],
@@ -90,9 +96,7 @@ Widget downText(BuildContext context) {
         width: 2,
       ),
       InkWell(
-          onTap: () {
-            context.read<RegistrationCubit>().sendVerCode();
-          },
+          onTap: () {},
           child: const Text(
             "Увійти",
             style: TextStyle(

@@ -31,14 +31,19 @@ class RegistrationContainer extends StatelessWidget {
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Імя',
-                onChanged: (value) => cubit.mobileNumberChanged(value),
-                autofillHints: const [
-                  AutofillHints.telephoneNumber,
-                ],
+                controller: cubit.firstNameController,
+                onChanged: (value) => cubit.firstNameChanged(value),
+              ),
+              CustomTextField(
+                borderColor: AppTheme.greyLigth,
+                title: 'Прізвище',
+                controller: cubit.secondNameController,
+                onChanged: (value) => cubit.secondNameChanged(value),
               ),
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Номер телефону',
+                controller: cubit.mobileNumberController,
                 onChanged: (value) => cubit.mobileNumberChanged(value),
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
@@ -47,21 +52,23 @@ class RegistrationContainer extends StatelessWidget {
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Email',
-                onChanged: (value) => cubit.mobileNumberChanged(value),
+                controller: cubit.emailController,
+                onChanged: (value) => cubit.emailChanged(value),
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
               ),
-              const SizedBox(height: AppTheme.elementSpacing),
+              // const SizedBox(height: AppTheme.elementSpacing),
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Пароль',
+                controller: cubit.passwordController,
                 onChanged: (value) => cubit.passwordChanged(value),
                 autofillHints: const [
                   AutofillHints.password,
                 ],
               ),
-              const SizedBox(height: AppTheme.elementSpacing),
+              // const SizedBox(height: AppTheme.elementSpacing),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: CustomButton(
@@ -73,7 +80,7 @@ class RegistrationContainer extends StatelessWidget {
                           ? ButtonState.idle
                           : ButtonState.disabled),
                   onTap: () {
-                    context.read<LoginCubit>().nextPage();
+                    cubit.register(context);
                   },
                 ),
               ),

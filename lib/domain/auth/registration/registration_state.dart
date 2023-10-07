@@ -1,48 +1,68 @@
 import 'package:moxy/domain/copyable.dart';
 
 class RegistrationState implements Copyable<RegistrationState> {
-  final String name;
+  final String firstName;
+  final String secondName;
   final String mobileNumber;
   final String email;
   final String password;
-  final String verCode;
+  final String confirmationCode;
+  final String mobileNumberPassword;
+  final String newPassword;
+  final String confirmPassword;
   final RegisterState state;
 
   RegistrationState({
-    required this.name,
+    required this.firstName,
+    required this.secondName,
     required this.mobileNumber,
     required this.email,
     required this.password,
-    required this.verCode,
+    required this.confirmationCode,
+    required this.mobileNumberPassword,
+    required this.newPassword,
+    required this.confirmPassword,
     required this.state,
   });
 
   static RegistrationState defaultAllProductsState() {
     return RegistrationState(
-      name: '',
+      firstName: '',
+      secondName: '',
       email: '',
       mobileNumber: '',
       password: '',
-      verCode: '',
+      confirmationCode: '',
+      mobileNumberPassword: '',
+      newPassword: '',
+      confirmPassword: '',
       state: const RegisterState(),
     );
   }
 
   @override
   RegistrationState copyWith({
-    String? name,
+    String? firstName,
+    String? secondName,
     String? email,
     String? mobileNumber,
     String? password,
-    String? verCode,
+    String? confirmationCode,
+    String? mobileNumberPassword,
+    String? newPassword,
+    String? confirmPassword,
     RegisterState? state,
   }) {
     return RegistrationState(
-        name: name ?? this.name,
+        firstName: firstName ?? this.firstName,
+        secondName: secondName ?? this.secondName,
         email: email ?? this.email,
         mobileNumber: mobileNumber ?? this.mobileNumber,
         password: password ?? this.password,
-        verCode: verCode ?? this.verCode,
+        confirmationCode: confirmationCode ?? this.confirmationCode,
+        mobileNumberPassword: mobileNumberPassword ?? this.mobileNumberPassword,
+        newPassword: newPassword ?? this.newPassword,
+        confirmPassword: confirmPassword ?? this.confirmPassword,
         state: state ?? this.state);
   }
 

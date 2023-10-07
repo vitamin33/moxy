@@ -30,7 +30,8 @@ class ResetPasswordContainer extends StatelessWidget {
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Номер телефону',
-                onChanged: (value) => cubit.mobileNumberChanged(value),
+                controller: cubit.mobileNumberPasswordController,
+                onChanged: (value) => cubit.mobileNumberPasswordChanged(value),
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
@@ -75,7 +76,7 @@ Widget downText(BuildContext context) {
       ),
       InkWell(
           onTap: () {
-            context.read<RegistrationCubit>().sendVerCode();
+            context.read<RegistrationCubit>().sendConfirmationCode();
           },
           child: const Text(
             "Увійти",

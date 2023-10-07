@@ -30,7 +30,8 @@ class NewPasswordContainer extends StatelessWidget {
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Новий пароль',
-                onChanged: (value) => cubit.mobileNumberChanged(value),
+                controller: cubit.newPasswordController,
+                onChanged: (value) => cubit.newPasswordChanged(value),
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
@@ -38,7 +39,8 @@ class NewPasswordContainer extends StatelessWidget {
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
                 title: 'Підтвердити новий пароль',
-                onChanged: (value) => cubit.mobileNumberChanged(value),
+                controller: cubit.confirmPasswordController,
+                onChanged: (value) => cubit.confirmPasswordChanged(value),
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
@@ -83,7 +85,7 @@ Widget downText(BuildContext context) {
       ),
       InkWell(
           onTap: () {
-            context.read<RegistrationCubit>().sendVerCode();
+            // context.read<RegistrationCubit>().sendConfirmationCode();
           },
           child: const Text(
             "Увійти",

@@ -1,6 +1,7 @@
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/find_orders_request.dart';
+import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
@@ -362,9 +363,7 @@ class DioClient {
       );
       result = response.headers;
     } catch (e) {
-      moxyPrint('Error during creating user: $e');
-
-      return Result.error(_handleHttpException(e));
+      rethrow;
     }
     return Result.success(result);
   }
@@ -372,7 +371,6 @@ class DioClient {
   Future<Result<Headers, Exception>> editUserPassword(
       NetworkPasswordUser password) async {
     final Headers result;
-
     try {
       Response response = await dio.post(
         editUserPasswordUrl,
@@ -380,23 +378,57 @@ class DioClient {
       );
       result = response.headers;
     } catch (e) {
-      moxyPrint('Error during creating user: $e');
-
-      return Result.error(_handleHttpException(e));
+      rethrow;
     }
     return Result.success(result);
   }
 
-  //REGISTRATION
-  Future<dynamic> sendVerCode(String verCode) async {
+  //REGISTER
+
+  Future<Headers>register(
+      NetworkRegister networkRegister) async {
+    final Headers result;
     try {
       Response response = await dio.post(
-        loginUserUrl,
-        data: verCode,
+        registerUserUrl,
+        data: networkRegister.toJson(),
       );
-    } catch (e) {
-      moxyPrint('During login: $e');
-      return null;
+      result = response.headers;
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
+    return result;
+  }
+
+  Future <Headers> sendConfirmationCode(
+      NetworkConfirmationCode networkConfirmationCode) async {
+    final Headers result;
+    try {
+      Response response = await dio.post(
+        verifyUserUrl,
+        data: networkConfirmationCode.toJson(),
+      );
+      result = response.headers;
+    } catch (e,stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+    return result;
+  }
+
+  Future<Headers>resendConfirmationCode(
+      String email) async {
+    final Headers result;
+    try {
+      Response response = await dio.post(
+        resendVerifyUserUrl,
+        data: {'email': email},
+      );
+      result = response.headers;
+    } catch (e) {
+      rethrow;
+    }
+    return result;
   }
 }
