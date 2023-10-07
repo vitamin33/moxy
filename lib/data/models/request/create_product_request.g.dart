@@ -57,32 +57,38 @@ Map<String, dynamic> _$NetworkDimensionToJson(NetworkDimension instance) =>
     };
 
 NetworkColor _$NetworkColorFromJson(Map<String, dynamic> json) => NetworkColor(
+      id: json['id'] as String,
       name: json['name'] as String,
       hexCode: json['hexCode'] as String,
     );
 
 Map<String, dynamic> _$NetworkColorToJson(NetworkColor instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
       'hexCode': instance.hexCode,
     };
 
 NetworkSize _$NetworkSizeFromJson(Map<String, dynamic> json) => NetworkSize(
+      id: json['id'] as String,
       name: json['name'] as String,
     );
 
 Map<String, dynamic> _$NetworkSizeToJson(NetworkSize instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
     };
 
 NetworkMaterial _$NetworkMaterialFromJson(Map<String, dynamic> json) =>
     NetworkMaterial(
+      id: json['id'] as String,
       name: json['name'] as String,
     );
 
 Map<String, dynamic> _$NetworkMaterialToJson(NetworkMaterial instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'name': instance.name,
     };
 
@@ -98,6 +104,7 @@ NetworkProductAttributes _$NetworkProductAttributesFromJson(
       depthInCm: json['depthInCm'] as int?,
       producer: json['producer'] as String?,
       strap: json['strap'] as String?,
+      style: json['style'] as String?,
     );
 
 Map<String, dynamic> _$NetworkProductAttributesToJson(
@@ -112,4 +119,5 @@ Map<String, dynamic> _$NetworkProductAttributesToJson(
       'lengthInCm': instance.lengthInCm,
       'depthInCm': instance.depthInCm,
       'producer': instance.producer,
+      'style': instance.style,
     };

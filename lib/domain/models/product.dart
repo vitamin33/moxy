@@ -10,6 +10,7 @@ class Product implements Copyable<Product> {
   double salePrice;
   List<Dimension> dimensions;
   String idName;
+  String category;
   bool forSale;
   ProductAttributes attributes;
 
@@ -23,6 +24,7 @@ class Product implements Copyable<Product> {
     required this.salePrice,
     required this.dimensions,
     required this.idName,
+    required this.category,
     required this.forSale,
     required this.attributes,
   });
@@ -37,6 +39,7 @@ class Product implements Copyable<Product> {
       salePrice: 0,
       dimensions: [],
       idName: '',
+      category: '',
       forSale: false,
       attributes: ProductAttributes.defaultAttributes(),
     );
@@ -46,6 +49,7 @@ class Product implements Copyable<Product> {
   Product copyWith({
     String? name,
     String? idName,
+    String? category,
     String? description,
     double? costPriceInUsd,
     double? discountPrice,
@@ -64,6 +68,7 @@ class Product implements Copyable<Product> {
       salePrice: salePrice ?? this.salePrice,
       dimensions: dimensions ?? this.dimensions,
       idName: idName ?? this.idName,
+      category: category ?? this.category,
       forSale: forSale ?? this.forSale,
       attributes: attributes ?? this.attributes,
     );
@@ -84,6 +89,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
   int lengthInCm;
   int? depthInCm;
   String? producer;
+  String? style;
 
   ProductAttributes({
     required this.weightInGrams,
@@ -95,6 +101,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
     this.furniture,
     this.strap,
     this.producer,
+    this.style,
   });
 
   static ProductAttributes defaultAttributes() {
@@ -117,6 +124,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
     String? furniture,
     String? strap,
     String? producer,
+    String? style,
   }) {
     return ProductAttributes(
       weightInGrams: weightInGrams ?? this.weightInGrams,
@@ -128,6 +136,7 @@ class ProductAttributes implements Copyable<ProductAttributes> {
       furniture: furniture ?? this.furniture,
       strap: strap ?? this.strap,
       producer: producer ?? this.producer,
+      style: style ?? this.style,
     );
   }
 }
@@ -137,7 +146,7 @@ class Dimension implements Copyable<Dimension> {
   ProductMaterial? material;
   bool isSelected;
   int quantity;
-  Size? size;
+  ProductSize? size;
   List<ImagePath> images;
 
   Dimension({
@@ -153,7 +162,7 @@ class Dimension implements Copyable<Dimension> {
     return Dimension(
       color: ProductColor.defaultColor(),
       material: ProductMaterial.defaultMaterial(),
-      size: Size.defaultSize(),
+      size: ProductSize.defaultSize(),
       isSelected: false,
       quantity: 0,
       images: [],
@@ -166,7 +175,7 @@ class Dimension implements Copyable<Dimension> {
     int? quantity,
     bool? isSelected,
     ProductMaterial? material,
-    Size? size,
+    ProductSize? size,
     List<ImagePath>? chosenImages,
   }) {
     return Dimension(
@@ -194,36 +203,47 @@ class Dimension implements Copyable<Dimension> {
 }
 
 class ProductColor {
+  final String id;
   final String name;
   final String hexCode;
+  bool isSelected;
 
-  ProductColor({required this.name, required this.hexCode});
+  ProductColor({
+    required this.id,
+    required this.name,
+    required this.hexCode,
+    this.isSelected = false,
+  });
 
   static ProductColor defaultColor() {
-    return ProductColor(name: 'Black', hexCode: '000000');
+    return ProductColor(id: '', name: 'Black', hexCode: '000000');
   }
 }
 
-class Size {
+class ProductSize {
+  final String id;
   final String name;
 
-  Size({
+  ProductSize({
+    required this.id,
     required this.name,
   });
 
-  static Size defaultSize() {
-    return Size(name: 'M');
+  static ProductSize defaultSize() {
+    return ProductSize(id: '', name: 'M');
   }
 }
 
 class ProductMaterial {
   final String name;
+  final String id;
 
   ProductMaterial({
+    required this.id,
     required this.name,
   });
   static ProductMaterial defaultMaterial() {
-    return ProductMaterial(name: 'Leather');
+    return ProductMaterial(id: '', name: 'Leather');
   }
 }
 

@@ -32,6 +32,7 @@ NetworkProduct _$NetworkProductFromJson(Map<String, dynamic> json) =>
           ?.map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
           .toList(),
       idName: json['idName'] as String,
+      category: json['category'] as String,
       forSale: json['forSale'] as bool,
       attributes: NetworkProductAttributes.fromJson(
           json['attributes'] as Map<String, dynamic>),
@@ -48,6 +49,7 @@ Map<String, dynamic> _$NetworkProductToJson(NetworkProduct instance) =>
       'salePrice': instance.salePrice,
       'dimensions': instance.dimensions,
       'idName': instance.idName,
+      'category': instance.category,
       'forSale': instance.forSale,
       'attributes': instance.attributes,
     };
