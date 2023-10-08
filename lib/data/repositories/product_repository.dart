@@ -62,8 +62,9 @@ class ProductRepository {
     try {
       final result = await client.getProductById(id);
       return Result.success(result);
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

@@ -30,8 +30,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
         ) {
     final colors = configRepository.attributes?.colors ?? [];
     final categories = configRepository.attributes?.productCategories ?? [];
+    final firstCategory = categories.isNotEmpty ? categories.first : '';
     emit(
-      state.copyWith(allConfigColors: colors, productCategories: categories),
+      state.copyWith(
+          allConfigColors: colors,
+          productCategories: categories,
+          product: state.product.copyWith(category: firstCategory)),
     );
     if (isEditMode && productId != null) {
       getProductById(productId);
@@ -506,12 +510,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   List<ImagePath> _getAllDimenImages() {
-    return state.product.dimensions
-        .map((e) => e.images)
-        .reduce((value, element) {
-      value.addAll(element);
-      return value;
+    List<ImagePath> result = [];
+    state.product.dimensions
+        .expand((dimension) => dimension.images)
+        .forEach((element) {
+      result.add(element);
     });
+
+    return result;
   }
 
   void _clearFieldsControllers() {

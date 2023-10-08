@@ -11,13 +11,7 @@ CreateProduct _$CreateProductFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String,
       description: json['description'] as String,
       costPriceInUsd: (json['costPriceInUsd'] as num).toDouble(),
-      weightInGrams: json['weightInGrams'] as int,
       salePrice: (json['salePrice'] as num).toDouble(),
-      dimensions: (json['dimensions'] as List<dynamic>)
-          .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      images:
-          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
       idName: json['idName'] as String,
     );
 
@@ -26,10 +20,7 @@ Map<String, dynamic> _$CreateProductToJson(CreateProduct instance) =>
       'name': instance.name,
       'description': instance.description,
       'costPriceInUsd': instance.costPriceInUsd,
-      'weightInGrams': instance.weightInGrams,
       'salePrice': instance.salePrice,
-      'dimensions': instance.dimensions,
-      'images': instance.images,
       'idName': instance.idName,
     };
 
@@ -57,38 +48,38 @@ Map<String, dynamic> _$NetworkDimensionToJson(NetworkDimension instance) =>
     };
 
 NetworkColor _$NetworkColorFromJson(Map<String, dynamic> json) => NetworkColor(
-      id: json['id'] as String,
+      id: json['_id'] as String,
       name: json['name'] as String,
       hexCode: json['hexCode'] as String,
     );
 
 Map<String, dynamic> _$NetworkColorToJson(NetworkColor instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'name': instance.name,
       'hexCode': instance.hexCode,
     };
 
 NetworkSize _$NetworkSizeFromJson(Map<String, dynamic> json) => NetworkSize(
-      id: json['id'] as String,
+      id: json['_id'] as String,
       name: json['name'] as String,
     );
 
 Map<String, dynamic> _$NetworkSizeToJson(NetworkSize instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'name': instance.name,
     };
 
 NetworkMaterial _$NetworkMaterialFromJson(Map<String, dynamic> json) =>
     NetworkMaterial(
-      id: json['id'] as String,
+      id: json['_id'] as String,
       name: json['name'] as String,
     );
 
 Map<String, dynamic> _$NetworkMaterialToJson(NetworkMaterial instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'name': instance.name,
     };
 
