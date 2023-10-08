@@ -44,7 +44,8 @@ class ProductsService {
       'costPriceInUsd': costPrice,
       'salePrice': salePrice,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
-      'numberOfImagesForDimensions': formImageDimensionIndexes(dimensions),
+      'numberOfImagesForDimensions':
+          jsonDecode(jsonEncode(formImageDimensionIndexes(dimensions))),
       'images': imageFiles,
       'idName': idName,
       'category': category,
@@ -85,7 +86,7 @@ class ProductsService {
       final result = NetworkProduct.fromJson(data);
       return result;
     } catch (e) {
-      throw Exception('Failed to load product: $e');
+      rethrow;
     }
   }
 

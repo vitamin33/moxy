@@ -218,6 +218,18 @@ class ProductColor {
   static ProductColor defaultColor() {
     return ProductColor(id: '', name: 'Black', hexCode: '000000');
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ProductColor && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
 }
 
 class ProductSize {
@@ -232,6 +244,18 @@ class ProductSize {
   static ProductSize defaultSize() {
     return ProductSize(id: '', name: 'M');
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ProductColor && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
+  }
 }
 
 class ProductMaterial {
@@ -244,6 +268,18 @@ class ProductMaterial {
   });
   static ProductMaterial defaultMaterial() {
     return ProductMaterial(id: '', name: 'Leather');
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ProductColor && other.id == id;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode;
   }
 }
 
