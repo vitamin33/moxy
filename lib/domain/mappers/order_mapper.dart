@@ -49,14 +49,10 @@ class OrderMapper {
     return products.where((source) {
       return source.id != null;
     }).map((product) {
-      Dimension dimen = product.dimensions.first;
-      final firstImage =
-          dimen.images.isEmpty ? null : dimen.images.first.imagePath;
       return OrderedItem(
           productId: product.id!,
           productName: product.name,
           dimensions: product.dimensions,
-          imageUrl: firstImage,
           productPrice: product.salePrice.toString());
     }).toList();
   }
@@ -78,13 +74,11 @@ class OrderMapper {
         client: Client.defaultClient(),
         orderedItems: o.orderedItems.map((e) {
           List<NetworkDimension> dimens = e.product.dimensions ?? [];
-          final firstImage = dimens.first.images.first;
           return OrderedItem(
               productId: e.product.id,
               productName: e.product.name,
               dimensions:
                   dimens.map((d) => productMapper.mapToDimension(d)).toList(),
-              imageUrl: firstImage,
               productPrice: e.product.salePrice.toString());
         }).toList(),
         createdAt: _parseDataTime(o.createdAt),

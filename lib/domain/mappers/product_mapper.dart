@@ -175,7 +175,6 @@ class ProductMapper {
         productPrice: p.productPrice.toString(),
         productId: p.product,
         productName: p.productName ?? '',
-        imageUrl: p.imageUrl,
         dimensions: p.dimensions.map((e) => mapToDimension(e)).toList(),
       );
     }).toList();
@@ -205,13 +204,11 @@ class ProductMapper {
           ),
         );
       } else {
-        final item = dimenItem.dimension.images.first;
         finalList.add(
           OrderedItem(
             productPrice: dimenItem.salePrice.toString(),
             productId: dimenItem.id,
             productName: dimenItem.name,
-            imageUrl: item.imagePath,
             dimensions: [
               Dimension(
                 color: dimenItem.dimension.color,

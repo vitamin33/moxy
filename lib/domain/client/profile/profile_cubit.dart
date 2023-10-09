@@ -136,7 +136,8 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
             firstName: state.profile.firstName,
             secondName: state.profile.secondName,
             mobileNumber: state.profile.mobileNumber,
-            city: state.profile.city.presentName,
+            city: state.profile.city
+                .copyWith(presentName: state.profile.city.presentName),
             instagram: ''),
         state.profile.city,
         state.profile.warehouse,
