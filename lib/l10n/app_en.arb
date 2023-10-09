@@ -102,6 +102,7 @@
   "deleteProductFailed": "Product deleting Failed",
   "failed": "Failed",
   "wrongInput": "Wrong input, please check text fields.",
+  "errorDuringProductUpdate": "Unable to update product, try one more time or ask IT team.",
   "failedToCreateOrder": "Failed to create order.",
   "unableToParseData": "Unable To Parse Data",
   "backToBasket": "Back to basket",

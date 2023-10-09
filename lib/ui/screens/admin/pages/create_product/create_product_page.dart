@@ -33,97 +33,99 @@ class CreateProductPage extends StatelessWidget {
       ProductDetails(),
       Branding(),
     ];
-    final CreateProductCubit cubit =
-        CreateProductCubit(productId: editProductId, isEditMode: isEditMode);
+    final CreateProductCubit cubit = mainContext.read<CreateProductCubit>();
     cubit.effectStream.listen((effect) {
       if (effect is ValidationFailed) {
         ScaffoldMessenger.of(mainContext).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText:AppLocalizations.of(mainContext)!.wrongInput));
+            snackBarFailureText: AppLocalizations.of(mainContext)!.wrongInput));
+      } else if (effect is ProductUpdateFailed) {
+        ScaffoldMessenger.of(mainContext).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                AppLocalizations.of(mainContext)!.errorDuringProductUpdate));
+      } else if (effect is NavigateToProducts) {
+        mainContext
+            .read<AdminHomeRouterCubit>()
+            .navigateTo(const ProductsPageState());
       }
     });
-    return BlocProvider<CreateProductCubit>(
-      create: (BuildContext context) =>
-          CreateProductCubit(productId: editProductId, isEditMode: isEditMode),
-      child: BlocConsumer<CreateProductCubit, CreateProductState>(
-        listener: (context, state) => {
-          if (state.errorMessage != '')
-            {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  snackBarWhenFailure(snackBarFailureText: AppLocalizations.of(context)!.failed)),
-              context.read<CreateProductCubit>().clearErrorState(),
-            }
-        },
-        builder: (context, state) {
-          final cubit = context.read<CreateProductCubit>();
-          return Material(
-            color: AppTheme.pink,
-            child: LayoutBuilder(
-                builder: (BuildContext context, BoxConstraints constraints) {
-              return KeyboardVisibilityBuilder(
-                  builder: (context, isKeyboardVisible) {
-                return SizedBox(
-                  height: constraints.maxHeight,
-                  child: Column(
-                    children: [
-                      SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        child: SizedBox(
-                          height: isKeyboardVisible
-                              ? constraints.maxHeight
-                              : constraints.maxHeight - bottomButtonsHeight,
-                          child: state.isSuccess
-                              ? _buildSuccessWidget(context, cubit, state)
-                              : state.isLoading
-                                  ? loader()
-                                  : Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 20),
-                                          child: AppIndicator(
-                                              activePage: state.activePage,
-                                              inadicatorName: [
-                                                AppLocalizations.of(context)!
-                                                    .about,
-                                                AppLocalizations.of(context)!
-                                                    .sale,
-                                              ],
-                                              pages: const [
-                                                ProductDetails(),
-                                                Branding()
-                                              ],
-                                              controller: cubit.pageController),
+    return BlocConsumer<CreateProductCubit, CreateProductState>(
+      listener: (context, state) => {
+        if (state.errorMessage != '')
+          {
+            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+                snackBarFailureText: AppLocalizations.of(context)!.failed)),
+            context.read<CreateProductCubit>().clearErrorState(),
+          }
+      },
+      builder: (context, state) {
+        final cubit = context.read<CreateProductCubit>();
+        return Material(
+          color: AppTheme.pink,
+          child: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+            return KeyboardVisibilityBuilder(
+                builder: (context, isKeyboardVisible) {
+              return SizedBox(
+                height: constraints.maxHeight,
+                child: Column(
+                  children: [
+                    SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: SizedBox(
+                        height: isKeyboardVisible
+                            ? constraints.maxHeight
+                            : constraints.maxHeight - bottomButtonsHeight,
+                        child: state.isSuccess
+                            ? _buildSuccessWidget(context, cubit, state)
+                            : state.isLoading
+                                ? loader()
+                                : Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20),
+                                        child: AppIndicator(
+                                            activePage: state.activePage,
+                                            inadicatorName: [
+                                              AppLocalizations.of(context)!
+                                                  .about,
+                                              AppLocalizations.of(context)!
+                                                  .sale,
+                                            ],
+                                            pages: const [
+                                              ProductDetails(),
+                                              Branding()
+                                            ],
+                                            controller: cubit.pageController),
+                                      ),
+                                      const SizedBox(height: 30),
+                                      Expanded(
+                                        child: PageView.builder(
+                                          controller: cubit.pageController,
+                                          onPageChanged: (int page) {
+                                            cubit.onChangePage(page);
+                                          },
+                                          itemCount: pages.length,
+                                          itemBuilder: (context, index) {
+                                            return pages[index % pages.length];
+                                          },
                                         ),
-                                        const SizedBox(height: 30),
-                                        Expanded(
-                                          child: PageView.builder(
-                                            controller: cubit.pageController,
-                                            onPageChanged: (int page) {
-                                              cubit.onChangePage(page);
-                                            },
-                                            itemCount: pages.length,
-                                            itemBuilder: (context, index) {
-                                              return pages[
-                                                  index % pages.length];
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                        ),
+                                      ),
+                                    ],
+                                  ),
                       ),
-                      !state.isSuccess
-                          ? positionProductButton(
-                              state, cubit, isKeyboardVisible, context)
-                          : Container(),
-                    ],
-                  ),
-                );
-              });
-            }),
-          );
-        },
-      ),
+                    ),
+                    !state.isSuccess
+                        ? positionProductButton(
+                            state, cubit, isKeyboardVisible, context)
+                        : Container(),
+                  ],
+                ),
+              );
+            });
+          }),
+        );
+      },
     );
   }
 
@@ -141,7 +143,9 @@ class CreateProductPage extends StatelessWidget {
           }
         },
         title: AppLocalizations.of(context)!.productAdded,
-        titleButton: state.isEdit ?  AppLocalizations.of(context)!.backToProduct : AppLocalizations.of(context)!.createNew);
+        titleButton: state.isEdit
+            ? AppLocalizations.of(context)!.backToProduct
+            : AppLocalizations.of(context)!.createNew);
   }
 }
 

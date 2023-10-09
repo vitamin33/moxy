@@ -176,7 +176,7 @@ class Dimension implements Copyable<Dimension> {
     bool? isSelected,
     ProductMaterial? material,
     ProductSize? size,
-    List<ImagePath>? chosenImages,
+    List<ImagePath>? images,
   }) {
     return Dimension(
       color: color ?? this.color,
@@ -184,7 +184,7 @@ class Dimension implements Copyable<Dimension> {
       isSelected: isSelected ?? this.isSelected,
       material: material ?? this.material,
       size: size ?? this.size,
-      images: chosenImages ?? this.images,
+      images: images ?? this.images,
     );
   }
 

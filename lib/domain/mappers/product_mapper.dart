@@ -108,10 +108,7 @@ class ProductMapper {
       size: mapToNetworkSize(dimen.size),
       material: mapToNetworkMaterial(dimen.material),
       quantity: dimen.quantity,
-      images: dimen.images
-          .where((element) => element.type == Type.file)
-          .map((e) => e.imagePath)
-          .toList(),
+      images: dimen.images.map((e) => e.imagePath).toList(),
     );
   }
 
