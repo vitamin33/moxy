@@ -120,7 +120,10 @@ class _OrdersPageState extends State<OrdersPage> {
   }
 
   Widget _buildImage(List<OrderedItem> products) {
-    if (products.isEmpty || products.first.imageUrl == null) {
+    bool noDimensions = products.any((element) => element.dimensions.isEmpty);
+    bool noImages = products.any((element) =>
+        element.dimensions.any((element) => element.images.isEmpty));
+    if (products.isEmpty || noDimensions || noImages) {
       return Image.asset(
         width: 50,
         height: 50,
@@ -128,9 +131,11 @@ class _OrdersPageState extends State<OrdersPage> {
         fit: BoxFit.cover,
       );
     } else {
+      String firstImageUrl =
+          products.first.dimensions.first.images.first.imagePath;
       return FadeInImage.assetNetwork(
         placeholder: 'assets/images/placeholder.jpg',
-        image: products.first.imageUrl!,
+        image: firstImageUrl,
         width: 50,
         height: 50,
         fit: BoxFit.cover,

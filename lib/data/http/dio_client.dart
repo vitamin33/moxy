@@ -119,7 +119,7 @@ class DioClient {
       }
       return orderList;
     } catch (e) {
-      throw Exception('Failed to load orders list: $e');
+      rethrow;
     }
   }
 

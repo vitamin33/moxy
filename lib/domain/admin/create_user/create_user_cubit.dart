@@ -95,13 +95,17 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
 
   void cityChanged(value) {
     final String city = value;
-    emit(state.copyWith(editedUser: state.editedUser.copyWith(city: city)));
+    emit(state.copyWith(
+        editedUser: state.editedUser.copyWith(
+            city: state.editedUser.city?.copyWith(presentName: city))));
   }
 
   void cityPasted() async {
     final city = await getTextFromClipboard();
     cityController.text = city;
-    emit(state.copyWith(editedUser: state.editedUser.copyWith(city: city)));
+    emit(state.copyWith(
+        editedUser: state.editedUser.copyWith(
+            city: state.editedUser.city?.copyWith(presentName: city))));
   }
 
   void instagramChanged(value) {
@@ -197,7 +201,7 @@ class CreateUserCubit extends CubitWithEffects<CreateUserState, UiEffect>
             firstName: firstName,
             secondName: secondName,
             mobileNumber: phoneNumber,
-            city: city,
+            city: state.editedUser.city?.copyWith(presentName: city),
           ),
         ),
       );

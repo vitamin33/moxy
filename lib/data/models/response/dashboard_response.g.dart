@@ -11,15 +11,19 @@ NetworkDashboard _$NetworkDashboardFromJson(Map<String, dynamic> json) =>
       totalSaleValue: json['totalSaleValue'] as int,
       totalCostValue: json['totalCostValue'] as int,
       totalOrdersCount: json['totalOrdersCount'] as int,
+      totalProfitValue: json['totalProfitValue'] as int,
       previousTotalSaleValue: json['previousTotalSaleValue'] as int,
       previousTotalCostValue: json['previousTotalCostValue'] as int,
       previousTotalOrdersCount: json['previousTotalOrdersCount'] as int,
+      previousTotalProfitValue: json['previousTotalProfitValue'] as int,
       saleValuePercentageChange:
           (json['saleValuePercentageChange'] as num).toDouble(),
       costValuePercentageChange:
           (json['costValuePercentageChange'] as num).toDouble(),
       ordersCountPercentageChange:
           (json['ordersCountPercentageChange'] as num).toDouble(),
+      profitValuePercentageChange:
+          (json['profitValuePercentageChange'] as num).toDouble(),
       ordersCountByTimeFrame: (json['ordersCountByTimeFrame'] as List<dynamic>)
           .map((e) => TotalByTimeFrame.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -31,6 +35,10 @@ NetworkDashboard _$NetworkDashboardFromJson(Map<String, dynamic> json) =>
           (json['totalCostValueByTimeFrame'] as List<dynamic>)
               .map((e) => TotalByTimeFrame.fromJson(e as Map<String, dynamic>))
               .toList(),
+      totalProfitValueByTimeFrame:
+          (json['totalProfitValueByTimeFrame'] as List<dynamic>)
+              .map((e) => TotalByTimeFrame.fromJson(e as Map<String, dynamic>))
+              .toList(),
     );
 
 Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
@@ -38,15 +46,19 @@ Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
       'totalSaleValue': instance.totalSaleValue,
       'totalCostValue': instance.totalCostValue,
       'totalOrdersCount': instance.totalOrdersCount,
+      'totalProfitValue': instance.totalProfitValue,
       'previousTotalSaleValue': instance.previousTotalSaleValue,
       'previousTotalCostValue': instance.previousTotalCostValue,
+      'previousTotalProfitValue': instance.previousTotalProfitValue,
       'previousTotalOrdersCount': instance.previousTotalOrdersCount,
       'saleValuePercentageChange': instance.saleValuePercentageChange,
       'costValuePercentageChange': instance.costValuePercentageChange,
       'ordersCountPercentageChange': instance.ordersCountPercentageChange,
+      'profitValuePercentageChange': instance.profitValuePercentageChange,
       'ordersCountByTimeFrame': instance.ordersCountByTimeFrame,
       'totalSaleValueByTimeFrame': instance.totalSaleValueByTimeFrame,
       'totalCostValueByTimeFrame': instance.totalCostValueByTimeFrame,
+      'totalProfitValueByTimeFrame': instance.totalProfitValueByTimeFrame,
     };
 
 TotalByTimeFrame _$TotalByTimeFrameFromJson(Map<String, dynamic> json) =>

@@ -65,9 +65,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final images = _getAllDimenImages();
+      final images = _getAllChosenFileDimenImages();
       final product = productMapper.mapToNetworkProduct(state.product);
-      final pushProduct = await productRepository.addProduct(product, images);
+      List<int> imageIndexes =
+          formNumberOfChoseImagesIndexes(state.product.dimensions);
+      final pushProduct =
+          await productRepository.addProduct(product, images, imageIndexes);
       pushProduct.when((success) {
         _clearFieldsControllers();
         emit(state.copyWith(isLoading: false, isSuccess: true));
@@ -417,16 +420,22 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   void editProduct(editProductId) async {
     try {
       emit(state.copyWith(isLoading: true));
-      List<ImagePath> allDimenImages = _getAllDimenImages();
+      List<ImagePath> allDimenImages = _getAllChosenFileDimenImages();
       final product = productMapper.mapToNetworkProduct(state.product);
-      final pushProduct = await productRepository.editProduct(
-          product, allDimenImages, editProductId);
-      pushProduct.when((success) {
+      List<int> imageIndexes =
+          formNumberOfChoseImagesIndexes(state.product.dimensions);
+      List<Dimension> filteredDimens =
+          filterFileImagesDimens(state.product.dimensions);
+      final updated = await productRepository.editProduct(
+          product, filteredDimens, allDimenImages, imageIndexes, editProductId);
+      updated.when((success) {
         _clearFieldsControllers();
         emit(state.copyWith(isLoading: false));
+        emitEffect(NavigateToProducts());
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
+        emitEffect(ProductUpdateFailed(error.toString()));
       });
     } catch (e) {
       moxyPrint(e);
@@ -509,12 +518,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     return dimensions;
   }
 
-  List<ImagePath> _getAllDimenImages() {
+  List<ImagePath> _getAllChosenFileDimenImages() {
     List<ImagePath> result = [];
     state.product.dimensions
         .expand((dimension) => dimension.images)
         .forEach((element) {
-      result.add(element);
+      if (element.type == Type.file) {
+        result.add(element);
+      }
     });
 
     return result;
@@ -540,5 +551,26 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     for (var element in quantityControllers) {
       element.clear();
     }
+  }
+
+  List<int> formNumberOfChoseImagesIndexes(List<Dimension> dimensions) {
+    final result = dimensions.map((e) {
+      if (e.images.isNotEmpty) {
+        return e.images.where((element) => element.type == Type.file).length;
+      } else {
+        return 0;
+      }
+    }).toList();
+    return result;
+  }
+
+  List<Dimension> filterFileImagesDimens(List<Dimension> dimensions) {
+    final result = dimensions.map((dimension) {
+      final filteredImages =
+          dimension.images.where((image) => image.type != Type.file).toList();
+      return dimension.copyWith(images: filteredImages);
+    }).toList();
+
+    return result;
   }
 }
