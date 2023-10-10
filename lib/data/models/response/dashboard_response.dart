@@ -7,29 +7,37 @@ class NetworkDashboard {
   int totalSaleValue;
   int totalCostValue;
   int totalOrdersCount;
+  int totalProfitValue;
   int previousTotalSaleValue;
   int previousTotalCostValue;
+  int previousTotalProfitValue;
   int previousTotalOrdersCount;
   double saleValuePercentageChange;
   double costValuePercentageChange;
   double ordersCountPercentageChange;
+  double profitValuePercentageChange;
   List<TotalByTimeFrame> ordersCountByTimeFrame;
   List<TotalByTimeFrame> totalSaleValueByTimeFrame;
   List<TotalByTimeFrame> totalCostValueByTimeFrame;
+  List<TotalByTimeFrame> totalProfitValueByTimeFrame;
 
   NetworkDashboard({
     required this.totalSaleValue,
     required this.totalCostValue,
     required this.totalOrdersCount,
+    required this.totalProfitValue,
     required this.previousTotalSaleValue,
     required this.previousTotalCostValue,
     required this.previousTotalOrdersCount,
+    required this.previousTotalProfitValue,
     required this.saleValuePercentageChange,
     required this.costValuePercentageChange,
     required this.ordersCountPercentageChange,
+    required this.profitValuePercentageChange,
     required this.ordersCountByTimeFrame,
     required this.totalSaleValueByTimeFrame,
     required this.totalCostValueByTimeFrame,
+    required this.totalProfitValueByTimeFrame,
   });
 
   factory NetworkDashboard.fromJson(Map<String, dynamic> json) =>

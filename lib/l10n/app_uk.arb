@@ -32,6 +32,8 @@
   "overviewTotalSale": "Загальний продаж",
   "overviewTotalCost": "Загальна вартість",
   "overviewOrders": "Замовленя",
+  "overviewProfit": "Прибуток",
+  "overviewTotalProfit": "Загальний прибуток",
   "overviewChartTitle": "Активність",
   "filterReset": "Скинути",
   "filterTypePayment": "Тип Оплати",
