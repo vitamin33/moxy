@@ -27,7 +27,8 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
   final TextEditingController secondNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
 
-  CheckoutCubit() : super(CheckoutState.defaultState()) {
+  CheckoutCubit(Basket basket) : super(CheckoutState.defaultState()) {
+    updateStateBasket(basket);
     getBasketInfo();
   }
 
@@ -143,15 +144,7 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
 
   void emitSuccessBasket(NetworkBasket success) {
     Basket basket = basketMapper.mapToBasket(success);
-    bool isFreeShipping =
-        basket.amountForFreeShipping() > basket.freeShippingThreshold;
-    emit(
-      state.copyWith(
-        basket: basket,
-        isFreeShipping: isFreeShipping,
-        isLoading: false,
-      ),
-    );
+    updateStateBasket(basket);
   }
 
   void firstNameChanged(String value) {
@@ -213,5 +206,17 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
+  }
+
+  void updateStateBasket(Basket basket) {
+    bool isFreeShipping =
+        basket.amountForFreeShipping() > basket.freeShippingThreshold;
+    emit(
+      state.copyWith(
+        basket: basket,
+        isFreeShipping: isFreeShipping,
+        isLoading: false,
+      ),
+    );
   }
 }

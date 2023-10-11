@@ -6,17 +6,44 @@ import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
 part 'client_home_router_state.dart';
 
 class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
-  ClientHomeRouterCubit() : super(const HomeRoute());
-  void goToFavourites([String? text]) => emit(FavouritesRoute(text));
-  void goToHome([int? tabIndex = 0]) => emit(HomeRoute(tabIndex));
-  void goToCheckout([String? text]) => emit(CheckoutRoute(text));
-  void goToProfile([String? text]) => emit(ProfileRoute(text));
+  final List<ClientHomeRoute> _routeStack = [];
 
-  void popExtra() {
-    if (state is HomeRoute) {
-      goToHome();
-    } else {
-      goToFavourites();
+  ClientHomeRouterCubit() : super(const HomeRoute());
+
+  void goToFavourites([String? text, bool addToRouteStack = true]) {
+    _pushRoute(FavouritesRoute(text), addToRouteStack: addToRouteStack);
+  }
+
+  void goToHome([int? tabIndex = 0, bool addToRouteStack = true]) {
+    _pushRoute(HomeRoute(tabIndex), addToRouteStack: addToRouteStack);
+  }
+
+  void goToCheckout([String? text, bool addToRouteStack = true]) {
+    _pushRoute(CheckoutRoute(text), addToRouteStack: addToRouteStack);
+  }
+
+  void goToProfile([String? text, bool addToRouteStack = true]) {
+    _pushRoute(ProfileRoute(text), addToRouteStack: addToRouteStack);
+  }
+
+  void goBack() {
+    _popRoute();
+  }
+
+  void _pushRoute(ClientHomeRoute route, {bool addToRouteStack = true}) {
+    if (addToRouteStack) {
+      _routeStack.add(route);
+    }
+    emit(route);
+  }
+
+  // Pop the top route from the stack.
+  void _popRoute() {
+    if (_routeStack.isNotEmpty) {
+      _routeStack.removeLast();
+      final previousRoute =
+          _routeStack.isNotEmpty ? _routeStack.last : const HomeRoute();
+      emit(previousRoute);
     }
   }
 
