@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/create_order_page.dart';
 import 'package:moxy/ui/screens/admin/pages/create_product/create_product_page.dart';
 import 'package:moxy/ui/screens/admin/pages/create_user/create_user_page.dart';
@@ -171,8 +173,12 @@ class AdminHomeRouterDelegate extends RouterDelegate<AdminHomeRouterState> {
       return [
         _materialPage(
           valueKey: "createProduct",
-          child: CreateProductPage(
-              editProductId: editProductId, isEditMode: isEditMode),
+          child: BlocProvider(
+            create: ((context) => CreateProductCubit(
+                productId: editProductId, isEditMode: isEditMode)),
+            child: CreateProductPage(
+                editProductId: editProductId, isEditMode: isEditMode),
+          ),
         ),
       ];
     }

@@ -65,7 +65,7 @@ class Order implements Copyable<Order> {
     String? updatedAt,
   }) {
     return Order(
-        id: id ?? this._id,
+        id: id ?? _id,
         cashAdvanceValue: cashAdvanceValue ?? this.cashAdvanceValue,
         novaPost: novaPost ?? this.novaPost,
         city: city ?? this.city,
@@ -132,29 +132,22 @@ class OrderedItem {
       {required this.productId,
       required this.productName,
       required this.dimensions,
-      this.imageUrl,
       required this.productPrice});
 
   static OrderedItem defaultOrderedItem() {
     return OrderedItem(
-        productId: '',
-        productName: '',
-        dimensions: [],
-        imageUrl: null,
-        productPrice: '0');
+        productId: '', productName: '', dimensions: [], productPrice: '0');
   }
 
   OrderedItem copyWith(
       {String? productId,
       String? productName,
       List<Dimension>? dimensions,
-      String? imageUrl,
       String? productPrice}) {
     return OrderedItem(
       productId: productId ?? this.productId,
       productName: productName ?? this.productName,
       dimensions: dimensions ?? this.dimensions,
-      imageUrl: imageUrl ?? this.imageUrl,
       productPrice: productPrice ?? this.productPrice,
     );
   }

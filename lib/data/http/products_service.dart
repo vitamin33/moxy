@@ -6,6 +6,7 @@ import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/extensions.dart';
 import 'package:path/path.dart';
 
 import '../../environment.dart';
@@ -26,6 +27,7 @@ class ProductsService {
     String category,
     NetworkProductAttributes attributes,
     List<String> choosenImages,
+    List<int> numberOfChosenImages,
   ) async {
     final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
@@ -44,7 +46,8 @@ class ProductsService {
       'costPriceInUsd': costPrice,
       'salePrice': salePrice,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
-      'numberOfImagesForDimensions': formImageDimensionIndexes(dimensions),
+      'numberOfImagesForDimensions':
+          jsonDecode(jsonEncode(numberOfChosenImages)),
       'images': imageFiles,
       'idName': idName,
       'category': category,
@@ -85,36 +88,33 @@ class ProductsService {
       final result = NetworkProduct.fromJson(data);
       return result;
     } catch (e) {
-      throw Exception('Failed to load product: $e');
+      rethrow;
     }
   }
 
-  Future<NetworkProduct?> editProduct(
-      String? id,
-      String name,
-      String? description,
-      String idName,
-      List<NetworkDimension> dimensions,
-      double costPriceInUsd,
-      double salePrice,
-      NetworkProductAttributes attributes,
-      List<String> choosenImages,
-      editProductId) async {
-    final NetworkProduct? result;
+  Future<bool> editProduct(
+    String? id,
+    String name,
+    String? description,
+    String idName,
+    String category,
+    List<NetworkDimension> dimensions,
+    double costPriceInUsd,
+    double salePrice,
+    NetworkProductAttributes attributes,
+    List<String> choosenImages,
+    List<int> numberOfChosenImages,
+    editProductId,
+  ) async {
     List<MultipartFile> newImage = [];
-    List<String> currentImage = [];
     for (String image in choosenImages) {
-      if (image.contains('http')) {
-        currentImage.add(image);
-      } else {
-        String fileName = basename(image);
-        newImage.add(
-          await MultipartFile.fromFile(
-            image,
-            filename: fileName,
-          ),
-        );
-      }
+      String fileName = basename(image);
+      newImage.add(
+        await MultipartFile.fromFile(
+          image,
+          filename: fileName,
+        ),
+      );
     }
     FormData formData = FormData.fromMap({
       'name': name,
@@ -122,10 +122,11 @@ class ProductsService {
       'costPriceInUsd': costPriceInUsd,
       'salePrice': salePrice,
       'idName': idName,
+      'category': category,
       'newImages': newImage,
-      'currentImages': currentImage,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
-      'numberOfImagesForDimensions': formImageDimensionIndexes(dimensions),
+      'numberOfImagesForDimensions':
+          jsonDecode(jsonEncode(numberOfChosenImages)),
       'attributes': jsonDecode(jsonEncode(attributes))
     });
     try {
@@ -133,12 +134,12 @@ class ProductsService {
         '$baseUrl/products/edit/$editProductId',
         data: formData,
       );
-      result = NetworkProduct.fromJson(response.data);
+
+      int statusCode = response.statusCode ?? 0;
+      return statusCode.isSuccessful();
     } catch (e) {
-      moxyPrint('Request product :$e');
-      return null;
+      rethrow;
     }
-    return result;
   }
 
   Future<List<NetworkProduct>> getSellingProducts() async {
@@ -167,15 +168,5 @@ class ProductsService {
       return false;
     }
     return false;
-  }
-
-  List<int> formImageDimensionIndexes(List<NetworkDimension> dimensions) {
-    return dimensions.map((e) {
-      if (e.images.isNotEmpty) {
-        return e.images.length;
-      } else {
-        return 0;
-      }
-    }).toList();
   }
 }

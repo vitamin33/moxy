@@ -8,15 +8,19 @@ class DashboardState implements Copyable<DashboardState> {
   final int totalSale;
   final int totalCost;
   final int totalOrders;
+  final int totalProfit;
   final int previousTotalSaleValue;
   final int previousTotalCostValue;
   final int previousTotalOrdersCount;
+  final int previousTotalProfit;
   final double saleValuePercentageChange;
   final double costValuePercentageChange;
   final double ordersCountPercentageChange;
+  final double profitPercentageChange;
   final List<TotalByTimeFrame> ordersFromTimeFrame;
   final List<TotalByTimeFrame> saleFromTimeFrame;
   final List<TotalByTimeFrame> costFromTimeFrame;
+  final List<TotalByTimeFrame> profitFromTimeFrame;
   final String errorMessage;
   final DateTimeRange? selectedDate;
 
@@ -26,15 +30,19 @@ class DashboardState implements Copyable<DashboardState> {
       required this.totalSale,
       required this.totalCost,
       required this.totalOrders,
+      required this.totalProfit,
       required this.previousTotalSaleValue,
       required this.previousTotalCostValue,
       required this.previousTotalOrdersCount,
+      required this.previousTotalProfit,
       required this.saleValuePercentageChange,
       required this.costValuePercentageChange,
       required this.ordersCountPercentageChange,
+      required this.profitPercentageChange,
       required this.ordersFromTimeFrame,
       required this.saleFromTimeFrame,
       required this.costFromTimeFrame,
+      required this.profitFromTimeFrame,
       required this.errorMessage,
       this.selectedDate});
 
@@ -43,45 +51,53 @@ class DashboardState implements Copyable<DashboardState> {
         totalSale: 0,
         totalCost: 0,
         totalOrders: 0,
+        totalProfit: 0,
         previousTotalSaleValue: 0,
         previousTotalCostValue: 0,
         previousTotalOrdersCount: 0,
+        previousTotalProfit: 0,
         saleValuePercentageChange: 0,
         costValuePercentageChange: 0,
         ordersCountPercentageChange: 0,
-        selectedDate: null,
+        profitPercentageChange: 0,
         ordersFromTimeFrame: [],
         saleFromTimeFrame: [],
         costFromTimeFrame: [],
+        profitFromTimeFrame: [],
         isLoading: false,
         animated: false,
+        selectedDate: null,
         errorMessage: '');
   }
 
   @override
   DashboardState copyWith(
-      {
-        bool? isLoading,
-        bool? animated,
+      {bool? isLoading,
+      bool? animated,
       String? errorMessage,
       int? totalSale,
       int? totalCost,
       int? totalOrders,
+      int? totalProfit,
       int? previousTotalSaleValue,
       int? previousTotalCostValue,
       int? previousTotalOrdersCount,
+      int? previousTotalProfit,
       double? saleValuePercentageChange,
       double? costValuePercentageChange,
       double? ordersCountPercentageChange,
+      double? profitPercentageChange,
       List<TotalByTimeFrame>? ordersFromTimeFrame,
       List<TotalByTimeFrame>? saleFromTimeFrame,
       List<TotalByTimeFrame>? costFromTimeFrame,
+      List<TotalByTimeFrame>? profitFromTimeFrame,
       DateTimeRange? selectedDate}) {
     return DashboardState(
         totalSale: totalSale ?? this.totalSale,
         isLoading: isLoading ?? this.isLoading,
         animated: animated ?? this.animated,
         totalCost: totalCost ?? this.totalCost,
+        totalProfit: totalProfit ?? this.totalProfit,
         totalOrders: totalOrders ?? this.totalOrders,
         previousTotalSaleValue:
             previousTotalSaleValue ?? this.previousTotalSaleValue,
@@ -89,15 +105,19 @@ class DashboardState implements Copyable<DashboardState> {
             previousTotalCostValue ?? this.previousTotalCostValue,
         previousTotalOrdersCount:
             previousTotalOrdersCount ?? this.previousTotalOrdersCount,
+        previousTotalProfit: previousTotalProfit ?? this.previousTotalProfit,
         saleValuePercentageChange:
             saleValuePercentageChange ?? this.saleValuePercentageChange,
         costValuePercentageChange:
             costValuePercentageChange ?? this.costValuePercentageChange,
         ordersCountPercentageChange:
             ordersCountPercentageChange ?? this.ordersCountPercentageChange,
+        profitPercentageChange:
+            profitPercentageChange ?? this.profitPercentageChange,
         ordersFromTimeFrame: ordersFromTimeFrame ?? this.ordersFromTimeFrame,
         saleFromTimeFrame: saleFromTimeFrame ?? this.saleFromTimeFrame,
         costFromTimeFrame: costFromTimeFrame ?? this.costFromTimeFrame,
+        profitFromTimeFrame: profitFromTimeFrame ?? this.profitFromTimeFrame,
         selectedDate: selectedDate ?? this.selectedDate,
         errorMessage: errorMessage ?? this.errorMessage);
   }

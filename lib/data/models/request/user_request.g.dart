@@ -11,7 +11,9 @@ NetworkUser _$NetworkUserFromJson(Map<String, dynamic> json) => NetworkUser(
       firstName: json['firstName'] as String?,
       secondName: json['secondName'] as String?,
       mobileNumber: json['mobileNumber'] as String,
-      city: json['city'] as String?,
+      city: json['city'] == null
+          ? null
+          : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
       instagram: json['instagram'] as String?,
     );
 

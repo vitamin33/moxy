@@ -108,10 +108,7 @@ class ProductMapper {
       size: mapToNetworkSize(dimen.size),
       material: mapToNetworkMaterial(dimen.material),
       quantity: dimen.quantity,
-      images: dimen.images
-          .where((element) => element.type == Type.file)
-          .map((e) => e.imagePath)
-          .toList(),
+      images: dimen.images.map((e) => e.imagePath).toList(),
     );
   }
 
@@ -178,7 +175,6 @@ class ProductMapper {
         productPrice: p.productPrice.toString(),
         productId: p.product,
         productName: p.productName ?? '',
-        imageUrl: p.imageUrl,
         dimensions: p.dimensions.map((e) => mapToDimension(e)).toList(),
       );
     }).toList();
@@ -208,13 +204,11 @@ class ProductMapper {
           ),
         );
       } else {
-        final item = dimenItem.dimension.images.first;
         finalList.add(
           OrderedItem(
             productPrice: dimenItem.salePrice.toString(),
             productId: dimenItem.id,
             productName: dimenItem.name,
-            imageUrl: item.imagePath,
             dimensions: [
               Dimension(
                 color: dimenItem.dimension.color,

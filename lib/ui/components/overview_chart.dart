@@ -9,11 +9,14 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class Chart extends StatefulWidget {
   final List<TotalByTimeFrame> saleFromTimeFrame;
   final List<TotalByTimeFrame> costFromTimeFrame;
+  final List<TotalByTimeFrame> profitFromTimeFrame;
 
-  const Chart(
-      {super.key,
-      required this.saleFromTimeFrame,
-      required this.costFromTimeFrame});
+  const Chart({
+    super.key,
+    required this.saleFromTimeFrame,
+    required this.costFromTimeFrame,
+    required this.profitFromTimeFrame,
+  });
 
   @override
   // ignore: library_private_types_in_public_api
@@ -42,11 +45,13 @@ class _ChartState extends State<Chart> {
       }
       double saleValue = widget.saleFromTimeFrame[i].value.toDouble();
       double costValue = widget.costFromTimeFrame[i].value.toDouble();
+      double profitValue = widget.profitFromTimeFrame[i].value.toDouble();
       dataSourceList.add(
         ChartData(
           formattedDate,
           saleValue,
           costValue,
+          profitValue,
         ),
       );
     }
@@ -54,6 +59,7 @@ class _ChartState extends State<Chart> {
 
   int? selectedColumnIndex1;
   int? selectedColumnIndex2;
+  int? selectedColumnIndex3;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -66,11 +72,12 @@ class _ChartState extends State<Chart> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-               Padding(
-                padding:const EdgeInsets.all(5.0),
+              Padding(
+                padding: const EdgeInsets.all(5.0),
                 child: Text(
                   AppLocalizations.of(context)!.overviewChartTitle,
-                  style:const TextStyle(fontSize: 19, fontWeight: FontWeight.w500),
+                  style: const TextStyle(
+                      fontSize: 19, fontWeight: FontWeight.w500),
                 ),
               ),
               SfCartesianChart(
@@ -100,58 +107,100 @@ class _ChartState extends State<Chart> {
                 ),
                 palette: const <Color>[
                   AppTheme.violet,
+                  AppTheme.pinkAvarage,
                   AppTheme.pinkDark,
                 ],
                 series: <ChartSeries>[
                   ColumnSeries<ChartData, String>(
-                      onPointTap: (args) {
-                        setState(() {
-                          selectedColumnIndex1 = args.pointIndex;
-                          selectedColumnIndex2 = null;
-                        });
-                      },
-                      name: AppLocalizations.of(context)!.overviewTotalCost,
-                      dataSource: dataSourceList,
-                      markerSettings: MarkerSettings(
-                          isVisible:
-                              selectedColumnIndex2 != null ? false : true),
-                      dataLabelSettings: DataLabelSettings(
-                          isVisible:
-                              selectedColumnIndex2 != null ? false : true,
-                          textStyle: const TextStyle(fontSize: 0)),
-                      xValueMapper: (ChartData data, _) => data.x,
-                      yValueMapper: (ChartData data, _) => data.y2,
-                      width: 0.4,
-                      spacing: 0.1,
-                      borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12))),
+                    onPointTap: (args) {
+                      setState(() {
+                        selectedColumnIndex1 = args.pointIndex;
+                        selectedColumnIndex2 = null;
+                        selectedColumnIndex3 = null;
+                      });
+                    },
+                    name: AppLocalizations.of(context)!.overviewTotalCost,
+                    dataSource: dataSourceList,
+                    markerSettings: MarkerSettings(
+                        isVisible: (selectedColumnIndex2 != null ||
+                                selectedColumnIndex3 != null)
+                            ? false
+                            : true),
+                    dataLabelSettings: DataLabelSettings(
+                        isVisible: (selectedColumnIndex2 != null ||
+                                selectedColumnIndex3 != null)
+                            ? false
+                            : true,
+                        textStyle: const TextStyle(fontSize: 0)),
+                    xValueMapper: (ChartData data, _) => data.x,
+                    yValueMapper: (ChartData data, _) => data.y2,
+                    width: 0.4,
+                    spacing: 0.1,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
                   ColumnSeries<ChartData, String>(
-                      onPointTap: (args) {
-                        setState(() {
-                          selectedColumnIndex2 = args.pointIndex;
-                          selectedColumnIndex1 = null;
-                        });
-                      },
-                      name:AppLocalizations.of(context)!.overviewTotalSale,
-                      dataSource: dataSourceList,
-                      markerSettings: MarkerSettings(
-                          isVisible:
-                              selectedColumnIndex1 != null ? false : true),
-                      dataLabelSettings: DataLabelSettings(
-                          isVisible:
-                              selectedColumnIndex1 != null ? false : true,
-                          textStyle: const TextStyle(fontSize: 0)),
-                      xValueMapper: (ChartData data, _) => data.x,
-                      yValueMapper: (ChartData data, _) => data.y,
-                      width: 0.4,
-                      spacing: 0.1,
-                      borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(12))),
+                    onPointTap: (args) {
+                      setState(() {
+                        selectedColumnIndex2 = args.pointIndex;
+                        selectedColumnIndex1 = null;
+                        selectedColumnIndex3 = null;
+                      });
+                    },
+                    name: AppLocalizations.of(context)!.overviewTotalSale,
+                    dataSource: dataSourceList,
+                    markerSettings: MarkerSettings(
+                        isVisible: (selectedColumnIndex1 != null ||
+                                selectedColumnIndex3 != null)
+                            ? false
+                            : true),
+                    dataLabelSettings: DataLabelSettings(
+                        isVisible: (selectedColumnIndex1 != null ||
+                                selectedColumnIndex3 != null)
+                            ? false
+                            : true,
+                        textStyle: const TextStyle(fontSize: 0)),
+                    xValueMapper: (ChartData data, _) => data.x,
+                    yValueMapper: (ChartData data, _) => data.y,
+                    width: 0.4,
+                    spacing: 0.1,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
+                  ColumnSeries<ChartData, String>(
+                    onPointTap: (args) {
+                      setState(() {
+                        selectedColumnIndex3 = args.pointIndex;
+                        selectedColumnIndex1 = null;
+                        selectedColumnIndex2 = null;
+                      });
+                    },
+                    name: AppLocalizations.of(context)!.overviewTotalProfit,
+                    dataSource: dataSourceList,
+                    markerSettings: MarkerSettings(
+                        isVisible: (selectedColumnIndex1 != null ||
+                                selectedColumnIndex2 != null)
+                            ? false
+                            : true),
+                    dataLabelSettings: DataLabelSettings(
+                        isVisible: (selectedColumnIndex1 != null ||
+                                selectedColumnIndex2 != null)
+                            ? false
+                            : true,
+                        textStyle: const TextStyle(fontSize: 0)),
+                    xValueMapper: (ChartData data, _) => data.x,
+                    yValueMapper: (ChartData data, _) => data.y3,
+                    width: 0.4,
+                    spacing: 0.1,
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
                 ],
                 onDataLabelRender: (DataLabelRenderArgs args) {
                   final int pointIndex = args.pointIndex!;
                   if (pointIndex == selectedColumnIndex1 ||
-                      pointIndex == selectedColumnIndex2) {
+                      pointIndex == selectedColumnIndex2 ||
+                      pointIndex == selectedColumnIndex3) {
                     args.text = '\₴ ${args.text}';
                     args.color = AppTheme.black;
                     args.textStyle = const TextStyle(fontSize: 14);
@@ -160,7 +209,8 @@ class _ChartState extends State<Chart> {
                 onMarkerRender: (markerArgs) {
                   final int pointIndex = markerArgs.pointIndex!;
                   if (pointIndex == selectedColumnIndex1 ||
-                      pointIndex == selectedColumnIndex2) {
+                      pointIndex == selectedColumnIndex2 ||
+                      pointIndex == selectedColumnIndex3) {
                     markerArgs.color = AppTheme.black;
                     markerArgs.markerHeight = 12;
                     markerArgs.markerWidth = 12;
@@ -177,8 +227,9 @@ class _ChartState extends State<Chart> {
 }
 
 class ChartData {
-  ChartData(this.x, this.y, this.y2);
+  ChartData(this.x, this.y, this.y2, this.y3);
   final String x;
   final double? y;
   final double? y2;
+  final double? y3;
 }
