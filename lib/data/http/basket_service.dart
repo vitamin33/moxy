@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../environment.dart';
@@ -18,8 +19,9 @@ class BasketService {
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
       return Result.success(result);
-    } on Exception catch (e) {
-      return Result.error(e);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
@@ -32,8 +34,9 @@ class BasketService {
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
       return Result.success(result);
-    } on Exception catch (e) {
-      return Result.error(e);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
@@ -46,8 +49,9 @@ class BasketService {
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
       return Result.success(result);
-    } on Exception catch (e) {
-      return Result.error(e);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
@@ -59,8 +63,9 @@ class BasketService {
           await _dio.post('$baseUrl$changeBasketUrl', data: change.toJson());
       final result = response.headers;
       return Result.success(result);
-    } on Exception catch (e) {
-      return Result.error(e);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

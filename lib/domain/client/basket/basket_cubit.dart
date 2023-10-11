@@ -52,37 +52,35 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
   }
 
   void addQuantityOfProduct(BasketItem basketItem) {
-    if (checkQuantityAvailability(basketItem)) {
-      return;
+    if (checkMaxQuantityAvailability(basketItem)) {
+      String? productId = basketItem.product.id;
+      BasketItem item = state.basket.basketItems
+          .firstWhere((element) => element.product.id == productId);
+      basketItem.dimension.quantity++;
+      item.dimension = basketItem.dimension;
+      emit(
+        state.copyWith(
+          basket: state.basket.copyWith(basketItems: state.basket.basketItems),
+        ),
+      );
+      updateCart(item);
     }
-    String? productId = basketItem.product.id;
-    BasketItem item = state.basket.basketItems
-        .firstWhere((element) => element.product.id == productId);
-    basketItem.dimension.quantity++;
-    item.dimension = basketItem.dimension;
-    emit(
-      state.copyWith(
-        basket: state.basket.copyWith(basketItems: state.basket.basketItems),
-      ),
-    );
-    updateCart(item);
   }
 
   void removeQuantityOfProduct(BasketItem basketItem) {
-    if (!checkQuantityAvailability(basketItem)) {
-      return;
+    if (checkMinQuantityAvailability(basketItem)) {
+      String? productId = basketItem.product.id;
+      BasketItem item = state.basket.basketItems
+          .firstWhere((element) => element.product.id == productId);
+      basketItem.dimension.quantity--;
+      item.dimension = basketItem.dimension;
+      emit(
+        state.copyWith(
+          basket: state.basket.copyWith(basketItems: state.basket.basketItems),
+        ),
+      );
+      updateCart(item);
     }
-    String? productId = basketItem.product.id;
-    BasketItem item = state.basket.basketItems
-        .firstWhere((element) => element.product.id == productId);
-    basketItem.dimension.quantity--;
-    item.dimension = basketItem.dimension;
-    emit(
-      state.copyWith(
-        basket: state.basket.copyWith(basketItems: state.basket.basketItems),
-      ),
-    );
-    updateCart(item);
   }
 
   void updateCart(BasketItem basketItem) async {
@@ -96,11 +94,19 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     });
   }
 
-  bool checkQuantityAvailability(BasketItem basketItem) {
-    Dimension dimen = basketItem.dimension;
-    Dimension currentDimen =
-        basketItem.product.dimensions.firstWhere((d) => d.color == dimen.color);
-    if (dimen.quantity > 0 && dimen.quantity < currentDimen.quantity) {
+  bool checkMaxQuantityAvailability(BasketItem basketItem) {
+    Dimension orderedDimen = basketItem.dimension;
+    Dimension productDimen = basketItem.product.dimensions
+        .firstWhere((d) => d.color.id == orderedDimen.color.id);
+    if (orderedDimen.quantity < productDimen.quantity) {
+      return true;
+    }
+    return false;
+  }
+
+  bool checkMinQuantityAvailability(BasketItem basketItem) {
+    Dimension orderedDimen = basketItem.dimension;
+    if (orderedDimen.quantity > 0) {
       return true;
     }
     return false;

@@ -1,6 +1,7 @@
 import 'package:moxy/data/http/basket_service.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../services/get_it.dart';
@@ -13,8 +14,9 @@ class BasketRepository {
     try {
       final result = await client.getBasket();
       return result;
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
@@ -24,7 +26,7 @@ class BasketRepository {
       final result = await client.addOrChangeQuantityOfProduct(change);
       return result;
     } catch (e) {
-      return Result.error(Exception('$e'));
+      rethrow;
     }
   }
 
@@ -33,8 +35,9 @@ class BasketRepository {
     try {
       final result = await client.addProductToBasket(change);
       return result;
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
@@ -44,7 +47,7 @@ class BasketRepository {
       final result = await client.removeProductFromBasket(remove);
       return result;
     } catch (e) {
-      return Result.error(Exception('$e'));
+      rethrow;
     }
   }
 
