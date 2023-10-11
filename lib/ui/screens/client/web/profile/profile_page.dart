@@ -15,15 +15,49 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  _ProfilePageState createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late ProfileCubit cubit;
+
+  @override
+  void initState() {
+    super.initState();
+    cubit = ProfileCubit();
+
+    cubit.effectStream.listen((effect) {
+      if (effect is ProfileApiRequestFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarWhenFailure(snackBarFailureText: effect.failureText));
+      }
+      if (effect is ProfileSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarWhenSuccess(snackBarSuccessText: effect.successText));
+      }
+      if (effect is ProfileValidationFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText: 'Wrong input, please check fields.'));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    cubit.close();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ProfileCubit>(
-          create: (BuildContext context) => ProfileCubit(),
+          create: (BuildContext context) => cubit,
         ),
         BlocProvider<SearchCitiesCubit>(
           create: (BuildContext context) => SearchCitiesCubit(),
@@ -34,28 +68,13 @@ class ProfilePage extends StatelessWidget {
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
-          final ProfileCubit cubit = context.read<ProfileCubit>();
-          cubit.effectStream.listen((effect) {
-            if (effect is ProfileApiRequestFailed) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  snackBarWhenFailure(snackBarFailureText: effect.failureText));
-            }
-            if (effect is ProfileSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  snackBarWhenSuccess(snackBarSuccessText: effect.successText));
-            }
-            if (effect is ProfileValidationFailed) {
-              ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-                  snackBarFailureText: 'Wrong input, please check fields.'));
-            }
-          });
           return Scaffold(
             body: Container(
-                height: MediaQuery.of(context).size.height,
-                width: double.infinity,
-                color: AppTheme.white,
-                child: SingleChildScrollView(
-                    child: Column(
+              height: MediaQuery.of(context).size.height,
+              width: double.infinity,
+              color: AppTheme.white,
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
                     state.isLoading
                         ? const MoxyLoader(
@@ -63,9 +82,11 @@ class ProfilePage extends StatelessWidget {
                           )
                         : ProfileTabPage(),
                     const PromoContainer(),
-                    const Footer()
+                    const Footer(),
                   ],
-                ))),
+                ),
+              ),
+            ),
           );
         },
       ),
@@ -85,7 +106,7 @@ class ProfileTabPage extends StatelessWidget {
     ProfileAdress(),
   ];
 
-  ProfileTabPage({super.key});
+  ProfileTabPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -122,26 +143,30 @@ class ProfileTabPage extends StatelessWidget {
                             border: state.activePage == index
                                 ? const Border(
                                     right: BorderSide(
-                                        color: AppTheme.black,
-                                        width: 2,
-                                        style: BorderStyle.solid),
+                                      color: AppTheme.black,
+                                      width: 2,
+                                      style: BorderStyle.solid,
+                                    ),
                                   )
                                 : const Border(
                                     right: BorderSide(
-                                        color: AppTheme.greyLigth,
-                                        width: 2,
-                                        style: BorderStyle.solid)),
+                                      color: AppTheme.greyLigth,
+                                      width: 2,
+                                      style: BorderStyle.solid,
+                                    ),
+                                  ),
                           ),
                           padding: const EdgeInsets.symmetric(vertical: 25),
                           child: Text(
                             tabTitles[index],
                             style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: state.activePage == index
-                                    ? AppTheme.pinkDark
-                                    : AppTheme.black),
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              fontWeight: FontWeight.w600,
+                              color: state.activePage == index
+                                  ? AppTheme.pinkDark
+                                  : AppTheme.black,
+                            ),
                           ),
                         ),
                       );
@@ -154,41 +179,42 @@ class ProfileTabPage extends StatelessWidget {
                 child: SizedBox(
                   height: 600,
                   child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: SizedBox(
-                            height: 350,
-                            child: PageView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              controller: cubit.pageController,
-                              onPageChanged: (int page) {
-                                cubit.onChangePage(page);
-                              },
-                              itemCount: tabPages.length,
-                              itemBuilder: (context, index) {
-                                return tabPages[index % tabPages.length];
-                              },
-                            ),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: SizedBox(
+                          height: 350,
+                          child: PageView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            controller: cubit.pageController,
+                            onPageChanged: (int page) {
+                              cubit.onChangePage(page);
+                            },
+                            itemCount: tabPages.length,
+                            itemBuilder: (context, index) {
+                              return tabPages[index % tabPages.length];
+                            },
                           ),
                         ),
-                        const SizedBox(height: 30),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 100),
-                          child: CustomButton(
-                            title: 'Зберегти',
-                            onTap: () {
-                              if (cubit.validateFields()) {
-                                cubit.editProfile();
-                                cubit.editPassword();
-                              }
-                            },
-                            buttonWidth: 200,
-                          ),
-                        )
-                      ]),
+                      ),
+                      const SizedBox(height: 30),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 100),
+                        child: CustomButton(
+                          title: 'Зберегти',
+                          onTap: () {
+                            if (cubit.validateFields()) {
+                              cubit.editProfile();
+                              cubit.editPassword();
+                            }
+                          },
+                          buttonWidth: 200,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
