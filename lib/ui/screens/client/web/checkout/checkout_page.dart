@@ -62,6 +62,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           final theme = AppTheme.of(context)!;
           ClientHomeRouterCubit router = context.read<ClientHomeRouterCubit>();
           return Scaffold(
+            backgroundColor: Colors.transparent,
             body: ScrollableSection(
               content: Column(
                 children: [
