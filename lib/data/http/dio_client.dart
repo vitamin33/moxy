@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/find_orders_request.dart';
@@ -300,7 +302,6 @@ class DioClient {
 // FOOTER
   Future<Result<Headers, Exception>> sendFooterEmail(String email) async {
     final Headers? result;
-    // final data = order.toJson();
     try {
       Response response = await dio.post(
         sendFooterEmailUrl,
@@ -352,7 +353,6 @@ class DioClient {
   }
 
 // EDIT USER
-
   Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
     final Headers? result;
 
@@ -384,51 +384,73 @@ class DioClient {
   }
 
   //REGISTER
-
-  Future<Headers>register(
-      NetworkRegister networkRegister) async {
-    final Headers result;
+  Future<bool> register(NetworkRegister networkRegister) async {
     try {
       Response response = await dio.post(
         registerUserUrl,
         data: networkRegister.toJson(),
       );
-      result = response.headers;
-    } catch (e, stack) {
-      moxyPrint(stack);
-      rethrow;
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == HttpStatus.conflict) {
+        return true;
+      } else {
+        rethrow;
+      }
     }
-    return result;
   }
 
-  Future <Headers> sendConfirmationCode(
+  Future<bool> sendConfirmationCode(
       NetworkConfirmationCode networkConfirmationCode) async {
-    final Headers result;
     try {
       Response response = await dio.post(
         verifyUserUrl,
         data: networkConfirmationCode.toJson(),
       );
-      result = response.headers;
-    } catch (e,stack) {
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, stack) {
       moxyPrint(stack);
       rethrow;
     }
-    return result;
   }
 
-  Future<Headers>resendConfirmationCode(
-      String email) async {
-    final Headers result;
+  Future<bool> resendConfirmationCode(String email) async {
     try {
       Response response = await dio.post(
         resendVerifyUserUrl,
         data: {'email': email},
       );
-      result = response.headers;
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       rethrow;
     }
-    return result;
+  }
+
+  Future<bool> changePasswordWithMobile(String email) async {
+    try {
+      Response response = await dio.post(
+        editUserPassworWithMobiledUrl,
+        data: {'email': email},
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

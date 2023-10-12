@@ -119,7 +119,7 @@ class AuthRepository {
         (success) => Result.success(success), (error) => Result.error(error));
   }
 
-  Future<Result<Headers, Exception>> register(
+  Future<Result<bool, Exception>> register(
       String firstName,
       String secondName,
       String mobileNumber,
@@ -131,29 +131,38 @@ class AuthRepository {
         mobileNumber: mobileNumber,
         email: email,
         password: password));
-    if (resultCase != null) {
+    if (resultCase) {
       return Result.success(resultCase);
     } else {
       return Result.error(Exception('error register'));
     }
   }
 
-  Future<Result<Headers, Exception>> sendConfirmationCode(
+  Future<Result<bool, Exception>> sendConfirmationCode(
       String confirmationCode, String email) async {
     final resultCase = await client.sendConfirmationCode(
         NetworkConfirmationCode(
             email: email, confirmationCode: confirmationCode));
-    if (resultCase != null) {
+    if (resultCase) {
       return Result.success(resultCase);
     } else {
       return Result.error(Exception('error sendConfirmationCode'));
     }
   }
 
-  Future<Result<Headers, Exception>> resendConfirmationCode(
+  Future<Result<bool, Exception>> resendConfirmationCode(
       String email) async {
     final resultCase = await client.resendConfirmationCode(email);
-    if (resultCase != null) {
+    if (resultCase ) {
+      return Result.success(resultCase);
+    } else {
+      return Result.error(Exception('error resendConfirmationCode'));
+    }
+  }
+  Future<Result<bool, Exception>> changePasswordWithMobile(
+      String email) async {
+    final resultCase = await client.changePasswordWithMobile(email);
+    if (resultCase ) {
       return Result.success(resultCase);
     } else {
       return Result.error(Exception('error resendConfirmationCode'));

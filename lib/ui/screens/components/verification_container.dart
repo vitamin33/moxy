@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
@@ -28,8 +27,9 @@ class VerificationContainer extends StatelessWidget {
               ),
               const SizedBox(height: AppTheme.cardPadding),
               OtpTextField(
+                state: state.error.confirmationCode,
                 numberOfFields: 4,
-                borderColor: AppTheme.pink,
+                borderColor: AppTheme.greyLigth,
                 showFieldAsBox: true,
                 focusedBorderColor: AppTheme.pinkAvarage,
                 onSubmit: (String code) {
@@ -64,15 +64,10 @@ class VerificationContainer extends StatelessWidget {
                 child: CustomButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити код',
-                  // state:
-                  // //  state.state is Loading
-                  //     ? ButtonState.loading
-                  //     : (state.mobileNumberIsValid
-                  //         ? ButtonState.idle
-                  //         : ButtonState.disabled),
                   onTap: () {
-                    context.read<RegistrationCubit>().sendConfirmationCode();
-                    context.read<LoginCubit>().moveToPage(0);
+                    if (cubit.validateConfirmCodeFields()) {
+                      context.read<RegistrationCubit>().sendConfirmationCode();
+                    }
                   },
                 ),
               ),

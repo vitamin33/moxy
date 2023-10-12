@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
+import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/domain/validation_mixin.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
 
-class RegistrationCubit extends Cubit<RegistrationState> {
+class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
+    with ValidationMixin {
   final authRepository = locate<AuthRepository>();
 
   RegistrationCubit()
@@ -15,13 +18,13 @@ class RegistrationCubit extends Cubit<RegistrationState> {
             secondName: '',
             email: '',
             password: '',
+            confirmRegisterPassword: '',
             confirmationCode: '',
             mobileNumberPassword: '',
             newPassword: '',
             confirmPassword: '',
-            state: const RegisterState())) {
-    emit(state.copyWith(mobileNumber: '0938795984', password: '123123'));
-  }
+            state: const RegisterState(),
+            error: RegisterFieldErrors()));
 
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController secondNameController = TextEditingController();
@@ -30,6 +33,8 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmRegisterPasswordController =
+      TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
@@ -40,6 +45,7 @@ class RegistrationCubit extends Cubit<RegistrationState> {
       firstName: firstName,
     ));
   }
+
   void secondNameChanged(String value) {
     final secondName = value;
     emit(state.copyWith(
@@ -68,6 +74,13 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     ));
   }
 
+  void confirmRegisterPasswordChanged(String value) {
+    final confirmRegisterPassword = value;
+    emit(state.copyWith(
+      confirmRegisterPassword: confirmRegisterPassword,
+    ));
+  }
+
   void changeVarCode(String value) {
     final confirmationCode = value;
     emit(state.copyWith(
@@ -78,19 +91,17 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   void register(context) async {
     try {
       emit(state.copyWith(state: Loading()));
-
-      final result = await authRepository.register(
-          state.firstName,state.secondName, state.mobileNumber, state.email, state.password);
-
-      result.when((role) {
-                    context.read<LoginCubit>().nextPage();
-
-      }, (error) {
+      final result = await authRepository.register(state.firstName,
+          state.secondName, state.mobileNumber, state.email, state.password);
+      if (result.isSuccess()) {
+        emitEffect(NavigateToNextPage());
+      } else {
         emit(state.copyWith(
             state: RegisterFailed(
                 message: 'Unable to login. Try one more time.')));
-      });
-    } on Exception catch (error) {
+      }
+    } catch (error) {
+      emitEffect(RegistrationApiRequestFailed(error.toString()));
       emit(state.copyWith(state: RegisterFailed(message: error.toString())));
     }
   }
@@ -98,30 +109,34 @@ class RegistrationCubit extends Cubit<RegistrationState> {
   void sendConfirmationCode() async {
     try {
       emit(state.copyWith(state: Loading()));
-      final result = await authRepository.sendConfirmationCode(state.confirmationCode,state.email);
-      result.when((role) {}, (error) {
+      final result = await authRepository.sendConfirmationCode(
+          state.confirmationCode, state.email);
+      if (result.isSuccess()) {
+        emitEffect(NavigateToLogin());
+      } else {
         emit(state.copyWith(
             state: RegisterFailed(
                 message: 'Unable to login. Try one more time.')));
-      });
-    } on Exception catch (error) {
+      }
+    } catch (error) {
+      emitEffect(RegistrationApiRequestFailed(error.toString()));
       emit(state.copyWith(state: RegisterFailed(message: error.toString())));
     }
   }
 
-  
   void resendConfirmationCode() async {
     try {
       emit(state.copyWith(state: Loading()));
       final result = await authRepository.resendConfirmationCode(state.email);
-      result.when((role) {
-        
-      }, (error) {
+      if (result.isSuccess()) {
+        emitEffect(ResendConfirm());
+      } else {
         emit(state.copyWith(
             state: RegisterFailed(
                 message: 'Unable to login. Try one more time.')));
-      });
-    } on Exception catch (error) {
+      }
+    } catch (error) {
+      emitEffect(RegistrationApiRequestFailed(error.toString()));
       emit(state.copyWith(state: RegisterFailed(message: error.toString())));
     }
   }
@@ -145,5 +160,106 @@ class RegistrationCubit extends Cubit<RegistrationState> {
     emit(state.copyWith(
       confirmPassword: confirmPassword,
     ));
+  }
+
+  void changePasswordWithMobile() async {
+    try {
+      emit(state.copyWith(state: Loading()));
+      final result = await authRepository.changePasswordWithMobile(state.email);
+      if (result.isSuccess()) {
+        emitEffect(NavigateToNextPage());
+      } else {
+        emit(state.copyWith(
+            state: RegisterFailed(
+                message: 'Unable to login. Try one more time.')));
+      }
+    } catch (error) {
+      emitEffect(RegistrationApiRequestFailed(error.toString()));
+      emit(state.copyWith(state: RegisterFailed(message: error.toString())));
+    }
+  }
+
+
+
+  bool validateRegisterFields() {
+    final errors = RegisterFieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.firstName)) {
+      errors.firstName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.secondName)) {
+      errors.secondName = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.email)) {
+      errors.email = FieldError.empty;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.mobileNumber)) {
+      errors.mobileNumber = FieldError.invalid;
+      noErrors = false;
+    }
+    if (isFieldEmpty(state.password)) {
+      errors.password = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!validateRepeatPassword(
+        state.password, state.confirmRegisterPassword)) {
+      errors.confirmRegisterPassword = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(RegistrationValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(error: errors));
+    return noErrors;
+  }
+
+  bool validateConfirmCodeFields() {
+    final errors = RegisterFieldErrors.noErrors();
+    var noErrors = true;
+
+    if (isFieldEmpty(state.confirmationCode)) {
+      errors.confirmationCode = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(RegistrationValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(error: errors));
+    return noErrors;
+  }
+
+  bool validateChangePasswordFields() {
+    final errors = RegisterFieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.mobileNumberPassword)) {
+      errors.mobileNumberPassword = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(RegistrationValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(error: errors));
+    return noErrors;
+  }
+
+  bool validateNewPasswordFields() {
+    final errors = RegisterFieldErrors.noErrors();
+    var noErrors = true;
+    if (isFieldEmpty(state.newPassword)) {
+      errors.newPassword = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!validateRepeatPassword(state.newPassword, state.confirmPassword)) {
+      errors.confirmPassword = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!noErrors) {
+      emitEffect(RegistrationValidationFailed(errors.formErrorMessageFields()));
+    }
+    emit(state.copyWith(error: errors));
+    return noErrors;
   }
 }

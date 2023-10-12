@@ -35,23 +35,19 @@ class ResetPasswordContainer extends StatelessWidget {
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
+                state: state.error.mobileNumberPassword,
+                validation: true,
               ),
               const SizedBox(height: AppTheme.elementSpacing),
-              const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: []),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: CustomButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити номер',
-                  state: state.state is Loading
-                      ? ButtonState.loading
-                      : (state.mobileNumberIsValid
-                          ? ButtonState.idle
-                          : ButtonState.disabled),
                   onTap: () {
-                    context.read<LoginCubit>().nextPage();
+                    if (cubit.validateChangePasswordFields()) {
+                      context.read<LoginCubit>().nextPage();
+                    }
                   },
                 ),
               ),

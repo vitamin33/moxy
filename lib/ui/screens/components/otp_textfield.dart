@@ -2,13 +2,16 @@ library flutter_otp_text_field;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:moxy/domain/validation_mixin.dart';
 
 typedef OnCodeEnteredCompletion = void Function(String value);
 typedef OnCodeChanged = void Function(String value);
-typedef HandleControllers = void Function(List<TextEditingController?> controllers);
+typedef HandleControllers = void Function(
+    List<TextEditingController?> controllers);
 
 // ignore: must_be_immutable
 class OtpTextField extends StatefulWidget {
+  final FieldError? state;
   final bool showCursor;
   final int numberOfFields;
   final double fieldWidth;
@@ -32,7 +35,7 @@ class OtpTextField extends StatefulWidget {
   final bool filled;
   final bool autoFocus;
   final bool readOnly;
-   bool clearText;
+  bool clearText;
   final bool hasCustomInputDecoration;
   final Color fillColor;
   final BorderRadius borderRadius;
@@ -40,7 +43,9 @@ class OtpTextField extends StatefulWidget {
   final List<TextStyle?> styles;
   final List<TextInputFormatter>? inputFormatters;
 
-  OtpTextField({super.key, 
+  OtpTextField({
+    super.key,
+    this.state,
     this.showCursor = true,
     this.numberOfFields = 4,
     this.fieldWidth = 40.0,
@@ -100,12 +105,12 @@ class _OtpTextFieldState extends State<OtpTextField> {
   @override
   void didUpdateWidget(covariant OtpTextField oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.clearText != widget.clearText && widget.clearText == true) {
-      for (var controller in _textControllers ){
+    if (oldWidget.clearText != widget.clearText && widget.clearText == true) {
+      for (var controller in _textControllers) {
         controller?.clear();
       }
       _verificationCode = List<String?>.filled(widget.numberOfFields, null);
-      setState((){
+      setState(() {
         widget.clearText = false;
       });
     }
@@ -151,16 +156,16 @@ class _OtpTextFieldState extends State<OtpTextField> {
                 filled: widget.filled,
                 fillColor: widget.fillColor,
                 focusedBorder: widget.showFieldAsBox
-                    ? outlineBorder(widget.focusedBorderColor)
+                    ? outlineBorder(isValid(widget.state), widget.borderColor)
                     : underlineInputBorder(widget.focusedBorderColor),
                 enabledBorder: widget.showFieldAsBox
-                    ? outlineBorder(widget.enabledBorderColor)
+                    ? outlineBorder(isValid(widget.state), widget.borderColor)
                     : underlineInputBorder(widget.enabledBorderColor),
                 disabledBorder: widget.showFieldAsBox
-                    ? outlineBorder(widget.disabledBorderColor)
+                    ? outlineBorder(isValid(widget.state), widget.borderColor)
                     : underlineInputBorder(widget.disabledBorderColor),
                 border: widget.showFieldAsBox
-                    ? outlineBorder(widget.borderColor)
+                    ? outlineBorder(isValid(widget.state), widget.borderColor)
                     : underlineInputBorder(widget.borderColor),
               ),
         obscureText: widget.obscureText,
@@ -172,22 +177,23 @@ class _OtpTextFieldState extends State<OtpTextField> {
             value: value,
             indexOfTextField: index,
           );
-          changeFocusToPreviousNodeWhenValueIsRemoved(value: value, indexOfTextField: index);
+          changeFocusToPreviousNodeWhenValueIsRemoved(
+              value: value, indexOfTextField: index);
           onSubmit(verificationCode: _verificationCode);
         },
       ),
     );
   }
 
-  OutlineInputBorder outlineBorder(Color color) {
+  OutlineInputBorder outlineBorder(bool isValid, Color borderColor) {
     return OutlineInputBorder(
       borderSide: BorderSide(
-        width: widget.borderWidth,
-        color: color,
+        color: isValid ? borderColor ?? Colors.grey : Colors.red,
       ),
-      borderRadius: widget.borderRadius,
     );
   }
+
+  bool isValid(state) => state == null;
 
   UnderlineInputBorder underlineInputBorder(Color color) {
     return UnderlineInputBorder(
@@ -215,7 +221,6 @@ class _OtpTextFieldState extends State<OtpTextField> {
       }
       return _buildTextField(context: context, index: i);
     });
-
 
     return Row(
       mainAxisAlignment: widget.mainAxisAlignment,
@@ -268,7 +273,6 @@ class _OtpTextFieldState extends State<OtpTextField> {
       }
     }
   }
-
 
   void onSubmit({required List<String?> verificationCode}) {
     if (verificationCode.every((String? code) => code != null && code != '')) {

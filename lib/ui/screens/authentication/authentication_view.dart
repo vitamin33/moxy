@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
+import 'package:moxy/domain/auth/registration/registration_cubit.dart';
+import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/roles.dart';
 import 'package:moxy/services/navigation/root_router_cubit.dart';
 import 'package:moxy/ui/components/succes_card.dart';
@@ -38,11 +40,33 @@ class AuthenticationView extends StatelessWidget {
           titleButton: 'Повернутись до входу')
     ];
     return BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
-      final cubit = context.read<LoginCubit>();
+      final RegistrationCubit cubit = context.read<RegistrationCubit>();
+      cubit.effectStream.listen((effect) {
+        if (effect is RegistrationValidationFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              snackBarWhenFailure(snackBarFailureText: 'error validation'));
+        } else if (effect is RegistrationApiRequestFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              snackBarWhenFailure(snackBarFailureText: 'error api'));
+        } else if (effect is NavigateToNextPage) {
+          context.read<LoginCubit>().nextPage();
+          ScaffoldMessenger.of(context).showSnackBar(
+              snackBarWhenSuccess(snackBarSuccessText: 'register success'));
+        } else if (effect is NavigateToLogin) {
+          context.read<LoginCubit>().moveToPage(0);
+          ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
+              snackBarSuccessText: 'confirm register code success'));
+        }
+         else if (effect is ResendConfirm) {
+          ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
+              snackBarSuccessText: 'resend confirm register code'));
+        }
+      });
+      final loginCubit = context.read<LoginCubit>();
       if (state.state is LoginFailed) {
         showFailureSnackbar(
             context, AppLocalizations.of(context)!.failedLoginError);
-        cubit.clearState();
+        loginCubit.clearState();
       } else if (state.state is LoginWithCredsSuccess) {
         final role = (state.state as LoginWithCredsSuccess).role;
         if (role == Role.admin || role == Role.manager) {
@@ -50,9 +74,9 @@ class AuthenticationView extends StatelessWidget {
         } else {
           rootNavCubit.goToClientHomeFlow();
         }
-        cubit.clearState();
+        loginCubit.clearState();
       } else if (state.state is Logout) {
-        cubit.clearState();
+        loginCubit.clearState();
       }
     }, builder: (context, state) {
       final cubit = context.read<LoginCubit>();

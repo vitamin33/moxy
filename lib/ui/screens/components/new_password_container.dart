@@ -35,6 +35,8 @@ class NewPasswordContainer extends StatelessWidget {
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
+                state: state.error.newPassword,
+                validation: true,
               ),
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
@@ -44,6 +46,8 @@ class NewPasswordContainer extends StatelessWidget {
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],
+                state: state.error.confirmPassword,
+                validation: true,
               ),
               const SizedBox(height: AppTheme.elementSpacing),
               const Row(
@@ -54,13 +58,11 @@ class NewPasswordContainer extends StatelessWidget {
                 child: CustomButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Змінити пароль',
-                  state: state.state is Loading
-                      ? ButtonState.loading
-                      : (state.mobileNumberIsValid
-                          ? ButtonState.idle
-                          : ButtonState.disabled),
                   onTap: () {
-                    context.read<LoginCubit>().nextPage();
+                    if (cubit.validateNewPasswordFields()) {
+                      cubit.changePasswordWithMobile();
+                      context.read<LoginCubit>().nextPage();
+                    }
                   },
                 ),
               ),
@@ -85,7 +87,6 @@ Widget downText(BuildContext context) {
       ),
       InkWell(
           onTap: () {
-            // context.read<RegistrationCubit>().sendConfirmationCode();
           },
           child: const Text(
             "Увійти",

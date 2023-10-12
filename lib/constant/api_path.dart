@@ -15,6 +15,7 @@ const String createGuestUserUrl = '/users/create-guest';
 const String allUsersUrl = '/users';
 const String editUserUrl = '/users/edit';
 const String editUserPasswordUrl = '/auth/change-password';
+const String editUserPassworWithMobiledUrl = '/auth/change-password-mobile';
 const String ordersDashboardUrl = '/dashboard/orders';
 const String sendFooterEmailUrl = '/sendfootetemail';
 const String getBasketUrl = '/basket';
