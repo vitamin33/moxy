@@ -49,7 +49,7 @@ class CreateOrderPage extends StatelessWidget {
             return KeyboardVisibilityBuilder(
               builder: (context, isKeyboardVisible) {
                 return state.isSuccess
-                    ? succsess(
+                    ? SuccessCard(
                         onTap: () {
                           if (state.isEdit) {
                             cubit.createNew();

@@ -47,9 +47,9 @@ mixin ValidationMixin {
 
   bool validateRepeatPassword(String newPassword, String repeatPassword) {
     if (newPassword == repeatPassword) {
-      return false;
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 

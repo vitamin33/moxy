@@ -1,5 +1,8 @@
 const String createProductUrl = '/products/create';
 const String loginUserUrl = '/auth/login';
+const String registerUserUrl = '/auth/register';
+const String verifyUserUrl = '/auth/verify-confirmation';
+const String resendVerifyUserUrl = '/auth/resend-confirmation';
 const String allProductsUrl = '/products';
 const String getProductByIdUrl = '/products/details/';
 const String editProductUrl = '/products/edit/';
@@ -12,6 +15,7 @@ const String createGuestUserUrl = '/users/create-guest';
 const String allUsersUrl = '/users';
 const String editUserUrl = '/users/edit';
 const String editUserPasswordUrl = '/auth/change-password';
+const String editUserPassworWithMobiledUrl = '/auth/change-password-mobile';
 const String ordersDashboardUrl = '/dashboard/orders';
 const String sendFooterEmailUrl = '/sendfootetemail';
 const String getBasketUrl = '/basket';
