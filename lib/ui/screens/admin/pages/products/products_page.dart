@@ -210,10 +210,10 @@ Widget _buildLoadingIfNeeded(AllProductsState state) {
 }
 
 Widget _buildProductImage(Product product) {
-  if (product.images.isNotEmpty) {
+  if (product.dimensions.first.images.isNotEmpty) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: product.images.first.imagePath,
+      image: product.dimensions.first.images.first.imagePath,
       width: 50,
       height: 50,
       fit: BoxFit.cover,

@@ -36,8 +36,9 @@ class OrderRepository {
       final allOrdersList = orderMapper.mapToOrderList(result);
 
       return Result.success(allOrdersList);
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

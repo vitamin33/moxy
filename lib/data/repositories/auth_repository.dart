@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:moxy/data/http/token_service.dart';
+import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/domain/models/profile.dart';
 import 'package:moxy/domain/models/user.dart';
 import 'package:moxy/domain/roles.dart';
@@ -116,5 +117,55 @@ class AuthRepository {
         .editUserPassword(userMapper.maptoNetworkPassword(password));
     return resultCase.when(
         (success) => Result.success(success), (error) => Result.error(error));
+  }
+
+  Future<Result<bool, Exception>> register(
+      String firstName,
+      String secondName,
+      String mobileNumber,
+      String email,
+      String password) async {
+    final resultCase = await client.register(NetworkRegister(
+        firstName: firstName,
+        secondName: secondName,
+        mobileNumber: mobileNumber,
+        email: email,
+        password: password));
+    if (resultCase) {
+      return Result.success(resultCase);
+    } else {
+      return Result.error(Exception('error register'));
+    }
+  }
+
+  Future<Result<bool, Exception>> sendConfirmationCode(
+      String confirmationCode, String email) async {
+    final resultCase = await client.sendConfirmationCode(
+        NetworkConfirmationCode(
+            email: email, confirmationCode: confirmationCode));
+    if (resultCase) {
+      return Result.success(resultCase);
+    } else {
+      return Result.error(Exception('error sendConfirmationCode'));
+    }
+  }
+
+  Future<Result<bool, Exception>> resendConfirmationCode(
+      String email) async {
+    final resultCase = await client.resendConfirmationCode(email);
+    if (resultCase ) {
+      return Result.success(resultCase);
+    } else {
+      return Result.error(Exception('error resendConfirmationCode'));
+    }
+  }
+  Future<Result<bool, Exception>> changePasswordWithMobile(
+      String email) async {
+    final resultCase = await client.changePasswordWithMobile(email);
+    if (resultCase ) {
+      return Result.success(resultCase);
+    } else {
+      return Result.error(Exception('error resendConfirmationCode'));
+    }
   }
 }

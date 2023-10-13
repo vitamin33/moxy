@@ -13,6 +13,7 @@ import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 
 class BasketPage extends StatefulWidget {
   const BasketPage({Key? key}) : super(key: key);
@@ -129,7 +130,7 @@ Widget _buildProductItem(
   AppTheme theme,
 ) {
   String productName = item.product.name.toUpperCase();
-  String color = item.dimension.color.toUpperCase();
+  String color = item.dimension.color.name.toUpperCase();
   return Padding(
     padding: const EdgeInsets.all(8),
     child: Row(
@@ -211,10 +212,10 @@ Widget _buildProductItem(
 }
 
 Widget _buildProductImage(BasketItem item) {
-  if (item.product.images.isNotEmpty) {
+  if (item.dimension.images.isNotEmpty) {
     return FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
-      image: item.product.images.first.imagePath,
+      image: item.dimension.images.first.imagePath,
       width: 100,
       height: 150,
       fit: BoxFit.cover,
@@ -230,6 +231,7 @@ Widget _buildProductImage(BasketItem item) {
 }
 
 Widget _buildColorWidget(Dimension dimen) {
+  final color = _generateColor(dimen);
   return Container(
     padding: const EdgeInsets.all(2),
     decoration: BoxDecoration(
@@ -243,11 +245,11 @@ Widget _buildColorWidget(Dimension dimen) {
     child: CircleAvatar(
       radius: 15,
       backgroundColor: AppTheme.greyLigth,
-      child: CircleAvatar(
-        radius: 13,
-        backgroundColor: AppTheme.pink,
-        backgroundImage: AssetImage(dimen.image!),
-      ),
+      child: CircleAvatar(radius: 13, backgroundColor: color),
     ),
   );
+}
+
+Color _generateColor(Dimension dimen) {
+  return hexToColor(dimen.color.hexCode);
 }

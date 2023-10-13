@@ -8,6 +8,7 @@ import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../../constant/icon_path.dart';
 import '../../../../../../domain/admin/create_product/create_product_state.dart';
@@ -28,31 +29,6 @@ class Branding extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
               child: Column(
                 children: [
-                  state.product.images.isNotEmpty
-                      ? InkWell(
-                          onTap: () {
-                            cubit.pickImage();
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SvgPicture.asset(IconPath.plus),
-                              const SizedBox(
-                                width: 2,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)!.pickImage,
-                                style: const TextStyle(
-                                    color: AppTheme.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Container(),
-                  _buildGalleryArea(context, state, cubit),
-                  const SizedBox(height: 20),
                   CustomTextField(
                     title:
                         ' ${AppLocalizations.of(context)!.createProductWeight}',
@@ -102,7 +78,7 @@ class Branding extends StatelessWidget {
                       LengthLimitingTextInputFormatter(16),
                     ],
                   ),
-                  _buildSelectedDimensWidget(state, cubit),
+                  _buildSelectedDimensWidget(context, state, cubit),
                 ],
               ),
             ),
@@ -112,12 +88,13 @@ class Branding extends StatelessWidget {
     );
   }
 
-  _buildImage(Product product, int index, CreateProductCubit cubit) {
-    final images = product.images;
+  _buildImage(Dimension dimension, int dimenIndex, int imageIndex,
+      CreateProductCubit cubit) {
+    final images = dimension.images;
     if (images.isEmpty) {
       return Container();
     } else {
-      final image = images[index];
+      final image = images[imageIndex];
       if (image.type == Type.file) {
         return Stack(
           children: [
@@ -141,7 +118,7 @@ class Branding extends StatelessWidget {
               right: 0,
               child: GestureDetector(
                 onTap: () {
-                  cubit.removeImage(index);
+                  cubit.removeImage(dimenIndex, imageIndex);
                 },
                 child: const Icon(Icons.close, color: AppTheme.blackLight),
               ),
@@ -171,7 +148,7 @@ class Branding extends StatelessWidget {
               right: 0,
               child: GestureDetector(
                 onTap: () {
-                  cubit.removeImage(index);
+                  cubit.removeImage(dimenIndex, imageIndex);
                 },
                 child: const Icon(Icons.close, color: AppTheme.blackLight),
               ),
@@ -182,9 +159,9 @@ class Branding extends StatelessWidget {
     }
   }
 
-  Widget _buildSelectedDimensWidget(
+  Widget _buildSelectedDimensWidget(BuildContext context,
       CreateProductState state, CreateProductCubit cubit) {
-    if (state.allDimensions.isEmpty) {
+    if (state.allConfigColors.isEmpty) {
       return Container();
     }
     return Align(
@@ -194,72 +171,17 @@ class Branding extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: List.generate(state.product.dimensions.length, (index) {
-          Dimension dimen = state.product.dimensions[index];
-          final imagePath = _generateImagePath(dimen);
           return Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+            child: Column(
               children: [
-                Container(
-                    padding: const EdgeInsets.all(3),
-                    child: CircleAvatar(
-                      radius: 20,
-                      backgroundColor:
-                          _renderBorder(isValid(state.errors.quantity)),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: AppTheme.pink,
-                        backgroundImage: AssetImage(imagePath),
-                      ),
-                    )),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onLongPress: () {
-                    cubit.quantityLongRemove(index, dimen.quantity);
-                  },
-                  child: IconButton(
-                    constraints: const BoxConstraints(maxHeight: 30),
-                    iconSize: 15,
-                    color: AppTheme.black,
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(AppTheme.white),
-                    ),
-                    onPressed: () {
-                      cubit.quantityRemove(index, dimen.quantity);
-                    },
-                    icon: const Icon(Icons.remove),
-                  ),
+                Row(
+                  children: [
+                    _buildQuantitySelector(index, cubit, state),
+                    _buildPickImageSideButton(context, cubit, state, index),
+                  ],
                 ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  '${dimen.quantity}',
-                  style: const TextStyle(fontSize: 17),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                GestureDetector(
-                  behavior: HitTestBehavior.translucent,
-                  onLongPress: () {
-                    cubit.quantityLongAdd(index, dimen.quantity);
-                  },
-                  child: IconButton(
-                    constraints: const BoxConstraints(maxHeight: 30),
-                    iconSize: 15,
-                    color: AppTheme.black,
-                    style: const ButtonStyle(
-                      backgroundColor: MaterialStatePropertyAll(AppTheme.white),
-                    ),
-                    onPressed: () {
-                      cubit.quantityAdd(index, dimen.quantity);
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                )
+                _buildGalleryArea(context, state, cubit, index)
               ],
             ),
           );
@@ -269,28 +191,30 @@ class Branding extends StatelessWidget {
   }
 
   Widget _buildGalleryArea(BuildContext context, CreateProductState state,
-      CreateProductCubit cubit) {
+      CreateProductCubit cubit, int dimenIndex) {
+    Dimension dimension = state.product.dimensions[dimenIndex];
     return LayoutBuilder(builder: (context, constraints) {
       final lineWidth = constraints.maxWidth;
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          state.product.images.isNotEmpty
+          dimension.images.isNotEmpty
               ? Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
                       child: SizedBox(
-                        height: 120,
+                        height: 60,
                         width: double.maxFinite,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: state.product.images.length,
-                          itemBuilder: (context, index) {
+                          itemCount: dimension.images.length,
+                          itemBuilder: (context, imageIndex) {
                             return Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: SizedBox(
-                                child: _buildImage(state.product, index, cubit),
+                                child: _buildImage(
+                                    dimension, dimenIndex, imageIndex, cubit),
                               ),
                             );
                           },
@@ -301,7 +225,7 @@ class Branding extends StatelessWidget {
                 )
               : InkWell(
                   onTap: () {
-                    cubit.pickImage();
+                    cubit.pickImage(dimenIndex);
                   },
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -338,12 +262,103 @@ class Branding extends StatelessWidget {
     });
   }
 
-  String _generateImagePath(Dimension dimen) {
-    if (dimen.image != null) {
-      return dimen.image!;
-    } else {
-      return 'assets/images/logo.png';
-    }
+  Color _generateColor(Dimension dimen) {
+    return hexToColor(dimen.color.hexCode);
+  }
+
+  Widget _buildQuantitySelector(
+      int index, CreateProductCubit cubit, CreateProductState state) {
+    Dimension dimen = state.product.dimensions[index];
+    final color = _generateColor(dimen);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+            padding: const EdgeInsets.all(3),
+            child: CircleAvatar(
+              radius: 20,
+              backgroundColor: _renderBorder(isValid(state.errors.dimensions)),
+              child: CircleAvatar(
+                radius: 15,
+                backgroundColor: color,
+              ),
+            )),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onLongPress: () {
+            cubit.quantityLongRemove(index, dimen.quantity);
+          },
+          child: IconButton(
+            constraints: const BoxConstraints(maxHeight: 30),
+            iconSize: 15,
+            color: AppTheme.black,
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(AppTheme.white),
+            ),
+            onPressed: () {
+              cubit.quantityRemove(index, dimen.quantity);
+            },
+            icon: const Icon(Icons.remove),
+          ),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          '${dimen.quantity}',
+          style: const TextStyle(fontSize: 17),
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onLongPress: () {
+            cubit.quantityLongAdd(index, dimen.quantity);
+          },
+          child: IconButton(
+            constraints: const BoxConstraints(maxHeight: 30),
+            iconSize: 15,
+            color: AppTheme.black,
+            style: const ButtonStyle(
+              backgroundColor: MaterialStatePropertyAll(AppTheme.white),
+            ),
+            onPressed: () {
+              cubit.quantityAdd(index, dimen.quantity);
+            },
+            icon: const Icon(Icons.add),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _buildPickImageSideButton(BuildContext context,
+      CreateProductCubit cubit, CreateProductState state, int index) {
+    return state.product.hasImages()
+        ? InkWell(
+            onTap: () {
+              cubit.pickImage(index);
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                SvgPicture.asset(IconPath.plus),
+                const SizedBox(
+                  width: 2,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.pickImage,
+                  style: const TextStyle(
+                      color: AppTheme.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          )
+        : Container();
   }
 }
 
@@ -351,4 +366,10 @@ Color _renderBorder(bool isValid) {
   return isValid ? AppTheme.white : Colors.red;
 }
 
-bool isValid(state) => state == null;
+bool isValid(error) {
+  if (error == null) {
+    return true;
+  } else {
+    return false;
+  }
+}

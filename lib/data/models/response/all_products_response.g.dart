@@ -26,14 +26,17 @@ NetworkProduct _$NetworkProductFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       costPriceInUsd: (json['costPriceInUsd'] as num).toDouble(),
       weightInGrams: json['weightInGrams'] as int,
+      discountPrice: (json['discountPrice'] as num?)?.toDouble(),
+      costPrice: (json['costPrice'] as num?)?.toDouble(),
       salePrice: (json['salePrice'] as num).toDouble(),
       dimensions: (json['dimensions'] as List<dynamic>?)
           ?.map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
           .toList(),
       idName: json['idName'] as String,
-      images:
-          (json['images'] as List<dynamic>).map((e) => e as String).toList(),
+      category: json['category'] as String,
       forSale: json['forSale'] as bool,
+      attributes: NetworkProductAttributes.fromJson(
+          json['attributes'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NetworkProductToJson(NetworkProduct instance) =>
@@ -43,9 +46,12 @@ Map<String, dynamic> _$NetworkProductToJson(NetworkProduct instance) =>
       'description': instance.description,
       'costPriceInUsd': instance.costPriceInUsd,
       'weightInGrams': instance.weightInGrams,
+      'discountPrice': instance.discountPrice,
+      'costPrice': instance.costPrice,
       'salePrice': instance.salePrice,
       'dimensions': instance.dimensions,
-      'images': instance.images,
       'idName': instance.idName,
+      'category': instance.category,
       'forSale': instance.forSale,
+      'attributes': instance.attributes,
     };

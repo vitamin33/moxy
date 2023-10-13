@@ -36,7 +36,7 @@ class OverviewPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
-                        selectedDateTextWidget(state,context),
+                        selectedDateTextWidget(state, context),
                         totalSelectedDataWidget(context, state),
                         const SizedBox(
                           height: 10,
@@ -49,10 +49,13 @@ class OverviewPage extends StatelessWidget {
                               : Column(
                                   children: [
                                     Chart(
-                                        saleFromTimeFrame:
-                                            state.saleFromTimeFrame,
-                                        costFromTimeFrame:
-                                            state.costFromTimeFrame),
+                                      saleFromTimeFrame:
+                                          state.saleFromTimeFrame,
+                                      costFromTimeFrame:
+                                          state.costFromTimeFrame,
+                                      profitFromTimeFrame:
+                                          state.profitFromTimeFrame,
+                                    ),
                                     const SizedBox(
                                       height: 10,
                                     ),
@@ -74,7 +77,7 @@ class OverviewPage extends StatelessWidget {
     );
   }
 
-  Widget selectedDateTextWidget(DashboardState state,context) {
+  Widget selectedDateTextWidget(DashboardState state, context) {
     return state.selectedDate != null
         ? AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -102,13 +105,13 @@ class OverviewPage extends StatelessWidget {
                 ? Container()
                 : Column(
                     children: [
-                       Align(
+                      Align(
                         alignment: Alignment.centerRight,
                         child: Padding(
-                          padding:const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           child: Text(
                             AppLocalizations.of(context)!.overviewPreviusPeriod,
-                            style:const TextStyle(
+                            style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -126,65 +129,119 @@ class OverviewPage extends StatelessWidget {
   }
 
   Widget totalSelectedDataWidget(context, DashboardState state) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        CurrentStatValue(
-          value: state.totalSale.toString(),
-          iconPath: IconPath.wallet,
-          title: AppLocalizations.of(context)!.overviewSale,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: CurrentStatValue(
+                value: state.totalSale.toString(),
+                iconPath: IconPath.wallet,
+                title: AppLocalizations.of(context)!.overviewSale,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: CurrentStatValue(
+                value: state.totalCost.toString(),
+                iconPath: IconPath.cashPayment,
+                title: AppLocalizations.of(context)!.overviewCost,
+              ),
+            ),
+          ],
         ),
         const SizedBox(
-          width: 10,
+          height: 10,
         ),
-        CurrentStatValue(
-          value: state.totalCost.toString(),
-          iconPath: IconPath.cashPayment,
-          title:  AppLocalizations.of(context)!.overviewCost,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        CurrentStatValue(
-          value: state.totalOrders.toString(),
-          iconPath: IconPath.orders,
-          title:  AppLocalizations.of(context)!.overviewOrders,
-          showCurrency: false,
-        ),
+        Row(
+          children: [
+            Expanded(
+              child: CurrentStatValue(
+                value: state.totalProfit.toString(),
+                iconPath: IconPath.wallet,
+                title: AppLocalizations.of(context)!.overviewProfit,
+                showCurrency: true,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: CurrentStatValue(
+                value: state.totalOrders.toString(),
+                iconPath: IconPath.orders,
+                title: AppLocalizations.of(context)!.overviewOrders,
+                showCurrency: false,
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
 
   previusTotal(context, DashboardState state) {
-    return Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Column(
       children: [
-        PreviusStatValue(
-          value: state.previousTotalSaleValue.toString(),
-          iconPath: IconPath.wallet,
-          title:  AppLocalizations.of(context)!.overviewSale,
-          percentageValue: state.saleValuePercentageChange,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: PreviusStatValue(
+                value: state.previousTotalSaleValue.toString(),
+                iconPath: IconPath.wallet,
+                title: AppLocalizations.of(context)!.overviewSale,
+                percentageValue: state.saleValuePercentageChange,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: PreviusStatValue(
+                value: state.previousTotalCostValue.toString(),
+                iconPath: IconPath.cashPayment,
+                title: AppLocalizations.of(context)!.overviewCost,
+                percentageValue: state.costValuePercentageChange,
+              ),
+            ),
+          ],
         ),
         const SizedBox(
-          width: 10,
+          height: 10,
         ),
-        PreviusStatValue(
-          value: state.previousTotalCostValue.toString(),
-          iconPath: IconPath.cashPayment,
-          title: AppLocalizations.of(context)!.overviewCost,
-          percentageValue: state.costValuePercentageChange,
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        PreviusStatValue(
-          value: state.previousTotalOrdersCount.toString(),
-          iconPath: IconPath.orders,
-          title: AppLocalizations.of(context)!.overviewOrders,
-          percentageValue: state.ordersCountPercentageChange,
-          showCurrency: false,
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Expanded(
+              child: PreviusStatValue(
+                value: state.previousTotalProfit.toString(),
+                iconPath: IconPath.wallet,
+                title: AppLocalizations.of(context)!.overviewProfit,
+                percentageValue: state.profitPercentageChange,
+                showCurrency: true,
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: PreviusStatValue(
+                value: state.previousTotalOrdersCount.toString(),
+                iconPath: IconPath.orders,
+                title: AppLocalizations.of(context)!.overviewOrders,
+                percentageValue: state.ordersCountPercentageChange,
+                showCurrency: false,
+              ),
+            ),
+          ],
         ),
       ],
     );

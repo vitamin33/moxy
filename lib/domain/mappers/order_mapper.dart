@@ -50,13 +50,10 @@ class OrderMapper {
     return products.where((source) {
       return source.id != null;
     }).map((product) {
-      final firstImage =
-          product.images.isEmpty ? null : product.images.first.imagePath;
       return OrderedItem(
           productId: product.id!,
           productName: product.name,
           dimensions: product.dimensions,
-          imageUrl: firstImage,
           productPrice: product.salePrice.toString());
     }).toList();
   }
@@ -81,15 +78,17 @@ class OrderMapper {
           return OrderedItem(
               productId: e.product.id,
               productName: e.product.name,
-              dimensions: dimens
-                  .map((d) => Dimension(
-                        color: d.color,
-                        quantity: d.quantity,
-                      ))
-                  .toList(),
-              imageUrl: e.product.images.isNotEmpty
-                  ? e.product.images.first
-                  : ImageAssets.moxyIcLauncher,
+              // dimensions: dimens
+              //     .map((d) => Dimension(
+              //           color: d.color,
+              //           quantity: d.quantity,
+              //         ))
+              //     .toList(),
+              // imageUrl: e.product.images.isNotEmpty
+              //     ? e.product.images.first
+              //     : ImageAssets.moxyIcLauncher,
+              dimensions:
+                  dimens.map((d) => productMapper.mapToDimension(d)).toList(),
               productPrice: e.product.salePrice.toString());
         }).toList(),
         createdAt: _parseDataTime(o.createdAt),
@@ -188,7 +187,7 @@ class OrderMapper {
           return NetworkOrderedItem(
             id: e.productId,
             dimensions: list.map((d) {
-              return NetworkDimension(color: d.color, quantity: d.quantity);
+              return productMapper.mapToNetworkDimension(d);
             }).toList(),
           );
         },
@@ -236,7 +235,7 @@ class OrderMapper {
           return NetworkOrderedItem(
             id: e.productId,
             dimensions: list.map((d) {
-              return NetworkDimension(color: d.color, quantity: d.quantity);
+              return productMapper.mapToNetworkDimension(d);
             }).toList(),
           );
         },

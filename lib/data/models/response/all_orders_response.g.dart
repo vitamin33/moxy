@@ -33,7 +33,7 @@ Map<String, dynamic> _$ProfileOrdersResponseToJson(
     };
 
 NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
-      id: json['id'] as String?,
+      id: json['_id'] as String?,
       cashAdvanceValue: json['cashAdvanceValue'] as int,
       novaPost: json['novaPost'] == null
           ? null
@@ -56,7 +56,7 @@ NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
 
 Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      '_id': instance.id,
       'cashAdvanceValue': instance.cashAdvanceValue,
       'novaPost': instance.novaPost,
       'city': instance.city,
@@ -158,7 +158,6 @@ NetworkOrderedItemResponse _$NetworkOrderedItemResponseFromJson(
       (json['dimensions'] as List<dynamic>)
           .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
           .toList(),
-      json['imageUrl'] as String?,
       json['productPrice'] as int?,
     );
 
@@ -167,7 +166,6 @@ Map<String, dynamic> _$NetworkOrderedItemResponseToJson(
     <String, dynamic>{
       'product': instance.product,
       'productName': instance.productName,
-      'imageUrl': instance.imageUrl,
       'productPrice': instance.productPrice,
       'dimensions': instance.dimensions,
     };

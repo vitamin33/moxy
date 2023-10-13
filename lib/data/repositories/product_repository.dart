@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:rxdart/subjects.dart';
@@ -12,6 +14,7 @@ import '../../services/get_it.dart';
 class ProductRepository {
   final ProductsService client = locate<ProductsService>();
   final orderMapper = locate<OrderMapper>();
+  final productMapper = locate<ProductMapper>();
   final _selectedProductSubject = BehaviorSubject<List<OrderedItem>>();
   Stream<List<OrderedItem>> get selectedProducts =>
       _selectedProductSubject.stream;
@@ -21,17 +24,23 @@ class ProductRepository {
   void addToSelectedProductStream(List<OrderedItem> items) =>
       _selectedProductSubject.sink.add(items);
 
-  Future<Result<dynamic, Exception>> addProduct(NetworkProduct product) async {
+  Future<Result<dynamic, Exception>> addProduct(NetworkProduct product,
+      List<ImagePath> chosenImages, List<int> numberOfChosenImages) async {
     try {
       final result = await client.createProduct(
         product.name,
         product.description,
         product.costPriceInUsd,
-        product.weightInGrams,
         product.salePrice,
         product.dimensions ?? [],
-        product.images,
         product.idName,
+        product.category,
+        product.attributes,
+        chosenImages
+            .where((e) => e.type == Type.file)
+            .map((e) => e.imagePath)
+            .toList(),
+        numberOfChosenImages,
       );
       if (result != null) {
         return Result.success(result);
@@ -56,34 +65,39 @@ class ProductRepository {
     try {
       final result = await client.getProductById(id);
       return Result.success(result);
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 
-  Future<Result<NetworkProduct, Exception>> editProduct(
-      NetworkProduct product, editProductId) async {
+  Future<Result<bool, Exception>> editProduct(
+      NetworkProduct product,
+      List<Dimension> productDimensions,
+      List<ImagePath> chosenImages,
+      List<int> numberOfChosenImages,
+      String editProductId) async {
     try {
-      final result = (await client.editProduct(
+      bool result = (await client.editProduct(
         product.id,
         product.name,
         product.description,
         product.idName,
-        product.dimensions ?? [],
+        product.category,
+        productDimensions
+            .map((e) => productMapper.mapToNetworkDimension(e))
+            .toList(),
         product.costPriceInUsd,
-        product.weightInGrams,
         product.salePrice,
-        product.images,
+        product.attributes,
+        chosenImages.map((e) => e.imagePath).toList(),
+        numberOfChosenImages,
         editProductId,
       ));
-      if (result != null) {
-        return Result.success(result);
-      } else {
-        return Result.error(Exception('sd'));
-      }
-    } catch (e) {
-      moxyPrint('Repository Error:$e');
-      return Result.error(Exception('$e'));
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

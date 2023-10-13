@@ -74,7 +74,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       bool? isSuccess,
       int? initialPage,
       int? activePage,
-      List<String>? images,
+      List<String>? chosenImages,
       String? editProductId,
       FieldErrors? errors,
       DeliveryType? deliveryType,

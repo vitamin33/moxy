@@ -2,6 +2,7 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/create_product/create_product_effects.dart';
 import 'package:moxy/domain/admin/create_product/create_product_state.dart';
@@ -19,6 +20,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     with ValidationMixin {
   final productMapper = locate<ProductMapper>();
   final productRepository = locate<ProductRepository>();
+  final configRepository = locate<ConfigRepository>();
   final bool isEditMode;
   final String? productId;
 
@@ -26,6 +28,15 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       : super(
           CreateProductState.defaultCreateProductState(),
         ) {
+    final colors = configRepository.attributes?.colors ?? [];
+    final categories = configRepository.attributes?.productCategories ?? [];
+    final firstCategory = categories.isNotEmpty ? categories.first : '';
+    emit(
+      state.copyWith(
+          allConfigColors: colors,
+          productCategories: categories,
+          product: state.product.copyWith(category: firstCategory)),
+    );
     if (isEditMode && productId != null) {
       getProductById(productId);
     }
@@ -40,28 +51,29 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController idNameController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController heightController = TextEditingController();
+  final TextEditingController widthController = TextEditingController();
+  final TextEditingController lengthController = TextEditingController();
+  final TextEditingController depthController = TextEditingController();
+  final TextEditingController seasonController = TextEditingController();
+  final TextEditingController furnitureController = TextEditingController();
+  final TextEditingController strapController = TextEditingController();
+  final TextEditingController producerController = TextEditingController();
+  final TextEditingController styleController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
 
   void addProduct() async {
     try {
       emit(state.copyWith(isLoading: true));
-      final product = productMapper.mapToNetworkProduct(
-          state.product, state.product.dimensions);
-      final pushProduct = await productRepository.addProduct(product);
+      final images = _getAllChosenFileDimenImages();
+      final product = productMapper.mapToNetworkProduct(state.product);
+      List<int> imageIndexes =
+          formNumberOfChoseImagesIndexes(state.product.dimensions);
+      final pushProduct =
+          await productRepository.addProduct(product, images, imageIndexes);
       pushProduct.when((success) {
-        emit(state.copyWith(isLoading: false));
-        nameController.clear();
-        descriptionController.clear();
-        costPriceInUsdController.clear();
-        weightController.clear();
-        salePriceController.clear();
-        colorController.clear();
-        idNameController.clear();
-        for (var element in quantityControllers) {
-          element.clear();
-        }
-        emit(state.copyWith(isLoading: false));
-        emit(state.copyWith(isSuccess: true));
+        _clearFieldsControllers();
+        emit(state.copyWith(isLoading: false, isSuccess: true));
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
@@ -71,17 +83,24 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
-  Future<void> pickImage() async {
+  Future<void> pickImage(int dimenIndex) async {
     try {
+      Dimension dimension = state.product.dimensions[dimenIndex];
       final pickedFiles = await ImagePicker().pickMultiImage(imageQuality: 6);
-      final images = <ImagePath>[...state.product.images];
+      final images = <ImagePath>[...dimension.images];
       if (pickedFiles.isNotEmpty) {
         for (var element in pickedFiles) {
           final file = File(element.path);
           final imagePath = file.path;
           images.add(ImagePath(type: Type.file, imagePath: imagePath));
         }
-        emit(state.copyWith(product: state.product.copyWith(images: images)));
+        dimension.images = images;
+        emit(
+          state.copyWith(
+            product:
+                state.product.copyWith(dimensions: state.product.dimensions),
+          ),
+        );
       }
     } catch (e) {
       moxyPrint('$e');
@@ -102,6 +121,10 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void onChangePage(int page) {
     emit(state.copyWith(activePage: page));
+  }
+
+  void categorySelected(String category) {
+    emit(state.copyWith(product: state.product.copyWith(category: category)));
   }
 
   void nameChanged(value) {
@@ -148,9 +171,105 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     if (value.isNotEmpty) {
       final int weightInGrams = int.parse(value);
       emit(state.copyWith(
-          product: state.product.copyWith(weightInGrams: weightInGrams)));
-
+          product: state.product.copyWith(
+              attributes: state.product.attributes
+                  .copyWith(weightInGrams: weightInGrams))));
     }
+  }
+
+  void heightInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int heightInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(heightInCm: heightInCm))));
+    }
+  }
+
+  void widthInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int widthInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(widthInCm: widthInCm))));
+    }
+  }
+
+  void lengthInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int lengthInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(lengthInCm: lengthInCm))));
+    }
+  }
+
+  void depthInCmChanged(String value) {
+    if (value.isNotEmpty) {
+      final int depthInCm = int.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(
+              attributes:
+                  state.product.attributes.copyWith(depthInCm: depthInCm))));
+    }
+  }
+
+  void seasonChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String season = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(season: season),
+    )));
+  }
+
+  void furnitureChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String furniture = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(furniture: furniture),
+    )));
+  }
+
+  void strapChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String strap = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(strap: strap),
+    )));
+  }
+
+  void producerChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String producer = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(producer: producer),
+    )));
+  }
+
+  void styleChanged(value) {
+    if (value.isEmpty) {
+      return;
+    }
+    final String style = value;
+    emit(state.copyWith(
+        product: state.product.copyWith(
+      attributes: state.product.attributes.copyWith(style: style),
+    )));
   }
 
   void quantityLongAdd(int index, int? quantity) {
@@ -227,11 +346,13 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }
   }
 
-  void removeImage(index) {
-    final updatedImages = List<ImagePath>.from(state.product.images);
-    updatedImages.removeAt(index);
-    final updatedProduct = state.product.copyWith(images: updatedImages);
-    emit(state.copyWith(product: updatedProduct));
+  void removeImage(int dimenIndex, int imageIndex) {
+    Dimension dimension = state.product.dimensions[dimenIndex];
+    List<ImagePath> updatedImages = List<ImagePath>.from(dimension.images);
+    updatedImages.removeAt(imageIndex);
+    dimension.images = updatedImages;
+    emit(state.copyWith(
+        product: state.product.copyWith(dimensions: state.product.dimensions)));
   }
 
   void clearState() {
@@ -249,9 +370,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(isLoading: true));
     productById.when((success) {
       final product = productMapper.mapToProduct(success);
-      final updatedAllDimens = checkSelectedColors(product.dimensions);
+      final updatedAllDimens =
+          checkSelectedColors(product.dimensions.map((e) => e.color).toList());
       emit(state.copyWith(
-          product: product, allDimensions: updatedAllDimens, isLoading: false));
+          product: product,
+          allConfigColors: updatedAllDimens,
+          isLoading: false));
     }, (error) {
       moxyPrint(error);
     });
@@ -262,9 +386,18 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     nameController.text = product.name;
     descriptionController.text = product.description;
     costPriceInUsdController.text = product.costPriceInUsd.toString();
-    weightController.text = product.weightInGrams.toString();
+    weightController.text = product.attributes.weightInGrams.toString();
     salePriceController.text = product.salePrice.toString();
     idNameController.text = product.idName.toString();
+    heightController.text = product.attributes.heightInCm.toString();
+    widthController.text = product.attributes.widthInCm.toString();
+    lengthController.text = product.attributes.lengthInCm.toString();
+    depthController.text = (product.attributes.depthInCm ?? '').toString();
+    seasonController.text = product.attributes.season ?? '';
+    furnitureController.text = product.attributes.furniture ?? '';
+    strapController.text = product.attributes.strap ?? '';
+    producerController.text = product.attributes.producer ?? '';
+    styleController.text = product.attributes.style ?? '';
   }
 
   void changeEdit() {
@@ -272,42 +405,37 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void toggleColorField(int index) {
-    state.allDimensions[index].isSelected =
-        !state.allDimensions[index].isSelected;
-    final updatedDimens = state.allDimensions;
-
-    final selectedDimensions = state.allDimensions
-        .where(
-          (element) => element.isSelected,
-        )
-        .toList();
+    state.allConfigColors[index].isSelected =
+        !state.allConfigColors[index].isSelected;
+    final updatedColors = state.allConfigColors;
+    final updatedDimens = createSelectedDimensions(
+      state.allConfigColors,
+    );
     emit(state.copyWith(
-      allDimensions: updatedDimens,
-      product: state.product.copyWith(dimensions: selectedDimensions),
+      allConfigColors: updatedColors,
+      product: state.product.copyWith(dimensions: updatedDimens),
     ));
   }
 
   void editProduct(editProductId) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final product = productMapper.mapToNetworkProduct(
-          state.product, state.product.dimensions);
-      final pushProduct =
-          await productRepository.editProduct(product, editProductId);
-      pushProduct.when((success) {
-        nameController.clear();
-        descriptionController.clear();
-        costPriceInUsdController.clear();
-        salePriceController.clear();
-        colorController.clear();
-        idNameController.clear();
-        for (var element in quantityControllers) {
-          element.clear();
-        }
+      List<ImagePath> allDimenImages = _getAllChosenFileDimenImages();
+      final product = productMapper.mapToNetworkProduct(state.product);
+      List<int> imageIndexes =
+          formNumberOfChoseImagesIndexes(state.product.dimensions);
+      List<Dimension> filteredDimens =
+          filterFileImagesDimens(state.product.dimensions);
+      final updated = await productRepository.editProduct(
+          product, filteredDimens, allDimenImages, imageIndexes, editProductId);
+      updated.when((success) {
+        _clearFieldsControllers();
         emit(state.copyWith(isLoading: false));
+        emitEffect(NavigateToProducts());
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
+        emitEffect(ProductUpdateFailed(error.toString()));
       });
     } catch (e) {
       moxyPrint(e);
@@ -333,12 +461,24 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       errors.costPriceInUsd = FieldError.invalid;
       noErrors = false;
     }
-    if (!isValidWeight(state.product.weightInGrams)) {
-      errors.costPriceInUsd = FieldError.invalid;
+    if (!isValidWeight(state.product.attributes.weightInGrams)) {
+      errors.weightInGrams = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSizeValues(state.product.attributes.heightInCm)) {
+      errors.heightInCm = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSizeValues(state.product.attributes.widthInCm)) {
+      errors.widthInCm = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidSizeValues(state.product.attributes.lengthInCm)) {
+      errors.lengthInCm = FieldError.invalid;
       noErrors = false;
     }
     if (!isValidQuantity(state.product.dimensions)) {
-      errors.quantity = FieldError.invalid;
+      errors.dimensions = FieldError.invalid;
       noErrors = false;
     }
     if (!isValidPrice(state.product.salePrice)) {
@@ -352,16 +492,85 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     return noErrors;
   }
 
-  List<Dimension> checkSelectedColors(List<Dimension> dimensions) {
-    for (var element in state.allDimensions) {
-      element.isSelected = dimensions.contains(element);
-      element.quantity = dimensions
-          .firstWhere(
-            (e) => e.color == element.color,
-            orElse: () => element,
-          )
-          .quantity;
+  List<ProductColor> checkSelectedColors(List<ProductColor> colors) {
+    for (var element in state.allConfigColors) {
+      element.isSelected = colors.contains(element);
     }
-    return state.allDimensions;
+    return state.allConfigColors;
+  }
+
+  List<Dimension> createSelectedDimensions(
+    List<ProductColor> colors,
+  ) {
+    final dimensions = colors
+        .where((color) => color.isSelected)
+        .map(
+          (color) => Dimension(
+            color: color,
+            quantity: 1,
+            material: null,
+            size: null,
+            images: [],
+          ),
+        )
+        .toList();
+
+    return dimensions;
+  }
+
+  List<ImagePath> _getAllChosenFileDimenImages() {
+    List<ImagePath> result = [];
+    state.product.dimensions
+        .expand((dimension) => dimension.images)
+        .forEach((element) {
+      if (element.type == Type.file) {
+        result.add(element);
+      }
+    });
+
+    return result;
+  }
+
+  void _clearFieldsControllers() {
+    nameController.clear();
+    descriptionController.clear();
+    costPriceInUsdController.clear();
+    weightController.clear();
+    salePriceController.clear();
+    colorController.clear();
+    idNameController.clear();
+    heightController.clear();
+    widthController.clear();
+    lengthController.clear();
+    depthController.clear();
+    seasonController.clear();
+    furnitureController.clear();
+    strapController.clear();
+    producerController.clear();
+    styleController.clear();
+    for (var element in quantityControllers) {
+      element.clear();
+    }
+  }
+
+  List<int> formNumberOfChoseImagesIndexes(List<Dimension> dimensions) {
+    final result = dimensions.map((e) {
+      if (e.images.isNotEmpty) {
+        return e.images.where((element) => element.type == Type.file).length;
+      } else {
+        return 0;
+      }
+    }).toList();
+    return result;
+  }
+
+  List<Dimension> filterFileImagesDimens(List<Dimension> dimensions) {
+    final result = dimensions.map((dimension) {
+      final filteredImages =
+          dimension.images.where((image) => image.type != Type.file).toList();
+      return dimension.copyWith(images: filteredImages);
+    }).toList();
+
+    return result;
   }
 }

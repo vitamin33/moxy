@@ -14,9 +14,14 @@ class LoginCubit extends Cubit<LoginState> {
   late TextEditingController phoneController;
   late TextEditingController passwordController;
   String walletConnectURI = '';
+  final PageController pageController = PageController(initialPage: 0);
 
   LoginCubit()
-      : super(LoginState(mobileNumber: '', password: '', state: AuthState())) {
+      : super(LoginState(
+            mobileNumber: '',
+            password: '',
+            activePage: 0,
+            state:const AuthState())) {
     //_checkLoggedInState();
     emit(state.copyWith(mobileNumber: '0938795984', password: '123123'));
   }
@@ -33,6 +38,10 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(
       password: password,
     ));
+  }
+
+  void onChangePage(int page) {
+    emit(state.copyWith(activePage: page));
   }
 
   void logInWithCredentials() async {
@@ -75,5 +84,21 @@ class LoginCubit extends Cubit<LoginState> {
     if (isLoggedIn && userRole != null) {
       emit(state.copyWith(state: LoginWithCredsSuccess(role: userRole)));
     }
+  }
+
+  void nextPage() {
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.linear);
+  }
+
+  void perviousPage() {
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.linear);
+  }
+
+  void moveToPage(int page) {
+    emit(state.copyWith(activePage: page));
+    pageController.animateToPage(page,
+        duration: const Duration(microseconds: 300), curve: Curves.linear);
   }
 }

@@ -73,7 +73,8 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed fetching orders'));
       });
-    } catch (e) {
+    } catch (e, stack) {
+      moxyPrint(stack);
       rethrow;
     }
   }

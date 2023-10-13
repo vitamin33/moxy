@@ -1,3 +1,5 @@
+import 'package:moxy/domain/models/city.dart';
+
 import '../copyable.dart';
 
 class User implements Copyable<User> {
@@ -5,7 +7,7 @@ class User implements Copyable<User> {
   String firstName;
   String secondName;
   String mobileNumber;
-  String? city;
+  City? city;
   String? instagram;
 
   User({
@@ -23,7 +25,7 @@ class User implements Copyable<User> {
       firstName: '',
       secondName: '',
       mobileNumber: '',
-      city: '',
+      city: City.defaultCity(),
       instagram: '',
     );
   }
@@ -34,7 +36,7 @@ class User implements Copyable<User> {
     String? firstName,
     String? secondName,
     String? mobileNumber,
-    String? city,
+    City? city,
     String? instagram,
   }) {
     return User(

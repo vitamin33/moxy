@@ -18,7 +18,7 @@ class UserMapper {
       firstName: user.firstName,
       secondName: user.secondName,
       mobileNumber: user.mobileNumber,
-      city: user.city,
+      city: cityMapper.mapToNetworkCity(user.city),
       instagram: user.instagram,
     );
   }
@@ -42,7 +42,7 @@ class UserMapper {
       firstName: network.firstName ?? '',
       secondName: network.secondName ?? '',
       mobileNumber: network.mobileNumber,
-      city: network.city ?? '',
+      city: cityMapper.mapToCity(network.city),
       instagram: network.instagram ?? '',
     );
   }

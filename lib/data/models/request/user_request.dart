@@ -9,7 +9,7 @@ class NetworkUser {
   final String? firstName;
   final String? secondName;
   final String mobileNumber;
-  final String? city;
+  final NetworkCity? city;
   final String? instagram;
 
   NetworkUser({

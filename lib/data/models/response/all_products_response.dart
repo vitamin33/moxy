@@ -23,11 +23,14 @@ class NetworkProduct {
   String? description;
   double costPriceInUsd;
   int weightInGrams;
+  double? discountPrice;
+  double? costPrice;
   double salePrice;
   List<NetworkDimension>? dimensions;
-  List<String> images;
   String idName;
+  String category;
   bool forSale;
+  NetworkProductAttributes attributes;
 
   NetworkProduct({
     this.id,
@@ -35,11 +38,14 @@ class NetworkProduct {
     required this.description,
     required this.costPriceInUsd,
     required this.weightInGrams,
+    this.discountPrice,
+    required this.costPrice,
     required this.salePrice,
     required this.dimensions,
     required this.idName,
-    required this.images,
+    required this.category,
     required this.forSale,
+    required this.attributes,
   });
 
   factory NetworkProduct.fromJson(Map<String, dynamic> json) =>

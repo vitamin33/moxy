@@ -35,19 +35,22 @@ class ProfileMapper {
   NetworkProfile mapToNetworkProfile(Profile profile) {
     return NetworkProfile(
         favoriteProducts: profile.favoriteProducts
-            .map((e) => NetworkProduct(
-                name: e.name,
-                description: e.description,
-                costPriceInUsd: e.costPriceInUsd,
-                weightInGrams: e.weightInGrams,
-                salePrice: e.salePrice,
-                dimensions: e.dimensions
-                    .map((e) =>
-                        NetworkDimension(color: e.color, quantity: e.quantity))
-                    .toList(),
-                idName: e.idName,
-                images: e.images.map((e) => e.toString()).toList(),
-                forSale: e.forSale))
+            // .map((e) => NetworkProduct(
+            //     name: e.name,
+            //     description: e.description,
+            //     costPriceInUsd: e.costPriceInUsd,
+            //     weightInGrams: e.weightInGrams,
+            //     salePrice: e.salePrice,
+            //     dimensions: e.dimensions
+            //         .map((e) =>
+            //             NetworkDimension(color: e.color, quantity: e.quantity))
+            //         .toList(),
+            //     idName: e.idName,
+            //     images: e.images.map((e) => e.toString()).toList(),
+            //     forSale: e.forSale))
+// =======
+            .map((e) => productMapper.mapToNetworkProduct(e))
+// >>>>>>> main
             .toList(),
         firstName: profile.firstName,
         secondName: profile.secondName,
