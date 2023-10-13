@@ -26,15 +26,16 @@ class SearchCityDropdown extends StatelessWidget {
       children: [
         BlocBuilder<SearchCitiesCubit, SearchCitiesState>(
           builder: (context, state) {
-            if (state.isLoading) {
-              return const CircularProgressIndicator();
-            }
             final citySearchCubit = context.read<SearchCitiesCubit>();
             final warehousSearchCubit = context.read<SearchWarehouseCubit>();
             return DropdownSearch<City>(
                 items: state.cityList,
                 asyncItems: citySearchCubit.searchCities,
                 popupProps: PopupPropsMultiSelection.menu(
+                  loadingBuilder: (context, searchEntry) {
+                    return const LinearProgressIndicator();
+                  },
+                  menuProps: const MenuProps(backgroundColor: AppTheme.white),
                   showSelectedItems: false,
                   searchFieldProps:
                       _createSearchFieldProps(citySearchCubit.controller),

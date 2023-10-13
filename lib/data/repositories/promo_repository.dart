@@ -1,3 +1,4 @@
+import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../services/get_it.dart';
@@ -10,10 +11,11 @@ class PromoRepository {
 
   Future<Result<List<NetworkPromos>, Exception>> getPromo() async {
     try {
-      final result =await client.getPromos();
+      final result = await client.getPromos();
       return Result.success(result);
-    } catch (e) {
-      return Result.error(Exception('$e'));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 }

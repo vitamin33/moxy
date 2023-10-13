@@ -325,8 +325,9 @@ class DioClient {
         promosList.add(NetworkPromos.fromJson(value));
       }
       return promosList;
-    } catch (e) {
-      throw Exception('Failed to load promos: $e');
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

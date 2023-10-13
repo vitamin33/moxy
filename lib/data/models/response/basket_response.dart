@@ -6,11 +6,14 @@ part 'basket_response.g.dart';
 
 @JsonSerializable()
 class NetworkBasket {
+  @JsonKey(name: '_id')
+  String id;
   String client;
   List<NetworkBasketItem> basketItems;
   int freeShippingThreshold;
 
   NetworkBasket({
+    required this.id,
     required this.client,
     required this.basketItems,
     required this.freeShippingThreshold,

@@ -28,3 +28,6 @@ const String allSellingProductsUrl = '/products/selling-products';
 const String getProductDetailsUrl = '/products/details';
 const String getAttributesUrl = '/attributes';
 
+// MONO
+const String monoCreateInvoiceUrl =
+    "https://api.monobank.ua/api/merchant/invoice/create";
