@@ -5,53 +5,57 @@ import '../../constant/icon_path.dart';
 import '../theme/app_theme.dart';
 import 'custom_button.dart';
 
-Widget succsess(
-    {required Function onTap,
-    required String title,
-    required String titleButton}) {
-  return Container(
-    alignment: Alignment.center,
-    constraints: const BoxConstraints.expand(),
-    color: AppTheme.pink,
-    child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                color: AppTheme.white),
-            child: Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  AnimatedLogo(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  CustomButton(
-                    buttonWidth: 250,
-                    title: titleButton,
-                    onTap: () {
-                      onTap();
-                    },
-                  )
-                ],
+class SuccessCard extends StatelessWidget {
+  final Function onTap;
+  final String title;
+  final String titleButton;
+  SuccessCard(
+      {required this.onTap, required this.title, required this.titleButton});
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.center,
+      constraints: const BoxConstraints.expand(),
+      color: AppTheme.white,
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
+                  color: AppTheme.pink),
+              child: Padding(
+                padding: const EdgeInsets.all(40.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    AnimatedLogo(),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      title,
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    CustomButton(
+                      buttonWidth: 250,
+                      title: titleButton,
+                      onTap: () {
+                        onTap();
+                      },
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ]),
-  );
+          ]),
+    );
+  }
 }
 
 class AnimatedLogo extends StatefulWidget {

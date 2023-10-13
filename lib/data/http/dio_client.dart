@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/find_orders_request.dart';
+import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
@@ -299,7 +302,6 @@ class DioClient {
 // FOOTER
   Future<Result<Headers, Exception>> sendFooterEmail(String email) async {
     final Headers? result;
-    // final data = order.toJson();
     try {
       Response response = await dio.post(
         sendFooterEmailUrl,
@@ -352,7 +354,6 @@ class DioClient {
   }
 
 // EDIT USER
-
   Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
     final Headers? result;
 
@@ -363,9 +364,7 @@ class DioClient {
       );
       result = response.headers;
     } catch (e) {
-      moxyPrint('Error during creating user: $e');
-
-      return Result.error(_handleHttpException(e));
+      rethrow;
     }
     return Result.success(result);
   }
@@ -373,7 +372,6 @@ class DioClient {
   Future<Result<Headers, Exception>> editUserPassword(
       NetworkPasswordUser password) async {
     final Headers result;
-
     try {
       Response response = await dio.post(
         editUserPasswordUrl,
@@ -381,10 +379,79 @@ class DioClient {
       );
       result = response.headers;
     } catch (e) {
-      moxyPrint('Error during creating user: $e');
-
-      return Result.error(_handleHttpException(e));
+      rethrow;
     }
     return Result.success(result);
+  }
+
+  //REGISTER
+  Future<bool> register(NetworkRegister networkRegister) async {
+    try {
+      Response response = await dio.post(
+        registerUserUrl,
+        data: networkRegister.toJson(),
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == HttpStatus.conflict) {
+        return true;
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  Future<bool> sendConfirmationCode(
+      NetworkConfirmationCode networkConfirmationCode) async {
+    try {
+      Response response = await dio.post(
+        verifyUserUrl,
+        data: networkConfirmationCode.toJson(),
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+
+  Future<bool> resendConfirmationCode(String email) async {
+    try {
+      Response response = await dio.post(
+        resendVerifyUserUrl,
+        data: {'email': email},
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> changePasswordWithMobile(String email) async {
+    try {
+      Response response = await dio.post(
+        editUserPassworWithMobiledUrl,
+        data: {'email': email},
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -131,7 +131,7 @@ class CreateProductPage extends StatelessWidget {
 
   Widget _buildSuccessWidget(BuildContext context, CreateProductCubit cubit,
       CreateProductState state) {
-    return succsess(
+    return SuccessCard(
         onTap: () {
           if (state.isEdit) {
             cubit.clearState();

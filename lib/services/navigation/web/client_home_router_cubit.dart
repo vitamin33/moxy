@@ -26,6 +26,10 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     _pushRoute(ProfileRoute(text), addToRouteStack: addToRouteStack);
   }
 
+  void goToProductDetails([String? text, bool addToRouteStack = true]) {
+    _pushRoute(ProductDetailsRoute(text), addToRouteStack: addToRouteStack);
+  }
+
   void goBack() {
     _popRoute();
   }
@@ -61,6 +65,9 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
       case ProfileRoute:
         goToProfile();
         break;
+      case ProductDetailsRoute:
+        goToProductDetails();
+        break;
     }
   }
 
@@ -80,8 +87,9 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     SideSheet.right(body: const BasketPage(), context: context);
   }
 
-  void searchPressed() {
+  void searchPressed(context) {
     // TODO impl search state
+    goToProductDetails();
   }
 
   void tabControlTouched({

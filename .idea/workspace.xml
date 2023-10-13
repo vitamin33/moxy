@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7645cbcf-13d3-49ba-9e68-9e309d3c3db4" name="Changes" comment="" />
+    <list default="true" id="7645cbcf-13d3-49ba-9e68-9e309d3c3db4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/lib/services/navigation/web/client_home_router_cubit.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/services/navigation/web/client_home_router_cubit.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/screens/client/web/product_details.dart/product_details.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/screens/client/web/product_details.dart/product_details.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/screens/client/web/root_web.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/screens/client/web/root_web.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/ui/screens/components/product_details_container.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/ui/screens/components/product_details_container.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,6 +57,9 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
     </layout>
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.configurationType" implementationName="FlutterRunConfigurationType" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

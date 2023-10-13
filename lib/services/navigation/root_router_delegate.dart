@@ -55,7 +55,7 @@ class RootRouterDelegate extends RouterDelegate<RootRoute>
       return [
         _materialPage(
           valueKey: "login",
-          child: const AuthenticationView(),
+          child:  AuthenticationView(),
         ),
       ];
     }
