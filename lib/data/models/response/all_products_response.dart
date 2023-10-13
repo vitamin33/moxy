@@ -22,6 +22,7 @@ class NetworkProduct {
   String name;
   String? description;
   double costPriceInUsd;
+  int weightInGrams;
   double? discountPrice;
   double? costPrice;
   double salePrice;
@@ -36,6 +37,7 @@ class NetworkProduct {
     required this.name,
     required this.description,
     required this.costPriceInUsd,
+    required this.weightInGrams,
     this.discountPrice,
     required this.costPrice,
     required this.salePrice,

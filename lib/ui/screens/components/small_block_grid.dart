@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 
 import '../../../constant/icon_path.dart';
 import '../../theme/app_theme.dart';
@@ -29,9 +31,15 @@ class SmallBlockGrid extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
+// <<<<<<< HEAD
+//                       image: NetworkImage(product.images.isNotEmpty
+//                           ? product.images.first.imagePath
+//                           : ImageAssets.logo))),
+// =======
                       image: NetworkImage(
                         product.dimensions.first.images.first.imagePath,
                       ))),
+// >>>>>>> main
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Align(
@@ -67,6 +75,16 @@ class SmallBlockGrid extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  Row(children: [
+                    InkWell(
+                        onTap: () {
+                          context
+                              .read<ClientHomeRouterCubit>()
+                              .navigateTo(const ProductDetailsRoute());
+                        },
+                        child: Container(
+                            width: 10, height: 10, color: AppTheme.green))
+                  ]),
                   Row(
                     children: [
                       InkWell(

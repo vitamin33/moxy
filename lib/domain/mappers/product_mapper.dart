@@ -15,6 +15,28 @@ class ProductMapper {
         for (var i = 0; i < dimens.length; i++) {
           dimenMap.putIfAbsent(i, () => mapToDimension(dimens[i]));
         }
+        // return Product(
+        //   id: p.id,
+        //   name: p.name,
+        //   description: p.description ?? '',
+        //   costPriceInUsd: p.costPriceInUsd,
+        //   weightInGrams: p.weightInGrams,
+        //   salePrice: p.salePrice,
+        //   dimensions: dimens
+        //       .map((e) => Dimension(
+        //             color: e.color,
+        //             quantity: e.quantity,
+        //             image: _mapColorDimensionImage(e.color),
+        //           ))
+        //       .toList(),
+        //   idName: p.idName,
+        //   images: p.images
+        //       .map(
+        //         (e) => ImagePath(type: Type.network, imagePath: e),
+        //       )
+        //       .toList(),
+        //   forSale: p.forSale,
+        // );
         return mapToProduct(p);
       },
     ).toList();
@@ -26,6 +48,7 @@ class ProductMapper {
       name: p.name,
       description: p.description,
       costPriceInUsd: p.costPriceInUsd,
+      weightInGrams: p.weightInGrams,
       costPrice: p.costPrice,
       salePrice: p.salePrice,
       dimensions: p.dimensions.map((d) => mapToNetworkDimension(d)).toList(),
@@ -39,6 +62,12 @@ class ProductMapper {
   Product mapToProduct(NetworkProduct network) {
     List<NetworkDimension> dimens = network.dimensions ?? [];
     return Product(
+      // id: success.id,
+      // name: success.name,
+      // description: success.description ?? '',
+      // costPriceInUsd: success.costPriceInUsd,
+      weightInGrams: network.weightInGrams,
+      // salePrice: success.salePrice,
       id: network.id,
       name: network.name,
       description: network.description ?? '',

@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
@@ -77,6 +78,15 @@ class OrderMapper {
           return OrderedItem(
               productId: e.product.id,
               productName: e.product.name,
+              // dimensions: dimens
+              //     .map((d) => Dimension(
+              //           color: d.color,
+              //           quantity: d.quantity,
+              //         ))
+              //     .toList(),
+              // imageUrl: e.product.images.isNotEmpty
+              //     ? e.product.images.first
+              //     : ImageAssets.moxyIcLauncher,
               dimensions:
                   dimens.map((d) => productMapper.mapToDimension(d)).toList(),
               productPrice: e.product.salePrice.toString());

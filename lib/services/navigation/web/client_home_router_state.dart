@@ -9,6 +9,7 @@ abstract class ClientHomeRoute extends Equatable {
   static const String favoritesPath = 'favorites';
   static const String checkoutPath = 'checkout';
   static const String profilePath = 'profile';
+  static const String productDetailsPath = 'profile';
 
   static const int secondTabIndex = 1;
   static const int thirdTabIndex = 2;
@@ -31,6 +32,8 @@ abstract class ClientHomeRoute extends Equatable {
           return const ProfileRoute();
         case checkoutPath:
           return const CheckoutRoute();
+        case productDetailsPath:
+          return const ProductDetailsRoute();
         case homeBagsPath:
           return const HomeRoute(secondTabIndex);
         case accessoriesPath:
@@ -85,4 +88,13 @@ class ProfileRoute extends ClientHomeRoute {
   List<Object?> get props => [extraPageContent];
   @override
   String urlPath() => ClientHomeRoute.profilePath;
+}
+
+class ProductDetailsRoute extends ClientHomeRoute {
+  final String? extraPageContent;
+  const ProductDetailsRoute([this.extraPageContent]);
+  @override
+  List<Object?> get props => [extraPageContent];
+  @override
+  String urlPath() => ClientHomeRoute.productDetailsPath;
 }

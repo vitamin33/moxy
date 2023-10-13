@@ -1,3 +1,5 @@
+import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/data/models/response/profile_response.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
@@ -33,7 +35,22 @@ class ProfileMapper {
   NetworkProfile mapToNetworkProfile(Profile profile) {
     return NetworkProfile(
         favoriteProducts: profile.favoriteProducts
+            // .map((e) => NetworkProduct(
+            //     name: e.name,
+            //     description: e.description,
+            //     costPriceInUsd: e.costPriceInUsd,
+            //     weightInGrams: e.weightInGrams,
+            //     salePrice: e.salePrice,
+            //     dimensions: e.dimensions
+            //         .map((e) =>
+            //             NetworkDimension(color: e.color, quantity: e.quantity))
+            //         .toList(),
+            //     idName: e.idName,
+            //     images: e.images.map((e) => e.toString()).toList(),
+            //     forSale: e.forSale))
+// =======
             .map((e) => productMapper.mapToNetworkProduct(e))
+// >>>>>>> main
             .toList(),
         firstName: profile.firstName,
         secondName: profile.secondName,

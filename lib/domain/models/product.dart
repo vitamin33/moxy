@@ -5,6 +5,7 @@ class Product implements Copyable<Product> {
   String name;
   String description;
   double costPriceInUsd;
+  int weightInGrams;
   double discountPrice;
   double costPrice;
   double salePrice;
@@ -19,6 +20,7 @@ class Product implements Copyable<Product> {
     required this.name,
     required this.description,
     required this.costPriceInUsd,
+    required this.weightInGrams,
     required this.discountPrice,
     required this.costPrice,
     required this.salePrice,
@@ -34,6 +36,7 @@ class Product implements Copyable<Product> {
       name: '',
       description: '',
       costPriceInUsd: 0,
+      weightInGrams: 0,
       discountPrice: 0,
       costPrice: 0,
       salePrice: 0,
@@ -52,6 +55,7 @@ class Product implements Copyable<Product> {
     String? category,
     String? description,
     double? costPriceInUsd,
+    int? weightInGrams,
     double? discountPrice,
     double? costPrice,
     double? salePrice,
@@ -63,6 +67,7 @@ class Product implements Copyable<Product> {
       name: name ?? this.name,
       description: description ?? this.description,
       costPriceInUsd: costPriceInUsd ?? this.costPriceInUsd,
+      weightInGrams: weightInGrams ?? this.weightInGrams,
       discountPrice: discountPrice ?? this.discountPrice,
       costPrice: costPrice ?? this.costPrice,
       salePrice: salePrice ?? this.salePrice,
