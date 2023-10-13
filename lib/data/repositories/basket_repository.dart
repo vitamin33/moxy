@@ -1,6 +1,9 @@
 import 'package:moxy/data/http/basket_service.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
+import 'package:moxy/domain/mappers/basket_mapper.dart';
+import 'package:moxy/domain/models/basket.dart';
+import 'package:moxy/domain/models/created_invoice.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -9,6 +12,7 @@ import '../../services/get_it.dart';
 class BasketRepository {
   BasketRepository();
   final BasketService client = locate<BasketService>();
+  final BasketMapper mapper = locate<BasketMapper>();
 
   Future<Result<NetworkBasket, Exception>> getBasket() async {
     try {
@@ -51,12 +55,13 @@ class BasketRepository {
     }
   }
 
-  Future<Result<NetworkBasket, Exception>> startPayment() async {
+  Future<Result<CreatedInvoice, Exception>> startPayment(Basket basket) async {
     try {
-      final result = await client.startPayment();
-      return result;
+      final createInvoice = mapper.mapToNetworkCreateInvoice(basket);
+      final result = await client.startPayment(createInvoice);
+      return Result.success(mapper.mapToCreatedInvoice(result));
     } catch (e) {
-      return Result.error(Exception('$e'));
+      rethrow;
     }
   }
 }

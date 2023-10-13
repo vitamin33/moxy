@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
+import 'package:moxy/data/models/request/mono_create_invoice_request.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
+import 'package:moxy/data/models/response/mono_create_invoice_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
@@ -69,15 +71,20 @@ class BasketService {
     }
   }
 
-  Future<Result<NetworkBasket, Exception>> startPayment() async {
+  Future<NetworkCreateInvoiceResponse> startPayment(
+      CreateInvoiceRequest createInvoice) async {
     try {
       _dio.options.headers['Content-Type'] = Headers.jsonContentType;
-      final response = await _dio.post('$baseUrl$changeBasketUrl');
+      final response = await _dio.post(
+        monoCreateInvoiceUrl,
+        data: createInvoice.toJson(),
+      );
       final data = response.data;
-      final result = NetworkBasket.fromJson(data);
-      return Result.success(result);
-    } on Exception catch (e) {
-      return Result.error(e);
+      final result = NetworkCreateInvoiceResponse.fromJson(data);
+      return result;
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 }

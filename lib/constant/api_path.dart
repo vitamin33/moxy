@@ -22,3 +22,7 @@ const String getProfileUrl = '/profile';
 const String getProfileOrdersUrl = '/profile/orders';
 const String allSellingProductsUrl = '/products/selling-products';
 const String getAttributesUrl = '/attributes';
+
+// MONO ACQUIRING
+const String monoCreateInvoiceUrl =
+    "https://api.monobank.ua/api/merchant/invoice/create";

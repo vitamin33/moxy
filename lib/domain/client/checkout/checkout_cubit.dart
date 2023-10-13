@@ -170,7 +170,7 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
     if (!validateFields()) {
       return;
     }
-    final result = await basketRepository.startPayment();
+    final result = await basketRepository.startPayment(state.basket);
     result.when((success) {
       // TODO update UI with success
     }, (error) {
@@ -197,7 +197,7 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
       errors.phoneNumber = FieldError.invalid;
       noErrors = false;
     }
-    if (!isFieldEmpty(state.selectedWarehouse.ref)) {
+    if (isFieldEmpty(state.selectedWarehouse.ref)) {
       errors.selectedWarehouse = FieldError.empty;
       noErrors = false;
     }
