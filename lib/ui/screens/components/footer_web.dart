@@ -36,7 +36,6 @@ class Footer extends StatelessWidget {
                 ],
               ),
             ),
-            // ),
           );
         },
       ),
@@ -53,7 +52,10 @@ Widget emailColumn(FooterCubit cubit, FooterState state) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 60),
-        SvgPicture.asset(IconPath.moxyLogoWeb),
+        SvgPicture.asset(
+          IconPath.moxyLogoWeb,
+          width: 100,
+        ),
         const SizedBox(height: 40),
         const SizedBox(
           width: 290,

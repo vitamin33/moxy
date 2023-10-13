@@ -78,13 +78,7 @@ class ProductDetailsContainer extends StatelessWidget {
                     height: 50,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: [
-                        for (Dimension dimen in allColorsDimens)
-                          Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child: _buildColorWidget(dimen.image!),
-                          ),
-                      ],
+                      children: [],
                     ),
                   ),
                   const SizedBox(height: 40),
