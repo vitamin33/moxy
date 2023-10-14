@@ -7,3 +7,9 @@ extension StatusCodeExtensions on int {
     return this >= 200 && this < 300;
   }
 }
+
+extension CurrencyExtensions on int {
+  int convertToPenny() {
+    return this * 100;
+  }
+}

@@ -51,7 +51,7 @@ Map<String, dynamic> _$NetworkMerchantInfoToJson(
 MonoBasketItem _$MonoBasketItemFromJson(Map<String, dynamic> json) =>
     MonoBasketItem(
       name: json['name'] as String,
-      quantity: json['quantity'] as int,
+      qty: json['qty'] as int,
       sum: json['sum'] as int,
       code: json['code'] as String,
       icon: json['icon'] as String,
@@ -61,7 +61,7 @@ MonoBasketItem _$MonoBasketItemFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$MonoBasketItemToJson(MonoBasketItem instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'quantity': instance.quantity,
+      'qty': instance.qty,
       'sum': instance.sum,
       'icon': instance.icon,
       'unit': instance.unit,

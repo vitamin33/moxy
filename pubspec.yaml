@@ -39,8 +39,11 @@ dependencies:
   shared_preferences: ^2.0.17
   flutter_secure_storage: ^8.0.0
 
-  #new
+  #http
   dio: ^5.2.1+1
+
+  #launch external urls
+  url_launcher: ^6.0.3
 
   #state management control
   provider: ^6.0.5

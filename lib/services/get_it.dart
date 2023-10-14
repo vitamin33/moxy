@@ -36,18 +36,18 @@ class GetItService {
     final dio = Dio();
     getIt.registerSingleton<ProductMapper>(ProductMapper());
     getIt.registerSingleton<FilterParamsMapper>(FilterParamsMapper());
-    getIt.registerSingleton<BasketMapper>(BasketMapper());
     getIt.registerSingleton<ConfigMapper>(ConfigMapper());
+    getIt.registerSingleton<CityMapper>(CityMapper());
+    getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
+    getIt.registerSingleton<OrderMapper>(OrderMapper());
+    getIt.registerSingleton<UserMapper>(UserMapper());
+    getIt.registerSingleton<BasketMapper>(BasketMapper());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<ProductsService>(ProductsService(dio));
     getIt.registerSingleton<BasketService>(BasketService(dio));
     getIt.registerSingleton<ConfigService>(ConfigService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
-    getIt.registerSingleton<CityMapper>(CityMapper());
-    getIt.registerSingleton<WarehouseMapper>(WarehouseMapper());
-    getIt.registerSingleton<OrderMapper>(OrderMapper());
-    getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ConfigRepository>(ConfigRepository());
     getIt.registerSingleton<ISecureStorageRepository>(

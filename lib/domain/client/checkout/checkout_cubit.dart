@@ -1,14 +1,20 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/order_constants.dart';
+import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
-import 'package:moxy/domain/admin/create_order/create_order_effects.dart';
+import 'package:moxy/data/repositories/order_repository.dart';
+import 'package:moxy/domain/client/checkout/checkout_effects.dart';
+import 'package:moxy/domain/client/checkout/payment_config.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
+import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/city.dart';
+import 'package:moxy/domain/models/created_invoice.dart';
+import 'package:moxy/domain/models/profile_user.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
@@ -17,12 +23,15 @@ import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'checkout_state.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
     with ValidationMixin {
   final basketRepository = locate<BasketRepository>();
+  final orderRepository = locate<OrderRepository>();
   final basketMapper = locate<BasketMapper>();
   final cityMapper = locate<CityMapper>();
+  final orderMapper = locate<OrderMapper>();
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController secondNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
@@ -167,18 +176,48 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
   }
 
   void clickCheckout() async {
-    if (!validateFields()) {
+    if (!_validateFields()) {
       return;
     }
-    final result = await basketRepository.startPayment(state.basket);
-    result.when((success) {
-      // TODO update UI with success
-    }, (error) {
-      emit(state.copyWith(basketProductsError: 'Failed to perform checkout'));
+    emit(state.copyWith(isLoadingPaymentButton: true));
+    final createOrder = orderMapper.mapToNetworkCreateOrder(
+      state.deliveryType,
+      state.paymentType,
+      basketMapper.mapToOrderedItems(state.basket.basketItems),
+      state.selectedWarehouse,
+      state.client,
+      state.selectedCity,
+      OrderStatus.New.name,
+      defaultPrepaymentAmount,
+    );
+    final createdOrderResult = await orderRepository.addOrder(createOrder);
+    createdOrderResult.when((success) {
+      if (success.id != null) {
+        _processPayment(success.id!);
+      } else {
+        emitEffect(NewOrderCreationFailed());
+      }
+      emit(state.copyWith(isLoadingPaymentButton: false));
+    }, (e) {
+      emitEffect(NewOrderCreationFailed());
+      emit(state.copyWith(isLoadingPaymentButton: false));
     });
   }
 
-  bool validateFields() {
+  void _processPayment(String orderId) async {
+    final result = await basketRepository.startPayment(state.basket, orderId);
+    CreatedInvoice? createdInvoice = result.tryGetSuccess();
+    if (createdInvoice != null) {
+      if ((await canLaunchUrl(Uri.parse(createdInvoice.pageUrl)))) {
+        emitEffect(
+            NavigateToPaymentProccess(Uri.parse(createdInvoice.pageUrl)));
+      } else {
+        emitEffect(UnableToLoadPaymentUrl());
+      }
+    }
+  }
+
+  bool _validateFields() {
     final errors = FieldErrors.noErrors();
     var noErrors = true;
     if (isFieldEmpty(state.client.firstName)) {
@@ -209,14 +248,32 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
   }
 
   void updateStateBasket(Basket basket) {
-    bool isFreeShipping =
-        basket.amountForFreeShipping() > basket.freeShippingThreshold;
+    ProfileUser client = basket.client;
+    fillFields(client);
     emit(
       state.copyWith(
         basket: basket,
-        isFreeShipping: isFreeShipping,
+        client: state.client.copyWith(
+          mobileNumber: client.mobileNumber,
+          firstName: client.firstName,
+          secondName: client.secondName,
+        ),
+        selectedCity: client.city,
+        selectedWarehouse: client.novaPost,
+        isFreeShipping: isShippingFree(),
         isLoading: false,
       ),
     );
+  }
+
+  void fillFields(ProfileUser user) {
+    firstNameController.text = user.firstName;
+    secondNameController.text = user.secondName;
+    phoneNumberController.text = user.mobileNumber;
+  }
+
+  bool isShippingFree() {
+    return state.basket.amountForFreeShipping() >
+        state.basket.freeShippingThreshold;
   }
 }

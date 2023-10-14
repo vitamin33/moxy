@@ -325,6 +325,8 @@ class _OrdersPageState extends State<OrdersPage> {
         return AppLocalizations.of(context)!.statusCanceled;
       case OrderStatus.Returned:
         return AppLocalizations.of(context)!.statusReturned;
+      case OrderStatus.PaymentFailed:
+        return AppLocalizations.of(context)!.statusPaymentFailed;
     }
   }
 
@@ -406,6 +408,7 @@ class _OrdersPageState extends State<OrdersPage> {
     switch (status.statusValue) {
       case OrderStatus.Returned:
       case OrderStatus.Canceled:
+      case OrderStatus.PaymentFailed:
         return AppTheme.red;
       case OrderStatus.Sale:
       case OrderStatus.Sent:

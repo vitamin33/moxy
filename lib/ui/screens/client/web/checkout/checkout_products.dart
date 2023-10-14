@@ -5,6 +5,7 @@ import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/screens/components/expandable_text.dart';
+import 'package:moxy/ui/screens/components/loading_elevated_button.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
@@ -91,25 +92,11 @@ class CheckoutProducts extends StatelessWidget {
             'For free shipping you need to order at least for ${state.basket.freeShippingThreshold} $uah.',
       ),
       const SizedBox(height: 32),
-      ElevatedButton(
-        onPressed: () {
-          cubit.clickCheckout();
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppTheme.textColor, // Background color
-          foregroundColor: Colors.white, // Text color
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0), // Rounded corners
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            'Checkout',
-            style: theme.checkoutButtonText,
-          ),
-        ),
-      ),
+      LoadingElevatedButton(
+          onPressed: () {
+            cubit.clickCheckout();
+          },
+          isLoadingState: state.isLoadingPaymentButton),
       const SizedBox(height: 20),
     ];
   }

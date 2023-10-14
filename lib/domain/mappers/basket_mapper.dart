@@ -1,16 +1,22 @@
+import 'package:moxy/constants.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/request/mono_create_invoice_request.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
 import 'package:moxy/data/models/response/mono_create_invoice_response.dart';
+import 'package:moxy/domain/client/checkout/payment_config.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/mappers/user_mapper.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/created_invoice.dart';
+import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/utils/extensions.dart';
 
 class BasketMapper {
   final productMapper = locate<ProductMapper>();
+  final userMapper = locate<UserMapper>();
 
   Basket mapToBasket(NetworkBasket network) {
     List<BasketItem> items = [];
@@ -34,28 +40,41 @@ class BasketMapper {
       }
     }
     return Basket(
-        id: network.id,
-        client: network.client,
-        basketItems: items,
-        freeShippingThreshold: network.freeShippingThreshold);
+      id: network.id,
+      client: userMapper.mapToProfileUser(network.client),
+      basketItems: items,
+      freeShippingThreshold: network.freeShippingThreshold,
+    );
   }
 
-  CreateInvoiceRequest mapToNetworkCreateInvoice(Basket basket) {
-    final merchantInfo = mapToMerchantInfo(basket);
+  CreateInvoiceRequest mapToNetworkCreateInvoice(
+      Basket basket, String newOrderId) {
+    final merchantInfo = mapToMerchantInfo(basket, newOrderId);
     return CreateInvoiceRequest(
-      amount: basket.totalValue(),
+      amount: basket.totalValue().convertToPenny(),
       ccy: 980, // UAH code, default 980
-      redirectUrl: 'redirect_url',
+      redirectUrl: paymentRedirectUrl,
       paymentType: 'debit',
-      webHookUrl: 'web_hook_url',
+      webHookUrl: paymentInvoiceUpdateUrl,
       merchantPaymInfo: merchantInfo,
     );
   }
 
-  NetworkMerchantInfo mapToMerchantInfo(Basket basket) {
+  NetworkMerchantInfo mapToMerchantInfo(Basket basket, String orderId) {
     List<MonoBasketItem> basketOrder = [];
+    for (BasketItem item in basket.basketItems) {
+      MonoBasketItem monoItem = MonoBasketItem(
+        name: '${item.product.name} ${item.dimension.color.name}',
+        qty: item.dimension.quantity,
+        sum: item.product.salePrice.toInt().convertToPenny(),
+        icon: item.dimension.images.first.imagePath,
+        code: item.product.id ?? item.product.idName,
+        unit: piece,
+      );
+      basketOrder.add(monoItem);
+    }
     return NetworkMerchantInfo(
-        reference: basket.id,
+        reference: orderId,
         basketOrder: basketOrder,
         comment: 'comment',
         destination: 'destination');
@@ -85,5 +104,30 @@ class BasketMapper {
             productMapper.mapToNetworkDimension(product.dimensions.first),
       ),
     );
+  }
+
+  List<OrderedItem> mapToOrderedItems(List<BasketItem> basketItems) {
+    List<OrderedItem> result = [];
+
+    for (BasketItem basketItem in basketItems) {
+      OrderedItem existingOrderedItem = result.firstWhere(
+        (item) => item.productId == basketItem.product.id,
+        orElse: () => OrderedItem(
+          productId: basketItem.product.id,
+          productName: basketItem.product.name,
+          dimensions: [], // Initialize with an empty list of dimensions
+          productPrice: basketItem.product.salePrice.toString(),
+        ),
+      );
+
+      // Append the dimension to the existing OrderedItem
+      existingOrderedItem.dimensions.add(basketItem.dimension);
+
+      // Replace the existing OrderedItem in the result list (if found)
+      result.remove(existingOrderedItem);
+      result.add(existingOrderedItem);
+    }
+
+    return result;
   }
 }

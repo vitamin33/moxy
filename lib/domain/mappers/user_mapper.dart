@@ -2,6 +2,7 @@ import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/models/profile.dart';
+import 'package:moxy/domain/models/profile_user.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/services/get_it.dart';
 
@@ -43,6 +44,18 @@ class UserMapper {
       secondName: network.secondName ?? '',
       mobileNumber: network.mobileNumber,
       city: cityMapper.mapToCity(network.city),
+      instagram: network.instagram ?? '',
+    );
+  }
+
+  ProfileUser mapToProfileUser(NetworkProfileUser network) {
+    return ProfileUser(
+      id: network.userId ?? '',
+      firstName: network.firstName ?? '',
+      secondName: network.secondName ?? '',
+      mobileNumber: network.mobileNumber,
+      city: cityMapper.mapToCity(network.city),
+      novaPost: warehouseMapper.mapToWarehouse(network.novaPost),
       instagram: network.instagram ?? '',
     );
   }

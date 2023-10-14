@@ -48,7 +48,7 @@ class NetworkMerchantInfo {
 @JsonSerializable()
 class MonoBasketItem {
   String name;
-  int quantity;
+  int qty;
   int sum;
   String icon;
   String unit;
@@ -56,7 +56,7 @@ class MonoBasketItem {
 
   MonoBasketItem({
     required this.name,
-    required this.quantity,
+    required this.qty,
     required this.sum,
     required this.code,
     required this.icon,
