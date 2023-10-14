@@ -74,10 +74,13 @@ class BasketService {
   Future<NetworkCreateInvoiceResponse> startPayment(
       CreateInvoiceRequest createInvoice) async {
     try {
+      _dio.options.headers['X-Token'] = Environment.monoAcquiringToken;
       _dio.options.headers['Content-Type'] = Headers.jsonContentType;
+      _dio.options.headers['Accept'] = '*/*';
+      final json = createInvoice.toJson();
       final response = await _dio.post(
         monoCreateInvoiceUrl,
-        data: createInvoice.toJson(),
+        data: json,
       );
       final data = response.data;
       final result = NetworkCreateInvoiceResponse.fromJson(data);

@@ -67,13 +67,13 @@ class OrderRepository {
     }
   }
 
-  Future<Result<dynamic, Exception>> addOrder(CreateOrder order) async {
+  Future<Result<Order, Exception>> addOrder(CreateOrder order) async {
     try {
       final result = await client.createOrder(order);
-      return Result.success(result);
-    } catch (e) {
-      moxyPrint('Repository Error:$e');
-      return Result.error(Exception('$e'));
+      return Result.success(orderMapper.mapToOrder(result));
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

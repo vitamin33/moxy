@@ -53,6 +53,7 @@
   "statusSale": "Sale",
   "statusCanceled": "Canceled",
   "statusReturned": "Returned",
+  "statusPaymentFailed": "PaymentFailed",
   "userFirstName": "First Name",
   "userSecondName": "Second Name",
   "userPhoneNumber": "Phone Number",

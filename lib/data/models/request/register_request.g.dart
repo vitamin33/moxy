@@ -8,8 +8,8 @@ part of 'register_request.dart';
 
 NetworkRegister _$NetworkRegisterFromJson(Map<String, dynamic> json) =>
     NetworkRegister(
-      firstName: json['name'] as String,
-      secondName: json['name'] as String,
+      firstName: json['firstName'] as String,
+      secondName: json['secondName'] as String,
       mobileNumber: json['mobileNumber'] as String,
       email: json['email'] as String,
       password: json['password'] as String,

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/admin/create_order/create_order_effects.dart';
 import 'package:moxy/domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import 'package:moxy/domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
+import 'package:moxy/domain/client/checkout/checkout_effects.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../theme/app_theme.dart';
 import 'checkout_info.dart';
@@ -30,11 +31,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
     BasketCubit basketCubit = context.read<BasketCubit>();
     cubit = CheckoutCubit(basketCubit.state.basket);
     cubit.effectStream.listen((effect) {
-      if (effect is ValidationFailed) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText: 'Wrong input, please check fields.'));
-      }
+      handleEffect(effect);
     });
+  }
+
+  void handleEffect(dynamic effect) async {
+    if (effect is ValidationFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+          snackBarFailureText: 'Wrong input, please check fields.'));
+    } else if (effect is NavigateToPaymentProccess) {
+      // Use Future.delayed to wait for the launchUrl to complete
+      await Future.delayed(Duration.zero);
+      await launchUrl(effect.paymentUri);
+    } else if (effect is UnableToLoadPaymentUrl) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+          snackBarFailureText:
+              'Unable to open payment URL, please try again later.'));
+    } else if (effect is NewOrderCreationFailed) {
+      ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+          snackBarFailureText:
+              'Unable to create order, contact our support please.'));
+    }
   }
 
   @override

@@ -55,9 +55,13 @@ class BasketRepository {
     }
   }
 
-  Future<Result<CreatedInvoice, Exception>> startPayment(Basket basket) async {
+  Future<Result<CreatedInvoice, Exception>> startPayment(
+    Basket basket,
+    String newOrderId,
+  ) async {
     try {
-      final createInvoice = mapper.mapToNetworkCreateInvoice(basket);
+      final createInvoice =
+          mapper.mapToNetworkCreateInvoice(basket, newOrderId);
       final result = await client.startPayment(createInvoice);
       return Result.success(mapper.mapToCreatedInvoice(result));
     } catch (e) {

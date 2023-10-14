@@ -50,6 +50,7 @@
   "statusSale": "Продано",
   "statusCanceled": "Скасовано",
   "statusReturned": "Повернено",
+  "statusPaymentFailed": "Помилка оплати",
   "userFirstName": "І'мя",
   "userSecondName": "Прізвище",
   "userPhoneNumber": "Мобільний номер",

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/city.dart';
@@ -139,6 +140,17 @@ class OrderedItem {
         productId: '', productName: '', dimensions: [], productPrice: '0');
   }
 
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is OrderedItem &&
+          runtimeType == other.runtimeType &&
+          productId == other.productId &&
+          listEquals(dimensions, other.dimensions);
+
+  @override
+  int get hashCode => productId.hashCode ^ dimensions.hashCode;
+
   OrderedItem copyWith(
       {String? productId,
       String? productName,
@@ -167,6 +179,9 @@ extension OrderListExtensions on List<Order> {
 
     // Add orders from this list to the map
     for (final order in this) {
+      if (order.id == null) {
+        continue;
+      }
       uniqueOrders[order.id!] = order;
     }
 
