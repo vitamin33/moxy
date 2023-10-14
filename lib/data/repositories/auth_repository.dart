@@ -67,6 +67,11 @@ class AuthRepository {
     return containsAuthInfo;
   }
 
+  Future<String> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return Future.value(prefs.getString(userIdKey));
+  }
+
   Future<Role?> getUserRole() async {
     final prefs = await SharedPreferences.getInstance();
     final userRole = prefs.getString(userRoleKey);
@@ -119,12 +124,8 @@ class AuthRepository {
         (success) => Result.success(success), (error) => Result.error(error));
   }
 
-  Future<Result<bool, Exception>> register(
-      String firstName,
-      String secondName,
-      String mobileNumber,
-      String email,
-      String password) async {
+  Future<Result<bool, Exception>> register(String firstName, String secondName,
+      String mobileNumber, String email, String password) async {
     final resultCase = await client.register(NetworkRegister(
         firstName: firstName,
         secondName: secondName,
@@ -150,19 +151,18 @@ class AuthRepository {
     }
   }
 
-  Future<Result<bool, Exception>> resendConfirmationCode(
-      String email) async {
+  Future<Result<bool, Exception>> resendConfirmationCode(String email) async {
     final resultCase = await client.resendConfirmationCode(email);
-    if (resultCase ) {
+    if (resultCase) {
       return Result.success(resultCase);
     } else {
       return Result.error(Exception('error resendConfirmationCode'));
     }
   }
-  Future<Result<bool, Exception>> changePasswordWithMobile(
-      String email) async {
+
+  Future<Result<bool, Exception>> changePasswordWithMobile(String email) async {
     final resultCase = await client.changePasswordWithMobile(email);
-    if (resultCase ) {
+    if (resultCase) {
       return Result.success(resultCase);
     } else {
       return Result.error(Exception('error resendConfirmationCode'));

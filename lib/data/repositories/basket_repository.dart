@@ -1,6 +1,7 @@
 import 'package:moxy/data/http/basket_service.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
+import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/created_invoice.dart';
@@ -13,6 +14,7 @@ class BasketRepository {
   BasketRepository();
   final BasketService client = locate<BasketService>();
   final BasketMapper mapper = locate<BasketMapper>();
+  final AuthRepository authRepository = locate<AuthRepository>();
 
   Future<Result<NetworkBasket, Exception>> getBasket() async {
     try {
@@ -60,8 +62,9 @@ class BasketRepository {
     String newOrderId,
   ) async {
     try {
+      final userId = await authRepository.getUserId();
       final createInvoice =
-          mapper.mapToNetworkCreateInvoice(basket, newOrderId);
+          mapper.mapToNetworkCreateInvoice(basket, newOrderId, userId);
       final result = await client.startPayment(createInvoice);
       return Result.success(mapper.mapToCreatedInvoice(result));
     } catch (e) {
