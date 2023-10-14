@@ -37,6 +37,11 @@ List<Status> getAllStatusOrder(BuildContext context) {
         isSelected: false,
         iconPath: IconPath.returnedStatus,
         statusValue: OrderStatus.Returned),
+    Status(
+        statusTitle: l10n.statusPaymentFailed,
+        isSelected: false,
+        iconPath: IconPath.paidStatus,
+        statusValue: OrderStatus.PaymentFailed),
   ];
 }
 
