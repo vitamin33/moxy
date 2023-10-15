@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
-import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
-import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 

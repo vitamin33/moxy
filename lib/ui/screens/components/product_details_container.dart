@@ -76,9 +76,8 @@ class ProductDetailsContainer extends StatelessWidget {
                     height: 50,
                     child: ListView(
                       scrollDirection: Axis.horizontal,
-                      children: [
-                       
-                      ],
+                      children: [],
+
                     ),
                   ),
                   const SizedBox(height: 40),

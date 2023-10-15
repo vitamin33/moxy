@@ -30,23 +30,25 @@ class PromoContainer extends StatelessWidget {
               animatedToPage: cubit.animatedToPage,
             );
           }).toList();
-          return SizedBox(
-            width: double.infinity,
-            height: 600,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: PageView.builder(
-                controller: cubit.pageController,
-                onPageChanged: (int page) {
-                  cubit.onChangePage(page);
-                },
-                itemCount: pages.length,
-                itemBuilder: (context, index) {
-                  return pages[index % pages.length];
-                },
-              ),
-            ),
-          );
+          return state.allPromo.isEmpty
+              ? SizedBox(
+                  width: double.infinity,
+                  height: 600,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PageView.builder(
+                      controller: cubit.pageController,
+                      onPageChanged: (int page) {
+                        cubit.onChangePage(page);
+                      },
+                      itemCount: pages.length,
+                      itemBuilder: (context, index) {
+                        return pages[index % pages.length];
+                      },
+                    ),
+                  ),
+                )
+              :const SizedBox();
         },
       ),
     );

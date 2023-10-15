@@ -144,7 +144,7 @@ class _CustomAccordionState extends State<CustomAccordion>
                       color: AppTheme.pink,
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: Offset(0, 3),
                     ),
                 ],
                 borderRadius: widget.titleBorderRadius,
@@ -162,27 +162,31 @@ class _CustomAccordionState extends State<CustomAccordion>
                         ? Text(widget.title!, style: widget.textStyle)
                         : (widget.titleChild ?? Container()),
                   ),
-                if(widget.showIcon)  showAccordion ? widget.expandedIcon : widget.collapsedIcon
+                  if (widget.showIcon)
+                    showAccordion ? widget.expandedIcon : widget.collapsedIcon
                 ],
               ),
             ),
           ),
-          showAccordion
-              ? Container(
-                  decoration: BoxDecoration(
-                    borderRadius: widget.contentBorderRadius,
-                    border: widget.contentBorder,
-                    color: widget.contentBackgroundColor ?? Colors.white70,
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  padding: widget.contentPadding,
-                  child: SlideTransition(
-                    position: offset,
-                    child: widget.content != null
-                        ? Text(widget.content!)
-                        : (widget.contentChild ?? Container()),
-                  ))
-              : Container()
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 300),
+            crossFadeState: showAccordion
+                ? CrossFadeState.showSecond
+                : CrossFadeState.showFirst,
+            firstChild: Container(),
+            secondChild: Container(
+              decoration: BoxDecoration(
+                borderRadius: widget.contentBorderRadius,
+                border: widget.contentBorder,
+                color: widget.contentBackgroundColor ?? Colors.white70,
+              ),
+              width: MediaQuery.of(context).size.width,
+              padding: widget.contentPadding,
+              child: widget.content != null
+                  ? Text(widget.content!)
+                  : (widget.contentChild ?? Container()),
+            ),
+          )
         ],
       );
 
