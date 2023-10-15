@@ -48,8 +48,8 @@ class BasketMapper {
   }
 
   CreateInvoiceRequest mapToNetworkCreateInvoice(
-      Basket basket, String newOrderId) {
-    final merchantInfo = mapToMerchantInfo(basket, newOrderId);
+      Basket basket, String newOrderId, String userId) {
+    final merchantInfo = mapToMerchantInfo(basket, newOrderId, userId);
     return CreateInvoiceRequest(
       amount: basket.totalValue().convertToPenny(),
       ccy: 980, // UAH code, default 980
@@ -60,7 +60,8 @@ class BasketMapper {
     );
   }
 
-  NetworkMerchantInfo mapToMerchantInfo(Basket basket, String orderId) {
+  NetworkMerchantInfo mapToMerchantInfo(
+      Basket basket, String orderId, String userId) {
     List<MonoBasketItem> basketOrder = [];
     for (BasketItem item in basket.basketItems) {
       MonoBasketItem monoItem = MonoBasketItem(
@@ -74,7 +75,8 @@ class BasketMapper {
       basketOrder.add(monoItem);
     }
     return NetworkMerchantInfo(
-        reference: orderId,
+        reference:
+            '$orderId $userId', // Its important - Format: 'orderId userId'
         basketOrder: basketOrder,
         comment: 'comment',
         destination: 'destination');

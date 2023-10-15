@@ -45,8 +45,10 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
     try {
       emit(state.copyWith(isLoading: true));
       final result = await basketRepository.getBasket();
-      result.when((success) {
-        emitSuccessBasket(success);
+      result.when((basket) {
+        if (basket != null) {
+          emitSuccessBasket(basket);
+        }
       }, (error) {
         emit(state.copyWith(basketProductsError: 'Failed get basket info'));
       });
