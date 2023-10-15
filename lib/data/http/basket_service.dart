@@ -15,12 +15,15 @@ class BasketService {
 
   BasketService(this._dio);
 
-  Future<Result<NetworkBasket, Exception>> getBasket() async {
+  Future<NetworkBasket?> getBasket() async {
     try {
-      final response = await _dio.get('$baseUrl $getBasketUrl');
+      final response = await _dio.get('$baseUrl$getBasketUrl');
       final data = response.data;
       final result = NetworkBasket.fromJson(data);
-      return Result.success(result);
+      return result;
+    } on DioException catch (e) {
+      moxyPrint(e);
+      return null;
     } catch (e, stack) {
       moxyPrint(stack);
       rethrow;

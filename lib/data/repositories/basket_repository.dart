@@ -16,10 +16,10 @@ class BasketRepository {
   final BasketMapper mapper = locate<BasketMapper>();
   final AuthRepository authRepository = locate<AuthRepository>();
 
-  Future<Result<NetworkBasket, Exception>> getBasket() async {
+  Future<Result<NetworkBasket?, Exception>> getBasket() async {
     try {
       final result = await client.getBasket();
-      return result;
+      return Result.success(result);
     } catch (e, stack) {
       moxyPrint(stack);
       rethrow;

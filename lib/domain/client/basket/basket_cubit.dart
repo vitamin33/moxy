@@ -27,8 +27,12 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     try {
       emit(state.copyWith(isLoading: true));
       final result = await basketRepository.getBasket();
-      result.when((success) {
-        emitSuccessBasket(success);
+      result.when((basket) {
+        if (basket != null) {
+          emitSuccessBasket(basket);
+        } else {
+          // TODO handle empty basket state
+        }
       }, (error) {
         emitEffect(BasketApiRequestFailed(
             'Failed get basket info ${error.toString()}'));
