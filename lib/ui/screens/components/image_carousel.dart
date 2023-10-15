@@ -38,8 +38,6 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 itemBuilder: (context, pagePosition) {
                   return Container(
                     decoration: BoxDecoration(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(15)),
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(widget.images[pagePosition]))),
@@ -150,8 +148,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
                                 curve: Curves.easeIn);
                           },
                           effect: const ExpandingDotsEffect(
-                            dotHeight: 16,
-                            dotWidth: 16,
+                            dotHeight: 6,
+                            dotWidth: 10,
                           ),
                         ),
                       )),
