@@ -11,8 +11,7 @@ List<Status> getAllStatusOrder(BuildContext context) {
         statusTitle: l10n.statusNew,
         isSelected: false,
         iconPath: IconPath.newStatus,
-        statusValue: OrderStatus.New
-        ),
+        statusValue: OrderStatus.New),
     Status(
         statusTitle: l10n.statusPaid,
         isSelected: false,
@@ -42,26 +41,41 @@ List<Status> getAllStatusOrder(BuildContext context) {
 }
 
 List<Status> allStatusOrder = [
-  Status(statusTitle: 'New', isSelected: false, iconPath: IconPath.newStatus,
-        statusValue: OrderStatus.New),
-  Status(statusTitle: 'Paid', isSelected: false, iconPath: IconPath.paidStatus,
-        statusValue: OrderStatus.Paid),
-  Status(statusTitle: 'Sent', isSelected: false, iconPath: IconPath.sentStatus,
-        statusValue: OrderStatus.Sent),
-  Status(statusTitle: 'Sale', isSelected: false, iconPath: IconPath.saleStatus,
-        statusValue: OrderStatus.Sale),
+  Status(
+      statusTitle: 'New',
+      isSelected: false,
+      iconPath: IconPath.newStatus,
+      statusValue: OrderStatus.New),
+  Status(
+      statusTitle: 'Paid',
+      isSelected: false,
+      iconPath: IconPath.paidStatus,
+      statusValue: OrderStatus.Paid),
+  Status(
+      statusTitle: 'Sent',
+      isSelected: false,
+      iconPath: IconPath.sentStatus,
+      statusValue: OrderStatus.Sent),
+  Status(
+      statusTitle: 'Sale',
+      isSelected: false,
+      iconPath: IconPath.saleStatus,
+      statusValue: OrderStatus.Sale),
   Status(
       statusTitle: 'Canceled',
       isSelected: false,
       iconPath: IconPath.canceledStatus,
-        statusValue: OrderStatus.Canceled),
+      statusValue: OrderStatus.Canceled),
   Status(
       statusTitle: 'Returned',
       isSelected: false,
       iconPath: IconPath.returnedStatus,
-        statusValue: OrderStatus.Returned),
+      statusValue: OrderStatus.Returned),
+  Status(
+      statusTitle: 'PaymentFailed',
+      isSelected: false,
+      iconPath: IconPath.paidStatus,
+      statusValue: OrderStatus.PaymentFailed),
 ];
 
- enum  OrderStatus{
-  New, Paid, Sent, Sale, Canceled, Returned;
-}
+enum OrderStatus { New, Paid, Sent, Sale, Canceled, Returned, PaymentFailed }

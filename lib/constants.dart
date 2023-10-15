@@ -16,3 +16,4 @@ const codeKey = 'secretCode';
 
 // Fiat signs
 const uah = 'UAH';
+const piece = 'шт.';

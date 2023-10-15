@@ -1,13 +1,16 @@
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/profile_user.dart';
 
 import '../copyable.dart';
 
 class Basket implements Copyable<Basket> {
-  String client;
+  String id;
+  ProfileUser client;
   List<BasketItem> basketItems;
   int freeShippingThreshold;
 
   Basket({
+    required this.id,
     required this.client,
     required this.basketItems,
     required this.freeShippingThreshold,
@@ -15,7 +18,8 @@ class Basket implements Copyable<Basket> {
 
   static Basket defaultBasket() {
     return Basket(
-      client: '',
+      id: '',
+      client: ProfileUser.defaultUser(),
       basketItems: [],
       freeShippingThreshold: 2000,
     );
@@ -23,11 +27,13 @@ class Basket implements Copyable<Basket> {
 
   @override
   Basket copyWith({
-    String? client,
+    String? id,
+    ProfileUser? client,
     List<BasketItem>? basketItems,
     int? freeShippingThreshold,
   }) {
     return Basket(
+      id: id ?? this.id,
       client: client ?? this.client,
       basketItems: basketItems ?? this.basketItems,
       freeShippingThreshold:

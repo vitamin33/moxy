@@ -8,6 +8,7 @@ import 'package:moxy/domain/validation_mixin.dart';
 
 class CheckoutState implements Copyable<CheckoutState> {
   final bool isLoading;
+  final bool isLoadingPaymentButton;
   final String? basketProductsError;
   final Basket basket;
   DeliveryType deliveryType;
@@ -20,6 +21,7 @@ class CheckoutState implements Copyable<CheckoutState> {
 
   CheckoutState({
     required this.isLoading,
+    required this.isLoadingPaymentButton,
     required this.basketProductsError,
     required this.basket,
     required this.deliveryType,
@@ -34,6 +36,7 @@ class CheckoutState implements Copyable<CheckoutState> {
   static defaultState() {
     return CheckoutState(
       isLoading: false,
+      isLoadingPaymentButton: false,
       basket: Basket.defaultBasket(),
       deliveryType: DeliveryType.novaPost,
       paymentType: PaymentType.fullPayment,
@@ -49,6 +52,7 @@ class CheckoutState implements Copyable<CheckoutState> {
   @override
   CheckoutState copyWith({
     bool? isLoading,
+    bool? isLoadingPaymentButton,
     String? basketProductsError,
     Basket? basket,
     DeliveryType? deliveryType,
@@ -61,6 +65,8 @@ class CheckoutState implements Copyable<CheckoutState> {
   }) {
     return CheckoutState(
       isLoading: isLoading ?? this.isLoading,
+      isLoadingPaymentButton:
+          isLoadingPaymentButton ?? this.isLoadingPaymentButton,
       basketProductsError: basketProductsError ?? this.basketProductsError,
       basket: basket ?? this.basket,
       deliveryType: deliveryType ?? this.deliveryType,

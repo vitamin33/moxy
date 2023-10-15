@@ -176,20 +176,18 @@ class DioClient {
     }
   }
 
-  Future<Result<Headers, Exception>> createOrder(CreateOrder order) async {
-    final Headers? result;
-    final data = order.toJson();
+  Future<NetworkOrder> createOrder(CreateOrder order) async {
     try {
+      final data = order.toJson();
       Response response = await dio.post(
         createOrdersUrl,
         data: data,
       );
-      result = response.headers;
-    } catch (e) {
-      moxyPrint('Error during creating order: $e');
-      return Result.error(_handleHttpException(e));
+      return NetworkOrder.fromJson(response.data);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
-    return Result.success(result);
   }
 
   Future<Result<Headers, Exception>> editOrder(EditOrder order) async {
@@ -325,8 +323,9 @@ class DioClient {
         promosList.add(NetworkPromos.fromJson(value));
       }
       return promosList;
-    } catch (e) {
-      throw Exception('Failed to load promos: $e');
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

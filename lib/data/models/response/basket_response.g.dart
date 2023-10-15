@@ -8,7 +8,9 @@ part of 'basket_response.dart';
 
 NetworkBasket _$NetworkBasketFromJson(Map<String, dynamic> json) =>
     NetworkBasket(
-      client: json['client'] as String,
+      id: json['_id'] as String,
+      client:
+          NetworkProfileUser.fromJson(json['client'] as Map<String, dynamic>),
       basketItems: (json['basketItems'] as List<dynamic>)
           .map((e) => NetworkBasketItem.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -17,6 +19,7 @@ NetworkBasket _$NetworkBasketFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$NetworkBasketToJson(NetworkBasket instance) =>
     <String, dynamic>{
+      '_id': instance.id,
       'client': instance.client,
       'basketItems': instance.basketItems,
       'freeShippingThreshold': instance.freeShippingThreshold,

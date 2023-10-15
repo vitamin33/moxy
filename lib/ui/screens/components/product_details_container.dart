@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/constant/image_path.dart';
-import 'package:moxy/constant/product_colors.dart';
 import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
 import 'package:moxy/domain/client/product_details/product_details_state.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/components/custom_accordion.dart';
 import 'package:moxy/ui/screens/components/image_carousel.dart';
@@ -79,6 +77,7 @@ class ProductDetailsContainer extends StatelessWidget {
                     child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: [],
+
                     ),
                   ),
                   const SizedBox(height: 40),

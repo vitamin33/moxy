@@ -1,16 +1,20 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
+import 'package:moxy/data/models/request/user_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 
 part 'basket_response.g.dart';
 
 @JsonSerializable()
 class NetworkBasket {
-  String client;
+  @JsonKey(name: '_id')
+  String id;
+  NetworkProfileUser client;
   List<NetworkBasketItem> basketItems;
   int freeShippingThreshold;
 
   NetworkBasket({
+    required this.id,
     required this.client,
     required this.basketItems,
     required this.freeShippingThreshold,
