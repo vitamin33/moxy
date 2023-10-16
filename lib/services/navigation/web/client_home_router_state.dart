@@ -9,7 +9,9 @@ abstract class ClientHomeRoute extends Equatable {
   static const String favoritesPath = 'favorites';
   static const String checkoutPath = 'checkout';
   static const String profilePath = 'profile';
-  static const String productDetailsPath = 'profile';
+  static const String productDetailsPath = 'product';
+  static const String ordersPath = 'orders';
+  static const String addressesPath = 'address';
 
   static const int secondTabIndex = 1;
   static const int thirdTabIndex = 2;
@@ -40,6 +42,15 @@ abstract class ClientHomeRoute extends Equatable {
           return const HomeRoute(thirdTabIndex);
         default:
           return const HomeRoute();
+      }
+    } else if (uri.pathSegments.length == 3) {
+      String third = uri.pathSegments[2];
+      String second = uri.pathSegments[1];
+      switch (second) {
+        case productDetailsPath:
+          return ProductDetailsRoute(third);
+        case profilePath:
+          return ProfileRoute(third);
       }
     }
     return const HomeRoute();
@@ -82,12 +93,18 @@ class CheckoutRoute extends ClientHomeRoute {
 }
 
 class ProfileRoute extends ClientHomeRoute {
-  final String? extraPageContent;
-  const ProfileRoute([this.extraPageContent]);
+  final String? extraPagePath;
+  const ProfileRoute([this.extraPagePath]);
   @override
-  List<Object?> get props => [extraPageContent];
+  List<Object?> get props => [extraPagePath];
   @override
-  String urlPath() => ClientHomeRoute.profilePath;
+  String urlPath() {
+    if (extraPagePath == null) {
+      return ClientHomeRoute.profilePath;
+    } else {
+      return '${ClientHomeRoute.profilePath}/$extraPagePath';
+    }
+  }
 }
 
 class ProductDetailsRoute extends ClientHomeRoute {
@@ -96,5 +113,11 @@ class ProductDetailsRoute extends ClientHomeRoute {
   @override
   List<Object?> get props => [productId];
   @override
-  String urlPath() => ClientHomeRoute.productDetailsPath;
+  String urlPath() {
+    if (productId == null) {
+      return ClientHomeRoute.profilePath;
+    } else {
+      return '${ClientHomeRoute.profilePath}/$productId';
+    }
+  }
 }

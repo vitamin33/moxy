@@ -68,11 +68,11 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRoute>
       ];
     }
     if (_routerCubit.state is ProfileRoute) {
-      extraPageContent = (_routerCubit.state as ProfileRoute).extraPageContent;
+      final extraPagePath = (_routerCubit.state as ProfileRoute).extraPagePath;
       return [
         _materialPage(
           valueKey: "profile",
-          child: const ProfilePage(),
+          child: ProfilePage(extraPagePath: extraPagePath),
         ),
       ];
     }
@@ -112,13 +112,15 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRoute>
         _routerCubit.goToFavourites();
         break;
       case ProfileRoute:
-        _routerCubit.goToProfile();
+        ProfileRoute route = configuration as ProfileRoute;
+        _routerCubit.goToProfile(route.extraPagePath);
         break;
       case CheckoutRoute:
         _routerCubit.goToCheckout();
         break;
       case ProductDetailsRoute:
-        _routerCubit.goToProductDetails();
+        ProductDetailsRoute route = configuration as ProductDetailsRoute;
+        _routerCubit.goToProductDetails(route.productId);
         break;
       case HomeRoute:
         int index = configuration.props[0] as int;

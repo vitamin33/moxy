@@ -10,6 +10,7 @@ class ProfileState implements Copyable<ProfileState> {
   final Profile profile;
   final List<Order> historyOrders;
   final ProfilePassword password;
+  final bool showSaveButton;
 
   // Field errors
   final ProfileFieldErrors errors;
@@ -21,11 +22,13 @@ class ProfileState implements Copyable<ProfileState> {
     required this.historyOrders,
     required this.password,
     required this.errors,
+    required this.showSaveButton,
   });
 
   static defaultState() {
     return ProfileState(
         isLoading: false,
+        showSaveButton: true,
         activePage: 0,
         profile: Profile.defaultProfile(),
         historyOrders: [],
@@ -41,15 +44,16 @@ class ProfileState implements Copyable<ProfileState> {
     List<Order>? historyOrders,
     ProfilePassword? password,
     ProfileFieldErrors? errors,
+    bool? showSaveButton,
   }) {
     return ProfileState(
-      isLoading: isLoading ?? this.isLoading,
-      activePage: activePage ?? this.activePage,
-      profile: profile ?? this.profile,
-      historyOrders: historyOrders ?? this.historyOrders,
-      password: password ?? this.password,
-      errors: errors ?? this.errors,
-    );
+        isLoading: isLoading ?? this.isLoading,
+        activePage: activePage ?? this.activePage,
+        profile: profile ?? this.profile,
+        historyOrders: historyOrders ?? this.historyOrders,
+        password: password ?? this.password,
+        errors: errors ?? this.errors,
+        showSaveButton: showSaveButton ?? this.showSaveButton);
   }
 }
 

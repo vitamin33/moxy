@@ -6,8 +6,13 @@ class ProfileValidationFailed implements UiEffect {
 }
 
 class ProfileSuccess implements UiEffect {
-   String successText;
-   ProfileSuccess(this.successText);
+  String successText;
+  ProfileSuccess(this.successText);
+}
+
+class ProfileActivePageChanged implements UiEffect {
+  String? additionalPagePath;
+  ProfileActivePageChanged(this.additionalPagePath);
 }
 
 class ProfileApiRequestFailed implements UiEffect {

@@ -30,6 +30,19 @@ class ProfileOrdersResponse {
 }
 
 @JsonSerializable()
+class NetworkProfileOrderItem {
+  String product;
+  List<NetworkDimension> dimensions;
+  NetworkProfileOrderItem(
+    this.product,
+    this.dimensions,
+  );
+
+  factory NetworkProfileOrderItem.fromJson(Map<String, dynamic> json) =>
+      _$NetworkProfileOrderItemFromJson(json);
+}
+
+@JsonSerializable()
 class NetworkOrder {
   @JsonKey(name: '_id')
   String? id;
@@ -76,7 +89,7 @@ class NetworkProfileOrder {
   String deliveryType;
   String status;
   String paymentType;
-  List<NetworkOrderedProductResponse> orderedItems;
+  List<NetworkOrderedItemResponse> orderedItems;
   String? client;
   String createdAt;
   String updatedAt;

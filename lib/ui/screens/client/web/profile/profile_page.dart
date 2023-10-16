@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
+import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
@@ -16,11 +17,14 @@ import '../../../../../domain/admin/create_order/search_cities/search_cities_cub
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  final String? extraPagePath;
+  const ProfilePage({Key? key, required this.extraPagePath}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
+
+const double contentHeight = 380.0;
 
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileCubit cubit;
@@ -28,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    cubit = ProfileCubit();
+    cubit = ProfileCubit(extraPagePath: widget.extraPagePath);
 
     cubit.effectStream.listen((effect) {
       if (effect is ProfileApiRequestFailed) {
@@ -42,6 +46,10 @@ class _ProfilePageState extends State<ProfilePage> {
       if (effect is ProfileValidationFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText: 'Wrong input, please check fields.'));
+      }
+      if (effect is ProfileActivePageChanged) {
+        ClientHomeRouterCubit router = context.read<ClientHomeRouterCubit>();
+        router.goToProfile(effect.additionalPagePath);
       }
     });
   }
@@ -76,11 +84,18 @@ class _ProfilePageState extends State<ProfilePage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    state.isLoading
-                        ? const MoxyLoader(
-                            iconSize: 40,
-                          )
-                        : ProfileTabPage(),
+                    SizedBox(
+                      height: 600,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(
+                            milliseconds: 500), // Adjust the duration as needed
+                        child: state.isLoading
+                            ? const MoxyLoader(
+                                iconSize: 40,
+                              )
+                            : ProfileTabPage(),
+                      ),
+                    ),
                     const PromoContainer(),
                     const Footer(),
                   ],
@@ -115,112 +130,132 @@ class ProfileTabPage extends StatelessWidget {
         final cubit = context.read<ProfileCubit>();
         return Padding(
           padding: const EdgeInsets.all(24.0),
-          child: Row(
+          child: Column(
             children: [
-              // Drawer Menu
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
-                child: SizedBox(
-                  width: 250,
-                  height: 600,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(tabTitles.length, (index) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (cubit.pageController.hasClients) {
-                            cubit.pageController.animateToPage(
-                              index,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                            );
-                          }
-                        },
-                        child: Container(
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: state.activePage == index
-                                ? const Border(
-                                    right: BorderSide(
-                                      color: AppTheme.black,
-                                      width: 2,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  )
-                                : const Border(
-                                    right: BorderSide(
-                                      color: AppTheme.greyLigth,
-                                      width: 2,
-                                      style: BorderStyle.solid,
-                                    ),
-                                  ),
-                          ),
-                          padding: const EdgeInsets.symmetric(vertical: 25),
-                          child: Text(
-                            tabTitles[index],
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: 'Poppins',
-                              fontWeight: FontWeight.w600,
-                              color: state.activePage == index
-                                  ? AppTheme.pinkDark
-                                  : AppTheme.black,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
+              SizedBox(
+                height: contentHeight,
+                child: Row(
+                  children: [
+                    // Drawer Menu
+                    _drawerMenu(cubit, state),
+                    // Selected Tab Content
+                    _selectedTabContent(cubit, state),
+                  ],
                 ),
               ),
-              // Selected Tab Content
-              Expanded(
-                child: SizedBox(
-                  height: 600,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: SizedBox(
-                          height: 350,
-                          child: PageView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            controller: cubit.pageController,
-                            onPageChanged: (int page) {
-                              cubit.onChangePage(page);
-                            },
-                            itemCount: tabPages.length,
-                            itemBuilder: (context, index) {
-                              return tabPages[index % tabPages.length];
-                            },
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 100),
-                        child: CustomButton(
-                          title: 'Зберегти',
-                          onTap: () {
-                            if (cubit.validateFields()) {
-                              cubit.editProfile();
-                              cubit.editPassword();
-                            }
-                          },
-                          buttonWidth: 200,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              const SizedBox(height: 30),
+              AnimatedOpacity(
+                opacity: state.showSaveButton ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: _buildSaveButton(cubit),
               ),
+              const SizedBox(height: 50),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _selectedTabContent(ProfileCubit cubit, ProfileState state) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SizedBox(
+              height: contentHeight,
+              child: PageView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                controller: cubit.pageController,
+                onPageChanged: (int page) {
+                  cubit.onChangePage(page);
+                },
+                itemCount: tabPages.length,
+                itemBuilder: (context, index) {
+                  return tabPages[index % tabPages.length];
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _drawerMenu(ProfileCubit cubit, ProfileState state) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
+      child: SizedBox(
+        width: 250,
+        height: contentHeight,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: List.generate(tabTitles.length, (index) {
+            return GestureDetector(
+              onTap: () {
+                if (cubit.pageController.hasClients) {
+                  cubit.pageController.animateToPage(
+                    index,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                  );
+                }
+              },
+              child: Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  border: state.activePage == index
+                      ? const Border(
+                          right: BorderSide(
+                            color: AppTheme.black,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        )
+                      : const Border(
+                          right: BorderSide(
+                            color: AppTheme.greyLigth,
+                            width: 2,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                ),
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                child: Text(
+                  tabTitles[index],
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    color: state.activePage == index
+                        ? AppTheme.pinkDark
+                        : AppTheme.black,
+                  ),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSaveButton(ProfileCubit cubit) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 100),
+      child: CustomButton(
+        title: 'Зберегти',
+        onTap: () {
+          if (cubit.validateFields()) {
+            cubit.editProfile();
+            cubit.editPassword();
+          }
+        },
+        buttonWidth: 200,
+      ),
     );
   }
 }

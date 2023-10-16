@@ -9,6 +9,7 @@ import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import '../../../data/repositories/profile_repository.dart';
 import '../../../utils/common.dart';
 import '../../mappers/profile_mapper.dart';
@@ -21,8 +22,11 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   late TextEditingController firstnameController;
   late TextEditingController secondnameController;
   late TextEditingController mobileNumberController;
+  late PageController pageController;
+  final String? extraPagePath;
 
-  ProfileCubit() : super(ProfileState.defaultState()) {
+  ProfileCubit({required this.extraPagePath})
+      : super(ProfileState.defaultState()) {
     getProfile();
     getProfileOrders();
     firstnameController = TextEditingController(text: state.profile.firstName);
@@ -30,20 +34,26 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
         TextEditingController(text: state.profile.secondName);
     mobileNumberController =
         TextEditingController(text: state.profile.mobileNumber);
+    int activePage = _calculateInitialPage(extraPagePath);
+    pageController = PageController(initialPage: activePage);
+    emit(state.copyWith(
+        activePage: activePage, showSaveButton: _showSaveButton(activePage)));
   }
   final profileRepository = locate<ProfileRepository>();
   final authRepository = locate<AuthRepository>();
   final profileMapper = locate<ProfileMapper>();
   final userMapper = locate<UserMapper>();
 
-  final PageController pageController = PageController(initialPage: 0);
   final TextEditingController oldPasswordController = TextEditingController();
   final TextEditingController newPasswordController = TextEditingController();
   final TextEditingController repeatNewPasswordController =
       TextEditingController();
 
   void onChangePage(int page) {
-    emit(state.copyWith(activePage: page));
+    emit(state.copyWith(
+        activePage: page, showSaveButton: _showSaveButton(page)));
+    final addPath = _generateAdditionalPagePath(page);
+    emitEffect(ProfileActivePageChanged(addPath));
   }
 
   void getProfile() async {
@@ -199,5 +209,34 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
+  }
+
+  bool _showSaveButton(int activePage) {
+    return activePage != 1; // not equal index of orders history
+  }
+
+  int _calculateInitialPage(String? extraPagePath) {
+    if (extraPagePath != null) {
+      switch (extraPagePath) {
+        case ClientHomeRoute.ordersPath:
+          return 1;
+        case ClientHomeRoute.addressesPath:
+          return 2;
+        default:
+          return 0;
+      }
+    }
+    return 0;
+  }
+
+  String? _generateAdditionalPagePath(int activePage) {
+    switch (activePage) {
+      case 1:
+        return ClientHomeRoute.ordersPath;
+      case 2:
+        return ClientHomeRoute.addressesPath;
+      default:
+        return null;
+    }
   }
 }

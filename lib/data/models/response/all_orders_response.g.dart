@@ -32,6 +32,22 @@ Map<String, dynamic> _$ProfileOrdersResponseToJson(
       'profileOrders': instance.profileOrders,
     };
 
+NetworkProfileOrderItem _$NetworkProfileOrderItemFromJson(
+        Map<String, dynamic> json) =>
+    NetworkProfileOrderItem(
+      json['product'] as String,
+      (json['dimensions'] as List<dynamic>)
+          .map((e) => NetworkDimension.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$NetworkProfileOrderItemToJson(
+        NetworkProfileOrderItem instance) =>
+    <String, dynamic>{
+      'product': instance.product,
+      'dimensions': instance.dimensions,
+    };
+
 NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
       id: json['_id'] as String?,
       cashAdvanceValue: json['cashAdvanceValue'] as int,
@@ -85,7 +101,7 @@ NetworkProfileOrder _$NetworkProfileOrderFromJson(Map<String, dynamic> json) =>
       client: json['client'] as String?,
       orderedItems: (json['orderedItems'] as List<dynamic>)
           .map((e) =>
-              NetworkOrderedProductResponse.fromJson(e as Map<String, dynamic>))
+              NetworkOrderedItemResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,

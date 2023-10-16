@@ -14,7 +14,7 @@ abstract class RootRoute extends Equatable {
   factory RootRoute.fromUri(Uri uri) {
     if (uri.pathSegments.isEmpty) {
       return const LoginRoute();
-    } else if (uri.pathSegments.length == 1) {
+    } else if (uri.pathSegments.length > 1) {
       String first = uri.pathSegments.first;
       switch (first) {
         case loginPath:
