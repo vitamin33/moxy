@@ -9,7 +9,8 @@ import 'package:moxy/utils/common.dart';
 
 class ProductDetailsCubit
     extends CubitWithEffects<ProductDetailsState, UiEffect> {
-  ProductDetailsCubit()
+  final String? productId;
+  ProductDetailsCubit({required this.productId})
       : super(ProductDetailsState.defaultProductDetailsState());
 
   final productRepository = locate<ProductRepository>();

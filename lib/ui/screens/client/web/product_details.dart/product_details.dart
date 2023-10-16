@@ -6,12 +6,13 @@ import 'package:moxy/ui/screens/components/product_details_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class ProductDetailsPage extends StatelessWidget {
-  const ProductDetailsPage({super.key});
+  final String? productId;
+  const ProductDetailsPage({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ProductDetailsCubit(),
+      create: (context) => ProductDetailsCubit(productId: productId),
       child: Scaffold(
         backgroundColor: AppTheme.white,
         body: SingleChildScrollView(

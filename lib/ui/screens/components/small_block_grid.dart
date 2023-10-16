@@ -73,7 +73,7 @@ class SmallBlockGrid extends StatelessWidget {
                         onTap: () {
                           context
                               .read<ClientHomeRouterCubit>()
-                              .navigateTo(const ProductDetailsRoute());
+                              .navigateTo(ProductDetailsRoute(product.id));
                         },
                         child: Container(
                             width: 10, height: 10, color: AppTheme.green))
