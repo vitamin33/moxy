@@ -26,8 +26,9 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     _pushRoute(ProfileRoute(text), addToRouteStack: addToRouteStack);
   }
 
-  void goToProductDetails([String? text, bool addToRouteStack = true]) {
-    _pushRoute(ProductDetailsRoute(text), addToRouteStack: addToRouteStack);
+  void goToProductDetails([String? productId, bool addToRouteStack = true]) {
+    _pushRoute(ProductDetailsRoute(productId),
+        addToRouteStack: addToRouteStack);
   }
 
   void goBack() {
@@ -66,7 +67,8 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
         goToProfile();
         break;
       case ProductDetailsRoute:
-        goToProductDetails();
+        ProductDetailsRoute route = initialRoute as ProductDetailsRoute;
+        goToProductDetails(route.productId);
         break;
     }
   }

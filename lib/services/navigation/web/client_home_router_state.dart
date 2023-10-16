@@ -91,10 +91,10 @@ class ProfileRoute extends ClientHomeRoute {
 }
 
 class ProductDetailsRoute extends ClientHomeRoute {
-  final String? extraPageContent;
-  const ProductDetailsRoute([this.extraPageContent]);
+  final String? productId;
+  const ProductDetailsRoute([this.productId]);
   @override
-  List<Object?> get props => [extraPageContent];
+  List<Object?> get props => [productId];
   @override
   String urlPath() => ClientHomeRoute.productDetailsPath;
 }
