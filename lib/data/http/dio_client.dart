@@ -342,7 +342,7 @@ class DioClient {
 
   Future<ProfileOrdersResponse> getProfileOrders() async {
     try {
-      final response = await dio.get('$baseUrl $getProfileOrdersUrl');
+      final response = await dio.get('$baseUrl$getProfileOrdersUrl');
       final data = response.data;
       final orderList = ProfileOrdersResponse.fromJson(data);
       return orderList;

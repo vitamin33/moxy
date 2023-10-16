@@ -22,8 +22,18 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     _pushRoute(CheckoutRoute(text), addToRouteStack: addToRouteStack);
   }
 
-  void goToProfile([String? text, bool addToRouteStack = true]) {
-    _pushRoute(ProfileRoute(text), addToRouteStack: addToRouteStack);
+  void goToProfile([String? extraPagePath, bool addToRouteStack = true]) {
+    _pushRoute(ProfileRoute(extraPagePath), addToRouteStack: addToRouteStack);
+  }
+
+  void goToProfileAddresses([bool addToRouteStack = false]) {
+    _pushRoute(const ProfileRoute(ClientHomeRoute.addressesPath),
+        addToRouteStack: addToRouteStack);
+  }
+
+  void goToProfileOrders([bool addToRouteStack = false]) {
+    _pushRoute(const ProfileRoute(ClientHomeRoute.ordersPath),
+        addToRouteStack: addToRouteStack);
   }
 
   void goToProductDetails([String? productId, bool addToRouteStack = true]) {
@@ -64,7 +74,8 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
         goToCheckout();
         break;
       case ProfileRoute:
-        goToProfile();
+        ProfileRoute route = initialRoute as ProfileRoute;
+        goToProfile(route.extraPagePath);
         break;
       case ProductDetailsRoute:
         ProductDetailsRoute route = initialRoute as ProductDetailsRoute;

@@ -264,18 +264,20 @@ class _OrdersPageState extends State<OrdersPage> {
             } else {
               _toolbarHeight = 0.0;
             }
-            return showTopBar
-                ? Stack(
-                    children: [
-                      _buildLoadingIfNeeded(state),
-                      Wrap(
-                        direction: Axis.horizontal,
-                        alignment: WrapAlignment.spaceAround,
-                        children: _filterChipsList(context, cubit, state),
-                      ),
-                    ],
-                  )
-                : Container();
+            return AnimatedOpacity(
+              opacity: showTopBar ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 300),
+              child: Stack(
+                children: [
+                  _buildLoadingIfNeeded(state),
+                  Wrap(
+                    direction: Axis.horizontal,
+                    alignment: WrapAlignment.spaceAround,
+                    children: _filterChipsList(context, cubit, state),
+                  ),
+                ],
+              ),
+            );
           },
         ),
       ),

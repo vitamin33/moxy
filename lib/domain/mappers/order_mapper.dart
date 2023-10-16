@@ -63,23 +63,20 @@ class OrderMapper {
         id: o.id,
         cashAdvanceValue: o.cashAdvanceValue,
         novaPost: warehouseMapper.mapToWarehouse(o.novaPost),
-        city: City(
-            mainDescription: o.city!.mainDescription!,
-            ref: o.city!.ref!,
-            deliveryCityRef: o.city!.deliveryCityRef!,
-            presentName: o.city!.presentName!),
+        city: cityMapper.mapToCity(o.city),
         deliveryType: _mapDeliveryType(o.deliveryType),
         status: _mapStatus(o.status),
         paymentType: _mapPaymentType(o.paymentType),
         client: Client.defaultClient(),
         orderedItems: o.orderedItems.map((e) {
-          List<NetworkDimension> dimens = e.product.dimensions ?? [];
+          List<NetworkDimension> dimens = e.dimensions;
           return OrderedItem(
-              productId: e.product.id,
-              productName: e.product.name,
-              dimensions:
-                  dimens.map((d) => productMapper.mapToDimension(d)).toList(),
-              productPrice: e.product.salePrice.toString());
+            productId: e.product,
+            productName: e.productName ?? '',
+            dimensions:
+                dimens.map((d) => productMapper.mapToDimension(d)).toList(),
+            productPrice: e.productPrice.toString(),
+          );
         }).toList(),
         createdAt: _parseDataTime(o.createdAt),
         updatedAt: _parseDataTime(o.updatedAt),

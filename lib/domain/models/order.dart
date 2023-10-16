@@ -35,6 +35,22 @@ class Order implements Copyable<Order> {
 
   String? get id => _id;
 
+  int totalValue() {
+    int total = 0;
+    for (var orderedItem in orderedItems) {
+      total += orderedItem.fullOrderPrice();
+    }
+    return total;
+  }
+
+  String fullOrderName() {
+    List<String> orderedNames = [];
+    for (var orderedItem in orderedItems) {
+      orderedNames.add(orderedItem.fullOrderedName());
+    }
+    return orderedNames.join(', ');
+  }
+
   static Order defaultOrder() {
     return Order(
         id: '',
@@ -169,6 +185,16 @@ class OrderedItem {
     return dimensions
         .map((e) => (e.quantity * productPrice).toInt())
         .reduce((total, element) => total + element);
+  }
+
+  String fullOrderedName() {
+    List<String> dimensionNames = [];
+    for (var dimension in dimensions) {
+      String dimensionName = '$productName - ${dimension.color.name}';
+      dimensionNames.add(dimensionName);
+    }
+
+    return dimensionNames.join(', ');
   }
 }
 

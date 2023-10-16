@@ -5,14 +5,15 @@ class ClientHomeRouteInfoParser
     extends RouteInformationParser<ClientHomeRoute> {
   @override
   RouteInformation? restoreRouteInformation(ClientHomeRoute configuration) {
-    final location = '/$shopPrefix${Uri.parse(configuration.urlPath())}';
-    return RouteInformation(location: location);
+    final path = '/$shopPrefix${Uri.parse(configuration.urlPath())}';
+
+    return RouteInformation(uri: Uri.parse(path));
   }
 
   @override
   Future<ClientHomeRoute> parseRouteInformation(
       RouteInformation routeInformation) async {
-    final uri = Uri.parse(routeInformation.location!);
+    final uri = routeInformation.uri;
     return ClientHomeRoute.fromUri(uri);
   }
 }
