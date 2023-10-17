@@ -128,6 +128,7 @@ class ProfileTabPage extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         final cubit = context.read<ProfileCubit>();
+        final theme = AppTheme.of(context)!;
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -137,7 +138,7 @@ class ProfileTabPage extends StatelessWidget {
                 child: Row(
                   children: [
                     // Drawer Menu
-                    _drawerMenu(cubit, state),
+                    _drawerMenu(cubit, state, theme),
                     // Selected Tab Content
                     _selectedTabContent(cubit, state),
                   ],
@@ -185,7 +186,7 @@ class ProfileTabPage extends StatelessWidget {
     );
   }
 
-  Widget _drawerMenu(ProfileCubit cubit, ProfileState state) {
+  Widget _drawerMenu(ProfileCubit cubit, ProfileState state, AppTheme theme) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
       child: SizedBox(
@@ -226,10 +227,7 @@ class ProfileTabPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 25),
                 child: Text(
                   tabTitles[index],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
+                  style: theme.drawerMenuText.copyWith(
                     color: state.activePage == index
                         ? AppTheme.pinkDark
                         : AppTheme.black,

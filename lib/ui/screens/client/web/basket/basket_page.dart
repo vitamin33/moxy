@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_effect.dart';
@@ -81,14 +82,8 @@ class _BasketPageState extends State<BasketPage> {
                 const SizedBox(height: 40),
                 SizedBox(
                   width: double.infinity,
-                  height: 300,
-                  child: ListView.builder(
-                    itemCount: state.basket.basketItems.length,
-                    itemBuilder: (context, index) {
-                      final item = state.basket.basketItems[index];
-                      return _buildProductItem(cubit, item, theme);
-                    },
-                  ),
+                  height: 350,
+                  child: _buildBasketItemList(cubit, state.basket, theme),
                 ),
                 const Divider(),
                 Row(
@@ -121,6 +116,32 @@ class _BasketPageState extends State<BasketPage> {
         );
       },
     );
+  }
+
+  Widget _buildBasketItemList(
+      BasketCubit cubit, Basket basket, AppTheme theme) {
+    if (basket.isEmpty()) {
+      return Column(
+        children: [
+          SizedBox(
+              height: 260,
+              width: 200,
+              child: Lottie.asset('assets/anim/empty_list.json')),
+          const Text(
+            'Ваша корзина порожня.\n Не пропустіть шанс зробити свій день яскравішим!',
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
+    } else {
+      return ListView.builder(
+        itemCount: basket.basketItems.length,
+        itemBuilder: (context, index) {
+          final item = basket.basketItems[index];
+          return _buildProductItem(cubit, item, theme);
+        },
+      );
+    }
   }
 }
 

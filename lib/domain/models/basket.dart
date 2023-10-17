@@ -25,6 +25,10 @@ class Basket implements Copyable<Basket> {
     );
   }
 
+  bool isEmpty() {
+    return basketItems.isEmpty;
+  }
+
   @override
   Basket copyWith({
     String? id,
