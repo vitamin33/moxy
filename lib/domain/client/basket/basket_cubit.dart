@@ -32,7 +32,7 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
         if (basket != null) {
           emitSuccessBasket(basket);
         } else {
-          // TODO handle empty basket state
+          emit(state.copyWith(isLoading: false, basket: null));
         }
       }, (error) {
         emitEffect(BasketApiRequestFailed(

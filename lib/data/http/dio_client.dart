@@ -23,7 +23,6 @@ import '../models/response/all_orders_response.dart';
 import '../models/response/all_promos_response.dart';
 import '../models/response/dashboard_response.dart';
 import '../models/response/login_response.dart';
-import '../models/response/profile_response.dart';
 
 class DioClient {
   late String baseUrl;
@@ -325,29 +324,6 @@ class DioClient {
       return promosList;
     } catch (e, stack) {
       moxyPrint(stack);
-      rethrow;
-    }
-  }
-
-  //PROFILE
-  Future<NetworkProfile> getProfile() async {
-    try {
-      final response = await dio.get('$baseUrl $getProfileUrl');
-      final profile = NetworkProfile.fromJson(response.data);
-      return profile;
-    } catch (e, stack) {
-      moxyPrint(stack);
-      rethrow;
-    }
-  }
-
-  Future<ProfileOrdersResponse> getProfileOrders() async {
-    try {
-      final response = await dio.get('$baseUrl$getProfileOrdersUrl');
-      final data = response.data;
-      final orderList = ProfileOrdersResponse.fromJson(data);
-      return orderList;
-    } catch (e) {
       rethrow;
     }
   }

@@ -58,6 +58,16 @@ class AppTheme extends InheritedWidget {
     color: gray,
     decoration: TextDecoration.underline,
   );
+  final TextStyle mainTitleText = const TextStyle(
+    fontSize: 28,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w600,
+  );
+  final TextStyle drawerMenuText = const TextStyle(
+    fontSize: 16,
+    fontFamily: 'Poppins',
+    fontWeight: FontWeight.w600,
+  );
 
   const AppTheme({super.key, required Widget child}) : super(child: child);
 
