@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
 import 'package:moxy/domain/client/product_details/product_details_state.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/components/custom_accordion.dart';
 import 'package:moxy/ui/screens/components/image_carousel.dart';
+import 'package:moxy/ui/screens/components/quantity_picker.dart';
+import 'package:moxy/ui/screens/components/rate_indicator.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 
 class ProductDetailsContainer extends StatelessWidget {
   ProductDetailsContainer({super.key});
 
-  final List<String> images = [
-    ImageAssets.bigPictureHome,
-    ImageAssets.bigPictureHome,
-  ];
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
       builder: (context, state) {
+        final cubit = context.read<ProductDetailsCubit>();
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -27,73 +27,128 @@ class ProductDetailsContainer extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  ImageCarousel(images: images),
-                  const SizedBox(
-                    width: 400,
-                    child: Column(children: [
-                      SizedBox(height: 10),
-                      CustomAccordion(
-                        title: 'Безкоштовна доставка від 1800 грн',
-                        content:
-                            'Безкоштовна доставка при замовленні від 1800 грн. В разі обміну або повернення, усіх товарів або частини товарів із цього замовлення, безкоштовна доставка анулюється.',
-                        boxShadow: true,
-                      ),
-                      SizedBox(height: 10),
-                      CustomAccordion(
-                          title: '30 днів на повернення',
-                          content:
-                              'Товар підлягає поверненню протягом 30 днів з моменту отримання замовлення.Як виглядає весь процес? Все просто!Ви відправляєте товар по зворотній адресі.Ми повертаємо кошти наступного дня після надходження товару на наш склад..',
-                          boxShadow: true),
-                      SizedBox(height: 10),
-                      CustomAccordion(
-                          title: 'Легке повернення за 0 грн',
-                          content:
-                              'Скористуйся послугою легке повернення від Нової Пошти.Деталі за посиланням',
-                          boxShadow: true),
-                      SizedBox(height: 10),
-                    ]),
-                  ),
+                  if(!state.isLoading)
+                    ImageCarousel(dimensions: state.product.dimensions),
                 ],
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Сумка літня рожева ',
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+                  Text(
+                    state.product.name,
+                    style: const TextStyle(
+                        fontSize: 40, fontWeight: FontWeight.w700),
+                  ),
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text('4.6'),
+                      ),
+                      RatingBarIndicator(
+                        rating: 4.6,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 15.0,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text(
+                          '5,890 rating',
+                          style: TextStyle(color: AppTheme.gray),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  const Text('785 uah',
-                      style:
-                          TextStyle(fontSize: 30, fontWeight: FontWeight.w600)),
+                  state.product.discountPrice != 0
+                      ? Row(
+                          children: [
+                            Text('${state.product.discountPrice} uah',
+                                style: const TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w600,
+                                    color: AppTheme.pinkDark)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text('${state.product.salePrice} uah',
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    color: AppTheme.gray,
+                                    decoration: TextDecoration.lineThrough)),
+                          ],
+                        )
+                      : Row(children: [
+                          Text('${state.product.salePrice} uah',
+                              style: const TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppTheme.pinkDark)),
+                        ]),
                   const SizedBox(height: 20),
-                  const Text('Color:'),
+                  Row(
+                    children: [
+                      const Text('Color:'),
+                      SizedBox(
+                        width: 300,
+                        height: 50,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          children: [
+                            for (Dimension dimen in state.product.dimensions)
+                              Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: _buildColorWidget(dimen, cubit),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Text(state.product.description),
+                  const SizedBox(height: 20),
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          QuantityPicker(
+                            quantity: 1,
+                            onPlus: () {
+                            },
+                            onMinus: () {
+                            },
+                          ),
+                          SizedBox(width: 5),
+                          CustomButton(
+                            outline: true,
+                            title: 'ADD TO CART',
+                            onTap: () {},
+                            buttonWidth: 275,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      CustomButton(
+                        title: 'BUY IT NOW',
+                        onTap: () {},
+                        buttonWidth: 400,
+                      ),
+                    ],
+                  ),
                   SizedBox(
-                    width: 300,
-                    height: 50,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [],
-
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                  const Text('Відправка завтра 27.09',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    title: 'Купити',
-                    onTap: () {},
-                    buttonWidth: 300,
-                  ),
-                  const SizedBox(
                     width: 400,
                     child: Column(children: [
-                      Divider(),
+                      const Divider(
+                        color: AppTheme.black,
+                      ),
                       CustomAccordion(
                         showIcon: false,
                         title: 'Харкатеристика',
@@ -101,39 +156,56 @@ class ProductDetailsContainer extends StatelessWidget {
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [Text("Код товару"), Text('099769')],
+                              children: [
+                                const Text("Розміри:"),
+                                Text(
+                                    state.product.attributes.widthInCm
+                                            .toString() +
+                                        'x' +
+                                        state.product.attributes.heightInCm
+                                            .toString() +
+                                        'x' +
+                                        state.product.attributes.lengthInCm
+                                            .toString())
+                              ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Колір:"),
-                                Text('Білий, Колір засмаги')
+                                const Text("Вага:"),
+                                Text(state.product.attributes.weightInGrams
+                                    .toString())
                               ],
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Матеріал:"),
-                                Text('Екошкіра, Штучне хутро')
+                                const Text("Виробник:"),
+                                Text(state.product.attributes.producer
+                                    .toString())
                               ],
                             ),
-                            SizedBox(height: 10),
-                            Row(
+                            const SizedBox(height: 10),
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [Text("Сезонність:"), Text('Зима')],
                             ),
                           ],
                         ),
                       ),
-                      Divider(),
-                      CustomAccordion(
+                      const Divider(
+                        color: AppTheme.black,
+                      ),
+                      const CustomAccordion(
                         showIcon: false,
                         title: 'Розмірна сітка',
                         content: '',
                       ),
-                      Divider(),
+                      const Divider(
+                        color: AppTheme.black,
+                      ),
                     ]),
                   ),
                 ],
@@ -146,24 +218,29 @@ class ProductDetailsContainer extends StatelessWidget {
   }
 }
 
-Widget _buildColorWidget(String color) {
-  return Container(
-    padding: const EdgeInsets.all(2),
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(
-        style: BorderStyle.solid,
-        color: AppTheme.gray.withOpacity(0.4),
-        width: 1,
+Widget _buildColorWidget(Dimension dimen, ProductDetailsCubit cubit) {
+  return GestureDetector(
+    onTap: () {
+      cubit.setSeletedColor(dimen.color);
+    },
+    child: Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          style: BorderStyle.solid,
+          color:
+              dimen.isSelected ? AppTheme.red : AppTheme.gray.withOpacity(0.4),
+          width: 1,
+        ),
       ),
-    ),
-    child: CircleAvatar(
-      radius: 15,
-      backgroundColor: AppTheme.greyLigth,
       child: CircleAvatar(
-        radius: 13,
-        backgroundColor: AppTheme.pink,
-        backgroundImage: AssetImage(color),
+        radius: 15,
+        backgroundColor: AppTheme.greyLigth,
+        child: CircleAvatar(
+          radius: 13,
+          backgroundColor: hexToColor(dimen.color.hexCode),
+        ),
       ),
     ),
   );

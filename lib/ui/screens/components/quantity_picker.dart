@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 class QuantityPicker extends StatelessWidget {
   final int quantity;
@@ -14,10 +15,8 @@ class QuantityPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(border: Border.all(color: AppTheme.black)),
+      padding: const EdgeInsets.all(1),
       child: Row(
         children: [
           InkWell(

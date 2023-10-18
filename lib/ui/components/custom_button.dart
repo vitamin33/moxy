@@ -35,31 +35,29 @@ class _CustomButtonState extends State<CustomButton> {
         child: widget.outline
             ? OutlinedButton(
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: AppTheme.pink,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  padding: const EdgeInsets.all(28),
+                  backgroundColor: AppTheme.white,
+                  shape: RoundedRectangleBorder(),
+                  padding: const EdgeInsets.all(20),
                   side: const BorderSide(
                     width: 2,
-                    color: AppTheme.black,
+                    color: AppTheme.pinkDark,
                   ),
                 ),
                 onPressed: disabled ? null : widget.onTap,
                 child: Text(
                   widget.title,
-                  style: const TextStyle(color: AppTheme.black, fontSize: 18),
+                  style:
+                      const TextStyle(color: AppTheme.pinkDark, fontSize: 18),
                 ),
               )
             : TextButton(
                 onPressed: disabled ? null : widget.onTap,
                 style: TextButton.styleFrom(
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    shape: const RoundedRectangleBorder(),
                     padding: const EdgeInsets.all(0),
                     backgroundColor: AppTheme.black),
                 child: Container(
-                  height: 56.0,
+                  height: 50.0,
                   alignment: Alignment.center,
                   child: widget.state == ButtonState.loading
                       ? Center(
