@@ -16,39 +16,27 @@ class ImageCarousel extends StatefulWidget {
 }
 
 class _ImageCarouselState extends State<ImageCarousel> {
-  final PageController _pageController =PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
   int activePage = 0;
   List<ImagePath> allImages = [];
 
-  
   @override
   void initState() {
     super.initState();
-    _updateAllImages();
+    _updateImages();
   }
 
-  void _updateAllImages() {
-    allImages = widget.dimensions.expand((dimension) => dimension.images).toList();
-  }
+  void _updateImages() {
+    bool allDimensionsSelected =
+        widget.dimensions.any((dimension) => dimension.isSelected);
 
-  void _updateActivePage() {
-    int selectedImageIndex = 0;
-
-    for (int i = 0; i < widget.dimensions.length; i++) {
-      if (widget.dimensions[i].isSelected) {
-        selectedImageIndex += i;
-        break;
-      }
-      selectedImageIndex += widget.dimensions[i].images.length;
-    }
-
-    setState(() {
-      activePage = selectedImageIndex;
-    });
-
-    if (_pageController.hasClients) {
-      _pageController.animateToPage(selectedImageIndex,
-          duration:const Duration(microseconds: 100), curve: Curves.linear);
+    if (allDimensionsSelected) {
+      allImages = widget.dimensions
+          .where((dimension) => dimension.isSelected)
+          .expand((dimension) => dimension.images)
+          .toList();
+    } else {
+       allImages=widget.dimensions.expand((dimension) => dimension.images).toList();;
     }
   }
 
@@ -56,7 +44,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
   void didUpdateWidget(ImageCarousel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.dimensions != oldWidget.dimensions) {
-      _updateActivePage();
+      _updateImages();
     }
   }
 
