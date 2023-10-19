@@ -16,32 +16,39 @@ class ImageCarousel extends StatefulWidget {
 }
 
 class _ImageCarouselState extends State<ImageCarousel> {
-  final PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController =PageController(initialPage: 0);
   int activePage = 0;
   List<ImagePath> allImages = [];
-  List<ImagePath> carouselImages = [];
 
-
-   @override
+  
+  @override
   void initState() {
     super.initState();
-    _updateImages();
+    _updateAllImages();
   }
 
-  void _updateImages() {
-    allImages =
-        widget.dimensions.expand((dimension) => dimension.images).toList();
+  void _updateAllImages() {
+    allImages = widget.dimensions.expand((dimension) => dimension.images).toList();
+  }
 
-    bool allDimensionsSelected =
-        widget.dimensions.any((dimension) => dimension.isSelected);
+  void _updateActivePage() {
+    int selectedImageIndex = 0;
 
-    if (allDimensionsSelected) {
-      carouselImages = widget.dimensions
-          .where((dimension) => dimension.isSelected)
-          .expand((dimension) => dimension.images)
-          .toList();
-    } else {
-      carouselImages = allImages;
+    for (int i = 0; i < widget.dimensions.length; i++) {
+      if (widget.dimensions[i].isSelected) {
+        selectedImageIndex += i;
+        break;
+      }
+      selectedImageIndex += widget.dimensions[i].images.length;
+    }
+
+    setState(() {
+      activePage = selectedImageIndex;
+    });
+
+    if (_pageController.hasClients) {
+      _pageController.animateToPage(selectedImageIndex,
+          duration:const Duration(microseconds: 100), curve: Curves.linear);
     }
   }
 
@@ -49,7 +56,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
   void didUpdateWidget(ImageCarousel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.dimensions != oldWidget.dimensions) {
-      _updateImages();
+      _updateActivePage();
     }
   }
 
@@ -66,7 +73,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _pageController,
-                    itemCount: carouselImages.length,
+                    itemCount: allImages.length,
                     onPageChanged: (newPage) {
                       setState(() {
                         activePage = newPage;
@@ -78,7 +85,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                             image: DecorationImage(
                                 fit: BoxFit.cover,
                                 image: NetworkImage(
-                                    carouselImages[pagePosition].imagePath))),
+                                    allImages[pagePosition].imagePath))),
                       );
                     }),
               ),
@@ -182,7 +189,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                           child: Center(
                             child: SmoothPageIndicator(
                               controller: _pageController,
-                              count: carouselImages.length,
+                              count: allImages.length,
                               onDotClicked: (index) {
                                 _pageController.animateToPage(index,
                                     duration: const Duration(milliseconds: 300),
