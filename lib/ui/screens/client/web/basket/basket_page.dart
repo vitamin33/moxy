@@ -23,11 +23,13 @@ class BasketPage extends StatefulWidget {
   State<BasketPage> createState() => _BasketPageState();
 }
 
-class _BasketPageState extends State<BasketPage> {
+class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
+  late final AnimationController _controller;
   @override
   void initState() {
     super.initState();
     context.read<BasketCubit>().getBasketInfo();
+    _controller = AnimationController(vsync: this);
   }
 
   @override
@@ -123,10 +125,20 @@ class _BasketPageState extends State<BasketPage> {
     if (basket.isEmpty()) {
       return Column(
         children: [
-          SizedBox(
-              height: 260,
-              width: 200,
-              child: Lottie.asset('assets/anim/empty_list.json')),
+          Lottie.asset(
+            'assets/anim/main.json',
+            width: 200,
+            height: 200,
+            fit: BoxFit.fill,
+            controller: _controller,
+            onLoaded: (composition) {
+              // Configure the AnimationController with the duration of the
+              // Lottie file and start the animation.
+              _controller
+                ..duration = composition.duration
+                ..forward();
+            },
+          ),
           const Text(
             'Ваша корзина порожня.\n Не пропустіть шанс зробити свій день яскравішим!',
             textAlign: TextAlign.center,
