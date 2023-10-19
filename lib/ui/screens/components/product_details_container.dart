@@ -27,7 +27,7 @@ class ProductDetailsContainer extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  if(!state.isLoading)
+                  if (!state.isLoading)
                     ImageCarousel(dimensions: state.product.dimensions),
                 ],
               ),
@@ -70,7 +70,7 @@ class ProductDetailsContainer extends StatelessWidget {
                   state.product.discountPrice != 0
                       ? Row(
                           children: [
-                            Text('${state.product.discountPrice} uah',
+                            Text('${state.product.discountPrice} UAH',
                                 style: const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.w600,
@@ -78,7 +78,7 @@ class ProductDetailsContainer extends StatelessWidget {
                             const SizedBox(
                               width: 20,
                             ),
-                            Text('${state.product.salePrice} uah',
+                            Text('${state.product.salePrice} UAH',
                                 style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w400,
@@ -87,7 +87,7 @@ class ProductDetailsContainer extends StatelessWidget {
                           ],
                         )
                       : Row(children: [
-                          Text('${state.product.salePrice} uah',
+                          Text('${state.product.salePrice} UAH',
                               style: const TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.w600,
@@ -121,10 +121,8 @@ class ProductDetailsContainer extends StatelessWidget {
                         children: [
                           QuantityPicker(
                             quantity: 1,
-                            onPlus: () {
-                            },
-                            onMinus: () {
-                            },
+                            onPlus: () {},
+                            onMinus: () {},
                           ),
                           SizedBox(width: 5),
                           CustomButton(
@@ -151,7 +149,7 @@ class ProductDetailsContainer extends StatelessWidget {
                       ),
                       CustomAccordion(
                         showIcon: false,
-                        title: 'Харкатеристика',
+                        title: 'ХАРАКТЕРИСТИКА',
                         contentChild: Column(
                           children: [
                             Row(
@@ -200,7 +198,7 @@ class ProductDetailsContainer extends StatelessWidget {
                       ),
                       const CustomAccordion(
                         showIcon: false,
-                        title: 'Розмірна сітка',
+                        title: 'РОЗМІРНА СІТКА',
                         content: '',
                       ),
                       const Divider(

@@ -36,7 +36,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
           .expand((dimension) => dimension.images)
           .toList();
     } else {
-       allImages=widget.dimensions.expand((dimension) => dimension.images).toList();;
+      allImages =
+          widget.dimensions.expand((dimension) => dimension.images).toList();
+      ;
     }
   }
 
@@ -51,13 +53,14 @@ class _ImageCarouselState extends State<ImageCarousel> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         OnHover(
           builder: (isHovered) {
             return Stack(children: [
               SizedBox(
-                width: 700,
-                height: 600,
+                width: 600,
+                height: 550,
                 child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: _pageController,
