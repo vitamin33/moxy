@@ -32,6 +32,7 @@ class ProductsService {
     final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
     for (String image in choosenImages) {
+      moxyPrint('Image path: $image');
       String fileName = basename(image);
       imageFiles.add(
         await MultipartFile.fromFile(
@@ -170,7 +171,7 @@ class ProductsService {
     return false;
   }
 
-   Future<NetworkProduct> getProductsDetails(String productId) async {
+  Future<NetworkProduct> getProductsDetails(String productId) async {
     try {
       final response =
           await _dio.get('$baseUrl $getProductDetailsUrl $productId');

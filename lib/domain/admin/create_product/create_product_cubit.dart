@@ -356,7 +356,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void clearState() {
-    emit(CreateProductState.defaultCreateProductState());
+    emit(state.copyWith(editProduct: null, product: null));
   }
 
   void clearErrorState() {

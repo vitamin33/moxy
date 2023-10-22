@@ -18,7 +18,9 @@ class _ProductCategoryChooserState extends State<ProductCategoryChooser> {
   @override
   void initState() {
     super.initState();
-    selectedValue = widget.categories.first;
+    if (widget.categories.isNotEmpty) {
+      selectedValue = widget.categories.first;
+    }
   }
 
   @override
