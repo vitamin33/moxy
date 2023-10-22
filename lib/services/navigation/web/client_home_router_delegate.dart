@@ -82,6 +82,7 @@ class ClientHomeRouterDelegate extends RouterDelegate<ClientHomeRoute>
         _materialPage(
           valueKey: "productDetails",
           child: ProductDetailsPage(productId: productId),
+
         ),
       ];
     }
