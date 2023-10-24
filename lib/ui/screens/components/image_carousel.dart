@@ -59,7 +59,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
           builder: (isHovered) {
             return Stack(children: [
               SizedBox(
-                width: 600,
+                width: MediaQuery.sizeOf(context).width / 2.2,
                 height: 550,
                 child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),

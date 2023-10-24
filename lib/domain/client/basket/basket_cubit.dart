@@ -141,10 +141,23 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     final result = await basketRepository.addProductToBasket(item);
     result.when((success) {
       final List<BasketItem> updateBasketItemsList = [
-        BasketItem(product: product, dimension: product.dimensions.first)
+        BasketItem(product: product, dimension:  product.dimensions.first)
       ];
       emit(state.copyWith(
           basket: state.basket.copyWith(basketItems: updateBasketItemsList)));
+    }, (error) {
+      emitEffect(BasketApiRequestFailed(
+          'Failed add product to basket  ${error.toString()}'));
+    });
+  }
+
+  void addBasketItemToBasket(BasketItem basketItem) async {
+    NetworkAddOrChange item =
+        basketMapper.mapToNetworkBasketChange(basketItem);
+    final result = await basketRepository.addProductToBasket(item);
+    result.when((success) {
+      emit(state.copyWith(
+          basket: state.basket.copyWith(basketItems:[basketItem])));
     }, (error) {
       emitEffect(BasketApiRequestFailed(
           'Failed add product to basket  ${error.toString()}'));

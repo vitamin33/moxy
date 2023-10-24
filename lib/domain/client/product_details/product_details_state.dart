@@ -1,4 +1,5 @@
 import 'package:moxy/domain/copyable.dart';
+import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
 
 import '../../validation_mixin.dart';
@@ -7,6 +8,7 @@ class ProductDetailsState implements Copyable<ProductDetailsState> {
   final bool isLoading;
   final String userEmail;
   final Product product;
+  final BasketItem basketItem;
 
   // field errors
   FieldErrors errors;
@@ -16,6 +18,7 @@ class ProductDetailsState implements Copyable<ProductDetailsState> {
     required this.userEmail,
     required this.errors,
     required this.product,
+    required this.basketItem,
   });
 
   static defaultProductDetailsState() {
@@ -24,6 +27,7 @@ class ProductDetailsState implements Copyable<ProductDetailsState> {
       userEmail: '',
       errors: FieldErrors(),
       product: Product.defaultProduct(),
+      basketItem: BasketItem.defaultBasket(),
     );
   }
 
@@ -32,12 +36,15 @@ class ProductDetailsState implements Copyable<ProductDetailsState> {
       {String? userEmail,
       FieldErrors? errors,
       Product? product,
-      bool? isLoading}) {
+      bool? isLoading,
+      BasketItem? basketItem,
+      }) {
     return ProductDetailsState(
       isLoading: isLoading ?? this.isLoading,
       userEmail: userEmail ?? this.userEmail,
       errors: errors ?? this.errors,
       product: product ?? this.product,
+      basketItem: basketItem ?? this.basketItem,
     );
   }
 }

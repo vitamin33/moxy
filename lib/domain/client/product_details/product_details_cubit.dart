@@ -25,7 +25,7 @@ class ProductDetailsCubit
       final result = await productRepository.getProductById(productId);
       result.when((success) {
         final product = productMapper.mapToProduct(success);
-        emit(state.copyWith(product: product, isLoading: false));
+        emit(state.copyWith(product: product, isLoading: false,basketItem: state.basketItem.copyWith(product: product)));
       }, (error) {
         emitEffect(ProductDetailsApiRequestFailed(
             'Failed get product details ${error.toString()}'));
@@ -35,15 +35,65 @@ class ProductDetailsCubit
     }
   }
 
-  void setSeletedColor(ProductColor color) {
-    final updatedDimensions = state.product.dimensions.map((dimension) {
-      if (dimension.color.hexCode == color.hexCode) {
+  void setSeletedColor(Dimension selectedDimension) {
+    final updatedIsSelectedInProduct =
+        state.product.dimensions.map((dimension) {
+      if (dimension.color.hexCode == selectedDimension.color.hexCode) {
         return dimension.copyWith(isSelected: !dimension.isSelected);
       } else {
         return dimension.copyWith(isSelected: false);
       }
     }).toList();
+    final updateSelectedDimension = Dimension(
+        color: selectedDimension.color,
+        quantity: 1,
+        material: selectedDimension.material,
+        size: selectedDimension.size,
+        images: selectedDimension.images);
     emit(state.copyWith(
-        product: state.product.copyWith(dimensions: updatedDimensions)));
+        basketItem:
+            state.basketItem.copyWith(dimension: updateSelectedDimension),
+        product:
+            state.product.copyWith(dimensions: updatedIsSelectedInProduct)));
+  }
+
+  bool checkMaxQuantityAvailability() {
+    Dimension orderedDimen = state.basketItem.dimension;
+    Dimension productDimen = state.product.dimensions
+        .firstWhere((d) => d.color.id == orderedDimen.color.id);
+    if (orderedDimen.quantity < productDimen.quantity) {
+      return true;
+    }
+    return false;
+  }
+
+  bool checkMinQuantityAvailability() {
+    Dimension orderedDimen = state.basketItem.dimension;
+    if (orderedDimen.quantity > 1) {
+      return true;
+    }
+    return false;
+  }
+
+  void addQuantityOfProduct() {
+    if (checkMaxQuantityAvailability()) {
+      emit(
+        state.copyWith(
+            basketItem: state.basketItem.copyWith(
+                dimension: state.basketItem.dimension.copyWith(
+                    quantity: state.basketItem.dimension.quantity + 1))),
+      );
+    }
+  }
+
+  void removeQuantityOfProduct() {
+    if (checkMinQuantityAvailability()) {
+      emit(
+        state.copyWith(
+            basketItem: state.basketItem.copyWith(
+                dimension: state.basketItem.dimension.copyWith(
+                    quantity: state.basketItem.dimension.quantity - 1))),
+      );
+    }
   }
 }
