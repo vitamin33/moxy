@@ -47,6 +47,7 @@ class Product implements Copyable<Product> {
 
   @override
   Product copyWith({
+    String? id,
     String? name,
     String? idName,
     String? category,
@@ -60,6 +61,7 @@ class Product implements Copyable<Product> {
     ProductAttributes? attributes,
   }) {
     return Product(
+      id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
       costPriceInUsd: costPriceInUsd ?? this.costPriceInUsd,

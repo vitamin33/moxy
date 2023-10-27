@@ -25,7 +25,10 @@ class ProductDetailsCubit
       final result = await productRepository.getProductById(productId);
       result.when((success) {
         final product = productMapper.mapToProduct(success);
-        emit(state.copyWith(product: product, isLoading: false,basketItem: state.basketItem.copyWith(product: product)));
+        emit(state.copyWith(
+          productDetails: state.productDetails.copyWith(product: product),
+          isLoading: false,
+        ));
       }, (error) {
         emitEffect(ProductDetailsApiRequestFailed(
             'Failed get product details ${error.toString()}'));
@@ -37,7 +40,7 @@ class ProductDetailsCubit
 
   void setSeletedColor(Dimension selectedDimension) {
     final updatedIsSelectedInProduct =
-        state.product.dimensions.map((dimension) {
+        state.productDetails.product.dimensions.map((dimension) {
       if (dimension.color.hexCode == selectedDimension.color.hexCode) {
         return dimension.copyWith(isSelected: !dimension.isSelected);
       } else {
@@ -51,15 +54,16 @@ class ProductDetailsCubit
         size: selectedDimension.size,
         images: selectedDimension.images);
     emit(state.copyWith(
-        basketItem:
-            state.basketItem.copyWith(dimension: updateSelectedDimension),
-        product:
-            state.product.copyWith(dimensions: updatedIsSelectedInProduct)));
+        productDetails: state.productDetails.copyWith(
+      dimension: updateSelectedDimension,
+      product: state.productDetails.product
+          .copyWith(dimensions: updatedIsSelectedInProduct),
+    )));
   }
 
   bool checkMaxQuantityAvailability() {
-    Dimension orderedDimen = state.basketItem.dimension;
-    Dimension productDimen = state.product.dimensions
+    Dimension orderedDimen = state.productDetails.dimension;
+    Dimension productDimen = state.productDetails.product.dimensions
         .firstWhere((d) => d.color.id == orderedDimen.color.id);
     if (orderedDimen.quantity < productDimen.quantity) {
       return true;
@@ -68,7 +72,7 @@ class ProductDetailsCubit
   }
 
   bool checkMinQuantityAvailability() {
-    Dimension orderedDimen = state.basketItem.dimension;
+    Dimension orderedDimen = state.productDetails.dimension;
     if (orderedDimen.quantity > 1) {
       return true;
     }
@@ -79,9 +83,9 @@ class ProductDetailsCubit
     if (checkMaxQuantityAvailability()) {
       emit(
         state.copyWith(
-            basketItem: state.basketItem.copyWith(
-                dimension: state.basketItem.dimension.copyWith(
-                    quantity: state.basketItem.dimension.quantity + 1))),
+            productDetails: state.productDetails.copyWith(
+                dimension: state.productDetails.dimension.copyWith(
+                    quantity: state.productDetails.dimension.quantity + 1))),
       );
     }
   }
@@ -90,9 +94,9 @@ class ProductDetailsCubit
     if (checkMinQuantityAvailability()) {
       emit(
         state.copyWith(
-            basketItem: state.basketItem.copyWith(
-                dimension: state.basketItem.dimension.copyWith(
-                    quantity: state.basketItem.dimension.quantity - 1))),
+            productDetails: state.productDetails.copyWith(
+                dimension: state.productDetails.dimension.copyWith(
+                    quantity: state.productDetails.dimension.quantity - 1))),
       );
     }
   }

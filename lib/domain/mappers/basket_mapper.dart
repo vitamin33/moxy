@@ -11,6 +11,7 @@ import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/created_invoice.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/product_details.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/extensions.dart';
 
@@ -90,6 +91,15 @@ class BasketMapper {
   }
 
   NetworkAddOrChange mapToNetworkBasketChange(BasketItem item) {
+    return NetworkAddOrChange(
+      product: NetworkChangeBasketDimen(
+        productId: item.product.id!,
+        dimension: productMapper.mapToNetworkDimension(item.dimension),
+      ),
+    );
+  }
+  
+  NetworkAddOrChange productDetailsMapToNetworkBasketChange(ProductDetails item) {
     return NetworkAddOrChange(
       product: NetworkChangeBasketDimen(
         productId: item.product.id!,

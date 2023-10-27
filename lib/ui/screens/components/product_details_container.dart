@@ -15,7 +15,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 
 class ProductDetailsContainer extends StatelessWidget {
-  ProductDetailsContainer({super.key});
+  const ProductDetailsContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,14 +25,15 @@ class ProductDetailsContainer extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: state.isLoading
-              ? MoxyLoader(
+              ? const MoxyLoader(
                   iconSize: 50,
                 )
               : Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ImageCarousel(dimensions: state.product.dimensions),
+                    ImageCarousel(
+                        dimensions: state.productDetails.product.dimensions),
                     _aboutProductDetails(state, cubit, context)
                   ],
                 ),
@@ -51,7 +52,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          state.product.name.toUpperCase(),
+          state.productDetails.product.name.toUpperCase(),
           style: const TextStyle(
               fontFamily: 'HelveticaNeue',
               fontSize: 36,
@@ -87,10 +88,10 @@ Widget _aboutProductDetails(ProductDetailsState state,
         const SizedBox(
           height: 20,
         ),
-        state.product.discountPrice != 0
+        state.productDetails.product.discountPrice != 0
             ? Row(
                 children: [
-                  Text('${state.product.discountPrice} UAH',
+                  Text('${state.productDetails.product.discountPrice} UAH',
                       style: const TextStyle(
                           fontSize: 30,
                           fontFamily: 'HelveticaNeue',
@@ -99,7 +100,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
                   const SizedBox(
                     width: 20,
                   ),
-                  Text('${state.product.salePrice} UAH',
+                  Text('${state.productDetails.product.salePrice} UAH',
                       style: const TextStyle(
                           fontSize: 18,
                           fontFamily: 'HelveticaNeue',
@@ -109,7 +110,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
                 ],
               )
             : Row(children: [
-                Text('${state.product.salePrice} UAH',
+                Text('${state.productDetails.product.salePrice} UAH',
                     style: const TextStyle(
                         fontSize: 30,
                         fontFamily: 'HelveticaNeue',
@@ -132,7 +133,8 @@ Widget _aboutProductDetails(ProductDetailsState state,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  for (Dimension dimen in state.product.dimensions)
+                  for (Dimension dimen
+                      in state.productDetails.product.dimensions)
                     Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: _buildColorWidget(dimen, cubit),
@@ -143,8 +145,8 @@ Widget _aboutProductDetails(ProductDetailsState state,
           ],
         ),
         Text(
-          state.product.description,
-          style: TextStyle(
+          state.productDetails.product.description,
+          style: const TextStyle(
               fontFamily: 'HelveticaNeue',
               fontSize: 15,
               fontWeight: FontWeight.w500),
@@ -155,7 +157,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
             Row(
               children: [
                 QuantityPicker(
-                  quantity: state.basketItem.dimension.quantity,
+                  quantity: state.productDetails.dimension.quantity,
                   onPlus: () {
                     cubit.addQuantityOfProduct();
                   },
@@ -163,12 +165,14 @@ Widget _aboutProductDetails(ProductDetailsState state,
                     cubit.removeQuantityOfProduct();
                   },
                 ),
-                SizedBox(width: 5),
+                const SizedBox(width: 5),
                 CustomButton(
                   outline: true,
                   title: 'ADD TO CART',
                   onTap: () {
-                    context.read<BasketCubit>().addBasketItemToBasket(state.basketItem);
+                    context
+                        .read<BasketCubit>()
+                        .addProductDetailsToBasket(state.productDetails);
                   },
                   buttonWidth: 375,
                 ),
@@ -177,14 +181,16 @@ Widget _aboutProductDetails(ProductDetailsState state,
             const SizedBox(height: 10),
             CustomButton(
               title: 'BUY IT NOW',
-              onTap: () {
-                Navigator.pop(
-                  context,
-                );
-                context.read<BasketCubit>().addBasketItemToBasket(state.basketItem);
-                context
-                    .read<ClientHomeRouterCubit>()
-                    .navigateTo(const CheckoutRoute());
+              onTap: () async {
+                final isProductInBusket = await context
+                    .read<BasketCubit>()
+                    .addProductDetailsToBasket(state.productDetails);
+
+                if (isProductInBusket) {
+                  context
+                      .read<ClientHomeRouterCubit>()
+                      .navigateTo(const CheckoutRoute());
+                }
               },
               buttonWidth: 500,
             ),
@@ -211,12 +217,15 @@ Widget _aboutProductDetails(ProductDetailsState state,
                         ),
                       ),
                       Text(
-                        state.product.attributes.widthInCm.toString() +
+                        state.productDetails.product.attributes.widthInCm
+                                .toString() +
                             'x' +
-                            state.product.attributes.heightInCm.toString() +
+                            state.productDetails.product.attributes.heightInCm
+                                .toString() +
                             'x' +
-                            state.product.attributes.lengthInCm.toString(),
-                        style: TextStyle(fontFamily: 'HelveticaNeue'),
+                            state.productDetails.product.attributes.lengthInCm
+                                .toString(),
+                        style: const TextStyle(fontFamily: 'HelveticaNeue'),
                       )
                     ],
                   ),
@@ -228,8 +237,10 @@ Widget _aboutProductDetails(ProductDetailsState state,
                         "Вага:",
                         style: TextStyle(fontFamily: 'HelveticaNeue'),
                       ),
-                      Text(state.product.attributes.weightInGrams.toString(),
-                          style: TextStyle(fontFamily: 'HelveticaNeue'))
+                      Text(
+                          state.productDetails.product.attributes.weightInGrams
+                              .toString(),
+                          style: const TextStyle(fontFamily: 'HelveticaNeue'))
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -240,8 +251,10 @@ Widget _aboutProductDetails(ProductDetailsState state,
                         "Виробник:",
                         style: TextStyle(fontFamily: 'HelveticaNeue'),
                       ),
-                      Text(state.product.attributes.producer.toString(),
-                          style: TextStyle(fontFamily: 'HelveticaNeue'))
+                      Text(
+                          state.productDetails.product.attributes.producer
+                              .toString(),
+                          style: const TextStyle(fontFamily: 'HelveticaNeue'))
                     ],
                   ),
                   const SizedBox(height: 10),
@@ -264,7 +277,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
             const Divider(
               color: AppTheme.black,
             ),
-            CustomAccordion(
+            const CustomAccordion(
               title: 'БЕЗКОШТОВНА ДОСТАВКА ВІД 1800 ГРН',
               content:
                   'Безкоштовна доставка при замовленні від 1800 грн. В разі обміну або повернення, усіх товарів або частини товарів із цього замовлення, безкоштовна доставка анулюється.',
@@ -273,7 +286,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
             const Divider(
               color: AppTheme.black,
             ),
-            CustomAccordion(
+            const CustomAccordion(
               title: '30 ДНІВ НА ПОВЕРНЕННЯ',
               content:
                   'Товар підлягає поверненню протягом 30 днів з моменту отримання замовлення.Як виглядає весь процес? Все просто!Ви відправляєте товар по зворотній адресі.Ми повертаємо кошти наступного дня після надходження товару на наш склад..',
@@ -282,7 +295,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
             const Divider(
               color: AppTheme.black,
             ),
-            CustomAccordion(
+            const CustomAccordion(
               title: 'ЛЕГКЕ ПОВЕРНЕННЯ ЗА 0 ГРИВЕНЬ',
               content:
                   'Скористуйся послугою легке повернення від Нової Пошти.Деталі за посиланням',
