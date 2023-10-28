@@ -125,20 +125,10 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
     if (basket.isEmpty()) {
       return Column(
         children: [
-          Lottie.asset(
-            'assets/anim/main.json',
-            width: 200,
-            height: 200,
-            fit: BoxFit.fill,
-            controller: _controller,
-            onLoaded: (composition) {
-              // Configure the AnimationController with the duration of the
-              // Lottie file and start the animation.
-              _controller
-                ..duration = composition.duration
-                ..forward();
-            },
-          ),
+          SizedBox(
+              height: 260,
+              width: 200,
+              child: Lottie.asset('assets/anim/empty_list.json')),
           const Text(
             'Ваша корзина порожня.\n Не пропустіть шанс зробити свій день яскравішим!',
             textAlign: TextAlign.center,
