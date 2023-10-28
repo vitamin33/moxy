@@ -7,6 +7,7 @@ import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/product_details.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
@@ -149,6 +150,38 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
       emitEffect(BasketApiRequestFailed(
           'Failed add product to basket  ${error.toString()}'));
     });
+  }
+
+  void addBasketItemToBasket(BasketItem basketItem) async {
+    NetworkAddOrChange item = basketMapper.mapToNetworkBasketChange(basketItem);
+    final result = await basketRepository.addProductToBasket(item);
+    result.when((success) {
+      emit(state.copyWith(
+          basket: state.basket.copyWith(basketItems: [basketItem])));
+    }, (error) {
+      emitEffect(BasketApiRequestFailed(
+          'Failed add product to basket  ${error.toString()}'));
+    });
+  }
+
+  Future<bool> addProductDetailsToBasket(ProductDetails productDetails) async {
+    bool isProductInBusket = false;
+    NetworkAddOrChange item =
+        basketMapper.productDetailsMapToNetworkBasketChange(productDetails);
+    final result = await basketRepository.addProductToBasket(item);
+    result.when((success) {
+      emit(state.copyWith(
+          basket: state.basket.copyWith(basketItems: [
+        BasketItem(
+            product: productDetails.product,
+            dimension: productDetails.dimension)
+      ])));
+      isProductInBusket = true;
+    }, (error) {
+      emitEffect(BasketApiRequestFailed(
+          'Failed add product to basket  ${error.toString()}'));
+    });
+    return isProductInBusket;
   }
 
   String getBasketCount() {

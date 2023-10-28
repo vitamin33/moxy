@@ -1,43 +1,37 @@
 import 'package:moxy/domain/copyable.dart';
-import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/product_details.dart';
 
 import '../../validation_mixin.dart';
 
 class ProductDetailsState implements Copyable<ProductDetailsState> {
   final bool isLoading;
-  final String userEmail;
-  final Product product;
-
-  // field errors
+  final ProductDetails productDetails;
   FieldErrors errors;
 
   ProductDetailsState({
     required this.isLoading,
-    required this.userEmail,
     required this.errors,
-    required this.product,
+    required this.productDetails,
   });
 
   static defaultProductDetailsState() {
     return ProductDetailsState(
       isLoading: false,
-      userEmail: '',
       errors: FieldErrors(),
-      product: Product.defaultProduct(),
+      productDetails: ProductDetails.defaultProductDetails(),
     );
   }
 
   @override
-  ProductDetailsState copyWith(
-      {String? userEmail,
-      FieldErrors? errors,
-      Product? product,
-      bool? isLoading}) {
+  ProductDetailsState copyWith({
+    FieldErrors? errors,
+    bool? isLoading,
+    ProductDetails? productDetails
+  }) {
     return ProductDetailsState(
       isLoading: isLoading ?? this.isLoading,
-      userEmail: userEmail ?? this.userEmail,
       errors: errors ?? this.errors,
-      product: product ?? this.product,
+      productDetails: productDetails ?? this.productDetails,
     );
   }
 }

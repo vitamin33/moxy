@@ -59,7 +59,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
           builder: (isHovered) {
             return Stack(children: [
               SizedBox(
-                width: 600,
+                width: MediaQuery.sizeOf(context).width / 2.2,
                 height: 550,
                 child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -91,63 +91,45 @@ class _ImageCarouselState extends State<ImageCarousel> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: OnHover(
-                                    builder: ((isHovered) {
-                                      return InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            if (_pageController.hasClients) {
-                                              _pageController.previousPage(
-                                                duration: const Duration(
-                                                    milliseconds: 300),
-                                                curve: Curves.easeIn,
-                                              );
-                                            }
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: isHovered
-                                                ? AppTheme.white
-                                                : Colors.transparent,
-                                            border: Border.all(
-                                                color: AppTheme.white),
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                          ),
-                                          height: 50,
-                                          width: 50,
-                                          child: Center(
-                                            child: SvgPicture.asset(
-                                              IconPath.backArrow,
-                                              width: 20,
-                                              color: isHovered
-                                                  ? Colors.transparent
-                                                      .withOpacity(0.9)
-                                                  : AppTheme.white,
-                                            ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (_pageController.hasClients) {
+                                            _pageController.previousPage(
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.easeIn,
+                                            );
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.greyLigth,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                        ),
+                                        height: 50,
+                                        width: 50,
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            IconPath.backArrow,
+                                            width: 20,
                                           ),
                                         ),
-                                      );
-                                    }),
-                                  ),
-                                ),
+                                      ),
+                                    )),
                                 Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: OnHover(builder: ((isHovered) {
-                                    return Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
                                       decoration: BoxDecoration(
-                                          color: isHovered
-                                              ? AppTheme.white
-                                              : Colors.transparent,
-                                          border:
-                                              Border.all(color: AppTheme.white),
+                                          color: AppTheme.greyLigth,
                                           borderRadius:
                                               BorderRadius.circular(50)),
                                       height: 50,
                                       width: 50,
-                                      child: InkWell(
+                                      child: GestureDetector(
                                           onTap: () {
                                             setState(() {
                                               if (_pageController.hasClients) {
@@ -162,19 +144,13 @@ class _ImageCarouselState extends State<ImageCarousel> {
                                             child: SvgPicture.asset(
                                               IconPath.forwardArrow,
                                               width: 20,
-                                              color: isHovered
-                                                  ? Colors.transparent
-                                                      .withOpacity(0.9)
-                                                  : AppTheme.white,
                                             ),
                                           )),
-                                    );
-                                  })),
-                                ),
+                                    )),
                               ],
                             )
                           : Container(),
-                      const SizedBox(height: 150),
+                      const SizedBox(height: 200),
                       SizedBox(
                           height: 50,
                           child: Center(

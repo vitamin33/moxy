@@ -335,8 +335,9 @@ class DioClient {
       final response = await dio.get('$baseUrl $getProfileUrl');
       final profile = NetworkProfile.fromJson(response.data);
       return profile;
-    } catch (e) {
-      throw Exception('Failed to load profile: $e');
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
     }
   }
 

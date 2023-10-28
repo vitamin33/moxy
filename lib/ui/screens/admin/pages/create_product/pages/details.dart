@@ -9,8 +9,8 @@ import '../../../../../components/custom_textfield.dart';
 import '../../../../../../domain/admin/create_product/create_product_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ProductDetails extends StatelessWidget {
-  const ProductDetails({Key? key}) : super(key: key);
+class ProductDetailsPage extends StatelessWidget {
+  const ProductDetailsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -115,7 +115,7 @@ class ExpandingDotsEffect extends BasicIndicatorEffect {
     double spacing = 8.0,
     double radius = 16.0,
     Color activeDotColor = AppTheme.pink,
-    Color dotColor = Colors.white,
+    Color dotColor = AppTheme.greyLigth,
     double strokeWidth = 1.0,
     PaintingStyle paintStyle = PaintingStyle.fill,
   })  : assert(expansionFactor > 1),
@@ -245,7 +245,6 @@ class SmoothPageIndicator extends StatefulWidget {
     this.textDirection,
     this.onDotClicked,
     required this.effect,
-    //  = const WormEffect(),
   }) : super(key: key);
 
   @override

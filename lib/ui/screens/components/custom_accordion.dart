@@ -13,7 +13,11 @@ class CustomAccordion extends StatefulWidget {
       this.expandedTitleBackgroundColor = const Color(0xFFE0E0E0),
       this.collapsedIcon = const Icon(Icons.keyboard_arrow_down),
       this.expandedIcon = const Icon(Icons.keyboard_arrow_up),
-      this.textStyle = const TextStyle(color: Colors.black, fontSize: 16),
+      this.textStyle = const TextStyle(
+          color: Colors.black,
+          fontSize: 16,
+          fontFamily: 'HelveticaNeue',
+          fontWeight: FontWeight.w500),
       this.titlePadding = const EdgeInsets.all(10),
       this.contentBackgroundColor,
       this.contentPadding = const EdgeInsets.all(10),
@@ -183,7 +187,10 @@ class _CustomAccordionState extends State<CustomAccordion>
               width: MediaQuery.of(context).size.width,
               padding: widget.contentPadding,
               child: widget.content != null
-                  ? Text(widget.content!)
+                  ? Text(
+                      widget.content!,
+                      style: TextStyle(fontFamily: 'HelveticaNeue'),
+                    )
                   : (widget.contentChild ?? Container()),
             ),
           )

@@ -47,7 +47,7 @@ class _CustomButtonState extends State<CustomButton> {
                 child: Text(
                   widget.title,
                   style:
-                      const TextStyle(color: AppTheme.pinkDark, fontSize: 18),
+                      const TextStyle(color: AppTheme.pinkDark, fontSize: 18,fontFamily: 'HelveticaNeue',fontWeight: FontWeight.w600),
                 ),
               )
             : TextButton(
@@ -70,7 +70,7 @@ class _CustomButtonState extends State<CustomButton> {
                       : Text(
                           widget.title,
                           style: const TextStyle(
-                              color: AppTheme.white, fontSize: 18),
+                              color: AppTheme.white, fontSize: 18,fontFamily: 'HelveticaNeue',fontWeight: FontWeight.w600),
                         ),
                 )));
   }
