@@ -24,12 +24,10 @@ class BasketPage extends StatefulWidget {
 }
 
 class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
-  late final AnimationController _controller;
   @override
   void initState() {
     super.initState();
     context.read<BasketCubit>().getBasketInfo();
-    _controller = AnimationController(vsync: this);
   }
 
   @override
