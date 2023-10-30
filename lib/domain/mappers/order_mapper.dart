@@ -5,6 +5,7 @@ import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/utils/extensions.dart';
 
 import '../../constant/order_constants.dart';
 import '../../data/models/request/create_order_request.dart';
@@ -41,6 +42,7 @@ class OrderMapper {
         orderedItems: productMapper.mapToOrderedItemList(o.orderedItems),
         createdAt: o.createdAt,
         updatedAt: o.updatedAt,
+        ukrPostInfo: o.ukrPostInfo,
       );
     }).toList();
   }
@@ -80,6 +82,7 @@ class OrderMapper {
         }).toList(),
         createdAt: _parseDataTime(o.createdAt),
         updatedAt: _parseDataTime(o.updatedAt),
+        ukrPostInfo: null,
       );
     }).toList();
   }
@@ -138,23 +141,27 @@ class OrderMapper {
   }
 
   CreateOrder mapToNetworkCreateOrder(
-      DeliveryType deliveryType,
-      PaymentType paymentType,
-      List<OrderedItem> selectedProduct,
-      Warehouse novapost,
-      Client client,
-      City city,
-      String status,
-      String prepayment) {
+    DeliveryType deliveryType,
+    PaymentType paymentType,
+    List<OrderedItem> selectedProduct,
+    Warehouse? novapost,
+    Client client,
+    City? city,
+    String status,
+    int cashAdvance,
+    String? ukrPostInfo,
+  ) {
     return CreateOrder(
-      cashAdvanceValue: int.parse(prepayment),
+      cashAdvanceValue: cashAdvance,
+      ukrPostInfo: ukrPostInfo,
       deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
       paymentType: _mapPaymentTypeNetwork(paymentType.name),
-      novaPost: NetworkNovaPost(
-          number: novapost.number,
-          ref: novapost.ref,
-          postMachineType: novapost.postMachineType,
-          presentName: novapost.description),
+      novaPost: novapost?.let((n) => NetworkNovaPost(
+            number: n.number,
+            ref: n.ref,
+            postMachineType: n.postMachineType,
+            presentName: n.description,
+          )),
       status: status,
       client: NetworkClient(
         city: cityMapper.mapToNetworkCity(client.city),
@@ -162,12 +169,12 @@ class OrderMapper {
         mobileNumber: client.mobileNumber,
         secondName: client.secondName,
       ),
-      city: NetworkCity(
-        ref: city.ref,
-        mainDescription: city.mainDescription,
-        deliveryCityRef: city.deliveryCityRef,
-        presentName: city.presentName,
-      ),
+      city: city?.let((c) => NetworkCity(
+            ref: c.ref,
+            mainDescription: c.mainDescription,
+            deliveryCityRef: c.deliveryCityRef,
+            presentName: c.presentName,
+          )),
       products: selectedProduct.map(
         (e) {
           List<Dimension> list = e.dimensions;
@@ -183,18 +190,21 @@ class OrderMapper {
   }
 
   EditOrder mapToNetworkEditOrder(
-      String orderId,
-      DeliveryType deliveryType,
-      PaymentType paymentType,
-      List<OrderedItem> selectedProduct,
-      Warehouse novapost,
-      Client client,
-      City city,
-      String status,
-      String prepayment) {
+    String orderId,
+    DeliveryType deliveryType,
+    PaymentType paymentType,
+    List<OrderedItem> selectedProduct,
+    Warehouse novapost,
+    Client client,
+    City city,
+    String status,
+    String prepayment,
+    String? ukrPostInfo,
+  ) {
     return EditOrder(
       orderId: orderId,
       cashAdvanceValue: int.parse(prepayment),
+      ukrPostInfo: ukrPostInfo,
       deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
       paymentType: _mapPaymentTypeNetwork(paymentType.name),
       novaPost: NetworkNovaPost(
@@ -265,6 +275,7 @@ class OrderMapper {
       orderedItems: productMapper.mapToOrderedItemList(o.orderedItems),
       createdAt: o.createdAt,
       updatedAt: o.updatedAt,
+      ukrPostInfo: o.ukrPostInfo,
     );
   }
 }

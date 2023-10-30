@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:moxy/constant/order_status.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/admin/create_order/create_order_effects.dart';
@@ -12,7 +14,6 @@ import '../../../data/repositories/product_repository.dart';
 import '../../../services/get_it.dart';
 import '../../mappers/order_mapper.dart';
 import '../../models/order.dart';
-import '../../models/status.dart';
 import '../../models/warehouse.dart';
 import '../../ui_effect.dart';
 import '../../validation_mixin.dart';
@@ -27,28 +28,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   late final StreamSubscription _selectedProductSubscription;
 
-  bool isEditMode;
-
-  CreateOrderCubit({this.isEditMode = false})
-      : super(
-          CreateOrderState(
-              isLoading: false,
-              isEdit: false,
-              isSuccess: false,
-              initialPage: 0,
-              activePage: 0,
-              errors: FieldErrors(),
-              deliveryType: DeliveryType.novaPost,
-              paymentType: PaymentType.fullPayment,
-              novaPostNumber: 0,
-              productListPrice: 0,
-              selectedProducts: [],
-              selectedCity: City.defaultCity(),
-              selectedWarehouse: Warehouse.defaultWarehouse(),
-              client: Client.defaultClient(),
-              status: Status.defaultStatus(),
-              prepayment: '0'),
-        ) {
+  CreateOrderCubit() : super(CreateOrderState.defaultCreateProductState()) {
     _subscribe();
   }
 
@@ -56,12 +36,9 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   final TextEditingController secondNameController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController prePaymentController =
-      TextEditingController(text: '150');
+      TextEditingController(text: defaultCashAvanceValue.toString());
+  final TextEditingController ukrPostInfoController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
-
-  void setEditMode(bool isEdit) {
-    isEditMode = isEdit;
-  }
 
   void _subscribe() {
     _selectedProductSubscription = productRepository.selectedProducts.listen(
@@ -94,14 +71,16 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
       List<OrderedItem> selectedProducts =
           productRepository.currentSelectedProducts ?? [];
       final order = orderMapper.mapToNetworkCreateOrder(
-          state.deliveryType,
-          state.paymentType,
-          selectedProducts,
-          state.selectedWarehouse,
-          state.client,
-          state.selectedCity,
-          state.status.statusValue.name,
-          state.prepayment);
+        state.deliveryType,
+        state.paymentType,
+        selectedProducts,
+        state.selectedWarehouse,
+        state.client,
+        state.selectedCity,
+        state.status.statusValue.name,
+        state.cashAdvanceValue,
+        state.ukrPostInfo,
+      );
       final pushOrder = await orderRepository.addOrder(order);
       pushOrder.when((success) {
         emit(state.copyWith(isLoading: false, isSuccess: true));
@@ -109,6 +88,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
         firstNameController.clear();
         secondNameController.clear();
         phoneNumberController.clear();
+        ukrPostInfoController.clear();
       }, (error) {
         emit(state.copyWith(
           isLoading: false,
@@ -161,13 +141,18 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     if (value.isEmpty) {
       return;
     }
-    final String prepayment = value;
-    emit(state.copyWith(prepayment: prepayment));
+    final int? cashAdvance = int.tryParse(value);
+    emit(state.copyWith(cashAdvanceValue: cashAdvance));
   }
 
-  void updateSelectedStatusTitle(newSelectedStatusTitle) {
+  void ukrPostInfoChanged(value) {
+    final String info = value;
+    emit(state.copyWith(ukrPostInfo: info));
+  }
+
+  void updateSelectedStatus(OrderStatus? selectedStatus) {
     emit(state.copyWith(
-        status: state.status.copyWith(statusValue: newSelectedStatusTitle)));
+        status: state.status.copyWith(statusValue: selectedStatus)));
   }
 
   void selectDeliveryType(DeliveryType type) {
@@ -176,10 +161,22 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
 
   void selectPaymentType(PaymentType type) {
     emit(state.copyWith(paymentType: type));
-    if (type.name == 'cashAdvance') {
-      emit(state.copyWith(prepayment: '150'));
+    if (type == PaymentType.cashAdvance) {
+      emit(state.copyWith(
+        cashAdvanceValue: defaultCashAvanceValue,
+        status: state.status.copyWith(statusValue: OrderStatus.Reserved),
+        availableStatuses: [OrderStatus.Reserved],
+      ));
     } else {
-      emit(state.copyWith(prepayment: null));
+      emit(state.copyWith(
+        cashAdvanceValue: null,
+        status: state.status.copyWith(statusValue: OrderStatus.Paid),
+        availableStatuses: [
+          OrderStatus.Paid,
+          OrderStatus.Sent,
+          OrderStatus.Sale,
+        ],
+      ));
     }
   }
 
@@ -226,7 +223,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
       errors.firstName = FieldError.empty;
       noErrors = false;
     }
-    if (isFieldEmpty(state.prepayment)) {
+    if (!isValidCashAdvanceValue(state.cashAdvanceValue, state.status)) {
       errors.selectedPrepayment = FieldError.empty;
       noErrors = false;
     }

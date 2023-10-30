@@ -64,6 +64,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
       for (final dimension in product.dimensions) {
         final color = dimension.color;
         final quantity = dimension.quantity;
+        bool isAvailableInStock = quantity > 0;
 
         final newDimension = Dimension(
           color: color,
@@ -90,12 +91,13 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
           id: product.id,
           name: productName,
           description: productDescription,
-          costPrice: productCostPrice,
+          costPriceInUsd: productCostPrice,
           salePrice: productSalePrice,
           idName: productIdName,
           dimension: newDimension,
           selectedQuantity: selectedQuantity,
           isSelected: isSelected,
+          isAvailableInStock: isAvailableInStock,
         );
 
         productsByDimension.add(newProduct);

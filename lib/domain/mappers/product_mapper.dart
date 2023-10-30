@@ -240,6 +240,7 @@ class ProductMapper {
       for (final dimension in product.dimensions) {
         final color = dimension.color;
         final quantity = dimension.quantity;
+        bool isAvailableInStock = quantity > 0;
 
         final newDimension = Dimension(
           color: color,
@@ -266,12 +267,13 @@ class ProductMapper {
           id: product.id,
           name: productName,
           description: productDescription,
-          costPrice: productCostPrice,
+          costPriceInUsd: productCostPrice,
           salePrice: productSalePrice,
           idName: productIdName,
           dimension: newDimension,
           selectedQuantity: selectedQuantity,
           isSelected: isSelected,
+          isAvailableInStock: isAvailableInStock,
         );
 
         productsByDimension.add(newProduct);
@@ -291,6 +293,7 @@ class ProductMapper {
       for (final dimension in item.dimensions) {
         final color = dimension.color;
         final quantity = dimension.quantity;
+        bool isAvailableInStock = quantity > 0;
 
         final newDimension = Dimension(
           color: color,
@@ -304,12 +307,13 @@ class ProductMapper {
           id: item.productId,
           name: productName,
           description: '',
-          costPrice: 0,
+          costPriceInUsd: 0,
           salePrice: productSalePrice,
           idName: '',
           dimension: newDimension,
           selectedQuantity: 1,
           isSelected: true,
+          isAvailableInStock: isAvailableInStock,
         );
 
         productsByDimension.add(newProduct);

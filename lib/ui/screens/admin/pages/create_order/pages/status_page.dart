@@ -16,7 +16,8 @@ class StatusPage extends StatelessWidget {
       builder: (context, state) {
         // ignore: unused_local_variable
         final cubit = context.read<CreateOrderCubit>();
-        final allStatusOrder = getAllStatusOrder(context);
+        final allStatusOrder =
+            getAllStatusOrder(context, state.availableStatuses);
         return Padding(
           padding: const EdgeInsets.all(9.0),
           child: SingleChildScrollView(
@@ -31,46 +32,52 @@ class StatusPage extends StatelessWidget {
                       final status = allStatusOrder[index];
                       final isSelected =
                           status.statusValue == state.status.statusValue;
+                      bool isAvailable = status.isAvailable;
                       return Padding(
                         padding: const EdgeInsets.all(5.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: isSelected
-                                ? Border.all(
-                                    color: AppTheme.black,
-                                    width: 2.0,
-                                  )
-                                : Border.all(
-                                    color: AppTheme.white,
-                                    width: 2.0,
-                                  ),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: RadioListTile(
-                            contentPadding: const EdgeInsets.all(4),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SvgPicture.asset(status.iconPath),
-                                const SizedBox(width: 15),
-                                Text(
-                                  status.statusTitle,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
+                        child: IgnorePointer(
+                          ignoring:
+                              !isAvailable, // Ignore pointer events if not available
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: isSelected
+                                  ? Border.all(
+                                      color: AppTheme.black,
+                                      width: 2.0,
+                                    )
+                                  : Border.all(
+                                      color: AppTheme.white,
+                                      width: 2.0,
+                                    ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: isAvailable ? null : AppTheme.greyLigth,
                             ),
-                            activeColor: AppTheme.black,
-                            tileColor: AppTheme.white,
-                            groupValue: state.status.statusValue,
-                            value: status.statusValue,
-                            onChanged: (newValue) {
-                              context
-                                  .read<CreateOrderCubit>()
-                                  .updateSelectedStatusTitle(newValue);
-                            },
+                            child: RadioListTile(
+                              contentPadding: const EdgeInsets.all(4),
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SvgPicture.asset(status.iconPath),
+                                  const SizedBox(width: 15),
+                                  Text(
+                                    status.statusTitle,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              activeColor: AppTheme.black,
+                              tileColor: AppTheme.white,
+                              groupValue: state.status.statusValue,
+                              value: status.statusValue,
+                              onChanged: (newValue) {
+                                context
+                                    .read<CreateOrderCubit>()
+                                    .updateSelectedStatus(newValue);
+                              },
+                            ),
                           ),
                         ),
                       );

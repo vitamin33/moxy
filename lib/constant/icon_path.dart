@@ -25,7 +25,7 @@ class IconPath {
   static const String filter = "assets/icons/filter.svg";
   static const String fullPayment = "assets/icons/full_payment.svg";
   static const String cashPayment = "assets/icons/cash_payment.svg";
-  static const String newStatus = "assets/icons/new_status.svg";
+  static const String reservedStatus = "assets/icons/reserved_status.svg";
   static const String paidStatus = "assets/icons/paid_status.svg";
   static const String sentStatus = "assets/icons/sent_status.svg";
   static const String saleStatus = "assets/icons/sale_status.svg";
@@ -45,5 +45,6 @@ class IconPath {
   static const String bagWeb = "assets/icons/bag_web.svg";
   static const String instagramIcon = "assets/icons/instagram_icon.svg";
   static const String tikTokIcon = "assets/icons/tiktok_icon.svg";
-  static const String textFieldArrowWeb = "assets/icons/textfield_arrow_web.svg";
+  static const String textFieldArrowWeb =
+      "assets/icons/textfield_arrow_web.svg";
 }
