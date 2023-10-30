@@ -1,3 +1,5 @@
+import 'package:moxy/constant/order_status.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
 
 import '../../../constant/order_constants.dart';
@@ -19,11 +21,13 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   int novaPostNumber;
   int productListPrice;
   List<DimensionProduct> selectedProducts;
-  City selectedCity;
-  Warehouse selectedWarehouse;
+  City? selectedCity;
+  Warehouse? selectedWarehouse;
   Status status;
   Client client;
-  String prepayment;
+  int cashAdvanceValue;
+  List<OrderStatus> availableStatuses = [];
+  String? ukrPostInfo;
 
   // field errors
   FieldErrors errors;
@@ -44,49 +48,57 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.selectedWarehouse,
     required this.client,
     required this.status,
-    required this.prepayment,
+    required this.cashAdvanceValue,
+    required this.availableStatuses,
+    required this.ukrPostInfo,
   });
 
   static CreateOrderState defaultCreateProductState() {
     return CreateOrderState(
-        isLoading: false,
-        isEdit: false,
-        isSuccess: false,
-        initialPage: 0,
-        activePage: 0,
-        errors: FieldErrors(),
-        deliveryType: DeliveryType.novaPost,
-        paymentType: PaymentType.fullPayment,
-        novaPostNumber: 0,
-        productListPrice: 0,
-        selectedProducts: [],
-        selectedCity: City.defaultCity(),
-        selectedWarehouse: Warehouse.defaultWarehouse(),
-        client: Client.defaultClient(),
-        status: Status.defaultStatus(),
-        prepayment: '150');
+      isLoading: false,
+      isEdit: false,
+      isSuccess: false,
+      initialPage: 0,
+      activePage: 0,
+      errors: FieldErrors(),
+      deliveryType: DeliveryType.novaPost,
+      paymentType: PaymentType.fullPayment,
+      novaPostNumber: 0,
+      productListPrice: 0,
+      selectedProducts: [],
+      selectedCity: null,
+      selectedWarehouse: null,
+      client: Client.defaultClient(),
+      status: Status.defaultStatus(),
+      cashAdvanceValue: defaultCashAvanceValue,
+      availableStatuses: [],
+      ukrPostInfo: null,
+    );
   }
 
   @override
-  CreateOrderState copyWith(
-      {bool? isLoading,
-      bool? isEdit,
-      bool? isSuccess,
-      int? initialPage,
-      int? activePage,
-      List<String>? chosenImages,
-      String? editProductId,
-      FieldErrors? errors,
-      DeliveryType? deliveryType,
-      PaymentType? paymentType,
-      int? novaPostNumber,
-      int? productListPrice,
-      List<DimensionProduct>? selectedProducts,
-      City? selectedCity,
-      Warehouse? selectedWarehouse,
-      Client? client,
-      Status? status,
-      String? prepayment}) {
+  CreateOrderState copyWith({
+    bool? isLoading,
+    bool? isEdit,
+    bool? isSuccess,
+    int? initialPage,
+    int? activePage,
+    List<String>? chosenImages,
+    String? editProductId,
+    FieldErrors? errors,
+    DeliveryType? deliveryType,
+    PaymentType? paymentType,
+    int? novaPostNumber,
+    int? productListPrice,
+    List<DimensionProduct>? selectedProducts,
+    City? selectedCity,
+    Warehouse? selectedWarehouse,
+    Client? client,
+    Status? status,
+    int? cashAdvanceValue,
+    List<OrderStatus>? availableStatuses,
+    String? ukrPostInfo,
+  }) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
@@ -103,7 +115,9 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,
       status: status ?? this.status,
-      prepayment: prepayment ?? this.prepayment,
+      cashAdvanceValue: cashAdvanceValue ?? this.cashAdvanceValue,
+      availableStatuses: availableStatuses ?? this.availableStatuses,
+      ukrPostInfo: ukrPostInfo ?? this.ukrPostInfo,
     );
   }
 }
@@ -114,6 +128,7 @@ class FieldErrors {
   FieldError? phoneNumber;
   FieldError? selectedProduct;
   FieldError? selectedPrepayment;
+  FieldError? ukrPostInfo;
 
   FieldErrors({
     this.firstName,
@@ -121,6 +136,7 @@ class FieldErrors {
     this.phoneNumber,
     this.selectedProduct,
     this.selectedPrepayment,
+    this.ukrPostInfo,
   });
 
   static FieldErrors noErrors() {
@@ -144,6 +160,9 @@ class FieldErrors {
     }
     if (selectedPrepayment != null) {
       buffer.write('selectedPrepayment ');
+    }
+    if (ukrPostInfo != null) {
+      buffer.write('ukrPostInfo ');
     }
     buffer.write('.');
     return buffer.toString();

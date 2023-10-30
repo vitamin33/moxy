@@ -142,9 +142,17 @@ class _ProductsPageState extends State<ProductsPage> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text('${product.salePrice} $uah'),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text('${product.salePrice} $uah'),
+                                              Text(
+                                                  '${product.totalQuantity()} $piece'),
+                                            ],
+                                          ),
                                           Text(
-                                              '${AppLocalizations.of(context)!.createProductCostPrice}: ${product.costPriceInUsd} $uah')
+                                              '${AppLocalizations.of(context)!.createProductCostPrice}: ${product.costPrice} $uah')
                                         ],
                                       ),
                                       trailing: SvgPicture.asset(

@@ -48,12 +48,15 @@ class OrderProductList extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             final dimenProduct =
                                 state.productsByDimension.elementAt(index);
-
+                            bool availableInStock =
+                                dimenProduct.isAvailableInStock;
                             return Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: InkWell(
                                 onTap: () {
-                                  cubit.toggleProductSelection(index);
+                                  if (availableInStock) {
+                                    cubit.toggleProductSelection(index);
+                                  }
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -134,12 +137,31 @@ Widget _listTile(OrderProductListState state, DimensionProduct product,
   final chosenQuantity = product.selectedQuantity;
   final fullQuantity = product.dimension.quantity;
 
+  final bool isAvailableInStock = product.isAvailableInStock;
+
+  // Define a function to handle the add button tap
+  void handleAddButtonTap() {
+    if (isAvailableInStock) {
+      cubit.quantityAdd(index);
+    }
+  }
+
+  // Define a function to handle the remove button tap
+  void handleRemoveButtonTap() {
+    if (isAvailableInStock) {
+      cubit.quantityRemove(index);
+    }
+  }
+
   return ListTile(
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(10),
     ),
     contentPadding: const EdgeInsets.all(18.0),
-    tileColor: AppTheme.white,
+    tileColor: isAvailableInStock
+        ? AppTheme.white
+        : AppTheme.greyLigth, // Use grayed out color
+
     leading: Stack(
       children: [
         ClipOval(
@@ -180,7 +202,7 @@ Widget _listTile(OrderProductListState state, DimensionProduct product,
                             MaterialStateProperty.all(AppTheme.white),
                       ),
                       onPressed: () {
-                        cubit.quantityRemove(index);
+                        handleRemoveButtonTap();
                       },
                       icon: const Icon(Icons.remove),
                     ),
@@ -203,7 +225,7 @@ Widget _listTile(OrderProductListState state, DimensionProduct product,
                             MaterialStateProperty.all(AppTheme.white),
                       ),
                       onPressed: () {
-                        cubit.quantityAdd(index);
+                        handleAddButtonTap();
                       },
                       icon: const Icon(Icons.add),
                     ),

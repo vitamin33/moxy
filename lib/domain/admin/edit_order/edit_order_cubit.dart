@@ -24,10 +24,12 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   final productRepository = locate<ProductRepository>();
   final orderMapper = locate<OrderMapper>();
   final _productMapper = locate<ProductMapper>();
-  late TextEditingController paymentController;
+
   final TextEditingController nameEditController = TextEditingController();
   final TextEditingController phoneEditController = TextEditingController();
   late final StreamSubscription _selectedProductSubscription;
+  late TextEditingController paymentController;
+  late TextEditingController ukrPostInfoController;
 
   EditOrderCubit() : super(EditOrderState.defaultEditOrderState()) {
     _subscribe();
@@ -58,15 +60,17 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
       List<OrderedItem> selectedProducts =
           productRepository.currentSelectedProducts ?? [];
       final order = orderMapper.mapToNetworkEditOrder(
-          state.orderId,
-          state.deliveryType,
-          state.paymentType,
-          selectedProducts,
-          state.selectedWarehouse,
-          state.client,
-          state.selectedCity,
-          state.status,
-          state.prepayment.toString());
+        state.orderId,
+        state.deliveryType,
+        state.paymentType,
+        selectedProducts,
+        state.selectedWarehouse,
+        state.client,
+        state.selectedCity,
+        state.status,
+        state.prepayment.toString(),
+        state.ukrPostInfo,
+      );
       final pushOrder = await orderRepository.editOrder(order);
       pushOrder.when((success) {
         emit(state.copyWith(isSuccess: true, isLoading: false));
@@ -86,6 +90,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     emitOrder(order);
     paymentController =
         TextEditingController(text: state.prepayment.toString());
+    ukrPostInfoController = TextEditingController(text: state.ukrPostInfo);
 
     requestOrderFromNetwork(order.id);
   }
@@ -104,14 +109,14 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
   void changePayment(updatePayment) {
     emit(state.copyWith(paymentType: updatePayment));
     if (updatePayment == PaymentType.fullPayment) {
-      emit(state.copyWith(prepayment: 0));
+      emit(state.copyWith(cashAdvanceValue: 0));
     }
   }
 
   void cashAdvancePrepayment(value) {
     if (value != '') {
       final updatePrepayment = int.parse(value);
-      emit(state.copyWith(prepayment: updatePrepayment));
+      emit(state.copyWith(cashAdvanceValue: updatePrepayment));
     }
   }
 
@@ -129,6 +134,12 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
     phoneEditController.value =
         TextEditingValue(text: state.client.mobileNumber);
     emit(state.copyWith(isEditPhone: true));
+  }
+
+  void ukrPostInfoChanged(value) {
+    if (value != '') {
+      emit(state.copyWith(ukrPostInfo: value));
+    }
   }
 
   void addEditPhone() {
@@ -185,7 +196,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
       isLoading: false,
       selectedWarehouse: order.novaPost,
       orderId: order.id,
-      prepayment: order.cashAdvanceValue,
+      cashAdvanceValue: order.cashAdvanceValue,
       selectedCity: order.city,
       deliveryType: order.deliveryType,
       paymentType: order.paymentType,
@@ -201,6 +212,7 @@ class EditOrderCubit extends CubitWithEffects<EditOrderState, UiEffect>
       orderedItems: order.orderedItems,
       createdAt: formattedDateTime(order.createdAt),
       updatedAt: order.updatedAt,
+      ukrPostInfo: order.ukrPostInfo,
     ));
   }
 }

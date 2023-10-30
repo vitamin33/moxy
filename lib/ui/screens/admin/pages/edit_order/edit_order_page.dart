@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moxy/domain/admin/all_orders/all_orders_cubit.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/screens/admin/pages/edit_order/contact_details.dart';
 import 'package:moxy/ui/screens/admin/pages/edit_order/type_payment.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -173,37 +174,44 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
           ],
         ),
       ),
-      AnimatedOpacity(
-          curve: Curves.easeOut,
-          opacity: state.deliveryType == DeliveryType.novaPost ? 1 : 0,
-          duration: const Duration(milliseconds: 300),
-          child: AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-            child: Container(
-                child: state.deliveryType == DeliveryType.novaPost
-                    ? Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          BottomSearchCityDropdown(
-                              selectedCity: state.selectedCity,
-                              selectedWarehouse: state.selectedWarehouse,
-                              onChanged: (city) {
-                                cubit.selectCity(city);
-                              }),
-                          const SizedBox(height: 20),
-                          BottomSearchWarehouseDropdown(
-                              selectedCity: state.selectedCity,
-                              selectedWarehouse: state.selectedWarehouse,
-                              onChanged: (warehouse) {
-                                cubit.selectWarehouse(warehouse);
-                              })
-                        ],
-                      )
-                    : Container()),
-          ))
+      AnimatedSize(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        child: Container(
+          child: state.deliveryType == DeliveryType.novaPost
+              ? Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    BottomSearchCityDropdown(
+                        selectedCity: state.selectedCity,
+                        selectedWarehouse: state.selectedWarehouse,
+                        onChanged: (city) {
+                          cubit.selectCity(city);
+                        }),
+                    const SizedBox(height: 20),
+                    BottomSearchWarehouseDropdown(
+                        selectedCity: state.selectedCity,
+                        selectedWarehouse: state.selectedWarehouse,
+                        onChanged: (warehouse) {
+                          cubit.selectWarehouse(warehouse);
+                        })
+                  ],
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: CustomTextField(
+                    title: AppLocalizations.of(context)!.ukrPoshtaLocationData,
+                    maxLines: 4,
+                    controller: cubit.ukrPostInfoController,
+                    onChanged: cubit.ukrPostInfoChanged,
+                    validation: true,
+                    state: state.errors.ukrPostInfo,
+                  ),
+                ),
+        ),
+      ),
     ],
   );
 }

@@ -14,6 +14,8 @@ const dateRangeKey = 'dateRange';
 const uniqueIdKey = 'uniqueId';
 const codeKey = 'secretCode';
 
+const defaultCashAvanceValue = 200;
+
 // Fiat signs
 const uah = 'UAH';
 const piece = 'шт.';

@@ -68,6 +68,7 @@ NetworkOrder _$NetworkOrderFromJson(Map<String, dynamic> json) => NetworkOrder(
           .toList(),
       createdAt: json['createdAt'] as String,
       updatedAt: json['updatedAt'] as String,
+      ukrPostInfo: json['ukrPostInfo'] as String?,
     );
 
 Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
@@ -83,6 +84,7 @@ Map<String, dynamic> _$NetworkOrderToJson(NetworkOrder instance) =>
       'orderedItems': instance.orderedItems,
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
+      'ukrPostInfo': instance.ukrPostInfo,
     };
 
 NetworkProfileOrder _$NetworkProfileOrderFromJson(Map<String, dynamic> json) =>

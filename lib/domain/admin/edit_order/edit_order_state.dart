@@ -25,6 +25,7 @@ class EditOrderState implements Copyable<EditOrderState> {
   int prepayment;
   String createdAt;
   String updatedAt;
+  String? ukrPostInfo;
 
   // field errors
   FieldErrors errors;
@@ -48,50 +49,55 @@ class EditOrderState implements Copyable<EditOrderState> {
     required this.prepayment,
     required this.createdAt,
     required this.updatedAt,
+    required this.ukrPostInfo,
   });
 
   static EditOrderState defaultEditOrderState() {
     return EditOrderState(
-        isLoading: false,
-        isSuccess: false,
-        isEditName: false,
-        isEditPhone: false,
-        errorMessage: '',
-        errors: FieldErrors(),
-        orderId: '',
-        deliveryType: DeliveryType.novaPost,
-        paymentType: PaymentType.fullPayment,
-        selectedProducts: [],
-        orderedItems: [],
-        selectedCity: City.defaultCity(),
-        selectedWarehouse: Warehouse.defaultWarehouse(),
-        client: Client.defaultClient(),
-        status: 'New',
-        prepayment: 150,
-        createdAt: '',
-        updatedAt: '');
+      isLoading: false,
+      isSuccess: false,
+      isEditName: false,
+      isEditPhone: false,
+      errorMessage: '',
+      errors: FieldErrors(),
+      orderId: '',
+      deliveryType: DeliveryType.novaPost,
+      paymentType: PaymentType.fullPayment,
+      selectedProducts: [],
+      orderedItems: [],
+      selectedCity: City.defaultCity(),
+      selectedWarehouse: Warehouse.defaultWarehouse(),
+      client: Client.defaultClient(),
+      status: 'New',
+      prepayment: 150,
+      createdAt: '',
+      updatedAt: '',
+      ukrPostInfo: null,
+    );
   }
 
   @override
-  EditOrderState copyWith(
-      {bool? isLoading,
-      bool? isSuccess,
-      bool? isEditName,
-      bool? isEditPhone,
-      String? errorMessage,
-      FieldErrors? errors,
-      String? orderId,
-      DeliveryType? deliveryType,
-      PaymentType? paymentType,
-      List<OrderedItem>? orderedItems,
-      List<DimensionProduct>? selectedProducts,
-      City? selectedCity,
-      Warehouse? selectedWarehouse,
-      Client? client,
-      String? status,
-      int? prepayment,
-      String? createdAt,
-      String? updatedAt}) {
+  EditOrderState copyWith({
+    bool? isLoading,
+    bool? isSuccess,
+    bool? isEditName,
+    bool? isEditPhone,
+    String? errorMessage,
+    FieldErrors? errors,
+    String? orderId,
+    DeliveryType? deliveryType,
+    PaymentType? paymentType,
+    List<OrderedItem>? orderedItems,
+    List<DimensionProduct>? selectedProducts,
+    City? selectedCity,
+    Warehouse? selectedWarehouse,
+    Client? client,
+    String? status,
+    int? cashAdvanceValue,
+    String? createdAt,
+    String? updatedAt,
+    String? ukrPostInfo,
+  }) {
     return EditOrderState(
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
@@ -108,9 +114,10 @@ class EditOrderState implements Copyable<EditOrderState> {
       selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,
       status: status ?? this.status,
-      prepayment: prepayment ?? this.prepayment,
+      prepayment: cashAdvanceValue ?? this.prepayment,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
+      ukrPostInfo: ukrPostInfo ?? this.ukrPostInfo,
     );
   }
 }
@@ -121,6 +128,7 @@ class FieldErrors {
   FieldError? phoneNumber;
   FieldError? selectedProduct;
   FieldError? selectedPrepayment;
+  FieldError? ukrPostInfo;
 
   FieldErrors({
     this.firstName,
@@ -128,6 +136,7 @@ class FieldErrors {
     this.phoneNumber,
     this.selectedProduct,
     this.selectedPrepayment,
+    this.ukrPostInfo,
   });
 
   static FieldErrors noErrors() {
@@ -151,6 +160,9 @@ class FieldErrors {
     }
     if (selectedPrepayment != null) {
       buffer.write('selectedPrepayment ');
+    }
+    if (ukrPostInfo != null) {
+      buffer.write('ukrPostInfo ');
     }
     buffer.write('.');
     return buffer.toString();

@@ -56,6 +56,7 @@ class NetworkOrder {
   List<NetworkOrderedItemResponse> orderedItems;
   String createdAt;
   String updatedAt;
+  String? ukrPostInfo;
 
   NetworkOrder({
     this.id,
@@ -69,6 +70,7 @@ class NetworkOrder {
     required this.orderedItems,
     required this.createdAt,
     required this.updatedAt,
+    required this.ukrPostInfo,
   });
 
   factory NetworkOrder.fromJson(Map<String, dynamic> json) =>

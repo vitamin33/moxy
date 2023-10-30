@@ -1,5 +1,8 @@
+import 'package:moxy/constant/order_status.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/status.dart';
 
 mixin ValidationMixin {
   bool isFieldEmpty(String? fieldValue) => fieldValue?.isEmpty ?? true;
@@ -23,6 +26,15 @@ mixin ValidationMixin {
       return false;
     }
     return value > 0;
+  }
+
+  bool isValidCashAdvanceValue(int? value, Status status) {
+    if (status.statusValue == OrderStatus.Reserved) {
+      if (value == null || value < defaultCashAvanceValue) {
+        return false;
+      }
+    }
+    return true;
   }
 
   bool isValidQuantity(List<Dimension> dimensions) {
