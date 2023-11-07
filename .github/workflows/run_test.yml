@@ -10,7 +10,7 @@ on:
 
 jobs:
   test:
-    runs-on: subosito/flutter-action@v2
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
