@@ -1,0 +1,42 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Create .dev.env file
+        run: |
+          cat > .dev.env <<EOF
+          BASE_URL=https://moxy.herokuapp.com
+          EOF
+
+      - name: Create .prod.env file
+        run: |
+          cat > .prod.env <<EOF
+          BASE_URL=https://moxy.herokuapp.com
+          EOF
+
+      # Extract Git tag and set it as env variable
+      - name: Set version environment variable
+        run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV  
+
+      - name: Run Tests
+        run: flutter test
