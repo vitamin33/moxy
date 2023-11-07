@@ -28,6 +28,11 @@ jobs:
           BASE_URL=https://moxy.herokuapp.com
           EOF
 
+      - name: Create .prod.env file
+        run: |
+          cat > .prod.env <<EOF
+          BASE_URL=https://moxy.herokuapp.com
+          EOF
 
       # Extract Git tag and set it as env variable
       - name: Set version environment variable
