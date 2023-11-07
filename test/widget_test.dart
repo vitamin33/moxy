@@ -1,42 +1,21 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:json_theme/json_theme.dart';
-
-// import 'package:moxy/main.dart';
-import 'package:moxy/moxy_app.dart';
-import 'package:moxy/ui/theme/theme_provider.dart';
+import 'package:moxy/ui/screens/admin/pages/transactions/transactions_page.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
-    final themeJson = jsonDecode(themeStr);
-    final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-    final darkTheme = ThemeDecoder.decodeThemeData(themeJson)!;
-    final appTheme = AppThemeData(theme, darkTheme);
-    // Build our app and trigger a frame.
+  testWidgets('TransactionsPage Widget Test', (WidgetTester widgetTester) async {
 
-    await tester.pumpWidget(MoxyApp(appTheme));
+    await widgetTester.pumpWidget(
+     const MaterialApp(
+        home: Directionality(
+          textDirection: TextDirection.ltr, 
+          child: TransactionsPage(),
+        ),
+      ),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    final textWidget = find.text('Transactions');
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(textWidget, findsOneWidget);
   });
 }
