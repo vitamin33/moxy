@@ -146,7 +146,7 @@ class Delivery extends StatelessWidget {
       padding: const EdgeInsets.all(AppTheme.cardPadding),
       child: CustomTextField(
         key: UniqueKey(),
-        title: AppLocalizations.of(context)!.ukrPoshtaLocationData,
+        title: AppLocalizations.of(context)!.novaPostDelivery,
         maxLines: 4,
         controller: cubit.ukrPostInfoController,
         onChanged: cubit.ukrPostInfoChanged,

@@ -188,7 +188,7 @@ class _OtpTextFieldState extends State<OtpTextField> {
   OutlineInputBorder outlineBorder(bool isValid, Color borderColor) {
     return OutlineInputBorder(
       borderSide: BorderSide(
-        color: isValid ? borderColor ?? Colors.grey : Colors.red,
+        color: isValid ?  Colors.grey : Colors.red,
       ),
     );
   }

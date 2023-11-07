@@ -202,7 +202,7 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   child: CustomTextField(
-                    title: AppLocalizations.of(context)!.ukrPoshtaLocationData,
+                    title: AppLocalizations.of(context)!.novaPostDelivery,
                     maxLines: 4,
                     controller: cubit.ukrPostInfoController,
                     onChanged: cubit.ukrPostInfoChanged,
