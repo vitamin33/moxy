@@ -16,7 +16,7 @@ class FavouritesPage extends StatelessWidget {
           return Container(
             height: MediaQuery.of(context).size.height,
             color: AppTheme.pink,
-            child: Text('Favourites'),
+            child:const Text('Favourites'),
           );
         },
       ),

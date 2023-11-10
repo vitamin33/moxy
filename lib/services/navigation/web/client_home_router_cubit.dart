@@ -102,7 +102,6 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
 
   void searchPressed(context) {
     // TODO impl search state
-    goToProductDetails();
   }
 
   void tabControlTouched({

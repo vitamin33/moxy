@@ -41,8 +41,8 @@ class DioClient {
     // Set default configs
     dio.options.baseUrl = baseUrl;
 
-    dio.options.connectTimeout = Duration(seconds: 15); //15s
-    dio.options.receiveTimeout = Duration(seconds: 15);
+    dio.options.connectTimeout = const Duration(seconds: 15); //15s
+    dio.options.receiveTimeout = const Duration(seconds: 15);
 
     // customization
     dio.interceptors.add(PrettyDioLogger(
@@ -272,7 +272,7 @@ class DioClient {
   Future<NetworkDashboard> getDashboard(
       DateTime? fromDate, DateTime? toDate) async {
     try {
-      final requestData;
+      final Object requestData;
 
       if (toDate != null || fromDate != null) {
         requestData = {

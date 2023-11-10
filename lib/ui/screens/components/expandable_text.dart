@@ -6,7 +6,8 @@ class ExpandableShippingText extends StatefulWidget {
   final String? additionalText;
   final String? price;
 
-  ExpandableShippingText({
+  const ExpandableShippingText({
+    super.key,
     required this.collapsedText,
     required this.price,
     this.maxLines =
@@ -66,7 +67,7 @@ class _ExpandableShippingTextState extends State<ExpandableShippingText> {
                 crossFadeState: _isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
-                duration: Duration(milliseconds: 300), // Customize the duration
+                duration:const Duration(milliseconds: 300), // Customize the duration
                 firstChild: richTextCollapsed,
                 secondChild: richTextExpanded,
               ),

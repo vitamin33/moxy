@@ -16,6 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class OrderProductList extends StatelessWidget {
   final OrderProductListState state;
   final OrderProductListCubit cubit;
+  // ignore: use_key_in_widget_constructors
   const OrderProductList({
     Key? key,
     required this.state,
@@ -32,7 +33,7 @@ class OrderProductList extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding:const EdgeInsets.all(8.0),
                 child: SearchTextfield(
                   title: AppLocalizations.of(context)!.search,
                 ),
