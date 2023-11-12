@@ -5,8 +5,8 @@ class TransactionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('Transactions'),
+    return const SizedBox(
+      child:  Text('Transactions'),
     );
   }
 }

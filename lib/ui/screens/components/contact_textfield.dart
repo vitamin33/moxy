@@ -10,6 +10,7 @@ class ContactTextField extends StatelessWidget {
   final bool hasError;
 
   const ContactTextField({
+    super.key,
     required this.labelText,
     this.prefixText,
     required this.controller,

@@ -7,6 +7,7 @@ import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/extensions.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path/path.dart';
 
 import '../../environment.dart';

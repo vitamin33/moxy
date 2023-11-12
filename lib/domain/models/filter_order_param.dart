@@ -38,7 +38,7 @@ class FilterOrderParams implements Copyable<FilterOrderParams> {
     return FilterOrderParams(
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
-      statuses: status ?? this.statuses,
+      statuses: status ?? statuses,
       dateRange: dateRange ?? this.dateRange,
     );
   }

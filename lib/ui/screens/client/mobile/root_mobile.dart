@@ -67,7 +67,7 @@ class _RootMobileWidgetState extends State<RootMobileWidget> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextButton(
-                  child: Text('Category 1'),
+                  child: const Text('Category 1'),
                   onPressed: () {
                     setState(() {
                       _selectedIndex = 0;
@@ -75,7 +75,7 @@ class _RootMobileWidgetState extends State<RootMobileWidget> {
                   },
                 ),
                 TextButton(
-                  child: Text('Category 2'),
+                  child: const Text('Category 2'),
                   onPressed: () {
                     setState(() {
                       _selectedIndex = 1;

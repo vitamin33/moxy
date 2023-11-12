@@ -230,7 +230,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 child: const Icon(
                   Icons.close,
                 )),
-            label: Text('${firstDate}-${lastDate}'),
+            label: Text('$firstDate-$lastDate'),
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
@@ -349,7 +349,7 @@ class _OrdersPageState extends State<OrdersPage> {
               fontSize: 13,
             )),
         Text(
-          '${orderPrice} грн',
+          '$orderPrice грн',
           style: const TextStyle(
               fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
         ),

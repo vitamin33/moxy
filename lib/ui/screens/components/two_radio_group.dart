@@ -51,7 +51,7 @@ class TwoRadioGroup extends StatelessWidget {
             },
           ),
         ),
-        SizedBox(height: 10),
+        const SizedBox(height: 10),
         ListTile(
           shape: RoundedRectangleBorder(
             side: BorderSide(

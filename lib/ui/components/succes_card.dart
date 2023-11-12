@@ -9,8 +9,13 @@ class SuccessCard extends StatelessWidget {
   final Function onTap;
   final String title;
   final String titleButton;
-  SuccessCard(
-      {required this.onTap, required this.title, required this.titleButton});
+  const SuccessCard(
+      {super.key,
+      required this.onTap,
+      required this.title,
+      required this.titleButton});
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
@@ -30,7 +35,7 @@ class SuccessCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    AnimatedLogo(),
+                   const AnimatedLogo(),
                     const SizedBox(
                       height: 20,
                     ),
@@ -59,7 +64,10 @@ class SuccessCard extends StatelessWidget {
 }
 
 class AnimatedLogo extends StatefulWidget {
+  const AnimatedLogo({super.key});
+
   @override
+  // ignore: library_private_types_in_public_api
   _AnimatedLogoState createState() => _AnimatedLogoState();
 }
 

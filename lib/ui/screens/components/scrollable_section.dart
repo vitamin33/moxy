@@ -12,7 +12,7 @@ class ScrollableSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: AppTheme.chekoutPadding),
+        padding:const EdgeInsets.symmetric(horizontal: AppTheme.chekoutPadding),
         child: content,
       ),
     );

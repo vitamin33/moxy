@@ -189,7 +189,7 @@ class _CustomAccordionState extends State<CustomAccordion>
               child: widget.content != null
                   ? Text(
                       widget.content!,
-                      style: TextStyle(fontFamily: 'HelveticaNeue'),
+                      style: const TextStyle(fontFamily: 'HelveticaNeue'),
                     )
                   : (widget.contentChild ?? Container()),
             ),

@@ -5,8 +5,8 @@ class FeedbacksPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('Feedbacks'),
+    return const SizedBox(
+      child: Text('Feedbacks'),
     );
   }
 }

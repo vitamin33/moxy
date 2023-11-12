@@ -38,7 +38,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
     } else {
       allImages =
           widget.dimensions.expand((dimension) => dimension.images).toList();
-      ;
+      
     }
   }
 
