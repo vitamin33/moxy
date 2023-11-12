@@ -6,11 +6,13 @@ import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/admin/pages/order_product_list/order_product_list.dart';
 
 class OrderProductListScreen extends StatefulWidget {
+  const OrderProductListScreen({super.key});
+
   @override
-  _OrderProductListScreenState createState() => _OrderProductListScreenState();
+  OrderProductListScreenState createState() => OrderProductListScreenState();
 }
 
-class _OrderProductListScreenState extends State<OrderProductListScreen> {
+class OrderProductListScreenState extends State<OrderProductListScreen> {
   late OrderProductListCubit cubit;
 
   @override

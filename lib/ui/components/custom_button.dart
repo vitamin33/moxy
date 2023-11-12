@@ -36,7 +36,7 @@ class _CustomButtonState extends State<CustomButton> {
             ? OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   backgroundColor: AppTheme.white,
-                  shape: RoundedRectangleBorder(),
+                  shape:const RoundedRectangleBorder(),
                   padding: const EdgeInsets.all(20),
                   side: const BorderSide(
                     width: 2,

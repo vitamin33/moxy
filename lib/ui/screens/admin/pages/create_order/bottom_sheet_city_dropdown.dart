@@ -14,6 +14,7 @@ class BottomSearchCityDropdown extends StatelessWidget {
   final City selectedCity;
   final ValueChanged onChanged;
 
+  // ignore: use_key_in_widget_constructors
   const BottomSearchCityDropdown({
     Key? key,
     required this.selectedWarehouse,

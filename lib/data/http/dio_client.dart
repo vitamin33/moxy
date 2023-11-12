@@ -95,7 +95,7 @@ class DioClient {
   Future<NetworkDashboard> getDashboard(
       DateTime? fromDate, DateTime? toDate) async {
     try {
-      final dynamic requestData;
+      final requestData;
 
       if (toDate != null || fromDate != null) {
         requestData = {

@@ -7,7 +7,7 @@ import 'package:moxy/domain/models/status.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 
 class Order implements Copyable<Order> {
-  String? _id;
+  final String? _id;
   int cashAdvanceValue;
   Warehouse? novaPost;
   City? city;
@@ -104,7 +104,7 @@ class Order implements Copyable<Order> {
 }
 
 class Client {
-  String? _id;
+  final String? _id;
   String mobileNumber;
   String firstName;
   String secondName;
@@ -137,7 +137,7 @@ class Client {
     City? city,
   }) {
     return Client(
-      id: id ?? this._id,
+      id: id ?? _id,
       mobileNumber: mobileNumber ?? this.mobileNumber,
       firstName: firstName ?? this.firstName,
       secondName: secondName ?? this.secondName,

@@ -81,8 +81,8 @@ class _ChartState extends State<Chart> {
                 ),
               ),
               SfCartesianChart(
-                legend:
-                    Legend(isVisible: true, position: LegendPosition.bottom),
+                legend: const Legend(
+                    isVisible: true, position: LegendPosition.bottom),
                 primaryYAxis: NumericAxis(
                   majorGridLines: const MajorGridLines(
                     width: 1,
@@ -93,11 +93,11 @@ class _ChartState extends State<Chart> {
                     final int value = axisLabelRenderArgs.value.toInt();
                     if (value >= 1000) {
                       return ChartAxisLabel(
-                          '\₴${(value / 1000).toStringAsFixed(0)}k',
+                          '₴${(value / 1000).toStringAsFixed(0)}k',
                           const TextStyle(color: AppTheme.gray));
                     } else {
                       return ChartAxisLabel(
-                          '\₴$value', const TextStyle(color: AppTheme.gray));
+                          '₴$value', const TextStyle(color: AppTheme.gray));
                     }
                   },
                 ),
@@ -201,7 +201,7 @@ class _ChartState extends State<Chart> {
                   if (pointIndex == selectedColumnIndex1 ||
                       pointIndex == selectedColumnIndex2 ||
                       pointIndex == selectedColumnIndex3) {
-                    args.text = '\₴ ${args.text}';
+                    args.text = '₴ ${args.text}';
                     args.color = AppTheme.black;
                     args.textStyle = const TextStyle(fontSize: 14);
                   }

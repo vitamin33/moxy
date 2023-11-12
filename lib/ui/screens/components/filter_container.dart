@@ -4,7 +4,8 @@ import 'package:moxy/ui/theme/app_theme.dart';
 class FilterContainer extends StatelessWidget {
   final String title;
   final String productCount;
-  const FilterContainer({required this.title,required this.productCount});
+  const FilterContainer(
+      {super.key, required this.title, required this.productCount});
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +25,9 @@ class FilterContainer extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-             Text(
-              "(${productCount})",
-              style:const TextStyle(
+            Text(
+              "($productCount)",
+              style: const TextStyle(
                 color: Color(0xFF0C0C0C),
                 fontSize: 20,
                 fontFamily: 'Poppins',
@@ -79,7 +80,7 @@ class TestSelect extends StatefulWidget {
 }
 
 class _TestSelectState extends State<TestSelect> {
-  var my_services;
+  var myServices;
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +100,12 @@ class _TestSelectState extends State<TestSelect> {
               isExpanded: true,
               style: const TextStyle(color: Colors.black, fontSize: 16.0),
               onChanged: (String? changedValue) {
-                my_services = changedValue;
+                myServices = changedValue;
                 setState(() {
-                  my_services;
+                  myServices;
                 });
               },
-              value: my_services,
+              value: myServices,
               items: widget.dropDownItems.map((String value) {
                 return DropdownMenuItem<String>(
                   value: value,

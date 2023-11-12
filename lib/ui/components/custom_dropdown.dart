@@ -7,7 +7,8 @@ class CustomDropdown extends StatefulWidget {
   final ValueChanged<String?> onChanged;
   final String? value;
 
-  CustomDropdown({
+  const CustomDropdown({
+    super.key,
     required this.labelText,
     required this.hintText,
     required this.items,

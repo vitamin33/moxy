@@ -6,7 +6,8 @@ class QuantityPicker extends StatelessWidget {
   final ValueGetter onPlus;
   final ValueGetter onMinus;
 
-  QuantityPicker({
+  const QuantityPicker({
+    super.key,
     required this.quantity,
     required this.onPlus,
     required this.onMinus,

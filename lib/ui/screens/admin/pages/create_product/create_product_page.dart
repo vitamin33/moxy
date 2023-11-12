@@ -28,6 +28,7 @@ class CreateProductPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext mainContext) {
     List<Widget> pages = const [
       ProductDetailsPage(),

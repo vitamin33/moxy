@@ -61,7 +61,7 @@ class PreviusStatValue extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '${showCurrency ? '\₴ ' : ''}$value',
+              '${showCurrency ? '₴ ' : ''}$value',
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
