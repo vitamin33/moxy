@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/models/city.dart';
+import 'package:moxy/domain/models/warehouse.dart';
+import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../../constant/image_path.dart';
@@ -10,6 +13,7 @@ import '../../../../../../domain/admin/create_order/search_cities/search_cities_
 import '../../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../bottom_sheet_city_dropdown.dart';
 import '../bottom_sheet_warehouse_dropdown.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Delivery extends StatelessWidget {
   const Delivery({super.key});
@@ -94,40 +98,61 @@ class Delivery extends StatelessWidget {
                     ),
                   ),
                 ),
-                AnimatedOpacity(
+                AnimatedSize(
+                  duration: const Duration(milliseconds: 300),
                   curve: Curves.easeOut,
-                  opacity: state.deliveryType.index == 0 ? 1 : 0,
-                  duration: const Duration(milliseconds: 500),
-                  child: AnimatedSize(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeOut,
-                    child: Padding(
-                      padding: const EdgeInsets.all(AppTheme.cardPadding),
-                      child: Column(
-                        children: [
-                          BottomSearchCityDropdown(
-                            selectedCity: state.selectedCity,
-                            selectedWarehouse: state.selectedWarehouse,
-                            onChanged: (city) {
-                              cubit.selectCity(city);
-                            },
-                          ),
-                          SizedBox(height: 20),
-                          BottomSearchWarehouseDropdown(
-                            selectedCity: state.selectedCity,
-                            selectedWarehouse: state.selectedWarehouse,
-                            onChanged: (warehouse) {
-                              cubit.selectWarehouse(warehouse);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
+                  child: Container(
+                    child: state.deliveryType == DeliveryType.novaPost
+                        ? _buildNovaPostArea(cubit, state)
+                        : _buildUkrPostArea(context, cubit, state),
                   ),
-                )
+                ),
               ],
             ),
           ));
     });
+  }
+
+  Widget _buildNovaPostArea(CreateOrderCubit cubit, CreateOrderState state) {
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.cardPadding),
+      child: Column(
+        key: UniqueKey(),
+        children: [
+          BottomSearchCityDropdown(
+            selectedCity: state.selectedCity ?? City.defaultCity(),
+            selectedWarehouse: state.selectedWarehouse,
+            onChanged: (city) {
+              cubit.selectCity(city);
+            },
+          ),
+          const SizedBox(height: 20),
+          BottomSearchWarehouseDropdown(
+            selectedCity: state.selectedCity ?? City.defaultCity(),
+            selectedWarehouse:
+                state.selectedWarehouse ?? Warehouse.defaultWarehouse(),
+            onChanged: (warehouse) {
+              cubit.selectWarehouse(warehouse);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUkrPostArea(
+      BuildContext context, CreateOrderCubit cubit, CreateOrderState state) {
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.cardPadding),
+      child: CustomTextField(
+        key: UniqueKey(),
+        title: AppLocalizations.of(context)!.novaPostDelivery,
+        maxLines: 4,
+        controller: cubit.ukrPostInfoController,
+        onChanged: cubit.ukrPostInfoChanged,
+        validation: true,
+        state: state.errors.ukrPostInfo,
+      ),
+    );
   }
 }

@@ -10,15 +10,19 @@ EditOrder _$EditOrderFromJson(Map<String, dynamic> json) => EditOrder(
       orderId: json['orderId'] as String,
       deliveryType: json['deliveryType'] as String,
       paymentType: json['paymentType'] as String,
-      novaPost:
-          NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
+      novaPost: json['novaPost'] == null
+          ? null
+          : NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       products: (json['products'] as List<dynamic>)
           .map((e) => NetworkOrderedItem.fromJson(e as Map<String, dynamic>))
           .toList(),
       client: NetworkClient.fromJson(json['client'] as Map<String, dynamic>),
-      city: NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
+      city: json['city'] == null
+          ? null
+          : NetworkCity.fromJson(json['city'] as Map<String, dynamic>),
       status: json['status'] as String,
       cashAdvanceValue: json['cashAdvanceValue'] as int,
+      ukrPostInfo: json['ukrPostInfo'] as String?,
     );
 
 Map<String, dynamic> _$EditOrderToJson(EditOrder instance) => <String, dynamic>{
@@ -31,6 +35,7 @@ Map<String, dynamic> _$EditOrderToJson(EditOrder instance) => <String, dynamic>{
       'city': instance.city,
       'status': instance.status,
       'cashAdvanceValue': instance.cashAdvanceValue,
+      'ukrPostInfo': instance.ukrPostInfo,
     };
 
 EditStatusOrder _$EditStatusOrderFromJson(Map<String, dynamic> json) =>

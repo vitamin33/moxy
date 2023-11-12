@@ -9,12 +9,13 @@ part 'create_order_request.g.dart';
 class CreateOrder {
   final String deliveryType;
   final String paymentType;
-  final NetworkNovaPost novaPost;
+  final NetworkNovaPost? novaPost;
   final List<NetworkOrderedItem> products;
   final NetworkClient client;
-  final NetworkCity city;
+  final NetworkCity? city;
   final String status;
   final int cashAdvanceValue;
+  final String? ukrPostInfo;
 
   CreateOrder({
     required this.deliveryType,
@@ -25,6 +26,7 @@ class CreateOrder {
     required this.city,
     required this.status,
     required this.cashAdvanceValue,
+    required this.ukrPostInfo,
   });
 
   factory CreateOrder.fromJson(Map<String, dynamic> json) =>

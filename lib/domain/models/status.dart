@@ -7,19 +7,24 @@ class Status {
   final String statusTitle;
   final OrderStatus statusValue;
   bool isSelected;
+  bool isAvailable;
 
-  Status(
-      {required this.iconPath,
-      required this.isSelected,
-      required this.statusTitle,
-      required this.statusValue});
+  Status({
+    required this.iconPath,
+    required this.isSelected,
+    required this.statusTitle,
+    required this.statusValue,
+    this.isAvailable = true,
+  });
 
   static Status defaultStatus() {
     return Status(
-        iconPath: IconPath.newStatus,
-        statusTitle: 'New',
-        isSelected: true,
-        statusValue: OrderStatus.New);
+      iconPath: IconPath.reservedStatus,
+      statusTitle: 'Reserved',
+      isSelected: true,
+      isAvailable: true,
+      statusValue: OrderStatus.Reserved,
+    );
   }
 
   Status copyWith({
@@ -27,12 +32,14 @@ class Status {
     String? statusTitle,
     OrderStatus? statusValue,
     bool? isSelected,
+    bool? isAvailable,
   }) {
     return Status(
       iconPath: iconPath ?? this.iconPath,
       statusTitle: statusTitle ?? this.statusTitle,
       statusValue: statusValue ?? this.statusValue,
       isSelected: isSelected ?? this.isSelected,
+      isAvailable: isAvailable ?? this.isAvailable,
     );
   }
 

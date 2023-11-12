@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/ui/components/sidesheet.dart';
 import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
@@ -97,12 +98,14 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
   }
 
   void basketPressed(context) {
-    SideSheet.right(body: const BasketPage(), context: context);
+    SideSheet.right(
+        body: const BasketPage(),
+        context: context,
+        barrierColor: Colors.grey.withOpacity(0.5));
   }
 
   void searchPressed(context) {
     // TODO impl search state
-    goToProductDetails();
   }
 
   void tabControlTouched({

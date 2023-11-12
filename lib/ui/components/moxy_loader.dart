@@ -12,6 +12,7 @@ class MoxyLoader extends StatefulWidget {
   final double iconSize;
 
   @override
+  // ignore: library_private_types_in_public_api
   _MoxyLoaderState createState() => _MoxyLoaderState();
 }
 

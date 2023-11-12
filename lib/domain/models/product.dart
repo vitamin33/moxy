@@ -79,6 +79,14 @@ class Product implements Copyable<Product> {
   bool hasImages() {
     return dimensions.where((element) => element.images.isNotEmpty).isNotEmpty;
   }
+
+  int totalQuantity() {
+    int sum = 0;
+    for (final dimension in dimensions) {
+      sum += dimension.quantity;
+    }
+    return sum;
+  }
 }
 
 class ProductAttributes implements Copyable<ProductAttributes> {

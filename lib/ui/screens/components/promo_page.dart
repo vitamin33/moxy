@@ -19,7 +19,7 @@ class PromoPage extends StatelessWidget {
   final Function() moveToPreviusPage;
   final Function(int index) animatedToPage;
 
-  const PromoPage({
+  const PromoPage({super.key, 
     required this.backgroundImage,
     required this.discountPercentage,
     required this.collectionName,
@@ -137,7 +137,7 @@ Widget textPromo(
                       ),
                     const SizedBox(height: 20),
                     Text(
-                      '-${discountPercentage}%',
+                      '-$discountPercentage%',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 60,

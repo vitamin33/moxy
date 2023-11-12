@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/constant/order_status.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/data/models/request/change_basket_dimen.dart';
 import 'package:moxy/data/models/response/basket_response.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
 import 'package:moxy/data/repositories/order_repository.dart';
 import 'package:moxy/domain/client/checkout/checkout_effects.dart';
-import 'package:moxy/domain/client/checkout/payment_config.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
@@ -189,8 +189,10 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
       state.selectedWarehouse,
       state.client,
       state.selectedCity,
-      OrderStatus.New.name,
-      defaultPrepaymentAmount,
+      OrderStatus.Reserved.name,
+      defaultCashAvanceValue,
+      // TODO add real info
+      null,
     );
     final createdOrderResult = await orderRepository.addOrder(createOrder);
     createdOrderResult.when((success) {

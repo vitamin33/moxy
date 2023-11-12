@@ -10,12 +10,13 @@ class EditOrder {
   final String orderId;
   final String deliveryType;
   final String paymentType;
-  final NetworkNovaPost novaPost;
+  final NetworkNovaPost? novaPost;
   final List<NetworkOrderedItem> products;
   final NetworkClient client;
-  final NetworkCity city;
+  final NetworkCity? city;
   final String status;
   final int cashAdvanceValue;
+  final String? ukrPostInfo;
 
   EditOrder({
     required this.orderId,
@@ -27,6 +28,7 @@ class EditOrder {
     required this.city,
     required this.status,
     required this.cashAdvanceValue,
+    required this.ukrPostInfo,
   });
 
   factory EditOrder.fromJson(Map<String, dynamic> json) =>
@@ -41,7 +43,6 @@ class EditStatusOrder {
   final String status;
 
   EditStatusOrder({required this.orderId, required this.status});
-
 
   factory EditStatusOrder.fromJson(Map<String, dynamic> json) =>
       _$EditStatusOrderFromJson(json);

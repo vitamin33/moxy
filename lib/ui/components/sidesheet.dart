@@ -16,7 +16,7 @@ class SideSheet {
       bool barrierDismissible = true,
 
       /// Use barrierColor to set the outside color of the side sheet when opened
-      Color barrierColor = const Color(0xFF66000000),
+      Color barrierColor =  Colors.black,
 
       /// Use sheetBorderRadius to set the outside border radius of the side sheet when opened
       double sheetBorderRadius = 0,

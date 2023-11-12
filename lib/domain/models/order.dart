@@ -7,7 +7,7 @@ import 'package:moxy/domain/models/status.dart';
 import 'package:moxy/domain/models/warehouse.dart';
 
 class Order implements Copyable<Order> {
-  String? _id;
+  final String? _id;
   int cashAdvanceValue;
   Warehouse? novaPost;
   City? city;
@@ -18,6 +18,7 @@ class Order implements Copyable<Order> {
   List<OrderedItem> orderedItems;
   String createdAt;
   String updatedAt;
+  String? ukrPostInfo;
 
   Order({
     String? id,
@@ -31,6 +32,7 @@ class Order implements Copyable<Order> {
     required this.orderedItems,
     required this.createdAt,
     required this.updatedAt,
+    required this.ukrPostInfo,
   }) : _id = id;
 
   String? get id => _id;
@@ -53,17 +55,19 @@ class Order implements Copyable<Order> {
 
   static Order defaultOrder() {
     return Order(
-        id: '',
-        cashAdvanceValue: 0,
-        city: City.defaultCity(),
-        novaPost: Warehouse.defaultWarehouse(),
-        deliveryType: DeliveryType.novaPost,
-        status: Status.defaultStatus(),
-        paymentType: PaymentType.cashAdvance,
-        client: Client.defaultClient(),
-        orderedItems: [],
-        createdAt: '',
-        updatedAt: '');
+      id: '',
+      cashAdvanceValue: 0,
+      city: City.defaultCity(),
+      novaPost: Warehouse.defaultWarehouse(),
+      deliveryType: DeliveryType.novaPost,
+      status: Status.defaultStatus(),
+      paymentType: PaymentType.cashAdvance,
+      client: Client.defaultClient(),
+      orderedItems: [],
+      createdAt: '',
+      updatedAt: '',
+      ukrPostInfo: '',
+    );
   }
 
   @override
@@ -80,24 +84,27 @@ class Order implements Copyable<Order> {
     List<OrderedItem>? orderedItems,
     String? createdAt,
     String? updatedAt,
+    String? ukrPostInfo,
   }) {
     return Order(
-        id: id ?? _id,
-        cashAdvanceValue: cashAdvanceValue ?? this.cashAdvanceValue,
-        novaPost: novaPost ?? this.novaPost,
-        city: city ?? this.city,
-        deliveryType: deliveryType ?? this.deliveryType,
-        status: status ?? this.status,
-        paymentType: paymentType ?? this.paymentType,
-        client: client ?? this.client,
-        orderedItems: orderedItems ?? this.orderedItems,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt);
+      id: id ?? _id,
+      cashAdvanceValue: cashAdvanceValue ?? this.cashAdvanceValue,
+      novaPost: novaPost ?? this.novaPost,
+      city: city ?? this.city,
+      deliveryType: deliveryType ?? this.deliveryType,
+      status: status ?? this.status,
+      paymentType: paymentType ?? this.paymentType,
+      client: client ?? this.client,
+      orderedItems: orderedItems ?? this.orderedItems,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      ukrPostInfo: ukrPostInfo ?? this.ukrPostInfo,
+    );
   }
 }
 
 class Client {
-  String? _id;
+  final String? _id;
   String mobileNumber;
   String firstName;
   String secondName;
@@ -122,14 +129,15 @@ class Client {
     );
   }
 
-  Client copyWith(
-      {String? id,
-      String? mobileNumber,
-      String? firstName,
-      String? secondName,
-      City? city}) {
+  Client copyWith({
+    String? id,
+    String? mobileNumber,
+    String? firstName,
+    String? secondName,
+    City? city,
+  }) {
     return Client(
-      id: id ?? this._id,
+      id: id ?? _id,
       mobileNumber: mobileNumber ?? this.mobileNumber,
       firstName: firstName ?? this.firstName,
       secondName: secondName ?? this.secondName,

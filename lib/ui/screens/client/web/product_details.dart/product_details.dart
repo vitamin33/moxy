@@ -13,17 +13,13 @@ class ProductDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ProductDetailsCubit(productId: productId),
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: AppTheme.white,
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            padding: EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
-              children: [
-                ProductDetailsContainer(),
-                //  PromoContainer(),
-                const Footer()
-              ],
+              children: [ProductDetailsContainer(), Footer()],
             ),
           ),
         ),

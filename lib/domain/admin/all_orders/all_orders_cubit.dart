@@ -155,16 +155,18 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
     final updateAllOrders = state.allOrders.map((element) {
       if (element.id == id) {
         return Order(
-            cashAdvanceValue: element.cashAdvanceValue,
-            novaPost: element.novaPost,
-            city: element.city,
-            deliveryType: element.deliveryType,
-            status: status,
-            paymentType: element.paymentType,
-            client: element.client,
-            orderedItems: element.orderedItems,
-            createdAt: element.createdAt,
-            updatedAt: element.createdAt);
+          cashAdvanceValue: element.cashAdvanceValue,
+          novaPost: element.novaPost,
+          city: element.city,
+          deliveryType: element.deliveryType,
+          status: status,
+          paymentType: element.paymentType,
+          client: element.client,
+          orderedItems: element.orderedItems,
+          createdAt: element.createdAt,
+          updatedAt: element.createdAt,
+          ukrPostInfo: element.ukrPostInfo,
+        );
       } else {
         return element;
       }

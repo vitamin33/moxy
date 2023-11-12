@@ -4,9 +4,11 @@ import 'package:moxy/data/http/basket_service.dart';
 import 'package:moxy/data/http/config_service.dart';
 import 'package:moxy/data/http/dio_client.dart';
 import 'package:moxy/data/http/nova_poshta_client.dart';
+import 'package:moxy/data/http/order_service.dart';
 import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/http/profile_service.dart';
 import 'package:moxy/data/http/token_service.dart';
+import 'package:moxy/data/http/user_service.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/basket_repository.dart';
 import 'package:moxy/data/repositories/config_repository.dart';
@@ -49,6 +51,8 @@ class GetItService {
     getIt.registerSingleton<ProductsService>(ProductsService(dio));
     getIt.registerSingleton<BasketService>(BasketService(dio));
     getIt.registerSingleton<ConfigService>(ConfigService(dio));
+    getIt.registerSingleton<OrderService>(OrderService(dio));
+    getIt.registerSingleton<UserService>(UserService(dio));
     getIt.registerSingleton<DioClient>(DioClient());
     getIt.registerSingleton<AuthRepository>(AuthRepository());
     getIt.registerSingleton<ConfigRepository>(ConfigRepository());
@@ -68,6 +72,7 @@ class GetItService {
     getIt.registerSingleton<ProfileRepository>(ProfileRepository());
   }
 }
+
 
 T locate<T extends Object>() {
   return GetItService.getIt<T>();

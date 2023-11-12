@@ -133,7 +133,7 @@ class _RootWebWidgetState extends State<RootWebWidget>
                   color: AppTheme.pinkDark.withOpacity(0.3),
                 )
               : null,
-          child: Container(
+          child: SizedBox(
             child: GestureDetector(
               onTap: () {
                 onPressed.call();

@@ -39,9 +39,9 @@ class SearchTextfield extends StatelessWidget {
               maxLines: maxLines,
               inputFormatters: inputFormatters,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 prefixIconColor: AppTheme.gray,
-                prefixStyle: TextStyle(color: AppTheme.gray),
+                prefixStyle: const TextStyle(color: AppTheme.gray),
                 border: const OutlineInputBorder(
                     borderSide: BorderSide(color: AppTheme.white)),
                 enabledBorder: const OutlineInputBorder(

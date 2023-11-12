@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:moxy/data/http/dio_client.dart';
+import 'package:moxy/data/http/order_service.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -14,7 +14,7 @@ import '../models/request/edit_order_request.dart';
 
 class OrderRepository {
   final orderMapper = locate<OrderMapper>();
-  final DioClient client = locate<DioClient>();
+  final OrderService client = locate<OrderService>();
   final filterRepository = locate<FilterRepository>();
   late SharedPreferences prefs;
   final _filterParamsStreamController = StreamController<FilterOrdersState>();

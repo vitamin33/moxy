@@ -230,7 +230,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 child: const Icon(
                   Icons.close,
                 )),
-            label: Text('${firstDate}-${lastDate}'),
+            label: Text('$firstDate-$lastDate'),
             side: const BorderSide(color: Colors.white),
             onSelected: (selected) {
               if (selected) {
@@ -315,8 +315,8 @@ class _OrdersPageState extends State<OrdersPage> {
 
   _mapStatusToStringValue(Status status, BuildContext context) {
     switch (status.statusValue) {
-      case OrderStatus.New:
-        return AppLocalizations.of(context)!.statusNew;
+      case OrderStatus.Reserved:
+        return AppLocalizations.of(context)!.statusReturned;
       case OrderStatus.Paid:
         return AppLocalizations.of(context)!.statusPaid;
       case OrderStatus.Sent:
@@ -349,7 +349,7 @@ class _OrdersPageState extends State<OrdersPage> {
               fontSize: 13,
             )),
         Text(
-          '${orderPrice} грн',
+          '$orderPrice грн',
           style: const TextStyle(
               fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
         ),
