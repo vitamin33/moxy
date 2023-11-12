@@ -316,7 +316,7 @@ class _OrdersPageState extends State<OrdersPage> {
   _mapStatusToStringValue(Status status, BuildContext context) {
     switch (status.statusValue) {
       case OrderStatus.Reserved:
-        return AppLocalizations.of(context)!.statusReserved;
+        return AppLocalizations.of(context)!.statusReturned;
       case OrderStatus.Paid:
         return AppLocalizations.of(context)!.statusPaid;
       case OrderStatus.Sent:

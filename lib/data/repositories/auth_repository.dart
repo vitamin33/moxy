@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:moxy/data/http/token_service.dart';
+import 'package:moxy/data/http/user_service.dart';
 import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/domain/models/profile.dart';
 import 'package:moxy/domain/models/user.dart';
@@ -11,14 +12,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants.dart';
 import '../../domain/mappers/user_mapper.dart';
 import '../../services/get_it.dart';
-import '../http/dio_client.dart';
 // ignore: depend_on_referenced_packages
 import 'package:multiple_result/multiple_result.dart';
 
 import '../models/request/user_request.dart';
 
 class AuthRepository {
-  final DioClient client = locate<DioClient>();
+  final UserService client = locate<UserService>();
   final userMapper = locate<UserMapper>();
   final tokenService = locate<TokenService>();
 
@@ -79,23 +79,25 @@ class AuthRepository {
   }
 
   Future<Result<User, Exception>> createGuestUser(NetworkUser user) async {
-    final resultCase = await client.createGuestUser(user);
-    return resultCase.when(
-        (success) => Result.success(userMapper.mapToUser(success)),
-        (error) => Result.error(error));
+    try {
+      final resultCase = await client.createGuestUser(user);
+      return Result.success(userMapper.mapToUser(resultCase));
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
   }
 
   Future<Result<List<User>, Exception>> getAllUsers() async {
-    final resultUsers = await client.getAllUsers();
-    return resultUsers.when(
-        (success) => Result.success(
-              success
-                  .map(
-                    (e) => userMapper.mapToUser(e),
-                  )
-                  .toList(),
-            ),
-        (error) => Result.error(error));
+    try {
+      final resultUsers = await client.getAllUsers();
+      return Result.success(resultUsers
+          .map(
+            (e) => userMapper.mapToUser(e),
+          )
+          .toList());
+    } catch (e) {
+      return Result.error(Exception('$e'));
+    }
   }
 
   Role _mapUserRole(String userRole) {
@@ -111,17 +113,23 @@ class AuthRepository {
   }
 
   Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
-    final resultCase = await client.editUser(user);
-    return resultCase.when(
-        (success) => Result.success(success), (error) => Result.error(error));
+    try {
+      final resultCase = await client.editUser(user);
+      return Result.success(resultCase);
+    } catch (e) {
+      return Result.error(Exception(e));
+    }
   }
 
   Future<Result<Headers, Exception>> editUserPassword(
       ProfilePassword password) async {
-    final resultCase = await client
-        .editUserPassword(userMapper.maptoNetworkPassword(password));
-    return resultCase.when(
-        (success) => Result.success(success), (error) => Result.error(error));
+    try {
+      final resultCase = await client
+          .editUserPassword(userMapper.maptoNetworkPassword(password));
+      return Result.success(resultCase);
+    } catch (e) {
+      return Result.error(Exception(e));
+    }
   }
 
   Future<Result<bool, Exception>> register(String firstName, String secondName,
