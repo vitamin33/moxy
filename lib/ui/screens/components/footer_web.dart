@@ -22,9 +22,7 @@ class Footer extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              decoration: const BoxDecoration(
-                  color: AppTheme.pink,
-                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              decoration: const BoxDecoration(color: AppTheme.pink),
               width: double.infinity,
               height: 400,
               child: Row(

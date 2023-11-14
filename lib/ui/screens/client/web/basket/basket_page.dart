@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_effect.dart';
 import 'package:moxy/domain/client/basket/basket_state.dart';
@@ -92,7 +93,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                     const Text(
                       'Вартість замовлення',
                     ),
-                    Text('${state.basket.totalValue().toString()} грн'),
+                    Text('${state.basket.totalValue().toString()} $uah'),
                   ],
                 ),
                 const SizedBox(

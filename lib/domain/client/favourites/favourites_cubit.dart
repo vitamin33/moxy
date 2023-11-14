@@ -1,9 +1,12 @@
 // ignore: depend_on_referenced_packages
 import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/favourites/favorites_effects.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/utils/common.dart';
+import 'package:multiple_result/multiple_result.dart';
 import 'favourites_state.dart';
 
 class FavouritesCubit extends CubitWithEffects<FavouritesState, UiEffect> {
@@ -22,5 +25,28 @@ class FavouritesCubit extends CubitWithEffects<FavouritesState, UiEffect> {
       emit(state.copyWith(isLoading: false));
       emitEffect(LoadingFailed());
     });
+  }
+
+  void removeFromFavorites(Product product) async {
+    final productId = product.id;
+    if (productId == null) {
+      return;
+    }
+    try {
+      state.favoriteProducts.removeWhere(
+        (element) => element.id == product.id,
+      );
+      emit(state.copyWith(favoriteProducts: state.favoriteProducts));
+      Result<bool, Exception> response =
+          await profileRepository.removeFavoriteProduct(product.id!);
+      bool success = response.tryGetSuccess() ?? false;
+      if (!success) {
+        state.favoriteProducts.add(product);
+        emit(state.copyWith(favoriteProducts: state.favoriteProducts));
+        emitEffect(RemoveFavoriteFailed());
+      }
+    } catch (e, stack) {
+      moxyPrint(stack);
+    }
   }
 }

@@ -35,11 +35,12 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
           emit(state.copyWith(isLoading: false, basket: null));
         }
       }, (error) {
+        emit(state.copyWith(isLoading: false));
         emitEffect(BasketApiRequestFailed(
             'Failed get basket info ${error.toString()}'));
       });
-    } catch (e) {
-      moxyPrint('$e');
+    } catch (e, stack) {
+      moxyPrint(stack);
     }
   }
 

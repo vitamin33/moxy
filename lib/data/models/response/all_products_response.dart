@@ -29,6 +29,7 @@ class NetworkProduct {
   String idName;
   String category;
   bool forSale;
+  bool? isFavorite;
   NetworkProductAttributes attributes;
 
   NetworkProduct({
@@ -43,6 +44,7 @@ class NetworkProduct {
     required this.idName,
     required this.category,
     required this.forSale,
+    required this.isFavorite,
     required this.attributes,
   });
 

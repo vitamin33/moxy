@@ -68,6 +68,12 @@ class AppTheme extends InheritedWidget {
     fontFamily: 'Poppins',
     fontWeight: FontWeight.w600,
   );
+  final TextStyle productItemText = const TextStyle(
+    fontSize: 14,
+    fontFamily: 'HelveticaNeue',
+    fontWeight: FontWeight.w500,
+    color: black,
+  );
 
   const AppTheme({super.key, required Widget child}) : super(child: child);
 

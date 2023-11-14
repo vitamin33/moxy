@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_constants.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/status.dart';
@@ -349,7 +350,7 @@ class _OrdersPageState extends State<OrdersPage> {
               fontSize: 13,
             )),
         Text(
-          '$orderPrice грн',
+          '$orderPrice $uah',
           style: const TextStyle(
               fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
         ),

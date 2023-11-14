@@ -17,5 +17,5 @@ const codeKey = 'secretCode';
 const defaultCashAvanceValue = 200;
 
 // Fiat signs
-const uah = 'UAH';
+const uah = 'грн';
 const piece = 'шт.';

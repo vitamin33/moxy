@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
+import 'package:moxy/domain/client/new_product_list/new_product_list_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 
@@ -20,6 +21,7 @@ class SmallBlockGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NewProductListCubit cubit = context.read<NewProductListCubit>();
     return StaggeredGridTile.count(
       crossAxisCellCount: 1,
       mainAxisCellCount: 1,
@@ -38,7 +40,9 @@ class SmallBlockGrid extends StatelessWidget {
                 child: Align(
                     alignment: Alignment.topRight,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        cubit.toggleFavoriteForProduct(product.id);
+                      },
                       child: OnHover(
                         builder: (isHovered) {
                           return Container(

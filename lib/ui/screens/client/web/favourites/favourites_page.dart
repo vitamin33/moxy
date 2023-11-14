@@ -7,6 +7,7 @@ import 'package:moxy/domain/client/favourites/favourites_state.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/product_grid_item.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class FavouritesPage extends StatefulWidget {
@@ -28,6 +29,10 @@ class _FavouritesPageState extends State<FavouritesPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText:
                 'Failed to load favorite products. Try later.'));
+      }
+      if (effect is RemoveFavoriteFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText: 'Failed to remove from favorite products.'));
       }
     });
   }
@@ -58,9 +63,14 @@ class _FavouritesPageState extends State<FavouritesPage> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Expanded(child: _buildFavoritesArea(state)),
+                Expanded(
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    return SizedBox(
+                      height: constraints.maxHeight,
+                      width: constraints.maxWidth,
+                      child: _buildFavoritesArea(state),
+                    );
+                  }),
                 ),
               ],
             ),
@@ -72,7 +82,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
   Widget _buildFavoritesArea(FavouritesState state) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 300),
       child: state.isLoading
           ? const MoxyLoader(
               iconSize: 40,
@@ -81,38 +91,10 @@ class _FavouritesPageState extends State<FavouritesPage> {
     );
   }
 
-  Widget _buildProductItem(Product product) {
-    final imageUrl = product.dimensions.first.images.first.imagePath;
-    return Stack(
-      children: [
-        ElevatedButton(
-          onPressed: () {},
-          style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              backgroundColor: Colors.white,
-              fixedSize: const Size(60, 60)),
-          child: const Icon(Icons.favorite),
-        ),
-        Column(
-          children: [
-            Image.network(imageUrl),
-            Row(
-              children: [
-                Text(product.name),
-                Text(
-                  product.salePrice.toString(),
-                ),
-              ],
-            )
-          ],
-        )
-      ],
-    );
-  }
-
   Widget _buildFavoritesList(FavouritesState state) {
     if (state.favoriteProducts.isEmpty) {
       return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
               height: 260,
@@ -122,11 +104,20 @@ class _FavouritesPageState extends State<FavouritesPage> {
         ],
       );
     }
-    return ListView.builder(
+    return GridView.builder(
       itemCount: state.favoriteProducts.length,
+      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        childAspectRatio: 0.8,
+        maxCrossAxisExtent: 240.0,
+        crossAxisSpacing: 20.0,
+        mainAxisSpacing: 20.0,
+      ),
       itemBuilder: (context, index) {
         Product product = state.favoriteProducts[index];
-        return _buildProductItem(product);
+        return ProductGridItem(
+          product: product,
+          onFavoriteTap: () => _favouritesCubit.removeFromFavorites(product),
+        );
       },
     );
   }

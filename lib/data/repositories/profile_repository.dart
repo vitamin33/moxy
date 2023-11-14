@@ -49,4 +49,25 @@ class ProfileRepository {
       rethrow;
     }
   }
+
+  Future<Result<bool, Exception>> addFavoriteProduct(String productId) async {
+    try {
+      bool result = await client.addFavoriteProduct(productId);
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+
+  Future<Result<bool, Exception>> removeFavoriteProduct(
+      String productId) async {
+    try {
+      bool result = await client.removeFavoriteProduct(productId);
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
 }

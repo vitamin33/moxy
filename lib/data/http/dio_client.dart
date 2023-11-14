@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:moxy/data/http/token_service.dart';
+import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
@@ -9,11 +12,8 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../constant/api_path.dart';
-import '../models/response/all_orders_response.dart';
 import '../models/response/all_promos_response.dart';
 import '../models/response/dashboard_response.dart';
-import '../models/response/profile_response.dart';
-import '../models/response/login_response.dart';
 
 class DioClient {
   late String baseUrl;
@@ -151,60 +151,6 @@ class DioClient {
       moxyPrint(stack);
       rethrow;
     }
-  }
-
-  //PROFILE
-  Future<NetworkProfile> getProfile() async {
-    try {
-      final response = await dio.get('$baseUrl $getProfileUrl');
-      final profile = NetworkProfile.fromJson(response.data);
-      return profile;
-    } catch (e, stack) {
-      moxyPrint(stack);
-      rethrow;
-    }
-  }
-
-  Future<ProfileOrdersResponse> getProfileOrders() async {
-    try {
-      final response = await dio.get('$baseUrl$getProfileOrdersUrl');
-      final data = response.data;
-      final orderList = ProfileOrdersResponse.fromJson(data);
-      return orderList;
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-// EDIT USER
-  Future<Result<Headers, Exception>> editUser(NetworkProfileUser user) async {
-    final Headers? result;
-
-    try {
-      Response response = await dio.post(
-        editUserUrl,
-        data: user.toJson(),
-      );
-      result = response.headers;
-    } catch (e) {
-      rethrow;
-    }
-    return Result.success(result);
-  }
-
-  Future<Result<Headers, Exception>> editUserPassword(
-      NetworkPasswordUser password) async {
-    final Headers result;
-    try {
-      Response response = await dio.post(
-        editUserPasswordUrl,
-        data: password.toJson(),
-      );
-      result = response.headers;
-    } catch (e) {
-      rethrow;
-    }
-    return Result.success(result);
   }
 
   //REGISTER

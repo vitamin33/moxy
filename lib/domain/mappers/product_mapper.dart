@@ -32,6 +32,7 @@ class ProductMapper {
       idName: p.idName,
       category: p.category,
       forSale: p.forSale,
+      isFavorite: p.isFavorite,
       attributes: mapToNetworkAttributes(p.attributes),
     );
   }
@@ -54,6 +55,7 @@ class ProductMapper {
       idName: network.idName,
       category: network.category,
       forSale: network.forSale,
+      isFavorite: network.isFavorite ?? false,
       attributes: mapToAttributes(network.attributes),
     );
   }
