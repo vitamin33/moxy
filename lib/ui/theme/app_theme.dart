@@ -74,6 +74,12 @@ class AppTheme extends InheritedWidget {
     fontWeight: FontWeight.w500,
     color: black,
   );
+  final TextStyle logoutText = const TextStyle(
+    fontSize: 16,
+    fontFamily: 'HelveticaNeue',
+    fontWeight: FontWeight.w400,
+    color: gray,
+  );
 
   const AppTheme({super.key, required Widget child}) : super(child: child);
 

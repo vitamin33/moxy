@@ -56,8 +56,7 @@ class AuthenticationView extends StatelessWidget {
           context.read<LoginCubit>().moveToPage(0);
           ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
               snackBarSuccessText: 'confirm register code success'));
-        }
-         else if (effect is ResendConfirm) {
+        } else if (effect is ResendConfirm) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
               snackBarSuccessText: 'resend confirm register code'));
         }
@@ -105,19 +104,19 @@ class AuthenticationView extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             SizedBox(
-                                width: MediaQuery.of(context).size.width / 3,
-                                height: 600,
-                                child: PageView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    controller: cubit.pageController,
-                                    onPageChanged: (int page) {
-                                      cubit.onChangePage(page);
-                                    },
-                                    itemCount: pages.length,
-                                    itemBuilder: (context, index) {
-                                      return pages[index];
-                                    })),
+                              width: MediaQuery.of(context).size.width / 3,
+                              height: 600,
+                              child: PageView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  controller: cubit.pageController,
+                                  onPageChanged: (int page) {
+                                    cubit.onChangePage(page);
+                                  },
+                                  itemCount: pages.length,
+                                  itemBuilder: (context, index) {
+                                    return pages[index];
+                                  }),
+                            ),
                           ],
                         ),
                       ),

@@ -9,7 +9,7 @@ class RegistrationState implements Copyable<RegistrationState> {
   final String password;
   final String confirmRegisterPassword;
   final String confirmationCode;
-  final String mobileNumberPassword;
+  final String emailForResetPassword;
   final String newPassword;
   final String confirmPassword;
   final RegisterState state;
@@ -23,7 +23,7 @@ class RegistrationState implements Copyable<RegistrationState> {
     required this.password,
     required this.confirmRegisterPassword,
     required this.confirmationCode,
-    required this.mobileNumberPassword,
+    required this.emailForResetPassword,
     required this.newPassword,
     required this.confirmPassword,
     required this.state,
@@ -39,7 +39,7 @@ class RegistrationState implements Copyable<RegistrationState> {
       password: '',
       confirmRegisterPassword: '',
       confirmationCode: '',
-      mobileNumberPassword: '',
+      emailForResetPassword: '',
       newPassword: '',
       confirmPassword: '',
       state: const RegisterState(),
@@ -56,7 +56,7 @@ class RegistrationState implements Copyable<RegistrationState> {
     String? password,
     String? confirmRegisterPassword,
     String? confirmationCode,
-    String? mobileNumberPassword,
+    String? emailForResetPassword,
     String? newPassword,
     String? confirmPassword,
     RegisterState? state,
@@ -71,7 +71,8 @@ class RegistrationState implements Copyable<RegistrationState> {
       confirmRegisterPassword:
           confirmRegisterPassword ?? this.confirmRegisterPassword,
       confirmationCode: confirmationCode ?? this.confirmationCode,
-      mobileNumberPassword: mobileNumberPassword ?? this.mobileNumberPassword,
+      emailForResetPassword:
+          emailForResetPassword ?? this.emailForResetPassword,
       newPassword: newPassword ?? this.newPassword,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       state: state ?? this.state,

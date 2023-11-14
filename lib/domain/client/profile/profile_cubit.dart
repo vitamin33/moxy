@@ -184,6 +184,12 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
     }
   }
 
+  void signOut() async {
+    emit(state.copyWith(isLoading: true));
+    await authRepository.logout();
+    emit(state.copyWith(isLoading: false));
+  }
+
   bool validateFields() {
     final errors = ProfileFieldErrors.noErrors();
     var noErrors = true;

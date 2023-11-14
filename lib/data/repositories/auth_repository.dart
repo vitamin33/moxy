@@ -53,8 +53,9 @@ class AuthRepository {
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
       moxyPrint('Successfult logout completed.');
-    } catch (e) {
+    } catch (e, stack) {
       moxyPrint('Failed logout.');
+      moxyPrint(stack);
     }
   }
 

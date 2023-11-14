@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
+import 'package:moxy/services/navigation/root_router_cubit.dart';
 import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
@@ -24,7 +25,7 @@ class ProfilePage extends StatefulWidget {
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-const double contentHeight = 380.0;
+const double contentHeight = 400.0;
 
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileCubit cubit;
@@ -129,6 +130,7 @@ class ProfileTabPage extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<ProfileCubit>();
         final theme = AppTheme.of(context)!;
+        final router = context.read<RootRouterCubit>();
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -138,7 +140,7 @@ class ProfileTabPage extends StatelessWidget {
                 child: Row(
                   children: [
                     // Drawer Menu
-                    _drawerMenu(cubit, state, theme),
+                    _drawerMenu(cubit, state, theme, router),
                     // Selected Tab Content
                     _selectedTabContent(cubit, state),
                   ],
@@ -186,7 +188,8 @@ class ProfileTabPage extends StatelessWidget {
     );
   }
 
-  Widget _drawerMenu(ProfileCubit cubit, ProfileState state, AppTheme theme) {
+  Widget _drawerMenu(ProfileCubit cubit, ProfileState state, AppTheme theme,
+      RootRouterCubit router) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
       child: SizedBox(
@@ -235,7 +238,21 @@ class ProfileTabPage extends StatelessWidget {
                 ),
               ),
             );
-          }),
+          })
+            ..add(
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: InkWell(
+                    onTap: () {
+                      cubit.signOut();
+                      router.goToAuthFlow();
+                    },
+                    child: Text('Вихід', style: theme.logoutText),
+                  ),
+                ),
+              ),
+            ),
         ),
       ),
     );
