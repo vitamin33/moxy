@@ -32,14 +32,15 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
         if (basket != null) {
           emitSuccessBasket(basket);
         } else {
-          // TODO handle empty basket state
+          emit(state.copyWith(isLoading: false, basket: null));
         }
       }, (error) {
+        emit(state.copyWith(isLoading: false));
         emitEffect(BasketApiRequestFailed(
             'Failed get basket info ${error.toString()}'));
       });
-    } catch (e) {
-      moxyPrint('$e');
+    } catch (e, stack) {
+      moxyPrint(stack);
     }
   }
 

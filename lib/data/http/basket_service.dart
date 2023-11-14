@@ -19,10 +19,14 @@ class BasketService {
     try {
       final response = await _dio.get('$baseUrl$getBasketUrl');
       final data = response.data;
-      final result = NetworkBasket.fromJson(data);
-      return result;
-    } on DioException catch (e) {
-      moxyPrint(e);
+      if (response.data != null && response.data.toString().isNotEmpty) {
+        final result = NetworkBasket.fromJson(data);
+        return result;
+      } else {
+        return null;
+      }
+    } on DioException catch (e, stack) {
+      moxyPrint(stack);
       return null;
     } catch (e, stack) {
       moxyPrint(stack);

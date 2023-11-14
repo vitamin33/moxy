@@ -12,6 +12,7 @@ class Product implements Copyable<Product> {
   String idName;
   String category;
   bool forSale;
+  bool isFavorite;
   ProductAttributes attributes;
 
   Product({
@@ -26,6 +27,7 @@ class Product implements Copyable<Product> {
     required this.idName,
     required this.category,
     required this.forSale,
+    required this.isFavorite,
     required this.attributes,
   });
 
@@ -41,6 +43,7 @@ class Product implements Copyable<Product> {
       idName: '',
       category: '',
       forSale: false,
+      isFavorite: false,
       attributes: ProductAttributes.defaultAttributes(),
     );
   }
@@ -58,6 +61,7 @@ class Product implements Copyable<Product> {
     double? salePrice,
     List<Dimension>? dimensions,
     bool? forSale,
+    bool? isFavorite,
     ProductAttributes? attributes,
   }) {
     return Product(
@@ -72,6 +76,7 @@ class Product implements Copyable<Product> {
       idName: idName ?? this.idName,
       category: category ?? this.category,
       forSale: forSale ?? this.forSale,
+      isFavorite: isFavorite ?? this.isFavorite,
       attributes: attributes ?? this.attributes,
     );
   }

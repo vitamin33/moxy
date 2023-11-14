@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:moxy/data/http/token_service.dart';
+import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
@@ -9,10 +12,8 @@ import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import '../../constant/api_path.dart';
-import '../models/response/all_orders_response.dart';
 import '../models/response/all_promos_response.dart';
 import '../models/response/dashboard_response.dart';
-import '../models/response/profile_response.dart';
 
 class DioClient {
   late String baseUrl;
@@ -152,24 +153,72 @@ class DioClient {
     }
   }
 
-  //PROFILE
-  Future<NetworkProfile> getProfile() async {
+  //REGISTER
+  Future<bool> register(NetworkRegister networkRegister) async {
     try {
-      final response = await dio.get('$baseUrl $getProfileUrl');
-      final profile = NetworkProfile.fromJson(response.data);
-      return profile;
+      Response response = await dio.post(
+        registerUserUrl,
+        data: networkRegister.toJson(),
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == HttpStatus.conflict) {
+        return true;
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  Future<bool> sendConfirmationCode(
+      NetworkConfirmationCode networkConfirmationCode) async {
+    try {
+      Response response = await dio.post(
+        verifyUserUrl,
+        data: networkConfirmationCode.toJson(),
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e, stack) {
       moxyPrint(stack);
       rethrow;
     }
   }
 
-  Future<ProfileOrdersResponse> getProfileOrders() async {
+  Future<bool> resendConfirmationCode(String email) async {
     try {
-      final response = await dio.get('$baseUrl$getProfileOrdersUrl');
-      final data = response.data;
-      final orderList = ProfileOrdersResponse.fromJson(data);
-      return orderList;
+      Response response = await dio.post(
+        resendVerifyUserUrl,
+        data: {'email': email},
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> changePasswordWithMobile(String email) async {
+    try {
+      Response response = await dio.post(
+        editUserPassworWithMobiledUrl,
+        data: {'email': email},
+      );
+      if (response.statusCode == HttpStatus.created) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       rethrow;
     }

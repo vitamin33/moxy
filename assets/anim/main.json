@@ -1,0 +1,1065 @@
+{
+  "v": "4.8.0",
+  "meta": { "g": "LottieFiles AE 3.4.5", "a": "", "k": "", "d": "", "tc": "" },
+  "fr": 29.9700012207031,
+  "ip": 0,
+  "op": 900.000036657751,
+  "w": 1920,
+  "h": 1080,
+  "nm": "Comp 1",
+  "ddd": 0,
+  "assets": [
+    {
+      "id": "image_0",
+      "w": 728,
+      "h": 773,
+      "u": "",
+      "p": "data:image/png;base64,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",
+      "e": 1
+    }
+  ],
+  "fonts": {
+    "list": [
+      {
+        "fName": "Orbitron-Bold",
+        "fFamily": "Orbitron",
+        "fStyle": "Bold",
+        "ascent": 76.9989013671875
+      }
+    ]
+  },
+  "layers": [
+    {
+      "ddd": 0,
+      "ind": 1,
+      "ty": 2,
+      "nm": "Group 427319747.png",
+      "cl": "png",
+      "refId": "image_0",
+      "sr": 1,
+      "ks": {
+        "o": { "a": 0, "k": 100, "ix": 11 },
+        "r": { "a": 0, "k": 0, "ix": 10 },
+        "p": { "a": 0, "k": [918.047, 533.992, 0], "ix": 2 },
+        "a": { "a": 0, "k": [364, 386.5, 0], "ix": 1 },
+        "s": { "a": 0, "k": [30.769, 31.695, 100], "ix": 6 }
+      },
+      "ao": 0,
+      "ip": 0,
+      "op": 900.000036657751,
+      "st": 0,
+      "bm": 0
+    },
+    {
+      "ddd": 0,
+      "ind": 2,
+      "ty": 5,
+      "nm": "moxy store • moxy store • moxy store •",
+      "sr": 1,
+      "ks": {
+        "o": { "a": 0, "k": 100, "ix": 11 },
+        "r": { "a": 0, "k": 0, "ix": 10 },
+        "p": { "a": 0, "k": [642, 454, 0], "ix": 2 },
+        "a": { "a": 0, "k": [0, 0, 0], "ix": 1 },
+        "s": { "a": 0, "k": [100, 100, 100], "ix": 6 }
+      },
+      "ao": 0,
+      "hasMask": true,
+      "masksProperties": [
+        {
+          "inv": false,
+          "mode": "n",
+          "pt": {
+            "a": 0,
+            "k": {
+              "i": [
+                [118.189, 0],
+                [0, -118.189],
+                [-118.189, 0],
+                [0, 118.189]
+              ],
+              "o": [
+                [-118.189, 0],
+                [0, 118.189],
+                [118.189, 0],
+                [0, -118.189]
+              ],
+              "v": [
+                [276, -138],
+                [62, 76],
+                [276, 290],
+                [490, 76]
+              ],
+              "c": true
+            },
+            "ix": 1
+          },
+          "o": { "a": 0, "k": 100, "ix": 3 },
+          "x": { "a": 0, "k": 0, "ix": 4 },
+          "nm": "Mask 1"
+        }
+      ],
+      "t": {
+        "d": {
+          "k": [
+            {
+              "s": {
+                "s": 49,
+                "f": "Orbitron-Bold",
+                "t": "moxy store • moxy store • moxy store •",
+                "j": 0,
+                "tr": 137,
+                "lh": 58.8,
+                "ls": 0,
+                "fc": [0, 0, 0]
+              },
+              "t": 0
+            }
+          ]
+        },
+        "p": {
+          "m": 0,
+          "f": {
+            "a": 0,
+            "k": 0,
+            "ix": 5,
+            "x": "var $bm_rt;\n$bm_rt = $bm_mul(time, 200);"
+          },
+          "l": { "a": 0, "k": 0, "ix": 6 },
+          "a": 0,
+          "p": 1,
+          "r": 1
+        },
+        "m": { "g": 1, "a": { "a": 0, "k": [0, 0], "ix": 2 } },
+        "a": []
+      },
+      "ip": 0,
+      "op": 900.000036657751,
+      "st": 0,
+      "bm": 0
+    }
+  ],
+  "markers": [],
+  "chars": [
+    {
+      "ch": "m",
+      "size": 49,
+      "style": "Bold",
+      "w": 93.5,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-0.4, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [2.7, 2.7],
+                      [3.8, 0]
+                    ],
+                    "o": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0.4, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0.533, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, -3.8],
+                      [-2.7, -2.7],
+                      [0, 0]
+                    ],
+                    "v": [
+                      [5.4, -58],
+                      [5.4, 0],
+                      [18.5, 0],
+                      [18.5, -44.2],
+                      [19.2, -44.9],
+                      [41.1, -44.9],
+                      [41.7, -44.2],
+                      [41.7, 0],
+                      [54.9, 0],
+                      [54.9, -44.2],
+                      [55.5, -44.9],
+                      [77.3, -44.9],
+                      [78.1, -44.2],
+                      [78.1, 0],
+                      [91.1, 0],
+                      [91.1, -44.2],
+                      [87.05, -53.95],
+                      [77.3, -58]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "m",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "m",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "o",
+      "size": 49,
+      "style": "Bold",
+      "w": 66.9,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [2.7, -2.7],
+                      [0, -3.8],
+                      [0, 0],
+                      [-2.7, -2.7],
+                      [-3.8, 0],
+                      [0, 0],
+                      [-2.7, 2.7],
+                      [0, 3.8],
+                      [0, 0],
+                      [2.7, 2.7],
+                      [3.8, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [-2.7, 2.7],
+                      [0, 0],
+                      [0, 3.8],
+                      [2.7, 2.7],
+                      [0, 0],
+                      [3.8, 0],
+                      [2.7, -2.7],
+                      [0, 0],
+                      [0, -3.8],
+                      [-2.7, -2.7],
+                      [0, 0],
+                      [-3.8, 0]
+                    ],
+                    "v": [
+                      [9.15, -53.95],
+                      [5.1, -44.2],
+                      [5.1, -13.8],
+                      [9.15, -4.05],
+                      [18.9, 0],
+                      [50.2, 0],
+                      [59.95, -4.05],
+                      [64, -13.8],
+                      [64, -44.2],
+                      [59.95, -53.95],
+                      [50.2, -58],
+                      [18.9, -58]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "o",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              },
+              {
+                "ind": 1,
+                "ty": "sh",
+                "ix": 2,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, -0.466],
+                      [0, 0],
+                      [0.466, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0.466, 0]
+                    ],
+                    "v": [
+                      [50.9, -44.2],
+                      [50.9, -13.8],
+                      [50.2, -13.1],
+                      [18.9, -13.1],
+                      [18.2, -13.8],
+                      [18.2, -44.2],
+                      [18.9, -44.9],
+                      [50.2, -44.9]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "o",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "o",
+            "np": 5,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "x",
+      "size": 49,
+      "style": "Bold",
+      "w": 69.2,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "v": [
+                      [34.5, -39.6],
+                      [18.9, -58],
+                      [4.6, -58],
+                      [4.6, -54.7],
+                      [26, -29.5],
+                      [4.6, -3.3],
+                      [4.6, 0],
+                      [18.9, 0],
+                      [34.5, -19.2],
+                      [50.2, 0],
+                      [64.5, 0],
+                      [64.5, -3.3],
+                      [43, -29.5],
+                      [64.5, -54.7],
+                      [64.5, -58],
+                      [50.2, -58]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "x",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "x",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "y",
+      "size": 49,
+      "style": "Bold",
+      "w": 68.5,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0.4, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-2.7, -2.7],
+                      [-3.8, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0.4, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-2.667, 2.7],
+                      [0, 3.8]
+                    ],
+                    "o": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 3.8],
+                      [2.7, 2.7],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0.4],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [3.8, 0],
+                      [2.666, -2.7],
+                      [0, 0]
+                    ],
+                    "v": [
+                      [63.1, -57.8],
+                      [50, -57.8],
+                      [50, -13.8],
+                      [49.4, -13.1],
+                      [18, -13.1],
+                      [17.3, -13.8],
+                      [17.3, -57.8],
+                      [4.2, -57.8],
+                      [4.2, -13.8],
+                      [8.25, -4.05],
+                      [18, 0],
+                      [50, 0],
+                      [50, 9.2],
+                      [49.4, 9.8],
+                      [13.9, 9.8],
+                      [13.9, 23],
+                      [49.4, 23],
+                      [59.1, 18.95],
+                      [63.1, 9.2]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "y",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "y",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": " ",
+      "size": 49,
+      "style": "Bold",
+      "w": 30.8,
+      "data": {},
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "s",
+      "size": 49,
+      "style": "Bold",
+      "w": 68.6,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [2.666, 2.7],
+                      [3.866, 0],
+                      [0, 0],
+                      [2.7, -2.7],
+                      [0, -3.8],
+                      [0, 0],
+                      [-2.7, -2.7],
+                      [-3.8, 0],
+                      [0, 0],
+                      [0, -0.4],
+                      [0, 0],
+                      [0.466, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-2.7, -2.7],
+                      [-3.8, 0],
+                      [0, 0],
+                      [-2.667, 2.7],
+                      [0, 3.8],
+                      [0, 0],
+                      [2.666, 2.7],
+                      [3.866, 0],
+                      [0, 0],
+                      [0, 0.4],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [-2.667, -2.7],
+                      [0, 0],
+                      [-3.8, 0],
+                      [-2.7, 2.7],
+                      [0, 0],
+                      [0, 3.8],
+                      [2.7, 2.7],
+                      [0, 0],
+                      [0.466, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 3.8],
+                      [2.7, 2.7],
+                      [0, 0],
+                      [3.866, 0],
+                      [2.666, -2.7],
+                      [0, 0],
+                      [0, -3.8],
+                      [-2.667, -2.7],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0.466, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, -3.8]
+                    ],
+                    "v": [
+                      [59.7, -53.95],
+                      [49.9, -58],
+                      [18.6, -58],
+                      [8.85, -53.95],
+                      [4.8, -44.2],
+                      [4.8, -36.2],
+                      [8.85, -26.45],
+                      [18.6, -22.4],
+                      [49.9, -22.4],
+                      [50.6, -21.8],
+                      [50.6, -13.8],
+                      [49.9, -13.1],
+                      [18.6, -13.1],
+                      [17.9, -13.8],
+                      [17.9, -16.3],
+                      [4.8, -16.3],
+                      [4.8, -13.8],
+                      [8.85, -4.05],
+                      [18.6, 0],
+                      [49.9, 0],
+                      [59.7, -4.05],
+                      [63.7, -13.8],
+                      [63.7, -21.8],
+                      [59.7, -31.55],
+                      [49.9, -35.6],
+                      [18.6, -35.6],
+                      [17.9, -36.2],
+                      [17.9, -44.2],
+                      [18.6, -44.9],
+                      [49.9, -44.9],
+                      [50.6, -44.2],
+                      [50.6, -41.7],
+                      [63.7, -41.7],
+                      [63.7, -44.2]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "s",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "s",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "t",
+      "size": 49,
+      "style": "Bold",
+      "w": 43.7,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-2.667, -2.7],
+                      [-3.867, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 3.8],
+                      [2.666, 2.7],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "v": [
+                      [41, -58],
+                      [18.4, -58],
+                      [18.4, -77],
+                      [5.3, -77],
+                      [5.3, -13.8],
+                      [9.3, -4.05],
+                      [19.1, 0],
+                      [41, 0],
+                      [41, -13.1],
+                      [19.1, -13.1],
+                      [18.4, -13.8],
+                      [18.4, -44.9],
+                      [41, -44.9]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "t",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "t",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "r",
+      "size": 49,
+      "style": "Bold",
+      "w": 52.8,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [2.7, -2.7],
+                      [0, -3.8],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [-2.7, 2.7],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-3.8, 0]
+                    ],
+                    "v": [
+                      [9.25, -53.95],
+                      [5.2, -44.2],
+                      [5.2, 0],
+                      [18.3, 0],
+                      [18.3, -44.2],
+                      [19, -44.9],
+                      [51.2, -44.9],
+                      [51.2, -58],
+                      [19, -58]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "r",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "r",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "e",
+      "size": 49,
+      "style": "Bold",
+      "w": 66.9,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, 0],
+                      [2.7, -2.7],
+                      [0, -3.8],
+                      [0, 0],
+                      [-2.7, -2.7],
+                      [-3.8, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0.467],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [2.7, 2.7],
+                      [3.8, 0]
+                    ],
+                    "o": [
+                      [-3.8, 0],
+                      [-2.7, 2.7],
+                      [0, 0],
+                      [0, 3.8],
+                      [2.7, 2.7],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, -3.8],
+                      [-2.7, -2.7],
+                      [0, 0]
+                    ],
+                    "v": [
+                      [18.9, -58],
+                      [9.15, -53.95],
+                      [5.1, -44.2],
+                      [5.1, -13.8],
+                      [9.15, -4.05],
+                      [18.9, 0],
+                      [64, 0],
+                      [64, -13.1],
+                      [18.9, -13.1],
+                      [18.2, -13.8],
+                      [18.2, -22.4],
+                      [64, -22.4],
+                      [64, -44.2],
+                      [59.95, -53.95],
+                      [50.2, -58]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "e",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              },
+              {
+                "ind": 1,
+                "ty": "sh",
+                "ix": 2,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, 0],
+                      [-0.467, 0],
+                      [0, 0],
+                      [0, -0.466],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [0, -0.466],
+                      [0, 0],
+                      [0.466, 0],
+                      [0, 0],
+                      [0, 0],
+                      [0, 0]
+                    ],
+                    "v": [
+                      [18.2, -44.2],
+                      [18.9, -44.9],
+                      [50.2, -44.9],
+                      [50.9, -44.2],
+                      [50.9, -35.6],
+                      [18.2, -35.6]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "e",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "e",
+            "np": 5,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    },
+    {
+      "ch": "•",
+      "size": 49,
+      "style": "Bold",
+      "w": 37.1,
+      "data": {
+        "shapes": [
+          {
+            "ty": "gr",
+            "it": [
+              {
+                "ind": 0,
+                "ty": "sh",
+                "ix": 1,
+                "ks": {
+                  "a": 0,
+                  "k": {
+                    "i": [
+                      [0, -3.6],
+                      [0, 0],
+                      [-3.6, 0],
+                      [0, 0],
+                      [0, 3.6],
+                      [0, 0],
+                      [3.666, 0],
+                      [0, 0]
+                    ],
+                    "o": [
+                      [0, 0],
+                      [0, 3.6],
+                      [0, 0],
+                      [3.666, 0],
+                      [0, 0],
+                      [0, -3.6],
+                      [0, 0],
+                      [-3.6, 0]
+                    ],
+                    "v": [
+                      [11.8, -36.6],
+                      [11.8, -34.7],
+                      [17.2, -29.3],
+                      [19.4, -29.3],
+                      [24.9, -34.7],
+                      [24.9, -36.6],
+                      [19.4, -42],
+                      [17.2, -42]
+                    ],
+                    "c": true
+                  },
+                  "ix": 2
+                },
+                "nm": "•",
+                "mn": "ADBE Vector Shape - Group",
+                "hd": false
+              }
+            ],
+            "nm": "•",
+            "np": 3,
+            "cix": 2,
+            "bm": 0,
+            "ix": 1,
+            "mn": "ADBE Vector Group",
+            "hd": false
+          }
+        ]
+      },
+      "fFamily": "Orbitron"
+    }
+  ]
+}

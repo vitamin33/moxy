@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void moxyPrint(dynamic value) {
@@ -30,3 +32,7 @@ Color hexToColor(String code) {
   return Color(intValue)
       .withAlpha(255); // Set alpha to 255 for fully opaque color
 }
+
+final _random = Random();
+
+int random(int min, int max) => min + _random.nextInt(max - min);
