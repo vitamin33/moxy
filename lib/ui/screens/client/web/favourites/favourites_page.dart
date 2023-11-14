@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:moxy/domain/client/favourites/favorites_effects.dart';
 import 'package:moxy/domain/client/favourites/favourites_cubit.dart';
@@ -104,21 +105,33 @@ class _FavouritesPageState extends State<FavouritesPage> {
         ],
       );
     }
-    return GridView.builder(
-      itemCount: state.favoriteProducts.length,
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        childAspectRatio: 0.8,
-        maxCrossAxisExtent: 240.0,
-        crossAxisSpacing: 20.0,
-        mainAxisSpacing: 20.0,
+    return AnimationLimiter(
+      child: GridView.builder(
+        itemCount: state.favoriteProducts.length,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          childAspectRatio: 0.8,
+          maxCrossAxisExtent: 240.0,
+          crossAxisSpacing: 20.0,
+          mainAxisSpacing: 20.0,
+        ),
+        itemBuilder: (context, index) {
+          Product product = state.favoriteProducts[index];
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 375),
+            child: SlideAnimation(
+              verticalOffset: 50.0,
+              child: FadeInAnimation(
+                child: ProductGridItem(
+                  product: product,
+                  onFavoriteTap: () =>
+                      _favouritesCubit.removeFromFavorites(product),
+                ),
+              ),
+            ),
+          );
+        },
       ),
-      itemBuilder: (context, index) {
-        Product product = state.favoriteProducts[index];
-        return ProductGridItem(
-          product: product,
-          onFavoriteTap: () => _favouritesCubit.removeFromFavorites(product),
-        );
-      },
     );
   }
 }
