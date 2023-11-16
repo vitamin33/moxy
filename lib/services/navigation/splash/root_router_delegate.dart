@@ -74,7 +74,8 @@ class RootRouterDelegate extends RouterDelegate<RootRoute>
       return [
         _materialPage(
           valueKey: "client_main",
-          child: const RootView(),
+          //child: const RootView(),
+          child: Container(),
         ),
       ];
     }

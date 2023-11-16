@@ -1,110 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_state.dart';
-import 'package:moxy/services/navigation/web/client_home_info_parser.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
-import 'package:moxy/services/navigation/web/client_home_router_delegate.dart';
+import 'package:moxy/services/navigation/navigation_event.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
+import 'package:moxy/ui/components/sidesheet.dart';
+import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/ui/theme/theme_provider.dart';
+import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:provider/provider.dart';
 
-class RootWebWidget extends StatefulWidget {
-  final ClientHomeRouterCubit routerCubit;
-  const RootWebWidget(this.routerCubit, {Key? key}) : super(key: key);
+class RootWebWidget extends HookWidget {
+  /// The navigation shell and container for the branch Navigators.
+  final StatefulNavigationShell navigationShell;
 
-  @override
-  _RootWebWidgetState createState() => _RootWebWidgetState();
-}
+  /// The children (branch Navigators) to display in a custom container
+  final List<Widget> children;
 
-class _RootWebWidgetState extends State<RootWebWidget>
-    with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  @override
-  void initState() {
-    super.initState();
-    final state = widget.routerCubit.state;
-    int initialIndex = 0;
-    if (state.runtimeType == HomeRoute) {
-      initialIndex = (state as HomeRoute).tabIndex ?? 0;
-    }
-    _tabController =
-        TabController(length: 3, vsync: this, initialIndex: initialIndex);
-    _tabController?.addListener(_handleTabSelection);
-  }
-
-  @override
-  void dispose() {
-    _tabController?.removeListener(_handleTabSelection);
-    _tabController?.dispose();
-    super.dispose();
-  }
-
-  void _handleTabSelection() {
-    if (_tabController?.indexIsChanging == true) {
-      int index = _tabController?.index ?? 0;
-      widget.routerCubit.tabControlSelected(index);
-    }
-  }
+  const RootWebWidget({
+    Key? key,
+    required this.navigationShell,
+    required this.children,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 3,
-      child: BlocBuilder<ClientHomeRouterCubit, ClientHomeRoute>(
-        builder: (context, route) {
-          return Material(
-            child: Scaffold(
-              appBar: AppBar(
-                  leadingWidth: 150,
-                  leading: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: SvgPicture.asset(
-                      IconPath.moxyLogoWeb,
-                      width: 50,
-                    ),
-                  ),
-                  centerTitle: true,
-                  backgroundColor: AppTheme.white,
-                  elevation: 8.0,
-                  title: SizedBox(
-                    width: 380,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          _buildTabsWidget(),
-                        ],
-                      ),
-                    ),
-                  ),
-                  actions: _buildActions(context, route)),
-              body: _buildRouter(context, _tabController!),
+    int routeIndex = navigationShell.currentIndex;
+    int initialIndex = routeIndex > 3 ? 0 : routeIndex;
+    // ignore: unused_local_variable
+    final tabController =
+        useTabController(initialLength: 3, initialIndex: initialIndex);
+    return Scaffold(
+      appBar: AppBar(
+          leadingWidth: 150,
+          leading: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SvgPicture.asset(
+              IconPath.moxyLogoWeb,
+              width: 50,
             ),
-          );
-        },
+          ),
+          centerTitle: true,
+          backgroundColor: AppTheme.white,
+          elevation: 8.0,
+          title: SizedBox(
+            width: 380,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _buildTabsWidget(context, tabController),
+                ],
+              ),
+            ),
+          ),
+          actions: _buildActions(context)),
+      body: AnimatedBranchContainer(
+        currentIndex: navigationShell.currentIndex,
+        children: children,
       ),
-    );
-  }
-
-  Widget _buildRouter(BuildContext context, TabController controller) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, child) {
-        return MaterialApp.router(
-          routerDelegate: ClientHomeRouterDelegate(
-              navigatorKey, context.read<ClientHomeRouterCubit>(), controller),
-          backButtonDispatcher: RootBackButtonDispatcher(),
-          routeInformationParser: ClientHomeRouteInfoParser(),
-          theme: themeProvider.themeData.theme,
-          darkTheme: themeProvider.themeData.darkTheme,
-          debugShowCheckedModeBanner: false,
-        );
-      },
     );
   }
 
@@ -195,42 +156,51 @@ class _RootWebWidgetState extends State<RootWebWidget>
     );
   }
 
-  List<Widget> _buildActions(BuildContext context, ClientHomeRoute route) {
+  List<Widget> _buildActions(BuildContext context) {
+    final currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    bool profileSelected = currentRoute == RouterProvider.profileInfoPath() ||
+        currentRoute == RouterProvider.profileOrdersPath() ||
+        currentRoute == RouterProvider.profileAdressesPath();
+    bool favoritesSelected = currentRoute == RouterProvider.favoritesPath();
+    bool searchSelected = currentRoute == RouterProvider.searchPath();
     return [
       _buildPaddedIconButton(
         IconPath.searchWeb,
-        false,
+        searchSelected,
         () {
-          widget.routerCubit.searchPressed(context);
+          navigateToBranch(context, searchIndex);
         },
       ),
       _buildPaddedIconButton(
         IconPath.favouritesWeb,
-        route is FavouritesRoute,
+        favoritesSelected,
         () {
-          widget.routerCubit.favouritesPressed();
+          navigateToBranch(context, favoritesIndex);
         },
       ),
       _buildPaddedIconButton(
         IconPath.profileWeb,
-        route is ProfileRoute,
+        profileSelected,
         () {
-          widget.routerCubit.profilePressed();
+          navigateToBranch(context, profileIndex);
         },
       ),
       _buildBasketIconButton(
         IconPath.bagWeb,
         () {
-          widget.routerCubit.basketPressed(context);
+          SideSheet.right(
+              body: const BasketPage(),
+              context: context,
+              barrierColor: Colors.grey.withOpacity(0.5));
         },
       )
     ];
   }
 
-  Widget _buildTabsWidget() {
-    int controllerIndex = _tabController?.index ?? 0;
+  Widget _buildTabsWidget(BuildContext context, TabController controller) {
     return SizedBox(
-      width: 350, // Adjust the width as needed
+      width: 350,
       child: TabBar(
         overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
@@ -240,35 +210,47 @@ class _RootWebWidgetState extends State<RootWebWidget>
             return null;
           },
         ),
-        controller: _tabController,
+        controller: controller,
         indicatorColor: AppTheme.black,
         labelColor: AppTheme.black,
-        tabs: [
-          Listener(
-            onPointerDown: (_) {
-              widget.routerCubit.tabControlTouched(
-                  controllerIndex: controllerIndex, newIndex: 0);
-            },
-            child: const Tab(text: 'Новинки'),
-          ),
-          Listener(
-            onPointerDown: (_) {
-              widget.routerCubit.tabControlTouched(
-                  controllerIndex: controllerIndex, newIndex: 1);
-            },
-            child: const Tab(text: 'Сумки'),
-          ),
-          Listener(
-            onPointerDown: (_) {
-              widget.routerCubit.tabControlTouched(
-                  controllerIndex: controllerIndex, newIndex: 2);
-            },
-            child: const Tab(
-              text: 'Аксесуари',
-            ),
-          ),
+        onTap: (int index) {
+          navigateToBranch(context, index);
+        },
+        tabs: const [
+          Tab(text: 'Новинки'),
+          Tab(text: 'Сумки'),
+          Tab(text: 'Аксесуари'),
         ],
       ),
     );
+  }
+
+  void navigateToBranch(BuildContext context, int index) {
+    navigationShell.goBranch(index);
+    final navCubit = context.read<RootRouterCubit>();
+    navCubit.sendNavEvent(eventByIndex(index));
+  }
+
+  NavigationEvent eventByIndex(int index) {
+    String routeName;
+    switch (index) {
+      case 0:
+        routeName = Routes.newPath;
+      case 1:
+        routeName = Routes.homeBagsPath;
+      case 2:
+        routeName = Routes.accessoriesPath;
+      case 3:
+        routeName = Routes.searchPath;
+      case 4:
+        routeName = Routes.favoritesPath;
+      case 5:
+        routeName = Routes.homeBagsPath;
+      case 6:
+        routeName = Routes.checkoutPath;
+      default:
+        routeName = Routes.newPath;
+    }
+    return NavigationEvent(routeName: routeName);
   }
 }

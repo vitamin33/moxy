@@ -97,13 +97,6 @@ class ClientHomeRouterCubit extends Cubit<ClientHomeRoute> {
     }
   }
 
-  void basketPressed(context) {
-    SideSheet.right(
-        body: const BasketPage(),
-        context: context,
-        barrierColor: Colors.grey.withOpacity(0.5));
-  }
-
   void searchPressed(context) {
     // TODO impl search state
   }

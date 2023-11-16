@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/new_product_list/new_product_list_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 
 import '../../../constant/icon_path.dart';
 import '../../theme/app_theme.dart';
@@ -75,9 +76,8 @@ class SmallBlockGrid extends StatelessWidget {
                   Row(children: [
                     InkWell(
                         onTap: () {
-                          context
-                              .read<ClientHomeRouterCubit>()
-                              .navigateTo(ProductDetailsRoute(product.id));
+                          context.push(
+                              RouterProvider.producDetailsPath(product.id!));
                         },
                         child: Container(
                             width: 10, height: 10, color: AppTheme.green))

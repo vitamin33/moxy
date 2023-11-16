@@ -6,6 +6,7 @@ import 'package:moxy/domain/client/favourites/favorites_effects.dart';
 import 'package:moxy/domain/client/favourites/favourites_cubit.dart';
 import 'package:moxy/domain/client/favourites/favourites_state.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/product_grid_item.dart';
@@ -24,7 +25,8 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   void initState() {
     super.initState();
-    _favouritesCubit = FavouritesCubit();
+    final navCubit = context.read<RootRouterCubit>();
+    _favouritesCubit = FavouritesCubit(navCubit);
     _favouritesCubit.effectStream.listen((effect) {
       if (effect is LoadingFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(

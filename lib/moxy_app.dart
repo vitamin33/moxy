@@ -6,19 +6,17 @@ import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
-import 'package:moxy/services/navigation/root_info_parser.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/theme/theme_provider.dart';
 import 'domain/admin/all_orders/all_orders_cubit.dart';
 import 'domain/admin/all_products/all_products_cubit.dart';
 import 'domain/admin/edit_order/edit_order_cubit.dart';
 import 'services/navigation/admin/admin_home_router_cubit.dart';
-import 'services/navigation/root_router_cubit.dart';
-import 'services/navigation/root_router_delegate.dart';
 import 'services/navigation/web/client_home_router_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
-
 
 // ignore: must_be_immutable
 class MoxyApp extends StatelessWidget {
@@ -65,10 +63,11 @@ class MoxyApp extends StatelessWidget {
       ],
       child: BlocBuilder<RootRouterCubit, RootRoute>(builder: (context, state) {
         return MaterialApp.router(
-          routerDelegate:
-              RootRouterDelegate(navigatorKey, context.read<RootRouterCubit>()),
+          routeInformationProvider:
+              RouterProvider.router.routeInformationProvider,
+          routeInformationParser: RouterProvider.router.routeInformationParser,
+          routerDelegate: RouterProvider.router.routerDelegate,
           backButtonDispatcher: RootBackButtonDispatcher(),
-          routeInformationParser: RootRouteInfoParser(),
           theme: theme.theme,
           darkTheme: theme.darkTheme,
           debugShowCheckedModeBanner: false,
