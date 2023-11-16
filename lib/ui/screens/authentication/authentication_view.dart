@@ -2,12 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/roles.dart';
-import 'package:moxy/services/navigation/root_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/succes_card.dart';
 import 'package:moxy/ui/screens/components/authentication_container.dart';
 import 'package:moxy/ui/screens/components/new_password_container.dart';
@@ -25,7 +27,6 @@ class AuthenticationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rootNavCubit = context.read<RootRouterCubit>();
     final pages = [
       const AuthenticationContainer(),
       const RegistrationContainer(),
@@ -56,8 +57,7 @@ class AuthenticationView extends StatelessWidget {
           context.read<LoginCubit>().moveToPage(0);
           ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
               snackBarSuccessText: 'confirm register code success'));
-        }
-         else if (effect is ResendConfirm) {
+        } else if (effect is ResendConfirm) {
           ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
               snackBarSuccessText: 'resend confirm register code'));
         }
@@ -70,9 +70,9 @@ class AuthenticationView extends StatelessWidget {
       } else if (state.state is LoginWithCredsSuccess) {
         final role = (state.state as LoginWithCredsSuccess).role;
         if (role == Role.admin || role == Role.manager) {
-          rootNavCubit.goToAdminFlow();
+          context.go(RouterProvider.loginPath());
         } else {
-          rootNavCubit.goToClientHomeFlow();
+          context.go(RouterProvider.homeNewPath());
         }
         loginCubit.clearState();
       } else if (state.state is Logout) {
@@ -105,19 +105,19 @@ class AuthenticationView extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
                             SizedBox(
-                                width: MediaQuery.of(context).size.width / 3,
-                                height: 600,
-                                child: PageView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    controller: cubit.pageController,
-                                    onPageChanged: (int page) {
-                                      cubit.onChangePage(page);
-                                    },
-                                    itemCount: pages.length,
-                                    itemBuilder: (context, index) {
-                                      return pages[index];
-                                    })),
+                              width: MediaQuery.of(context).size.width / 3,
+                              height: 600,
+                              child: PageView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  controller: cubit.pageController,
+                                  onPageChanged: (int page) {
+                                    cubit.onChangePage(page);
+                                  },
+                                  itemCount: pages.length,
+                                  itemBuilder: (context, index) {
+                                    return pages[index];
+                                  }),
+                            ),
                           ],
                         ),
                       ),

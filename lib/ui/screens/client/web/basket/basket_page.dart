@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constants.dart';
@@ -9,7 +10,7 @@ import 'package:moxy/domain/client/basket/basket_effect.dart';
 import 'package:moxy/domain/client/basket/basket_state.dart';
 import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
@@ -105,9 +106,8 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                     Navigator.pop(
                       context,
                     );
-                    context
-                        .read<ClientHomeRouterCubit>()
-                        .navigateTo(const CheckoutRoute());
+
+                    context.push(RouterProvider.checkoutPath());
                   },
                   buttonWidth: double.infinity,
                 )

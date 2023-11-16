@@ -1,24 +1,36 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/config_repository.dart';
+import 'package:moxy/domain/roles.dart';
+import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
+import 'package:moxy/services/get_it.dart';
+import 'package:moxy/services/navigation/navigation_event.dart';
+import 'package:moxy/services/navigation/splash/splash_effects.dart';
 import 'package:moxy/utils/extensions.dart';
-
-import '../../domain/roles.dart';
-import '../get_it.dart';
 
 part 'root_router_state.dart';
 
-class RootRouterCubit extends Cubit<RootRoute> {
+class RootRouterCubit extends CubitWithEffects<RootRoute, UiEffect> {
+  final _eventController = StreamController<NavigationEvent>.broadcast();
+
+  Stream<NavigationEvent> get eventStream => _eventController.stream;
+
+  void sendNavEvent(NavigationEvent event) {
+    _eventController.sink.add(event);
+  }
+
   final _authRepository = locate<AuthRepository>();
   final _configRepository = locate<ConfigRepository>();
 
   RootRouterCubit() : super(const SplashRoute());
 
-  void goToAdminFlow([String? text]) => emit(AdminHomeRoute(text));
-  void goToClientHomeFlow([String? text]) => emit(ShopRoute(text));
-  void goToAuthFlow([String? text]) => emit(LoginRoute(text));
-  void goToSplash([String? text]) => emit(const SplashRoute());
+  void goToAdminFlow([String? text]) => emitEffect(NavigateAdminRoot());
+  void goToClientHomeFlow([String? text]) => emitEffect(NavigateClientRoot());
+  void goToAuthFlow([String? text]) => emitEffect(NavigateAuthRoot());
+  void goToSplash([String? text]) => emitEffect(NavigateSplash());
 
   void popExtra() {
     if (state is AdminHomeRoute) {
@@ -61,5 +73,11 @@ class RootRouterCubit extends Cubit<RootRoute> {
 
   void checkInitialState() {
     _checkAuthenticationAndLoadConfigurations();
+  }
+
+  @override
+  Future<void> close() {
+    _eventController.close();
+    return super.close();
   }
 }

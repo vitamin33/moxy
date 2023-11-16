@@ -1,34 +1,30 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
+import 'package:go_router/src/route.dart';
 import 'package:moxy/ui/screens/client/web/root_web.dart';
 
 import 'mobile/root_mobile.dart';
 
 class RootView extends StatelessWidget {
-  const RootView({Key? key}) : super(key: key);
+  /// The navigation shell and container for the branch Navigators.
+  final StatefulNavigationShell navigationShell;
+
+  /// The children (branch Navigators) to display in a custom container
+  final List<Widget> children;
+
+  const RootView({
+    Key? key,
+    required this.navigationShell,
+    required this.children,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Overlay(
-      initialEntries: [
-        OverlayEntry(
-          builder: (context) {
-            return BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
-                builder: (context, state) {
-              if (kIsWeb) {
-                ClientHomeRouterCubit cubit =
-                    context.read<ClientHomeRouterCubit>();
-                return RootWebWidget(cubit);
-              } else {
-                return const RootMobileWidget();
-              }
-            });
-          },
-        ),
-      ],
-    );
+    if (kIsWeb) {
+      return RootWebWidget(
+          navigationShell: navigationShell, children: children);
+    } else {
+      return const RootMobileWidget();
+    }
   }
 }

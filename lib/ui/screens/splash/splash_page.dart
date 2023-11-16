@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/services/navigation/root_router_cubit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moxy/config/routes.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
+import 'package:moxy/services/navigation/splash/splash_effects.dart';
 import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
@@ -10,8 +13,6 @@ class SplashPage extends StatefulWidget {
   _SplashPageState createState() => _SplashPageState();
 }
 
-
-
 class _SplashPageState extends State<SplashPage> {
   late RootRouterCubit cubit;
 
@@ -19,6 +20,15 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     cubit = context.read<RootRouterCubit>();
+    cubit.effectStream.listen((effect) {
+      if (effect is NavigateAdminRoot) {
+        context.go('/${Routes.adminPath}');
+      } else if (effect is NavigateClientRoot) {
+        context.go('/${Routes.newPath}');
+      } else if (effect is NavigateAuthRoot) {
+        context.go('/${Routes.loginPath}');
+      }
+    });
     cubit.checkInitialState();
   }
 

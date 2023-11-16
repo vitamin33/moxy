@@ -20,7 +20,7 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
             password: '',
             confirmRegisterPassword: '',
             confirmationCode: '',
-            mobileNumberPassword: '',
+            emailForResetPassword: '',
             newPassword: '',
             confirmPassword: '',
             state: const RegisterState(),
@@ -141,10 +141,10 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
     }
   }
 
-  void mobileNumberPasswordChanged(String value) {
-    final mobileNumberPassword = value;
+  void emailPasswordChanged(String value) {
+    final emailPassword = value;
     emit(state.copyWith(
-      mobileNumberPassword: mobileNumberPassword,
+      emailForResetPassword: emailPassword,
     ));
   }
 
@@ -178,8 +178,6 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
       emit(state.copyWith(state: RegisterFailed(message: error.toString())));
     }
   }
-
-
 
   bool validateRegisterFields() {
     final errors = RegisterFieldErrors.noErrors();
@@ -234,7 +232,7 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
   bool validateChangePasswordFields() {
     final errors = RegisterFieldErrors.noErrors();
     var noErrors = true;
-    if (isFieldEmpty(state.mobileNumberPassword)) {
+    if (isFieldEmpty(state.emailForResetPassword)) {
       errors.mobileNumberPassword = FieldError.invalid;
       noErrors = false;
     }

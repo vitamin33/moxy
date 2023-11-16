@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
@@ -16,15 +19,16 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 
+// ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
-  final String? extraPagePath;
-  const ProfilePage({Key? key, required this.extraPagePath}) : super(key: key);
+  String? extraPage;
+  ProfilePage({super.key, this.extraPage});
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-const double contentHeight = 380.0;
+const double contentHeight = 400.0;
 
 class _ProfilePageState extends State<ProfilePage> {
   late ProfileCubit cubit;
@@ -32,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    cubit = ProfileCubit(extraPagePath: widget.extraPagePath);
+    cubit = ProfileCubit(extraPagePath: widget.extraPage);
 
     cubit.effectStream.listen((effect) {
       if (effect is ProfileApiRequestFailed) {
@@ -129,6 +133,7 @@ class ProfileTabPage extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<ProfileCubit>();
         final theme = AppTheme.of(context)!;
+        final router = context.read<RootRouterCubit>();
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -138,7 +143,7 @@ class ProfileTabPage extends StatelessWidget {
                 child: Row(
                   children: [
                     // Drawer Menu
-                    _drawerMenu(cubit, state, theme),
+                    _drawerMenu(context, cubit, state, theme, router),
                     // Selected Tab Content
                     _selectedTabContent(cubit, state),
                   ],
@@ -186,7 +191,8 @@ class ProfileTabPage extends StatelessWidget {
     );
   }
 
-  Widget _drawerMenu(ProfileCubit cubit, ProfileState state, AppTheme theme) {
+  Widget _drawerMenu(BuildContext context, ProfileCubit cubit,
+      ProfileState state, AppTheme theme, RootRouterCubit router) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
       child: SizedBox(
@@ -200,9 +206,10 @@ class ProfileTabPage extends StatelessWidget {
                 if (cubit.pageController.hasClients) {
                   cubit.pageController.animateToPage(
                     index,
-                    duration: const Duration(milliseconds: 300),
+                    duration: const Duration(milliseconds: 200),
                     curve: Curves.easeIn,
                   );
+                  updateNavigator(context, index);
                 }
               },
               child: Container(
@@ -235,7 +242,21 @@ class ProfileTabPage extends StatelessWidget {
                 ),
               ),
             );
-          }),
+          })
+            ..add(
+              Expanded(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: InkWell(
+                    onTap: () {
+                      cubit.signOut();
+                      context.go(RouterProvider.loginPath());
+                    },
+                    child: Text('Вихід', style: theme.logoutText),
+                  ),
+                ),
+              ),
+            ),
         ),
       ),
     );
@@ -255,5 +276,21 @@ class ProfileTabPage extends StatelessWidget {
         buttonWidth: 200,
       ),
     );
+  }
+
+  void updateNavigator(BuildContext context, int index) {
+    String path;
+    switch (index) {
+      case 1:
+        path = RouterProvider.profileOrdersPath();
+        break;
+      case 2:
+        path = RouterProvider.profileAdressesPath();
+        break;
+      default:
+        path = RouterProvider.profileInfoPath();
+        break;
+    }
+    context.go(path);
   }
 }

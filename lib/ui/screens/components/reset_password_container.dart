@@ -29,9 +29,9 @@ class ResetPasswordContainer extends StatelessWidget {
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
-                title: 'Номер телефону',
+                title: 'E-mail',
                 controller: cubit.mobileNumberPasswordController,
-                onChanged: (value) => cubit.mobileNumberPasswordChanged(value),
+                onChanged: (value) => cubit.emailPasswordChanged(value),
                 autofillHints: const [
                   AutofillHints.telephoneNumber,
                 ],

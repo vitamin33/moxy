@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/services/navigation/root_router_cubit.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 
 class RootRouteInfoParser extends RouteInformationParser<RootRoute> {
   @override

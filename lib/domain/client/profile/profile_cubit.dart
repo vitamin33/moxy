@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter/cupertino.dart';
+import 'package:moxy/config/routes.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
@@ -184,6 +185,12 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
     }
   }
 
+  void signOut() async {
+    emit(state.copyWith(isLoading: true));
+    await authRepository.logout();
+    emit(state.copyWith(isLoading: false));
+  }
+
   bool validateFields() {
     final errors = ProfileFieldErrors.noErrors();
     var noErrors = true;
@@ -218,9 +225,9 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   int _calculateInitialPage(String? extraPagePath) {
     if (extraPagePath != null) {
       switch (extraPagePath) {
-        case ClientHomeRoute.ordersPath:
+        case Routes.profileOrdersPath:
           return 1;
-        case ClientHomeRoute.addressesPath:
+        case Routes.profileAddressesPath:
           return 2;
         default:
           return 0;

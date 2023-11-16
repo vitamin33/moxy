@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import 'package:moxy/domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_effects.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -78,7 +78,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       child: BlocBuilder<CheckoutCubit, CheckoutState>(
         builder: (context, state) {
           final theme = AppTheme.of(context)!;
-          ClientHomeRouterCubit router = context.read<ClientHomeRouterCubit>();
           return Scaffold(
             backgroundColor: Colors.transparent,
             body: ScrollableSection(
@@ -91,7 +90,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       child: SizedBox(
                         width: 300,
                         child: InkWell(
-                          onTap: () => {router.goBack()},
+                          onTap: () => {
+                            context.pop(),
+                          },
                           child: Padding(
                             padding: const EdgeInsets.all(12),
                             child: Row(

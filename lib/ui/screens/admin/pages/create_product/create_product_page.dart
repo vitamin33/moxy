@@ -31,7 +31,7 @@ class CreateProductPage extends StatelessWidget {
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext mainContext) {
     List<Widget> pages = const [
-      ProductDetailsPage(),
+      AdminProductDetailsPage(),
       Branding(),
     ];
     final CreateProductCubit cubit = mainContext.read<CreateProductCubit>();
@@ -94,7 +94,7 @@ class CreateProductPage extends StatelessWidget {
                                                   .sale,
                                             ],
                                             pages: const [
-                                              ProductDetailsPage(),
+                                              AdminProductDetailsPage(),
                                               Branding()
                                             ],
                                             controller: cubit.pageController),

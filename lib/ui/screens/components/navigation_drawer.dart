@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
-import 'package:moxy/services/navigation/root_router_cubit.dart';
 import 'package:provider/provider.dart';
 import '../admin/menu.dart';
 import '../../theme/app_theme.dart';
@@ -15,7 +16,6 @@ class DashboardDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<LoginCubit>();
-    final navRootCubit = context.read<RootRouterCubit>();
     final menus = getLocalizedMenus(context);
 
     return ClipRRect(
@@ -68,7 +68,7 @@ class DashboardDrawer extends StatelessWidget {
               InkWell(
                 onTap: () => {
                   cubit.signOut(),
-                  navRootCubit.goToAuthFlow(),
+                  context.go('/${Routes.loginPath}'),
                   Scaffold.of(context).closeDrawer()
                 },
                 focusColor: AppTheme.darkPink,
