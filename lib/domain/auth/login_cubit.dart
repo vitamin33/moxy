@@ -22,8 +22,8 @@ class LoginCubit extends Cubit<LoginState> {
             password: '',
             activePage: 0,
             state:const AuthState())) {
-    //_checkLoggedInState();
-    emit(state.copyWith(mobileNumber: '0938795984', password: '123123'));
+    _checkLoggedInState();
+    emit(state.copyWith(mobileNumber: '', password: ''));
   }
 
   void mobileNumberChanged(String value) {
