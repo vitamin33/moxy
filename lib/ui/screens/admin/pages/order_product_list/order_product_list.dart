@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/domain/admin/order_product_list/order_product_list_state.dart';
 import 'package:moxy/utils/common.dart';
@@ -87,9 +86,6 @@ class OrderProductList extends StatelessWidget {
                   cubit.productsSelected();
                   context.pop();
 
-                  final isEditFrom = (context.read<AdminHomeRouterCubit>().state
-                          as OrderProductListPageState)
-                      .isFromEdit;
                   // if (isEditFrom) {
                   //   context
                   //       .read<AdminHomeRouterCubit>()

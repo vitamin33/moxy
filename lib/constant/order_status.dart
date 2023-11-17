@@ -13,7 +13,7 @@ List<Status> getAllStatusOrder(BuildContext context,
     switch (status) {
       case OrderStatus.Reserved:
         return Status(
-            statusTitle: l10n.statusReturned,
+            statusTitle: l10n.statusReserved,
             isSelected: false,
             isAvailable: isAvailable,
             iconPath: IconPath.reservedStatus,

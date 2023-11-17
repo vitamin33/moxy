@@ -6,8 +6,6 @@ import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_delegate.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
@@ -28,12 +26,11 @@ class AdminRootView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
-        builder: (context, state) => mobileWidget(context, state));
+    return mobileWidget(context);
   }
 
-  Widget mobileWidget(BuildContext context, AdminHomeRouterState state) {
-    final arrIcons = _mapStateToActionIcon(state, context);
+  Widget mobileWidget(BuildContext context) {
+    final arrIcons = _mapStateToActionIcon(context);
 
     return AppScaffold(
       appbar: AppBar(
@@ -82,14 +79,11 @@ class AdminRootView extends StatelessWidget {
                 )
               : Container()
         ],
-        backgroundColor: state.runtimeType == EditOrderPageState ||
-                state.runtimeType == FilterOrderPageState
-            ? AppTheme.white
-            : AppTheme.pink,
+        backgroundColor: AppTheme.pink,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            _mapStateToTitleText(context, state),
+            _mapStateToTitleText(context),
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
@@ -123,7 +117,7 @@ class AdminRootView extends StatelessWidget {
         ),
       ),
       drawer: const DashboardDrawer(),
-      floatingActionButton: _buildFabWidget(context, state),
+      floatingActionButton: _buildFabWidget(context),
       body: AnimatedBranchContainer(
         currentIndex: navigationShell.currentIndex,
         children: children,
@@ -131,21 +125,7 @@ class AdminRootView extends StatelessWidget {
     );
   }
 
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  Widget get _routers =>
-      BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
-        builder: (context, state) => Router(
-          routerDelegate: AdminHomeRouterDelegate(
-            navigatorKey,
-            context.read<AdminHomeRouterCubit>(),
-          ),
-          backButtonDispatcher: RootBackButtonDispatcher(),
-        ),
-      );
-
-  String _mapStateToTitleText(
-      BuildContext context, AdminHomeRouterState state) {
+  String _mapStateToTitleText(BuildContext context) {
     String currentRoute =
         GoRouter.of(context).routeInformationProvider.value.uri.toString();
     if (currentRoute == RouterProvider.adminDashboardPath()) {
@@ -177,8 +157,7 @@ class AdminRootView extends StatelessWidget {
     return AppLocalizations.of(context)!.overview;
   }
 
-  List<AppBarIcon> _mapStateToActionIcon(
-      AdminHomeRouterState state, BuildContext context) {
+  List<AppBarIcon> _mapStateToActionIcon(BuildContext context) {
     String currentRoute =
         GoRouter.of(context).routeInformationProvider.value.uri.toString();
     if (currentRoute == RouterProvider.adminDashboardPath()) {
@@ -218,7 +197,7 @@ class AdminRootView extends StatelessWidget {
     return [];
   }
 
-  Widget _buildFabWidget(BuildContext context, AdminHomeRouterState state) {
+  Widget _buildFabWidget(BuildContext context) {
     String currentRoute =
         GoRouter.of(context).routeInformationProvider.value.uri.toString();
 

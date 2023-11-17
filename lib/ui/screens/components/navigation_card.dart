@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 
 import '../../components/custom_expansion_tile.dart';
 import '../admin/menu.dart';
@@ -32,72 +30,64 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
     final icon = widget.menu.icon;
     final subItems = widget.menu.subRoutes;
 
-    return BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
-      builder: (context, state) {
-        String currentRoute =
-            GoRouter.of(context).routeInformationProvider.value.uri.toString();
-        final isTapped = initialRoute == currentRoute;
-        if (subItems.isNotEmpty) {
-          return NavigationBarCardList(
-              menu: widget.menu, isTapped: isTapped, showLeadingIcons: false);
-        }
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-              horizontal: AppTheme.elementSpacing,
-              vertical: AppTheme.elementSpacing * 0.25),
-          child: InkWell(
-            onHover: (v) {
-              setState(() {
-                isHover = v;
-              });
-            },
-            onTap: () {
-              context.go(initialRoute);
-              Scaffold.of(context).closeDrawer();
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: isTapped ? AppTheme.pink : Theme.of(context).canvasColor,
-              ),
-              padding: const EdgeInsets.all(AppTheme.elementSpacing),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        widget.showIcon
-                            ? SvgPicture.asset(icon,
-                                colorFilter: ColorFilter.mode(
-                                    isTapped
-                                        ? AppTheme.pinkDark
-                                        : AppTheme.black,
-                                    BlendMode.srcIn))
-                            : Container(),
-                        const SizedBox(width: AppTheme.elementSpacing),
-                        Text(
-                          title,
-                          style:
-                              Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    color: isTapped
-                                        ? AppTheme.pinkDark
-                                        : AppTheme.onPrimaryContainerColor,
-                                    fontWeight: isTapped
-                                        ? FontWeight.w700
-                                        : FontWeight.w500,
-                                  ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
+    String currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    final isTapped = initialRoute == currentRoute;
+    if (subItems.isNotEmpty) {
+      return NavigationBarCardList(
+          menu: widget.menu, isTapped: isTapped, showLeadingIcons: false);
+    }
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: AppTheme.elementSpacing,
+          vertical: AppTheme.elementSpacing * 0.25),
+      child: InkWell(
+        onHover: (v) {
+          setState(() {
+            isHover = v;
+          });
+        },
+        onTap: () {
+          context.go(initialRoute);
+          Scaffold.of(context).closeDrawer();
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: isTapped ? AppTheme.pink : Theme.of(context).canvasColor,
           ),
-        );
-      },
+          padding: const EdgeInsets.all(AppTheme.elementSpacing),
+          child: Row(
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    widget.showIcon
+                        ? SvgPicture.asset(icon,
+                            colorFilter: ColorFilter.mode(
+                                isTapped ? AppTheme.pinkDark : AppTheme.black,
+                                BlendMode.srcIn))
+                        : Container(),
+                    const SizedBox(width: AppTheme.elementSpacing),
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            color: isTapped
+                                ? AppTheme.pinkDark
+                                : AppTheme.onPrimaryContainerColor,
+                            fontWeight:
+                                isTapped ? FontWeight.w700 : FontWeight.w500,
+                          ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

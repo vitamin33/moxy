@@ -10,6 +10,7 @@ import 'package:moxy/ui/screens/admin/pages/edit_order/edit_order_page.dart';
 import 'package:moxy/ui/screens/admin/pages/feedbacks/feedbacks_page.dart';
 import 'package:moxy/ui/screens/admin/pages/order_product_list/order_product_list_screen.dart';
 import 'package:moxy/ui/screens/admin/pages/orders/orders_page.dart';
+import 'package:moxy/ui/screens/admin/pages/orders_filter/orders_filter_page.dart';
 import 'package:moxy/ui/screens/admin/pages/overview/overview_page.dart';
 import 'package:moxy/ui/screens/admin/pages/products/products_page.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
@@ -269,6 +270,15 @@ class RouterProvider {
               GoRoute(
                 path: adminOrderProductListPath(),
                 builder: (context, state) => const OrderProductListScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            initialLocation: adminFilterOrderPath(),
+            routes: <RouteBase>[
+              GoRoute(
+                path: adminFilterOrderPath(),
+                builder: (context, state) => const FilterOrderPage(),
               ),
             ],
           ),
