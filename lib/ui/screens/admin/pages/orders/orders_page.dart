@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_constants.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/status.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 
 import '../../../../../constant/order_status.dart';
-import '../../../../../services/navigation/admin/admin_home_router_cubit.dart';
 import '../../../../components/snackbar_widgets.dart';
 import '../../../../../domain/admin/all_orders/all_orders_cubit.dart';
 import '../../../../../domain/admin/all_orders/all_orders_state.dart';
@@ -440,9 +441,10 @@ class _OrdersPageState extends State<OrdersPage> {
         onLongPressStart: (details) =>
             showPopupMenu(context, order, cubit, details),
         onTap: () {
-          context
-              .read<AdminHomeRouterCubit>()
-              .navigateTo(const EditOrderPageState());
+          if (order.id == null) {
+            return;
+          }
+          context.push(RouterProvider.adminEditOrderPath(order.id!));
           context.read<EditOrderCubit>().getOrder(order);
         },
         child: ListTile(

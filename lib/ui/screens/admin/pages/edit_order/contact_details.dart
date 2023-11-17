@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_state.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class ContactDetails extends StatelessWidget {
@@ -204,9 +205,7 @@ class ContactDetails extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 cubit.editSelectedProduct();
-                context.read<AdminHomeRouterCubit>().navigateTo(
-                      const OrderProductListPageState(isFromEdit: true),
-                    );
+                context.push(RouterProvider.adminOrderProductListPath());
               },
               child: Text(
                 AppLocalizations.of(context)!.change,

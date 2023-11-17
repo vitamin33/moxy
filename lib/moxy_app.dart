@@ -12,8 +12,6 @@ import 'package:moxy/ui/theme/theme_provider.dart';
 import 'domain/admin/all_orders/all_orders_cubit.dart';
 import 'domain/admin/all_products/all_products_cubit.dart';
 import 'domain/admin/edit_order/edit_order_cubit.dart';
-import 'services/navigation/admin/admin_home_router_cubit.dart';
-import 'services/navigation/web/client_home_router_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -40,12 +38,6 @@ class MoxyApp extends StatelessWidget {
         ),
         BlocProvider<RootRouterCubit>(
           create: (BuildContext context) => RootRouterCubit(),
-        ),
-        BlocProvider<AdminHomeRouterCubit>(
-          create: (BuildContext context) => AdminHomeRouterCubit(),
-        ),
-        BlocProvider<ClientHomeRouterCubit>(
-          create: (BuildContext context) => ClientHomeRouterCubit(),
         ),
         BlocProvider<AllProductsCubit>(
             create: (BuildContext context) => AllProductsCubit()),

@@ -235,21 +235,21 @@ class RootWebWidget extends HookWidget {
     String routeName;
     switch (index) {
       case 0:
-        routeName = Routes.newPath;
+        routeName = Routes.brandNew;
       case 1:
-        routeName = Routes.homeBagsPath;
+        routeName = Routes.homeBags;
       case 2:
-        routeName = Routes.accessoriesPath;
+        routeName = Routes.accessories;
       case 3:
-        routeName = Routes.searchPath;
+        routeName = Routes.search;
       case 4:
-        routeName = Routes.favoritesPath;
+        routeName = Routes.favorites;
       case 5:
-        routeName = Routes.homeBagsPath;
+        routeName = Routes.homeBags;
       case 6:
-        routeName = Routes.checkoutPath;
+        routeName = Routes.checkout;
       default:
-        routeName = Routes.newPath;
+        routeName = Routes.brandNew;
     }
     return NavigationEvent(routeName: routeName);
   }

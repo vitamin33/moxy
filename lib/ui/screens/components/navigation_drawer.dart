@@ -68,7 +68,7 @@ class DashboardDrawer extends StatelessWidget {
               InkWell(
                 onTap: () => {
                   cubit.signOut(),
-                  context.go('/${Routes.loginPath}'),
+                  context.go('/${Routes.login}'),
                   Scaffold.of(context).closeDrawer()
                 },
                 focusColor: AppTheme.darkPink,

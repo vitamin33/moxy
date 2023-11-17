@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:go_router/src/route.dart';
+import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_delegate.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/common.dart';
 import '../../components/app_scaffold.dart';
 import '../components/action_button.dart';
@@ -14,25 +17,20 @@ import '../components/navigation_drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class AdminRootView extends StatelessWidget {
-  AdminRootView({Key? key}) : super(key: key);
+  StatefulNavigationShell navigationShell;
+  List<Widget> children;
+  AdminRootView(
+      {super.key, required this.navigationShell, required this.children});
 
   @override
   Widget build(BuildContext context) {
-    return Overlay(
-      initialEntries: [
-        OverlayEntry(
-          builder: (context) {
-            return BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
-                builder: (context, state) => mobileWidget(context, state));
-          },
-        ),
-      ],
-    );
+    return mobileWidget(context);
   }
 
-  Widget mobileWidget(BuildContext context, AdminHomeRouterState state) {
-    final arrIcons = _mapStateToActionIcon(state, context);
+  Widget mobileWidget(BuildContext context) {
+    final arrIcons = _mapStateToActionIcon(context);
 
     return AppScaffold(
       appbar: AppBar(
@@ -81,48 +79,29 @@ class AdminRootView extends StatelessWidget {
                 )
               : Container()
         ],
-        backgroundColor: state.runtimeType == EditOrderPageState ||
-                state.runtimeType == FilterOrderPageState
-            ? AppTheme.white
-            : AppTheme.pink,
+        backgroundColor: AppTheme.pink,
         title: Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            _mapStateToTitleText(context, state),
+            _mapStateToTitleText(context),
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
           ),
         ),
         leading: Builder(
           builder: (BuildContext context) {
-            if (state.runtimeType == OrderProductListPageState) {
-              bool fromEdit = (state as OrderProductListPageState).isFromEdit;
+            String currentRoute = GoRouter.of(context)
+                .routeInformationProvider
+                .value
+                .uri
+                .toString();
+            bool showBackButton =
+                currentRoute == RouterProvider.adminOrderProductListPath() ||
+                    currentRoute == RouterProvider.adminFilterOrderPath() ||
+                    isEditOrderRoute(currentRoute);
+            if (showBackButton) {
               return IconButton(
                   onPressed: () {
-                    if (fromEdit) {
-                      context.read<AdminHomeRouterCubit>().navigateTo(
-                            const EditOrderPageState(),
-                          );
-                    } else {
-                      context.read<AdminHomeRouterCubit>().navigateTo(
-                            const CreateOrderPageState(),
-                          );
-                    }
-                  },
-                  icon: SvgPicture.asset(IconPath.backArrow));
-            } else if (state.runtimeType == EditOrderPageState) {
-              return IconButton(
-                  onPressed: () {
-                    context.read<AdminHomeRouterCubit>().navigateTo(
-                          const OrdersPageState(),
-                        );
-                  },
-                  icon: SvgPicture.asset(IconPath.backArrow));
-            } else if (state.runtimeType == FilterOrderPageState) {
-              return IconButton(
-                  onPressed: () {
-                    context.read<AdminHomeRouterCubit>().navigateTo(
-                          const OrdersPageState(),
-                        );
+                    context.pop();
                   },
                   icon: SvgPicture.asset(IconPath.backArrow));
             } else {
@@ -138,122 +117,102 @@ class AdminRootView extends StatelessWidget {
         ),
       ),
       drawer: const DashboardDrawer(),
-      floatingActionButton: _buildFabWidget(context, state),
-      body: _routers,
+      floatingActionButton: _buildFabWidget(context),
+      body: AnimatedBranchContainer(
+        currentIndex: navigationShell.currentIndex,
+        children: children,
+      ),
     );
   }
 
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
-  Widget get _routers =>
-      BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
-        builder: (context, state) => Router(
-          routerDelegate: AdminHomeRouterDelegate(
-            navigatorKey,
-            context.read<AdminHomeRouterCubit>(),
-          ),
-          backButtonDispatcher: RootBackButtonDispatcher(),
-        ),
-      );
-
-  String _mapStateToTitleText(
-      BuildContext context, AdminHomeRouterState state) {
-    switch (state.runtimeType) {
-      case OverviewPageState:
-        return AppLocalizations.of(context)!.overview;
-      case ProductsPageState:
-        return AppLocalizations.of(context)!.products;
-      case UsersPageState:
-        return AppLocalizations.of(context)!.customers;
-      case OrdersPageState:
-        return AppLocalizations.of(context)!.orders;
-      case CreateProductPageState:
-        final createProductState = state as CreateProductPageState;
-        if (createProductState.isEditMode ?? false) {
-          return AppLocalizations.of(context)!.editProduct;
-        } else {
-          return AppLocalizations.of(context)!.createProduct;
-        }
-      case CreateOrderPageState:
-        return AppLocalizations.of(context)!.createOrder;
-      case EditOrderPageState:
-        return AppLocalizations.of(context)!.editOrder;
-      case FilterOrderPageState:
-        return AppLocalizations.of(context)!.filter;
-      case OrderProductListPageState:
-        return AppLocalizations.of(context)!.orderProductList;
-      case CreateUserPageState:
-        return AppLocalizations.of(context)!.createUser;
-      case TransactionsPageState:
-        return 'Products';
-      case FeedbacksPageState:
-        return AppLocalizations.of(context)!.feedbacks;
+  String _mapStateToTitleText(BuildContext context) {
+    String currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    if (currentRoute == RouterProvider.adminDashboardPath()) {
+      return AppLocalizations.of(context)!.overview;
+    } else if (currentRoute == RouterProvider.adminProductsPath()) {
+      return AppLocalizations.of(context)!.products;
+    } else if (currentRoute == RouterProvider.adminUsersPath()) {
+      return AppLocalizations.of(context)!.customers;
+    } else if (currentRoute == RouterProvider.adminOrdersPath()) {
+      return AppLocalizations.of(context)!.orders;
+    } else if (currentRoute
+        .startsWith('/${Routes.adminProducts}/${Routes.adminEditProduct}/')) {
+      return AppLocalizations.of(context)!.editProduct;
+    } else if (currentRoute == RouterProvider.adminCreateProductPath()) {
+      return AppLocalizations.of(context)!.createProduct;
+    } else if (currentRoute == RouterProvider.adminCreateOrderPath()) {
+      return AppLocalizations.of(context)!.createOrder;
+    } else if (isEditOrderRoute(currentRoute)) {
+      return AppLocalizations.of(context)!.editOrder;
+    } else if (currentRoute == RouterProvider.adminFilterOrderPath()) {
+      return AppLocalizations.of(context)!.filter;
+    } else if (currentRoute == RouterProvider.adminOrderProductListPath()) {
+      return AppLocalizations.of(context)!.orderProductList;
+    } else if (currentRoute == RouterProvider.adminCreateUserPath()) {
+      return AppLocalizations.of(context)!.createUser;
+    } else if (currentRoute == RouterProvider.adminFeedbacksPath()) {
+      return AppLocalizations.of(context)!.feedbacks;
     }
     return AppLocalizations.of(context)!.overview;
   }
 
-  List<AppBarIcon> _mapStateToActionIcon(
-      AdminHomeRouterState state, BuildContext context) {
-    switch (state.runtimeType) {
-      case OverviewPageState:
-        return [
-          AppBarIcon(
-              icon: IconPath.dataRange,
-              onPress: (ctx) {
-                ctx.read<DashboardCubit>().selectDate(ctx);
-              }),
-        ];
-      case ProductsPageState:
-        return [
-          AppBarIcon(
-              icon: IconPath.filter,
-              onPress: (ctx) {
-                moxyPrint('filter');
-              })
-        ];
-      case UsersPageState:
-        return [];
-      case OrdersPageState:
-        return [
-          AppBarIcon(
-              icon: IconPath.filter,
-              onPress: (ctx) {
-                ctx.read<AdminHomeRouterCubit>().navigateTo(
-                      const FilterOrderPageState(),
-                    );
-              })
-        ];
-      case CreateProductPageState:
-        return [];
-      case FilterOrderPageState:
-        return [
-          AppBarIcon(
-              icon: IconPath.bag,
-              text: AppLocalizations.of(context)!.reset,
-              onPress: (ctx) {
-                ctx.read<FilterOrdersCubit>().resetFilter();
-              })
-        ];
-      case CreateOrderPageState:
-        return [];
-      case TransactionsPageState:
-        return [];
-      case FeedbacksPageState:
-        return [];
+  List<AppBarIcon> _mapStateToActionIcon(BuildContext context) {
+    String currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    if (currentRoute == RouterProvider.adminDashboardPath()) {
+      return [
+        AppBarIcon(
+            icon: IconPath.dataRange,
+            onPress: (ctx) {
+              ctx.read<DashboardCubit>().selectDate(ctx);
+            }),
+      ];
+    } else if (currentRoute == RouterProvider.adminProductsPath()) {
+      return [
+        AppBarIcon(
+            icon: IconPath.filter,
+            onPress: (ctx) {
+              moxyPrint('filter');
+            })
+      ];
+    } else if (currentRoute == RouterProvider.adminOrdersPath()) {
+      return [
+        AppBarIcon(
+            icon: IconPath.filter,
+            onPress: (ctx) {
+              ctx.push(RouterProvider.adminFilterOrderPath());
+            })
+      ];
+    } else if (currentRoute == RouterProvider.adminFilterOrderPath()) {
+      return [
+        AppBarIcon(
+            icon: IconPath.bag,
+            text: AppLocalizations.of(context)!.reset,
+            onPress: (ctx) {
+              ctx.read<FilterOrdersCubit>().resetFilter();
+            })
+      ];
     }
     return [];
   }
 
-  Widget _buildFabWidget(BuildContext context, AdminHomeRouterState state) {
-    switch (state.runtimeType) {
-      case CreateProductPageState:
-      case CreateUserPageState:
-      case CreateOrderPageState:
-      case EditOrderPageState:
-      case OrderProductListPageState:
-      case FilterOrderPageState:
-        return Container();
+  Widget _buildFabWidget(BuildContext context) {
+    String currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
+
+    bool shouldHideFabActions =
+        currentRoute == RouterProvider.adminCreateProductPath() ||
+            currentRoute == RouterProvider.adminCreateOrderPath() ||
+            currentRoute == RouterProvider.adminCreateUserPath() ||
+            currentRoute == RouterProvider.adminOrderProductListPath() ||
+            currentRoute == RouterProvider.adminFilterOrderPath() ||
+            isEditOrderRoute(currentRoute) ||
+            isEditProductRoute(currentRoute);
+    if (shouldHideFabActions) {
+      return Container();
     }
+
     return ExpandableFab(distance: 100, children: [
       ActionButton(
         icon: const Icon(
@@ -262,9 +221,7 @@ class AdminRootView extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          context
-              .read<AdminHomeRouterCubit>()
-              .navigateTo(const CreateOrderPageState());
+          context.push(RouterProvider.adminCreateOrderPath());
         },
       ),
       ActionButton(
@@ -274,9 +231,7 @@ class AdminRootView extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          context
-              .read<AdminHomeRouterCubit>()
-              .navigateTo(const CreateUserPageState());
+          context.push(RouterProvider.adminCreateUserPath());
         },
       ),
       ActionButton(
@@ -286,12 +241,20 @@ class AdminRootView extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          context
-              .read<AdminHomeRouterCubit>()
-              .navigateTo(const CreateProductPageState());
+          context.push(RouterProvider.adminCreateOrderPath());
         },
       ),
     ]);
+  }
+
+  bool isEditOrderRoute(String currentRoute) {
+    return currentRoute
+        .startsWith('/${Routes.adminOrders}/${Routes.adminEditOrder}/');
+  }
+
+  bool isEditProductRoute(String currentRoute) {
+    return currentRoute
+        .startsWith('/${Routes.adminProducts}/${Routes.adminEditProduct}/');
   }
 }
 

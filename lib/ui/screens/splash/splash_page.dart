@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moxy/config/routes.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/services/navigation/splash/splash_effects.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +22,11 @@ class _SplashPageState extends State<SplashPage> {
     cubit = context.read<RootRouterCubit>();
     cubit.effectStream.listen((effect) {
       if (effect is NavigateAdminRoot) {
-        context.go('/${Routes.adminPath}');
+        context.go(RouterProvider.adminDashboardPath());
       } else if (effect is NavigateClientRoot) {
-        context.go('/${Routes.newPath}');
+        context.go(RouterProvider.homeNewPath());
       } else if (effect is NavigateAuthRoot) {
-        context.go('/${Routes.loginPath}');
+        context.go(RouterProvider.loginPath());
       }
     });
     cubit.checkInitialState();

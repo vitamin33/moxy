@@ -6,7 +6,6 @@ import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
@@ -50,10 +49,6 @@ class _ProfilePageState extends State<ProfilePage> {
       if (effect is ProfileValidationFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText: 'Wrong input, please check fields.'));
-      }
-      if (effect is ProfileActivePageChanged) {
-        ClientHomeRouterCubit router = context.read<ClientHomeRouterCubit>();
-        router.goToProfile(effect.additionalPagePath);
       }
     });
   }

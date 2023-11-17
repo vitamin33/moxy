@@ -18,7 +18,7 @@ class FavouritesCubit extends CubitWithEffects<FavouritesState, UiEffect> {
       : super(FavouritesState.defaultState()) {
     initFavorites();
     navCubit.eventStream.listen((event) {
-      if (event.routeName == Routes.favoritesPath) {
+      if (event.routeName == Routes.favorites) {
         getFavoriteProducts();
       }
     });

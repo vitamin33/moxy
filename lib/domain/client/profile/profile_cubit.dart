@@ -10,7 +10,6 @@ import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
 import '../../../data/repositories/profile_repository.dart';
 import '../../../utils/common.dart';
 import '../../mappers/profile_mapper.dart';
@@ -225,9 +224,9 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   int _calculateInitialPage(String? extraPagePath) {
     if (extraPagePath != null) {
       switch (extraPagePath) {
-        case Routes.profileOrdersPath:
+        case Routes.profileOrders:
           return 1;
-        case Routes.profileAddressesPath:
+        case Routes.profileAddresses:
           return 2;
         default:
           return 0;
@@ -239,11 +238,11 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   String? _generateAdditionalPagePath(int activePage) {
     switch (activePage) {
       case 1:
-        return ClientHomeRoute.ordersPath;
+        return Routes.profileOrders;
       case 2:
-        return ClientHomeRoute.addressesPath;
+        return Routes.profileAddresses;
       default:
-        return null;
+        return Routes.profileInfo;
     }
   }
 }

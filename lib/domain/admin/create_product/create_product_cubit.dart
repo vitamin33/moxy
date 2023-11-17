@@ -10,7 +10,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/utils/common.dart';
 
 import '../../../services/get_it.dart';
@@ -114,9 +114,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
 
   void backToProduct(context) {
     clearState();
-    context.read<AdminHomeRouterCubit>().navigateTo(
-          const ProductsPageState(),
-        );
+    context.go(RouterProvider.adminProductsPath());
   }
 
   void onChangePage(int page) {

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';

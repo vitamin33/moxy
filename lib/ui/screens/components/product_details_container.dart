@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
 import 'package:moxy/domain/client/product_details/product_details_state.dart';
 import 'package:moxy/domain/models/product.dart';
-import 'package:moxy/services/navigation/web/client_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/screens/components/custom_accordion.dart';
@@ -187,9 +188,9 @@ Widget _aboutProductDetails(ProductDetailsState state,
                     .addProductDetailsToBasket(state.productDetails);
 
                 if (isProductInBusket) {
-                  context
-                      .read<ClientHomeRouterCubit>()
-                      .navigateTo(const CheckoutRoute());
+                  // TODO fix this - move logic to cubit,
+                  // dont use context in async functions
+                  context.push(RouterProvider.checkoutPath());
                 }
               },
               buttonWidth: 500,

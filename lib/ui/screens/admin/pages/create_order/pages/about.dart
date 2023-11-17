@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import '../../../../../components/custom_textfield.dart';
 import '../../../../../components/dashed_path_painter.dart';
 import '../../../../../../constant/icon_path.dart';
@@ -77,10 +78,8 @@ class About extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                context.read<AdminHomeRouterCubit>().navigateTo(
-                                      const OrderProductListPageState(
-                                          isFromEdit: false),
-                                    );
+                                context.push(
+                                    RouterProvider.adminOrderProductListPath());
                               },
                               child: Row(
                                 children: [
@@ -172,9 +171,7 @@ Widget _buildGalleryArea(
               )
             : InkWell(
                 onTap: () {
-                  context.read<AdminHomeRouterCubit>().navigateTo(
-                        const OrderProductListPageState(isFromEdit: false),
-                      );
+                  context.push(RouterProvider.adminOrderProductListPath());
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

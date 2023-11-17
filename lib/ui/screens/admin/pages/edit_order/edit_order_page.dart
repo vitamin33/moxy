@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:moxy/domain/admin/all_orders/all_orders_cubit.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
@@ -17,7 +18,6 @@ import '../../../../../constant/order_constants.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../../../../../domain/admin/edit_order/edit_order_state.dart';
-import '../../../../../services/navigation/admin/admin_home_router_cubit.dart';
 import '../../../../components/loader.dart';
 import '../../../../components/succes_card.dart';
 import '../create_order/bottom_sheet_city_dropdown.dart';
@@ -25,8 +25,10 @@ import '../create_order/bottom_sheet_warehouse_dropdown.dart';
 import '../create_product/create_product_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+// ignore: must_be_immutable
 class EditOrderPage extends StatelessWidget {
-  const EditOrderPage({super.key});
+  String? orderId;
+  EditOrderPage({super.key, required this.orderId});
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +54,7 @@ class EditOrderPage extends StatelessWidget {
                   return state.isSuccess
                       ? SuccessCard(
                           onTap: () {
-                            context.read<AdminHomeRouterCubit>().navigateTo(
-                                  const OrdersPageState(),
-                                );
+                            context.pop();
                             cubit.clearState();
                             context.read<AllOrdersCubit>().refreshOrderList();
                           },
