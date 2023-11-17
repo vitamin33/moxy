@@ -16,99 +16,106 @@ class RegistrationContainer extends StatelessWidget {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
-        return Column(
-          children: [
-            const Text(
-              'Реєстрація',
-              textAlign: TextAlign.start,
-              style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 30),
-            Row(
-              children: [
-                SizedBox(
-                  width: 210,
-                  child: CustomTextField(
-                    borderColor: AppTheme.greyLigth,
-                    title: 'Імя',
-                    controller: cubit.firstNameController,
-                    onChanged: (value) => cubit.firstNameChanged(value),
-                    state: state.error.firstName,
-                    validation: true,
-                  ),
-                ),
-                SizedBox(
-                  width: 210,
-                  child: CustomTextField(
-                    borderColor: AppTheme.greyLigth,
-                    title: 'Прізвище',
-                    controller: cubit.secondNameController,
-                    onChanged: (value) => cubit.secondNameChanged(value),
-                    state: state.error.secondName,
-                    validation: true,
-                  ),
-                ),
-              ],
-            ),
-            CustomTextField(
-              borderColor: AppTheme.greyLigth,
-              title: 'Номер телефону',
-              controller: cubit.mobileNumberController,
-              onChanged: (value) => cubit.mobileNumberChanged(value),
-              autofillHints: const [
-                AutofillHints.telephoneNumber,
-              ],
-              state: state.error.mobileNumber,
-              validation: true,
-            ),
-            CustomTextField(
-              borderColor: AppTheme.greyLigth,
-              title: 'Email',
-              controller: cubit.emailController,
-              onChanged: (value) => cubit.emailChanged(value),
-              autofillHints: const [
-                AutofillHints.telephoneNumber,
-              ],
-              state: state.error.email,
-              validation: true,
-            ),
-            CustomTextField(
-              borderColor: AppTheme.greyLigth,
-              title: 'Пароль',
-              controller: cubit.passwordController,
-              onChanged: (value) => cubit.passwordChanged(value),
-              autofillHints: const [
-                AutofillHints.password,
-              ],
-              state: state.error.password,
-              validation: true,
-            ),
-            CustomTextField(
-              borderColor: AppTheme.greyLigth,
-              title: 'Підтвердити Пароль',
-              controller: cubit.confirmRegisterPasswordController,
-              onChanged: (value) => cubit.confirmRegisterPasswordChanged(value),
-              autofillHints: const [
-                AutofillHints.password,
-              ],
-              state: state.error.confirmRegisterPassword,
-              validation: true,
-            ),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: CustomButton(
-                buttonWidth: MediaQuery.of(context).size.width,
-                title: 'Далі',
-                onTap: () {
-                  if (cubit.validateRegisterFields()) {
-                    cubit.register(context);
-                  }
-                },
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Реєстрація',
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
               ),
-            ),
-            downText(context)
-          ],
+              const SizedBox(height: 30),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      child: CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Імя',
+                        controller: cubit.firstNameController,
+                        onChanged: (value) => cubit.firstNameChanged(value),
+                        state: state.error.firstName,
+                        validation: true,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: SizedBox(
+                      child: CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Прізвище',
+                        controller: cubit.secondNameController,
+                        onChanged: (value) => cubit.secondNameChanged(value),
+                        state: state.error.secondName,
+                        validation: true,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              CustomTextField(
+                borderColor: AppTheme.greyLigth,
+                title: 'Номер телефону',
+                controller: cubit.mobileNumberController,
+                onChanged: (value) => cubit.mobileNumberChanged(value),
+                autofillHints: const [
+                  AutofillHints.telephoneNumber,
+                ],
+                state: state.error.mobileNumber,
+                validation: true,
+              ),
+              CustomTextField(
+                borderColor: AppTheme.greyLigth,
+                title: 'Email',
+                controller: cubit.emailController,
+                onChanged: (value) => cubit.emailChanged(value),
+                autofillHints: const [
+                  AutofillHints.telephoneNumber,
+                ],
+                state: state.error.email,
+                validation: true,
+              ),
+              CustomTextField(
+                borderColor: AppTheme.greyLigth,
+                title: 'Пароль',
+                controller: cubit.passwordController,
+                onChanged: (value) => cubit.passwordChanged(value),
+                autofillHints: const [
+                  AutofillHints.password,
+                ],
+                state: state.error.password,
+                validation: true,
+              ),
+              CustomTextField(
+                borderColor: AppTheme.greyLigth,
+                title: 'Підтвердити Пароль',
+                controller: cubit.confirmRegisterPasswordController,
+                onChanged: (value) =>
+                    cubit.confirmRegisterPasswordChanged(value),
+                autofillHints: const [
+                  AutofillHints.password,
+                ],
+                state: state.error.confirmRegisterPassword,
+                validation: true,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                child: CustomButton(
+                  buttonWidth: MediaQuery.of(context).size.width,
+                  title: 'Далі',
+                  onTap: () {
+                    if (cubit.validateRegisterFields()) {
+                      cubit.register(context);
+                    }
+                  },
+                ),
+              ),
+              downText(context),
+            ],
+          ),
         );
       },
     );

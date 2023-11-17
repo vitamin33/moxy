@@ -29,13 +29,11 @@ class ResetPasswordContainer extends StatelessWidget {
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
-                title: 'E-mail',
-                controller: cubit.mobileNumberPasswordController,
+
+                title: 'Email',
+                controller: cubit.resetPasswordEmailController,
                 onChanged: (value) => cubit.emailPasswordChanged(value),
-                autofillHints: const [
-                  AutofillHints.telephoneNumber,
-                ],
-                state: state.error.mobileNumberPassword,
+                state: state.error.resetPasswordEmail,
                 validation: true,
               ),
               const SizedBox(height: AppTheme.elementSpacing),
@@ -43,7 +41,7 @@ class ResetPasswordContainer extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: CustomButton(
                   buttonWidth: MediaQuery.of(context).size.width,
-                  title: 'Відправити номер',
+                  title: 'Відправити Email',
                   onTap: () {
                     if (cubit.validateChangePasswordFields()) {
                       context.read<LoginCubit>().nextPage();

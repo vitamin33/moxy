@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 
 class CustomTextField extends StatelessWidget {
   final String title;
@@ -16,7 +17,7 @@ class CustomTextField extends StatelessWidget {
   final FieldError? state;
   final Color? borderColor;
   const CustomTextField(
-      {Key? key,
+      {super.key,
       required this.title,
       this.controller,
       this.onChanged,
@@ -27,8 +28,7 @@ class CustomTextField extends StatelessWidget {
       this.validation = false,
       this.expands = false,
       this.state,
-      this.borderColor})
-      : super(key: key);
+      this.borderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +44,7 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         Container(
+            height: SizeConfig().heightSize(context, 7.0),
             padding: const EdgeInsets.all(2),
             decoration: const BoxDecoration(
                 color: AppTheme.white,
@@ -83,7 +84,7 @@ bool isValid(state) => state == null;
 TextStyle renderTitleStyle(BuildContext context, bool isValid) {
   return TextStyle(
     color: isValid ? Colors.black : Colors.red,
-    fontSize: 18,
+    fontSize: SizeConfig().heightSize(context, 3.0),
     fontWeight: FontWeight.w400,
   );
 }
