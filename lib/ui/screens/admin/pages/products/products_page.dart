@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/admin/all_products/all_products_effects.dart';
 import 'package:moxy/domain/admin/all_products/all_products_state.dart';
 import 'package:moxy/domain/models/product.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
@@ -124,14 +125,12 @@ class _ProductsPageState extends State<ProductsPage> {
                                       contentPadding:
                                           const EdgeInsets.all(14.0),
                                       onTap: () {
-                                        context
-                                            .read<AdminHomeRouterCubit>()
-                                            .navigateTo(
-                                              CreateProductPageState(
-                                                editProductId: product.id,
-                                                isEditMode: true,
-                                              ),
-                                            );
+                                        if (product.id == null) {
+                                          return;
+                                        }
+                                        context.push(
+                                            RouterProvider.adminEditProductPath(
+                                                product.id!));
                                       },
                                       tileColor: AppTheme.white,
                                       leading: ClipOval(

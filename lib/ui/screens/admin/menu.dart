@@ -1,49 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 
 List<Menu> getLocalizedMenus(BuildContext context) {
   return [
     Menu(
       title: AppLocalizations.of(context)!.overview,
       icon: IconPath.overview,
-      route: const OverviewPageState(),
+      routePath: RouterProvider.adminDashboardPath(),
       subRoutes: const [],
     ),
     Menu(
       title: AppLocalizations.of(context)!.customers,
       icon: IconPath.customers,
-      route: const UsersPageState(),
+      routePath: RouterProvider.adminUsersPath(),
       subRoutes: const [],
     ),
     Menu(
       title: AppLocalizations.of(context)!.orders,
       icon: IconPath.orders,
-      route: const OrdersPageState(),
+      routePath: RouterProvider.adminOrdersPath(),
       subRoutes: const [],
     ),
     Menu(
       title: AppLocalizations.of(context)!.create,
       icon: IconPath.customers,
-      route: const EmptyState(),
+      routePath: RouterProvider.adminDashboardPath(),
       subRoutes: [
         Menu(
           title: AppLocalizations.of(context)!.createUser,
           icon: IconPath.createProduct,
-          route: const CreateUserPageState(),
+          routePath: RouterProvider.adminCreateUserPath(),
           subRoutes: const [],
         ),
         Menu(
           title: AppLocalizations.of(context)!.createOrder,
           icon: IconPath.createProduct,
-          route: const CreateOrderPageState(),
+          routePath: RouterProvider.adminCreateOrderPath(),
           subRoutes: const [],
         ),
         Menu(
           title: AppLocalizations.of(context)!.createProduct,
           icon: IconPath.createProduct,
-          route: const CreateProductPageState(isEditMode: false),
+          routePath: RouterProvider.adminCreateProductPath(),
           subRoutes: const [],
         ),
       ],
@@ -51,29 +51,28 @@ List<Menu> getLocalizedMenus(BuildContext context) {
     Menu(
       title: AppLocalizations.of(context)!.products,
       icon: IconPath.product,
-      route: const ProductsPageState(),
+      routePath: RouterProvider.adminProductsPath(),
       subRoutes: const [],
     ),
     Menu(
       title: AppLocalizations.of(context)!.feedbacks,
       icon: IconPath.feedbacks,
-      route: const FeedbacksPageState(),
+      routePath: RouterProvider.adminFeedbacksPath(),
       subRoutes: const [],
     ),
   ];
 }
 
-@immutable
 class Menu {
   final String title;
   final String icon;
-  final AdminHomeRouterState route;
+  final String routePath;
   final List<Menu> subRoutes;
 
-  const Menu({
+  Menu({
     required this.title,
     required this.icon,
-    this.route = const OverviewPageState(),
+    required this.routePath,
     this.subRoutes = const [],
   });
 }

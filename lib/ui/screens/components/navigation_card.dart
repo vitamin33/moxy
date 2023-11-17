@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
@@ -27,13 +28,15 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
   @override
   Widget build(BuildContext context) {
     final title = widget.menu.title;
-    final initialRoute = widget.menu.route;
+    final initialRoute = widget.menu.routePath;
     final icon = widget.menu.icon;
     final subItems = widget.menu.subRoutes;
 
     return BlocBuilder<AdminHomeRouterCubit, AdminHomeRouterState>(
       builder: (context, state) {
-        final isTapped = initialRoute == state;
+        String currentRoute =
+            GoRouter.of(context).routeInformationProvider.value.uri.toString();
+        final isTapped = initialRoute == currentRoute;
         if (subItems.isNotEmpty) {
           return NavigationBarCardList(
               menu: widget.menu, isTapped: isTapped, showLeadingIcons: false);
@@ -49,7 +52,7 @@ class _NavigationBarCardState extends State<NavigationBarCard> {
               });
             },
             onTap: () {
-              context.read<AdminHomeRouterCubit>().navigateTo(initialRoute);
+              context.go(initialRoute);
               Scaffold.of(context).closeDrawer();
             },
             child: Container(

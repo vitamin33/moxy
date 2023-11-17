@@ -225,9 +225,9 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   int _calculateInitialPage(String? extraPagePath) {
     if (extraPagePath != null) {
       switch (extraPagePath) {
-        case Routes.profileOrdersPath:
+        case Routes.profileOrders:
           return 1;
-        case Routes.profileAddressesPath:
+        case Routes.profileAddresses:
           return 2;
         default:
           return 0;

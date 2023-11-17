@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/pages/about.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/pages/delivery.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/pages/payment.dart';
@@ -55,9 +55,7 @@ class CreateOrderPage extends StatelessWidget {
                             cubit.createNew();
                           } else {
                             cubit.clearState();
-                            context.read<AdminHomeRouterCubit>().navigateTo(
-                                  const OrdersPageState(),
-                                );
+                            context.pop();
                           }
                         },
                         title: AppLocalizations.of(context)!.orderAdded,

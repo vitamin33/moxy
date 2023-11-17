@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
@@ -33,7 +34,7 @@ class OrderProductList extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding:const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: SearchTextfield(
                   title: AppLocalizations.of(context)!.search,
                 ),
@@ -83,20 +84,21 @@ class OrderProductList extends StatelessWidget {
               CustomButton(
                 title: AppLocalizations.of(context)!.choose,
                 onTap: () {
+                  cubit.productsSelected();
+                  context.pop();
+
                   final isEditFrom = (context.read<AdminHomeRouterCubit>().state
                           as OrderProductListPageState)
                       .isFromEdit;
-                  cubit.productsSelected();
-
-                  if (isEditFrom) {
-                    context
-                        .read<AdminHomeRouterCubit>()
-                        .navigateTo(const EditOrderPageState());
-                  } else {
-                    context.read<AdminHomeRouterCubit>().navigateTo(
-                          const CreateOrderPageState(),
-                        );
-                  }
+                  // if (isEditFrom) {
+                  //   context
+                  //       .read<AdminHomeRouterCubit>()
+                  //       .navigateTo(const EditOrderPageState());
+                  // } else {
+                  //   context.read<AdminHomeRouterCubit>().navigateTo(
+                  //         const CreateOrderPageState(),
+                  //       );
+                  // }
                 },
                 buttonWidth: MediaQuery.of(context).size.width - 90,
               )

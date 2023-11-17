@@ -61,7 +61,7 @@ class AdminHomeRouterDelegate extends RouterDelegate<AdminHomeRouterState> {
       return [
         _materialPage(
           valueKey: "overview",
-          child:const OverviewPage(),
+          child: const OverviewPage(),
         ),
       ];
     }
@@ -132,7 +132,7 @@ class AdminHomeRouterDelegate extends RouterDelegate<AdminHomeRouterState> {
       return [
         _materialPage(
           valueKey: "editOrder",
-          child: const EditOrderPage(),
+          child: Container(),
         ),
       ];
     }

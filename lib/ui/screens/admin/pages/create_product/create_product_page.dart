@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:moxy/services/navigation/admin/admin_home_router_cubit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 const bottomButtonsHeight = 100.0;
 
 // ignore: must_be_immutable
-class CreateProductPage extends StatelessWidget {
+class CreateProductPage extends StatefulWidget {
   bool isEditMode;
   String? editProductId;
   CreateProductPage({
@@ -28,38 +29,48 @@ class CreateProductPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _CreateProductPageState createState() => _CreateProductPageState();
+}
+
+class _CreateProductPageState extends State<CreateProductPage> {
+  late CreateProductCubit _createProductCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _createProductCubit = CreateProductCubit(
+        productId: widget.editProductId, isEditMode: widget.isEditMode);
+    _createProductCubit.effectStream.listen((effect) {
+      if (effect is ValidationFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText: AppLocalizations.of(context)!.wrongInput));
+      } else if (effect is ProductUpdateFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                AppLocalizations.of(context)!.errorDuringProductUpdate));
+      } else if (effect is NavigateToProducts) {
+        context.push(RouterProvider.adminProductsPath());
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _createProductCubit.close();
+    super.dispose();
+  }
+
+  @override
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext mainContext) {
     List<Widget> pages = const [
       AdminProductDetailsPage(),
       Branding(),
     ];
-    final CreateProductCubit cubit = mainContext.read<CreateProductCubit>();
-    cubit.effectStream.listen((effect) {
-      if (effect is ValidationFailed) {
-        ScaffoldMessenger.of(mainContext).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText: AppLocalizations.of(mainContext)!.wrongInput));
-      } else if (effect is ProductUpdateFailed) {
-        ScaffoldMessenger.of(mainContext).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText:
-                AppLocalizations.of(mainContext)!.errorDuringProductUpdate));
-      } else if (effect is NavigateToProducts) {
-        mainContext
-            .read<AdminHomeRouterCubit>()
-            .navigateTo(const ProductsPageState());
-      }
-    });
-    return BlocConsumer<CreateProductCubit, CreateProductState>(
-      listener: (context, state) => {
-        if (state.errorMessage != '')
-          {
-            ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-                snackBarFailureText: AppLocalizations.of(context)!.failed)),
-            context.read<CreateProductCubit>().clearErrorState(),
-          }
-      },
-      builder: (context, state) {
-        final cubit = context.read<CreateProductCubit>();
+    return BlocProvider<CreateProductCubit>(
+      create: (BuildContext context) => _createProductCubit,
+      child: BlocBuilder<CreateProductCubit, CreateProductState>(
+          builder: (context, state) {
         return Material(
           color: AppTheme.pink,
           child: LayoutBuilder(
@@ -77,7 +88,8 @@ class CreateProductPage extends StatelessWidget {
                             ? constraints.maxHeight
                             : constraints.maxHeight - bottomButtonsHeight,
                         child: state.isSuccess
-                            ? _buildSuccessWidget(context, cubit, state)
+                            ? _buildSuccessWidget(
+                                context, _createProductCubit, state)
                             : state.isLoading
                                 ? loader()
                                 : Column(
@@ -97,14 +109,17 @@ class CreateProductPage extends StatelessWidget {
                                               AdminProductDetailsPage(),
                                               Branding()
                                             ],
-                                            controller: cubit.pageController),
+                                            controller: _createProductCubit
+                                                .pageController),
                                       ),
                                       const SizedBox(height: 30),
                                       Expanded(
                                         child: PageView.builder(
-                                          controller: cubit.pageController,
+                                          controller: _createProductCubit
+                                              .pageController,
                                           onPageChanged: (int page) {
-                                            cubit.onChangePage(page);
+                                            _createProductCubit
+                                                .onChangePage(page);
                                           },
                                           itemCount: pages.length,
                                           itemBuilder: (context, index) {
@@ -117,8 +132,8 @@ class CreateProductPage extends StatelessWidget {
                       ),
                     ),
                     !state.isSuccess
-                        ? positionProductButton(
-                            state, cubit, isKeyboardVisible, context)
+                        ? positionProductButton(state, _createProductCubit,
+                            isKeyboardVisible, context)
                         : Container(),
                   ],
                 ),
@@ -126,7 +141,7 @@ class CreateProductPage extends StatelessWidget {
             });
           }),
         );
-      },
+      }),
     );
   }
 
@@ -136,9 +151,7 @@ class CreateProductPage extends StatelessWidget {
         onTap: () {
           if (state.isEdit) {
             cubit.clearState();
-            context.read<AdminHomeRouterCubit>().navigateTo(
-                  const ProductsPageState(),
-                );
+            context.push(RouterProvider.adminProductsPath());
           } else {
             cubit.createNew();
           }

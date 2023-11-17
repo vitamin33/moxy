@@ -65,7 +65,7 @@ class RootRouterDelegate extends RouterDelegate<RootRoute>
       return [
         _materialPage(
           valueKey: "admin_main",
-          child: AdminRootView(),
+          child: Container(),
         ),
       ];
     }
