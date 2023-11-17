@@ -18,6 +18,7 @@ class CurrentStatValue extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -46,23 +47,13 @@ class CurrentStatValue extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 3),
-                Text(
-                  title,
-                  style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.gray),
-                ),
+                Text(title,
+                    style: theme.smallText.copyWith(color: AppTheme.gray)),
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-              '${showCurrency ? '₴' : ''}$value',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
+            Text('${showCurrency ? '₴' : ''}$value',
+                style: theme.headlineSemiBoltText),
           ],
         ),
       ),

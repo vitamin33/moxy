@@ -229,7 +229,7 @@ class ProfileTabPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 25),
                 child: Text(
                   tabTitles[index],
-                  style: theme.drawerMenuText.copyWith(
+                  style: theme.largeBoltText.copyWith(
                     color: state.activePage == index
                         ? AppTheme.pinkDark
                         : AppTheme.black,
@@ -247,7 +247,7 @@ class ProfileTabPage extends StatelessWidget {
                       cubit.signOut();
                       context.go(RouterProvider.loginPath());
                     },
-                    child: Text('Вихід', style: theme.logoutText),
+                    child: Text('Вихід', style: theme.largeText.copyWith(color: AppTheme.gray)),
                   ),
                 ),
               ),

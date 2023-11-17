@@ -32,7 +32,7 @@ class LoadingElevatedButton extends StatelessWidget {
           children: [
             Text(
               'Checkout',
-              style: theme.checkoutButtonText,
+              style: theme.headline2BoltText,
             ),
             const SizedBox(width: 20),
             isLoadingState

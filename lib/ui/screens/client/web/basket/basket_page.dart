@@ -175,11 +175,11 @@ Widget _buildProductItem(
                     children: [
                       Text(
                         '$productName $color',
-                        style: theme.checkoutProductText,
+                        style: theme.mediumBoltText,
                       ),
                       Text(
                         '${item.product.salePrice} uah',
-                        style: theme.checkoutPriceText,
+                        style: theme.largeBoltText,
                       ),
                     ],
                   ),
@@ -189,7 +189,7 @@ Widget _buildProductItem(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Color:', style: theme.checkoutColorText),
+                      Text('Color:', style: theme.largeText),
                       _buildColorWidget(item.dimension),
                     ],
                   ),
@@ -214,7 +214,7 @@ Widget _buildProductItem(
                           padding: const EdgeInsets.all(8),
                           child: Text(
                             'Remove',
-                            style: theme.removeButtonText,
+                            style: theme.titleText.copyWith(decoration: TextDecoration.underline),
                           ),
                         ),
                         onTap: () {
