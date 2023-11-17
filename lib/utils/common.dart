@@ -36,3 +36,16 @@ Color hexToColor(String code) {
 final _random = Random();
 
 int random(int min, int max) => min + _random.nextInt(max - min);
+
+class SizeConfig{
+    
+  double heightSize(BuildContext context, double value){
+    value /= 100;
+    return MediaQuery.of(context).size.height * value;
+  }
+
+  double widthSize(BuildContext context,double value ){
+    value /=100;
+    return MediaQuery.of(context).size.width * value;
+  }
+}

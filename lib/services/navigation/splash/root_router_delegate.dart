@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/ui/screens/authentication/authentication_view.dart';
-import 'package:moxy/ui/screens/admin/admin_root_view.dart';
-import 'package:moxy/ui/screens/client/root_view.dart';
 import 'package:moxy/ui/screens/splash/splash_page.dart';
 import 'package:moxy/utils/common.dart';
 

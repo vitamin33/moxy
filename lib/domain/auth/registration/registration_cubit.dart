@@ -29,7 +29,7 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController secondNameController = TextEditingController();
   final TextEditingController mobileNumberController = TextEditingController();
-  final TextEditingController mobileNumberPasswordController =
+  final TextEditingController resetPasswordEmailController =
       TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -233,7 +233,7 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
     final errors = RegisterFieldErrors.noErrors();
     var noErrors = true;
     if (isFieldEmpty(state.emailForResetPassword)) {
-      errors.mobileNumberPassword = FieldError.invalid;
+      errors.emailForResetPassword = FieldError.invalid;
       noErrors = false;
     }
     if (!noErrors) {

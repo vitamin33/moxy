@@ -110,7 +110,8 @@ class RegisterFieldErrors {
   FieldError? password;
   FieldError? confirmRegisterPassword;
   FieldError? confirmationCode;
-  FieldError? mobileNumberPassword;
+  FieldError? resetPasswordEmail;
+  FieldError? emailForResetPassword;
   FieldError? newPassword;
   FieldError? confirmPassword;
 
@@ -122,7 +123,8 @@ class RegisterFieldErrors {
     this.password,
     this.confirmRegisterPassword,
     this.confirmationCode,
-    this.mobileNumberPassword,
+    this.resetPasswordEmail,
+    this.emailForResetPassword,
     this.newPassword,
     this.confirmPassword,
   });
@@ -152,7 +154,10 @@ class RegisterFieldErrors {
     if (confirmationCode != null) {
       buffer.write('confirmationCode');
     }
-    if (mobileNumberPassword != null) {
+    if (resetPasswordEmail != null) {
+      buffer.write('resetPasswordEmail');
+    }
+    if (emailForResetPassword != null) {
       buffer.write('mobileNumberPassword');
     }
     if (newPassword != null) {
