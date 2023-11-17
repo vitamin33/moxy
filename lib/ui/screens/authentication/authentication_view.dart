@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_effect.dart';
+import 'package:moxy/domain/roles.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/succes_card.dart';
 import 'package:moxy/ui/screens/components/authentication_container.dart';
 import 'package:moxy/ui/screens/components/new_password_container.dart';
@@ -16,7 +19,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import '../../components/snackbar_widgets.dart';
 import '../../../domain/auth/login_cubit.dart';
 import '../../../domain/auth/login_state.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthenticationView extends StatefulWidget {
   const AuthenticationView({super.key});
@@ -76,7 +79,24 @@ class _AuthenticationViewState extends State<AuthenticationView> {
           titleButton: 'Повернутись до входу')
     ];
 
-    return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
+    return BlocConsumer<LoginCubit, LoginState>(listener: (context, state) {
+      final loginCubit = context.read<LoginCubit>();
+      if (state.state is LoginFailed) {
+        showFailureSnackbar(
+            context, AppLocalizations.of(context)!.failedLoginError);
+        loginCubit.clearState();
+      } else if (state.state is LoginWithCredsSuccess) {
+        final role = (state.state as LoginWithCredsSuccess).role;
+        if (role == Role.admin || role == Role.manager) {
+          context.go(RouterProvider.loginPath());
+        } else {
+          context.go(RouterProvider.homeNewPath());
+        }
+        loginCubit.clearState();
+      } else if (state.state is Logout) {
+        loginCubit.clearState();
+      }
+    }, builder: (context, state) {
       final cubit = context.read<LoginCubit>();
       return Scaffold(
         backgroundColor: AppTheme.white,
