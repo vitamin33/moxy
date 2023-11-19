@@ -7,6 +7,10 @@ class Routes {
   static const root = '/';
   static const homeNamedPage = 'home';
   static const login = 'login';
+  static const register = 'register';
+  static const resetPassword = 'reset-password';
+  static const newPassword = 'new-password';
+  static const successPassword = 'success-password';
   static const splash = 'splash';
   static const admin = 'admin';
   static const shop = 'shop';

@@ -3,8 +3,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
+import 'package:moxy/domain/roles.dart';
 import '../../services/get_it.dart';
-import '../roles.dart';
 import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
@@ -21,7 +21,7 @@ class LoginCubit extends Cubit<LoginState> {
             mobileNumber: '',
             password: '',
             activePage: 0,
-            state:const AuthState())) {
+            state: const AuthState())) {
     _checkLoggedInState();
     emit(state.copyWith(mobileNumber: '', password: ''));
   }

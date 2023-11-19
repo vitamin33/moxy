@@ -1,22 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/auth/login_cubit.dart';
 import 'package:moxy/domain/auth/login_state.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AuthenticationContainer extends StatelessWidget {
-  const AuthenticationContainer({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
-        final cubit = context.read<LoginCubit>();
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -60,7 +61,7 @@ class AuthenticationContainer extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    cubit.moveToPage(3);
+                    context.push(RouterProvider.resetPasswordPath());
                   },
                   child: OnHover(
                     builder: (isHovered) {
@@ -114,7 +115,7 @@ class AuthenticationContainer extends StatelessWidget {
         ),
         InkWell(
             onTap: () {
-              context.read<LoginCubit>().nextPage();
+              context.push(RouterProvider.registerPath());
             },
             child: Text(
               AppLocalizations.of(context)!.signup,
