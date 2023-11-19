@@ -8,6 +8,7 @@ import 'package:moxy/data/models/request/user_request.dart';
 import 'package:moxy/data/models/response/login_response.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/extensions.dart';
 
 class UserService {
   final baseUrl = Environment.apiUrl;
@@ -143,17 +144,35 @@ class UserService {
     }
   }
 
-  Future<bool> createNewPassword(String email) async {
+  Future<bool> createNewPassword(
+    String email,
+    String newPassword,
+    String resetToken,
+  ) async {
     try {
       Response response = await _dio.post(
-        editUserPassworWithMobiledUrl,
+        setNewPasswordUrl,
+        data: {
+          'email': email,
+          'newPassword': newPassword,
+          'resetToken': resetToken
+        },
+      );
+      int code = response.statusCode ?? 0;
+      return code.isSuccessful();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> resetPassword(String email) async {
+    try {
+      Response response = await _dio.post(
+        resetPasswordUrl,
         data: {'email': email},
       );
-      if (response.statusCode == HttpStatus.created) {
-        return true;
-      } else {
-        return false;
-      }
+      int code = response.statusCode ?? 0;
+      return code.isSuccessful();
     } catch (e) {
       rethrow;
     }

@@ -1,6 +1,4 @@
-import 'package:moxy/domain/roles.dart';
-
-import '../copyable.dart';
+import 'package:moxy/domain/copyable.dart';
 
 class LoginState implements Copyable<LoginState> {
   final String mobileNumber;
@@ -50,24 +48,17 @@ class Loading extends AuthState {
 }
 
 class LoginWithCredsSuccess extends AuthState {
-  LoginWithCredsSuccess({required this.role});
-
-  Role role;
+  LoginWithCredsSuccess();
 }
 
 class Logout extends AuthState {
   Logout();
 }
 
-class LogoutFailed extends AuthState {
-  LogoutFailed();
+class SigninFailed extends AuthState {
+  SigninFailed();
 }
 
-class LoginFailed extends AuthState {
-  LoginFailed({
-    required this.message,
-  });
-
-  String? errorCode;
-  final String message;
+class LogoutFailed extends AuthState {
+  LogoutFailed();
 }

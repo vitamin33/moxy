@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:provider/provider.dart';
 import '../admin/menu.dart';
 import '../../theme/app_theme.dart';

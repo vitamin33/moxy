@@ -152,8 +152,16 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
 
   void createNewPassword() async {
     try {
+      if (state.resetToken == null) {
+        emitEffect(NoResetTokenFound());
+        return;
+      }
       emit(state.copyWith(state: Loading()));
-      final result = await authRepository.createNewPassword(state.email);
+      final result = await authRepository.createNewPassword(
+        state.emailForResetPassword,
+        state.confirmPassword,
+        state.resetToken!,
+      );
       if (result.isSuccess()) {
         emitEffect(NavigateToLogin());
       } else {
@@ -249,13 +257,23 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
     return noErrors;
   }
 
-  void sendResetEmail() {
+  void sendResetEmail() async {
     if (validateChangePasswordFields()) {
-      emit(state.copyWith(isResetEmailSent: true));
+      final result =
+          await authRepository.resetPassword(state.emailForResetPassword);
+      if (result.isSuccess()) {
+        emit(state.copyWith(isResetEmailSent: true));
+      } else {
+        emitEffect(ResetEmailFailed());
+      }
     }
   }
 
   void clearResetState() {
     emit(state.copyWith(isResetEmailSent: false));
+  }
+
+  void initNewPasswordFlow(String? email, String? resetToken) {
+    emit(state.copyWith(emailForResetPassword: email, resetToken: resetToken));
   }
 }
