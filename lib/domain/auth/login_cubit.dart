@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
+import 'package:moxy/domain/roles.dart';
 import '../../services/get_it.dart';
 import 'login_state.dart';
 
@@ -21,8 +22,8 @@ class LoginCubit extends Cubit<LoginState> {
             password: '',
             activePage: 0,
             state: const AuthState())) {
-    //_checkLoggedInState();
-    emit(state.copyWith(mobileNumber: '0938795984', password: '123123'));
+    _checkLoggedInState();
+    emit(state.copyWith(mobileNumber: '', password: ''));
   }
 
   void mobileNumberChanged(String value) {
@@ -75,6 +76,14 @@ class LoginCubit extends Cubit<LoginState> {
 
   void clearState() {
     emit(state.copyWith(state: const AuthState()));
+  }
+
+  _checkLoggedInState() async {
+    bool isLoggedIn = await authRepository.checkLoggedInState();
+    Role? userRole = await authRepository.getUserRole();
+    if (isLoggedIn && userRole != null) {
+      emit(state.copyWith(state: LoginWithCredsSuccess(role: userRole)));
+    }
   }
 
   void nextPage() {
