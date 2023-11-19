@@ -211,7 +211,7 @@ class DioClient {
   Future<bool> changePasswordWithMobile(String email) async {
     try {
       Response response = await dio.post(
-        editUserPassworWithMobiledUrl,
+        setNewPasswordUrl,
         data: {'email': email},
       );
       if (response.statusCode == HttpStatus.created) {

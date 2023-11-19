@@ -37,7 +37,8 @@ class RouterProvider {
   static loginPath() => '/${Routes.login}';
   static registerPath() => '/${Routes.register}';
   static resetPasswordPath() => '/${Routes.resetPassword}';
-  static newPasswordPath() => '/${Routes.resetPassword}/${Routes.newPassword}';
+  static newPasswordPath(String email, String token) =>
+      '/${Routes.resetPassword}/${Routes.newPassword}';
   static successPasswordChangePath() =>
       '/${Routes.resetPassword}/${Routes.successPassword}';
 
@@ -81,8 +82,6 @@ class RouterProvider {
   static Widget _resetPasswordScreen(
           BuildContext context, GoRouterState state) =>
       const ResetPasswordPage();
-  static Widget _newPasswordScreen(BuildContext context, GoRouterState state) =>
-      const NewPasswordPage();
   static Widget _splashScreen(BuildContext context, GoRouterState state) =>
       const SplashPage();
 
@@ -143,7 +142,13 @@ class RouterProvider {
                   builder: _resetPasswordScreen,
                   routes: [
                     GoRoute(
-                        path: Routes.newPassword, builder: _newPasswordScreen),
+                      path: Routes.newPassword,
+                      builder: (context, state) {
+                        final email = state.uri.queryParameters['email'];
+                        final token = state.uri.queryParameters['token'];
+                        return NewPasswordPage(email: email, resetToken: token);
+                      },
+                    ),
                     GoRoute(
                         path: Routes.successPassword,
                         builder: _successPasswordScreen),

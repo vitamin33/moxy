@@ -7,6 +7,7 @@ import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
+import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/components/succes_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
@@ -26,6 +27,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     _registerCubit.effectStream.listen((effect) {
       if (effect is NavigateToLogin) {
         context.go(RouterProvider.loginPath());
+      } else if (effect is ResetEmailFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'Unable to send Reset Password Email, try again later.'));
       }
     });
   }
@@ -77,7 +82,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: CustomButton(
             buttonWidth: MediaQuery.of(context).size.width,
-            title: 'Відправити Email',
+            title: 'Відправити E-mail',
             onTap: () {
               _registerCubit.sendResetEmail();
             },

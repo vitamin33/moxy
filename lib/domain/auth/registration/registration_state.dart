@@ -11,6 +11,7 @@ class RegistrationState implements Copyable<RegistrationState> {
   final String confirmationCode;
   final String emailForResetPassword;
   final bool isResetEmailSent;
+  final String? resetToken;
   final String newPassword;
   final String confirmPassword;
   final RegisterState state;
@@ -25,6 +26,7 @@ class RegistrationState implements Copyable<RegistrationState> {
     required this.confirmRegisterPassword,
     required this.confirmationCode,
     required this.emailForResetPassword,
+    required this.resetToken,
     required this.isResetEmailSent,
     required this.newPassword,
     required this.confirmPassword,
@@ -43,6 +45,7 @@ class RegistrationState implements Copyable<RegistrationState> {
       confirmationCode: '',
       emailForResetPassword: '',
       isResetEmailSent: false,
+      resetToken: null,
       newPassword: '',
       confirmPassword: '',
       state: const RegisterState(),
@@ -52,6 +55,7 @@ class RegistrationState implements Copyable<RegistrationState> {
 
   @override
   RegistrationState copyWith({
+    // register
     String? firstName,
     String? secondName,
     String? email,
@@ -59,8 +63,11 @@ class RegistrationState implements Copyable<RegistrationState> {
     String? password,
     String? confirmRegisterPassword,
     String? confirmationCode,
-    String? emailForResetPassword,
+
+    // reset and new pasword
     bool? isResetEmailSent,
+    String? emailForResetPassword,
+    String? resetToken,
     String? newPassword,
     String? confirmPassword,
     RegisterState? state,
@@ -78,6 +85,7 @@ class RegistrationState implements Copyable<RegistrationState> {
       emailForResetPassword:
           emailForResetPassword ?? this.emailForResetPassword,
       isResetEmailSent: isResetEmailSent ?? this.isResetEmailSent,
+      resetToken: resetToken ?? this.resetToken,
       newPassword: newPassword ?? this.newPassword,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       state: state ?? this.state,
