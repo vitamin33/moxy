@@ -143,7 +143,7 @@ class UserService {
     }
   }
 
-  Future<bool> changePasswordWithMobile(String email) async {
+  Future<bool> createNewPassword(String email) async {
     try {
       Response response = await _dio.post(
         editUserPassworWithMobiledUrl,

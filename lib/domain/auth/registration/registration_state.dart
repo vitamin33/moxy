@@ -10,6 +10,7 @@ class RegistrationState implements Copyable<RegistrationState> {
   final String confirmRegisterPassword;
   final String confirmationCode;
   final String emailForResetPassword;
+  final bool isResetEmailSent;
   final String newPassword;
   final String confirmPassword;
   final RegisterState state;
@@ -24,13 +25,14 @@ class RegistrationState implements Copyable<RegistrationState> {
     required this.confirmRegisterPassword,
     required this.confirmationCode,
     required this.emailForResetPassword,
+    required this.isResetEmailSent,
     required this.newPassword,
     required this.confirmPassword,
     required this.state,
     required this.error,
   });
 
-  static RegistrationState defaultAllProductsState() {
+  static RegistrationState defaultRegisterState() {
     return RegistrationState(
       firstName: '',
       secondName: '',
@@ -40,6 +42,7 @@ class RegistrationState implements Copyable<RegistrationState> {
       confirmRegisterPassword: '',
       confirmationCode: '',
       emailForResetPassword: '',
+      isResetEmailSent: false,
       newPassword: '',
       confirmPassword: '',
       state: const RegisterState(),
@@ -57,6 +60,7 @@ class RegistrationState implements Copyable<RegistrationState> {
     String? confirmRegisterPassword,
     String? confirmationCode,
     String? emailForResetPassword,
+    bool? isResetEmailSent,
     String? newPassword,
     String? confirmPassword,
     RegisterState? state,
@@ -73,6 +77,7 @@ class RegistrationState implements Copyable<RegistrationState> {
       confirmationCode: confirmationCode ?? this.confirmationCode,
       emailForResetPassword:
           emailForResetPassword ?? this.emailForResetPassword,
+      isResetEmailSent: isResetEmailSent ?? this.isResetEmailSent,
       newPassword: newPassword ?? this.newPassword,
       confirmPassword: confirmPassword ?? this.confirmPassword,
       state: state ?? this.state,

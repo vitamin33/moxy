@@ -1,15 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
+import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 
-class RegistrationContainer extends StatelessWidget {
-  const RegistrationContainer({super.key});
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
+
+  @override
+  _RegistrationPageState createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  late RegistrationCubit _registerCubit;
+  @override
+  void initState() {
+    super.initState();
+    _registerCubit = context.read<RegistrationCubit>();
+    _registerCubit.effectStream.listen((effect) {
+      if (effect is NavigateToLogin) {
+        context.go(RouterProvider.loginPath());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +127,7 @@ class RegistrationContainer extends StatelessWidget {
                   title: 'Далі',
                   onTap: () {
                     if (cubit.validateRegisterFields()) {
-                      cubit.register(context);
+                      cubit.register();
                     }
                   },
                 ),
@@ -136,7 +155,7 @@ Widget downText(BuildContext context) {
       InkWell(
           onTap: () {
             moxyPrint('Sign up');
-            context.read<LoginCubit>().perviousPage();
+            context.go(RouterProvider.loginPath());
           },
           child: const Text(
             "Увійти",

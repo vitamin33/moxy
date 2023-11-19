@@ -169,8 +169,8 @@ class AuthRepository {
     }
   }
 
-  Future<Result<bool, Exception>> changePasswordWithMobile(String email) async {
-    final resultCase = await client.changePasswordWithMobile(email);
+  Future<Result<bool, Exception>> createNewPassword(String email) async {
+    final resultCase = await client.createNewPassword(email);
     if (resultCase) {
       return Result.success(resultCase);
     } else {
