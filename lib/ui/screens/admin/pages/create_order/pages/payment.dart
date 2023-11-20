@@ -10,7 +10,6 @@ import '../../../../../../domain/admin/create_order/create_order_state.dart';
 import '../../../../../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-
 class Payment extends StatelessWidget {
   const Payment({super.key});
 
@@ -19,6 +18,8 @@ class Payment extends StatelessWidget {
     return BlocBuilder<CreateOrderCubit, CreateOrderState>(
         builder: (context, state) {
       final cubit = context.read<CreateOrderCubit>();
+      final theme = AppTheme.of(context)!;
+
       return SingleChildScrollView(
         child: Column(
           children: [
@@ -57,10 +58,8 @@ class Payment extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
-                               Text(AppLocalizations.of(context)!.fullPayment,
-                                  style:const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600)),
+                              Text(AppLocalizations.of(context)!.fullPayment,
+                                  style: theme.smallBoltText),
                             ],
                           ),
                         ),
@@ -94,10 +93,8 @@ class Payment extends StatelessWidget {
                               const SizedBox(
                                 height: 30,
                               ),
-                               Text(AppLocalizations.of(context)!.cashAdvance,
-                                  style:const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600)),
+                              Text(AppLocalizations.of(context)!.cashAdvance,
+                                  style: theme.smallBoltText),
                             ],
                           ),
                         ),

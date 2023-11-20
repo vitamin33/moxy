@@ -19,7 +19,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 
 class BasketPage extends StatefulWidget {
-  const BasketPage({Key? key}) : super(key: key);
+  const BasketPage({super.key});
 
   @override
   State<BasketPage> createState() => _BasketPageState();
@@ -54,10 +54,9 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'BASKET',
-                      style:
-                          TextStyle(fontSize: 32, fontWeight: FontWeight.w600),
+                      style: theme.headline4BoltText,
                     ),
                     if (state.isLoading)
                       const MoxyLoader(
@@ -214,7 +213,8 @@ Widget _buildProductItem(
                           padding: const EdgeInsets.all(8),
                           child: Text(
                             'Remove',
-                            style: theme.titleText.copyWith(decoration: TextDecoration.underline),
+                            style: theme.titleText
+                                .copyWith(decoration: TextDecoration.underline),
                           ),
                         ),
                         onTap: () {

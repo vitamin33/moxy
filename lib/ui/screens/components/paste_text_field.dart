@@ -30,6 +30,8 @@ class PasteTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +40,7 @@ class PasteTextField extends StatelessWidget {
           padding: const EdgeInsets.only(left: 0.0, bottom: 3),
           child: Text(
             title,
-            style: renderTitleStyle(context, isValid(state)),
+            style: renderTitleStyle(context, isValid(state),theme),
           ),
         ),
         Container(
@@ -96,10 +98,6 @@ OutlineInputBorder _renderBorder(bool isValid, bool focused, borderColor) {
 }
 
 bool isValid(state) => state == null;
-TextStyle renderTitleStyle(BuildContext context, bool isValid) {
-  return TextStyle(
-    color: isValid ? Colors.black : Colors.red,
-    fontSize: 18,
-    fontWeight: FontWeight.w400,
-  );
+TextStyle renderTitleStyle(BuildContext context, bool isValid, AppTheme theme) {
+  return theme.titleText.copyWith(color: isValid ? Colors.black : Colors.red);
 }

@@ -3,8 +3,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 
 class LoadingElevatedButton extends StatelessWidget {
   const LoadingElevatedButton(
-      {Key? key, required this.onPressed, required this.isLoadingState})
-      : super(key: key);
+      {Key? key, required this.onPressed, required this.isLoadingState});
 
   final VoidCallback onPressed;
   final bool isLoadingState;

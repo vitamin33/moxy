@@ -35,16 +35,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
+        final theme = AppTheme.of(context)!;
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Реєстрація',
                 textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: 30),
               Row(
@@ -132,7 +134,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   },
                 ),
               ),
-              downText(context),
+              downText(context, theme),
             ],
           ),
         );
@@ -141,13 +143,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 }
 
-Widget downText(BuildContext context) {
+Widget downText(BuildContext context, AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text(
+      Text(
         'Вже існує акаунт?',
-        style: TextStyle(fontSize: 18),
+        style: theme.titleText,
       ),
       const SizedBox(
         width: 2,
@@ -157,14 +159,10 @@ Widget downText(BuildContext context) {
             moxyPrint('Sign up');
             context.go(RouterProvider.loginPath());
           },
-          child: const Text(
-            "Увійти",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
-          )),
+          child: Text("Увійти",
+              style: theme.titleBoltText.copyWith(
+                  color: AppTheme.pinkDark,
+                  decoration: TextDecoration.underline))),
     ],
   );
 }

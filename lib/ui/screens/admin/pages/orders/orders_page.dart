@@ -20,7 +20,7 @@ import '../../../../theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
-  const OrdersPage({Key? key}) : super(key: key);
+  const OrdersPage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -86,6 +86,8 @@ class _OrdersPageState extends State<OrdersPage> {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<AllOrdersCubit>();
+    final theme = AppTheme.of(context)!;
+
     return BlocConsumer<AllOrdersCubit, AllOrdersState>(
         listener: (context, state) {
       if (state.errorMessage != '') {
@@ -112,7 +114,7 @@ class _OrdersPageState extends State<OrdersPage> {
                   refreshIndicatorExtent: 50,
                   onRefresh: () => cubit.refreshOrderList(),
                 ),
-                _buildOrdersListWidget(cubit, state),
+                _buildOrdersListWidget(cubit, state, theme),
               ],
             )
           ]),
@@ -286,7 +288,8 @@ class _OrdersPageState extends State<OrdersPage> {
     );
   }
 
-  Widget _buildOrdersListWidget(AllOrdersCubit cubit, AllOrdersState state) {
+  Widget _buildOrdersListWidget(
+      AllOrdersCubit cubit, AllOrdersState state, AppTheme theme) {
     return SliverToBoxAdapter(
       child: ListView.builder(
         shrinkWrap: true,
@@ -303,7 +306,8 @@ class _OrdersPageState extends State<OrdersPage> {
                 .map((item) => item.fullOrderPrice())
                 .reduce((total, price) => total + price)
                 .toString();
-            return _buildOrderItemWidget(cubit, order, orderDate, orderPrice);
+            return _buildOrderItemWidget(
+                cubit, order, orderDate, orderPrice, theme);
           } else if (state.isLoading) {
             return const Center(
               child: LinearProgressIndicator(),
@@ -334,48 +338,45 @@ class _OrdersPageState extends State<OrdersPage> {
     }
   }
 
-  listTileTitle(Order order) {
+  listTileTitle(Order order, AppTheme theme) {
     return Text(
       '${order.client.firstName} ${order.client.secondName}',
-      style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+      style: theme.largeBoltText,
     );
   }
 
-  listTileSubtitle(Order order, String orderPrice) {
+  listTileSubtitle(Order order, String orderPrice, AppTheme theme) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(order.orderedItems.map((item) => item.productName).join(', '),
-            style: const TextStyle(
-              fontSize: 13,
-            )),
+            style: theme.smallText),
         Text(
           '$orderPrice $uah',
-          style: const TextStyle(
-              fontSize: 15, fontWeight: FontWeight.w600, color: AppTheme.black),
+          style: theme.largeBoltText.copyWith(color: AppTheme.black),
         ),
       ],
     );
   }
 
-  listTileTrailing(Order order, String orderDate) {
+  listTileTrailing(Order order, String orderDate, AppTheme theme) {
     return Column(
       children: [
         Text(_mapStatusToStringValue(order.status, context),
-            style: TextStyle(
-                fontSize: 16, color: _mapStatusToColor(order.status))),
+            style: theme.largeText
+                .copyWith(color: _mapStatusToColor(order.status))),
         const SizedBox(height: 8),
         Text(
           orderDate,
-          style: const TextStyle(fontSize: 13),
+          style: theme.smallText,
         ),
       ],
     );
   }
 
   void showPopupMenu(BuildContext context, Order order, AllOrdersCubit cubit,
-      LongPressStartDetails details) {
+      LongPressStartDetails details, AppTheme theme) {
     final offset = details.globalPosition;
     final allStatusOrder = getAllStatusOrder(context);
 
@@ -401,7 +402,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 value: status.statusTitle,
                 child: Text(
                   status.statusTitle,
-                  style: const TextStyle(fontSize: 18, color: AppTheme.white),
+                  style: theme.headlineText.copyWith(color: AppTheme.white),
                 ),
               ),
             )
@@ -433,13 +434,13 @@ class _OrdersPageState extends State<OrdersPage> {
         : Container();
   }
 
-  Widget _buildOrderItemWidget(
-      AllOrdersCubit cubit, Order order, String orderDate, String orderPrice) {
+  Widget _buildOrderItemWidget(AllOrdersCubit cubit, Order order,
+      String orderDate, String orderPrice, AppTheme theme) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
         onLongPressStart: (details) =>
-            showPopupMenu(context, order, cubit, details),
+            showPopupMenu(context, order, cubit, details, theme),
         onTap: () {
           if (order.id == null) {
             return;
@@ -473,9 +474,9 @@ class _OrdersPageState extends State<OrdersPage> {
                 ),
               )
             ]),
-            title: listTileTitle(order),
-            subtitle: listTileSubtitle(order, orderPrice),
-            trailing: listTileTrailing(order, orderDate)),
+            title: listTileTitle(order, theme),
+            subtitle: listTileSubtitle(order, orderPrice, theme),
+            trailing: listTileTrailing(order, orderDate, theme)),
       ),
     );
   }

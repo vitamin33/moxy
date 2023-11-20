@@ -45,25 +45,24 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return SizedBox(
       width: 200,
       child: duration.isNegative
-          ? const Center(
+          ? Center(
               child: Text(
                 'Акція завершена',
-                style: TextStyle(
-                    color: AppTheme.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500),
+                style:
+                    theme.headlineSemiBoltText.copyWith(color: AppTheme.white),
               ),
             )
-          : buildTime(),
+          : buildTime(theme),
     );
   }
 
   String twoDigits(int n) => n.toString().padLeft(2, '0');
 
-  Widget buildTime() {
+  Widget buildTime(AppTheme theme) {
     final days = twoDigits(duration.inDays);
     final hours = twoDigits(duration.inHours.remainder(24));
     final minutes = twoDigits(duration.inMinutes.remainder(60));
@@ -72,18 +71,19 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        buildTimeCard(time: days, header: 'DAY'),
+        buildTimeCard(time: days, header: 'DAY', theme: theme),
         const SizedBox(width: 5),
-        buildTimeCard(time: hours, header: 'HOUR'),
+        buildTimeCard(time: hours, header: 'HOUR', theme: theme),
         const SizedBox(width: 5),
-        buildTimeCard(time: minutes, header: 'MIN'),
+        buildTimeCard(time: minutes, header: 'MIN', theme: theme),
         const SizedBox(width: 5),
-        buildTimeCard(time: seconds, header: 'SEC'),
+        buildTimeCard(time: seconds, header: 'SEC', theme: theme),
       ],
     );
   }
 
-  Widget buildTimeCard({required String time, required String header}) {
+  Widget buildTimeCard(
+      {required String time, required String header, required AppTheme theme}) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -93,17 +93,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             color: Colors.white,
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Text(
-            time,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: 26,
-            ),
-          ),
+          child: Text(time, style: theme.headline3BoltText),
         ),
         const SizedBox(height: 10),
-        Text(header, style: const TextStyle(color: Colors.white)),
+        Text(header, style: theme.mediumText),
       ],
     );
   }

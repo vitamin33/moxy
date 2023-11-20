@@ -23,6 +23,8 @@ class SmallBlockGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NewProductListCubit cubit = context.read<NewProductListCubit>();
+    final theme = AppTheme.of(context)!;
+
     return StaggeredGridTile.count(
       crossAxisCellCount: 1,
       mainAxisCellCount: 1,
@@ -69,9 +71,7 @@ class SmallBlockGrid extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
+                    style: theme.mediumSemiBoltText,
                   ),
                   Row(children: [
                     InkWell(

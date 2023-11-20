@@ -19,7 +19,8 @@ class PromoPage extends StatelessWidget {
   final Function() moveToPreviusPage;
   final Function(int index) animatedToPage;
 
-  const PromoPage({super.key, 
+  const PromoPage({
+    super.key,
     required this.backgroundImage,
     required this.discountPercentage,
     required this.collectionName,
@@ -34,6 +35,7 @@ class PromoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
         width: double.infinity,
         height: 500,
@@ -43,7 +45,7 @@ class PromoPage extends StatelessWidget {
                 fit: BoxFit.cover, image: NetworkImage(backgroundImage))),
         child: Stack(children: [
           textPromo(discountPercentage, collectionName, product, finalDate,
-              moveToNextPage, moveToPreviusPage),
+              moveToNextPage, moveToPreviusPage, theme),
           Positioned(
               bottom: 0,
               left: 0,
@@ -86,7 +88,8 @@ Widget textPromo(
     Product? product,
     DateTime? finalDate,
     Function moveToNextPage,
-    Function moveToPreviustPage) {
+    Function moveToPreviustPage,
+    AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -136,37 +139,20 @@ Widget textPromo(
                         finalDate: finalDate,
                       ),
                     const SizedBox(height: 20),
-                    Text(
-                      '-$discountPercentage%',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 60,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 11.62,
-                      ),
-                    ),
+                    Text('-$discountPercentage%',
+                        style: theme.bigTitleBoltText
+                            .copyWith(color: AppTheme.white)),
                     const SizedBox(height: 20),
                     Text(
                       collectionName,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 30.99,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: theme.headline4SemiBoltText
+                          .copyWith(color: AppTheme.white),
                     ),
                     const SizedBox(height: 20),
                     if (product != null)
-                      Text(
-                        product.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 41.99,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      Text(product.name,
+                          style: theme.headline2Text
+                              .copyWith(color: AppTheme.white)),
                     const SizedBox(height: 20),
                     TextButton(
                         onPressed: () {},
@@ -176,14 +162,9 @@ Widget textPromo(
                                     horizontal: 50, vertical: 20)),
                             backgroundColor:
                                 MaterialStateProperty.all(AppTheme.white)),
-                        child: const Text(
+                        child: Text(
                           "Перейти в каталог",
-                          style: TextStyle(
-                            color: Color(0xFF0C0C0C),
-                            fontSize: 19.20,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: theme.headlineText,
                         )),
                   ],
                 ),

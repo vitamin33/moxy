@@ -10,6 +10,7 @@ class BigBlockGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return StaggeredGridTile.count(
       crossAxisCellCount: 2,
       mainAxisCellCount: 2,
@@ -28,14 +29,10 @@ class BigBlockGrid extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'Сумки',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 55.61,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: theme.bigTitleBoltText
+                          .copyWith(color: AppTheme.white),
                     ),
                     const SizedBox(height: 20),
                     GestureDetector(
@@ -56,7 +53,7 @@ class BigBlockGrid extends StatelessWidget {
                               child: Center(
                                 child: Text(
                                   'Дивитись',
-                                  style: TextStyle(
+                                  style: theme.mediumText.copyWith(
                                       color: isHovered
                                           ? AppTheme.black
                                           : AppTheme.white),

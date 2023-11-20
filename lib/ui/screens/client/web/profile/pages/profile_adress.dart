@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/ui/screens/client/web/checkout/search_city_dropdown.dart';
 import 'package:moxy/ui/screens/client/web/checkout/search_warehouse_dropdown.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../../domain/client/profile/profile_state.dart';
 
@@ -13,6 +14,7 @@ class ProfileAdress extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
         final cubit = context.read<ProfileCubit>();
         return SizedBox(
           width: double.infinity,
@@ -22,21 +24,12 @@ class ProfileAdress extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Адресна Книга',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: theme.headline3BoltText,
                 ),
                 const SizedBox(height: 40),
-                const Text(
-                  'Місто',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                Text('Місто', style: theme.headlineSemiBoltText),
                 SearchCityDropdown(
                     selectedWarehouse: state.profile.warehouse,
                     onChanged: (city) {
@@ -44,12 +37,9 @@ class ProfileAdress extends StatelessWidget {
                     },
                     selectedCity: state.profile.city),
                 const SizedBox(height: 30),
-                const Text(
+                Text(
                   'Відділення',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: theme.headlineSemiBoltText,
                 ),
                 SearchWarehouseDropdown(
                     selectedWarehouse: state.profile.warehouse,

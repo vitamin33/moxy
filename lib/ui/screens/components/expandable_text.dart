@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 class ExpandableShippingText extends StatefulWidget {
   final String collapsedText;
@@ -24,14 +25,13 @@ class _ExpandableShippingTextState extends State<ExpandableShippingText> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     final richTextCollapsed = Text.rich(
       TextSpan(
         children: [
           TextSpan(text: widget.collapsedText),
           const TextSpan(text: ' '),
-          TextSpan(
-              text: widget.price,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: widget.price, style: theme.mediumBoltText),
         ],
       ),
       maxLines: widget.maxLines,
@@ -42,9 +42,7 @@ class _ExpandableShippingTextState extends State<ExpandableShippingText> {
         children: [
           TextSpan(text: widget.collapsedText),
           const TextSpan(text: ' '),
-          TextSpan(
-              text: widget.price,
-              style: const TextStyle(fontWeight: FontWeight.bold)),
+          TextSpan(text: widget.price, style: theme.mediumBoltText),
           const TextSpan(text: '\n'),
           TextSpan(text: widget.additionalText),
         ],
@@ -67,7 +65,8 @@ class _ExpandableShippingTextState extends State<ExpandableShippingText> {
                 crossFadeState: _isExpanded
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
-                duration:const Duration(milliseconds: 300), // Customize the duration
+                duration:
+                    const Duration(milliseconds: 300), // Customize the duration
                 firstChild: richTextCollapsed,
                 secondChild: richTextExpanded,
               ),

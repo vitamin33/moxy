@@ -11,6 +11,8 @@ class VerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
@@ -20,10 +22,10 @@ class VerificationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
+              Text(
                 'Код верифікації',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: AppTheme.cardPadding),
               OtpTextField(
@@ -44,11 +46,9 @@ class VerificationPage extends StatelessWidget {
                     onTap: () {
                       cubit.resendConfirmationCode();
                     },
-                    child: const Text(
+                    child: Text(
                       'Try Again',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
+                      style: theme.largeSemiBoltText.copyWith(
                           color: AppTheme.pinkDark,
                           decoration: TextDecoration.underline),
                     ),
@@ -79,27 +79,23 @@ class VerificationPage extends StatelessWidget {
   }
 }
 
-Widget downText(BuildContext context) {
+Widget downText(BuildContext context, AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text(
+      Text(
         'Вже існує акаунт?',
-        style: TextStyle(fontSize: 18),
+        style: theme.titleText,
       ),
       const SizedBox(
         width: 2,
       ),
       InkWell(
           onTap: () {},
-          child: const Text(
-            "Увійти",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
-          )),
+          child: Text("Увійти",
+              style: theme.titleBoltText.copyWith(
+                  color: AppTheme.pinkDark,
+                  decoration: TextDecoration.underline))),
     ],
   );
 }

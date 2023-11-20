@@ -21,6 +21,8 @@ class About extends StatelessWidget {
     return BlocBuilder<CreateOrderCubit, CreateOrderState>(
         builder: (context, state) {
       final cubit = context.read<CreateOrderCubit>();
+      final theme = AppTheme.of(context)!;
+
       return SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.cardPadding),
@@ -71,10 +73,7 @@ class About extends StatelessWidget {
                             Text(
                               '${AppLocalizations.of(context)!.createOrderListPrice}:${state.productListPrice}',
                               textAlign: TextAlign.start,
-                              style: const TextStyle(
-                                  color: AppTheme.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500),
+                              style: theme.largeSemiBoltText,
                             ),
                             InkWell(
                               onTap: () {
@@ -90,10 +89,7 @@ class About extends StatelessWidget {
                                   Text(
                                     AppLocalizations.of(context)!
                                         .createOrderAddProduct,
-                                    style: const TextStyle(
-                                        color: AppTheme.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500),
+                                    style: theme.largeSemiBoltText,
                                   ),
                                 ],
                               ),
@@ -104,8 +100,8 @@ class About extends StatelessWidget {
                           AppLocalizations.of(context)!
                               .createOrderListOfProduct,
                           textAlign: TextAlign.start,
-                          style: renderTitleStyle(
-                              context, isValid(state.errors.selectedProduct)),
+                          style: renderTitleStyle(context,
+                              isValid(state.errors.selectedProduct), theme),
                         ),
                   const SizedBox(
                     height: 10,
@@ -228,10 +224,7 @@ Widget _buildProductImage(DimensionProduct product) {
 }
 
 bool isValid(state) => state == null;
-TextStyle renderTitleStyle(BuildContext context, bool isValid) {
-  return TextStyle(
-    color: isValid ? Colors.black : Colors.red,
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  );
+TextStyle renderTitleStyle(BuildContext context, bool isValid, AppTheme theme) {
+  return theme.largeSemiBoltText
+      .copyWith(color: isValid ? Colors.black : Colors.red);
 }
