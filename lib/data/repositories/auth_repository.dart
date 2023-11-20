@@ -169,12 +169,26 @@ class AuthRepository {
     }
   }
 
-  Future<Result<bool, Exception>> changePasswordWithMobile(String email) async {
-    final resultCase = await client.changePasswordWithMobile(email);
+  Future<Result<bool, Exception>> createNewPassword(
+    String email,
+    String newPassword,
+    String resetToken,
+  ) async {
+    final resultCase =
+        await client.createNewPassword(email, newPassword, resetToken);
     if (resultCase) {
       return Result.success(resultCase);
     } else {
       return Result.error(Exception('error resendConfirmationCode'));
+    }
+  }
+
+  Future<Result<bool, Exception>> resetPassword(String email) async {
+    final resultCase = await client.resetPassword(email);
+    if (resultCase) {
+      return Result.success(resultCase);
+    } else {
+      return Result.error(Exception('error resetPassword'));
     }
   }
 }

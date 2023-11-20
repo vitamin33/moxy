@@ -1,14 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
+import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
+import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
-class NewPasswordContainer extends StatelessWidget {
-  const NewPasswordContainer({super.key});
+@immutable
+class NewPasswordPage extends StatefulWidget {
+  final String? email;
+  final String? resetToken;
+  const NewPasswordPage(
+      {super.key, required this.email, required this.resetToken});
+
+  @override
+  _NewPasswordPageState createState() => _NewPasswordPageState();
+}
+
+class _NewPasswordPageState extends State<NewPasswordPage> {
+  late RegistrationCubit _registerCubit;
+  @override
+  void initState() {
+    super.initState();
+    _registerCubit = context.read<RegistrationCubit>();
+    _registerCubit.initNewPasswordFlow(widget.email, widget.resetToken);
+    _registerCubit.effectStream.listen((effect) {
+      if (effect is NavigateToLogin) {
+        context.go(RouterProvider.loginPath());
+      } else if (effect is NoResetTokenFound) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'No reset token found. Try reset password flow from the beginning.'));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +89,7 @@ class NewPasswordContainer extends StatelessWidget {
                   title: 'Змінити пароль',
                   onTap: () {
                     if (cubit.validateNewPasswordFields()) {
-                      cubit.changePasswordWithMobile();
-                      context.read<LoginCubit>().nextPage();
+                      cubit.createNewPassword();
                     }
                   },
                 ),
@@ -86,8 +114,7 @@ Widget downText(BuildContext context) {
         width: 2,
       ),
       InkWell(
-          onTap: () {
-          },
+          onTap: () {},
           child: const Text(
             "Увійти",
             style: TextStyle(

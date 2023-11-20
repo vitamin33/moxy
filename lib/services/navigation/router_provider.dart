@@ -13,7 +13,12 @@ import 'package:moxy/ui/screens/admin/pages/orders/orders_page.dart';
 import 'package:moxy/ui/screens/admin/pages/orders_filter/orders_filter_page.dart';
 import 'package:moxy/ui/screens/admin/pages/overview/overview_page.dart';
 import 'package:moxy/ui/screens/admin/pages/products/products_page.dart';
-import 'package:moxy/ui/screens/authentication/authentication_view.dart';
+import 'package:moxy/ui/screens/authentication/authentication_root_view.dart';
+import 'package:moxy/ui/screens/authentication/login_page.dart';
+import 'package:moxy/ui/screens/authentication/new_password_page.dart';
+import 'package:moxy/ui/screens/authentication/registration_page.dart';
+import 'package:moxy/ui/screens/authentication/reset_password_page.dart';
+import 'package:moxy/ui/screens/authentication/success_password_page.dart';
 import 'package:moxy/ui/screens/client/root_view.dart';
 import 'package:moxy/ui/screens/client/web/checkout/checkout_page.dart';
 import 'package:moxy/ui/screens/client/web/favourites/favourites_page.dart';
@@ -28,7 +33,14 @@ import 'package:moxy/ui/screens/splash/splash_page.dart';
 class RouterProvider {
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
+  // Auth pathes
   static loginPath() => '/${Routes.login}';
+  static registerPath() => '/${Routes.register}';
+  static resetPasswordPath() => '/${Routes.resetPassword}';
+  static newPasswordPath(String email, String token) =>
+      '/${Routes.resetPassword}/${Routes.newPassword}';
+  static successPasswordChangePath() =>
+      '/${Routes.resetPassword}/${Routes.successPassword}';
 
   // Client pathes
   static homeNewPath() => '/${Routes.brandNew}';
@@ -64,9 +76,18 @@ class RouterProvider {
   static adminFeedbacksPath() => '/${Routes.adminFeedbacks}';
 
   static Widget _loginScreen(BuildContext context, GoRouterState state) =>
-      const AuthenticationView();
+      const LoginPage();
+  static Widget _registerScreen(BuildContext context, GoRouterState state) =>
+      const RegistrationPage();
+  static Widget _resetPasswordScreen(
+          BuildContext context, GoRouterState state) =>
+      const ResetPasswordPage();
   static Widget _splashScreen(BuildContext context, GoRouterState state) =>
       const SplashPage();
+
+  static Widget _successPasswordScreen(
+          BuildContext context, GoRouterState state) =>
+      const VerificationPage();
 
   static Widget errorWidget(BuildContext context, GoRouterState state) =>
       const NotFoundScreen();
@@ -81,7 +102,61 @@ class RouterProvider {
         redirect: (context, state) => '/${Routes.splash}',
       ),
       GoRoute(path: '/${Routes.splash}', builder: _splashScreen),
-      GoRoute(path: '/${Routes.login}', builder: _loginScreen),
+
+      // AUTH ROUTES
+      StatefulShellRoute(
+        builder: (BuildContext context, GoRouterState state,
+            StatefulNavigationShell navigationShell) {
+          return navigationShell;
+        },
+        navigatorContainerBuilder: (context, navigationShell, children) {
+          return AuthenticationRootView(
+            navigationShell: navigationShell,
+            children: children,
+          );
+        },
+        branches: [
+          StatefulShellBranch(
+            initialLocation: loginPath(),
+            routes: <RouteBase>[
+              GoRoute(
+                path: loginPath(),
+                builder: _loginScreen,
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            initialLocation: registerPath(),
+            routes: <RouteBase>[
+              GoRoute(
+                path: registerPath(),
+                builder: _registerScreen,
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            initialLocation: resetPasswordPath(),
+            routes: <RouteBase>[
+              GoRoute(
+                  path: resetPasswordPath(),
+                  builder: _resetPasswordScreen,
+                  routes: [
+                    GoRoute(
+                      path: Routes.newPassword,
+                      builder: (context, state) {
+                        final email = state.uri.queryParameters['email'];
+                        final token = state.uri.queryParameters['token'];
+                        return NewPasswordPage(email: email, resetToken: token);
+                      },
+                    ),
+                    GoRoute(
+                        path: Routes.successPassword,
+                        builder: _successPasswordScreen),
+                  ]),
+            ],
+          ),
+        ],
+      ),
 
       // CLIENT ROUTES
       StatefulShellRoute(

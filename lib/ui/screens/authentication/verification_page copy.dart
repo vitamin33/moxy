@@ -6,8 +6,8 @@ import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/components/otp_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
-class VerificationContainer extends StatelessWidget {
-  const VerificationContainer({super.key});
+class VerificationPage extends StatelessWidget {
+  const VerificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
