@@ -9,6 +9,8 @@ class FilterContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -18,21 +20,11 @@ class FilterContainer extends StatelessWidget {
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text(
               title,
-              style: const TextStyle(
-                color: Color(0xFF0C0C0C),
-                fontSize: 42,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
-              ),
+              style: theme.bigTitleSemiBoltText,
             ),
             Text(
               "($productCount)",
-              style: const TextStyle(
-                color: Color(0xFF0C0C0C),
-                fontSize: 20,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w500,
-              ),
+              style: theme.titleSemiBoltText,
             ),
           ]),
           const SizedBox(
@@ -72,6 +64,7 @@ class FilterContainer extends StatelessWidget {
 class TestSelect extends StatefulWidget {
   final String title;
   final List<String> dropDownItems;
+
   const TestSelect(
       {super.key, required this.title, required this.dropDownItems});
 
@@ -84,6 +77,7 @@ class _TestSelectState extends State<TestSelect> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Container(
         height: 50,
@@ -98,7 +92,7 @@ class _TestSelectState extends State<TestSelect> {
               elevation: 16,
               underline: const SizedBox(),
               isExpanded: true,
-              style: const TextStyle(color: Colors.black, fontSize: 16.0),
+              style:theme.largeText,
               onChanged: (String? changedValue) {
                 myServices = changedValue;
                 setState(() {

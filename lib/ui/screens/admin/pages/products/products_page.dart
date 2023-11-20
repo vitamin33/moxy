@@ -60,6 +60,8 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     final AllProductsCubit cubit = context.read<AllProductsCubit>();
+    final theme = AppTheme.of(context)!;
+
     cubit.effectStream.listen((effect) {
       if (effect is ProductsLoadingFailed) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
@@ -116,7 +118,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                     onLongPressStart:
                                         (LongPressStartDetails details) {
                                       showDeleteContextMenu(
-                                          context, product.id, details);
+                                          context, product.id, details, theme);
                                     },
                                     child: ListTile(
                                       shape: RoundedRectangleBorder(
@@ -173,8 +175,8 @@ class _ProductsPageState extends State<ProductsPage> {
     );
   }
 
-  void showDeleteContextMenu(
-      BuildContext context, String? productId, LongPressStartDetails details) {
+  void showDeleteContextMenu(BuildContext context, String? productId,
+      LongPressStartDetails details, AppTheme theme) {
     if (productId == null) {
       return;
     }
@@ -200,7 +202,7 @@ class _ProductsPageState extends State<ProductsPage> {
             value: AppLocalizations.of(context)!.delete,
             child: Text(
               AppLocalizations.of(context)!.delete,
-              style: const TextStyle(fontSize: 18, color: AppTheme.white),
+              style: theme.headlineText.copyWith(color: AppTheme.white),
             ),
           ),
         ]);

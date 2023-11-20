@@ -4,6 +4,7 @@ class AppTheme extends InheritedWidget {
   //spaces
   static const double cardPadding = 24;
   static const double elementSpacing = cardPadding * 0.5;
+  static const Widget smallSpace = SizedBox(width: 10);
   static const double bottomNavBarHeight = 64;
   static const Duration animationDuration = Duration(milliseconds: 300);
   static BorderRadius cardRadius = BorderRadius.circular(14);
@@ -38,48 +39,77 @@ class AppTheme extends InheritedWidget {
   static Size size(BuildContext context) => MediaQuery.of(context).size;
   static const double drawerWidth = 280;
 
-  // CHECKOUT
+  final TextStyle invisibleText = const TextStyle(fontSize: 0);
 
-  final TextStyle checkoutHeadingText =
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
-  final TextStyle checkoutProductText =
-      const TextStyle(fontSize: 14, fontWeight: FontWeight.bold);
-  final TextStyle checkoutPriceText =
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
-  final TextStyle checkoutColorText =
-      const TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
-  final TextStyle checkoutButtonText =
-      const TextStyle(fontSize: 22, fontWeight: FontWeight.w600);
-  final TextStyle checkoutWarningText =
-      const TextStyle(fontSize: 12, fontWeight: FontWeight.w400);
-  final TextStyle removeButtonText = const TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w400,
-    color: gray,
-    decoration: TextDecoration.underline,
-  );
-  final TextStyle mainTitleText = const TextStyle(
-    fontSize: 28,
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w600,
-  );
-  final TextStyle drawerMenuText = const TextStyle(
-    fontSize: 16,
-    fontFamily: 'Poppins',
-    fontWeight: FontWeight.w600,
-  );
-  final TextStyle productItemText = const TextStyle(
-    fontSize: 14,
-    fontFamily: 'HelveticaNeue',
-    fontWeight: FontWeight.w500,
-    color: black,
-  );
-  final TextStyle logoutText = const TextStyle(
-    fontSize: 16,
-    fontFamily: 'HelveticaNeue',
-    fontWeight: FontWeight.w400,
-    color: gray,
-  );
+  final TextStyle xSmallText = const TextStyle(
+      fontSize: 10, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+  final TextStyle smallText = const TextStyle(
+      fontSize: 12, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+
+  final TextStyle smallSemiBoltText = const TextStyle(
+      fontSize: 12, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
+  final TextStyle smallBoltText = const TextStyle(
+      fontSize: 12, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle mediumText = const TextStyle(
+      fontSize: 14, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+
+  final TextStyle mediumSemiBoltText = const TextStyle(
+      fontSize: 14, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
+  final TextStyle mediumBoltText = const TextStyle(
+      fontSize: 14, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle largeText = const TextStyle(
+      fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+
+  final TextStyle largeSemiBoltText = const TextStyle(
+      fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
+  final TextStyle largeBoltText = const TextStyle(
+      fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle titleText = const TextStyle(
+      fontSize: 18, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+
+  final TextStyle titleSemiBoltText = const TextStyle(
+      fontSize: 18, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
+  final TextStyle titleBoltText = const TextStyle(
+      fontSize: 18, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle headlineText = const TextStyle(
+      fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+
+  final TextStyle headlineSemiBoltText = const TextStyle(
+      fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
+  final TextStyle headlineBoltText = const TextStyle(
+      fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle headline2Text = const TextStyle(
+      fontSize: 22, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle headline2BoltText = const TextStyle(
+      fontSize: 22, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle headline3BoltText = const TextStyle(
+      fontSize: 28, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle headline4SemiBoltText = const TextStyle(
+      fontSize: 36, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+  final TextStyle headline4BoltText = const TextStyle(
+      fontSize: 36, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+
+  final TextStyle bigTitleText = const TextStyle(
+      fontSize: 42, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+
+  final TextStyle bigTitleSemiBoltText = const TextStyle(
+      fontSize: 42, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
+  final TextStyle bigTitleBoltText = const TextStyle(
+      fontSize: 42, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
 
   const AppTheme({super.key, required Widget child}) : super(child: child);
 

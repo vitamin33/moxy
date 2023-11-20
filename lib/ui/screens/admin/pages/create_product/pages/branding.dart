@@ -15,10 +15,12 @@ import '../../../../../../domain/admin/create_product/create_product_state.dart'
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Branding extends StatelessWidget {
-  const Branding({Key? key}) : super(key: key);
+  const Branding({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocBuilder<CreateProductCubit, CreateProductState>(
       builder: (context, state) {
         final cubit = context.read<CreateProductCubit>();
@@ -78,7 +80,7 @@ class Branding extends StatelessWidget {
                       LengthLimitingTextInputFormatter(16),
                     ],
                   ),
-                  _buildSelectedDimensWidget(context, state, cubit),
+                  _buildSelectedDimensWidget(context, state, cubit, theme),
                 ],
               ),
             ),
@@ -160,7 +162,7 @@ class Branding extends StatelessWidget {
   }
 
   Widget _buildSelectedDimensWidget(BuildContext context,
-      CreateProductState state, CreateProductCubit cubit) {
+      CreateProductState state, CreateProductCubit cubit, AppTheme theme) {
     if (state.allConfigColors.isEmpty) {
       return Container();
     }
@@ -177,8 +179,9 @@ class Branding extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    _buildQuantitySelector(index, cubit, state),
-                    _buildPickImageSideButton(context, cubit, state, index),
+                    _buildQuantitySelector(index, cubit, state, theme),
+                    _buildPickImageSideButton(
+                        context, cubit, state, index, theme),
                   ],
                 ),
                 _buildGalleryArea(context, state, cubit, index)
@@ -266,8 +269,8 @@ class Branding extends StatelessWidget {
     return hexToColor(dimen.color.hexCode);
   }
 
-  Widget _buildQuantitySelector(
-      int index, CreateProductCubit cubit, CreateProductState state) {
+  Widget _buildQuantitySelector(int index, CreateProductCubit cubit,
+      CreateProductState state, AppTheme theme) {
     Dimension dimen = state.product.dimensions[index];
     final color = _generateColor(dimen);
     return Row(
@@ -307,7 +310,7 @@ class Branding extends StatelessWidget {
         ),
         Text(
           '${dimen.quantity}',
-          style: const TextStyle(fontSize: 17),
+          style: theme.largeText,
         ),
         const SizedBox(
           width: 5,
@@ -334,8 +337,12 @@ class Branding extends StatelessWidget {
     );
   }
 
-  Widget _buildPickImageSideButton(BuildContext context,
-      CreateProductCubit cubit, CreateProductState state, int index) {
+  Widget _buildPickImageSideButton(
+      BuildContext context,
+      CreateProductCubit cubit,
+      CreateProductState state,
+      int index,
+      AppTheme theme) {
     return state.product.hasImages()
         ? InkWell(
             onTap: () {
@@ -350,10 +357,7 @@ class Branding extends StatelessWidget {
                 ),
                 Text(
                   AppLocalizations.of(context)!.pickImage,
-                  style: const TextStyle(
-                      color: AppTheme.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500),
+                  style: theme.largeSemiBoltText,
                 ),
               ],
             ),

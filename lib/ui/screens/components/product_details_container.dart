@@ -20,6 +20,8 @@ class ProductDetailsContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
       builder: (context, state) {
         final cubit = context.read<ProductDetailsCubit>();
@@ -35,7 +37,7 @@ class ProductDetailsContainer extends StatelessWidget {
                   children: [
                     ImageCarousel(
                         dimensions: state.productDetails.product.dimensions),
-                    _aboutProductDetails(state, cubit, context)
+                    _aboutProductDetails(state, cubit, context, theme)
                   ],
                 ),
         );
@@ -45,7 +47,7 @@ class ProductDetailsContainer extends StatelessWidget {
 }
 
 Widget _aboutProductDetails(ProductDetailsState state,
-    ProductDetailsCubit cubit, BuildContext context) {
+    ProductDetailsCubit cubit, BuildContext context, AppTheme theme) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -54,10 +56,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
       children: [
         Text(
           state.productDetails.product.name.toUpperCase(),
-          style: const TextStyle(
-              fontFamily: 'HelveticaNeue',
-              fontSize: 36,
-              fontWeight: FontWeight.w600),
+          style: theme.headline4BoltText,
         ),
         Row(
           children: [
@@ -74,15 +73,10 @@ Widget _aboutProductDetails(ProductDetailsState state,
               itemCount: 5,
               itemSize: 15.0,
             ),
-            const Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Text(
-                '5,890 rating',
-                style: TextStyle(
-                  color: AppTheme.gray,
-                  fontFamily: 'HelveticaNeue',
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Text('5,890 rating',
+                  style: theme.mediumText.copyWith(color: AppTheme.gray)),
             ),
           ],
         ),
@@ -93,40 +87,28 @@ Widget _aboutProductDetails(ProductDetailsState state,
             ? Row(
                 children: [
                   Text('${state.productDetails.product.discountPrice} UAH',
-                      style: const TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'HelveticaNeue',
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.pinkDark)),
+                      style: theme.headline3BoltText
+                          .copyWith(color: AppTheme.pinkDark)),
                   const SizedBox(
                     width: 20,
                   ),
                   Text('${state.productDetails.product.salePrice} UAH',
-                      style: const TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'HelveticaNeue',
-                          fontWeight: FontWeight.w400,
+                      style: theme.titleText.copyWith(
                           color: AppTheme.gray,
                           decoration: TextDecoration.lineThrough)),
                 ],
               )
             : Row(children: [
                 Text('${state.productDetails.product.salePrice} UAH',
-                    style: const TextStyle(
-                        fontSize: 30,
-                        fontFamily: 'HelveticaNeue',
-                        fontWeight: FontWeight.w600,
-                        color: AppTheme.pinkDark)),
+                    style: theme.headline3BoltText
+                        .copyWith(color: AppTheme.pinkDark)),
               ]),
         const SizedBox(height: 20),
         Row(
           children: [
-            const Text(
+            Text(
               'Color:',
-              style: TextStyle(
-                  fontFamily: 'HelveticaNeue',
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500),
+              style: theme.headlineSemiBoltText,
             ),
             SizedBox(
               width: 400,
@@ -147,10 +129,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
         ),
         Text(
           state.productDetails.product.description,
-          style: const TextStyle(
-              fontFamily: 'HelveticaNeue',
-              fontSize: 15,
-              fontWeight: FontWeight.w500),
+          style: theme.largeSemiBoltText,
         ),
         const SizedBox(height: 20),
         Column(
@@ -211,11 +190,9 @@ Widget _aboutProductDetails(ProductDetailsState state,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         "Розміри:",
-                        style: TextStyle(
-                          fontFamily: 'HelveticaNeue',
-                        ),
+                        style: theme.mediumText,
                       ),
                       Text(
                         state.productDetails.product.attributes.widthInCm
@@ -226,7 +203,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
                             'x' +
                             state.productDetails.product.attributes.lengthInCm
                                 .toString(),
-                        style: const TextStyle(fontFamily: 'HelveticaNeue'),
+                        style: theme.mediumText,
                       )
                     ],
                   ),
@@ -234,41 +211,41 @@ Widget _aboutProductDetails(ProductDetailsState state,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         "Вага:",
-                        style: TextStyle(fontFamily: 'HelveticaNeue'),
+                        style: theme.mediumText,
                       ),
                       Text(
                           state.productDetails.product.attributes.weightInGrams
                               .toString(),
-                          style: const TextStyle(fontFamily: 'HelveticaNeue'))
+                          style: theme.mediumText)
                     ],
                   ),
                   const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         "Виробник:",
-                        style: TextStyle(fontFamily: 'HelveticaNeue'),
+                        style: theme.mediumText,
                       ),
                       Text(
                           state.productDetails.product.attributes.producer
                               .toString(),
-                          style: const TextStyle(fontFamily: 'HelveticaNeue'))
+                          style: theme.mediumText)
                     ],
                   ),
                   const SizedBox(height: 10),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Сезонність:",
-                        style: TextStyle(fontFamily: 'HelveticaNeue'),
+                        style: theme.mediumText,
                       ),
                       Text(
                         'Зима',
-                        style: TextStyle(fontFamily: 'HelveticaNeue'),
+                        style: theme.mediumText,
                       )
                     ],
                   ),

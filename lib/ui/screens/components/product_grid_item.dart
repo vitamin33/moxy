@@ -48,11 +48,11 @@ class ProductGridItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(product.name.toUpperCase(),
-                      style: theme.productItemText),
+                      style: theme.mediumSemiBoltText),
                   Text(
                     '${product.salePrice.toStringAsFixed(2)} $uah'
                         .toUpperCase(),
-                    style: theme.productItemText,
+                    style: theme.mediumSemiBoltText,
                   ),
                 ],
               ),

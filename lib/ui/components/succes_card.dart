@@ -17,6 +17,7 @@ class SuccessCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
       alignment: Alignment.center,
       constraints: const BoxConstraints.expand(),
@@ -35,14 +36,13 @@ class SuccessCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                   const AnimatedLogo(),
+                    const AnimatedLogo(),
                     const SizedBox(
                       height: 20,
                     ),
                     Text(
                       title,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.w600),
+                      style: theme.headlineBoltText,
                     ),
                     const SizedBox(
                       height: 40,

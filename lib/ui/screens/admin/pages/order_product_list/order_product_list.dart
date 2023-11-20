@@ -24,6 +24,8 @@ class OrderProductList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return Scaffold(
       body: Material(
         color: AppTheme.pink,
@@ -69,11 +71,7 @@ class OrderProductList extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: _listTile(
-                                    state,
-                                    dimenProduct,
-                                    cubit,
-                                    index,
-                                  ),
+                                      state, dimenProduct, cubit, index, theme),
                                 ),
                               ),
                             );
@@ -129,7 +127,7 @@ Color _generateColor(Dimension dimen) {
 }
 
 Widget _listTile(OrderProductListState state, DimensionProduct product,
-    OrderProductListCubit cubit, int index) {
+    OrderProductListCubit cubit, int index, AppTheme theme) {
   final Dimension colorAvatar = state.productsByDimension[index].dimension;
   final color = _generateColor(colorAvatar);
   final chosenQuantity = product.selectedQuantity;
@@ -208,7 +206,7 @@ Widget _listTile(OrderProductListState state, DimensionProduct product,
                   const SizedBox(width: 2),
                   Text(
                     '$chosenQuantity/$fullQuantity',
-                    style: const TextStyle(fontSize: 13),
+                    style: theme.smallText,
                   ),
                   const SizedBox(width: 5),
                   GestureDetector(

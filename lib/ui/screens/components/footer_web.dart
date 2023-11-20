@@ -14,6 +14,8 @@ class Footer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocProvider(
       create: (BuildContext context) => FooterCubit(),
       child: BlocBuilder<FooterCubit, FooterState>(
@@ -28,9 +30,9 @@ class Footer extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  emailColumn(cubit, state),
-                  menuColumn(),
-                  contactColumn()
+                  emailColumn(cubit, state, theme),
+                  menuColumn(theme),
+                  contactColumn(theme)
                 ],
               ),
             ),
@@ -41,7 +43,7 @@ class Footer extends StatelessWidget {
   }
 }
 
-Widget emailColumn(FooterCubit cubit, FooterState state) {
+Widget emailColumn(FooterCubit cubit, FooterState state, AppTheme theme) {
   return Padding(
     padding: const EdgeInsets.all(20.0),
     child: Column(
@@ -55,17 +57,14 @@ Widget emailColumn(FooterCubit cubit, FooterState state) {
           width: 100,
         ),
         const SizedBox(height: 40),
-        const SizedBox(
+        SizedBox(
           width: 290,
           child: Text(
             "ПІДПИШИСЬ ЩОБ ОТРИМАТИ КАШБЕК \n -15% ВІД ПЕРШОГО ЗАМОВЛЕННЯ",
             overflow: TextOverflow.visible,
             maxLines: 5,
             softWrap: true,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.normal,
-            ),
+            style: theme.headline2Text,
             textAlign: TextAlign.start,
           ),
         ),
@@ -136,211 +135,143 @@ Widget emailColumn(FooterCubit cubit, FooterState state) {
   );
 }
 
-Widget menuColumn() {
+Widget menuColumn(AppTheme theme) {
   return Column(
     mainAxisSize: MainAxisSize.min,
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
+      Text(
         'МЕНЮ',
-        style: TextStyle(
-          color: Color(0xFF0C0C0C),
-          fontSize: 14,
-          fontFamily: 'Poppins',
-          fontWeight: FontWeight.w700,
-        ),
+        style: theme.mediumBoltText,
       ),
       const SizedBox(height: 22),
       OnHover(
         builder: ((isHovered) {
-          return Text(
-            'Доставка і оплата',
-            style: TextStyle(
-              decoration:
-                  isHovered ? TextDecoration.underline : TextDecoration.none,
-              color: isHovered ? AppTheme.gray : AppTheme.black,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          );
+          return Text('Доставка і оплата',
+              style: theme.mediumText.copyWith(
+                  color: isHovered ? AppTheme.gray : AppTheme.black,
+                  decoration: isHovered
+                      ? TextDecoration.underline
+                      : TextDecoration.none));
         }),
       ),
       const SizedBox(height: 22),
       OnHover(
         builder: ((isHovered) {
-          return Text(
-            'Обмін та повернення ',
-            style: TextStyle(
-              decoration:
-                  isHovered ? TextDecoration.underline : TextDecoration.none,
-              color: isHovered ? AppTheme.gray : AppTheme.black,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          );
+          return Text('Обмін та повернення ',
+              style: theme.mediumText.copyWith(
+                  color: isHovered ? AppTheme.gray : AppTheme.black,
+                  decoration: isHovered
+                      ? TextDecoration.underline
+                      : TextDecoration.none));
         }),
       ),
       const SizedBox(height: 22),
       OnHover(
         builder: ((isHovered) {
-          return Text(
-            'Як обрати розмір?',
-            style: TextStyle(
-              decoration:
-                  isHovered ? TextDecoration.underline : TextDecoration.none,
-              color: isHovered ? AppTheme.gray : AppTheme.black,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          );
+          return Text('Як обрати розмір?',
+              style: theme.mediumText.copyWith(
+                  color: isHovered ? AppTheme.gray : AppTheme.black,
+                  decoration: isHovered
+                      ? TextDecoration.underline
+                      : TextDecoration.none));
         }),
       ),
       const SizedBox(height: 22),
       OnHover(
         builder: ((isHovered) {
-          return Text(
-            'Як отримати кешбек?',
-            style: TextStyle(
-              decoration:
-                  isHovered ? TextDecoration.underline : TextDecoration.none,
-              color: isHovered ? AppTheme.gray : AppTheme.black,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          );
+          return Text('Як отримати кешбек?',
+              style: theme.mediumText.copyWith(
+                  color: isHovered ? AppTheme.gray : AppTheme.black,
+                  decoration: isHovered
+                      ? TextDecoration.underline
+                      : TextDecoration.none));
         }),
       ),
       const SizedBox(height: 22),
       OnHover(
         builder: ((isHovered) {
-          return Text(
-            'Запитання',
-            style: TextStyle(
-              decoration:
-                  isHovered ? TextDecoration.underline : TextDecoration.none,
-              color: isHovered ? AppTheme.gray : AppTheme.black,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          );
+          return Text('Запитання',
+              style: theme.mediumText.copyWith(
+                  color: isHovered ? AppTheme.gray : AppTheme.black,
+                  decoration: isHovered
+                      ? TextDecoration.underline
+                      : TextDecoration.none));
         }),
       ),
       const SizedBox(height: 22),
       OnHover(
         builder: ((isHovered) {
-          return Text(
-            'Політика конфеденційності',
-            style: TextStyle(
-              decoration:
-                  isHovered ? TextDecoration.underline : TextDecoration.none,
-              color: isHovered ? AppTheme.gray : AppTheme.black,
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w400,
-            ),
-          );
+          return Text('Політика конфеденційності',
+              style: theme.mediumText.copyWith(
+                  color: isHovered ? AppTheme.gray : AppTheme.black,
+                  decoration: isHovered
+                      ? TextDecoration.underline
+                      : TextDecoration.none));
         }),
       ),
     ],
   );
 }
 
-Widget contactColumn() {
+Widget contactColumn(AppTheme theme) {
   return Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.start,
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Flexible(
-        child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'ГРАФІК РОБОТИ',
+                style: theme.mediumBoltText,
+              ),
+              const SizedBox(height: 22),
+              Text('Понеділок - п’ятниця з 9:00 до 21:00',
+                  style: theme.mediumText),
+              const SizedBox(height: 22),
+              Text(
+                'Субота - п’ятниця з 10:00 до 19:00',
+                style: theme.mediumText,
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 58),
+        Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ГРАФІК РОБОТИ',
-              style: TextStyle(
-                color: Color(0xFF0C0C0C),
-                fontSize: 14,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w700,
-              ),
+              'ПІДТРИМКА',
+              style: theme.mediumBoltText,
             ),
-            SizedBox(height: 22),
-            Text(
-              'Понеділок - п’ятниця з 9:00 до 21:00',
-              style: TextStyle(
-                color: Color(0xFF0C0C0C),
-                fontSize: 14,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            SizedBox(height: 22),
-            Text(
-              'Субота - п’ятниця з 10:00 до 19:00',
-              style: TextStyle(
-                color: Color(0xFF0C0C0C),
-                fontSize: 14,
-                fontFamily: 'Poppins',
-                fontWeight: FontWeight.w400,
-              ),
+            const SizedBox(height: 22),
+            Row(
+              children: [
+                Text(
+                  'E-mail: ',
+                  style: theme.mediumText,
+                ),
+                OnHover(
+                  builder: ((isHovered) {
+                    return Text('Support@moxy.ua',
+                        style: theme.mediumText.copyWith(
+                            color: isHovered ? AppTheme.gray : AppTheme.black,
+                            decoration: isHovered
+                                ? TextDecoration.underline
+                                : TextDecoration.none));
+                  }),
+                ),
+              ],
             ),
           ],
-        ),
-      ),
-      const SizedBox(height: 58),
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'ПІДТРИМКА',
-            style: TextStyle(
-              color: Color(0xFF0C0C0C),
-              fontSize: 14,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 22),
-          Row(
-            children: [
-              const Text(
-                'E-mail: ',
-                style: TextStyle(
-                  color: Color(0xFF0C0C0C),
-                  fontSize: 14,
-                  fontFamily: 'Poppins',
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              OnHover(
-                builder: ((isHovered) {
-                  return Text(
-                    'Support@moxy.ua',
-                    style: TextStyle(
-                        color: isHovered ? AppTheme.gray : AppTheme.black,
-                        fontSize: 14,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w400,
-                        decoration: isHovered
-                            ? TextDecoration.underline
-                            : TextDecoration.none),
-                  );
-                }),
-              ),
-            ],
-          ),
-        ],
-      ),
-    ],
-  );
+        )
+      ]);
 }

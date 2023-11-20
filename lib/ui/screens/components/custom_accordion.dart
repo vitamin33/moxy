@@ -4,7 +4,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 class CustomAccordion extends StatefulWidget {
   /// An accordion is used to show (and hide) content. Use [showAccordion] to hide & show the accordion content.
   const CustomAccordion(
-      {Key? key,
+      {super.key,
       this.title,
       this.content,
       this.titleChild,
@@ -29,8 +29,7 @@ class CustomAccordion extends StatefulWidget {
       this.showAccordion = false,
       this.onToggleCollapsed,
       this.titleBorderRadius = const BorderRadius.all(Radius.circular(0)),
-      this.contentBorderRadius = const BorderRadius.all(Radius.circular(0))})
-      : super(key: key);
+      this.contentBorderRadius = const BorderRadius.all(Radius.circular(0))});
 
   /// controls if the accordion should be collapsed or not making it possible to be controlled from outside
   final bool showAccordion;

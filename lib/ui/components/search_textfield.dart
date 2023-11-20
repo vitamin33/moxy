@@ -25,6 +25,7 @@ class SearchTextfield extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,7 +42,7 @@ class SearchTextfield extends StatelessWidget {
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.search),
                 prefixIconColor: AppTheme.gray,
-                prefixStyle: const TextStyle(color: AppTheme.gray),
+                prefixStyle:theme.mediumText.copyWith(color: AppTheme.gray),
                 border: const OutlineInputBorder(
                     borderSide: BorderSide(color: AppTheme.white)),
                 enabledBorder: const OutlineInputBorder(

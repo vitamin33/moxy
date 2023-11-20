@@ -12,6 +12,8 @@ class StatusPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocBuilder<CreateOrderCubit, CreateOrderState>(
       builder: (context, state) {
         // ignore: unused_local_variable
@@ -61,10 +63,7 @@ class StatusPage extends StatelessWidget {
                                   const SizedBox(width: 15),
                                   Text(
                                     status.statusTitle,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w400,
-                                    ),
+                                    style:theme.titleText ,
                                   ),
                                 ],
                               ),

@@ -61,7 +61,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
               children: [
                 Text(
                   'Список бажань',
-                  style: theme.mainTitleText.copyWith(
+                  style: theme.headline3BoltText.copyWith(
                     color: AppTheme.black,
                   ),
                 ),

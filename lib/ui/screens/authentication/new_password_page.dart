@@ -43,17 +43,19 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
         final cubit = context.read<RegistrationCubit>();
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
+              Text(
                 'Створити пароль',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
@@ -102,26 +104,23 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   }
 }
 
-Widget downText(BuildContext context) {
+Widget downText(BuildContext context, AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text(
+      Text(
         'Вже існує акаунт?',
-        style: TextStyle(fontSize: 18),
+        style: theme.titleText,
       ),
       const SizedBox(
         width: 2,
       ),
       InkWell(
           onTap: () {},
-          child: const Text(
+          child: Text(
             "Увійти",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
+            style: theme.titleBoltText.copyWith(
+                color: AppTheme.pinkDark, decoration: TextDecoration.underline),
           )),
     ],
   );

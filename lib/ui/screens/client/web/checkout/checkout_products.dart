@@ -45,8 +45,7 @@ class CheckoutProducts extends StatelessWidget {
     return [
       Align(
         alignment: Alignment.centerLeft,
-        child:
-            Text('Your order'.toUpperCase(), style: theme.checkoutHeadingText),
+        child: Text('Your order'.toUpperCase(), style: theme.largeBoltText),
       ),
       const SizedBox(height: 30),
       ...productWidgets,
@@ -70,11 +69,11 @@ class CheckoutProducts extends StatelessWidget {
           children: [
             Text(
               'Total value to pay'.toUpperCase(),
-              style: theme.checkoutHeadingText,
+              style: theme.largeBoltText,
             ),
             Text(
               '${state.basket.totalValue()} $uah',
-              style: theme.checkoutPriceText,
+              style: theme.smallText,
             )
           ],
         ),
@@ -109,12 +108,11 @@ class CheckoutProducts extends StatelessWidget {
           children: [
             TextSpan(
                 text: 'Ordering on MOXY.UA you agreed with ',
-                style: theme.checkoutWarningText),
+                style: theme.smallText),
             TextSpan(
               text: 'Privacy And Policy',
-              style: theme.checkoutWarningText.copyWith(
+              style: theme.smallBoltText.copyWith(
                 color: AppTheme.pinkDark,
-                fontWeight: FontWeight.w600,
                 decoration: TextDecoration.underline,
               ),
             ),
@@ -125,15 +123,11 @@ class CheckoutProducts extends StatelessWidget {
       Text.rich(
         TextSpan(
           children: [
-            TextSpan(
-              text: 'Warning: ',
-              style: theme.checkoutWarningText
-                  .copyWith(fontWeight: FontWeight.w600),
-            ),
+            TextSpan(text: 'Warning: ', style: theme.smallBoltText),
             TextSpan(
                 text:
                     'Your order is keeping for 5 days in post warehouse. On 6th day it will be returned back to the sender.',
-                style: theme.checkoutWarningText),
+                style: theme.smallText),
           ],
         ),
       ),
@@ -166,11 +160,11 @@ class CheckoutProducts extends StatelessWidget {
                       children: [
                         Text(
                           '$productName $color',
-                          style: theme.checkoutProductText,
+                          style: theme.mediumBoltText,
                         ),
                         Text(
                           '${item.product.salePrice} $uah',
-                          style: theme.checkoutPriceText,
+                          style: theme.largeBoltText,
                         ),
                       ],
                     ),
@@ -180,7 +174,7 @@ class CheckoutProducts extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Color:', style: theme.checkoutColorText),
+                        Text('Color:', style: theme.largeText),
                         _buildColorWidget(item.dimension),
                       ],
                     ),
@@ -205,7 +199,9 @@ class CheckoutProducts extends StatelessWidget {
                             padding: const EdgeInsets.all(8),
                             child: Text(
                               'Remove',
-                              style: theme.removeButtonText,
+                              style: theme.titleText.copyWith(
+                                  color: AppTheme.gray,
+                                  decoration: TextDecoration.underline),
                             ),
                           ),
                           onTap: () {

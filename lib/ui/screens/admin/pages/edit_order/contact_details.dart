@@ -16,17 +16,19 @@ class ContactDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<EditOrderCubit>();
+    final theme = AppTheme.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           AppLocalizations.of(context)!.contactDetails,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          style: theme.largeBoltText,
         ),
         const SizedBox(height: 10),
-        _buildClientNameWidget(context, state, cubit),
-        _buildClientPhoneWidget(context, state, cubit),
-        _buildOrderProductsSummaryWidget(context, state, cubit),
+        _buildClientNameWidget(context, state, cubit, theme),
+        _buildClientPhoneWidget(context, state, cubit, theme),
+        _buildOrderProductsSummaryWidget(context, state, cubit, theme),
       ],
     );
   }
@@ -35,8 +37,8 @@ class ContactDetails extends StatelessWidget {
     return state.selectedProducts.map((item) => item.name).join(', ');
   }
 
-  Widget _buildClientNameWidget(
-      BuildContext context, EditOrderState state, EditOrderCubit cubit) {
+  Widget _buildClientNameWidget(BuildContext context, EditOrderState state,
+      EditOrderCubit cubit, AppTheme theme) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -76,11 +78,7 @@ class ContactDetails extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 25),
                     child: Text(
                       '${state.client.firstName}  ${state.client.secondName}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.gray,
-                      ),
+                      style: theme.largeBoltText.copyWith(color: AppTheme.gray),
                     ),
                   ),
                 ),
@@ -94,11 +92,8 @@ class ContactDetails extends StatelessWidget {
                       },
                       child: Text(
                         AppLocalizations.of(context)!.change,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppTheme.pinkDark,
-                        ),
+                        style: theme.largeSemiBoltText
+                            .copyWith(color: AppTheme.pinkDark),
                       ),
                     ),
                   ),
@@ -108,8 +103,8 @@ class ContactDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildClientPhoneWidget(
-      BuildContext context, EditOrderState state, EditOrderCubit cubit) {
+  Widget _buildClientPhoneWidget(BuildContext context, EditOrderState state,
+      EditOrderCubit cubit, AppTheme theme) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
       transitionBuilder: (Widget child, Animation<double> animation) {
@@ -143,14 +138,9 @@ class ContactDetails extends StatelessWidget {
                   flex: 10,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 25),
-                    child: Text(
-                      state.client.mobileNumber,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppTheme.gray,
-                      ),
-                    ),
+                    child: Text(state.client.mobileNumber,
+                        style: theme.largeSemiBoltText
+                            .copyWith(color: AppTheme.gray)),
                   ),
                 ),
                 Expanded(
@@ -161,14 +151,9 @@ class ContactDetails extends StatelessWidget {
                       onPressed: () {
                         cubit.changeEditPhone();
                       },
-                      child: Text(
-                        AppLocalizations.of(context)!.change,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: AppTheme.pinkDark,
-                        ),
-                      ),
+                      child: Text(AppLocalizations.of(context)!.change,
+                          style: theme.largeSemiBoltText
+                              .copyWith(color: AppTheme.pinkDark)),
                     ),
                   ),
                 ),
@@ -177,8 +162,8 @@ class ContactDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildOrderProductsSummaryWidget(
-      BuildContext context, EditOrderState state, EditOrderCubit cubit) {
+  Widget _buildOrderProductsSummaryWidget(BuildContext context,
+      EditOrderState state, EditOrderCubit cubit, AppTheme theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -187,15 +172,9 @@ class ContactDetails extends StatelessWidget {
           flex: 10,
           child: Padding(
             padding: const EdgeInsets.only(left: 25),
-            child: Text(
-              _formSelectedProductsName(state),
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: AppTheme.gray,
-              ),
-            ),
+            child: Text(_formSelectedProductsName(state),
+                overflow: TextOverflow.ellipsis,
+                style: theme.largeBoltText.copyWith(color: AppTheme.gray)),
           ),
         ),
         Expanded(
@@ -207,14 +186,9 @@ class ContactDetails extends StatelessWidget {
                 cubit.editSelectedProduct();
                 context.push(RouterProvider.adminOrderProductListPath());
               },
-              child: Text(
-                AppLocalizations.of(context)!.change,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.pinkDark,
-                ),
-              ),
+              child: Text(AppLocalizations.of(context)!.change,
+                  style:
+                      theme.largeBoltText.copyWith(color: AppTheme.pinkDark)),
             ),
           ),
         ),

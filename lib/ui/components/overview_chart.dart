@@ -62,6 +62,7 @@ class _ChartState extends State<Chart> {
   int? selectedColumnIndex3;
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
       decoration: const BoxDecoration(
           color: AppTheme.white,
@@ -76,8 +77,8 @@ class _ChartState extends State<Chart> {
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
                   AppLocalizations.of(context)!.overviewChartTitle,
-                  style: const TextStyle(
-                      fontSize: 19, fontWeight: FontWeight.w500),
+                  style: 
+                  theme.largeSemiBoltText
                 ),
               ),
               SfCartesianChart(
@@ -94,15 +95,15 @@ class _ChartState extends State<Chart> {
                     if (value >= 1000) {
                       return ChartAxisLabel(
                           '₴${(value / 1000).toStringAsFixed(0)}k',
-                          const TextStyle(color: AppTheme.gray));
+                          theme.mediumText.copyWith(color:AppTheme.gray));
                     } else {
                       return ChartAxisLabel(
-                          '₴$value', const TextStyle(color: AppTheme.gray));
+                          '₴$value', theme.mediumText.copyWith(color:AppTheme.gray));
                     }
                   },
                 ),
                 primaryXAxis: CategoryAxis(
-                  labelStyle: const TextStyle(color: AppTheme.gray),
+                  labelStyle:theme.mediumText.copyWith(color:AppTheme.gray),
                   majorGridLines: const MajorGridLines(width: 0),
                 ),
                 palette: const <Color>[
@@ -131,7 +132,7 @@ class _ChartState extends State<Chart> {
                                 selectedColumnIndex3 != null)
                             ? false
                             : true,
-                        textStyle: const TextStyle(fontSize: 0)),
+                        textStyle: theme.invisibleText),
                     xValueMapper: (ChartData data, _) => data.x,
                     yValueMapper: (ChartData data, _) => data.y2,
                     width: 0.4,
@@ -159,7 +160,7 @@ class _ChartState extends State<Chart> {
                                 selectedColumnIndex3 != null)
                             ? false
                             : true,
-                        textStyle: const TextStyle(fontSize: 0)),
+                        textStyle: theme.invisibleText),
                     xValueMapper: (ChartData data, _) => data.x,
                     yValueMapper: (ChartData data, _) => data.y,
                     width: 0.4,
@@ -187,7 +188,7 @@ class _ChartState extends State<Chart> {
                                 selectedColumnIndex2 != null)
                             ? false
                             : true,
-                        textStyle: const TextStyle(fontSize: 0)),
+                        textStyle: theme.invisibleText),
                     xValueMapper: (ChartData data, _) => data.x,
                     yValueMapper: (ChartData data, _) => data.y3,
                     width: 0.4,
@@ -203,7 +204,7 @@ class _ChartState extends State<Chart> {
                       pointIndex == selectedColumnIndex3) {
                     args.text = '₴ ${args.text}';
                     args.color = AppTheme.black;
-                    args.textStyle = const TextStyle(fontSize: 14);
+                    args.textStyle = theme.mediumText.copyWith(color:AppTheme.gray);
                   }
                 },
                 onMarkerRender: (markerArgs) {
