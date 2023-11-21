@@ -1,31 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
+import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 
-class RegistrationContainer extends StatelessWidget {
-  const RegistrationContainer({super.key});
+class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
+
+  @override
+  _RegistrationPageState createState() => _RegistrationPageState();
+}
+
+class _RegistrationPageState extends State<RegistrationPage> {
+  late RegistrationCubit _registerCubit;
+  @override
+  void initState() {
+    super.initState();
+    _registerCubit = context.read<RegistrationCubit>();
+    _registerCubit.effectStream.listen((effect) {
+      if (effect is NavigateToLogin) {
+        context.go(RouterProvider.loginPath());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
+        final theme = AppTheme.of(context)!;
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Реєстрація',
                 textAlign: TextAlign.start,
-                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: 30),
               Row(
@@ -108,12 +129,12 @@ class RegistrationContainer extends StatelessWidget {
                   title: 'Далі',
                   onTap: () {
                     if (cubit.validateRegisterFields()) {
-                      cubit.register(context);
+                      cubit.register();
                     }
                   },
                 ),
               ),
-              downText(context),
+              downText(context, theme),
             ],
           ),
         );
@@ -122,13 +143,13 @@ class RegistrationContainer extends StatelessWidget {
   }
 }
 
-Widget downText(BuildContext context) {
+Widget downText(BuildContext context, AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text(
+      Text(
         'Вже існує акаунт?',
-        style: TextStyle(fontSize: 18),
+        style: theme.titleText,
       ),
       const SizedBox(
         width: 2,
@@ -136,16 +157,12 @@ Widget downText(BuildContext context) {
       InkWell(
           onTap: () {
             moxyPrint('Sign up');
-            context.read<LoginCubit>().perviousPage();
+            context.go(RouterProvider.loginPath());
           },
-          child: const Text(
-            "Увійти",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
-          )),
+          child: Text("Увійти",
+              style: theme.titleBoltText.copyWith(
+                  color: AppTheme.pinkDark,
+                  decoration: TextDecoration.underline))),
     ],
   );
 }

@@ -12,16 +12,17 @@ class PreviusStatValue extends StatelessWidget {
   final bool showCurrency;
 
   const PreviusStatValue({
-    Key? key,
+    super.key,
     required this.title,
     required this.iconPath,
     required this.value,
     required this.percentageValue,
     this.showCurrency = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -52,20 +53,14 @@ class PreviusStatValue extends StatelessWidget {
                 const SizedBox(width: 3),
                 Text(
                   title,
-                  style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: AppTheme.gray),
+                  style: theme.mediumText.copyWith(color: AppTheme.gray),
                 ),
               ],
             ),
             const SizedBox(height: 8),
             Text(
               '${showCurrency ? '₴ ' : ''}$value',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w500,
-              ),
+              style: theme.headlineSemiBoltText,
             ),
             const SizedBox(
               height: 5,
@@ -77,15 +72,12 @@ class PreviusStatValue extends StatelessWidget {
                     ? IconPath.rightUpArrow
                     : IconPath.rightDownArrow),
                 Expanded(
-                  child: Text(
-                      ' ${percentageValue.toStringAsFixed(2)}% ${AppLocalizations.of(context)!.overviewFromPeriod}',
-                      style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                          color: percentageValue >= 0
-                              ? AppTheme.greenDark
-                              : AppTheme.red)),
-                )
+                    child: Text(
+                        ' ${percentageValue.toStringAsFixed(2)}% ${AppLocalizations.of(context)!.overviewFromPeriod}',
+                        style: theme.mediumText.copyWith(
+                            color: percentageValue >= 0
+                                ? AppTheme.greenDark
+                                : AppTheme.red)))
               ],
             )
           ],

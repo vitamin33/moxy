@@ -1,30 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
+import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
+import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
-class NewPasswordContainer extends StatelessWidget {
-  const NewPasswordContainer({super.key});
+@immutable
+class NewPasswordPage extends StatefulWidget {
+  final String? email;
+  final String? resetToken;
+  const NewPasswordPage(
+      {super.key, required this.email, required this.resetToken});
+
+  @override
+  _NewPasswordPageState createState() => _NewPasswordPageState();
+}
+
+class _NewPasswordPageState extends State<NewPasswordPage> {
+  late RegistrationCubit _registerCubit;
+  @override
+  void initState() {
+    super.initState();
+    _registerCubit = context.read<RegistrationCubit>();
+    _registerCubit.initNewPasswordFlow(widget.email, widget.resetToken);
+    _registerCubit.effectStream.listen((effect) {
+      if (effect is NavigateToLogin) {
+        context.go(RouterProvider.loginPath());
+      } else if (effect is NoResetTokenFound) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'No reset token found. Try reset password flow from the beginning.'));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
         final cubit = context.read<RegistrationCubit>();
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
+              Text(
                 'Створити пароль',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
@@ -60,8 +91,7 @@ class NewPasswordContainer extends StatelessWidget {
                   title: 'Змінити пароль',
                   onTap: () {
                     if (cubit.validateNewPasswordFields()) {
-                      cubit.changePasswordWithMobile();
-                      context.read<LoginCubit>().nextPage();
+                      cubit.createNewPassword();
                     }
                   },
                 ),
@@ -74,27 +104,23 @@ class NewPasswordContainer extends StatelessWidget {
   }
 }
 
-Widget downText(BuildContext context) {
+Widget downText(BuildContext context, AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text(
+      Text(
         'Вже існує акаунт?',
-        style: TextStyle(fontSize: 18),
+        style: theme.titleText,
       ),
       const SizedBox(
         width: 2,
       ),
       InkWell(
-          onTap: () {
-          },
-          child: const Text(
+          onTap: () {},
+          child: Text(
             "Увійти",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
+            style: theme.titleBoltText.copyWith(
+                color: AppTheme.pinkDark, decoration: TextDecoration.underline),
           )),
     ],
   );

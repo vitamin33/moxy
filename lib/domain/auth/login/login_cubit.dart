@@ -1,13 +1,14 @@
-// ignore: depend_on_referenced_packages
-import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
-import '../../services/get_it.dart';
-import '../roles.dart';
+import 'package:moxy/domain/auth/login/login_effects.dart';
+import 'package:moxy/domain/roles.dart';
+import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/services/cubit_with_effects.dart';
+import 'package:moxy/services/get_it.dart';
 import 'login_state.dart';
 
-class LoginCubit extends Cubit<LoginState> {
+class LoginCubit extends CubitWithEffects<LoginState, UiEffect> {
   final storage = locate<ISecureStorageRepository>();
   final authRepository = locate<AuthRepository>();
 
@@ -21,9 +22,9 @@ class LoginCubit extends Cubit<LoginState> {
             mobileNumber: '',
             password: '',
             activePage: 0,
-            state:const AuthState())) {
-    //_checkLoggedInState();
-    emit(state.copyWith(mobileNumber: '0938795984', password: '123123'));
+            state: const AuthState())) {
+    _checkLoggedInState();
+    emit(state.copyWith(mobileNumber: '', password: ''));
   }
 
   void mobileNumberChanged(String value) {
@@ -52,14 +53,13 @@ class LoginCubit extends Cubit<LoginState> {
           state.mobileNumber, state.password);
 
       result.when((role) {
-        emit(state.copyWith(state: LoginWithCredsSuccess(role: role)));
+        successfulLogin(role);
       }, (error) {
-        emit(state.copyWith(
-            state:
-                LoginFailed(message: 'Unable to login. Try one more time.')));
+        emitEffect(LoginFailed('Unable to login. Try one more time.'));
+        emit(state.copyWith(state: SigninFailed()));
       });
     } on Exception catch (error) {
-      emit(state.copyWith(state: LoginFailed(message: error.toString())));
+      emitEffect(LoginFailed(error.toString()));
     }
   }
 
@@ -82,7 +82,7 @@ class LoginCubit extends Cubit<LoginState> {
     bool isLoggedIn = await authRepository.checkLoggedInState();
     Role? userRole = await authRepository.getUserRole();
     if (isLoggedIn && userRole != null) {
-      emit(state.copyWith(state: LoginWithCredsSuccess(role: userRole)));
+      successfulLogin(userRole);
     }
   }
 
@@ -100,5 +100,14 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(activePage: page));
     pageController.animateToPage(page,
         duration: const Duration(microseconds: 300), curve: Curves.linear);
+  }
+
+  void successfulLogin(Role role) {
+    if (role == Role.admin) {
+      emitEffect(NavigateToAdmin());
+    } else {
+      emitEffect(NavigateToClient());
+    }
+    emit(state.copyWith(state: LoginWithCredsSuccess()));
   }
 }

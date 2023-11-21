@@ -14,6 +14,7 @@ class TypePayment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     final cubit = context.read<EditOrderCubit>();
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -25,8 +26,7 @@ class TypePayment extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.filterTypePayment,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600)),
+                  style: theme.largeBoltText),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -56,10 +56,7 @@ class TypePayment extends StatelessWidget {
                         padding: const EdgeInsets.all(5.0),
                         child: Text(
                           AppLocalizations.of(context)!.fullPayment,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: theme.smallSemiBoltText,
                         ),
                       )
                     ],
@@ -94,10 +91,7 @@ class TypePayment extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Text(AppLocalizations.of(context)!.cashAdvance,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            )),
+                            style: theme.smallSemiBoltText),
                       )
                     ],
                   )

@@ -32,6 +32,8 @@ class EditOrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocConsumer<EditOrderCubit, EditOrderState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -76,15 +78,17 @@ class EditOrderPage extends StatelessWidget {
                                           horizontal: 16.0),
                                       child: Column(
                                         children: [
-                                          dataRange(state, context),
+                                          dataRange(state, context, theme),
                                           const SizedBox(height: 10),
                                           ContactDetails(state: state),
                                           const SizedBox(height: 20),
                                           TypePayment(state: state),
                                           const SizedBox(height: 20),
-                                          typeDelivery(state, cubit, context),
+                                          typeDelivery(
+                                              state, cubit, context, theme),
                                           const SizedBox(height: 20),
-                                          orderStatus(context, state, cubit),
+                                          orderStatus(
+                                              context, state, cubit, theme),
                                           const SizedBox(height: 20),
                                         ],
                                       ),
@@ -107,7 +111,8 @@ class EditOrderPage extends StatelessWidget {
   }
 }
 
-Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
+Widget typeDelivery(
+    EditOrderState state, EditOrderCubit cubit, context, AppTheme theme) {
   return Column(
     children: [
       SizedBox(
@@ -117,8 +122,7 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(AppLocalizations.of(context)!.filterTypeDelivery,
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                style: theme.largeBoltText),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -216,33 +220,28 @@ Widget typeDelivery(EditOrderState state, EditOrderCubit cubit, context) {
   );
 }
 
-Widget dataRange(state, context) {
+Widget dataRange(EditOrderState state, BuildContext context, AppTheme theme) {
   return SizedBox(
     width: double.infinity,
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(AppLocalizations.of(context)!.creationDate,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-        Text(
-          state.createdAt,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: AppTheme.gray,
-          ),
-        ),
+            style: theme.largeBoltText),
+        Text(state.createdAt,
+            style: theme.largeSemiBoltText.copyWith(color: AppTheme.gray)),
       ],
     ),
   );
 }
 
-Widget orderStatus(context, EditOrderState state, cubit) {
+Widget orderStatus(BuildContext context, EditOrderState state,
+    EditOrderCubit cubit, AppTheme theme) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Text(AppLocalizations.of(context)!.filterOrderStatus,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          style: theme.largeBoltText),
       const SizedBox(height: 5),
       SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -286,8 +285,7 @@ Widget orderStatus(context, EditOrderState state, cubit) {
                           Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: Text(status.statusTitle,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w500)),
+                                style: theme.mediumBoltText),
                           )
                         ],
                       ));

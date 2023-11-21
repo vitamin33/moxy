@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
-import 'package:moxy/domain/auth/login_state.dart';
+import 'package:moxy/domain/auth/login/login_cubit.dart';
+import 'package:moxy/domain/auth/login/login_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
@@ -16,6 +16,7 @@ class AuthenticationContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LoginCubit, LoginState>(
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
         final cubit = context.read<LoginCubit>();
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -27,8 +28,7 @@ class AuthenticationContainer extends StatelessWidget {
               Text(
                 AppLocalizations.of(context)!.login,
                 textAlign: TextAlign.start,
-                style:
-                    const TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
@@ -64,13 +64,11 @@ class AuthenticationContainer extends StatelessWidget {
                   },
                   child: OnHover(
                     builder: (isHovered) {
-                      return Text(
-                        'Забули пароль?',
-                        style: TextStyle(
-                            decoration: isHovered
-                                ? TextDecoration.underline
-                                : TextDecoration.none),
-                      );
+                      return Text('Забули пароль?',
+                          style: theme.mediumText.copyWith(
+                              decoration: isHovered
+                                  ? TextDecoration.underline
+                                  : TextDecoration.none));
                     },
                   ),
                 )
@@ -93,7 +91,7 @@ class AuthenticationContainer extends StatelessWidget {
                   onTap: context.read<LoginCubit>().logInWithCredentials,
                 ),
               ),
-              downText(context)
+              downText(context, theme)
             ],
           ),
         );
@@ -101,13 +99,13 @@ class AuthenticationContainer extends StatelessWidget {
     );
   }
 
-  Widget downText(BuildContext context) {
+  Widget downText(BuildContext context, AppTheme theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           AppLocalizations.of(context)!.noAccountQuestion,
-          style: const TextStyle(fontSize: 18),
+          style: theme.titleText,
         ),
         const SizedBox(
           width: 2,
@@ -116,14 +114,10 @@ class AuthenticationContainer extends StatelessWidget {
             onTap: () {
               context.read<LoginCubit>().nextPage();
             },
-            child: Text(
-              AppLocalizations.of(context)!.signup,
-              style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.pinkDark,
-                  decoration: TextDecoration.underline),
-            )),
+            child: Text(AppLocalizations.of(context)!.signup,
+                style: theme.titleBoltText.copyWith(
+                    color: AppTheme.pinkDark,
+                    decoration: TextDecoration.underline))),
       ],
     );
   }

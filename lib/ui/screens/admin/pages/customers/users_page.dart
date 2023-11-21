@@ -8,10 +8,12 @@ import '../../../../../domain/admin/all_users/all_users_effects.dart';
 import '../../../../../domain/admin/all_users/all_users_state.dart';
 
 class UsersPage extends StatelessWidget {
-  const UsersPage({Key? key}) : super(key: key);
+  const UsersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     final AllUsersCubit cubit = AllUsersCubit();
     cubit.effectStream.listen((effect) {
       if (effect is UsersLoadingFailed) {
@@ -51,14 +53,10 @@ class UsersPage extends StatelessWidget {
                                     child: ListTile(
                                       title: Text(
                                         '${user.firstName} ${user.secondName}',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500),
+                                        style: theme.largeSemiBoltText,
                                       ),
                                       subtitle: Text(user.mobileNumber,
-                                          style: const TextStyle(
-                                            fontSize: 16,
-                                          )),
+                                          style: theme.largeText),
                                       trailing:
                                           const Icon(Icons.arrow_forward_ios),
                                     ),

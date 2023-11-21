@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../../domain/client/profile/profile_cubit.dart';
 import '../../../../../../domain/client/profile/profile_state.dart';
@@ -13,6 +14,7 @@ class ProfileContactInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
         final cubit = context.read<ProfileCubit>();
         return SizedBox(
           width: double.infinity,
@@ -21,13 +23,9 @@ class ProfileContactInfo extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Контактна інформація',
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: theme.headline3BoltText,
                 ),
                 const SizedBox(height: 40),
                 Padding(

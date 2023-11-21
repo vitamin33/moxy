@@ -13,6 +13,7 @@ class ProfileHistoryOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         return LayoutBuilder(builder: (context, constraints) {
@@ -23,16 +24,9 @@ class ProfileHistoryOrder extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Історія Замовлення',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  Text('Історія Замовлення', style: theme.headline3BoltText),
                   const SizedBox(height: 10),
-                  Expanded(child: _buildOrdersList(state)),
+                  Expanded(child: _buildOrdersList(state, theme)),
                 ],
               ),
             ),
@@ -42,13 +36,13 @@ class ProfileHistoryOrder extends StatelessWidget {
     );
   }
 
-  Widget _buildOrdersList(ProfileState state) {
+  Widget _buildOrdersList(ProfileState state, AppTheme theme) {
     return state.historyOrders.isEmpty
         ? const Text('No Orders')
-        : _listView(state);
+        : _listView(state, theme);
   }
 
-  Widget _listView(ProfileState state) {
+  Widget _listView(ProfileState state, AppTheme theme) {
     return ListView.builder(
       itemCount: state.historyOrders.length,
       scrollDirection: Axis.vertical,
@@ -78,14 +72,14 @@ class ProfileHistoryOrder extends StatelessWidget {
                             children: [
                               Text(
                                 order.fullOrderName(),
-                                style: const TextStyle(
-                                    color: AppTheme.gray, fontSize: 17),
+                                style: theme.titleText
+                                    .copyWith(color: AppTheme.gray),
                               ),
                               Text('${order.totalValue()} UAH'),
                               Text(
                                 state.historyOrders[index].createdAt,
-                                style: const TextStyle(
-                                    color: AppTheme.gray, fontSize: 10),
+                                style: theme.smallText
+                                    .copyWith(color: AppTheme.gray),
                               ),
                             ],
                           ),
@@ -94,9 +88,8 @@ class ProfileHistoryOrder extends StatelessWidget {
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: Text(
                               order.status.statusTitle,
-                              style: TextStyle(
-                                  color: _statusColor(order.status),
-                                  fontSize: 20),
+                              style: theme.headlineText
+                                  .copyWith(color: _statusColor(order.status)),
                             ),
                           ),
                         ],

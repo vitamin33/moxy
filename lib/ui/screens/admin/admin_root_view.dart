@@ -31,6 +31,7 @@ class AdminRootView extends StatelessWidget {
 
   Widget mobileWidget(BuildContext context) {
     final arrIcons = _mapStateToActionIcon(context);
+    final theme = AppTheme.of(context)!;
 
     return AppScaffold(
       appbar: AppBar(
@@ -57,15 +58,11 @@ class AdminRootView extends StatelessWidget {
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: item.text != null
-                                        ? Text(
-                                            item.text!,
+                                        ? Text(item.text!,
                                             textAlign: TextAlign.center,
                                             textDirection: TextDirection.rtl,
-                                            style: const TextStyle(
-                                              color: AppTheme.pinkDark,
-                                              fontSize: 14,
-                                            ),
-                                          )
+                                            style: theme.smallText.copyWith(
+                                                color: AppTheme.pinkDark))
                                         : SvgPicture.asset(item.icon),
                                   ),
                                 ),
@@ -84,7 +81,7 @@ class AdminRootView extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: Text(
             _mapStateToTitleText(context),
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            style: theme.headlineSemiBoltText,
           ),
         ),
         leading: Builder(

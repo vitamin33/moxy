@@ -12,13 +12,13 @@ class CustomButton extends StatefulWidget {
   final Function() onTap;
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.title,
     this.buttonWidth = 100.0,
     this.state = ButtonState.idle,
     this.outline = false,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -29,6 +29,7 @@ class _CustomButtonState extends State<CustomButton> {
   Widget build(BuildContext context) {
     final buttonWidth = widget.buttonWidth ?? widget.buttonWidth;
     final disabled = [ButtonState.disabled].contains(widget.state);
+    final theme = AppTheme.of(context)!;
 
     return SizedBox(
         width: buttonWidth,
@@ -36,7 +37,7 @@ class _CustomButtonState extends State<CustomButton> {
             ? OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   backgroundColor: AppTheme.white,
-                  shape:const RoundedRectangleBorder(),
+                  shape: const RoundedRectangleBorder(),
                   padding: const EdgeInsets.all(20),
                   side: const BorderSide(
                     width: 2,
@@ -44,11 +45,9 @@ class _CustomButtonState extends State<CustomButton> {
                   ),
                 ),
                 onPressed: disabled ? null : widget.onTap,
-                child: Text(
-                  widget.title,
-                  style:
-                      const TextStyle(color: AppTheme.pinkDark, fontSize: 18,fontFamily: 'HelveticaNeue',fontWeight: FontWeight.w600),
-                ),
+                child: Text(widget.title,
+                    style:
+                        theme.titleBoltText.copyWith(color: AppTheme.pinkDark)),
               )
             : TextButton(
                 onPressed: disabled ? null : widget.onTap,
@@ -69,8 +68,8 @@ class _CustomButtonState extends State<CustomButton> {
                               )))
                       : Text(
                           widget.title,
-                          style: const TextStyle(
-                              color: AppTheme.white, fontSize: 18,fontFamily: 'HelveticaNeue',fontWeight: FontWeight.w600),
+                          style: theme.titleBoltText
+                              .copyWith(color: AppTheme.white),
                         ),
                 )));
   }

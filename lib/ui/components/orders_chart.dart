@@ -49,6 +49,7 @@ class _OrdersChartState extends State<OrdersChart> {
   int? selectedColumnIndex1;
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
       decoration: const BoxDecoration(
           color: AppTheme.white,
@@ -63,8 +64,7 @@ class _OrdersChartState extends State<OrdersChart> {
                 padding: const EdgeInsets.all(5.0),
                 child: Text(
                   AppLocalizations.of(context)!.overviewOrders,
-                  style: const TextStyle(
-                      fontSize: 19, fontWeight: FontWeight.w500),
+                  style: theme.headlineSemiBoltText,
                 ),
               ),
               SfCartesianChart(
@@ -76,11 +76,11 @@ class _OrdersChartState extends State<OrdersChart> {
                   interval: 1,
                   axisLabelFormatter: (axisLabelRenderArgs) {
                     return ChartAxisLabel(axisLabelRenderArgs.text,
-                        const TextStyle(color: AppTheme.gray));
+                        theme.mediumText.copyWith(color: AppTheme.gray));
                   },
                 ),
                 primaryXAxis: CategoryAxis(
-                  labelStyle: const TextStyle(color: AppTheme.gray),
+                  labelStyle: theme.mediumText.copyWith(color: AppTheme.gray),
                   majorGridLines: const MajorGridLines(width: 0),
                 ),
                 palette: const <Color>[
@@ -103,9 +103,9 @@ class _OrdersChartState extends State<OrdersChart> {
                           height: 12,
                           width: 12,
                           color: AppTheme.black),
-                      dataLabelSettings: const DataLabelSettings(
+                      dataLabelSettings:  DataLabelSettings(
                           isVisible: true,
-                          textStyle: TextStyle(fontSize: 16),
+                          textStyle: theme.largeText,
                           color: AppTheme.black),
                       xValueMapper: (OrdersChartData data, _) => data.x,
                       yValueMapper: (OrdersChartData data, _) => data.y,

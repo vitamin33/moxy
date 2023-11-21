@@ -19,6 +19,7 @@ class AppIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return LayoutBuilder(
       builder: (context, constraints) {
         final lineWidth = constraints.maxWidth;
@@ -64,7 +65,7 @@ class AppIndicator extends StatelessWidget {
                     Text(
                       textAlign: TextAlign.center,
                       inadicatorName[index],
-                      style: TextStyle(
+                      style: theme.mediumText.copyWith(
                         color: activePage == index
                             ? AppTheme.black
                             : AppTheme.darkPink,

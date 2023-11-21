@@ -32,13 +32,14 @@ class ProfileTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: renderTitleStyle(context, isValid(state)),
+          style: renderTitleStyle(context, isValid(state), theme),
         ),
         Container(
             width: 300,
@@ -75,10 +76,6 @@ UnderlineInputBorder _renderBorder(bool isValid, bool focused, borderColor) {
 }
 
 bool isValid(state) => state == null;
-TextStyle renderTitleStyle(BuildContext context, bool isValid) {
-  return TextStyle(
-    color: isValid ? AppTheme.gray : Colors.red,
-    fontSize: 15,
-    fontWeight: FontWeight.w300,
-  );
+TextStyle renderTitleStyle(BuildContext context, bool isValid, AppTheme theme) {
+  return theme.largeText.copyWith(color: isValid ? AppTheme.gray : Colors.red);
 }

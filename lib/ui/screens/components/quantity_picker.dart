@@ -15,6 +15,7 @@ class QuantityPicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return Container(
       decoration: BoxDecoration(border: Border.all(color: AppTheme.black)),
       padding: const EdgeInsets.all(1),
@@ -32,7 +33,7 @@ class QuantityPicker extends StatelessWidget {
           const SizedBox(width: 12),
           Text(
             '$quantity',
-            style: const TextStyle(fontSize: 16),
+            style: theme.mediumText,
           ),
           const SizedBox(width: 12),
           InkWell(

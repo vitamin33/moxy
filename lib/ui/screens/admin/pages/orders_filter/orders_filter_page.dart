@@ -34,6 +34,8 @@ class _FilterOrderPageState extends State<FilterOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return BlocConsumer<FilterOrdersCubit, FilterOrdersState>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -44,13 +46,13 @@ class _FilterOrderPageState extends State<FilterOrderPage> {
                 color: AppTheme.white,
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    typePayment(state, cubit, context),
+                    typePayment(state, cubit, context, theme),
                     const SizedBox(height: 20),
-                    typeDelivery(state, cubit, context),
+                    typeDelivery(state, cubit, context, theme),
                     const SizedBox(height: 20),
-                    dataRange(cubit, context),
+                    dataRange(cubit, context, theme),
                     const SizedBox(height: 20),
-                    orderStatus(context, state, cubit),
+                    orderStatus(context, state, cubit, theme),
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -71,7 +73,8 @@ class _FilterOrderPageState extends State<FilterOrderPage> {
   }
 }
 
-Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
+Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit,
+    BuildContext context, AppTheme theme) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
     child: Column(
@@ -85,8 +88,7 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(AppLocalizations.of(context)!.filterTypePayment,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600)),
+                  style: theme.largeBoltText),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -115,10 +117,7 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                         padding: const EdgeInsets.all(5.0),
                         child: Text(
                           AppLocalizations.of(context)!.fullPayment,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
+                          style: theme.smallSemiBoltText,
                         ),
                       )
                     ],
@@ -153,10 +152,7 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
                         padding: const EdgeInsets.all(5.0),
                         child: Text(
                           AppLocalizations.of(context)!.cashAdvance,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                          ),
+                          style: theme.smallSemiBoltText,
                         ),
                       )
                     ],
@@ -171,7 +167,8 @@ Widget typePayment(FilterOrdersState state, FilterOrdersCubit cubit, context) {
   );
 }
 
-Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit, context) {
+Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit,
+    BuildContext context, AppTheme theme) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
     child: Column(
@@ -185,8 +182,7 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit, context) {
               Expanded(
                 flex: 3,
                 child: Text(AppLocalizations.of(context)!.filterTypeDelivery,
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w600)),
+                    style: theme.largeBoltText),
               ),
               Expanded(
                 flex: 2,
@@ -256,14 +252,15 @@ Widget typeDelivery(FilterOrdersState state, FilterOrdersCubit cubit, context) {
   );
 }
 
-Widget dataRange(FilterOrdersCubit cubit, context) {
+Widget dataRange(
+    FilterOrdersCubit cubit, BuildContext context, AppTheme theme) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 10.0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(AppLocalizations.of(context)!.filterDateRange,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            style: theme.largeBoltText),
         Row(
           children: [
             SizedBox(
@@ -271,8 +268,7 @@ Widget dataRange(FilterOrdersCubit cubit, context) {
               height: 35,
               child: TextField(
                 textAlignVertical: TextAlignVertical.top,
-                style:
-                    const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+                style: theme.largeSemiBoltText,
                 controller: cubit.dateController,
                 readOnly: true,
                 onTap: () {
@@ -305,7 +301,8 @@ Widget dataRange(FilterOrdersCubit cubit, context) {
   );
 }
 
-Widget orderStatus(context, FilterOrdersState state, FilterOrdersCubit cubit) {
+Widget orderStatus(
+    context, FilterOrdersState state, FilterOrdersCubit cubit, AppTheme theme) {
   final allStatusOrder = getAllStatusOrder(context);
   return Padding(
     padding: const EdgeInsets.all(10.0),
@@ -313,7 +310,7 @@ Widget orderStatus(context, FilterOrdersState state, FilterOrdersCubit cubit) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(AppLocalizations.of(context)!.filterOrderStatus,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+            style: theme.largeBoltText),
         SizedBox(
           width: MediaQuery.of(context).size.width,
           height: 100,
@@ -354,8 +351,7 @@ Widget orderStatus(context, FilterOrdersState state, FilterOrdersCubit cubit) {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Text(status.statusTitle,
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500)),
+                                  style: theme.mediumSemiBoltText),
                             )
                           ],
                         ));

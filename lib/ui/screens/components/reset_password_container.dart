@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moxy/domain/auth/login_cubit.dart';
+import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
@@ -15,21 +15,21 @@ class ResetPasswordContainer extends StatelessWidget {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
+        final theme = AppTheme.of(context)!;
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              const Text(
+              Text(
                 'Скинути пароль',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+                style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
                 borderColor: AppTheme.greyLigth,
-
                 title: 'Email',
                 controller: cubit.resetPasswordEmailController,
                 onChanged: (value) => cubit.emailPasswordChanged(value),
@@ -57,13 +57,13 @@ class ResetPasswordContainer extends StatelessWidget {
   }
 }
 
-Widget downText(BuildContext context) {
+Widget downText(BuildContext context, AppTheme theme) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      const Text(
+      Text(
         'Вже існує акаунт?',
-        style: TextStyle(fontSize: 18),
+        style: theme.titleText,
       ),
       const SizedBox(
         width: 2,
@@ -72,13 +72,10 @@ Widget downText(BuildContext context) {
           onTap: () {
             context.read<RegistrationCubit>().sendConfirmationCode();
           },
-          child: const Text(
+          child: Text(
             "Увійти",
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
+            style: theme.titleBoltText.copyWith(
+                color: AppTheme.pinkDark, decoration: TextDecoration.underline),
           )),
     ],
   );

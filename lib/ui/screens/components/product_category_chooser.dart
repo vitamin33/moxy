@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 class ProductCategoryChooser extends StatefulWidget {
   final List<String> categories;
@@ -25,14 +26,16 @@ class _ProductCategoryChooserState extends State<ProductCategoryChooser> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return Center(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          const Text(
+          Text(
             'Category: ',
-            style: TextStyle(fontSize: 18),
+            style: theme.titleText,
           ),
           const SizedBox(height: 20),
           DropdownButton<String>(

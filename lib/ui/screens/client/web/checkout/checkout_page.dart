@@ -104,7 +104,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 const SizedBox(
                                     width: 8), // Adjust the spacing as needed
                                 Text("Go back",
-                                    style: theme.checkoutHeadingText),
+                                    style: theme.largeBoltText),
                               ],
                             ),
                           ),

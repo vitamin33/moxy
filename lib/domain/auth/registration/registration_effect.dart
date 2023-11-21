@@ -10,8 +10,12 @@ class RegistrationApiRequestFailed implements UiEffect {
   RegistrationApiRequestFailed(this.failureText);
 }
 
-class NavigateToNextPage implements UiEffect {}
-
 class NavigateToLogin implements UiEffect {}
 
+class RegisterSuccess implements UiEffect {}
+
 class ResendConfirm implements UiEffect {}
+
+class NoResetTokenFound implements UiEffect {}
+
+class ResetEmailFailed implements UiEffect {}

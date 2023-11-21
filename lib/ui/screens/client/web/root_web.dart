@@ -24,13 +24,15 @@ class RootWebWidget extends HookWidget {
   final List<Widget> children;
 
   const RootWebWidget({
-    Key? key,
+    super.key,
     required this.navigationShell,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     int routeIndex = navigationShell.currentIndex;
     int initialIndex = routeIndex > 3 ? 0 : routeIndex;
     // ignore: unused_local_variable
@@ -61,7 +63,7 @@ class RootWebWidget extends HookWidget {
               ),
             ),
           ),
-          actions: _buildActions(context)),
+          actions: _buildActions(context, theme)),
       body: AnimatedBranchContainer(
         currentIndex: navigationShell.currentIndex,
         children: children,
@@ -109,9 +111,7 @@ class RootWebWidget extends HookWidget {
   }
 
   Widget _buildBasketIconButton(
-    String iconData,
-    Function onPressed,
-  ) {
+      String iconData, Function onPressed, AppTheme theme) {
     const double finalSize = 46.0;
 
     return BlocBuilder<BasketCubit, BasketState>(
@@ -146,7 +146,7 @@ class RootWebWidget extends HookWidget {
                   padding: const EdgeInsets.all(3.0),
                   child: Text(
                     cubit.getBasketCount(),
-                    style: const TextStyle(color: AppTheme.white, fontSize: 10),
+                    style: theme.xSmallText.copyWith(color: AppTheme.white),
                   ),
                 ),
               ),
@@ -156,7 +156,7 @@ class RootWebWidget extends HookWidget {
     );
   }
 
-  List<Widget> _buildActions(BuildContext context) {
+  List<Widget> _buildActions(BuildContext context, AppTheme theme) {
     final currentRoute =
         GoRouter.of(context).routeInformationProvider.value.uri.toString();
     bool profileSelected = currentRoute == RouterProvider.profileInfoPath() ||
@@ -186,15 +186,12 @@ class RootWebWidget extends HookWidget {
           navigateToBranch(context, profileIndex);
         },
       ),
-      _buildBasketIconButton(
-        IconPath.bagWeb,
-        () {
-          SideSheet.right(
-              body: const BasketPage(),
-              context: context,
-              barrierColor: Colors.grey.withOpacity(0.5));
-        },
-      )
+      _buildBasketIconButton(IconPath.bagWeb, () {
+        SideSheet.right(
+            body: const BasketPage(),
+            context: context,
+            barrierColor: Colors.grey.withOpacity(0.5));
+      }, theme)
     ];
   }
 

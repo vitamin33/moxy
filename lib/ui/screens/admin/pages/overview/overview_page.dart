@@ -12,13 +12,15 @@ import '../../../../components/previus_stat_value.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OverviewPage extends StatelessWidget {
-  const OverviewPage({Key? key}) : super(key: key);
+  const OverviewPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<DashboardCubit, DashboardState>(
       listener: (context, state) {},
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
+
         return Scaffold(
           body: Container(
             height: MediaQuery.of(context).size.height,
@@ -36,12 +38,12 @@ class OverviewPage extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: Column(
                       children: [
-                        selectedDateTextWidget(state, context),
+                        selectedDateTextWidget(state, context, theme),
                         totalSelectedDataWidget(context, state),
                         const SizedBox(
                           height: 10,
                         ),
-                        previousPeriodDataWidget(context, state),
+                        previousPeriodDataWidget(context, state, theme),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 200),
                           child: state.isLoading
@@ -77,7 +79,8 @@ class OverviewPage extends StatelessWidget {
     );
   }
 
-  Widget selectedDateTextWidget(DashboardState state, context) {
+  Widget selectedDateTextWidget(
+      DashboardState state, BuildContext context, AppTheme theme) {
     return state.selectedDate != null
         ? AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -87,17 +90,16 @@ class OverviewPage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        '${AppLocalizations.of(context)!.overviewSelectedDate} ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      ),
+                          '${AppLocalizations.of(context)!.overviewSelectedDate} ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                          style: theme.smallSemiBoltText),
                     )
                   ]),
           )
         : Container();
   }
 
-  Widget previousPeriodDataWidget(BuildContext context, DashboardState state) {
+  Widget previousPeriodDataWidget(
+      BuildContext context, DashboardState state, AppTheme theme) {
     return state.selectedDate != null
         ? AnimatedSize(
             duration: const Duration(milliseconds: 200),
@@ -110,12 +112,9 @@ class OverviewPage extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            AppLocalizations.of(context)!.overviewPreviusPeriod,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                              AppLocalizations.of(context)!
+                                  .overviewPreviusPeriod,
+                              style: theme.smallSemiBoltText),
                         ),
                       ),
                       previusTotal(context, state),
