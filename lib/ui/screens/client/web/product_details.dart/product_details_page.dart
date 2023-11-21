@@ -22,7 +22,7 @@ class ProductDetailsPage extends StatelessWidget {
             child: Column(
               children: [
                 ProductDetailsContainer(),
-                ProductAdvatages(),
+                ProductAdvantages(),
                 Footer()
               ],
             ),
