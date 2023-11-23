@@ -20,6 +20,7 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   late RegistrationCubit _registerCubit;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +40,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
+        final theme = AppTheme.of(context)!;
+
         return Padding(
             padding: const EdgeInsets.all(8.0),
             child: AnimatedSwitcher(
@@ -52,23 +55,31 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       title:
                           'Пароль скинуто, перевірте свій e-mail, щоб встановити новий пароль.',
                       titleButton: 'Повернутись до входу')
-                  : _buildTextForm(context, state),
+                  : _buildTextForm(context, state, theme),
             ));
       },
     );
   }
 
-  Widget _buildTextForm(BuildContext context, RegistrationState state) {
+  Widget _buildTextForm(
+      BuildContext context, RegistrationState state, AppTheme theme) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           'Скинути пароль',
-          textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+          textAlign: TextAlign.start,
+          style: theme.bigTitleBoltText,
         ),
-        const SizedBox(height: AppTheme.cardPadding),
+        AppTheme.smallVerticalSpasing,
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
+          child: Text(
+            'Для того щоб змінити пароль.Вам необхідно внести діючу адресу Вашої електронної пошти,яку ви використовували при реєстрації особистого кабінету.На цю адресу буде надіслано посилання на зміну паролю.',
+            style: theme.largeText.copyWith(color: AppTheme.gray),
+          ),
+        ),
+        AppTheme.smallVerticalSpasing,
         CustomTextField(
           borderColor: AppTheme.greyLigth,
           title: 'Email',
@@ -77,7 +88,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           state: state.error.resetPasswordEmail,
           validation: true,
         ),
-        const SizedBox(height: AppTheme.elementSpacing),
+        AppTheme.largeVerticalSpasing,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: CustomButton(

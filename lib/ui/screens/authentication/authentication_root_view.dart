@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/src/route.dart';
+import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/auth/login/login_cubit.dart';
