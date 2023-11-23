@@ -4,6 +4,7 @@ import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
 import 'package:moxy/ui/screens/components/footer_web.dart';
 import 'package:moxy/ui/screens/components/product_advatages.dart';
 import 'package:moxy/ui/screens/components/product_details_container.dart';
+import 'package:moxy/ui/screens/components/recomended_products.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class ProductDetailsPage extends StatelessWidget {
@@ -23,6 +24,7 @@ class ProductDetailsPage extends StatelessWidget {
               children: [
                 ProductDetailsContainer(),
                 ProductAdvantages(),
+                RecomendedProducts(),
                 Footer()
               ],
             ),

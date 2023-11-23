@@ -21,20 +21,17 @@ class Footer extends StatelessWidget {
       child: BlocBuilder<FooterCubit, FooterState>(
         builder: (context, state) {
           final cubit = context.read<FooterCubit>();
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              decoration: const BoxDecoration(color: AppTheme.pink),
-              width: double.infinity,
-              height: 400,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  emailColumn(cubit, state, theme),
-                  menuColumn(theme),
-                  contactColumn(theme)
-                ],
-              ),
+          return Container(
+            decoration: const BoxDecoration(color: AppTheme.pink),
+            width: double.infinity,
+            height: 400,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                emailColumn(cubit, state, theme),
+                menuColumn(theme),
+                contactColumn(theme)
+              ],
             ),
           );
         },

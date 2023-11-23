@@ -43,7 +43,7 @@ class _NewProductListState extends State<NewProductList> {
       child: BlocBuilder<NewProductListCubit, NewProductListState>(
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: state.isLoading
                 ? const CircularProgressIndicator()
                 : Column(

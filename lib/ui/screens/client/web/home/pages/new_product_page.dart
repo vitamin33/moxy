@@ -13,16 +13,15 @@ class NewProductPage extends StatelessWidget {
     return const Scaffold(
       backgroundColor: AppTheme.white,
       body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
+        child:
+            Column(
           children: [
             NewProductList(),
             PromoContainer(),
             Footer(),
           ],
         ),
-      )),
+      ),
     );
   }
 }
