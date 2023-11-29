@@ -27,6 +27,7 @@ const String getProfileUrl = '/profile';
 const String getProfileOrdersUrl = '/profile/orders';
 const String allSellingProductsUrl = '/products/selling-products';
 const String getRecomendedProductsUrl = '/products/recommend';
+const String getResaleProductsUrl = '/products/resale';
 const String getProductDetailsUrl = '/products/details';
 const String getAttributesUrl = '/attributes';
 const String getFavoriteUrl = '/favorites';

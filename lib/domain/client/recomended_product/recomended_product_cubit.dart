@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/client/recomended_product/recomended_products_state.dart';
@@ -13,19 +14,30 @@ class RecomendedProductCubit extends Cubit<RecomendedProductState> {
 
   final productRepository = locate<ProductRepository>();
   final productMapper = locate<ProductMapper>();
+  final ScrollController scrollController = ScrollController();
 
+  void moveToPreviousProduct() {
+    final currentOffset = scrollController.offset;
+    final itemWidth = 400;
+    final targetOffset = currentOffset - itemWidth;
 
-  void moveToPreviustPage() {
-    emit(state.copyWith(
-        activePage: (state.activePage - 1)
-            .clamp(0, state.recomendedProducts.length - 3)));
-
+    scrollController.animateTo(
+      targetOffset,
+      curve: Curves.easeInOut,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
-  void moveToNextPage() {
-    emit(state.copyWith(
-        activePage: (state.activePage + 1)
-            .clamp(0, state.recomendedProducts.length - 3)));
+  void moveToNextProduct() {
+    final currentOffset = scrollController.offset;
+    final itemWidth = 400;
+    final targetOffset = currentOffset + itemWidth;
+
+    scrollController.animateTo(
+      targetOffset,
+      curve: Curves.easeInOut,
+      duration: const Duration(milliseconds: 300),
+    );
   }
 
   void fetchRecomendedProducts() async {

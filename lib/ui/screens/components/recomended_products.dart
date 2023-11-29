@@ -44,7 +44,7 @@ class RecomendedProducts extends StatelessWidget {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              cubit.moveToPreviustPage();
+                              cubit.moveToPreviousProduct();
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -63,22 +63,21 @@ class RecomendedProducts extends StatelessWidget {
                           ),
                           SizedBox(
                             height: 400,
-                            width: MediaQuery.sizeOf(context).width * 0.8,
+                            width: 1050,
                             child: ListView.builder(
+                              controller: cubit.scrollController,
                               physics: const NeverScrollableScrollPhysics(),
                               scrollDirection: Axis.horizontal,
-                              itemCount: 3,
+                              itemCount: state.recomendedProducts.length,
                               itemBuilder: (context, index) {
-                                final productIndex = state.activePage + index;
                                 return RecomendedProductItem(
-                                    product:
-                                        state.recomendedProducts[productIndex]);
+                                    product: state.recomendedProducts[index]);
                               },
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              cubit.moveToNextPage();
+                              cubit.moveToNextProduct();
                             },
                             child: Container(
                               decoration: BoxDecoration(

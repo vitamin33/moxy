@@ -126,6 +126,17 @@ class ProductRepository {
       rethrow;
     }
   }
+  
+  Future<Result<List<NetworkProduct>, Exception>>
+      getResaleProducts() async {
+    try {
+      final result = await client.getRecomendedProducts();
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
 
   Future<Result<bool, Exception>> deleteProduct(String productId) async {
     try {

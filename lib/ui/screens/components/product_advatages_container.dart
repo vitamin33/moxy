@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/constant/image_path.dart';
+import 'package:moxy/domain/models/product_advatages.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
-class ProductAdvantages extends StatelessWidget {
-  const ProductAdvantages({super.key});
+class ProductAdvantagesContainer extends StatelessWidget {
+  final List<ProductAdvatages> productAdvatagesList;
+
+  const ProductAdvantagesContainer(
+      {super.key, required this.productAdvatagesList});
 
   @override
   Widget build(BuildContext context) {
@@ -19,25 +22,19 @@ class ProductAdvantages extends StatelessWidget {
             style: theme.bigTitleBoltText,
           ),
         ),
-        const AdvantageItem(
-          image: ImageAssets.bigPictureHome,
-          number: '1',
-          description:
-              'Металеві елементи всі виконанні із 100% якістюю і мають нержавіюючу сталь',
-        ),
-        const AdvantageItem(
-          image: ImageAssets.bigPictureHome,
-          number: '2',
-          description:
-              'Тканина у наших сумочка зроблена з якісного матеріалу, а також прослужить вам багато років.',
-          showTextFirst: true,
-        ),
-        const AdvantageItem(
-          image: ImageAssets.bigPictureHome,
-          number: '3',
-          description:
-              'Наші сумочки дуже зручні та укомплектовані, мають достатю кількість кишеньок, щоб комфортно носити в ній всі ваші необхідні речі.',
-        ),
+        ListView.builder(
+          itemCount: productAdvatagesList.length,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return AdvantageItem(
+              image: productAdvatagesList[index].imageUrl,
+              header: productAdvatagesList[index].header,
+              description: productAdvatagesList[index].description,
+              showTextFirst: index % 2 == 0 ? true : false,
+            );
+          },
+        )
       ],
     );
   }
@@ -45,14 +42,14 @@ class ProductAdvantages extends StatelessWidget {
 
 class AdvantageItem extends StatelessWidget {
   final String image;
-  final String number;
+  final String header;
   final String description;
   final bool showTextFirst;
 
   const AdvantageItem({
     super.key,
     required this.image,
-    required this.number,
+    required this.header,
     required this.description,
     this.showTextFirst = false,
   });
@@ -67,7 +64,7 @@ class AdvantageItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (!showTextFirst)
-            Image.asset(
+            Image.network(
               image,
               width: 500,
               height: 350,
@@ -79,7 +76,7 @@ class AdvantageItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  number,
+                  header,
                   style: theme.bigTitleBoltText,
                 ),
                 const Divider(
@@ -91,7 +88,7 @@ class AdvantageItem extends StatelessWidget {
           ),
           if (showTextFirst) const SizedBox(width: 130),
           if (showTextFirst)
-            Image.asset(
+            Image.network(
               image,
               width: 500,
               height: 350,

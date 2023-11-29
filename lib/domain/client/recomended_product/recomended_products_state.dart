@@ -5,13 +5,11 @@ class RecomendedProductState implements Copyable<RecomendedProductState> {
   final bool isLoading;
   final List<Product> recomendedProducts;
   final String errorMessage;
-  final int activePage;
 
   RecomendedProductState({
     required this.isLoading,
     required this.recomendedProducts,
     required this.errorMessage,
-    required this.activePage,
   });
 
   static defaultRecomendedProductState() {
@@ -19,7 +17,6 @@ class RecomendedProductState implements Copyable<RecomendedProductState> {
       isLoading: false,
       recomendedProducts: [Product.defaultProduct()],
       errorMessage: '',
-      activePage: 0,
     );
   }
 
@@ -28,13 +25,11 @@ class RecomendedProductState implements Copyable<RecomendedProductState> {
     bool? isLoading,
     List<Product>? recomendedProducts,
     String? errorMessage,
-    int? activePage,
   }) {
     return RecomendedProductState(
       isLoading: isLoading ?? this.isLoading,
       recomendedProducts: recomendedProducts ?? this.recomendedProducts,
       errorMessage: errorMessage ?? this.errorMessage,
-      activePage: activePage ?? this.activePage,
     );
   }
 }
