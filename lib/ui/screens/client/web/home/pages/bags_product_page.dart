@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/screens/components/bags_catalog.dart';
 
 import '../../../../../theme/app_theme.dart';
 import '../../../../components/filter_container.dart';
@@ -18,6 +19,7 @@ class BagsProductPage extends StatelessWidget {
         child: Column(
           children: [
             FilterContainer(title: 'Сумки',productCount: '34',),
+            BagsCatalog(),
             PromoContainer(),
             Footer(),
           ],
