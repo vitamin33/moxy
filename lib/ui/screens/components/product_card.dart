@@ -17,18 +17,22 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
-    return SizedBox(
-      width: 300,
-      height: 350,
-      child: Column(
-        children: [
-          Expanded(
-            child: Container(
+    return OnHover(builder: (isCardHover) {
+      return AnimatedContainer(
+        padding: EdgeInsets.all(isCardHover ? 3.0 : 8.0),
+        duration:const Duration(milliseconds: 300),
+        width: 300,
+        height: 380,
+        child: Column(
+          children: [
+            Expanded(
+                child: Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
+                      fit: BoxFit.cover,
                       image: NetworkImage(
-                product.dimensions.first.images.first.imagePath,
-              ))),
+                        product.dimensions.first.images.first.imagePath,
+                      ))),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Align(
@@ -43,8 +47,11 @@ class ProductCard extends StatelessWidget {
                         builder: (isHovered) {
                           return Container(
                             decoration: BoxDecoration(
-                                color:
-                                    isHovered ? AppTheme.gray : AppTheme.white,
+                                color: product.isFavorite
+                                    ? AppTheme.pinkDark
+                                    : isHovered
+                                        ? AppTheme.gray
+                                        : AppTheme.white,
                                 borderRadius: BorderRadius.circular(50)),
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
@@ -55,43 +62,64 @@ class ProductCard extends StatelessWidget {
                       ),
                     )),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 3.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    product.name,
-                    style: theme.mediumSemiBoltText,
-                  ),
-                  Row(children: [
-                    InkWell(
-                        onTap: () {
-                          context.push(
-                              RouterProvider.producDetailsPath(product.id!));
-                        },
-                        child: Container(
-                            width: 10, height: 10, color: AppTheme.green))
+            )),
+            Padding(
+              padding: const EdgeInsets.all(3.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      product.name.toUpperCase(),
+                      style: theme.titleText,
+                    ),
+                    Row(
+                      children: [
+                        InkWell(
+                            onTap: () {
+                              context.push(RouterProvider.producDetailsPath(
+                                  product.id!));
+                            },
+                            child:
+                                SvgPicture.asset(IconPath.orders, width: 20)),
+                        const SizedBox(width: 8),
+                        InkWell(
+                            onTap: () {
+                              context
+                                  .read<BasketCubit>()
+                                  .addProductToBasket(product);
+                            },
+                            child:
+                                SvgPicture.asset(IconPath.bagWeb, width: 15)),
+                        const SizedBox(width: 10),
+                        (product.discountPrice == 0)
+                            ? Text(
+                                '${product.salePrice.toString()}грн',
+                                style: theme.titleBoltText,
+                              )
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  const SizedBox(height: 15),
+                                  Text(
+                                    '${product.discountPrice}грн',
+                                    style: theme.titleBoltText
+                                        .copyWith(color: AppTheme.pinkDark),
+                                  ),
+                                  Text(
+                                    '${product.salePrice.toString()}грн',
+                                    style: theme.titleBoltText.copyWith(
+                                        color: AppTheme.gray,
+                                        decoration: TextDecoration.lineThrough),
+                                  ),
+                                ],
+                              )
+                      ],
+                    )
                   ]),
-                  Row(
-                    children: [
-                      InkWell(
-                          onTap: () {
-                            context
-                                .read<BasketCubit>()
-                                .addProductToBasket(product);
-                          },
-                          child: SvgPicture.asset(IconPath.orders, width: 20)),
-                      const SizedBox(width: 10),
-                      Text(product.salePrice.toString()),
-                    ],
-                  )
-                ]),
-          )
-        ],
-      ),
-    );
+            )
+          ],
+        ),
+      );
+    });
   }
 }

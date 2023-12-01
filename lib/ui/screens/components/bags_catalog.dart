@@ -52,7 +52,8 @@ class _BagsCatalogState extends State<BagsCatalog> {
                     shrinkWrap: true,
                     itemCount: state.bagsList.length,
                     crossAxisCount: 3,
-                    crossAxisSpacing: 3,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
                     itemBuilder: (context, index) {
                       final product = state.bagsList[index];
                       return ProductCard(
