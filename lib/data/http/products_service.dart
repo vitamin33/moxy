@@ -158,6 +158,20 @@ class ProductsService {
     }
   }
 
+  Future<List<NetworkProduct>> getBegsCatalog() async {
+    try {
+      final response = await _dio.get('$baseUrl $getBegsCatalogUrl');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<bool> deleteProduct(String productId) async {
     try {
       Response response = await _dio.delete('$allProductsUrl/$productId');
