@@ -213,12 +213,12 @@ class ProductsService {
     return false;
   }
 
-  Future<NetworkProduct> getProductsDetails(String productId) async {
+  Future<NetworkProductDetails> getProductsDetails(String productId) async {
     try {
       final response =
-          await _dio.get('$baseUrl $getProductDetailsUrl $productId');
+          await _dio.get('$baseUrl $getProductDetailsUrl/$productId');
       final data = response.data;
-      final result = NetworkProduct.fromJson(data);
+      final result = NetworkProductDetails.fromJson(data);
       return result;
     } catch (e) {
       rethrow;

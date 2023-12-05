@@ -3,6 +3,8 @@ import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/domain/models/order.dart';
+import 'package:moxy/domain/models/product_advantages.dart';
+import 'package:moxy/domain/models/product_details.dart';
 
 import '../models/product.dart';
 
@@ -58,6 +60,33 @@ class ProductMapper {
       isFavorite: network.isFavorite ?? false,
       attributes: mapToAttributes(network.attributes),
     );
+  }
+
+  ProductDetails mapToProductDetails(NetworkProductDetails network) {
+    List<NetworkDimension> dimens = network.dimensions ?? [];
+    List<NetworkProductAdantages?> productAdvantages = network.productAdvantages ?? [] ;
+    return ProductDetails(
+        product: Product(
+          id: network.id,
+          name: network.name,
+          description: network.description ?? '',
+          costPriceInUsd: network.costPriceInUsd,
+          discountPrice: network.discountPrice ?? 0,
+          costPrice: network.costPrice ?? 0,
+          salePrice: network.salePrice,
+          dimensions: dimens
+              .map(
+                (e) => mapToDimension(e),
+              )
+              .toList(),
+          idName: network.idName,
+          category: network.category,
+          forSale: network.forSale,
+          isFavorite: network.isFavorite ?? false,
+          attributes: mapToAttributes(network.attributes),
+        ),
+        dimension: Dimension.defaultDimension(),
+        productAdvantages: productAdvantages.map((e) => mapToProductAdvantages(e!)).toList());
   }
 
   Dimension mapToDimension(NetworkDimension network) {
@@ -322,5 +351,13 @@ class ProductMapper {
       }
     }
     return productsByDimension;
+  }
+
+  ProductAdvantages mapToProductAdvantages(
+      NetworkProductAdantages networkProductAdvantages) {
+      return ProductAdvantages(
+          header: networkProductAdvantages.header,
+          imageUrl: networkProductAdvantages.imageUrl,
+          description: networkProductAdvantages.description ?? '');
   }
 }

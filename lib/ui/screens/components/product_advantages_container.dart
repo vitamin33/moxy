@@ -1,41 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/domain/models/product_advatages.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
+import 'package:moxy/domain/client/product_details/product_details_state.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class ProductAdvantagesContainer extends StatelessWidget {
-  final List<ProductAdvatages> productAdvatagesList;
-
-  const ProductAdvantagesContainer(
-      {super.key, required this.productAdvatagesList});
+  const ProductAdvantagesContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Text(
-            'Переваги товару',
-            style: theme.bigTitleBoltText,
-          ),
-        ),
-        ListView.builder(
-          itemCount: productAdvatagesList.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemBuilder: (context, index) {
-            return AdvantageItem(
-              image: productAdvatagesList[index].imageUrl,
-              header: productAdvatagesList[index].header,
-              description: productAdvatagesList[index].description,
-              showTextFirst: index % 2 == 0 ? true : false,
-            );
-          },
-        )
-      ],
+    return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
+      builder: (context, state) {
+        final advantages = state.productDetails.productAdvantages;
+        return (advantages != null && advantages.isNotEmpty)
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Text(
+                      'Переваги товару',
+                      style: theme.bigTitleBoltText,
+                    ),
+                  ),
+                  ListView.builder(
+                    itemCount: advantages.length,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return AdvantageItem(
+                        image: advantages[index].imageUrl,
+                        header: advantages[index].header,
+                        description: advantages[index].description,
+                        showTextFirst: index % 2 == 0 ? true : false,
+                      );
+                    },
+                  )
+                ],
+              )
+            : const SizedBox();
+      },
     );
   }
 }

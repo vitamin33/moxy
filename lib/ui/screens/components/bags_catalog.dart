@@ -39,31 +39,28 @@ class _BagsCatalogState extends State<BagsCatalog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => cubit,
-      child: BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: state.isLoading
-                ? const CircularProgressIndicator()
-                : AlignedGridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.bagsList.length,
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    itemBuilder: (context, index) {
-                      final product = state.bagsList[index];
-                      return ProductCard(
-                        product: product,
-                      );
-                    },
-                  ),
-          );
-        },
-      ),
+    return BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: state.isLoading
+              ? const CircularProgressIndicator()
+              : AlignedGridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.bagsList.length,
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  itemBuilder: (context, index) {
+                    final product = state.bagsList[index];
+                    return ProductCard(
+                      product: product,
+                    );
+                  },
+                ),
+        );
+      },
     );
   }
 }

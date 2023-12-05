@@ -32,6 +32,7 @@ class ProductCard extends StatelessWidget {
                       fit: BoxFit.cover,
                       image: NetworkImage(
                         product.dimensions.first.images.first.imagePath,
+                        scale: 0.5
                       ))),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),

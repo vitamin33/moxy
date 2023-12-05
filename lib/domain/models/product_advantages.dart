@@ -1,17 +1,17 @@
 import 'package:moxy/domain/copyable.dart';
 
-class ProductAdvatages implements Copyable<ProductAdvatages> {
+class ProductAdvantages implements Copyable<ProductAdvantages> {
   final String header;
   final String imageUrl;
   final String description;
 
-  ProductAdvatages(
+  ProductAdvantages(
       {required this.header,
       required this.imageUrl,
       required this.description});
 
-  static ProductAdvatages defaultProductAdvatages() {
-    return ProductAdvatages(
+  static ProductAdvantages defaultProductAdvantages() {
+    return ProductAdvantages(
       header: '',
       imageUrl: '',
       description: '',
@@ -19,12 +19,12 @@ class ProductAdvatages implements Copyable<ProductAdvatages> {
   }
 
   @override
-  ProductAdvatages copyWith({
+  ProductAdvantages copyWith({
     String? header,
     String? imageUrl,
     String? description,
   }) {
-    return ProductAdvatages(
+    return ProductAdvantages(
       header: header ?? this.header,
       imageUrl: imageUrl ?? this.imageUrl,
       description: description ?? this.description,

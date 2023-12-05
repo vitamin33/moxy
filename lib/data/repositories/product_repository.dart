@@ -161,7 +161,7 @@ class ProductRepository {
     }
   }
 
-  Future<Result<NetworkProduct, Exception>> getProductsDetails(
+  Future<Result<NetworkProductDetails, Exception>> getProductsDetails(
       String productId) async {
     try {
       final result = await client.getProductsDetails(productId);

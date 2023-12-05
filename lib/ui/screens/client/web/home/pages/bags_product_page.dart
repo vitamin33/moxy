@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/domain/client/bags_catalog/bags_catalog_cubit.dart';
+import 'package:moxy/domain/client/bags_catalog/bags_catalog_state.dart';
 import 'package:moxy/ui/screens/components/bags_catalog.dart';
 
 import '../../../../../theme/app_theme.dart';
@@ -11,20 +14,29 @@ class BagsProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: AppTheme.white,
-      body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          children: [
-            FilterContainer(title: 'Сумки',productCount: '34',),
-            BagsCatalog(),
-            PromoContainer(),
-            Footer(),
-          ],
-        ),
-      )),
-    );
+    return BlocProvider<BagsCatalogCubit>(
+        create: (context) => BagsCatalogCubit(),
+        child: BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: AppTheme.white,
+              body: SingleChildScrollView(
+                  child: Padding(
+                padding:const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  children: [
+                    FilterContainer(
+                      title: 'Сумки',
+                      productCount: state.bagsList.length.toString(),
+                    ),
+                    const BagsCatalog(),
+                    const PromoContainer(),
+                    const Footer(),
+                  ],
+                ),
+              )),
+            );
+          },
+        ));
   }
 }
