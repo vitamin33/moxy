@@ -118,7 +118,17 @@ class ProductRepository {
 
   Future<Result<List<NetworkProduct>, Exception>> getBagsCatalog() async {
     try {
-      final result = await client.getBegsCatalog();
+      final result = await client.getBagsCatalog();
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+
+  Future<Result<List<NetworkProduct>, Exception>> getAccessoriesCatalog() async {
+    try {
+      final result = await client.getAccessoriesCatalog();
       return Result.success(result);
     } catch (e, stack) {
       moxyPrint(stack);

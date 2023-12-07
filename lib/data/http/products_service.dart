@@ -158,9 +158,26 @@ class ProductsService {
     }
   }
 
-  Future<List<NetworkProduct>> getBegsCatalog() async {
+  Future<List<NetworkProduct>> getBagsCatalog() async {
     try {
-      final response = await _dio.get('$baseUrl $getBegsCatalogUrl');
+      const bags = 'Bags';
+      final response = await _dio.get('$baseUrl $getCatalogUrl${bags.trim()}');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<NetworkProduct>> getAccessoriesCatalog() async {
+    try {
+      const accessories = 'Accessories';
+      final response =
+          await _dio.get('$baseUrl $getCatalogUrl${accessories.trim()}');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
