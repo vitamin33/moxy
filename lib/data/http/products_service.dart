@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:moxy/constant/api_path.dart';
+import 'package:moxy/constant/product_categories.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/utils/common.dart';
@@ -158,9 +159,25 @@ class ProductsService {
     }
   }
 
-  Future<List<NetworkProduct>> getBegsCatalog() async {
+  Future<List<NetworkProduct>> getBagsCatalog() async {
     try {
-      final response = await _dio.get('$baseUrl $getBegsCatalogUrl');
+      final response = await _dio
+          .get('$baseUrl $getCatalogUrl${ProductCategory.bags.urlSegment}');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<NetworkProduct>> getAccessoriesCatalog() async {
+    try {
+      final response = await _dio.get(
+          '$baseUrl $getCatalogUrl${ProductCategory.accessories.urlSegment}');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
