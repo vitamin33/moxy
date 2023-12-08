@@ -30,7 +30,7 @@ class AccessoriesCatalogCubit
         emit(
             state.copyWith(accessoriesList: allProductsList, isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
+        emitEffect(LoadingFailed());
       });
     } catch (e) {
       moxyPrint('$e');
