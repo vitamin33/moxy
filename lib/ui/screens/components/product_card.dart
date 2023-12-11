@@ -96,7 +96,8 @@ class ProductCard extends StatelessWidget {
                             IconPath.favoriteProductFilledWeb,
                             width: 20,
                           )
-                        : SvgPicture.asset(IconPath.favoriteProductWeb, width: 20),
+                        : SvgPicture.asset(IconPath.favoriteProductWeb,
+                            width: 20),
                   ));
             },
           ),

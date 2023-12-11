@@ -33,7 +33,8 @@ class RecomendedProducts extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: double.infinity,
+                      width: MediaQuery.of(context).size.width,
+                      height: 350,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -56,9 +57,7 @@ class RecomendedProducts extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 400,
-                            width: 1050,
+                          Expanded(
                             child: ListView.builder(
                               controller: cubit.scrollController,
                               physics: const NeverScrollableScrollPhysics(),

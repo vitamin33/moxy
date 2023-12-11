@@ -34,6 +34,7 @@ class ResaleProducts extends StatelessWidget {
                     ),
                     SizedBox(
                       width: double.infinity,
+                      height: 350,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -56,9 +57,7 @@ class ResaleProducts extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 400,
-                            width: 1050,
+                          Expanded(
                             child: ListView.builder(
                               controller: cubit.scrollController,
                               physics: const NeverScrollableScrollPhysics(),
