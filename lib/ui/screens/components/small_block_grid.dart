@@ -55,7 +55,7 @@ class SmallBlockGrid extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(50)),
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
-                              child: SvgPicture.asset(IconPath.favouritesWeb),
+                              child: SvgPicture.asset(IconPath.favoritesWeb),
                             ),
                           );
                         },

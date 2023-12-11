@@ -21,21 +21,27 @@ class ProductCard extends StatelessWidget {
 
     return OnHover(
       builder: (isCardHover) {
-        return SizedBox(
-          width: 330,
-          height: 340,
-          child: Column(
-            children: [
-              Expanded(
-                child: Stack(
-                  children: [
-                    _buildImageWithAnimation(isCardHover),
-                    _buildFavoriteIcon(context),
-                  ],
+        return GestureDetector(
+          onTap: () {
+            context.push(RouterProvider.producDetailsPath(product.id!));
+          },
+          child: SizedBox(
+            width: 330,
+            height: 340,
+            child: Column(
+              children: [
+                Expanded(
+                  child: Stack(
+                    children: [
+                      _buildImageWithAnimation(isCardHover),
+                      _buildFavoriteIcon(context),
+                      _buildAddBasketButton(context, theme, isCardHover)
+                    ],
+                  ),
                 ),
-              ),
-              _buildProductInfoRow(context, theme),
-            ],
+                _buildProductInfoRow(context, theme),
+              ],
+            ),
           ),
         );
       },
@@ -45,13 +51,12 @@ class ProductCard extends StatelessWidget {
   Widget _buildImageWithAnimation(bool isCardHover) {
     return TweenAnimationBuilder(
       duration: const Duration(milliseconds: 200),
-      tween: Tween<double>(begin: 1.0, end: isCardHover ? 1.0 : 0.9),
+      tween: Tween<double>(begin: 1.0, end: isCardHover ? 1.0 : 0.95),
       builder: (BuildContext context, double value, _) {
         return Transform.scale(
           scale: value,
           child: Image.network(
             _currentImagePath(isCardHover),
-            fit: BoxFit.cover,
           ),
         );
       },
@@ -68,7 +73,7 @@ class ProductCard extends StatelessWidget {
 
   Widget _buildFavoriteIcon(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(20.0),
       child: Align(
         alignment: Alignment.topRight,
         child: GestureDetector(
@@ -80,21 +85,60 @@ class ProductCard extends StatelessWidget {
           child: OnHover(
             builder: (isHovered) {
               return Container(
-                decoration: BoxDecoration(
-                  color: product.isFavorite
-                      ? AppTheme.pinkDark
-                      : isHovered
-                          ? AppTheme.gray
-                          : AppTheme.white,
-                  borderRadius: BorderRadius.circular(50),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: SvgPicture.asset(IconPath.favouritesWeb),
-                ),
-              );
+                  decoration: BoxDecoration(
+                    color: isHovered ? AppTheme.greyLigth : AppTheme.white,
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: product.isFavorite
+                        ? SvgPicture.asset(
+                            IconPath.favoriteProductFilledWeb,
+                            width: 20,
+                          )
+                        : SvgPicture.asset(IconPath.favoriteProductWeb, width: 20),
+                  ));
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAddBasketButton(
+      BuildContext context, AppTheme theme, bool isCardHover) {
+    return AnimatedPositioned(
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeInOut,
+      right: 10,
+      bottom: isCardHover ? 10 : -50,
+      child: GestureDetector(
+        onTap: () {
+          context.read<BasketCubit>().addProductToBasket(product);
+        },
+        child: AnimatedOpacity(
+          duration: const Duration(milliseconds: 400),
+          opacity: isCardHover ? 1.0 : 0.0,
+          child: OnHover(builder: (isIconHover) {
+            return Container(
+                width: 30,
+                height: 30,
+                decoration: BoxDecoration(color: AppTheme.white, boxShadow: [
+                  BoxShadow(
+                    color: AppTheme.gray.withOpacity(0.5),
+                    spreadRadius: 2,
+                    blurRadius: 2,
+                  )
+                ]),
+                child: AnimatedRotation(
+                  turns: isIconHover ? 0.5 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: const Icon(
+                    Icons.add,
+                    color: AppTheme.blackLight,
+                  ),
+                ));
+          }),
         ),
       ),
     );
@@ -110,25 +154,7 @@ class ProductCard extends StatelessWidget {
             product.name.toUpperCase(),
             style: theme.titleText,
           ),
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  context.push(RouterProvider.producDetailsPath(product.id!));
-                },
-                child: SvgPicture.asset(IconPath.orders, width: 20),
-              ),
-              const SizedBox(width: 8),
-              InkWell(
-                onTap: () {
-                  context.read<BasketCubit>().addProductToBasket(product);
-                },
-                child: SvgPicture.asset(IconPath.bagWeb, width: 15),
-              ),
-              const SizedBox(width: 10),
-              _buildPriceInfo(theme),
-            ],
-          ),
+          _buildPriceInfo(theme),
         ],
       ),
     );
