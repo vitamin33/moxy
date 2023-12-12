@@ -116,6 +116,7 @@ class ProductCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           context.read<BasketCubit>().addProductToBasket(product);
+          
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),
@@ -126,7 +127,7 @@ class ProductCard extends StatelessWidget {
                 height: 30,
                 decoration: BoxDecoration(color: AppTheme.white, boxShadow: [
                   BoxShadow(
-                    color: AppTheme.gray.withOpacity(0.5),
+                    color: AppTheme.blackLight.withOpacity(0.3),
                     spreadRadius: 2,
                     blurRadius: 2,
                   )
