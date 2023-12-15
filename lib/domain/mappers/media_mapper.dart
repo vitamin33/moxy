@@ -9,7 +9,9 @@ class MediaMapper {
         return Media(
             id: e.id,
             mediaType: _mapMediaTypeNetwork(e.type),
-            mediaUrls: e.mediaUrls);
+            mediaUrls: e.mediaUrls,
+            productId: e.productId
+            );
       },
     ).toList();
   }

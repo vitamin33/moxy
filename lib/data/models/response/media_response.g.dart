@@ -12,6 +12,7 @@ NetworkMedia _$NetworkMediaFromJson(Map<String, dynamic> json) => NetworkMedia(
       mediaUrls:
           (json['mediaUrls'] as List<dynamic>).map((e) => e as String).toList(),
       activeHome: json['activeHome'] as bool,
+      productId: json['productId'] as String,
     );
 
 Map<String, dynamic> _$NetworkMediaToJson(NetworkMedia instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$NetworkMediaToJson(NetworkMedia instance) =>
       'type': instance.type,
       'mediaUrls': instance.mediaUrls,
       'activeHome': instance.activeHome,
+      'productId': instance.productId,
     };

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moxy/domain/models/media.dart';
-import 'package:moxy/ui/screens/components/big_block_grid.dart';
+import 'package:moxy/ui/screens/components/media_block_grid.dart';
 import 'package:moxy/ui/screens/components/small_block_grid.dart';
 import 'package:moxy/utils/common.dart';
 
