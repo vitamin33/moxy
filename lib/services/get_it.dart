@@ -18,6 +18,7 @@ import 'package:moxy/data/repositories/promo_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/config_mapper.dart';
+import 'package:moxy/domain/mappers/media_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/mappers/profile_mapper.dart';
@@ -69,6 +70,7 @@ class GetItService {
     getIt.registerSingleton<PromoRepository>(PromoRepository());
     getIt.registerSingleton<BasketRepository>(BasketRepository());
     getIt.registerSingleton<ProfileMapper>(ProfileMapper());
+    getIt.registerSingleton<MediaMapper>(MediaMapper());
     getIt.registerSingleton<ProfileRepository>(ProfileRepository());
   }
 }

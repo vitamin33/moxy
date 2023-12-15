@@ -51,10 +51,12 @@ class _NewProductListState extends State<NewProductList> {
                       NewProductListGrid(
                         bigBlockLeading: false,
                         allSellingProduct: state.allSellingProduct,
+                        mediaList: state.mediaList,
                       ),
                       NewProductListGrid(
                         bigBlockLeading: true,
                         allSellingProduct: state.allSellingProduct,
+                        mediaList: state.mediaList,
                       ),
                     ],
                   ),

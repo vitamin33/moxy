@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/data/models/response/media_response.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/utils/common.dart';
@@ -126,7 +127,8 @@ class ProductRepository {
     }
   }
 
-  Future<Result<List<NetworkProduct>, Exception>> getAccessoriesCatalog() async {
+  Future<Result<List<NetworkProduct>, Exception>>
+      getAccessoriesCatalog() async {
     try {
       final result = await client.getAccessoriesCatalog();
       return Result.success(result);
@@ -154,6 +156,16 @@ class ProductRepository {
       String productId) async {
     try {
       final result = await client.getProductsDetails(productId);
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+
+  Future<Result<List<NetworkMedia>, Exception>> fetchHomeMedia() async {
+    try {
+      final result = await client.fetchHomeMedia();
       return Result.success(result);
     } catch (e, stack) {
       moxyPrint(stack);

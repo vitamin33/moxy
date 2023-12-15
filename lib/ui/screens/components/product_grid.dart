@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moxy/domain/models/media.dart';
 import 'package:moxy/ui/screens/components/big_block_grid.dart';
 import 'package:moxy/ui/screens/components/small_block_grid.dart';
 import 'package:moxy/utils/common.dart';
@@ -9,10 +10,13 @@ import '../../../domain/models/product.dart';
 class NewProductListGrid extends StatelessWidget {
   final bool bigBlockLeading;
   final List<Product> allSellingProduct;
+  final List<Media> mediaList;
+
   const NewProductListGrid(
       {super.key,
       required this.bigBlockLeading,
-      required this.allSellingProduct});
+      required this.mediaList,
+      required this.allSellingProduct,});
 
   @override
   Widget build(BuildContext context) {
@@ -28,14 +32,14 @@ class NewProductListGrid extends StatelessWidget {
             mainAxisSpacing: 12,
             crossAxisSpacing: 10,
             children: [
-              if (bigBlockLeading == true) const BigBlockGrid(),
+              if (bigBlockLeading == true)  MediaBlockGrid(mediaList: mediaList),
               SmallBlockGrid(
                 product: allSellingProduct[random(0, length)],
               ),
               SmallBlockGrid(
                 product: allSellingProduct[random(0, length)],
               ),
-              if (bigBlockLeading == false) const BigBlockGrid(),
+              if (bigBlockLeading == false)  MediaBlockGrid(mediaList: mediaList),
               SmallBlockGrid(
                 product: allSellingProduct[random(0, length)],
               ),

@@ -30,6 +30,7 @@ const String getCatalogUrl = '/products/selling-products?category=';
 const String getProductDetailsUrl = '/products/details';
 const String getAttributesUrl = '/attributes';
 const String getFavoriteUrl = '/favorites';
+const String getHomeMediaUrl = '/settings/media/home';
 
 // MONO
 const String monoCreateInvoiceUrl =
