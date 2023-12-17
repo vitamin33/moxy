@@ -36,49 +36,53 @@ class PromoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
-    return Container(
-        width: double.infinity,
-        height: 500,
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            image: DecorationImage(
-                fit: BoxFit.cover, image: NetworkImage(backgroundImage))),
-        child: Stack(children: [
-          textPromo(discountPercentage, collectionName, product, finalDate,
-              moveToNextPage, moveToPreviusPage, theme),
-          Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: SizedBox(
-                  height: 50,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List<Widget>.generate(
-                          allPromoCounth,
-                          (index) => Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: InkWell(
-                                  onTap: () {
-                                    animatedToPage(index);
-                                  },
-                                  child: CircleAvatar(
-                                    radius: 7,
-                                    backgroundColor: AppTheme.white,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      child: Container(
+          width: double.infinity,
+          height: 500,
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(15)),
+              image: DecorationImage(
+                  fit: BoxFit.cover, image: NetworkImage(backgroundImage))),
+          child: Stack(children: [
+            textPromo(discountPercentage, collectionName, product, finalDate,
+                moveToNextPage, moveToPreviusPage, theme),
+            Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List<Widget>.generate(
+                            allPromoCounth,
+                            (index) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: InkWell(
+                                    onTap: () {
+                                      animatedToPage(index);
+                                    },
                                     child: CircleAvatar(
-                                      radius: 5,
-                                      backgroundColor: activePage == index
-                                          ? AppTheme.white
-                                          : Colors.transparent.withOpacity(0.9),
+                                      radius: 7,
+                                      backgroundColor: AppTheme.white,
+                                      child: CircleAvatar(
+                                        radius: 5,
+                                        backgroundColor: activePage == index
+                                            ? AppTheme.white
+                                            : Colors.transparent
+                                                .withOpacity(0.9),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )),
-                    ),
-                  )))
-        ]));
+                                )),
+                      ),
+                    )))
+          ])),
+    );
   }
 }
 

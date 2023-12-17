@@ -158,6 +158,33 @@ class ProductsService {
       rethrow;
     }
   }
+  
+  Future<List<NetworkProduct>> getRecomendedProducts() async {
+    try {
+      final response = await _dio.get('$baseUrl $getRecomendedProductsUrl');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      rethrow;
+    }
+  }
+  Future<List<NetworkProduct>> getResaleProducts() async {
+    try {
+      final response = await _dio.get('$baseUrl $getResaleProductsUrl');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
   Future<List<NetworkProduct>> getBagsCatalog() async {
     try {
@@ -203,12 +230,12 @@ class ProductsService {
     return false;
   }
 
-  Future<NetworkProduct> getProductsDetails(String productId) async {
+  Future<NetworkProductDetails> getProductsDetails(String productId) async {
     try {
       final response =
-          await _dio.get('$baseUrl $getProductDetailsUrl $productId');
+          await _dio.get('$baseUrl $getProductDetailsUrl/$productId');
       final data = response.data;
-      final result = NetworkProduct.fromJson(data);
+      final result = NetworkProductDetails.fromJson(data);
       return result;
     } catch (e) {
       rethrow;

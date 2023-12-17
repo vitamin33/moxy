@@ -22,13 +22,14 @@ class ProductDetailsCubit
   void getProductsDetails(String? productId) async {
     try {
       emit(state.copyWith(isLoading: true));
-      final result = await productRepository.getProductById(productId);
+      final result = await productRepository.getProductsDetails(productId!);
       result.when((success) {
-        final product = productMapper.mapToProduct(success);
+        final productDetails = productMapper.mapToProductDetails(success);
         emit(state.copyWith(
-          productDetails: state.productDetails.copyWith(product: product),
+          productDetails:state.productDetails.copyWith(product: productDetails.product, productAdvantages: productDetails.productAdvantages),
           isLoading: false,
         ));
+        
       }, (error) {
         emitEffect(ProductDetailsApiRequestFailed(
             'Failed get product details ${error.toString()}'));

@@ -116,6 +116,27 @@ class ProductRepository {
     }
   }
 
+  Future<Result<List<NetworkProduct>, Exception>>
+      getRecomendedProducts() async {
+    try {
+      final result = await client.getRecomendedProducts();
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
+  
+  Future<Result<List<NetworkProduct>, Exception>>
+      getResaleProducts() async {
+    try {
+      final result = await client.getRecomendedProducts();
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
   Future<Result<List<NetworkProduct>, Exception>> getBagsCatalog() async {
     try {
       final result = await client.getBagsCatalog();
@@ -150,7 +171,7 @@ class ProductRepository {
     }
   }
 
-  Future<Result<NetworkProduct, Exception>> getProductsDetails(
+  Future<Result<NetworkProductDetails, Exception>> getProductsDetails(
       String productId) async {
     try {
       final result = await client.getProductsDetails(productId);

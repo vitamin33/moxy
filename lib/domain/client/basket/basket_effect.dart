@@ -9,3 +9,7 @@ class BasketApiRequestFailed implements UiEffect {
   String failureText;
   BasketApiRequestFailed(this.failureText);
 }
+
+class OpenBasketSideSheet implements UiEffect {
+  OpenBasketSideSheet();
+}

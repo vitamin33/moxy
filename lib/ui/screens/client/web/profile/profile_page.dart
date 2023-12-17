@@ -247,7 +247,9 @@ class ProfileTabPage extends StatelessWidget {
                       cubit.signOut();
                       context.go(RouterProvider.loginPath());
                     },
-                    child: Text('Вихід', style: theme.largeText.copyWith(color: AppTheme.gray)),
+                    child: Text('Вихід',
+                        style: theme.largeSemiBoltText
+                            .copyWith(color: AppTheme.gray)),
                   ),
                 ),
               ),

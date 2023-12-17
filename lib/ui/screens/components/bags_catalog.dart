@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_cubit.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_effect.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_state.dart';
+import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 
@@ -39,31 +40,30 @@ class _BagsCatalogState extends State<BagsCatalog> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => cubit,
-      child: BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
-        builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: state.isLoading
-                ? const CircularProgressIndicator()
-                : AlignedGridView.count(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.bagsList.length,
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                    itemBuilder: (context, index) {
-                      final product = state.bagsList[index];
-                      return ProductCard(
-                        product: product,
-                      );
-                    },
-                  ),
-          );
-        },
-      ),
+    return BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: state.isLoading
+              ? const MoxyLoader(
+                  iconSize: 50,
+                )
+              : AlignedGridView.count(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.bagsList.length,
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  itemBuilder: (context, index) {
+                    final product = state.bagsList[index];
+                    return ProductCard(
+                      product: product,
+                    );
+                  },
+                ),
+        );
+      },
     );
   }
 }

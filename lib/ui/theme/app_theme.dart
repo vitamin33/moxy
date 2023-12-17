@@ -99,6 +99,7 @@ class AppTheme extends InheritedWidget {
 
   final TextStyle headline4SemiBoltText = const TextStyle(
       fontSize: 36, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+
   final TextStyle headline4BoltText = const TextStyle(
       fontSize: 36, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
 

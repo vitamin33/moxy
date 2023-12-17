@@ -40,7 +40,11 @@ class IconPath {
   static const String rightDownArrow = "assets/icons/right_down_arrow.svg";
   static const String moxyLogoWeb = "assets/icons/moxy_logo_web.svg";
   static const String searchWeb = "assets/icons/search_web.svg";
-  static const String favouritesWeb = "assets/icons/favourites_web.svg";
+  static const String favoritesWeb = "assets/icons/favorites_web.svg";
+  static const String favoriteProductWeb =
+      "assets/icons/favorite_product_web.svg";
+  static const String favoriteProductFilledWeb =
+      "assets/icons/favorite_product_filled_web.svg";
   static const String profileWeb = "assets/icons/profile_web.svg";
   static const String bagWeb = "assets/icons/bag_web.svg";
   static const String instagramIcon = "assets/icons/instagram_icon.svg";

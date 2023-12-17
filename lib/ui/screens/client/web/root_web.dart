@@ -173,7 +173,7 @@ class RootWebWidget extends HookWidget {
         },
       ),
       _buildPaddedIconButton(
-        IconPath.favouritesWeb,
+        IconPath.favoritesWeb,
         favoritesSelected,
         () {
           navigateToBranch(context, favoritesIndex);
