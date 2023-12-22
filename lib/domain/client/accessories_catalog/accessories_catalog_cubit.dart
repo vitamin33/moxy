@@ -12,6 +12,7 @@ import 'package:multiple_result/multiple_result.dart';
 
 class AccessoriesCatalogCubit
     extends CubitWithEffects<AccessoriesCatalogState, UiEffect> {
+  late List<Product> originalAccessoriesList;
   AccessoriesCatalogCubit()
       : super(AccessoriesCatalogState.defaultAccessoriesCatalogState()) {
     fetchAccessoriesCatalog();
@@ -27,6 +28,7 @@ class AccessoriesCatalogCubit
       final result = await productRepository.getAccessoriesCatalog();
       result.when((success) {
         final allProductsList = productMapper.mapToProductList(success);
+        originalAccessoriesList = allProductsList;
         emit(
             state.copyWith(accessoriesList: allProductsList, isLoading: false));
       }, (error) {
@@ -62,5 +64,52 @@ class AccessoriesCatalogCubit
     } catch (e, stack) {
       moxyPrint(stack);
     }
+  }
+
+  void setFilterPrice(String selectedPriceRange) {
+    emit(state.copyWith(selectedPriceRange: selectedPriceRange));
+    filterPriceCatalog(selectedPriceRange);
+  }
+
+  void setFilterTime(String selectedTimeRange) {
+    emit(state.copyWith(selectedTimeRange: selectedTimeRange));
+    sortCatalogByCreateTime(selectedTimeRange);
+  }
+
+  void filterColorCatalog(String selectedColors) {
+    List<Product> filteredColorBagList = originalAccessoriesList
+        .where((product) => product.dimensions
+            .any((dimension) => dimension.color.name == selectedColors))
+        .toList();
+    emit(state.copyWith(accessoriesList: filteredColorBagList));
+  }
+
+  void filterPriceCatalog(String selectedPriceRange) {
+    List<Product> filteredPriceBagList = originalAccessoriesList.where((product) {
+      List<String> priceRange = selectedPriceRange.split('-');
+
+      if (priceRange.length == 2) {
+        double minPrice = double.parse(priceRange[0]);
+        double maxPrice = double.parse(priceRange[1]);
+        double productPrice = product.salePrice;
+        return productPrice >= minPrice && productPrice <= maxPrice;
+      } else {
+        return true;
+      }
+    }).toList();
+
+    emit(state.copyWith(accessoriesList: filteredPriceBagList));
+  }
+
+  void sortCatalogByCreateTime(String sortOrder) {
+    List<Product> sortedBagsList = List.from(originalAccessoriesList);
+
+    if (sortOrder == 'New-Old') {
+      sortedBagsList.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+    } else {
+      sortedBagsList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
+    }
+
+    emit(state.copyWith(accessoriesList: sortedBagsList));
   }
 }

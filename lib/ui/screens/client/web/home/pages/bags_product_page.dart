@@ -48,6 +48,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
         create: (context) => BagsCatalogCubit(),
         child: BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
           builder: (context, state) {
+            final cubit = context.read<BagsCatalogCubit>();
             return BlocBuilder<BasketCubit, BasketState>(
               builder: (context, basketState) {
                 return Scaffold(
@@ -61,6 +62,12 @@ class _BagsProductPageState extends State<BagsProductPage> {
                           FilterContainer(
                             title: 'Сумки',
                             productCount: state.bagsList.length.toString(),
+                            selectedColors: state.selectedColors,
+                            selectedPriceRange: state.selectedPriceRange,
+                            selectedTimeRange: state.selectedTimeRange,
+                            onChangedSelectedColors:cubit.setFilterColor,
+                            onChangedSelectedPriceRange:cubit.setFilterPrice,
+                            onChangedSelectedTimeRange: cubit.setFilterTime,
                           ),
                           const BagsCatalog(),
                           const PromoContainer(),

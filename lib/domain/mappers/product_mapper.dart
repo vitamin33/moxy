@@ -59,6 +59,8 @@ class ProductMapper {
       forSale: network.forSale,
       isFavorite: network.isFavorite ?? false,
       attributes: mapToAttributes(network.attributes),
+      createdAt: network.createdAt,
+      updatedAt: network.updatedAt,
     );
   }
 

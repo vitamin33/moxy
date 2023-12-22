@@ -31,6 +31,8 @@ class NetworkProduct {
   bool forSale;
   bool? isFavorite;
   NetworkProductAttributes attributes;
+  String? createdAt;
+  String? updatedAt;
 
   NetworkProduct({
     this.id,
@@ -46,6 +48,8 @@ class NetworkProduct {
     required this.forSale,
     required this.isFavorite,
     required this.attributes,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory NetworkProduct.fromJson(Map<String, dynamic> json) =>
