@@ -158,7 +158,7 @@ class ProductsService {
       rethrow;
     }
   }
-  
+
   Future<List<NetworkProduct>> getRecomendedProducts() async {
     try {
       final response = await _dio.get('$baseUrl $getRecomendedProductsUrl');
@@ -172,6 +172,7 @@ class ProductsService {
       rethrow;
     }
   }
+
   Future<List<NetworkProduct>> getResaleProducts() async {
     try {
       final response = await _dio.get('$baseUrl $getResaleProductsUrl');
@@ -233,7 +234,7 @@ class ProductsService {
   Future<NetworkProductDetails> getProductsDetails(String productId) async {
     try {
       final response =
-          await _dio.get('$baseUrl $getProductDetailsUrl/$productId');
+          await _dio.get('$baseUrl $getProductDetailsAdvUrl/$productId');
       final data = response.data;
       final result = NetworkProductDetails.fromJson(data);
       return result;
