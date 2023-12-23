@@ -75,11 +75,8 @@ class _ChartState extends State<Chart> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: Text(
-                  AppLocalizations.of(context)!.overviewChartTitle,
-                  style: 
-                  theme.largeSemiBoltText
-                ),
+                child: Text(AppLocalizations.of(context)!.overviewChartTitle,
+                    style: theme.largeSemiBoltText),
               ),
               SfCartesianChart(
                 legend: const Legend(
@@ -95,15 +92,15 @@ class _ChartState extends State<Chart> {
                     if (value >= 1000) {
                       return ChartAxisLabel(
                           '₴${(value / 1000).toStringAsFixed(0)}k',
-                          theme.mediumText.copyWith(color:AppTheme.gray));
+                          theme.mediumText.copyWith(color: AppTheme.gray));
                     } else {
-                      return ChartAxisLabel(
-                          '₴$value', theme.mediumText.copyWith(color:AppTheme.gray));
+                      return ChartAxisLabel('₴$value',
+                          theme.mediumText.copyWith(color: AppTheme.gray));
                     }
                   },
                 ),
                 primaryXAxis: CategoryAxis(
-                  labelStyle:theme.mediumText.copyWith(color:AppTheme.gray),
+                  labelStyle: theme.mediumText.copyWith(color: AppTheme.gray),
                   majorGridLines: const MajorGridLines(width: 0),
                 ),
                 palette: const <Color>[
@@ -111,7 +108,7 @@ class _ChartState extends State<Chart> {
                   AppTheme.pinkAvarage,
                   AppTheme.pinkDark,
                 ],
-                series: <ChartSeries>[
+                series: <CartesianSeries>[
                   ColumnSeries<ChartData, String>(
                     onPointTap: (args) {
                       setState(() {
@@ -204,7 +201,8 @@ class _ChartState extends State<Chart> {
                       pointIndex == selectedColumnIndex3) {
                     args.text = '₴ ${args.text}';
                     args.color = AppTheme.black;
-                    args.textStyle = theme.mediumText.copyWith(color:AppTheme.gray);
+                    args.textStyle =
+                        theme.mediumText.copyWith(color: AppTheme.gray);
                   }
                 },
                 onMarkerRender: (markerArgs) {

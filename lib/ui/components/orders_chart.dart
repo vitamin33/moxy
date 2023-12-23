@@ -86,7 +86,7 @@ class _OrdersChartState extends State<OrdersChart> {
                 palette: const <Color>[
                   AppTheme.pinkDark,
                 ],
-                series: <ChartSeries>[
+                series: <CartesianSeries>[
                   ColumnSeries<OrdersChartData, String>(
                       onPointTap: (args) {
                         setState(() {
@@ -103,7 +103,7 @@ class _OrdersChartState extends State<OrdersChart> {
                           height: 12,
                           width: 12,
                           color: AppTheme.black),
-                      dataLabelSettings:  DataLabelSettings(
+                      dataLabelSettings: DataLabelSettings(
                           isVisible: true,
                           textStyle: theme.largeText,
                           color: AppTheme.black),
