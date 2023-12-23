@@ -115,7 +115,7 @@ class _OrdersChartState extends State<OrdersChart> {
                           top: Radius.circular(12))),
                 ],
                 onDataLabelRender: (DataLabelRenderArgs args) {
-                  final int pointIndex = args.pointIndex!;
+                  final int pointIndex = args.pointIndex;
                   if (pointIndex != selectedColumnIndex1) {
                     args.text = '';
                   }

@@ -195,7 +195,7 @@ class _ChartState extends State<Chart> {
                   ),
                 ],
                 onDataLabelRender: (DataLabelRenderArgs args) {
-                  final int pointIndex = args.pointIndex!;
+                  final int pointIndex = args.pointIndex;
                   if (pointIndex == selectedColumnIndex1 ||
                       pointIndex == selectedColumnIndex2 ||
                       pointIndex == selectedColumnIndex3) {
