@@ -73,7 +73,7 @@ platform :ios do
     # Prep the xcodeproject from Flutter without building (`--config-only`)
     sh(
       "flutter", "build", "ios",
-      "--release", "--no-codesign",
+      "--release", "--no-codesign", "--no-tree-shake-icons",
       "--build-number", new_build_number.to_s,
       "--build-name", version_name,
       *extra_config_args
