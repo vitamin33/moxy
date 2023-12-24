@@ -7,6 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:json_theme/json_theme.dart';
 import 'package:moxy/moxy_app.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/services/navigation/navigation_service.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -40,6 +42,8 @@ void main() {
     );
 
     GetItService.initializeService();
+    initNavigationSercie();
+
     if (kIsWeb) {
       usePathUrlStrategy();
     }
@@ -52,4 +56,9 @@ void main() {
       ),
     );
   }, (error, stack) => moxyPrint(error));
+}
+
+void initNavigationSercie() {
+  final navService = locate<NavigationService>();
+  navService.router = RouterProvider.router;
 }

@@ -64,6 +64,8 @@ class TokenService {
 
         return Result.success(tokenResponse.accessToken);
       }
+    } on DioException catch (e) {
+      return Result.error(Exception('Error refreshing access token.'));
     } catch (e) {
       moxyPrint('Error refreshing token: $e');
       return Result.error(Exception('Error refreshing access token.'));

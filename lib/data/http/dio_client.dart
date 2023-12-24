@@ -4,6 +4,8 @@ import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/register_request.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/services/navigation/navigation_service.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/utils/common.dart';
 // ignore: depend_on_referenced_packages
 import 'package:multiple_result/multiple_result.dart';
@@ -21,6 +23,7 @@ class DioClient {
   final Dio dio = locate<Dio>();
 
   final TokenService _tokenService = locate<TokenService>();
+  final NavigationService _navigator = locate<NavigationService>();
 
   DioClient() {
     baseUrl = Environment.apiUrl;
@@ -55,7 +58,8 @@ class DioClient {
         return handler.next(options);
       },
       onError: (DioException error, handler) async {
-        if (error.response?.statusCode == 401) {
+        if (error.response?.statusCode == 401 &&
+            !error.requestOptions.path.endsWith('refresh-token')) {
           // Token expired or invalid, attempt to refresh it
           Result<String, Exception> newAccessTokenResult =
               await _tokenService.refreshAccessToken();
@@ -75,8 +79,11 @@ class DioClient {
           } else {
             moxyPrint(
                 'Error during refreshing access token: ${error.toString()}');
+            _navigator.push(RouterProvider.loginPath());
             return handler.reject(error);
           }
+        } else if (error.response?.statusCode == 401) {
+          _navigator.push(RouterProvider.loginPath());
         }
         return handler.next(error);
       },
