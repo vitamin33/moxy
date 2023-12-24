@@ -24,6 +24,7 @@ import 'package:moxy/domain/mappers/profile_mapper.dart';
 import 'package:moxy/domain/mappers/promo_mapper.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
+import 'package:moxy/services/navigation/navigation_service.dart';
 import '../data/repositories/footer_repository.dart';
 import '../data/repositories/order_repository.dart';
 import '../data/repositories/product_repository.dart';
@@ -45,6 +46,7 @@ class GetItService {
     getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<BasketMapper>(BasketMapper());
+    getIt.registerSingleton(NavigationService());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
     getIt.registerSingleton<ProfileService>(ProfileService(dio));
@@ -72,7 +74,6 @@ class GetItService {
     getIt.registerSingleton<ProfileRepository>(ProfileRepository());
   }
 }
-
 
 T locate<T extends Object>() {
   return GetItService.getIt<T>();

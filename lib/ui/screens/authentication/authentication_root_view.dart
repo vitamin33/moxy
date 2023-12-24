@@ -90,7 +90,7 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
             ),
             LayoutBuilder(builder: (context, constraints) {
               return SizedBox(
-                height: 400,
+                height: 470,
                 width: 400,
                 child: AnimatedBranchContainer(
                   currentIndex: widget.navigationShell.currentIndex,
