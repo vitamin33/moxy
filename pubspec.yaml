@@ -55,7 +55,7 @@ dependencies:
   go_router: ^12.1.1
 
   # UI
-  flutter_keyboard_visibility: ^5.4.1
+  flutter_keyboard_visibility: ^6.0.0
   dropdown_search: ^5.0.6
   syncfusion_flutter_charts: ^24.1.41
   animated_segmented_tab_control: ^1.0.1
