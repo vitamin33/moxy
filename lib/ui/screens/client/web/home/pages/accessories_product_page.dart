@@ -32,6 +32,7 @@ class AccessoriesProductPage extends StatelessWidget {
                       selectedColors: '',
                       selectedPriceRange: '',
                       selectedTimeRange: '',
+                      filterProductColors: state.attributes,
                       onChangedSelectedColors: cubit.setFilterColor,
                       onChangedSelectedPriceRange: cubit.setFilterPrice,
                       onChangedSelectedTimeRange: cubit.setFilterTime,

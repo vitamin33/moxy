@@ -8,6 +8,7 @@ class FilterContainer extends StatelessWidget {
   final String selectedColors;
   final String selectedPriceRange;
   final String selectedTimeRange;
+  final List<String> filterProductColors;
   final Function(String) onChangedSelectedColors;
   final Function(String) onChangedSelectedPriceRange;
   final Function(String) onChangedSelectedTimeRange;
@@ -19,6 +20,7 @@ class FilterContainer extends StatelessWidget {
     required this.selectedColors,
     required this.selectedPriceRange,
     required this.selectedTimeRange,
+    required this.filterProductColors,
     required this.onChangedSelectedColors,
     required this.onChangedSelectedPriceRange,
     required this.onChangedSelectedTimeRange,
@@ -28,65 +30,63 @@ class FilterContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
 
-     
-          return
-              Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              width: double.infinity,
-              height: 150,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: theme.bigTitleSemiBoltText,
-                      ),
-                      Text(
-                        "($productCount)",
-                        style: theme.titleSemiBoltText,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      TestSelect(
-                          title: 'Color',
-                          dropDownItems: filterProductColors,
-                          selectedValue: selectedColors,
-                          onChanged: onChangedSelectedColors),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TestSelect(
-                          title: 'Price',
-                          dropDownItems: filterRangePrice,
-                          selectedValue: selectedPriceRange,
-                          onChanged: onChangedSelectedPriceRange),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TestSelect(
-                          title: 'New',
-                          dropDownItems: filterTime,
-                          selectedValue: selectedTimeRange,
-                          onChanged: onChangedSelectedTimeRange),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SizedBox(
+        width: double.infinity,
+        height: 150,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.bigTitleSemiBoltText,
+                ),
+                Text(
+                  "($productCount)",
+                  style: theme.titleSemiBoltText,
+                ),
+              ],
             ),
-          );
-        }
+            const SizedBox(
+              height: 20,
+            ),
+            Row(
+              children: [
+                TestSelect(
+                    title: 'Color',
+                    dropDownItems: filterProductColors,
+                    selectedValue: selectedColors,
+                    onChanged: onChangedSelectedColors),
+                const SizedBox(
+                  width: 10,
+                ),
+                TestSelect(
+                    title: 'Price',
+                    dropDownItems: filterRangePrice,
+                    selectedValue: selectedPriceRange,
+                    onChanged: onChangedSelectedPriceRange),
+                const SizedBox(
+                  width: 10,
+                ),
+                TestSelect(
+                    title: 'New',
+                    dropDownItems: filterTime,
+                    selectedValue: selectedTimeRange,
+                    onChanged: onChangedSelectedTimeRange),
+                const SizedBox(
+                  width: 20,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class TestSelect extends StatefulWidget {

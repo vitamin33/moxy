@@ -1,7 +1,9 @@
+import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_state.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_effect.dart';
+import 'package:moxy/domain/catalog_filtering_mixin.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
@@ -11,16 +13,20 @@ import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 class AccessoriesCatalogCubit
-    extends CubitWithEffects<AccessoriesCatalogState, UiEffect> {
+    extends CubitWithEffects<AccessoriesCatalogState, UiEffect> 
+    with CatalogsFilteringMixin
+     {
   late List<Product> originalAccessoriesList;
   AccessoriesCatalogCubit()
       : super(AccessoriesCatalogState.defaultAccessoriesCatalogState()) {
     fetchAccessoriesCatalog();
+    getAttributesColorList();
   }
 
   final productRepository = locate<ProductRepository>();
   final productMapper = locate<ProductMapper>();
   final profileRepository = locate<ProfileRepository>();
+  final configRepository = locate<ConfigRepository>();
 
   void fetchAccessoriesCatalog() async {
     try {
@@ -39,6 +45,15 @@ class AccessoriesCatalogCubit
     }
   }
 
+void getAttributesColorList() async {
+    try {
+      final colorList = await configRepository.getAttributesColorList();
+      emit(state.copyWith(attributes: colorList));
+    } catch (e) {
+      moxyPrint(e);
+    }
+  }
+  
   void toggleFavoriteForProduct(String? productId) async {
     if (productId == null) {
       return;
@@ -66,50 +81,18 @@ class AccessoriesCatalogCubit
     }
   }
 
+  void setFilterColor(String selectedColors) {
+    final accessoriesList= filterPriceCatalog(selectedColors,originalAccessoriesList);
+    emit(state.copyWith(selectedColors: selectedColors,accessoriesList:accessoriesList ));
+  }
   void setFilterPrice(String selectedPriceRange) {
-    emit(state.copyWith(selectedPriceRange: selectedPriceRange));
-    filterPriceCatalog(selectedPriceRange);
+   final accessoriesList= filterPriceCatalog(selectedPriceRange,originalAccessoriesList);
+    emit(state.copyWith(selectedPriceRange: selectedPriceRange,accessoriesList: accessoriesList));
   }
 
   void setFilterTime(String selectedTimeRange) {
-    emit(state.copyWith(selectedTimeRange: selectedTimeRange));
-    sortCatalogByCreateTime(selectedTimeRange);
+   final accessoriesList= sortCatalogByCreateTime(selectedTimeRange,originalAccessoriesList);
+    emit(state.copyWith(selectedTimeRange: selectedTimeRange,accessoriesList: accessoriesList));
   }
-
-  void filterColorCatalog(String selectedColors) {
-    List<Product> filteredColorBagList = originalAccessoriesList
-        .where((product) => product.dimensions
-            .any((dimension) => dimension.color.name == selectedColors))
-        .toList();
-    emit(state.copyWith(accessoriesList: filteredColorBagList));
-  }
-
-  void filterPriceCatalog(String selectedPriceRange) {
-    List<Product> filteredPriceBagList = originalAccessoriesList.where((product) {
-      List<String> priceRange = selectedPriceRange.split('-');
-
-      if (priceRange.length == 2) {
-        double minPrice = double.parse(priceRange[0]);
-        double maxPrice = double.parse(priceRange[1]);
-        double productPrice = product.salePrice;
-        return productPrice >= minPrice && productPrice <= maxPrice;
-      } else {
-        return true;
-      }
-    }).toList();
-
-    emit(state.copyWith(accessoriesList: filteredPriceBagList));
-  }
-
-  void sortCatalogByCreateTime(String sortOrder) {
-    List<Product> sortedBagsList = List.from(originalAccessoriesList);
-
-    if (sortOrder == 'New-Old') {
-      sortedBagsList.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
-    } else {
-      sortedBagsList.sort((a, b) => a.createdAt!.compareTo(b.createdAt!));
-    }
-
-    emit(state.copyWith(accessoriesList: sortedBagsList));
-  }
+  
 }

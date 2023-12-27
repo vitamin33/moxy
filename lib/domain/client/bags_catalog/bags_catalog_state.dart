@@ -8,6 +8,7 @@ class BagsCatalogState implements Copyable<BagsCatalogState> {
   final String selectedColors;
   final String selectedPriceRange;
   final String selectedTimeRange;
+  final List<String> attributes;
 
   BagsCatalogState({
     required this.isLoading,
@@ -16,6 +17,7 @@ class BagsCatalogState implements Copyable<BagsCatalogState> {
     required this.selectedColors,
     required this.selectedPriceRange,
     required this.selectedTimeRange,
+    required this.attributes,
   });
 
   static defaultBagsCatalogState() {
@@ -26,6 +28,7 @@ class BagsCatalogState implements Copyable<BagsCatalogState> {
       selectedColors: '',
       selectedPriceRange: '',
       selectedTimeRange: '',
+      attributes: [],
     );
   }
 
@@ -37,6 +40,7 @@ class BagsCatalogState implements Copyable<BagsCatalogState> {
     String? selectedColors,
     String? selectedPriceRange,
     String? selectedTimeRange,
+    List<String>? attributes,
   }) {
     return BagsCatalogState(
       isLoading: isLoading ?? this.isLoading,
@@ -45,6 +49,7 @@ class BagsCatalogState implements Copyable<BagsCatalogState> {
       selectedColors: selectedColors ?? this.selectedColors,
       selectedPriceRange: selectedPriceRange ?? this.selectedPriceRange,
       selectedTimeRange: selectedTimeRange ?? this.selectedTimeRange,
+      attributes: attributes ?? this.attributes,
     );
   }
 }

@@ -7,6 +7,7 @@ class AccessoriesCatalogState implements Copyable<AccessoriesCatalogState> {
   final String selectedColors;
   final String selectedPriceRange;
   final String selectedTimeRange;
+  final List<String> attributes;
 
   AccessoriesCatalogState({
     required this.isLoading,
@@ -14,6 +15,7 @@ class AccessoriesCatalogState implements Copyable<AccessoriesCatalogState> {
     required this.selectedColors,
     required this.selectedPriceRange,
     required this.selectedTimeRange,
+    required this.attributes,
   });
 
   static defaultAccessoriesCatalogState() {
@@ -23,6 +25,7 @@ class AccessoriesCatalogState implements Copyable<AccessoriesCatalogState> {
        selectedColors: '',
       selectedPriceRange: '',
       selectedTimeRange: '',
+      attributes: [],
     );
   }
 
@@ -33,6 +36,7 @@ class AccessoriesCatalogState implements Copyable<AccessoriesCatalogState> {
     String? selectedColors,
     String? selectedPriceRange,
     String? selectedTimeRange,
+    List<String>? attributes,
   }) {
     return AccessoriesCatalogState(
       isLoading: isLoading ?? this.isLoading,
@@ -40,6 +44,7 @@ class AccessoriesCatalogState implements Copyable<AccessoriesCatalogState> {
       selectedColors: selectedColors ?? this.selectedColors,
       selectedPriceRange: selectedPriceRange ?? this.selectedPriceRange,
       selectedTimeRange: selectedTimeRange ?? this.selectedTimeRange,
+      attributes: attributes ?? this.attributes,
     );
   }
 }

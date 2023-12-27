@@ -65,6 +65,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
                             selectedColors: state.selectedColors,
                             selectedPriceRange: state.selectedPriceRange,
                             selectedTimeRange: state.selectedTimeRange,
+                            filterProductColors: state.attributes,
                             onChangedSelectedColors:cubit.setFilterColor,
                             onChangedSelectedPriceRange:cubit.setFilterPrice,
                             onChangedSelectedTimeRange: cubit.setFilterTime,
