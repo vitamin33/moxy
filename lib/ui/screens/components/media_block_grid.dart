@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moxy/constant/home_media.dart';
 import 'package:moxy/domain/models/media.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:video_player/video_player.dart';
 import '../../theme/app_theme.dart';
 import 'onhover.dart';
 
@@ -18,14 +20,30 @@ class MediaBlockGrid extends StatefulWidget {
 
 class _MediaBlockGridState extends State<MediaBlockGrid> {
   int _index = 0;
+  late VideoPlayerController _videoPlayerController;
+  late Media media;
 
   @override
   void initState() {
     super.initState();
 
+    media = widget.mediaList.isNotEmpty
+        ? widget.mediaList[_index % widget.mediaList.length]
+        : Media.defaultMedia();
+    _videoPlayerController =
+        VideoPlayerController.network(media.mediaUrls.first)
+          ..initialize().then((_) {
+            _videoPlayerController.play();
+            _videoPlayerController.setLooping(true);
+            _videoPlayerController.setVolume(0);
+
+            setState(() {});
+          });
+
     Timer.periodic(const Duration(seconds: 6), (timer) {
       setState(() {
         _index++;
+        media = widget.mediaList[_index % widget.mediaList.length];
       });
     });
   }
@@ -33,12 +51,13 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
   @override
   void dispose() {
     super.dispose();
+    _videoPlayerController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
-    final media = widget.mediaList[_index % widget.mediaList.length];
+
     return StaggeredGridTile.count(
       crossAxisCellCount: 2,
       mainAxisCellCount: 2,
@@ -48,19 +67,30 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
             child: Center(
               child: Stack(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 600),
-                      child: Image.network(
-                        media.mediaUrls.first,
-                        key: ValueKey(media.id),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    ),
-                  ),
-                    _buildCenterButton(context,theme, media.productId)
+                  (media.mediaType == MediaType.video)
+                      ? SizedBox.expand(
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: SizedBox(
+                              width: _videoPlayerController.value.size.width,
+                              height: _videoPlayerController.value.size.height,
+                              child: VideoPlayer(_videoPlayerController),
+                            ),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 600),
+                            child: Image.network(
+                              media.mediaUrls.first,
+                              key: ValueKey(media.id),
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                            ),
+                          ),
+                        ),
+                  _buildCenterButton(context, theme, media.productId)
                 ],
               ),
             ),
@@ -71,7 +101,8 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
   }
 }
 
-Widget _buildCenterButton(BuildContext context, AppTheme theme, String productId) {
+Widget _buildCenterButton(
+    BuildContext context, AppTheme theme, String productId) {
   return Center(
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
