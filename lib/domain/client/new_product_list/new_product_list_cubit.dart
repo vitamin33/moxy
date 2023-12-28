@@ -2,6 +2,7 @@
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/new_product_list/new_product_list_effects.dart';
+import 'package:moxy/domain/mappers/media_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
@@ -21,6 +22,7 @@ class NewProductListCubit
 
   final productRepository = locate<ProductRepository>();
   final productMapper = locate<ProductMapper>();
+  final mediaMapper = locate<MediaMapper>();
   final profileRepository = locate<ProfileRepository>();
 
   void allSellingProduct() async {
@@ -30,7 +32,17 @@ class NewProductListCubit
       result.when((success) {
         final allProductsList = productMapper.mapToProductList(success);
         emit(state.copyWith(
-            allSellingProduct: allProductsList, isLoading: false));
+            allSellingProduct: allProductsList));
+      }, (error) {
+        emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
+      });
+
+      final resultMedia = await productRepository.fetchHomeMedia();
+      resultMedia.when((success) {
+        final mediaList = mediaMapper.mapToMedia(success);
+        emit(state.copyWith(
+          mediaList:mediaList,
+             isLoading: false));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
       });

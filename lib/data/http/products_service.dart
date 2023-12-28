@@ -6,6 +6,7 @@ import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/constant/product_categories.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/data/models/response/media_response.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/extensions.dart';
 // ignore: depend_on_referenced_packages
@@ -239,6 +240,21 @@ class ProductsService {
       final result = NetworkProductDetails.fromJson(data);
       return result;
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<NetworkMedia>> fetchHomeMedia() async {
+    try {
+      final response = await _dio.get('$baseUrl $getHomeMediaUrl');
+      final data = response.data;
+      final mediaList = <NetworkMedia>[];
+      for (var value in (data as List)) {
+        mediaList.add(NetworkMedia.fromJson(value));
+      }
+      return mediaList;
+    } catch (e, stack) {
+      moxyPrint(stack);
       rethrow;
     }
   }
