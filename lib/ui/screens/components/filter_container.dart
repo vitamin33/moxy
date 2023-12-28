@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/constant/filter_catalog.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class FilterContainer extends StatelessWidget {
   final String title;
   final String productCount;
-  const FilterContainer(
-      {super.key, required this.title, required this.productCount});
+  final String selectedColors;
+  final String selectedPriceRange;
+  final String selectedTimeRange;
+  final List<String> filterProductColors;
+  final Function(String) onChangedSelectedColors;
+  final Function(String) onChangedSelectedPriceRange;
+  final Function(String) onChangedSelectedTimeRange;
+
+  const FilterContainer({
+    super.key,
+    required this.title,
+    required this.productCount,
+    required this.selectedColors,
+    required this.selectedPriceRange,
+    required this.selectedTimeRange,
+    required this.filterProductColors,
+    required this.onChangedSelectedColors,
+    required this.onChangedSelectedPriceRange,
+    required this.onChangedSelectedTimeRange,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,46 +35,55 @@ class FilterContainer extends StatelessWidget {
       child: SizedBox(
         width: double.infinity,
         height: 150,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(
-              title,
-              style: theme.bigTitleSemiBoltText,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: theme.bigTitleSemiBoltText,
+                ),
+                Text(
+                  "($productCount)",
+                  style: theme.titleSemiBoltText,
+                ),
+              ],
             ),
-            Text(
-              "($productCount)",
-              style: theme.titleSemiBoltText,
+            const SizedBox(
+              height: 20,
             ),
-          ]),
-          const SizedBox(
-            height: 20,
-          ),
-          Row(
-            children: [
-              TestSelect(
-                title: 'Color',
-                dropDownItems: colors,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              TestSelect(
-                title: 'Price',
-                dropDownItems: price,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              TestSelect(
-                title: 'New',
-                dropDownItems: time,
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-            ],
-          )
-        ]),
+            Row(
+              children: [
+                TestSelect(
+                    title: 'Color',
+                    dropDownItems: filterProductColors,
+                    selectedValue: selectedColors,
+                    onChanged: onChangedSelectedColors),
+                const SizedBox(
+                  width: 10,
+                ),
+                TestSelect(
+                    title: 'Price',
+                    dropDownItems: filterRangePrice,
+                    selectedValue: selectedPriceRange,
+                    onChanged: onChangedSelectedPriceRange),
+                const SizedBox(
+                  width: 10,
+                ),
+                TestSelect(
+                    title: 'New',
+                    dropDownItems: filterTime,
+                    selectedValue: selectedTimeRange,
+                    onChanged: onChangedSelectedTimeRange),
+                const SizedBox(
+                  width: 20,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -63,10 +91,16 @@ class FilterContainer extends StatelessWidget {
 
 class TestSelect extends StatefulWidget {
   final String title;
+  final String selectedValue;
   final List<String> dropDownItems;
+  final Function(String) onChanged;
 
   const TestSelect(
-      {super.key, required this.title, required this.dropDownItems});
+      {super.key,
+      required this.title,
+      required this.dropDownItems,
+      required this.onChanged,
+      required this.selectedValue});
 
   @override
   State<TestSelect> createState() => _TestSelectState();
@@ -92,8 +126,9 @@ class _TestSelectState extends State<TestSelect> {
               elevation: 16,
               underline: const SizedBox(),
               isExpanded: true,
-              style:theme.largeText,
+              style: theme.largeText,
               onChanged: (String? changedValue) {
+                widget.onChanged(changedValue!);
                 myServices = changedValue;
                 setState(() {
                   myServices;
@@ -111,25 +146,3 @@ class _TestSelectState extends State<TestSelect> {
     ]);
   }
 }
-
-List<String> colors = [
-  'Black',
-  'White',
-  'Grey',
-  'Pink',
-  'PinkLeo',
-  'Leo',
-  'Brown',
-  'Beige',
-  'Purple',
-  'Zebra',
-  'Jeans',
-  'Green',
-  'Bars',
-  'Unified'
-];
-List<String> price = ['400-800', '800-1200', '1200<'];
-List<String> time = [
-  'New-Old',
-  'Old-New',
-];

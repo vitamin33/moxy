@@ -37,6 +37,8 @@ NetworkProduct _$NetworkProductFromJson(Map<String, dynamic> json) =>
       isFavorite: json['isFavorite'] as bool?,
       attributes: NetworkProductAttributes.fromJson(
           json['attributes'] as Map<String, dynamic>),
+      createdAt: json['createdAt'] as String?,
+      updatedAt: json['updatedAt'] as String?,
     );
 
 Map<String, dynamic> _$NetworkProductToJson(NetworkProduct instance) =>
@@ -54,6 +56,8 @@ Map<String, dynamic> _$NetworkProductToJson(NetworkProduct instance) =>
       'forSale': instance.forSale,
       'isFavorite': instance.isFavorite,
       'attributes': instance.attributes,
+      'createdAt': instance.createdAt,
+      'updatedAt': instance.updatedAt,
     };
 
 NetworkProductDetails _$NetworkProductDetailsFromJson(

@@ -14,6 +14,8 @@ class Product implements Copyable<Product> {
   bool forSale;
   bool isFavorite;
   ProductAttributes attributes;
+  String? createdAt;
+  String? updatedAt;
 
   Product({
     this.id,
@@ -29,6 +31,8 @@ class Product implements Copyable<Product> {
     required this.forSale,
     required this.isFavorite,
     required this.attributes,
+    this.createdAt,
+    this.updatedAt,
   });
 
   static Product defaultProduct() {
@@ -63,6 +67,8 @@ class Product implements Copyable<Product> {
     bool? forSale,
     bool? isFavorite,
     ProductAttributes? attributes,
+    String? createdAt,
+    String? updatedAt
   }) {
     return Product(
       id: id ?? this.id,
@@ -78,6 +84,8 @@ class Product implements Copyable<Product> {
       forSale: forSale ?? this.forSale,
       isFavorite: isFavorite ?? this.isFavorite,
       attributes: attributes ?? this.attributes,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 

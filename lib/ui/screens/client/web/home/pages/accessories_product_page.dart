@@ -20,6 +20,7 @@ class AccessoriesProductPage extends StatelessWidget {
           create: (context) => AccessoriesCatalogCubit(),
           child: BlocBuilder<AccessoriesCatalogCubit, AccessoriesCatalogState>(
             builder: (context, state) {
+              final cubit = context.read<AccessoriesCatalogCubit>();
               return SingleChildScrollView(
                   child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -28,6 +29,13 @@ class AccessoriesProductPage extends StatelessWidget {
                     FilterContainer(
                       title: 'Аксесуари',
                       productCount: state.accessoriesList.length.toString(),
+                      selectedColors: '',
+                      selectedPriceRange: '',
+                      selectedTimeRange: '',
+                      filterProductColors: state.attributes,
+                      onChangedSelectedColors: cubit.setFilterColor,
+                      onChangedSelectedPriceRange: cubit.setFilterPrice,
+                      onChangedSelectedTimeRange: cubit.setFilterTime,
                     ),
                     const AccessoriesCatalog(),
                     const PromoContainer(),
