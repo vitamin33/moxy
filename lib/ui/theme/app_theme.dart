@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class AppTheme extends InheritedWidget {
   //spaces
   static const double cardPadding = 24;
+  static const Widget smallVerticalSpasing = SizedBox(height:10);
+  static const Widget mediumVerticalSpasing = SizedBox(height:30);
+  static const Widget largeVerticalSpasing = SizedBox(height:50);
+  static const Widget smallHorizontalSpasing = SizedBox(width:10);
+  static const Widget mediumHorizontalSpasing = SizedBox(width:30);
+  static const Widget largeHorizontalSpasing = SizedBox(width:50);
   static const double elementSpacing = cardPadding * 0.5;
-  static const Widget smallSpace = SizedBox(width: 10);
   static const double bottomNavBarHeight = 64;
   static const Duration animationDuration = Duration(milliseconds: 300);
   static BorderRadius cardRadius = BorderRadius.circular(14);

@@ -40,9 +40,10 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(AppTheme.cardPadding),
         child: Column(
           crossAxisAlignment:
               kIsWeb ? CrossAxisAlignment.start : CrossAxisAlignment.center,
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
             Text(
               AppLocalizations.of(context)!.login,
               textAlign: TextAlign.start,
-              style: const TextStyle(fontSize: 44, fontWeight: FontWeight.w600),
+              style: theme.bigTitleBoltText,
             ),
             const SizedBox(height: AppTheme.cardPadding),
             CustomTextField(
@@ -116,20 +117,20 @@ class _LoginPageState extends State<LoginPage> {
                 onTap: context.read<LoginCubit>().logInWithCredentials,
               ),
             ),
-            downText(context)
+            downText(context, theme)
           ],
         ),
       );
     });
   }
 
-  Widget downText(BuildContext context) {
+  Widget downText(BuildContext context, AppTheme theme) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           AppLocalizations.of(context)!.noAccountQuestion,
-          style: const TextStyle(fontSize: 18),
+          style: theme.titleText,
         ),
         const SizedBox(
           width: 2,
@@ -138,14 +139,10 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () {
             context.push(RouterProvider.registerPath());
           },
-          child: Text(
-            AppLocalizations.of(context)!.signup,
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-                color: AppTheme.pinkDark,
-                decoration: TextDecoration.underline),
-          ),
+          child: Text(AppLocalizations.of(context)!.signup,
+              style: theme.titleBoltText.copyWith(
+                  color: AppTheme.pinkDark,
+                  decoration: TextDecoration.underline)),
         ),
       ],
     );

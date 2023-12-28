@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/extensions.dart';
 
 class AnimatedBranchContainer extends StatelessWidget {
@@ -14,21 +15,24 @@ class AnimatedBranchContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-        children: children.mapIndexed(
-      children,
-      (int index, Widget navigator) {
-        return AnimatedScale(
-          scale: index == currentIndex ? 1 : 1.4,
-          duration: const Duration(milliseconds: 300),
-          child: AnimatedOpacity(
-            opacity: index == currentIndex ? 1 : 0,
+    return Padding(
+      padding: const EdgeInsets.all(AppTheme.cardPadding),
+      child: Stack(
+          children: children.mapIndexed(
+        children,
+        (int index, Widget navigator) {
+          return AnimatedScale(
+            scale: index == currentIndex ? 1 : 1.4,
             duration: const Duration(milliseconds: 300),
-            child: _branchNavigatorWrapper(index, navigator),
-          ),
-        );
-      },
-    ).toList());
+            child: AnimatedOpacity(
+              opacity: index == currentIndex ? 1 : 0,
+              duration: const Duration(milliseconds: 300),
+              child: _branchNavigatorWrapper(index, navigator),
+            ),
+          );
+        },
+      ).toList()),
+    );
   }
 
   Widget _branchNavigatorWrapper(int index, Widget navigator) => IgnorePointer(

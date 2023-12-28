@@ -8,7 +8,6 @@ import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -38,7 +37,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         final theme = AppTheme.of(context)!;
 
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(AppTheme.cardPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,7 +47,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 textAlign: TextAlign.start,
                 style: theme.bigTitleBoltText,
               ),
-              const SizedBox(height: 30),
+              AppTheme.smallVerticalSpasing,
               Row(
                 children: [
                   Expanded(
@@ -99,31 +98,40 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 state: state.error.email,
                 validation: true,
               ),
-              CustomTextField(
-                borderColor: AppTheme.greyLigth,
-                title: 'Пароль',
-                controller: cubit.passwordController,
-                onChanged: (value) => cubit.passwordChanged(value),
-                autofillHints: const [
-                  AutofillHints.password,
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomTextField(
+                      borderColor: AppTheme.greyLigth,
+                      title: 'Пароль',
+                      controller: cubit.passwordController,
+                      onChanged: (value) => cubit.passwordChanged(value),
+                      autofillHints: const [
+                        AutofillHints.password,
+                      ],
+                      state: state.error.password,
+                      validation: true,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomTextField(
+                      borderColor: AppTheme.greyLigth,
+                      title: 'Підтвердити Пароль',
+                      controller: cubit.confirmRegisterPasswordController,
+                      onChanged: (value) =>
+                          cubit.confirmRegisterPasswordChanged(value),
+                      autofillHints: const [
+                        AutofillHints.password,
+                      ],
+                      state: state.error.confirmRegisterPassword,
+                      validation: true,
+                    ),
+                  ),
                 ],
-                state: state.error.password,
-                validation: true,
               ),
-              CustomTextField(
-                borderColor: AppTheme.greyLigth,
-                title: 'Підтвердити Пароль',
-                controller: cubit.confirmRegisterPasswordController,
-                onChanged: (value) =>
-                    cubit.confirmRegisterPasswordChanged(value),
-                autofillHints: const [
-                  AutofillHints.password,
-                ],
-                state: state.error.confirmRegisterPassword,
-                validation: true,
-              ),
+              AppTheme.smallVerticalSpasing,
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: CustomButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Далі',
@@ -134,6 +142,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   },
                 ),
               ),
+              // AppTheme.smallVerticalSpasing,
               downText(context, theme),
             ],
           ),
@@ -156,7 +165,6 @@ Widget downText(BuildContext context, AppTheme theme) {
       ),
       InkWell(
           onTap: () {
-            moxyPrint('Sign up');
             context.go(RouterProvider.loginPath());
           },
           child: Text("Увійти",
