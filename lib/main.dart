@@ -44,9 +44,6 @@ void main() {
     GetItService.initializeService();
     initNavigationSercie();
 
-    if (kIsWeb) {
-      usePathUrlStrategy();
-    }
     runApp(
       ChangeNotifierProvider(
         create: (_) => ThemeProvider(appThemeData),
@@ -56,6 +53,10 @@ void main() {
       ),
     );
   }, (error, stack) => moxyPrint(error));
+
+  if (kIsWeb) {
+    usePathUrlStrategy();
+  }
 }
 
 void initNavigationSercie() {
