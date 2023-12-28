@@ -22,12 +22,11 @@ class BagsProductPage extends StatefulWidget {
 }
 
 class _BagsProductPageState extends State<BagsProductPage> {
-
   @override
   void initState() {
     super.initState();
 
- context.read<BasketCubit>().effectStream.listen((effect) {
+    context.read<BasketCubit>().effectStream.listen((effect) {
       if (effect is OpenBasketSideSheet) {
         SideSheet.right(
             body: const BasketPage(),
@@ -66,8 +65,8 @@ class _BagsProductPageState extends State<BagsProductPage> {
                             selectedPriceRange: state.selectedPriceRange,
                             selectedTimeRange: state.selectedTimeRange,
                             filterProductColors: state.attributes,
-                            onChangedSelectedColors:cubit.setFilterColor,
-                            onChangedSelectedPriceRange:cubit.setFilterPrice,
+                            onChangedSelectedColors: cubit.setFilterColor,
+                            onChangedSelectedPriceRange: cubit.setFilterPrice,
                             onChangedSelectedTimeRange: cubit.setFilterTime,
                           ),
                           const BagsCatalog(),
