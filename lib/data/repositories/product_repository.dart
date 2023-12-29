@@ -193,4 +193,15 @@ class ProductRepository {
       rethrow;
     }
   }
+
+  Future<Result<List<NetworkProduct>, Exception>>
+      getSearchProducts() async {
+    try {
+      final result = await client.getSearchProducts();
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
 }

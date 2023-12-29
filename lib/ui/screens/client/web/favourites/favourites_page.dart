@@ -90,11 +90,11 @@ class _FavouritesPageState extends State<FavouritesPage> {
           ? const MoxyLoader(
               iconSize: 40,
             )
-          : _buildFavoritesList(state),
+          : buildFavoritesList(state),
     );
   }
 
-  Widget _buildFavoritesList(FavouritesState state) {
+  Widget buildFavoritesList(FavouritesState state) {
     if (state.favoriteProducts.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,

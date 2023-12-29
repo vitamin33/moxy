@@ -258,4 +258,18 @@ class ProductsService {
       rethrow;
     }
   }
+
+  Future<List<NetworkProduct>> getSearchProducts() async {
+    try {
+      final response = await _dio.get('$baseUrl $allSellingProductsUrl');
+      final data = response.data;
+      final productList = <NetworkProduct>[];
+      for (var value in (data as List)) {
+        productList.add(NetworkProduct.fromJson(value));
+      }
+      return productList;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
