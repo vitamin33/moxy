@@ -15,6 +15,7 @@ import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/data/repositories/filter_repository.dart';
 import 'package:moxy/data/repositories/overview_repository.dart';
 import 'package:moxy/data/repositories/promo_repository.dart';
+import 'package:moxy/data/repositories/review_repository.dart';
 import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/mappers/basket_mapper.dart';
 import 'package:moxy/domain/mappers/config_mapper.dart';
@@ -23,6 +24,7 @@ import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/mappers/profile_mapper.dart';
 import 'package:moxy/domain/mappers/promo_mapper.dart';
+import 'package:moxy/domain/mappers/review_mapper.dart';
 import 'package:moxy/domain/mappers/user_mapper.dart';
 import 'package:moxy/domain/mappers/warehouse_mapper.dart';
 import 'package:moxy/services/navigation/navigation_service.dart';
@@ -47,6 +49,7 @@ class GetItService {
     getIt.registerSingleton<OrderMapper>(OrderMapper());
     getIt.registerSingleton<UserMapper>(UserMapper());
     getIt.registerSingleton<BasketMapper>(BasketMapper());
+    getIt.registerSingleton<ReviewMapper>(ReviewMapper());
     getIt.registerSingleton(NavigationService());
     getIt.registerSingleton<Dio>(dio);
     getIt.registerSingleton<TokenService>(TokenService(dio));
@@ -74,6 +77,7 @@ class GetItService {
     getIt.registerSingleton<ProfileMapper>(ProfileMapper());
     getIt.registerSingleton<MediaMapper>(MediaMapper());
     getIt.registerSingleton<ProfileRepository>(ProfileRepository());
+    getIt.registerSingleton<ReviewRepository>(ReviewRepository());
   }
 }
 

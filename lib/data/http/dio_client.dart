@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/register_request.dart';
+import 'package:moxy/data/models/response/review_response.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation/navigation_service.dart';
@@ -227,6 +228,23 @@ class DioClient {
         return false;
       }
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<List<NetworkReview>> fetchReviews() async {
+    try {
+      Response response = await dio.get(
+        getReviewsUrl,
+      );
+       final data = response.data;
+      final orderList = <NetworkReview>[];
+      for (var value in (data as List)) {
+        orderList.add(NetworkReview.fromJson(value));
+      }
+      return orderList;
+    } catch (e,stack) {
+      moxyPrint(stack);
       rethrow;
     }
   }
