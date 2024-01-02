@@ -89,21 +89,25 @@ class _SearchPageState extends State<SearchPage> {
                                       itemBuilder: (context, index) {
                                         return ProductCard(
                                             product:
-                                                state.searchProduct[index]);
+                                                state.searchProduct[index],
+                                                onChangeFavorites: cubit.toggleFavoriteForProduct,
+                                                );
                                       }),
                                 )
-                              : Column(
-                                  children: [
-                                    SizedBox(
-                                        height: 260,
-                                        width: 200,
-                                        child: Lottie.asset(
-                                            'assets/anim/empty_list.json')),
-                                    Text(
-                                      'Не знайдено продуктів',
-                                      style: theme.largeSemiBoltText,
-                                    )
-                                  ],
+                              : Center(
+                                  child: Column(
+                                    children: [
+                                      SizedBox(
+                                          height: 260,
+                                          width: 200,
+                                          child: Lottie.asset(
+                                              'assets/anim/empty_list.json')),
+                                      Text(
+                                        'Не знайдено продуктів',
+                                        style: theme.largeSemiBoltText,
+                                      )
+                                    ],
+                                  ),
                                 )
                         ],
                       ),

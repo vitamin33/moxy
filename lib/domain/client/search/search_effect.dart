@@ -9,3 +9,6 @@ class SearchApiRequestFailed implements UiEffect {
   String failureText;
   SearchApiRequestFailed(this.failureText);
 }
+class ChangeFavoriteFailed implements UiEffect {
+  ChangeFavoriteFailed();
+}

@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/client/bags_catalog/bags_catalog_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
@@ -12,8 +11,10 @@ import 'package:moxy/ui/theme/app_theme.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
+  final Function(String productId) onChangeFavorites;
 
-  const ProductCard({super.key, required this.product});
+  const ProductCard(
+      {super.key, required this.product, required this.onChangeFavorites});
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +79,7 @@ class ProductCard extends StatelessWidget {
         alignment: Alignment.topRight,
         child: GestureDetector(
           onTap: () {
-            context
-                .read<BagsCatalogCubit>()
-                .toggleFavoriteForProduct(product.id);
+            onChangeFavorites(product.id!);
           },
           child: OnHover(
             builder: (isHovered) {
@@ -116,7 +115,6 @@ class ProductCard extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           context.read<BasketCubit>().addProductToBasket(product);
-          
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),

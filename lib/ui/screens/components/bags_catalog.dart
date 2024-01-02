@@ -59,6 +59,7 @@ class _BagsCatalogState extends State<BagsCatalog> {
                     final product = state.bagsList[index];
                     return ProductCard(
                       product: product,
+                      onChangeFavorites:cubit.toggleFavoriteForProduct,
                     );
                   },
                 ),
