@@ -9,6 +9,7 @@ import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -46,6 +47,12 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+    bool isMobile = ResponsiveUtil.isMobile(context);
+    final crossAxisCount = isMobile ? 1 : 3;
+    final spacing = isMobile
+        ? AppTheme.defaultGridSpacingMobile
+        : AppTheme.defaultGridSpacing;
+
     return BlocProvider(
       create: (context) => SearchCubit(),
       child: BlocBuilder<SearchCubit, SearchState>(
@@ -62,7 +69,8 @@ class _SearchPageState extends State<SearchPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: AppTheme.cardPadding),
+                              horizontal: AppTheme.cardPadding,
+                            ),
                             child: Text(
                               'Search',
                               style: theme.bigTitleBoltText,
@@ -83,15 +91,15 @@ class _SearchPageState extends State<SearchPage> {
                               ? Expanded(
                                   child: AlignedGridView.count(
                                       itemCount: state.searchProduct.length,
-                                      crossAxisCount: 3,
-                                      crossAxisSpacing: 5,
-                                      mainAxisSpacing: 5,
+                                      crossAxisCount: crossAxisCount,
+                                      crossAxisSpacing: spacing,
+                                      mainAxisSpacing: spacing,
                                       itemBuilder: (context, index) {
                                         return ProductCard(
-                                            product:
-                                                state.searchProduct[index],
-                                                onChangeFavorites: cubit.toggleFavoriteForProduct,
-                                                );
+                                          product: state.searchProduct[index],
+                                          onChangeFavorites:
+                                              cubit.toggleFavoriteForProduct,
+                                        );
                                       }),
                                 )
                               : Center(

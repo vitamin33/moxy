@@ -3,18 +3,25 @@ import 'package:flutter/material.dart';
 class AppTheme extends InheritedWidget {
   //spaces
   static const double cardPadding = 24;
+  static const double iconPaddingMobile = 8;
   static const double defaultPadding = 8;
-  static const Widget smallVerticalSpasing = SizedBox(height:10);
-  static const Widget mediumVerticalSpasing = SizedBox(height:30);
-  static const Widget largeVerticalSpasing = SizedBox(height:50);
-  static const Widget smallHorizontalSpasing = SizedBox(width:10);
-  static const Widget mediumHorizontalSpasing = SizedBox(width:30);
-  static const Widget largeHorizontalSpasing = SizedBox(width:50);
+  static const double defaultPaddingMobile = 16;
+  static const double defaultGridSpacing = 8;
+  static const double defaultGridSpacingMobile = 16;
+  static const Widget smallVerticalSpasing = SizedBox(height: 10);
+  static const Widget mediumVerticalSpasing = SizedBox(height: 30);
+  static const Widget largeVerticalSpasing = SizedBox(height: 50);
+  static const Widget smallHorizontalSpasing = SizedBox(width: 10);
+  static const Widget mediumHorizontalSpasing = SizedBox(width: 30);
+  static const Widget largeHorizontalSpasing = SizedBox(width: 50);
   static const double elementSpacing = cardPadding * 0.5;
   static const double bottomNavBarHeight = 64;
   static const Duration animationDuration = Duration(milliseconds: 300);
   static BorderRadius cardRadius = BorderRadius.circular(14);
-  static const double iconSize = cardPadding;
+  static const double iconSize = 20;
+  static const double iconSizeMobile = 25;
+  static const double iconButtonSize = 30;
+  static const double iconButtonSizeMobile = 40;
 
   static const Color textColor = Color(0xFF0C0C0C);
   static const Color blackLight = Color(0xFF292031);
