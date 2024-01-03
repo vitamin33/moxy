@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppTheme extends InheritedWidget {
   //spaces
   static const double cardPadding = 24;
+  static const double defaultPadding = 8;
   static const Widget smallVerticalSpasing = SizedBox(height:10);
   static const Widget mediumVerticalSpasing = SizedBox(height:30);
   static const Widget largeVerticalSpasing = SizedBox(height:50);
