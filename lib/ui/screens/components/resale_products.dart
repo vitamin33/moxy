@@ -67,7 +67,8 @@ class ResaleProducts extends StatelessWidget {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: ProductCard(
-                                      product: state.resaleProducts[index]),
+                                      product: state.resaleProducts[index],
+                                      onChangeFavorites: cubit.toggleFavoriteForProduct,),
                                 );
                               },
                             ),

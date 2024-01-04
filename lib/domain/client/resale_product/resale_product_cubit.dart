@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
+import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/resale_product/resale_products_state.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 class ResaleProductCubit extends Cubit<ResaleProductState> {
   ResaleProductCubit() : super(ResaleProductState.defaultResaleProductState()) {
@@ -13,6 +16,7 @@ class ResaleProductCubit extends Cubit<ResaleProductState> {
 
   final productRepository = locate<ProductRepository>();
   final productMapper = locate<ProductMapper>();
+  final profileRepository = locate<ProfileRepository>();
   final ScrollController scrollController = ScrollController();
 
   void moveToPreviousProduct() {
@@ -51,6 +55,31 @@ class ResaleProductCubit extends Cubit<ResaleProductState> {
       });
     } catch (e) {
       moxyPrint('$e');
+    }
+  }
+
+    void toggleFavoriteForProduct(String? productId) async {
+    if (productId == null) {
+      return;
+    }
+    try {
+      Product product = state.resaleProducts.firstWhere((it) => it.id == productId);
+      product.isFavorite = !product.isFavorite;
+      emit(state.copyWith(resaleProducts: state.resaleProducts));
+      bool success;
+      Result<bool, Exception> response;
+      if (product.isFavorite) {
+        response = await profileRepository.addFavoriteProduct(productId);
+      } else {
+        response = await profileRepository.removeFavoriteProduct(productId);
+      }
+      success = response.tryGetSuccess() ?? false;
+      if (!success) {
+        product.isFavorite = !product.isFavorite;
+        emit(state.copyWith(resaleProducts: state.resaleProducts));
+      }
+    } catch (e, stack) {
+      moxyPrint(stack);
     }
   }
 }

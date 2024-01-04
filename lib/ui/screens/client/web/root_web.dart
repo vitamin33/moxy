@@ -34,7 +34,7 @@ class RootWebWidget extends HookWidget {
     final theme = AppTheme.of(context)!;
 
     int routeIndex = navigationShell.currentIndex;
-    int initialIndex = routeIndex > 3 ? 0 : routeIndex;
+    int initialIndex = routeIndex >= 3 ? 0 : routeIndex;
     // ignore: unused_local_variable
     final tabController =
         useTabController(initialLength: 3, initialIndex: initialIndex);

@@ -27,6 +27,7 @@ import 'package:moxy/ui/screens/client/web/home/pages/bags_product_page.dart';
 import 'package:moxy/ui/screens/client/web/home/pages/new_product_page.dart';
 import 'package:moxy/ui/screens/client/web/product_details.dart/product_details_page.dart';
 import 'package:moxy/ui/screens/client/web/profile/profile_page.dart';
+import 'package:moxy/ui/screens/client/web/search/search_page.dart';
 import 'package:moxy/ui/screens/not_found_page.dart';
 import 'package:moxy/ui/screens/splash/splash_page.dart';
 
@@ -210,7 +211,7 @@ class RouterProvider {
             routes: <RouteBase>[
               GoRoute(
                 path: searchPath(),
-                builder: (context, state) => const Text('Search page'),
+                builder: (context, state) => const SearchPage() ,
               ),
             ],
           ),

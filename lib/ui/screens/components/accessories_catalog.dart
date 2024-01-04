@@ -56,6 +56,7 @@ class _AccessoriesCatalogState extends State<AccessoriesCatalog> {
                     final product = state.accessoriesList[index];
                     return ProductCard(
                       product: product,
+                      onChangeFavorites: cubit.toggleFavoriteForProduct,
                     );
                   },
                 ),
