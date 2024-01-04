@@ -14,6 +14,7 @@ import 'package:moxy/ui/components/sidesheet.dart';
 import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 
 class RootWebWidget extends HookWidget {
@@ -39,35 +40,32 @@ class RootWebWidget extends HookWidget {
     final tabController =
         useTabController(initialLength: 3, initialIndex: initialIndex);
     return Scaffold(
-      appBar: AppBar(
-          leadingWidth: 150,
-          leading: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: SvgPicture.asset(
-              IconPath.moxyLogoWeb,
-              width: 50,
-            ),
-          ),
-          centerTitle: true,
-          backgroundColor: AppTheme.white,
-          elevation: 8.0,
-          title: SizedBox(
-            width: 380,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  _buildTabsWidget(context, tabController),
-                ],
-              ),
-            ),
-          ),
-          actions: _buildActions(context, theme)),
+      appBar: buildAppBar(context, theme, tabController),
       body: AnimatedBranchContainer(
         currentIndex: navigationShell.currentIndex,
         children: children,
       ),
+    );
+  }
+
+  AppBar buildAppBar(
+    BuildContext context,
+    AppTheme theme,
+    TabController tabController,
+  ) {
+    final isMobile = ResponsiveUtil.isMobile(context);
+    return AppBar(
+      leadingWidth: 150,
+      leading: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SvgPicture.asset(IconPath.moxyLogoWeb, width: 50),
+      ),
+      backgroundColor: AppTheme.white,
+      elevation: 8.0,
+      title: isMobile ? null : _buildTabsWidget(context, tabController),
+      actions: isMobile
+          ? _buildMobileActions(context, theme)
+          : _buildActions(context, theme),
     );
   }
 
@@ -217,6 +215,67 @@ class RootWebWidget extends HookWidget {
           Tab(text: 'Новинки'),
           Tab(text: 'Сумки'),
           Tab(text: 'Аксесуари'),
+        ],
+      ),
+    );
+  }
+
+  List<Widget> _buildMobileActions(BuildContext context, AppTheme theme) {
+    final currentRoute =
+        GoRouter.of(context).routeInformationProvider.value.uri.toString();
+    bool searchSelected = currentRoute == RouterProvider.searchPath();
+    return [
+      _buildPaddedIconButton(
+        IconPath.searchWeb,
+        searchSelected,
+        () {
+          navigateToBranch(context, searchIndex);
+        },
+      ),
+      _buildBasketIconButton(
+        IconPath.bagWeb,
+        () {
+          SideSheet.right(
+              body: const BasketPage(),
+              context: context,
+              barrierColor: Colors.grey.withOpacity(0.5));
+        },
+        theme,
+      ),
+    ];
+  }
+
+  Drawer buildMobileDrawer(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          // Add drawer header if needed
+          ListTile(
+            leading: Icon(Icons.new_releases),
+            title: Text('Новинки'),
+            onTap: () {
+              navigateToBranch(context, 0);
+              Navigator.of(context).pop(); // Close the drawer
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.shopping_bag),
+            title: Text('Сумки'),
+            onTap: () {
+              navigateToBranch(context, 1);
+              Navigator.of(context).pop();
+            },
+          ),
+          // ListTile(
+          //   leading: Icon(Icons.acce),
+          //   title: Text('Аксесуари'),
+          //   onTap: () {
+          //     navigateToBranch(context, 2);
+          //     Navigator.of(context).pop();
+          //   },
+          // ),
+          // Add other items...
         ],
       ),
     );
