@@ -27,7 +27,7 @@ class ReviewContainer extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Допродаж',
+                        'Що говорять наші клієнти',
                         style: theme.headline4BoltText,
                       ),
                     ),
@@ -65,8 +65,7 @@ class ReviewContainer extends StatelessWidget {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child:
-                                   ReviewCard(
+                                  child: ReviewCard(
                                       review: state.reviewsList[index]),
                                 );
                               },

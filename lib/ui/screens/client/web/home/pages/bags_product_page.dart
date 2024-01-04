@@ -8,6 +8,7 @@ import 'package:moxy/domain/client/basket/basket_state.dart';
 import 'package:moxy/ui/components/sidesheet.dart';
 import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
 import 'package:moxy/ui/screens/components/bags_catalog.dart';
+import 'package:moxy/ui/screens/components/review_container.dart';
 
 import '../../../../../theme/app_theme.dart';
 import '../../../../components/filter_container.dart';
@@ -71,6 +72,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
                           ),
                           const BagsCatalog(),
                           const PromoContainer(),
+                          const ReviewContainer(),
                           const Footer(),
                         ],
                       ),
