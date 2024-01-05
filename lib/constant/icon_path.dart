@@ -51,4 +51,6 @@ class IconPath {
   static const String tikTokIcon = "assets/icons/tiktok_icon.svg";
   static const String textFieldArrowWeb =
       "assets/icons/textfield_arrow_web.svg";
+  static const String newIcon = "assets/icons/new_icon.svg";
+  static const String accessoriesIcon = "assets/icons/accessories_icon.svg";
 }

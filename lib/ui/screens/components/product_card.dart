@@ -8,6 +8,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -19,6 +20,12 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = ResponsiveUtil.isMobile(context);
+
+    double cardWidth = isMobile ? screenWidth - 40 : 330;
+    double cardHeight = isMobile ? 300 : 340;
+    double itemPadding = isMobile ? 16 : 16;
 
     return OnHover(
       builder: (isCardHover) {
@@ -27,21 +34,29 @@ class ProductCard extends StatelessWidget {
             context.push(RouterProvider.producDetailsPath(product.id!));
           },
           child: SizedBox(
-            width: 330,
-            height: 340,
-            child: Column(
-              children: [
-                Expanded(
-                  child: Stack(
-                    children: [
-                      _buildImageWithAnimation(isCardHover),
-                      _buildFavoriteIcon(context),
-                      _buildAddBasketButton(context, theme, isCardHover)
-                    ],
+            width: cardWidth,
+            height: cardHeight,
+            child: Padding(
+              padding: isMobile
+                  ? EdgeInsets.symmetric(
+                      horizontal: itemPadding,
+                      vertical: AppTheme.defaultPadding,
+                    )
+                  : EdgeInsets.all(itemPadding),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        _buildImageWithAnimation(isMobile, isCardHover),
+                        _buildFavoriteIcon(context),
+                        _buildAddBasketButton(context, theme, isCardHover)
+                      ],
+                    ),
                   ),
-                ),
-                _buildProductInfoRow(context, theme),
-              ],
+                  _buildProductInfoRow(context, theme),
+                ],
+              ),
             ),
           ),
         );
@@ -49,15 +64,19 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  Widget _buildImageWithAnimation(bool isCardHover) {
+  Widget _buildImageWithAnimation(bool isMobile, bool isCardHover) {
+    bool enableHover = isCardHover && !isMobile;
+
     return TweenAnimationBuilder(
       duration: const Duration(milliseconds: 200),
-      tween: Tween<double>(begin: 1.0, end: isCardHover ? 1.0 : 0.95),
+      tween: Tween<double>(begin: 1.0, end: enableHover ? 1.0 : 0.95),
       builder: (BuildContext context, double value, _) {
         return Transform.scale(
           scale: value,
-          child: Image.network(
-            _currentImagePath(isCardHover),
+          child: Center(
+            child: Image.network(
+              _currentImagePath(enableHover),
+            ),
           ),
         );
       },
@@ -73,8 +92,13 @@ class ProductCard extends StatelessWidget {
   }
 
   Widget _buildFavoriteIcon(BuildContext context) {
+    final isMobile = ResponsiveUtil.isMobile(context);
+    final iconSize = isMobile ? AppTheme.iconSizeMobile : AppTheme.iconSize;
+    final padding =
+        isMobile ? AppTheme.defaultPaddingMobile : AppTheme.defaultPadding;
+
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(padding),
       child: Align(
         alignment: Alignment.topRight,
         child: GestureDetector(
@@ -93,10 +117,10 @@ class ProductCard extends StatelessWidget {
                     child: product.isFavorite
                         ? SvgPicture.asset(
                             IconPath.favoriteProductFilledWeb,
-                            width: 20,
+                            width: iconSize,
                           )
                         : SvgPicture.asset(IconPath.favoriteProductWeb,
-                            width: 20),
+                            width: iconSize),
                   ));
             },
           ),
@@ -107,22 +131,30 @@ class ProductCard extends StatelessWidget {
 
   Widget _buildAddBasketButton(
       BuildContext context, AppTheme theme, bool isCardHover) {
+    final isMobile = ResponsiveUtil.isMobile(context);
+    final buttonSize =
+        isMobile ? AppTheme.iconButtonSizeMobile : AppTheme.iconButtonSize;
+    final padding =
+        isMobile ? AppTheme.defaultPaddingMobile : AppTheme.defaultPadding;
+
+    bool enableHover = isCardHover || isMobile;
+
     return AnimatedPositioned(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
-      right: 10,
-      bottom: isCardHover ? 10 : -50,
+      right: padding,
+      bottom: enableHover ? padding : -50,
       child: GestureDetector(
         onTap: () {
           context.read<BasketCubit>().addProductToBasket(product);
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),
-          opacity: isCardHover ? 1.0 : 0.0,
+          opacity: enableHover ? 1.0 : 0.0,
           child: OnHover(builder: (isIconHover) {
             return Container(
-                width: 30,
-                height: 30,
+                width: buttonSize,
+                height: buttonSize,
                 decoration: BoxDecoration(color: AppTheme.white, boxShadow: [
                   BoxShadow(
                     color: AppTheme.blackLight.withOpacity(0.3),
@@ -146,7 +178,7 @@ class ProductCard extends StatelessWidget {
 
   Widget _buildProductInfoRow(BuildContext context, AppTheme theme) {
     return Padding(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
