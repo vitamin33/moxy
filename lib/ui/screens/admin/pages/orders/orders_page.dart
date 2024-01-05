@@ -300,8 +300,9 @@ class _OrdersPageState extends State<OrdersPage> {
         itemBuilder: (BuildContext context, int index) {
           if (index < state.allOrders.length) {
             final order = state.allOrders[index];
-            DateTime dateTime = DateTime.parse(order.createdAt.toString());
-            String orderDate = DateFormat("hh:mm  dd/MM").format(dateTime);
+            DateTime dateTime = DateTime.parse(order.createdAt);
+            String orderDate =
+                DateFormat("HH:mm  dd/MM").format(dateTime.toLocal());
             final orderPrice = order.orderedItems
                 .map((item) => item.fullOrderPrice())
                 .reduce((total, price) => total + price)
