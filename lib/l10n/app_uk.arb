@@ -118,6 +118,12 @@
   "novaPostDelivery": "Доставка Новою поштою",
   "urkPoshatDelivery": "Доставка Укрпоштою",
   "fullPaymentType": "Повна оплата",
+  "newCategory": "Новинки",
+  "bagsCategory": "Сумки",
+  "accessoriesCategory": "Аксесуари",
+  "clothesCategory": "Одяг",
+  "favorites": "Улюблене",
+  "profile": "Профіль",
 
   "postWarning": "Зверніть увагу: посилки зберігаються 5 днів від дати прибуття на\n відділення. На 6 день посилка автоматично повертається відправнику. ",
   "termsAndConditionsWarning": "Оформлення замовлення на Moxy.ua, ви погоджуєтесь з нашими Умовами і положеннями"

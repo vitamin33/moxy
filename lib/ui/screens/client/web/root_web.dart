@@ -16,15 +16,18 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RootWebWidget extends HookWidget {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   /// The navigation shell and container for the branch Navigators.
   final StatefulNavigationShell navigationShell;
 
   /// The children (branch Navigators) to display in a custom container
   final List<Widget> children;
 
-  const RootWebWidget({
+  RootWebWidget({
     super.key,
     required this.navigationShell,
     required this.children,
@@ -36,11 +39,15 @@ class RootWebWidget extends HookWidget {
 
     int routeIndex = navigationShell.currentIndex;
     int initialIndex = routeIndex >= 3 ? 0 : routeIndex;
+    final isMobile = ResponsiveUtil.isMobile(context);
+
     // ignore: unused_local_variable
     final tabController =
         useTabController(initialLength: 3, initialIndex: initialIndex);
     return Scaffold(
-      appBar: buildAppBar(context, theme, tabController),
+      key: _scaffoldKey,
+      appBar: buildAppBar(context, theme, tabController, isMobile),
+      drawer: isMobile ? _buildMobileDrawer(context) : null,
       body: AnimatedBranchContainer(
         currentIndex: navigationShell.currentIndex,
         children: children,
@@ -48,24 +55,26 @@ class RootWebWidget extends HookWidget {
     );
   }
 
-  AppBar buildAppBar(
-    BuildContext context,
-    AppTheme theme,
-    TabController tabController,
-  ) {
-    final isMobile = ResponsiveUtil.isMobile(context);
+  AppBar buildAppBar(BuildContext context, AppTheme theme,
+      TabController tabController, bool isMobile) {
     return AppBar(
-      leadingWidth: 150,
-      leading: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SvgPicture.asset(IconPath.moxyLogoWeb, width: 50),
-      ),
+      leadingWidth: isMobile ? 56 : 150, // Adjust the leading width
+      leading: isMobile ? _buildHamburgerButton(context) : _buildLogo(),
       backgroundColor: AppTheme.white,
       elevation: 8.0,
       title: isMobile ? null : _buildTabsWidget(context, tabController),
       actions: isMobile
           ? _buildMobileActions(context, theme)
           : _buildActions(context, theme),
+    );
+  }
+
+  Widget _buildHamburgerButton(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.menu),
+      onPressed: () {
+        _scaffoldKey.currentState!.openDrawer();
+      },
     );
   }
 
@@ -211,10 +220,10 @@ class RootWebWidget extends HookWidget {
         onTap: (int index) {
           navigateToBranch(context, index);
         },
-        tabs: const [
-          Tab(text: 'Новинки'),
-          Tab(text: 'Сумки'),
-          Tab(text: 'Аксесуари'),
+        tabs: [
+          Tab(text: AppLocalizations.of(context)!.newCategory),
+          Tab(text: AppLocalizations.of(context)!.bagsCategory),
+          Tab(text: AppLocalizations.of(context)!.accessoriesCategory),
         ],
       ),
     );
@@ -245,37 +254,75 @@ class RootWebWidget extends HookWidget {
     ];
   }
 
-  Drawer buildMobileDrawer(BuildContext context) {
+  Drawer _buildMobileDrawer(BuildContext context) {
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          // Add drawer header if needed
-          ListTile(
-            leading: Icon(Icons.new_releases),
-            title: Text('Новинки'),
-            onTap: () {
-              navigateToBranch(context, 0);
-              Navigator.of(context).pop(); // Close the drawer
-            },
+      child: Column(
+        children: [
+          Expanded(flex: 1, child: _buildLogo()),
+          Expanded(
+            flex: 10,
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                // Add drawer header if needed
+                ListTile(
+                  leading: SvgPicture.asset(
+                    IconPath.newIcon,
+                    height: 26,
+                    width: 24,
+                  ),
+                  title: Text(AppLocalizations.of(context)!.newCategory),
+                  onTap: () {
+                    navigateToBranch(context, 0);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    IconPath.bagWeb,
+                  ),
+                  title: Text(AppLocalizations.of(context)!.bagsCategory),
+                  onTap: () {
+                    navigateToBranch(context, 1);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: SvgPicture.asset(IconPath.accessoriesIcon),
+                  title:
+                      Text(AppLocalizations.of(context)!.accessoriesCategory),
+                  onTap: () {
+                    navigateToBranch(context, 2);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    IconPath.favoritesWeb,
+                    height: 26,
+                    width: 24,
+                  ),
+                  title: Text(AppLocalizations.of(context)!.favorites),
+                  onTap: () {
+                    navigateToBranch(context, 4);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    IconPath.profileWeb,
+                    height: 26,
+                    width: 24,
+                  ),
+                  title: Text(AppLocalizations.of(context)!.profile),
+                  onTap: () {
+                    navigateToBranch(context, 4);
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            ),
           ),
-          ListTile(
-            leading: Icon(Icons.shopping_bag),
-            title: Text('Сумки'),
-            onTap: () {
-              navigateToBranch(context, 1);
-              Navigator.of(context).pop();
-            },
-          ),
-          // ListTile(
-          //   leading: Icon(Icons.acce),
-          //   title: Text('Аксесуари'),
-          //   onTap: () {
-          //     navigateToBranch(context, 2);
-          //     Navigator.of(context).pop();
-          //   },
-          // ),
-          // Add other items...
         ],
       ),
     );
@@ -308,5 +355,12 @@ class RootWebWidget extends HookWidget {
         routeName = Routes.brandNew;
     }
     return NavigationEvent(routeName: routeName);
+  }
+
+  Widget _buildLogo() {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: SvgPicture.asset(IconPath.moxyLogoWeb, width: 60),
+    );
   }
 }

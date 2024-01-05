@@ -33,8 +33,7 @@ class ProductCard extends StatelessWidget {
           onTap: () {
             context.push(RouterProvider.producDetailsPath(product.id!));
           },
-          child: Container(
-            color: Colors.red,
+          child: SizedBox(
             width: cardWidth,
             height: cardHeight,
             child: Padding(
