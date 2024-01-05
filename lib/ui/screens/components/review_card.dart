@@ -13,9 +13,9 @@ class ReviewCard extends StatelessWidget {
     final theme = AppTheme.of(context)!;
 
     return Container(
-        color: AppTheme.greyLigth,
+        color: AppTheme.white,
         width: 330,
-        height: 340,
+        height: 240,
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.cardPadding),
           child: Column(

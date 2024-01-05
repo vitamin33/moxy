@@ -31,65 +31,73 @@ class ReviewContainer extends StatelessWidget {
                         style: theme.headline4BoltText,
                       ),
                     ),
-                    SizedBox(
+                    Container(
+                      color: AppTheme.greyLigth,
                       width: double.infinity,
-                      height: 350,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      height: 250,
+                      child: Stack(
                         children: [
-                          GestureDetector(
-                            onTap: () {
-                              cubit.moveToPreviousProduct();
+                          ListView.builder(
+                            controller: cubit.scrollController,
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.reviewsList.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ReviewCard(
+                                    review: state.reviewsList[index]),
+                              );
                             },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppTheme.greyLigth,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              height: 50,
-                              width: 50,
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  IconPath.backArrow,
-                                  width: 20,
-                                ),
-                              ),
-                            ),
                           ),
-                          Expanded(
-                            child: ListView.builder(
-                              controller: cubit.scrollController,
-                              physics: const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.horizontal,
-                              itemCount: state.reviewsList.length,
-                              itemBuilder: (context, index) {
-                                return Padding(
+                          Align(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: ReviewCard(
-                                      review: state.reviewsList[index]),
-                                );
-                              },
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      cubit.moveToPreviousProduct();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: AppTheme.greyLigth,
+                                        borderRadius: BorderRadius.circular(50),
+                                      ),
+                                      height: 50,
+                                      width: 50,
+                                      child: Center(
+                                        child: SvgPicture.asset(
+                                          IconPath.backArrow,
+                                          width: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    cubit.moveToNextProduct();
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.greyLigth,
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    height: 50,
+                                    width: 50,
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        IconPath.forwardArrow,
+                                        width: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              cubit.moveToNextProduct();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppTheme.greyLigth,
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              height: 50,
-                              width: 50,
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  IconPath.forwardArrow,
-                                  width: 20,
-                                ),
-                              ),
-                            ),
-                          )
                         ],
                       ),
                     ),
