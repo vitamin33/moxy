@@ -30,7 +30,7 @@ class PromoContainer extends StatelessWidget {
               animatedToPage: cubit.animatedToPage,
             );
           }).toList();
-          return state.allPromo.isEmpty
+          return state.allPromo.isNotEmpty
               ? SizedBox(
                   width: double.infinity,
                   height: 600,
@@ -48,7 +48,7 @@ class PromoContainer extends StatelessWidget {
                     ),
                   ),
                 )
-              :const SizedBox();
+              : const SizedBox();
         },
       ),
     );
