@@ -10,7 +10,7 @@ import '../../../../../../domain/admin/create_product/create_product_state.dart'
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AdminProductDetailsPage extends StatelessWidget {
-  const AdminProductDetailsPage({Key? key}) : super(key: key);
+  const AdminProductDetailsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,7 @@ class AdminProductDetailsPage extends StatelessWidget {
                   state: state.errors.productName,
                 ),
                 const SizedBox(height: 15),
-                CustomTextField(
-                  maxLines: 6,
-                  title: AppLocalizations.of(context)!.createProductDescription,
-                  controller: cubit.descriptionController,
-                  onChanged: cubit.descriptionChanged,
-                  validation: true,
-                  state: state.errors.productDescription,
-                ),
+                _buildDescriptionTextField(context, state, cubit),
                 const SizedBox(height: 10),
                 ProductCategoryChooser(
                     categories: state.productCategories,
@@ -196,10 +189,62 @@ Widget _buildColorQuantityRow(
       ));
 }
 
+_buildDescriptionTextField(
+    BuildContext context, CreateProductState state, CreateProductCubit cubit) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(left: 0.0, bottom: 3),
+        child: Text(
+          AppLocalizations.of(context)!.createProductDescription,
+          style: renderTitleStyle(
+              context, isValid(state.errors.productDescription)),
+        ),
+      ),
+      Container(
+          padding: const EdgeInsets.all(2),
+          decoration: const BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          child: TextField(
+            textInputAction: TextInputAction.done,
+            minLines: 1,
+            onChanged: cubit.descriptionChanged,
+            controller: cubit.descriptionController,
+            maxLines: 6,
+            decoration: InputDecoration(
+              border: _renderDescriptionBorder(
+                isValid(state.errors.productDescription),
+                true,
+              ),
+              enabledBorder: _renderDescriptionBorder(
+                isValid(state.errors.productDescription),
+                true,
+              ),
+              focusedBorder: _renderDescriptionBorder(
+                isValid(state.errors.productDescription),
+                true,
+              ),
+              hintText: AppLocalizations.of(context)!.createProductDescription,
+            ),
+          )),
+    ],
+  );
+}
+
 Color _generateColor(ProductColor color) {
   return hexToColor(color.hexCode);
 }
 
 Color _renderBorder(bool isValid) {
   return isValid ? Colors.transparent : Colors.red;
+}
+
+OutlineInputBorder _renderDescriptionBorder(bool isValid, bool focused) {
+  return OutlineInputBorder(
+    borderSide: BorderSide(
+        color: isValid ? Colors.white : Colors.red, width: focused ? 2 : 1),
+  );
 }

@@ -238,7 +238,7 @@ class AdminRootView extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          context.push(RouterProvider.adminCreateOrderPath());
+          context.push(RouterProvider.adminCreateProductPath());
         },
       ),
     ]);

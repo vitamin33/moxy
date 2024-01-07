@@ -354,7 +354,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   }
 
   void clearState() {
-    emit(state.copyWith(editProduct: null, product: null));
+    emit(state.copyWith(editProduct: null, product: null, activePage: 0));
   }
 
   void clearErrorState() {
@@ -549,6 +549,18 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     for (var element in quantityControllers) {
       element.clear();
     }
+    List<ProductColor> updatedAllConfigColors =
+        state.allConfigColors.map((color) {
+      return ProductColor(
+        id: color.id,
+        hexCode: color.hexCode,
+        name: color.name,
+        isSelected: false,
+      );
+    }).toList();
+    emit(state.copyWith(
+        product: Product.defaultProduct(),
+        allConfigColors: updatedAllConfigColors));
   }
 
   List<int> formNumberOfChoseImagesIndexes(List<Dimension> dimensions) {

@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final List<String> autofillHints;
   final int? maxLines;
+  final int mixLines;
   final bool validation;
   final bool expands;
   final ScrollPhysics? scrollPhysics;
@@ -22,6 +23,7 @@ class CustomTextField extends StatelessWidget {
       this.controller,
       this.onChanged,
       this.maxLines,
+      this.mixLines = 1,
       this.scrollPhysics,
       this.inputFormatters,
       this.autofillHints = const [],
