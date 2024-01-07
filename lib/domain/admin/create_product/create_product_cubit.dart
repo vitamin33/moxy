@@ -28,15 +28,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       : super(
           CreateProductState.defaultCreateProductState(),
         ) {
-    final colors = configRepository.attributes?.colors ?? [];
-    final categories = configRepository.attributes?.productCategories ?? [];
-    final firstCategory = categories.isNotEmpty ? categories.first : '';
-    emit(
-      state.copyWith(
-          allConfigColors: colors,
-          productCategories: categories,
-          product: state.product.copyWith(category: firstCategory)),
-    );
+    initState();
     if (isEditMode && productId != null) {
       getProductById(productId);
     }
@@ -73,7 +65,15 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
           await productRepository.addProduct(product, images, imageIndexes);
       pushProduct.when((success) {
         _clearFieldsControllers();
-        emit(state.copyWith(isLoading: false, isSuccess: true));
+
+        emit(
+          state.copyWith(
+            isLoading: false,
+            isSuccess: true,
+            product: Product.defaultProduct(),
+          ),
+        );
+        initState();
       }, (error) {
         emit(state.copyWith(
             errorMessage: 'Failed', isLoading: false, activePage: 0));
@@ -570,5 +570,18 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     }).toList();
 
     return result;
+  }
+
+  void initState() {
+    final colors = configRepository.attributes?.colors ?? [];
+    final categories = configRepository.attributes?.productCategories ?? [];
+    final firstCategory = categories.isNotEmpty ? categories.first : '';
+    emit(
+      state.copyWith(
+        allConfigColors: colors,
+        productCategories: categories,
+        product: state.product.copyWith(category: firstCategory),
+      ),
+    );
   }
 }
