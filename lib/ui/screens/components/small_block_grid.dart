@@ -35,9 +35,11 @@ class SmallBlockGrid extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(
-                        product.dimensions.first.images.first.imagePath,
-                      ))),
+                      image: (product.dimensions.first.images.isNotEmpty)
+                          ? NetworkImage(
+                              product.dimensions.first.images.first.imagePath,
+                            )
+                          : const AssetImage('assets/images/placeholder.jpg')as ImageProvider<Object>)),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Align(

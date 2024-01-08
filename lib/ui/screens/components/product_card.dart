@@ -74,10 +74,16 @@ class ProductCard extends StatelessWidget {
         return Transform.scale(
           scale: value,
           child: Center(
-            child: Image.network(
-              _currentImagePath(enableHover),
-            ),
-          ),
+              child: (product.dimensions.first.images.isNotEmpty)
+                  ? Image.network(
+                      _currentImagePath(enableHover),
+                    )
+                  : Image.asset(
+                      width: 50,
+                      height: 50,
+                      'assets/images/placeholder.jpg',
+                      fit: BoxFit.cover,
+                    )),
         );
       },
     );
