@@ -3,8 +3,8 @@ import 'package:moxy/domain/models/review.dart';
 
 
 class ReviewMapper {
-  List<Review> mapToReview(List<NetworkReview> networkPromos) {
-    return networkPromos.map(
+  List<Review> mapToReview(List<NetworkReview> networkReviews) {
+    return networkReviews.map(
       (p) {
         return Review(
             clientName: p.clientName,
