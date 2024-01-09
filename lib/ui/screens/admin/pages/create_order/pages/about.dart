@@ -27,39 +27,45 @@ class About extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(AppTheme.cardPadding),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              IconButton(
+                  onPressed: () {
+                    cubit.pasteUsersData();
+                  },
+                  icon: const Icon(Icons.paste)),
               CustomTextField(
-                title: AppLocalizations.of(context)!.userFirstName,
-                maxLines: 1,
-                controller: cubit.firstNameController,
-                onChanged: cubit.firstNameChanged,
-                validation: true,
-                state: state.errors.firstName,
-              ),
+                  title: AppLocalizations.of(context)!.userFirstName,
+                  maxLines: 1,
+                  controller: cubit.firstNameController,
+                  onChanged: cubit.firstNameChanged,
+                  validation: true,
+                  state: state.errors.firstName,
+                  isClearButton: true),
               const SizedBox(
                 height: 10,
               ),
               CustomTextField(
-                title: AppLocalizations.of(context)!.userSecondName,
-                maxLines: 1,
-                controller: cubit.secondNameController,
-                onChanged: cubit.secondNameChanged,
-                state: state.errors.secondName,
-              ),
+                  title: AppLocalizations.of(context)!.userSecondName,
+                  maxLines: 1,
+                  controller: cubit.secondNameController,
+                  onChanged: cubit.secondNameChanged,
+                  state: state.errors.secondName,
+                  isClearButton: true),
               const SizedBox(
                 height: 10,
               ),
               CustomTextField(
-                title: AppLocalizations.of(context)!.userPhoneNumber,
-                controller: cubit.phoneNumberController,
-                onChanged: cubit.phoneNumberChanged,
-                maxLines: 1,
-                state: state.errors.phoneNumber,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(16),
-                ],
-              ),
+                  title: AppLocalizations.of(context)!.userPhoneNumber,
+                  controller: cubit.phoneNumberController,
+                  onChanged: cubit.phoneNumberChanged,
+                  maxLines: 1,
+                  state: state.errors.phoneNumber,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(16),
+                  ],
+                  isClearButton: true),
               const SizedBox(
                 height: 10,
               ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
@@ -214,6 +215,73 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
   void createNew() {
     emit(state.copyWith(isSuccess: false));
     clearState();
+  }
+
+  Future<void> pasteUsersData() async {
+    final input = await getTextFromClipboard();
+    moxyPrint(input);
+
+    String phone = '';
+    String firstName = '';
+    String secondName = '';
+    String city = '';
+    String warehouse = '';
+
+    RegExp phoneRegExp = RegExp(r'(\+?\d{12}|\+?\d{9})');
+    Iterable<Match> phoneMatches = phoneRegExp.allMatches(input);
+    if (phoneMatches.isNotEmpty) {
+      phone = phoneMatches.first.group(0)!;
+    }
+
+    RegExp nameRegExp =
+        RegExp(r'([А-Яа-яЁё]+)\s+([А-Яа-яЁё]+)(\s+[А-Яа-яЁё]+)??');
+    ;
+    Iterable<Match> nameMatches = nameRegExp.allMatches(input);
+    if (nameMatches.isNotEmpty) {
+      Match nameMatch = nameMatches.first;
+      firstName = nameMatch.group(1)!;
+      secondName = nameMatch.group(2)!;
+    }
+
+    RegExp cityRegExp =
+        RegExp(r'([А-Яа-яЁё]+.*Нової пошти +.*місто +.*м \d+|[А-Яа-яЁё]+)');
+    Iterable<Match> cityMatches = cityRegExp.allMatches(input);
+    if (cityMatches.isNotEmpty) {
+      city = cityMatches.first.group(0)!;
+    }
+
+    RegExp warehouseRegExp = RegExp(r'\b\d{1,3}\b');
+    Iterable<Match> warehouseMatches = warehouseRegExp.allMatches(input);
+    if (warehouseMatches.isNotEmpty) {
+      warehouse = warehouseMatches.first.group(0)!;
+    }
+
+    firstNameController.text = firstName;
+    secondNameController.text = secondName;
+    phoneNumberController.text = phone;
+
+    selectCity(City(
+        mainDescription: city,
+        ref: '',
+        deliveryCityRef: '',
+        presentName: city));
+
+    selectWarehouse(Warehouse(
+        ref: '',
+        postMachineType: '',
+        description: warehouse,
+        number: int.parse(warehouse)));
+
+    emit(state.copyWith(
+      client: state.client.copyWith(
+          firstName: firstName, secondName: secondName, mobileNumber: phone),
+    ));
+  }
+
+  Future<String> getTextFromClipboard() async {
+    ClipboardData? data = await Clipboard.getData('text/plain');
+    final text = data?.text ?? '';
+    return text;
   }
 
   bool validateFields() {

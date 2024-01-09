@@ -6,7 +6,7 @@ import 'package:moxy/utils/common.dart';
 
 class CustomTextField extends StatelessWidget {
   final String title;
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
   final List<String> autofillHints;
@@ -17,10 +17,11 @@ class CustomTextField extends StatelessWidget {
   final ScrollPhysics? scrollPhysics;
   final FieldError? state;
   final Color? borderColor;
+  final bool isClearButton;
   const CustomTextField(
       {super.key,
       required this.title,
-      this.controller,
+      required this.controller,
       this.onChanged,
       this.maxLines,
       this.mixLines = 1,
@@ -30,7 +31,8 @@ class CustomTextField extends StatelessWidget {
       this.validation = false,
       this.expands = false,
       this.state,
-      this.borderColor});
+      this.borderColor,
+      this.isClearButton = false});
 
   @override
   Widget build(BuildContext context) {
@@ -46,28 +48,50 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         Container(
-            height: SizeConfig().heightSize(context, 7.0),
-            padding: const EdgeInsets.all(2),
-            decoration: const BoxDecoration(
-                color: AppTheme.white,
-                borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: TextField(
-              textInputAction: TextInputAction.done,
-              minLines: 1,
-              onChanged: onChanged,
-              controller: controller,
-              maxLines: maxLines,
-              inputFormatters: inputFormatters,
-              autofillHints: autofillHints,
-              decoration: InputDecoration(
-                border: _renderBorder(isValid(state), false, borderColor),
-                enabledBorder:
-                    _renderBorder(isValid(state), false, borderColor),
-                focusedBorder: _renderBorder(isValid(state), true, borderColor),
-                hintText: title,
-                contentPadding: const EdgeInsets.all(15),
+          height: SizeConfig().heightSize(context, 7.0),
+          padding: const EdgeInsets.all(2),
+          decoration: const BoxDecoration(
+              color: AppTheme.white,
+              borderRadius: BorderRadius.all(Radius.circular(8))),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  textInputAction: TextInputAction.done,
+                  minLines: 1,
+                  onChanged: onChanged,
+                  controller: controller,
+                  maxLines: maxLines,
+                  inputFormatters: inputFormatters,
+                  autofillHints: autofillHints,
+                  decoration: InputDecoration(
+                    border: _renderBorder(isValid(state), false, borderColor),
+                    enabledBorder:
+                        _renderBorder(isValid(state), false, borderColor),
+                    focusedBorder:
+                        _renderBorder(isValid(state), true, borderColor),
+                    hintText: title,
+                    contentPadding: const EdgeInsets.all(15),
+                  ),
+                ),
               ),
-            )),
+              if (isClearButton)
+                Expanded(
+                  flex: 1,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                      onPressed: () {
+                        controller.text = '';
+                        onChanged!('');
+                      },
+                      icon: const Icon(size: 20, Icons.delete),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ],
     );
   }

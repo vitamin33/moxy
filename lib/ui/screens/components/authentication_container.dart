@@ -32,6 +32,7 @@ class AuthenticationContainer extends StatelessWidget {
               ),
               const SizedBox(height: AppTheme.cardPadding),
               CustomTextField(
+                controller: TextEditingController(),
                 borderColor: AppTheme.greyLigth,
                 title: AppLocalizations.of(context)!.phoneNumber,
                 onChanged: (value) =>
@@ -42,6 +43,7 @@ class AuthenticationContainer extends StatelessWidget {
               ),
               const SizedBox(height: AppTheme.elementSpacing),
               CustomTextField(
+                controller: TextEditingController(),
                 borderColor: AppTheme.greyLigth,
                 title: AppLocalizations.of(context)!.password,
                 onChanged: (value) =>
