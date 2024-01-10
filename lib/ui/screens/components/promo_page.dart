@@ -37,7 +37,7 @@ class PromoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Container(
           width: double.infinity,
           height: 500,
