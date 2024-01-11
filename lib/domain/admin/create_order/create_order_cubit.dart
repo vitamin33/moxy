@@ -89,17 +89,23 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
         secondNameController.clear();
         phoneNumberController.clear();
         ukrPostInfoController.clear();
+        productRepository.resetSelectedProductList();
       }, (error) {
-        emit(state.copyWith(
-          isLoading: false,
-          isSuccess: false,
-          activePage: 0,
-        ));
-        emitEffect(FailedCreation(error.toString()));
+        failedToCreateOrder(error.toString());
       });
     } catch (e) {
       moxyPrint(e);
+      failedToCreateOrder(e.toString());
     }
+  }
+
+  void failedToCreateOrder(String errorMessage) {
+    emit(state.copyWith(
+      isLoading: false,
+      isSuccess: false,
+      activePage: 0,
+    ));
+    emitEffect(FailedCreation(errorMessage));
   }
 
   int fullPrice(List<DimensionProduct> selectedProducts) {

@@ -25,6 +25,8 @@ class ProductRepository {
   void addToSelectedProductStream(List<OrderedItem> items) =>
       _selectedProductSubject.sink.add(items);
 
+  void resetSelectedProductList() => _selectedProductSubject.sink.add([]);
+
   Future<Result<dynamic, Exception>> addProduct(NetworkProduct product,
       List<ImagePath> chosenImages, List<int> numberOfChosenImages) async {
     try {
@@ -127,9 +129,8 @@ class ProductRepository {
       rethrow;
     }
   }
-  
-  Future<Result<List<NetworkProduct>, Exception>>
-      getResaleProducts() async {
+
+  Future<Result<List<NetworkProduct>, Exception>> getResaleProducts() async {
     try {
       final result = await client.getRecomendedProducts();
       return Result.success(result);
@@ -138,6 +139,7 @@ class ProductRepository {
       rethrow;
     }
   }
+
   Future<Result<List<NetworkProduct>, Exception>> getBagsCatalog() async {
     try {
       final result = await client.getBagsCatalog();
@@ -194,8 +196,7 @@ class ProductRepository {
     }
   }
 
-  Future<Result<List<NetworkProduct>, Exception>>
-      getSearchProducts() async {
+  Future<Result<List<NetworkProduct>, Exception>> getSearchProducts() async {
     try {
       final result = await client.getSearchProducts();
       return Result.success(result);
