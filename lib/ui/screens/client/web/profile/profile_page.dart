@@ -12,7 +12,7 @@ import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_adress.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_contact_info.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.dart';
-import 'package:moxy/ui/screens/components/footer_web.dart';
+import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';

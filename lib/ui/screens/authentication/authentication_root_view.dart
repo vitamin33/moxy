@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,6 +10,7 @@ import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import '../../components/snackbar_widgets.dart';
 // import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -64,12 +64,14 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtil.isMobile(context);
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       final cubit = context.read<LoginCubit>();
       return Scaffold(
         backgroundColor: AppTheme.white,
         body: Container(
-            child: kIsWeb ? buildWebContent(cubit) : buildMobileContent(cubit)),
+            child:
+                isMobile ? buildMobileContent(cubit) : buildWebContent(cubit)),
       );
     });
   }

@@ -12,7 +12,7 @@ import 'package:moxy/ui/screens/components/review_container.dart';
 
 import '../../../../../theme/app_theme.dart';
 import '../../../../components/filter_container.dart';
-import '../../../../components/footer_web.dart';
+import '../../../../components/footer.dart';
 import '../../../../components/promo_container.dart';
 
 class BagsProductPage extends StatefulWidget {

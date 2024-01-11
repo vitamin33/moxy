@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 import '../../../constant/icon_path.dart';
 import '../../../domain/client/footer/footer_cubit.dart';
@@ -21,19 +22,30 @@ class Footer extends StatelessWidget {
       child: BlocBuilder<FooterCubit, FooterState>(
         builder: (context, state) {
           final cubit = context.read<FooterCubit>();
+          final isMobile = ResponsiveUtil.isMobile(context);
           return Container(
-            decoration: const BoxDecoration(color: AppTheme.pink),
-            width: double.infinity,
-            height: 400,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                emailColumn(cubit, state, theme),
-                menuColumn(theme),
-                contactColumn(theme)
-              ],
-            ),
-          );
+              decoration: const BoxDecoration(color: AppTheme.pink),
+              width: double.infinity,
+              child: isMobile
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          emailColumn(cubit, state, theme),
+                          menuColumn(theme),
+                          contactColumn(theme)
+                        ],
+                      ),
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        emailColumn(cubit, state, theme),
+                        menuColumn(theme),
+                        contactColumn(theme)
+                      ],
+                    ));
         },
       ),
     );

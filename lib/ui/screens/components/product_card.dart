@@ -79,8 +79,7 @@ class ProductCard extends StatelessWidget {
                       _currentImagePath(enableHover),
                     )
                   : Image.asset(
-                      width: 50,
-                      height: 50,
+                     
                       'assets/images/placeholder.jpg',
                       fit: BoxFit.cover,
                     )),

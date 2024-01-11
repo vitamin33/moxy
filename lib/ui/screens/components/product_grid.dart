@@ -4,6 +4,7 @@ import 'package:moxy/domain/models/media.dart';
 import 'package:moxy/ui/screens/components/media_block_grid.dart';
 import 'package:moxy/ui/screens/components/small_block_grid.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 import '../../../domain/models/product.dart';
 
@@ -12,34 +13,38 @@ class NewProductListGrid extends StatelessWidget {
   final List<Product> allSellingProduct;
   final List<Media> mediaList;
 
-  const NewProductListGrid(
-      {super.key,
-      required this.bigBlockLeading,
-      required this.mediaList,
-      required this.allSellingProduct,});
+  const NewProductListGrid({
+    super.key,
+    required this.bigBlockLeading,
+    required this.mediaList,
+    required this.allSellingProduct,
+  });
 
   @override
   Widget build(BuildContext context) {
     final length = allSellingProduct.length - 1;
+    final isMobile = ResponsiveUtil.isMobile(context);
     return SizedBox(
       width: double.infinity,
-      height: 700,
       child: Row(
         children: [
           Expanded(
               child: StaggeredGrid.count(
-            crossAxisCount: 4,
+            crossAxisCount: isMobile ? 1 : 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 10,
             children: [
-              if (bigBlockLeading == true)  MediaBlockGrid(mediaList: mediaList),
+              if (isMobile) MediaBlockGrid(mediaList: mediaList),
+              if (bigBlockLeading && !isMobile)
+                MediaBlockGrid(mediaList: mediaList),
               SmallBlockGrid(
                 product: allSellingProduct[random(0, length)],
               ),
               SmallBlockGrid(
                 product: allSellingProduct[random(0, length)],
               ),
-              if (bigBlockLeading == false)  MediaBlockGrid(mediaList: mediaList),
+              if (!bigBlockLeading && !isMobile)
+                MediaBlockGrid(mediaList: mediaList),
               SmallBlockGrid(
                 product: allSellingProduct[random(0, length)],
               ),
