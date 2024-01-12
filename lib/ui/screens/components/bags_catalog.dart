@@ -7,6 +7,7 @@ import 'package:moxy/domain/client/bags_catalog/bags_catalog_state.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class BagsCatalog extends StatefulWidget {
   const BagsCatalog({super.key});
@@ -42,28 +43,26 @@ class _BagsCatalogState extends State<BagsCatalog> {
   Widget build(BuildContext context) {
     return BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
       builder: (context, state) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: state.isLoading
-              ? const MoxyLoader(
-                  iconSize: 50,
-                )
-              : AlignedGridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.bagsList.length,
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  itemBuilder: (context, index) {
-                    final product = state.bagsList[index];
-                    return ProductCard(
-                      product: product,
-                      onChangeFavorites:cubit.toggleFavoriteForProduct,
-                    );
-                  },
-                ),
-        );
+        final isMobile = ResponsiveUtil.isMobile(context);
+        return state.isLoading
+            ? const MoxyLoader(
+                iconSize: 50,
+              )
+            : AlignedGridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: state.bagsList.length,
+                crossAxisCount: isMobile ? 1 : 3,
+                crossAxisSpacing: 5,
+                mainAxisSpacing: 5,
+                itemBuilder: (context, index) {
+                  final product = state.bagsList[index];
+                  return ProductCard(
+                    product: product,
+                    onChangeFavorites: cubit.toggleFavoriteForProduct,
+                  );
+                },
+              );
       },
     );
   }

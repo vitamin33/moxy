@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
-import 'package:moxy/ui/screens/components/footer_web.dart';
+import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/screens/components/product_advantages_container.dart';
 import 'package:moxy/ui/screens/components/product_details_container.dart';
 import 'package:moxy/ui/screens/components/recomended_products.dart';

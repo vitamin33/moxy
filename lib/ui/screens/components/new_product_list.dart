@@ -42,25 +42,22 @@ class _NewProductListState extends State<NewProductList> {
       create: (context) => cubit,
       child: BlocBuilder<NewProductListCubit, NewProductListState>(
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: state.isLoading
-                ? const CircularProgressIndicator()
-                : Column(
-                    children: [
-                      NewProductListGrid(
-                        bigBlockLeading: false,
-                        allSellingProduct: state.allSellingProduct,
-                        mediaList: state.mediaList,
-                      ),
-                      NewProductListGrid(
-                        bigBlockLeading: true,
-                        allSellingProduct: state.allSellingProduct,
-                        mediaList: state.mediaList,
-                      ),
-                    ],
-                  ),
-          );
+          return state.isLoading
+              ? const CircularProgressIndicator()
+              : Column(
+                  children: [
+                    NewProductListGrid(
+                      bigBlockLeading: false,
+                      allSellingProduct: state.allSellingProduct,
+                      mediaList: state.mediaList,
+                    ),
+                    NewProductListGrid(
+                      bigBlockLeading: true,
+                      allSellingProduct: state.allSellingProduct,
+                      mediaList: state.mediaList,
+                    ),
+                  ],
+                );
         },
       ),
     );

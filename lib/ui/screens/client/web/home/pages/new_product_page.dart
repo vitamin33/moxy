@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../theme/app_theme.dart';
-import '../../../../components/footer_web.dart';
+import '../../../../components/footer.dart';
 import '../../../../components/new_product_list.dart';
 import '../../../../components/promo_container.dart';
 

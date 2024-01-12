@@ -12,8 +12,8 @@ class LoginCubit extends CubitWithEffects<LoginState, UiEffect> {
   final storage = locate<ISecureStorageRepository>();
   final authRepository = locate<AuthRepository>();
 
-  late TextEditingController phoneController;
-  late TextEditingController passwordController;
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   String walletConnectURI = '';
   final PageController pageController = PageController(initialPage: 0);
 

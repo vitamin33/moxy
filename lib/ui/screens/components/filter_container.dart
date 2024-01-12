@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/constant/filter_catalog.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class FilterContainer extends StatelessWidget {
   final String title;
@@ -29,16 +30,16 @@ class FilterContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+    final isMobile = ResponsiveUtil.isMobile(context);
 
     return Padding(
       padding: const EdgeInsets.all(16.0),  
       child: SizedBox(
         width: double.infinity,
-        height: 150,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -54,34 +55,63 @@ class FilterContainer extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                TestSelect(
-                    title: 'Color',
-                    dropDownItems: filterProductColors,
-                    selectedValue: selectedColors,
-                    onChanged: onChangedSelectedColors),
-                const SizedBox(
-                  width: 10,
-                ),
-                TestSelect(
-                    title: 'Price',
-                    dropDownItems: filterRangePrice,
-                    selectedValue: selectedPriceRange,
-                    onChanged: onChangedSelectedPriceRange),
-                const SizedBox(
-                  width: 10,
-                ),
-                TestSelect(
-                    title: 'New',
-                    dropDownItems: filterTime,
-                    selectedValue: selectedTimeRange,
-                    onChanged: onChangedSelectedTimeRange),
-                const SizedBox(
-                  width: 20,
-                ),
-              ],
-            ),
+            isMobile
+                ? Column(
+                    children: [
+                      TestSelect(
+                          title: 'Color',
+                          dropDownItems: filterProductColors,
+                          selectedValue: selectedColors,
+                          onChanged: onChangedSelectedColors),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TestSelect(
+                          title: 'Price',
+                          dropDownItems: filterRangePrice,
+                          selectedValue: selectedPriceRange,
+                          onChanged: onChangedSelectedPriceRange),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TestSelect(
+                          title: 'New',
+                          dropDownItems: filterTime,
+                          selectedValue: selectedTimeRange,
+                          onChanged: onChangedSelectedTimeRange),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      TestSelect(
+                          title: 'Color',
+                          dropDownItems: filterProductColors,
+                          selectedValue: selectedColors,
+                          onChanged: onChangedSelectedColors),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TestSelect(
+                          title: 'Price',
+                          dropDownItems: filterRangePrice,
+                          selectedValue: selectedPriceRange,
+                          onChanged: onChangedSelectedPriceRange),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TestSelect(
+                          title: 'New',
+                          dropDownItems: filterTime,
+                          selectedValue: selectedTimeRange,
+                          onChanged: onChangedSelectedTimeRange),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),

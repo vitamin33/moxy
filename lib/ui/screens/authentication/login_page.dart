@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +11,7 @@ import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,12 +41,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+    final isMobile = ResponsiveUtil.isMobile(context);
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(AppTheme.cardPadding),
         child: Column(
           crossAxisAlignment:
-              kIsWeb ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+              isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
@@ -56,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: AppTheme.cardPadding),
             CustomTextField(
-              controller: TextEditingController(),
+              controller: context.read<LoginCubit>().phoneController,
               borderColor: AppTheme.greyLigth,
               title: AppLocalizations.of(context)!.phoneNumber,
               onChanged: (value) =>
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: AppTheme.elementSpacing),
             CustomTextField(
-              controller: TextEditingController(),
+              controller: context.read<LoginCubit>().passwordController,
               borderColor: AppTheme.greyLigth,
               title: AppLocalizations.of(context)!.password,
               onChanged: (value) =>

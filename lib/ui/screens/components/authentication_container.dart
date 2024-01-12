@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/auth/login/login_cubit.dart';
@@ -8,6 +7,7 @@ import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class AuthenticationContainer extends StatelessWidget {
   const AuthenticationContainer({super.key});
@@ -18,11 +18,12 @@ class AuthenticationContainer extends StatelessWidget {
       builder: (context, state) {
         final theme = AppTheme.of(context)!;
         final cubit = context.read<LoginCubit>();
+        final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             crossAxisAlignment:
-                kIsWeb ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+                isMobile ? CrossAxisAlignment.start : CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(

@@ -6,7 +6,7 @@ import 'package:moxy/ui/screens/components/accessories_catalog.dart';
 
 import '../../../../../theme/app_theme.dart';
 import '../../../../components/filter_container.dart';
-import '../../../../components/footer_web.dart';
+import '../../../../components/footer.dart';
 import '../../../../components/promo_container.dart';
 
 class AccessoriesProductPage extends StatelessWidget {
