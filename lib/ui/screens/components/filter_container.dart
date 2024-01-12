@@ -31,7 +31,7 @@ class FilterContainer extends StatelessWidget {
     final theme = AppTheme.of(context)!;
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(16.0),  
       child: SizedBox(
         width: double.infinity,
         height: 150,

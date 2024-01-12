@@ -31,7 +31,7 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
         ? widget.mediaList[_index % widget.mediaList.length]
         : Media.defaultMedia();
     _videoPlayerController =
-        VideoPlayerController.network(media.mediaUrls.first)
+        VideoPlayerController.networkUrl(Uri.parse(media.mediaUrls.first))
           ..initialize().then((_) {
             _videoPlayerController.play();
             _videoPlayerController.setLooping(true);

@@ -22,8 +22,6 @@ class AccessoriesProductPage extends StatelessWidget {
             builder: (context, state) {
               final cubit = context.read<AccessoriesCatalogCubit>();
               return SingleChildScrollView(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   children: [
                     FilterContainer(
@@ -42,7 +40,7 @@ class AccessoriesProductPage extends StatelessWidget {
                     const Footer(),
                   ],
                 ),
-              ));
+              );
             },
           ),
         ));
