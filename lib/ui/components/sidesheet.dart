@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class SideSheet {
-
   static Future<dynamic> right(
       {
       ///Use this to pass any widget you want to display in the side sheet
@@ -16,7 +16,7 @@ class SideSheet {
       bool barrierDismissible = true,
 
       /// Use barrierColor to set the outside color of the side sheet when opened
-      Color barrierColor =  Colors.black,
+      Color barrierColor = Colors.black,
 
       /// Use sheetBorderRadius to set the outside border radius of the side sheet when opened
       double sheetBorderRadius = 0,
@@ -70,6 +70,7 @@ class SideSheet {
       transitionDuration: transitionDuration,
       context: context,
       pageBuilder: (context, animation1, animation2) {
+        final isMobile = ResponsiveUtil.isMobile(context);
         return Align(
           alignment: Alignment.centerRight,
           child: Material(
@@ -80,7 +81,9 @@ class SideSheet {
                 decoration: BoxDecoration(
                     color: sheetColor, borderRadius: borderRadius),
                 height: double.infinity,
-                width: width ?? MediaQuery.of(context).size.width / 2,
+                width: isMobile
+                    ? MediaQuery.of(context).size.width / 1.2
+                    : MediaQuery.of(context).size.width / 2,
                 child: body),
           ),
         );

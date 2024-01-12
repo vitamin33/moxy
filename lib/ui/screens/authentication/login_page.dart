@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: AppTheme.cardPadding),
             CustomTextField(
-              controller: TextEditingController(),
+              controller: context.read<LoginCubit>().phoneController,
               borderColor: AppTheme.greyLigth,
               title: AppLocalizations.of(context)!.phoneNumber,
               onChanged: (value) =>
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const SizedBox(height: AppTheme.elementSpacing),
             CustomTextField(
-              controller: TextEditingController(),
+              controller: context.read<LoginCubit>().passwordController,
               borderColor: AppTheme.greyLigth,
               title: AppLocalizations.of(context)!.password,
               onChanged: (value) =>
