@@ -37,6 +37,8 @@ class OrderProductList extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: SearchTextfield(
                   title: AppLocalizations.of(context)!.search,
+                  onChanged: (searchText) =>
+                      cubit.searchFieldChanged(searchText),
                 ),
               ),
               Expanded(

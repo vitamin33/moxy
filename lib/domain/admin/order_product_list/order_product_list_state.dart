@@ -8,6 +8,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
   final List<DimensionProduct> productsByDimension;
   final bool isLoading;
   final bool isEdit;
+  final String? searchText;
   final String? errorMessage;
   final List<Product> allProducts;
   Set<OrderedItem> selectedProducts = {};
@@ -17,6 +18,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     required this.allProducts,
     required this.isLoading,
     required this.selectedProducts,
+    required this.searchText,
     this.isEdit = false,
     this.errorMessage,
   });
@@ -29,6 +31,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
       isLoading: false,
       isEdit: false,
       errorMessage: '',
+      searchText: '',
     );
   }
 
@@ -36,6 +39,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
   OrderProductListState copyWith({
     bool? isLoading,
     bool? isEdit,
+    String? searchText,
     String? errorMessage,
     List<Product>? allProducts,
     List<DimensionProduct>? productsByDimension,
@@ -44,6 +48,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     return OrderProductListState(
       isLoading: isLoading ?? this.isLoading,
       isEdit: isEdit ?? this.isEdit,
+      searchText: searchText ?? this.searchText,
       errorMessage: errorMessage ?? this.errorMessage,
       productsByDimension: productsByDimension ?? this.productsByDimension,
       selectedProducts: selectedProducts ?? this.selectedProducts,

@@ -107,6 +107,17 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
     return productsByDimension;
   }
 
+  void searchFieldChanged(String searchText) {
+    final filteredProducts = state.allProducts.where((element) {
+      return element.name.toLowerCase().contains(searchText.toLowerCase());
+    }).toList();
+    final productsByDimen = _produtctMapper.mapToGroupProductsByDimension(
+      filteredProducts,
+      getSelectedProductList(),
+    );
+    emit(state.copyWith(productsByDimension: productsByDimen));
+  }
+
   void toggleProductSelection(int index) {
     bool isSelected = state.productsByDimension[index].isSelected;
     state.productsByDimension[index].isSelected = !isSelected;

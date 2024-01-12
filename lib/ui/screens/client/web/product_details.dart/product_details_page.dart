@@ -19,17 +19,14 @@ class ProductDetailsPage extends StatelessWidget {
         child: const Scaffold(
           backgroundColor: AppTheme.white,
           body: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                children: [
-                  ProductDetailsContainer(),
-                  ProductAdvantagesContainer(),
-                  RecomendedProducts(),
-                  ResaleProducts(),
-                  Footer()
-                ],
-              ),
+            child: Column(
+              children: [
+                ProductDetailsContainer(),
+                ProductAdvantagesContainer(),
+                RecomendedProducts(),
+                ResaleProducts(),
+                Footer()
+              ],
             ),
           ),
         ));

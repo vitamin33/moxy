@@ -55,8 +55,6 @@ class _BagsProductPageState extends State<BagsProductPage> {
                   backgroundColor: AppTheme.white,
                   body: Stack(children: [
                     SingleChildScrollView(
-                        child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24.0),
                       child: Column(
                         children: [
                           FilterContainer(
@@ -76,7 +74,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
                           const Footer(),
                         ],
                       ),
-                    )),
+                    ),
                     if (basketState.isLoading)
                       const Positioned(
                         top: 0,
