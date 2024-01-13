@@ -20,6 +20,8 @@ class NetworkDashboard {
   List<TotalByTimeFrame> totalSaleValueByTimeFrame;
   List<TotalByTimeFrame> totalCostValueByTimeFrame;
   List<TotalByTimeFrame> totalProfitValueByTimeFrame;
+  AdsReportResponse currentAdsReport;
+  AdsReportResponse previousAdsReport;
 
   NetworkDashboard({
     required this.totalSaleValue,
@@ -38,6 +40,8 @@ class NetworkDashboard {
     required this.totalSaleValueByTimeFrame,
     required this.totalCostValueByTimeFrame,
     required this.totalProfitValueByTimeFrame,
+    required this.currentAdsReport,
+    required this.previousAdsReport,
   });
 
   factory NetworkDashboard.fromJson(Map<String, dynamic> json) =>
@@ -62,4 +66,27 @@ class TotalByTimeFrame {
       _$TotalByTimeFrameFromJson(json);
 
   Map<String, dynamic> toJson() => _$TotalByTimeFrameToJson(this);
+}
+
+@JsonSerializable()
+class AdsReportResponse {
+  String spend;
+  String spendInUah;
+  String reach;
+  String cpm;
+  String ctr;
+  String cpc;
+
+  AdsReportResponse({
+    required this.spend,
+    required this.spendInUah,
+    required this.reach,
+    required this.cpm,
+    required this.cpc,
+    required this.ctr,
+  });
+  factory AdsReportResponse.fromJson(Map<String, dynamic> json) =>
+      _$AdsReportResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AdsReportResponseToJson(this);
 }

@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/models/ads_report.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../data/repositories/overview_repository.dart';
@@ -21,6 +22,8 @@ class DashboardCubit extends Cubit<DashboardState> {
       emit(state.copyWith(isLoading: true, animated: false));
       final result = await overviewRepository.getOverview(fromDate, toDate);
       result.when((success) {
+        final currentReport = AdsReport.fromResponse(success.currentAdsReport);
+        final prevReport = AdsReport.fromResponse(success.previousAdsReport);
         emit(state.copyWith(
           totalSale: success.totalSaleValue,
           totalCost: success.totalCostValue,
@@ -38,13 +41,18 @@ class DashboardCubit extends Cubit<DashboardState> {
           costFromTimeFrame: success.totalCostValueByTimeFrame,
           ordersFromTimeFrame: success.ordersCountByTimeFrame,
           profitFromTimeFrame: success.totalProfitValueByTimeFrame,
+          currentAdsReport: currentReport,
+          previousAdsReport: prevReport,
           isLoading: false,
           animated: true,
         ));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed GetDashboard'));
+        emit(state.copyWith(
+            isLoading: false, errorMessage: 'Failed GetDashboard'));
       });
     } catch (e) {
+      emit(state.copyWith(
+          isLoading: false, errorMessage: 'Failed GetDashboard'));
       moxyPrint(e);
     }
   }
@@ -75,9 +83,6 @@ class DashboardCubit extends Cubit<DashboardState> {
     if (result != null) {
       emit(state.copyWith(
         selectedDate: result,
-        animated: false,
-      ));
-      emit(state.copyWith(
         animated: true,
       ));
       getDashboard(

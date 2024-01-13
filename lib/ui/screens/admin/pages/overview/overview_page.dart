@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/ui/screens/components/ads_report.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../constant/icon_path.dart';
@@ -44,6 +45,32 @@ class OverviewPage extends StatelessWidget {
                           height: 10,
                         ),
                         previousPeriodDataWidget(context, state, theme),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                AppLocalizations.of(context)!.overviewAdsStats,
+                                style: theme.smallSemiBoltText),
+                          ),
+                        ),
+                        AdsReportInfo(
+                            title: AppLocalizations.of(context)!
+                                .overviewSelectedDate,
+                            report: state.currentAdsReport),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        AdsReportInfo(
+                            title: AppLocalizations.of(context)!
+                                .overviewPreviusPeriod,
+                            report: state.previousAdsReport),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         AnimatedSize(
                           duration: const Duration(milliseconds: 200),
                           child: state.isLoading
