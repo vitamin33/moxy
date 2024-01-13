@@ -2,7 +2,7 @@ name: moxy
 description: Moxy - brand-new e-commerce shop with unique style. Break Free and Be You.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -63,6 +63,7 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   lottie: ^2.6.0
   flutter_hooks: ^0.20.3
+  expandable: ^5.0.1
 
   #utils
   intl: any
@@ -110,13 +111,13 @@ dev_dependencies:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/icons/ic_launcher.png"
+  image_path: 'assets/icons/ic_launcher.png'
   min_sdk_android: 21
   remove_alpha_ios: true
 
 flutter_native_splash:
   image: assets/icons/moxy_icon.png
-  color: "#ffebfd"
+  color: '#ffebfd'
 
   web: false
 

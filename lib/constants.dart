@@ -20,4 +20,6 @@ const defaultCashAvanceValue = 200;
 
 // Fiat signs
 const uah = 'грн';
+const usd = '\$';
+const percent = '%';
 const piece = 'шт.';
