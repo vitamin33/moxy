@@ -24,17 +24,22 @@ class PromoCubit extends Cubit<PromoState> {
 
   void moveToPreviustPage() {
     pageController.previousPage(
-        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
 
   void moveToNextPage() {
-    pageController.nextPage(
-        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+    final currentIndex = pageController.page ?? 0;
+    if (currentIndex < state.allPromo.length - 1) {
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
+    } else {
+      animatedToPage(0);
+    }
   }
 
   void animatedToPage(int index) {
     pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
+        duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
   }
 
   void allPromo() async {
