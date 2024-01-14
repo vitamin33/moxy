@@ -13,9 +13,8 @@ import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 class AccessoriesCatalogCubit
-    extends CubitWithEffects<AccessoriesCatalogState, UiEffect> 
-    with CatalogsFilteringMixin
-     {
+    extends CubitWithEffects<AccessoriesCatalogState, UiEffect>
+    with CatalogsFilteringMixin {
   late List<Product> originalAccessoriesList;
   AccessoriesCatalogCubit()
       : super(AccessoriesCatalogState.defaultAccessoriesCatalogState()) {
@@ -45,7 +44,7 @@ class AccessoriesCatalogCubit
     }
   }
 
-void getAttributesColorList() async {
+  void getAttributesColorList() async {
     try {
       final colorList = await configRepository.getAttributesColorList();
       emit(state.copyWith(attributes: colorList));
@@ -53,8 +52,9 @@ void getAttributesColorList() async {
       moxyPrint(e);
     }
   }
-  
-  void toggleFavoriteForProduct(String? productId) async {
+
+  void toggleFavoriteForProduct(Product product) async {
+    String? productId = product.id;
     if (productId == null) {
       return;
     }
@@ -82,17 +82,25 @@ void getAttributesColorList() async {
   }
 
   void setFilterColor(String selectedColors) {
-    final accessoriesList= filterPriceCatalog(selectedColors,originalAccessoriesList);
-    emit(state.copyWith(selectedColors: selectedColors,accessoriesList:accessoriesList ));
+    final accessoriesList =
+        filterPriceCatalog(selectedColors, originalAccessoriesList);
+    emit(state.copyWith(
+        selectedColors: selectedColors, accessoriesList: accessoriesList));
   }
+
   void setFilterPrice(String selectedPriceRange) {
-   final accessoriesList= filterPriceCatalog(selectedPriceRange,originalAccessoriesList);
-    emit(state.copyWith(selectedPriceRange: selectedPriceRange,accessoriesList: accessoriesList));
+    final accessoriesList =
+        filterPriceCatalog(selectedPriceRange, originalAccessoriesList);
+    emit(state.copyWith(
+        selectedPriceRange: selectedPriceRange,
+        accessoriesList: accessoriesList));
   }
 
   void setFilterTime(String selectedTimeRange) {
-   final accessoriesList= sortCatalogByCreateTime(selectedTimeRange,originalAccessoriesList);
-    emit(state.copyWith(selectedTimeRange: selectedTimeRange,accessoriesList: accessoriesList));
+    final accessoriesList =
+        sortCatalogByCreateTime(selectedTimeRange, originalAccessoriesList);
+    emit(state.copyWith(
+        selectedTimeRange: selectedTimeRange,
+        accessoriesList: accessoriesList));
   }
-  
 }

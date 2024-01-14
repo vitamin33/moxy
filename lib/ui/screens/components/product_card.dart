@@ -12,10 +12,13 @@ import 'package:moxy/utils/responsive_utils.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  final Function(String productId) onChangeFavorites;
+  final Function(Product product) onChangeFavorites;
 
-  const ProductCard(
-      {super.key, required this.product, required this.onChangeFavorites});
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.onChangeFavorites,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +82,6 @@ class ProductCard extends StatelessWidget {
                       _currentImagePath(enableHover),
                     )
                   : Image.asset(
-                     
                       'assets/images/placeholder.jpg',
                       fit: BoxFit.cover,
                     )),
@@ -108,7 +110,7 @@ class ProductCard extends StatelessWidget {
         alignment: Alignment.topRight,
         child: GestureDetector(
           onTap: () {
-            onChangeFavorites(product.id!);
+            onChangeFavorites(product);
           },
           child: OnHover(
             builder: (isHovered) {

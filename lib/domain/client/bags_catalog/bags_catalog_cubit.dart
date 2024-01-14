@@ -53,7 +53,8 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
     }
   }
 
-  void toggleFavoriteForProduct(String? productId) async {
+  void toggleFavoriteForProduct(Product product) async {
+    String? productId = product.id;
     if (productId == null) {
       return;
     }
