@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
-class AttendanceScreen extends StatefulWidget {
+class PromoTimer extends StatefulWidget {
   final DateTime finalDate;
 
-  const AttendanceScreen({super.key, required this.finalDate});
+  const PromoTimer({super.key, required this.finalDate});
 
   @override
   // ignore: library_private_types_in_public_api
-  _AttendanceScreenState createState() => _AttendanceScreenState();
+  _PromoTimerState createState() => _PromoTimerState();
 }
 
-class _AttendanceScreenState extends State<AttendanceScreen> {
+class _PromoTimerState extends State<PromoTimer> {
   late Duration duration;
   late Timer timer;
 
@@ -46,15 +46,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+
     return SizedBox(
-      width: 200,
       child: duration.isNegative
-          ? Center(
-              child: Text(
-                'Акція завершена',
-                style:
-                    theme.headlineSemiBoltText.copyWith(color: AppTheme.white),
-              ),
+          ? const Center(
+              child: SizedBox.shrink(),
             )
           : buildTime(theme),
     );
@@ -67,17 +63,43 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     final hours = twoDigits(duration.inHours.remainder(24));
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
+    final theme = AppTheme.of(context)!;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        buildTimeCard(time: days, header: 'DAY', theme: theme),
-        const SizedBox(width: 5),
-        buildTimeCard(time: hours, header: 'HOUR', theme: theme),
-        const SizedBox(width: 5),
-        buildTimeCard(time: minutes, header: 'MIN', theme: theme),
-        const SizedBox(width: 5),
-        buildTimeCard(time: seconds, header: 'SEC', theme: theme),
+        const Spacer(flex: 1),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8.0),
+          child: Divider(
+            color: Colors.white,
+            thickness: 1,
+            height: 20,
+          ),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildTimeCard(time: days, header: 'Days', theme: theme),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: buildDivider(),
+            ),
+            buildTimeCard(time: hours, header: 'Hours', theme: theme),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: buildDivider(),
+            ),
+            buildTimeCard(time: minutes, header: 'Minutes', theme: theme),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: buildDivider(),
+            ),
+            buildTimeCard(time: seconds, header: 'Seconds', theme: theme),
+          ],
+        ),
+        const Spacer(flex: 7),
       ],
     );
   }
@@ -87,17 +109,31 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(20),
+        Text(
+          time,
+          style: theme.headline4BoltText.copyWith(
+            color: AppTheme.white,
           ),
-          child: Text(time, style: theme.headline3BoltText),
         ),
         const SizedBox(height: 10),
-        Text(header, style: theme.mediumText),
+        Text(
+          header,
+          style: theme.mediumText.copyWith(
+            color: AppTheme.white,
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget buildDivider() {
+    return const SizedBox(
+      height: 60, // Match this height with your time card's height
+      child: VerticalDivider(
+        color: Colors.white,
+        thickness: 1,
+        width: 20, // The space around the divider, adjust to your layout
+      ),
     );
   }
 }
