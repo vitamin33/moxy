@@ -9,11 +9,12 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
-import 'package:moxy/ui/screens/components/product_grid_item.dart';
+import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class FavouritesPage extends StatefulWidget {
-  const FavouritesPage({Key? key}) : super(key: key);
+  const FavouritesPage({super.key});
 
   @override
   _FavouritesPageState createState() => _FavouritesPageState();
@@ -49,34 +50,34 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+
     return BlocProvider<FavouritesCubit>(
       create: (BuildContext context) => _favouritesCubit,
       child: BlocBuilder<FavouritesCubit, FavouritesState>(
         builder: (context, state) {
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 32.0, horizontal: 48.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 24.0, horizontal: 30.0),
+                child: Text(
                   'Список бажань',
                   style: theme.headline3BoltText.copyWith(
                     color: AppTheme.black,
                   ),
                 ),
-                const SizedBox(height: 32),
-                Expanded(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return SizedBox(
-                      height: constraints.maxHeight,
-                      width: constraints.maxWidth,
-                      child: _buildFavoritesArea(state),
-                    );
-                  }),
-                ),
-              ],
-            ),
+              ),
+              Expanded(
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return SizedBox(
+                    height: constraints.maxHeight,
+                    width: constraints.maxWidth,
+                    child: _buildFavoritesArea(state),
+                  );
+                }),
+              ),
+            ],
           );
         },
       ),
@@ -107,14 +108,20 @@ class _FavouritesPageState extends State<FavouritesPage> {
         ],
       );
     }
+    bool isMobile = ResponsiveUtil.isMobile(context);
+    final crossAxisExtent = isMobile ? 500.0 : 300.0;
+    final spacing = isMobile
+        ? AppTheme.defaultGridSpacingMobile
+        : AppTheme.defaultGridSpacing;
+
     return AnimationLimiter(
       child: GridView.builder(
         itemCount: state.favoriteProducts.length,
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
           childAspectRatio: 0.8,
-          maxCrossAxisExtent: 240.0,
-          crossAxisSpacing: 20.0,
-          mainAxisSpacing: 20.0,
+          maxCrossAxisExtent: crossAxisExtent,
+          crossAxisSpacing: spacing,
+          mainAxisSpacing: spacing,
         ),
         itemBuilder: (context, index) {
           Product product = state.favoriteProducts[index];
@@ -124,9 +131,9 @@ class _FavouritesPageState extends State<FavouritesPage> {
             child: SlideAnimation(
               verticalOffset: 50.0,
               child: FadeInAnimation(
-                child: ProductGridItem(
+                child: ProductCard(
                   product: product,
-                  onFavoriteTap: () =>
+                  onChangeFavorites: (Product product) =>
                       _favouritesCubit.removeFromFavorites(product),
                 ),
               ),

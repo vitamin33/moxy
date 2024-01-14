@@ -5,7 +5,6 @@ import 'package:moxy/domain/client/new_product_list/new_product_list_cubit.dart'
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 
-
 class SmallBlockGrid extends StatelessWidget {
   final Product product;
 
@@ -21,7 +20,9 @@ class SmallBlockGrid extends StatelessWidget {
       crossAxisCellCount: 1,
       mainAxisCellCount: 1,
       child: ProductCard(
-          product: product, onChangeFavorites: cubit.toggleFavoriteForProduct),
+        product: product,
+        onChangeFavorites: cubit.toggleFavoriteForProduct,
+      ),
     );
   }
 }

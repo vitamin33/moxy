@@ -31,8 +31,7 @@ class NewProductListCubit
       final result = await productRepository.getAllSellingProducts();
       result.when((success) {
         final allProductsList = productMapper.mapToProductList(success);
-        emit(state.copyWith(
-            allSellingProduct: allProductsList));
+        emit(state.copyWith(allSellingProduct: allProductsList));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
       });
@@ -40,9 +39,7 @@ class NewProductListCubit
       final resultMedia = await productRepository.fetchHomeMedia();
       resultMedia.when((success) {
         final mediaList = mediaMapper.mapToMedia(success);
-        emit(state.copyWith(
-          mediaList:mediaList,
-             isLoading: false));
+        emit(state.copyWith(mediaList: mediaList, isLoading: false));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
       });
@@ -51,7 +48,8 @@ class NewProductListCubit
     }
   }
 
-  void toggleFavoriteForProduct(String? productId) async {
+  void toggleFavoriteForProduct(Product product) async {
+    String? productId = product.id;
     if (productId == null) {
       return;
     }
