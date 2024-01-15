@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
@@ -15,6 +16,7 @@ import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.d
 import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 
@@ -29,13 +31,15 @@ class ProfilePage extends StatefulWidget {
 
 const double contentHeight = 400.0;
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
   late ProfileCubit cubit;
 
   @override
   void initState() {
     super.initState();
     cubit = ProfileCubit(extraPagePath: widget.extraPage);
+    cubit.tabController = TabController(length: 3, vsync: this);
 
     cubit.effectStream.listen((effect) {
       if (effect is ProfileApiRequestFailed) {
@@ -129,20 +133,49 @@ class ProfileTabPage extends StatelessWidget {
         final cubit = context.read<ProfileCubit>();
         final theme = AppTheme.of(context)!;
         final router = context.read<RootRouterCubit>();
+        final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
               SizedBox(
                 height: contentHeight,
-                child: Row(
-                  children: [
-                    // Drawer Menu
-                    _drawerMenu(context, cubit, state, theme, router),
-                    // Selected Tab Content
-                    _selectedTabContent(cubit, state),
-                  ],
-                ),
+                child: isMobile
+                    ? Column(
+                        children: [
+                          TabBar(
+                            overlayColor:
+                                MaterialStateProperty.resolveWith<Color?>(
+                              (Set<MaterialState> states) {
+                                if (states.contains(MaterialState.hovered)) {
+                                  return AppTheme.greyLigth;
+                                }
+                                return null;
+                              },
+                            ),
+                            controller: cubit.tabController,
+                            indicatorColor: AppTheme.black,
+                            labelColor: AppTheme.black,
+                            onTap: (int index) {
+                              cubit.onChangePage(index);
+                            },
+                            tabs: [
+                              for (final pageTitle in tabTitles)
+                                Tab(text: pageTitle),
+                            ],
+                          ),
+                          _selectedTabContent(cubit, state),
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          // Drawer Menu
+                          _drawerMenu(
+                              context, cubit, state, theme, router, isMobile),
+                          // Selected Tab Content
+                          _selectedTabContent(cubit, state),
+                        ],
+                      ),
               ),
               const SizedBox(height: 30),
               AnimatedOpacity(
@@ -186,75 +219,128 @@ class ProfileTabPage extends StatelessWidget {
     );
   }
 
-  Widget _drawerMenu(BuildContext context, ProfileCubit cubit,
-      ProfileState state, AppTheme theme, RootRouterCubit router) {
+  Widget _drawerMenu(
+      BuildContext context,
+      ProfileCubit cubit,
+      ProfileState state,
+      AppTheme theme,
+      RootRouterCubit router,
+      bool isMobile) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
       child: SizedBox(
         width: 250,
         height: contentHeight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(tabTitles.length, (index) {
-            return GestureDetector(
-              onTap: () {
-                if (cubit.pageController.hasClients) {
-                  cubit.pageController.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
-                  );
-                  updateNavigator(context, index);
-                }
-              },
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: state.activePage == index
-                      ? const Border(
-                          right: BorderSide(
-                            color: AppTheme.black,
-                            width: 2,
-                            style: BorderStyle.solid,
-                          ),
-                        )
-                      : const Border(
-                          right: BorderSide(
-                            color: AppTheme.greyLigth,
-                            width: 2,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 25),
-                child: Text(
-                  tabTitles[index],
-                  style: theme.largeBoltText.copyWith(
-                    color: state.activePage == index
-                        ? AppTheme.pinkDark
-                        : AppTheme.black,
-                  ),
-                ),
-              ),
-            );
-          })
-            ..add(
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: InkWell(
+        child: isMobile
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: List.generate(tabTitles.length, (index) {
+                  return GestureDetector(
                     onTap: () {
-                      cubit.signOut();
-                      context.go(RouterProvider.loginPath());
+                      if (cubit.pageController.hasClients) {
+                        cubit.pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeIn,
+                        );
+                        updateNavigator(context, index);
+                      }
                     },
-                    child: Text('Вихід',
-                        style: theme.largeSemiBoltText
-                            .copyWith(color: AppTheme.gray)),
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: state.activePage == index
+                            ? const Border(
+                                right: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                              )
+                            : const Border(
+                                right: BorderSide(
+                                  color: AppTheme.greyLigth,
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                              ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: Text(
+                        tabTitles[index],
+                        style: theme.largeBoltText.copyWith(
+                          color: state.activePage == index
+                              ? AppTheme.pinkDark
+                              : AppTheme.black,
+                        ),
+                      ),
+                    ),
+                  );
+                }))
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(tabTitles.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      if (cubit.pageController.hasClients) {
+                        cubit.pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeIn,
+                        );
+                        updateNavigator(context, index);
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: state.activePage == index
+                            ? const Border(
+                                right: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                              )
+                            : const Border(
+                                right: BorderSide(
+                                  color: AppTheme.greyLigth,
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                              ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: Text(
+                        tabTitles[index],
+                        style: theme.largeBoltText.copyWith(
+                          color: state.activePage == index
+                              ? AppTheme.pinkDark
+                              : AppTheme.black,
+                        ),
+                      ),
+                    ),
+                  );
+                })
+                  ..add(
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: InkWell(
+                          onTap: () {
+                            cubit.signOut();
+                            context.go(RouterProvider.loginPath());
+                          },
+                          child: Text('Вихід',
+                              style: theme.largeSemiBoltText
+                                  .copyWith(color: AppTheme.gray)),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
               ),
-            ),
-        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:moxy/config/routes.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
@@ -18,11 +19,12 @@ import '../../models/warehouse.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
-    with ValidationMixin {
+    with ValidationMixin   {
   late TextEditingController firstnameController;
   late TextEditingController secondnameController;
   late TextEditingController mobileNumberController;
   late PageController pageController;
+  late TabController tabController;
   final String? extraPagePath;
 
   ProfileCubit({required this.extraPagePath})
