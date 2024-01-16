@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
@@ -39,7 +38,8 @@ class _ProfilePageState extends State<ProfilePage>
   void initState() {
     super.initState();
     cubit = ProfileCubit(extraPagePath: widget.extraPage);
-    cubit.tabController = TabController(length: 3, vsync: this);
+    cubit.tabController =
+        TabController(initialIndex: cubit.activePage, length: 3, vsync: this);
 
     cubit.effectStream.listen((effect) {
       if (effect is ProfileApiRequestFailed) {
@@ -88,7 +88,6 @@ class _ProfilePageState extends State<ProfilePage>
                 child: Column(
                   children: [
                     SizedBox(
-                      height: 600,
                       child: AnimatedSwitcher(
                         duration: const Duration(
                             milliseconds: 500), // Adjust the duration as needed
@@ -138,36 +137,11 @@ class ProfileTabPage extends StatelessWidget {
           padding: const EdgeInsets.all(24.0),
           child: Column(
             children: [
-              SizedBox(
-                height: contentHeight,
-                child: isMobile
-                    ? Column(
-                        children: [
-                          TabBar(
-                            overlayColor:
-                                MaterialStateProperty.resolveWith<Color?>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.hovered)) {
-                                  return AppTheme.greyLigth;
-                                }
-                                return null;
-                              },
-                            ),
-                            controller: cubit.tabController,
-                            indicatorColor: AppTheme.black,
-                            labelColor: AppTheme.black,
-                            onTap: (int index) {
-                              cubit.onChangePage(index);
-                            },
-                            tabs: [
-                              for (final pageTitle in tabTitles)
-                                Tab(text: pageTitle),
-                            ],
-                          ),
-                          _selectedTabContent(cubit, state),
-                        ],
-                      )
-                    : Row(
+              isMobile
+                  ? _selectedTabMobile(cubit, state)
+                  : SizedBox(
+                      height: contentHeight,
+                      child: Row(
                         children: [
                           // Drawer Menu
                           _drawerMenu(
@@ -176,7 +150,7 @@ class ProfileTabPage extends StatelessWidget {
                           _selectedTabContent(cubit, state),
                         ],
                       ),
-              ),
+                    ),
               const SizedBox(height: 30),
               AnimatedOpacity(
                 opacity: state.showSaveButton ? 1.0 : 0.0,
@@ -202,7 +176,7 @@ class ProfileTabPage extends StatelessWidget {
               height: contentHeight,
               child: PageView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
+                scrollDirection: Axis.horizontal,
                 controller: cubit.pageController,
                 onPageChanged: (int page) {
                   cubit.onChangePage(page);
@@ -219,6 +193,45 @@ class ProfileTabPage extends StatelessWidget {
     );
   }
 
+  Widget _selectedTabMobile(ProfileCubit cubit, ProfileState state) {
+    return Column(
+      children: [
+        Column(
+          children: [
+            TabBar(
+              overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.hovered)) {
+                    return AppTheme.greyLigth;
+                  }
+                  return null;
+                },
+              ),
+              controller: cubit.tabController,
+              indicatorColor: AppTheme.black,
+              labelColor: AppTheme.black,
+              onTap: (int index) {
+                cubit.onChangePage(index);
+              },
+              tabs: [
+                for (final pageTitle in tabTitles) Tab(text: pageTitle),
+              ],
+            ),
+            SizedBox(
+              height: 600,
+              child: TabBarView(
+                controller: cubit.tabController,
+                children: [
+                  for (final pageWidget in tabPages) pageWidget,
+                ],
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
   Widget _drawerMenu(
       BuildContext context,
       ProfileCubit cubit,
@@ -228,58 +241,58 @@ class ProfileTabPage extends StatelessWidget {
       bool isMobile) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
-      child: SizedBox(
-        width: 250,
-        height: contentHeight,
-        child: isMobile
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: List.generate(tabTitles.length, (index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (cubit.pageController.hasClients) {
-                        cubit.pageController.animateToPage(
-                          index,
-                          duration: const Duration(milliseconds: 200),
-                          curve: Curves.easeIn,
-                        );
-                        updateNavigator(context, index);
-                      }
-                    },
-                    child: Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: state.activePage == index
-                            ? const Border(
-                                right: BorderSide(
-                                  color: AppTheme.black,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
-                              )
-                            : const Border(
-                                right: BorderSide(
-                                  color: AppTheme.greyLigth,
-                                  width: 2,
-                                  style: BorderStyle.solid,
-                                ),
+      child: isMobile
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(tabTitles.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    if (cubit.pageController.hasClients) {
+                      cubit.pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeIn,
+                      );
+                      updateNavigator(context, index);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: state.activePage == index
+                          ? const Border(
+                              right: BorderSide(
+                                color: AppTheme.black,
+                                width: 2,
+                                style: BorderStyle.solid,
                               ),
-                      ),
-                      padding: const EdgeInsets.symmetric(vertical: 25),
-                      child: Text(
-                        tabTitles[index],
-                        style: theme.largeBoltText.copyWith(
-                          color: state.activePage == index
-                              ? AppTheme.pinkDark
-                              : AppTheme.black,
-                        ),
+                            )
+                          : const Border(
+                              right: BorderSide(
+                                color: AppTheme.greyLigth,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                            ),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: Text(
+                      tabTitles[index],
+                      style: theme.largeBoltText.copyWith(
+                        color: state.activePage == index
+                            ? AppTheme.pinkDark
+                            : AppTheme.black,
                       ),
                     ),
-                  );
-                }))
-            : Column(
+                  ),
+                );
+              }))
+          : SizedBox(
+              width: 250,
+              height: contentHeight,
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: List.generate(tabTitles.length, (index) {
                   return GestureDetector(
@@ -341,7 +354,7 @@ class ProfileTabPage extends StatelessWidget {
                     ),
                   ),
               ),
-      ),
+            ),
     );
   }
 

@@ -19,12 +19,13 @@ import '../../models/warehouse.dart';
 import 'profile_state.dart';
 
 class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
-    with ValidationMixin   {
+    with ValidationMixin {
   late TextEditingController firstnameController;
   late TextEditingController secondnameController;
   late TextEditingController mobileNumberController;
   late PageController pageController;
   late TabController tabController;
+  late int activePage;
   final String? extraPagePath;
 
   ProfileCubit({required this.extraPagePath})
@@ -36,7 +37,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
         TextEditingController(text: state.profile.secondName);
     mobileNumberController =
         TextEditingController(text: state.profile.mobileNumber);
-    int activePage = _calculateInitialPage(extraPagePath);
+     activePage = _calculateInitialPage(extraPagePath);
     pageController = PageController(initialPage: activePage);
     emit(state.copyWith(
         activePage: activePage, showSaveButton: _showSaveButton(activePage)));
