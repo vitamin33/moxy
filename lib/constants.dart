@@ -11,6 +11,7 @@ const statusKey = 'status';
 const dateRangeKey = 'dateRange';
 const attributesColorListKey = 'attributesColorList';
 const attributesSizeListKey = 'attributesSizeList';
+const novaPostApiKey = 'novaPostApiKey';
 
 // GET params keys
 const uniqueIdKey = 'uniqueId';

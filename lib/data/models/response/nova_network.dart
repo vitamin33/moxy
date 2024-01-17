@@ -45,3 +45,45 @@ class NovaNetworkWarehouse {
 
   Map<String, dynamic> toJson() => _$NovaNetworkWarehouseToJson(this);
 }
+
+@JsonSerializable()
+class NovaNetworkEN {
+  @JsonKey(name: 'Ref')
+  final String ref;
+  @JsonKey(name: 'Description')
+  final String description;
+  @JsonKey(name: 'DateTime')
+  final String dateTime;
+  @JsonKey(name: 'Cost')
+  final String cost;
+  @JsonKey(name: 'CityRecipient')
+  final String cityRecepientRef;
+  @JsonKey(name: 'ContactRecipient')
+  final String contactRecipientRef;
+  @JsonKey(name: 'RecipientsPhone')
+  final String recipientPhone;
+  @JsonKey(name: 'CityRecipientDescription')
+  final String cityRecipientDescription;
+  @JsonKey(name: 'RecipientContactPerson')
+  final String recipientContactPerson;
+  @JsonKey(name: 'RecipientAddressDescription')
+  final String recipientAddressDescription;
+
+  NovaNetworkEN(
+    this.ref,
+    this.description,
+    this.dateTime,
+    this.cityRecepientRef,
+    this.cost,
+    this.contactRecipientRef,
+    this.cityRecipientDescription,
+    this.recipientAddressDescription,
+    this.recipientContactPerson,
+    this.recipientPhone,
+  );
+
+  factory NovaNetworkEN.fromJson(Map<String, dynamic> json) =>
+      _$NovaNetworkENFromJson(json);
+
+  Map<String, dynamic> toJson() => _$NovaNetworkENToJson(this);
+}
