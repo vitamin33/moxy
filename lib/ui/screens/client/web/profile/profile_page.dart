@@ -82,7 +82,6 @@ class _ProfilePageState extends State<ProfilePage>
           return Scaffold(
             body: Container(
               height: MediaQuery.of(context).size.height,
-              width: double.infinity,
               color: AppTheme.white,
               child: SingleChildScrollView(
                 child: Column(
@@ -134,38 +133,38 @@ class ProfileTabPage extends StatelessWidget {
         final router = context.read<RootRouterCubit>();
         final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            children: [
-              isMobile
-                  ? _selectedTabMobile(cubit, state)
-                  : SizedBox(
-                      height: contentHeight,
-                      child: Row(
-                        children: [
-                          // Drawer Menu
-                          _drawerMenu(
-                              context, cubit, state, theme, router, isMobile),
-                          // Selected Tab Content
-                          _selectedTabContent(cubit, state),
-                        ],
+            padding: EdgeInsets.all(isMobile ? 0.0 : 24.0),
+            child: Column(
+              children: [
+                isMobile
+                    ? _selectedTabMobile(cubit, state)
+                    : SizedBox(
+                        height: contentHeight,
+                        child: Row(
+                          children: [
+                            // Drawer Menu
+                            _drawerMenu(
+                                context, cubit, state, theme, router, isMobile),
+                            // Selected Tab Content
+                            _selectedTabContent(cubit, state, isMobile),
+                          ],
+                        ),
                       ),
-                    ),
-              const SizedBox(height: 30),
-              AnimatedOpacity(
-                opacity: state.showSaveButton ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: _buildSaveButton(cubit),
-              ),
-              const SizedBox(height: 50),
-            ],
-          ),
-        );
+                const SizedBox(height: 30),
+                AnimatedOpacity(
+                  opacity: state.showSaveButton ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: _buildSaveButton(cubit),
+                ),
+                const SizedBox(height: 50),
+              ],
+            ));
       },
     );
   }
 
-  Widget _selectedTabContent(ProfileCubit cubit, ProfileState state) {
+  Widget _selectedTabContent(
+      ProfileCubit cubit, ProfileState state, bool isMobile) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,7 +175,7 @@ class ProfileTabPage extends StatelessWidget {
               height: contentHeight,
               child: PageView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
+                scrollDirection: Axis.vertical,
                 controller: cubit.pageController,
                 onPageChanged: (int page) {
                   cubit.onChangePage(page);
@@ -219,7 +218,9 @@ class ProfileTabPage extends StatelessWidget {
             ),
             SizedBox(
               height: 600,
+              width: double.infinity,
               child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
                 controller: cubit.tabController,
                 children: [
                   for (final pageWidget in tabPages) pageWidget,

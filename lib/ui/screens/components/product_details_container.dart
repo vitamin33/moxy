@@ -14,6 +14,7 @@ import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/screens/components/rate_indicator.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class ProductDetailsContainer extends StatelessWidget {
   const ProductDetailsContainer({super.key});
@@ -25,29 +26,46 @@ class ProductDetailsContainer extends StatelessWidget {
     return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
       builder: (context, state) {
         final cubit = context.read<ProductDetailsCubit>();
+        final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: state.isLoading
               ? const MoxyLoader(
                   iconSize: 50,
                 )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ImageCarousel(
-                        dimensions: state.productDetails.product.dimensions),
-                    _aboutProductDetails(state, cubit, context, theme)
-                  ],
-                ),
+              : isMobile
+                  ? Column(
+                      children: [
+                        ImageCarousel(
+                            dimensions:
+                                state.productDetails.product.dimensions),
+                        _aboutProductDetails(
+                            state, cubit, context, theme, isMobile)
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ImageCarousel(
+                            dimensions:
+                                state.productDetails.product.dimensions),
+                        _aboutProductDetails(
+                            state, cubit, context, theme, isMobile)
+                      ],
+                    ),
         );
       },
     );
   }
 }
 
-Widget _aboutProductDetails(ProductDetailsState state,
-    ProductDetailsCubit cubit, BuildContext context, AppTheme theme) {
+Widget _aboutProductDetails(
+    ProductDetailsState state,
+    ProductDetailsCubit cubit,
+    BuildContext context,
+    AppTheme theme,
+    bool isMobile) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Column(
@@ -58,51 +76,105 @@ Widget _aboutProductDetails(ProductDetailsState state,
           state.productDetails.product.name.toUpperCase(),
           style: theme.headline4BoltText,
         ),
-        Row(
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(5.0),
-              child: Text('4.6'),
-            ),
-            RatingBarIndicator(
-              rating: 4.6,
-              itemBuilder: (context, index) => const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              itemCount: 5,
-              itemSize: 15.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text('5,890 rating',
-                  style: theme.mediumText.copyWith(color: AppTheme.gray)),
-            ),
-          ],
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        state.productDetails.product.discountPrice != 0
-            ? Row(
+        isMobile
+            ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                state.productDetails.product.discountPrice != 0
+                    ? Row(
+                        children: [
+                          Text(
+                              '${state.productDetails.product.discountPrice} UAH',
+                              style: theme.headline3BoltText
+                                  .copyWith(color: AppTheme.pinkDark)),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text('${state.productDetails.product.salePrice} UAH',
+                              style: theme.titleText.copyWith(
+                                  color: AppTheme.gray,
+                                  decoration: TextDecoration.lineThrough)),
+                        ],
+                      )
+                    : Row(children: [
+                        Text('${state.productDetails.product.salePrice} UAH',
+                            style: theme.headline3BoltText
+                                .copyWith(color: AppTheme.pinkDark)),
+                      ]),
+                Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(5.0),
+                      child: Text('4.6'),
+                    ),
+                    RatingBarIndicator(
+                      rating: 4.6,
+                      itemBuilder: (context, index) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                      itemCount: 5,
+                      itemSize: 15.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text('5,890 rating',
+                          style:
+                              theme.mediumText.copyWith(color: AppTheme.gray)),
+                    ),
+                  ],
+                ),
+              ])
+            : Column(
                 children: [
-                  Text('${state.productDetails.product.discountPrice} UAH',
-                      style: theme.headline3BoltText
-                          .copyWith(color: AppTheme.pinkDark)),
-                  const SizedBox(
-                    width: 20,
+                  Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(5.0),
+                        child: Text('4.6'),
+                      ),
+                      RatingBarIndicator(
+                        rating: 4.6,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 15.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text('5,890 rating',
+                            style: theme.mediumText
+                                .copyWith(color: AppTheme.gray)),
+                      ),
+                    ],
                   ),
-                  Text('${state.productDetails.product.salePrice} UAH',
-                      style: theme.titleText.copyWith(
-                          color: AppTheme.gray,
-                          decoration: TextDecoration.lineThrough)),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  state.productDetails.product.discountPrice != 0
+                      ? Row(
+                          children: [
+                            Text(
+                                '${state.productDetails.product.discountPrice} UAH',
+                                style: theme.headline3BoltText
+                                    .copyWith(color: AppTheme.pinkDark)),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Text(
+                                '${state.productDetails.product.salePrice} UAH',
+                                style: theme.titleText.copyWith(
+                                    color: AppTheme.gray,
+                                    decoration: TextDecoration.lineThrough)),
+                          ],
+                        )
+                      : Row(children: [
+                          Text('${state.productDetails.product.salePrice} UAH',
+                              style: theme.headline3BoltText
+                                  .copyWith(color: AppTheme.pinkDark)),
+                        ]),
                 ],
-              )
-            : Row(children: [
-                Text('${state.productDetails.product.salePrice} UAH',
-                    style: theme.headline3BoltText
-                        .copyWith(color: AppTheme.pinkDark)),
-              ]),
+              ),
         const SizedBox(height: 20),
         Row(
           children: [
@@ -136,15 +208,20 @@ Widget _aboutProductDetails(ProductDetailsState state,
           children: [
             Row(
               children: [
-                QuantityPicker(
-                  quantity: state.productDetails.dimension.quantity,
-                  onPlus: () {
-                    cubit.addQuantityOfProduct();
-                  },
-                  onMinus: () {
-                    cubit.removeQuantityOfProduct();
-                  },
-                ),
+                if (!isMobile)
+                  Row(
+                    children: [
+                      QuantityPicker(
+                        quantity: state.productDetails.dimension.quantity,
+                        onPlus: () {
+                          cubit.addQuantityOfProduct();
+                        },
+                        onMinus: () {
+                          cubit.removeQuantityOfProduct();
+                        },
+                      ),
+                    ],
+                  ),
                 const SizedBox(width: 5),
                 CustomButton(
                   outline: true,
@@ -154,7 +231,7 @@ Widget _aboutProductDetails(ProductDetailsState state,
                         .read<BasketCubit>()
                         .addProductDetailsToBasket(state.productDetails);
                   },
-                  buttonWidth: 375,
+                  buttonWidth: isMobile ? 470 : 375,
                 ),
               ],
             ),

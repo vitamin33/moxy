@@ -72,8 +72,6 @@ class AdvantageItem extends StatelessWidget {
           if (!showTextFirst)
             Image.network(
               image,
-              width: 500,
-              height: 350,
               fit: BoxFit.cover,
             ),
           if (!showTextFirst) const SizedBox(width: 130),
@@ -96,8 +94,6 @@ class AdvantageItem extends StatelessWidget {
           if (showTextFirst)
             Image.network(
               image,
-              width: 500,
-              height: 350,
               fit: BoxFit.cover,
             ),
         ],

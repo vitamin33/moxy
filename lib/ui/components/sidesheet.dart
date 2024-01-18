@@ -82,7 +82,7 @@ class SideSheet {
                     color: sheetColor, borderRadius: borderRadius),
                 height: double.infinity,
                 width: isMobile
-                    ? MediaQuery.of(context).size.width / 1.2
+                    ? MediaQuery.of(context).size.width
                     : MediaQuery.of(context).size.width / 2,
                 child: body),
           ),
