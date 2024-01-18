@@ -191,4 +191,21 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       moxyPrint(e);
     }
   }
+
+  void deleteOrder(String? orderId, int index) async {
+    if (orderId != null) {
+      final updatedOrders = List<Order>.from(state.allOrders)..removeAt(index);
+
+      emit(state.copyWith(allOrders: updatedOrders, isLoading: true));
+      final result = await ordersRepository.deleteOrder(orderId);
+      result.when((success) {
+        refreshOrderList();
+      }, (error) {
+        emit(state.copyWith(
+          errorMessage: 'Failed',
+        ));
+        refreshOrderList();
+      });
+    }
+  }
 }
