@@ -9,6 +9,7 @@ import 'package:moxy/ui/screens/components/loading_elevated_button.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutProducts extends StatelessWidget {
@@ -20,12 +21,13 @@ class CheckoutProducts extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
     final cubit = context.read<CheckoutCubit>();
+    final isMobile = ResponsiveUtil.isMobile(context);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ..._buildYourOrderWidget(theme, cubit),
+          ..._buildYourOrderWidget(theme, cubit, isMobile),
           ..._buildCheckoutArea(theme, cubit),
           ..._buildWarningsAndTerms(theme, cubit),
         ],
@@ -33,13 +35,14 @@ class CheckoutProducts extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildYourOrderWidget(AppTheme theme, CheckoutCubit cubit) {
+  List<Widget> _buildYourOrderWidget(
+      AppTheme theme, CheckoutCubit cubit, bool isMobile) {
     List<Widget> productWidgets = [];
     int rowCount = state.basket.basketItems.length;
 
     for (int i = 0; i < rowCount; i++) {
       productWidgets.add(
-        _buildProductItem(cubit, theme, i),
+        _buildProductItem(cubit, theme, i, isMobile),
       );
     }
     return [
@@ -83,6 +86,7 @@ class CheckoutProducts extends StatelessWidget {
       ),
       const SizedBox(height: 30),
       ExpandableShippingText(
+        maxLines: 5,
         collapsedText: freeShippingText,
         price: state.isFreeShipping
             ? null
@@ -134,7 +138,8 @@ class CheckoutProducts extends StatelessWidget {
     ];
   }
 
-  Widget _buildProductItem(CheckoutCubit cubit, AppTheme theme, int index) {
+  Widget _buildProductItem(
+      CheckoutCubit cubit, AppTheme theme, int index, bool isMobile) {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
     String color = item.dimension.color.name.toUpperCase();
@@ -197,12 +202,14 @@ class CheckoutProducts extends StatelessWidget {
                         InkWell(
                           child: Padding(
                             padding: const EdgeInsets.all(8),
-                            child: Text(
-                              'Remove',
-                              style: theme.titleText.copyWith(
-                                  color: AppTheme.gray,
-                                  decoration: TextDecoration.underline),
-                            ),
+                            child: isMobile
+                                ? Icon(Icons.delete)
+                                : Text(
+                                    'Remove',
+                                    style: theme.titleText.copyWith(
+                                        color: AppTheme.gray,
+                                        decoration: TextDecoration.underline),
+                                  ),
                           ),
                           onTap: () {
                             cubit.removeProductFromBasket(item);

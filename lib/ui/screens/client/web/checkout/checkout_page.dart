@@ -9,6 +9,7 @@ import 'package:moxy/domain/client/checkout/checkout_effects.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../theme/app_theme.dart';
@@ -78,6 +79,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       child: BlocBuilder<CheckoutCubit, CheckoutState>(
         builder: (context, state) {
           final theme = AppTheme.of(context)!;
+          final isMobile = ResponsiveUtil.isMobile(context);
           return Scaffold(
             backgroundColor: Colors.transparent,
             body: ScrollableSection(
@@ -103,8 +105,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 const SizedBox(
                                     width: 8), // Adjust the spacing as needed
-                                Text("Go back",
-                                    style: theme.largeBoltText),
+                                Text("Go back", style: theme.largeBoltText),
                               ],
                             ),
                           ),
@@ -112,23 +113,34 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ),
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: CheckoutInfo(state: state),
-                      ),
-                      const VerticalDivider(width: 1, thickness: 1),
-                      Expanded(
-                        flex: 1,
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: CheckoutProducts(state: state),
-                        ),
-                      ),
-                    ],
-                  )
+                  isMobile
+                      ? Column(
+                          children: [
+                            CheckoutInfo(
+                              state: state,
+                            ),
+                            CheckoutProducts(
+                              state: state,
+                            )
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: CheckoutInfo(state: state),
+                            ),
+                            const VerticalDivider(width: 1, thickness: 1),
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: CheckoutProducts(state: state),
+                              ),
+                            ),
+                          ],
+                        )
                 ],
               ),
             ),
