@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/all_orders/all_orders_cubit.dart';
@@ -68,9 +69,25 @@ class OrderItemContent extends StatelessWidget {
   }
 
   listTileTitle(Order order, AppTheme theme) {
-    return Text(
-      '${order.client.firstName} ${order.client.secondName}',
-      style: theme.largeBoltText,
+    return Row(
+      children: [
+        Text(
+          '${order.client.firstName} ${order.client.secondName}',
+          style: theme.largeBoltText,
+        ),
+        order.novaEN != null
+            ? Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: Image.asset(
+                    ImageAssets.novaPoshta,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
+      ],
     );
   }
 

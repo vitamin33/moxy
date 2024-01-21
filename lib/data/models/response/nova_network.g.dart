@@ -52,6 +52,8 @@ NovaNetworkEN _$NovaNetworkENFromJson(Map<String, dynamic> json) =>
       json['RecipientAddressDescription'] as String,
       json['RecipientContactPerson'] as String,
       json['RecipientsPhone'] as String,
+      json['RecipientAddress'] as String,
+      json['IntDocNumber'] as String,
     );
 
 Map<String, dynamic> _$NovaNetworkENToJson(NovaNetworkEN instance) =>
@@ -66,4 +68,6 @@ Map<String, dynamic> _$NovaNetworkENToJson(NovaNetworkEN instance) =>
       'CityRecipientDescription': instance.cityRecipientDescription,
       'RecipientContactPerson': instance.recipientContactPerson,
       'RecipientAddressDescription': instance.recipientAddressDescription,
+      'RecipientAddress': instance.recipientAddressRef,
+      'IntDocNumber': instance.docNumber,
     };

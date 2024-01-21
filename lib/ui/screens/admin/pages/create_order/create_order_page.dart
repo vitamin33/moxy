@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/pages/about.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/pages/delivery.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/pages/payment.dart';
@@ -35,6 +36,8 @@ class CreateOrderPage extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText:
                 AppLocalizations.of(context)!.failedToCreateOrder));
+      } else if (effect is NavigateToNovaPostENs) {
+        context.push(RouterProvider.adminNovaPostENsPath());
       }
     });
 
@@ -128,7 +131,7 @@ class CreateOrderPage extends StatelessWidget {
 }
 
 Widget positionOrderButton(CreateOrderState state, CreateOrderCubit cubit,
-    bool isKeyboardVisible, context) {
+    bool isKeyboardVisible, BuildContext context) {
   double buttonsHeight = isKeyboardVisible ? 0 : bottomButtonsHeight;
   return SizedBox(
       height: buttonsHeight,

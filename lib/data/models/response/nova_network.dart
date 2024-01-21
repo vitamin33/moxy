@@ -68,6 +68,10 @@ class NovaNetworkEN {
   final String recipientContactPerson;
   @JsonKey(name: 'RecipientAddressDescription')
   final String recipientAddressDescription;
+  @JsonKey(name: 'RecipientAddress')
+  final String recipientAddressRef;
+  @JsonKey(name: 'IntDocNumber')
+  final String docNumber;
 
   NovaNetworkEN(
     this.ref,
@@ -80,6 +84,8 @@ class NovaNetworkEN {
     this.recipientAddressDescription,
     this.recipientContactPerson,
     this.recipientPhone,
+    this.recipientAddressRef,
+    this.docNumber,
   );
 
   factory NovaNetworkEN.fromJson(Map<String, dynamic> json) =>

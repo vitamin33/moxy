@@ -11,3 +11,5 @@ class FailedCreation implements UiEffect {
   String reason;
   FailedCreation(this.reason);
 }
+
+class NavigateToNovaPostENs implements UiEffect {}

@@ -7,6 +7,7 @@ import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/domain/admin/create_order/create_order_effects.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
+import 'package:moxy/domain/models/nova_en.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../constant/order_constants.dart';
@@ -81,6 +82,7 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
         state.status.statusValue.name,
         state.cashAdvanceValue,
         state.ukrPostInfo,
+        state.novaEN,
       );
       final pushOrder = await orderRepository.addOrder(order);
       pushOrder.when((success) {
@@ -223,6 +225,10 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     clearState();
   }
 
+  void openNovaPostENs() {
+    emitEffect(NavigateToNovaPostENs());
+  }
+
   Future<void> pasteUsersData() async {
     final input = await getTextFromClipboard();
     moxyPrint(input);
@@ -318,5 +324,29 @@ class CreateOrderCubit extends CubitWithEffects<CreateOrderState, UiEffect>
     }
     emit(state.copyWith(errors: errors));
     return noErrors;
+  }
+
+  void loadDataFromEN(NovaEN en) {
+    final firstName = en.recipientContactPerson.split(' ')[1];
+    final secondName = en.recipientContactPerson.split(' ')[0];
+    final City city = City.fromEN(en);
+    final Warehouse warehouse = Warehouse.fromEN(en);
+    firstNameController.text = firstName;
+    secondNameController.text = secondName;
+    phoneNumberController.text = en.recipientPhone;
+
+    emit(
+      state.copyWith(
+        novaEN: en.docNumber,
+        selectedCity: city,
+        selectedWarehouse: warehouse,
+        client: state.client.copyWith(
+          mobileNumber: en.recipientPhone,
+          firstName: firstName,
+          secondName: secondName,
+          city: city,
+        ),
+      ),
+    );
   }
 }

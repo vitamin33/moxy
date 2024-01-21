@@ -10,7 +10,6 @@ import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/status.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/screens/admin/pages/orders/order_content_item.dart';
-import 'package:moxy/utils/common.dart';
 
 import '../../../../../constant/order_status.dart';
 import '../../../../components/snackbar_widgets.dart';
@@ -274,7 +273,6 @@ class _OrdersPageState extends State<OrdersPage> {
             ? state.allOrders.length + 1
             : state.allOrders.length,
         itemBuilder: (BuildContext context, int index) {
-          moxyPrint('Current builder index: $index');
           if (index < state.allOrders.length) {
             final order = state.allOrders[index];
             DateTime dateTime = DateTime.parse(order.createdAt);

@@ -166,6 +166,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
           createdAt: element.createdAt,
           updatedAt: element.createdAt,
           ukrPostInfo: element.ukrPostInfo,
+          novaEN: element.novaEN,
         );
       } else {
         return element;

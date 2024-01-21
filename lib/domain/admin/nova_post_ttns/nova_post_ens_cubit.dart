@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/data/http/nova_poshta_client.dart';
+import 'package:moxy/domain/admin/create_order/create_order_cubit.dart';
 import 'package:moxy/domain/admin/nova_post_ttns/nova_post_ens_effects.dart';
 import 'package:moxy/domain/models/nova_en.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
@@ -11,8 +12,10 @@ import 'nova_post_ens_state.dart';
 class NovaPostENsCubit extends CubitWithEffects<NovaPostENsState, UiEffect> {
   final novaPostClient = locate<NovaPoshtaClient>();
   final TextEditingController apiKeyController = TextEditingController();
+  final CreateOrderCubit orderCubit;
 
-  NovaPostENsCubit() : super(NovaPostENsState.defaultAllENsState()) {
+  NovaPostENsCubit({required this.orderCubit})
+      : super(NovaPostENsState.defaultAllENsState()) {
     loadAllENs();
   }
 
@@ -67,5 +70,9 @@ class NovaPostENsCubit extends CubitWithEffects<NovaPostENsState, UiEffect> {
       final String apiKey = value;
       emit(state.copyWith(savedNovaPostApiKey: apiKey));
     }
+  }
+
+  void loadENsData(NovaEN item) {
+    orderCubit.loadDataFromEN(item);
   }
 }
