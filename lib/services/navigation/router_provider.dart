@@ -8,6 +8,7 @@ import 'package:moxy/ui/screens/admin/pages/create_user/create_user_page.dart';
 import 'package:moxy/ui/screens/admin/pages/customers/users_page.dart';
 import 'package:moxy/ui/screens/admin/pages/edit_order/edit_order_page.dart';
 import 'package:moxy/ui/screens/admin/pages/feedbacks/feedbacks_page.dart';
+import 'package:moxy/ui/screens/admin/pages/nova_post_ens/nova_post_ens_page.dart';
 import 'package:moxy/ui/screens/admin/pages/order_product_list/order_product_list_screen.dart';
 import 'package:moxy/ui/screens/admin/pages/orders/orders_page.dart';
 import 'package:moxy/ui/screens/admin/pages/orders_filter/orders_filter_page.dart';
@@ -70,6 +71,9 @@ class RouterProvider {
   static adminOrdersPath() => '/${Routes.adminOrders}';
   static adminCreateOrderPath() =>
       '/${Routes.adminOrders}/${Routes.adminCreateOrder}';
+  static adminNovaPostENsPath() =>
+      '/${Routes.adminOrders}/${Routes.adminCreateOrder}/${Routes.adminNovaPostENs}';
+
   static adminEditOrderPath(String orderId) =>
       '/${Routes.adminOrders}/${Routes.adminEditOrder}/$orderId';
   static adminFilterOrderPath() => '/${Routes.adminFilterOrder}';
@@ -211,7 +215,7 @@ class RouterProvider {
             routes: <RouteBase>[
               GoRoute(
                 path: searchPath(),
-                builder: (context, state) => const SearchPage() ,
+                builder: (context, state) => const SearchPage(),
               ),
             ],
           ),
@@ -319,9 +323,15 @@ class RouterProvider {
                   builder: (context, state) => const OrdersPage(),
                   routes: [
                     GoRoute(
-                      path: Routes.adminCreateOrder,
-                      builder: (context, state) => const CreateOrderPage(),
-                    ),
+                        path: Routes.adminCreateOrder,
+                        builder: (context, state) => const CreateOrderPage(),
+                        routes: [
+                          GoRoute(
+                            path: Routes.adminNovaPostENs,
+                            builder: (context, state) =>
+                                const NovaPostENsPage(),
+                          ),
+                        ]),
                     GoRoute(
                       path: '${Routes.adminEditOrder}/:orderId',
                       builder: (context, state) => EditOrderPage(

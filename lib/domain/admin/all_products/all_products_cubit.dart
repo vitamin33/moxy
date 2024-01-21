@@ -24,7 +24,7 @@ class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {
       final result = await productRepository.getAllProducts();
       result.when((success) {
         allProductsList = produtctMapper.mapToProductList(success);
-        emit(state.copyWith(allProducts: allProductsList));
+        emit(state.copyWith(allENs: allProductsList));
         emit(state.copyWith(isLoading: false));
       }, (error) {
         emitEffect(ProductsLoadingFailed(error.toString()));
@@ -42,7 +42,7 @@ class AllProductsCubit extends CubitWithEffects<AllProductsState, UiEffect> {
     final filteredList = allProductsList.where((element) {
       return element.name.toLowerCase().contains(searchTerm.toLowerCase());
     }).toList();
-    emit(state.copyWith(allProducts: filteredList));
+    emit(state.copyWith(allENs: filteredList));
   }
 
   void deleteProduct(String productId) async {

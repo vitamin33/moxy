@@ -193,6 +193,7 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
       defaultCashAvanceValue,
       // TODO add real info
       null,
+      null,
     );
     final createdOrderResult = await orderRepository.addOrder(createOrder);
     createdOrderResult.when((success) {

@@ -97,4 +97,14 @@ class OrderRepository {
       return Result.error(Exception('$e'));
     }
   }
+
+  Future<Result<bool, Exception>> deleteOrder(String orderId) async {
+    try {
+      final result = await client.deleteOrder(orderId);
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint('Unable to delete order: $stack');
+      return const Result.success(false);
+    }
+  }
 }

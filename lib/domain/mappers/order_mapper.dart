@@ -43,6 +43,7 @@ class OrderMapper {
         createdAt: o.createdAt,
         updatedAt: o.updatedAt,
         ukrPostInfo: o.ukrPostInfo,
+        novaEN: o.novaEN,
       );
     }).toList();
   }
@@ -83,6 +84,7 @@ class OrderMapper {
         createdAt: _parseDataTime(o.createdAt),
         updatedAt: _parseDataTime(o.updatedAt),
         ukrPostInfo: null,
+        novaEN: null,
       );
     }).toList();
   }
@@ -150,10 +152,12 @@ class OrderMapper {
     String status,
     int cashAdvance,
     String? ukrPostInfo,
+    String? novaEN,
   ) {
     return CreateOrder(
       cashAdvanceValue: cashAdvance,
       ukrPostInfo: ukrPostInfo,
+      novaEN: novaEN,
       deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
       paymentType: _mapPaymentTypeNetwork(paymentType.name),
       novaPost: novapost?.let((n) => NetworkNovaPost(
@@ -276,6 +280,7 @@ class OrderMapper {
       createdAt: o.createdAt,
       updatedAt: o.updatedAt,
       ukrPostInfo: o.ukrPostInfo,
+      novaEN: o.novaEN,
     );
   }
 }

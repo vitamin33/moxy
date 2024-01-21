@@ -166,6 +166,7 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
           createdAt: element.createdAt,
           updatedAt: element.createdAt,
           ukrPostInfo: element.ukrPostInfo,
+          novaEN: element.novaEN,
         );
       } else {
         return element;
@@ -189,6 +190,23 @@ class AllOrdersCubit extends Cubit<AllOrdersState> {
       });
     } catch (e) {
       moxyPrint(e);
+    }
+  }
+
+  void deleteOrder(String? orderId, int index) async {
+    if (orderId != null) {
+      final updatedOrders = List<Order>.from(state.allOrders)..removeAt(index);
+
+      emit(state.copyWith(allOrders: updatedOrders, isLoading: true));
+      final result = await ordersRepository.deleteOrder(orderId);
+      result.when((success) {
+        refreshOrderList();
+      }, (error) {
+        emit(state.copyWith(
+          errorMessage: 'Failed',
+        ));
+        refreshOrderList();
+      });
     }
   }
 }

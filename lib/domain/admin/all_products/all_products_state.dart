@@ -24,11 +24,11 @@ class AllProductsState implements Copyable<AllProductsState> {
   AllProductsState copyWith({
     bool? isLoading,
     String? errorMessage,
-    List<Product>? allProducts,
+    List<Product>? allENs,
   }) {
     return AllProductsState(
         isLoading: isLoading ?? this.isLoading,
         errorMessage: errorMessage ?? this.errorMessage,
-        allProducts: allProducts ?? this.allProducts);
+        allProducts: allENs ?? this.allProducts);
   }
 }

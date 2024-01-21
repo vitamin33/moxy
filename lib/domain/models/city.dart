@@ -1,3 +1,5 @@
+import 'package:moxy/domain/models/nova_en.dart';
+
 import '../copyable.dart';
 
 class City implements Copyable<City> {
@@ -12,6 +14,15 @@ class City implements Copyable<City> {
     required this.deliveryCityRef,
     required this.presentName,
   });
+
+  factory City.fromEN(NovaEN en) {
+    return City(
+      ref: en.cityRecepientRef,
+      mainDescription: en.cityRecipientDescription,
+      presentName: en.cityRecipientDescription,
+      deliveryCityRef: en.cityRecepientRef,
+    );
+  }
 
   static City defaultCity() {
     return City(

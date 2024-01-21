@@ -22,6 +22,7 @@ CreateOrder _$CreateOrderFromJson(Map<String, dynamic> json) => CreateOrder(
       status: json['status'] as String,
       cashAdvanceValue: json['cashAdvanceValue'] as int,
       ukrPostInfo: json['ukrPostInfo'] as String?,
+      novaEN: json['novaEN'] as String?,
     );
 
 Map<String, dynamic> _$CreateOrderToJson(CreateOrder instance) =>
@@ -35,6 +36,7 @@ Map<String, dynamic> _$CreateOrderToJson(CreateOrder instance) =>
       'status': instance.status,
       'cashAdvanceValue': instance.cashAdvanceValue,
       'ukrPostInfo': instance.ukrPostInfo,
+      'novaEN': instance.novaEN,
     };
 
 NetworkOrderedItem _$NetworkOrderedItemFromJson(Map<String, dynamic> json) =>

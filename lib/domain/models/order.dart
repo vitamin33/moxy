@@ -19,6 +19,7 @@ class Order implements Copyable<Order> {
   String createdAt;
   String updatedAt;
   String? ukrPostInfo;
+  String? novaEN;
 
   Order({
     String? id,
@@ -33,6 +34,7 @@ class Order implements Copyable<Order> {
     required this.createdAt,
     required this.updatedAt,
     required this.ukrPostInfo,
+    required this.novaEN,
   }) : _id = id;
 
   String? get id => _id;
@@ -67,6 +69,7 @@ class Order implements Copyable<Order> {
       createdAt: '',
       updatedAt: '',
       ukrPostInfo: '',
+      novaEN: null,
     );
   }
 
@@ -85,6 +88,7 @@ class Order implements Copyable<Order> {
     String? createdAt,
     String? updatedAt,
     String? ukrPostInfo,
+    String? novaEN,
   }) {
     return Order(
       id: id ?? _id,
@@ -99,6 +103,7 @@ class Order implements Copyable<Order> {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       ukrPostInfo: ukrPostInfo ?? this.ukrPostInfo,
+      novaEN: novaEN ?? this.novaEN,
     );
   }
 }

@@ -39,3 +39,35 @@ Map<String, dynamic> _$NovaNetworkWarehouseToJson(
       'PostMachineType': instance.postMachineType,
       'Number': instance.number,
     };
+
+NovaNetworkEN _$NovaNetworkENFromJson(Map<String, dynamic> json) =>
+    NovaNetworkEN(
+      json['Ref'] as String,
+      json['Description'] as String,
+      json['DateTime'] as String,
+      json['CityRecipient'] as String,
+      json['Cost'] as String,
+      json['ContactRecipient'] as String,
+      json['CityRecipientDescription'] as String,
+      json['RecipientAddressDescription'] as String,
+      json['RecipientContactPerson'] as String,
+      json['RecipientsPhone'] as String,
+      json['RecipientAddress'] as String,
+      json['IntDocNumber'] as String,
+    );
+
+Map<String, dynamic> _$NovaNetworkENToJson(NovaNetworkEN instance) =>
+    <String, dynamic>{
+      'Ref': instance.ref,
+      'Description': instance.description,
+      'DateTime': instance.dateTime,
+      'Cost': instance.cost,
+      'CityRecipient': instance.cityRecepientRef,
+      'ContactRecipient': instance.contactRecipientRef,
+      'RecipientsPhone': instance.recipientPhone,
+      'CityRecipientDescription': instance.cityRecipientDescription,
+      'RecipientContactPerson': instance.recipientContactPerson,
+      'RecipientAddressDescription': instance.recipientAddressDescription,
+      'RecipientAddress': instance.recipientAddressRef,
+      'IntDocNumber': instance.docNumber,
+    };

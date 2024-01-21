@@ -16,6 +16,7 @@ class CreateOrder {
   final String status;
   final int cashAdvanceValue;
   final String? ukrPostInfo;
+  final String? novaEN;
 
   CreateOrder({
     required this.deliveryType,
@@ -27,6 +28,7 @@ class CreateOrder {
     required this.status,
     required this.cashAdvanceValue,
     required this.ukrPostInfo,
+    required this.novaEN,
   });
 
   factory CreateOrder.fromJson(Map<String, dynamic> json) =>

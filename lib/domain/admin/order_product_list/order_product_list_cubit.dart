@@ -36,7 +36,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
             selectedItems,
           );
           emit(state.copyWith(
-            allProducts: products,
+            allENs: products,
             isLoading: false,
             productsByDimension: productsByDimen,
           ));
