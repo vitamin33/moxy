@@ -33,16 +33,17 @@ class FilterSideSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(40.0),
       child: SingleChildScrollView(
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(40.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Filter', style: theme.headline4BoltText),
+                  Text('Filter and sort', style: theme.headline4BoltText),
+                  Divider(color: AppTheme.gray),
                   InkWell(
                     onTap: () {
                       Navigator.pop(
@@ -69,16 +70,38 @@ class FilterSideSheet extends StatelessWidget {
                   children: [
                     for (String color in filterProductColors)
                       InkWell(
-                          onTap: () {
-                            onChangedSelectedColors(color);
-                          },
-                          child: Text(
-                            color,
-                            style: theme.titleText.copyWith(
-                                color: (color != selectedColors)
-                                    ? AppTheme.black
-                                    : AppTheme.pinkDark),
-                          ))
+                        onTap: () {
+                          onChangedSelectedColors(color);
+                        },
+                        child: Row(
+                          children: [
+                            Checkbox(
+                                side: BorderSide(
+                                    color: AppTheme.gray, width: 0.5),
+                                hoverColor: AppTheme.white,
+                                fillColor:
+                                    MaterialStateProperty.resolveWith((states) {
+                                  if (!states
+                                      .contains(MaterialState.selected)) {
+                                    return AppTheme.white;
+                                  }
+                                  return AppTheme.gray;
+                                }),
+                                checkColor: AppTheme.white,
+                                activeColor: AppTheme.gray,
+                                value: selectedColors == color,
+                                onChanged: (onChanged) {
+                                  onChanged == !onChanged!;
+                                  onChangedSelectedColors(color);
+                                }),
+                            Text(
+                              color,
+                              style: theme.titleText
+                                  .copyWith(color: AppTheme.black),
+                            )
+                          ],
+                        ),
+                      )
                   ],
                 )),
             const Divider(
@@ -91,16 +114,38 @@ class FilterSideSheet extends StatelessWidget {
                   children: [
                     for (String price in filterRangePrice)
                       InkWell(
-                          onTap: () {
-                            onChangedSelectedPriceRange(price);
-                          },
-                          child: Text(
-                            price,
-                            style: theme.titleText.copyWith(
-                                color: (price != selectedPriceRange)
-                                    ? AppTheme.black
-                                    : AppTheme.pinkDark),
-                          ))
+                        onTap: () {
+                          onChangedSelectedPriceRange(price);
+                        },
+                        child: Row(
+                          children: [
+                            Checkbox(
+                                side: BorderSide(
+                                    color: AppTheme.gray, width: 0.5),
+                                hoverColor: AppTheme.white,
+                                fillColor:
+                                    MaterialStateProperty.resolveWith((states) {
+                                  if (!states
+                                      .contains(MaterialState.selected)) {
+                                    return AppTheme.white;
+                                  }
+                                  return AppTheme.gray;
+                                }),
+                                checkColor: AppTheme.white,
+                                activeColor: AppTheme.gray,
+                                value: selectedPriceRange == price,
+                                onChanged: (onChanged) {
+                                  onChanged == !onChanged!;
+                                  onChangedSelectedColors(price);
+                                }),
+                            Text(
+                              price,
+                              style: theme.titleText
+                                  .copyWith(color: AppTheme.black),
+                            )
+                          ],
+                        ),
+                      )
                   ],
                 )),
             const Divider(
@@ -113,16 +158,38 @@ class FilterSideSheet extends StatelessWidget {
                   children: [
                     for (String time in filterTime)
                       InkWell(
-                          onTap: () {
-                            onChangedSelectedTimeRange(time);
-                          },
-                          child: Text(
-                            time,
-                            style: theme.titleText.copyWith(
-                                color: (time != selectedTimeRange)
-                                    ? AppTheme.black
-                                    : AppTheme.pinkDark),
-                          ))
+                        onTap: () {
+                          onChangedSelectedTimeRange(time);
+                        },
+                        child: Row(
+                          children: [
+                            Checkbox(
+                                side: BorderSide(
+                                    color: AppTheme.gray, width: 0.5),
+                                hoverColor: AppTheme.white,
+                                fillColor:
+                                    MaterialStateProperty.resolveWith((states) {
+                                  if (!states
+                                      .contains(MaterialState.selected)) {
+                                    return AppTheme.white;
+                                  }
+                                  return AppTheme.gray;
+                                }),
+                                checkColor: AppTheme.white,
+                                activeColor: AppTheme.gray,
+                                value: selectedTimeRange == time,
+                                onChanged: (onChanged) {
+                                  onChanged == !onChanged!;
+                                  onChangedSelectedTimeRange(time);
+                                }),
+                            Text(
+                              time,
+                              style: theme.titleText
+                                  .copyWith(color: AppTheme.black),
+                            )
+                          ],
+                        ),
+                      )
                   ],
                 )),
             const Divider(
