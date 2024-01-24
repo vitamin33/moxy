@@ -165,6 +165,7 @@ Widget _buildProductItem(
             height: 150,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 1,
@@ -176,13 +177,19 @@ Widget _buildProductItem(
                         '$productName $color',
                         style: theme.mediumBoltText,
                       ),
-                      Text(
-                        '${item.product.salePrice} uah',
-                        style: theme.largeBoltText,
-                      ),
+                      if (!isMobile)
+                        Text(
+                          '${item.product.salePrice} uah',
+                          style: theme.largeBoltText,
+                        ),
                     ],
                   ),
                 ),
+                if (isMobile)
+                  Text(
+                    '${item.product.salePrice} uah',
+                    style: theme.largeBoltText,
+                  ),
                 Expanded(
                   flex: 1,
                   child: Row(

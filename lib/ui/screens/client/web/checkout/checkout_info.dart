@@ -22,15 +22,12 @@ class CheckoutInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
     final cubit = context.read<CheckoutCubit>();
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          ..._buildContactInfoWidget(theme, cubit),
-          ..._buildDeliveryWidget(theme, cubit),
-          ..._buildPaymentWidget(theme, cubit),
-        ],
-      ),
+    return Column(
+      children: [
+        ..._buildContactInfoWidget(theme, cubit),
+        ..._buildDeliveryWidget(theme, cubit),
+        ..._buildPaymentWidget(theme, cubit),
+      ],
     );
   }
 
@@ -40,8 +37,7 @@ class CheckoutInfo extends StatelessWidget {
         children: [
           const RoundedText(number: 1),
           const SizedBox(width: 8),
-          Text("Contact information".toUpperCase(),
-              style: theme.largeBoltText),
+          Text("Contact information".toUpperCase(), style: theme.largeBoltText),
         ],
       ),
       const SizedBox(height: 30),
@@ -136,8 +132,7 @@ class CheckoutInfo extends StatelessWidget {
         children: [
           const RoundedText(number: 3),
           const SizedBox(width: 8),
-          Text("Choose payment type".toUpperCase(),
-              style: theme.largeBoltText),
+          Text("Choose payment type".toUpperCase(), style: theme.largeBoltText),
         ],
       ),
       const SizedBox(height: 16),

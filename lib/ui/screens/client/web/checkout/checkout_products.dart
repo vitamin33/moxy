@@ -22,16 +22,13 @@ class CheckoutProducts extends StatelessWidget {
     final theme = AppTheme.of(context)!;
     final cubit = context.read<CheckoutCubit>();
     final isMobile = ResponsiveUtil.isMobile(context);
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ..._buildYourOrderWidget(theme, cubit, isMobile),
-          ..._buildCheckoutArea(theme, cubit),
-          ..._buildWarningsAndTerms(theme, cubit),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        ..._buildYourOrderWidget(theme, cubit, isMobile),
+        ..._buildCheckoutArea(theme, cubit),
+        ..._buildWarningsAndTerms(theme, cubit),
+      ],
     );
   }
 
@@ -85,6 +82,9 @@ class CheckoutProducts extends StatelessWidget {
         color: AppTheme.gray.withOpacity(0.3),
       ),
       const SizedBox(height: 30),
+      // SizedBox(
+      //   width: double.infinity,
+      //   child:
       ExpandableShippingText(
         maxLines: 5,
         collapsedText: freeShippingText,
@@ -94,6 +94,8 @@ class CheckoutProducts extends StatelessWidget {
         additionalText:
             'For free shipping you need to order at least for ${state.basket.freeShippingThreshold} $uah.',
       ),
+
+      // ),
       const SizedBox(height: 32),
       LoadingElevatedButton(
           onPressed: () {
@@ -143,88 +145,97 @@ class CheckoutProducts extends StatelessWidget {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
     String color = item.dimension.color.name.toUpperCase();
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildProductImage(item),
-          const SizedBox(width: 30),
-          Expanded(
-            child: SizedBox(
-              height: productRowHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '$productName $color',
-                          style: theme.mediumBoltText,
-                        ),
+    return
+        //  Padding(
+        //   padding: const EdgeInsets.all(8),
+        //   child:
+        Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildProductImage(item),
+        // const SizedBox(width: 30),
+        Expanded(
+          child: SizedBox(
+            height: productRowHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$productName $color',
+                        style: theme.mediumBoltText,
+                      ),
+                      if (!isMobile)
                         Text(
                           '${item.product.salePrice} $uah',
                           style: theme.largeBoltText,
                         ),
-                      ],
-                    ),
+                    ],
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Color:', style: theme.largeText),
-                        _buildColorWidget(item.dimension),
-                      ],
-                    ),
+                ),
+                if (isMobile)
+                  Text(
+                    '${item.product.salePrice} $uah',
+                    style: theme.largeBoltText,
                   ),
-                  Expanded(
-                    flex: 3,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        QuantityPicker(
-                          quantity: item.dimension.quantity,
-                          onPlus: () {
-                            cubit.addQuantityOfProduct(item);
-                          },
-                          onMinus: () {
-                            cubit.removeQuantityOfProduct(item);
-                          },
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Color:', style: theme.largeText),
+                      _buildColorWidget(item.dimension),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      QuantityPicker(
+                        quantity: item.dimension.quantity,
+                        onPlus: () {
+                          cubit.addQuantityOfProduct(item);
+                        },
+                        onMinus: () {
+                          cubit.removeQuantityOfProduct(item);
+                        },
+                      ),
+                      InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: isMobile
+                              ? Icon(Icons.delete)
+                              : Text(
+                                  'Remove',
+                                  style: theme.titleText.copyWith(
+                                      color: AppTheme.gray,
+                                      decoration: TextDecoration.underline),
+                                ),
                         ),
-                        InkWell(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: isMobile
-                                ? Icon(Icons.delete)
-                                : Text(
-                                    'Remove',
-                                    style: theme.titleText.copyWith(
-                                        color: AppTheme.gray,
-                                        decoration: TextDecoration.underline),
-                                  ),
-                          ),
-                          onTap: () {
-                            cubit.removeProductFromBasket(item);
-                          },
-                        ),
-                      ],
-                    ),
+                        onTap: () {
+                          cubit.removeProductFromBasket(item);
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
+    // );
   }
 
   Widget _buildColorWidget(Dimension dimen) {

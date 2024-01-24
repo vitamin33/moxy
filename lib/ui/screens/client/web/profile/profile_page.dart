@@ -206,6 +206,8 @@ class ProfileTabPage extends StatelessWidget {
                   return null;
                 },
               ),
+              tabAlignment: TabAlignment.fill,
+              labelPadding:const EdgeInsets.all(15),
               controller: cubit.tabController,
               indicatorColor: AppTheme.black,
               labelColor: AppTheme.black,
@@ -213,7 +215,15 @@ class ProfileTabPage extends StatelessWidget {
                 cubit.onChangePage(index);
               },
               tabs: [
-                for (final pageTitle in tabTitles) Tab(text: pageTitle),
+                for (final pageTitle in tabTitles)
+                  Tab(
+                      child: Wrap(children: [
+                    Center(
+                        child: Text(
+                      pageTitle,
+                      textAlign: TextAlign.center,
+                    ))
+                  ])),
               ],
             ),
             SizedBox(

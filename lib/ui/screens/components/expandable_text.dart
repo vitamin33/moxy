@@ -48,39 +48,43 @@ class _ExpandableShippingTextState extends State<ExpandableShippingText> {
         ],
       ),
     );
-    return InkWell(
-      hoverColor: Colors.transparent,
-      onTap: () {
-        setState(() {
-          _isExpanded = !_isExpanded;
-        });
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              AnimatedCrossFade(
-                crossFadeState: _isExpanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
-                duration:
-                    const Duration(milliseconds: 300), // Customize the duration
-                firstChild: richTextCollapsed,
-                secondChild: richTextExpanded,
+    return  InkWell(
+        hoverColor: Colors.transparent,
+        onTap: () {
+          setState(() {
+            _isExpanded = !_isExpanded;
+          });
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  AnimatedCrossFade(
+                    crossFadeState: _isExpanded
+                        ? CrossFadeState.showSecond
+                        : CrossFadeState.showFirst,
+                    duration: const Duration(
+                        milliseconds: 300), // Customize the duration
+                    firstChild: richTextCollapsed,
+                    secondChild: richTextExpanded,
+                  ),
+                ],
               ),
-            ],
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Icon(
-              _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-              color: Colors.blue, // Customize the color
             ),
-          ),
-        ],
-      ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Icon(
+                _isExpanded
+                    ? Icons.keyboard_arrow_up
+                    : Icons.keyboard_arrow_down,
+                color: Colors.blue, // Customize the color
+              ),
+            ),
+          ],
+        ),
     );
   }
 }

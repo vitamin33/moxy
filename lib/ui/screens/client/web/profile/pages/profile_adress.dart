@@ -4,6 +4,7 @@ import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/ui/screens/client/web/checkout/search_city_dropdown.dart';
 import 'package:moxy/ui/screens/client/web/checkout/search_warehouse_dropdown.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 import '../../../../../../domain/client/profile/profile_state.dart';
 
@@ -16,11 +17,13 @@ class ProfileAdress extends StatelessWidget {
       builder: (context, state) {
         final theme = AppTheme.of(context)!;
         final cubit = context.read<ProfileCubit>();
+        final isMobile = ResponsiveUtil.isMobile(context);
         return SizedBox(
           width: double.infinity,
           height: 100,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+            padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 10 : 80, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

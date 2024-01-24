@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/filter_catalog.dart';
+import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/ui/components/sidesheet.dart';
+import 'package:moxy/ui/screens/components/filter_sidesheet.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
@@ -33,85 +37,85 @@ class FilterContainer extends StatelessWidget {
     final isMobile = ResponsiveUtil.isMobile(context);
 
     return Padding(
-      padding: const EdgeInsets.all(16.0),  
+      padding: const EdgeInsets.all(16.0),
       child: SizedBox(
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  title,
-                  style: theme.bigTitleSemiBoltText,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.bigTitleSemiBoltText,
+                    ),
+                    Text(
+                      "($productCount)",
+                      style: theme.titleSemiBoltText,
+                    ),
+                  ],
                 ),
-                Text(
-                  "($productCount)",
-                  style: theme.titleSemiBoltText,
-                ),
+                if (isMobile)
+                  InkWell(
+                    onTap: () {
+                      SideSheet.right(
+                          body: FilterSideSheet(
+                            title: 'Сумки',
+                            productCount: productCount,
+                            selectedColors: selectedColors,
+                            selectedPriceRange: selectedPriceRange,
+                            selectedTimeRange: selectedTimeRange,
+                            filterProductColors: filterProductColors,
+                            onChangedSelectedColors: onChangedSelectedColors,
+                            onChangedSelectedPriceRange:
+                                onChangedSelectedPriceRange,
+                            onChangedSelectedTimeRange:
+                                onChangedSelectedTimeRange,
+                          ),
+                          context: context);
+                    },
+                    child: SvgPicture.asset(
+                      IconPath.filter,
+                    ),
+                  )
               ],
             ),
             const SizedBox(
               height: 20,
             ),
-            isMobile
-                ? Column(
-                    children: [
-                      TestSelect(
-                          title: 'Color',
-                          dropDownItems: filterProductColors,
-                          selectedValue: selectedColors,
-                          onChanged: onChangedSelectedColors),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TestSelect(
-                          title: 'Price',
-                          dropDownItems: filterRangePrice,
-                          selectedValue: selectedPriceRange,
-                          onChanged: onChangedSelectedPriceRange),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TestSelect(
-                          title: 'New',
-                          dropDownItems: filterTime,
-                          selectedValue: selectedTimeRange,
-                          onChanged: onChangedSelectedTimeRange),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
-                  )
-                : Row(
-                    children: [
-                      TestSelect(
-                          title: 'Color',
-                          dropDownItems: filterProductColors,
-                          selectedValue: selectedColors,
-                          onChanged: onChangedSelectedColors),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TestSelect(
-                          title: 'Price',
-                          dropDownItems: filterRangePrice,
-                          selectedValue: selectedPriceRange,
-                          onChanged: onChangedSelectedPriceRange),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      TestSelect(
-                          title: 'New',
-                          dropDownItems: filterTime,
-                          selectedValue: selectedTimeRange,
-                          onChanged: onChangedSelectedTimeRange),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                    ],
+            if (!isMobile)
+              Row(
+                children: [
+                  TestSelect(
+                      title: 'Color',
+                      dropDownItems: filterProductColors,
+                      selectedValue: selectedColors,
+                      onChanged: onChangedSelectedColors),
+                  const SizedBox(
+                    width: 10,
                   ),
+                  TestSelect(
+                      title: 'Price',
+                      dropDownItems: filterRangePrice,
+                      selectedValue: selectedPriceRange,
+                      onChanged: onChangedSelectedPriceRange),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  TestSelect(
+                      title: 'New',
+                      dropDownItems: filterTime,
+                      selectedValue: selectedTimeRange,
+                      onChanged: onChangedSelectedTimeRange),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                ],
+              ),
           ],
         ),
       ),

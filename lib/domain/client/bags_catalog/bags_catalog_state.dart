@@ -23,7 +23,7 @@ class BagsCatalogState implements Copyable<BagsCatalogState> {
   static defaultBagsCatalogState() {
     return BagsCatalogState(
       isLoading: false,
-      bagsList: [Product.defaultProduct()],
+      bagsList: [],
       errorMessage: '',
       selectedColors: '',
       selectedPriceRange: '',

@@ -24,7 +24,8 @@ class ProfileHistoryOrder extends StatelessWidget {
             height: constraints.maxHeight,
             width: constraints.maxWidth,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+              padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 10 : 80, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
