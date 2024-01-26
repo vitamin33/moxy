@@ -42,7 +42,7 @@ class FilterSideSheet extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Filter and sort', style: theme.headline4BoltText),
+                  Text('Filter', style: theme.bigTitleBoltText),
                   Divider(color: AppTheme.gray),
                   InkWell(
                     onTap: () {
@@ -105,7 +105,7 @@ class FilterSideSheet extends StatelessWidget {
                   ],
                 )),
             const Divider(
-              color: AppTheme.black,
+              color: AppTheme.gray,
             ),
             CustomAccordion(
                 title: 'PRICE',
@@ -149,7 +149,7 @@ class FilterSideSheet extends StatelessWidget {
                   ],
                 )),
             const Divider(
-              color: AppTheme.black,
+              color: AppTheme.gray,
             ),
             CustomAccordion(
                 title: 'SORT BY',
@@ -193,7 +193,7 @@ class FilterSideSheet extends StatelessWidget {
                   ],
                 )),
             const Divider(
-              color: AppTheme.black,
+              color: AppTheme.gray,
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),

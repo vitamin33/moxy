@@ -182,19 +182,20 @@ Widget _aboutProductDetails(
               'Color:',
               style: theme.headlineSemiBoltText,
             ),
-            SizedBox(
-              width: 400,
-              height: 50,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (Dimension dimen
-                      in state.productDetails.product.dimensions)
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: _buildColorWidget(dimen, cubit),
-                    ),
-                ],
+            Expanded(
+              child: SizedBox(
+                height: 50,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (Dimension dimen
+                        in state.productDetails.product.dimensions)
+                      Padding(
+                        padding: const EdgeInsets.all(3.0),
+                        child: _buildColorWidget(dimen, cubit),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -206,9 +207,9 @@ Widget _aboutProductDetails(
         const SizedBox(height: 20),
         Column(
           children: [
-            Row(
-              children: [
-                if (!isMobile)
+            if (!isMobile)
+              Row(
+                children: [
                   Row(
                     children: [
                       QuantityPicker(
@@ -222,18 +223,28 @@ Widget _aboutProductDetails(
                       ),
                     ],
                   ),
-                const SizedBox(width: 5),
-                CustomButton(
-                  outline: true,
-                  title: 'ADD TO CART',
-                  onTap: () {
-                    context
-                        .read<BasketCubit>()
-                        .addProductDetailsToBasket(state.productDetails);
-                  },
-                  buttonWidth: isMobile ? 470 : 375,
-                ),
-              ],
+                  const SizedBox(width: 5),
+                  CustomButton(
+                    outline: true,
+                    title: 'ADD TO CART',
+                    onTap: () {
+                      context
+                          .read<BasketCubit>()
+                          .addProductDetailsToBasket(state.productDetails);
+                    },
+                    buttonWidth: isMobile ? 450 : 375,
+                  ),
+                ],
+              ),
+            CustomButton(
+              outline: true,
+              title: 'ADD TO CART',
+              onTap: () {
+                context
+                    .read<BasketCubit>()
+                    .addProductDetailsToBasket(state.productDetails);
+              },
+              buttonWidth: isMobile ? 450 : 375,
             ),
             const SizedBox(height: 10),
             CustomButton(
