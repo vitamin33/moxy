@@ -26,10 +26,13 @@ class Delivery extends StatelessWidget {
       return MultiBlocProvider(
           providers: [
             BlocProvider<SearchCitiesCubit>(
-              create: (BuildContext context) => SearchCitiesCubit(),
+              create: (BuildContext context) =>
+                  SearchCitiesCubit(selectedCity: cubit.state.selectedCity),
             ),
             BlocProvider<SearchWarehouseCubit>(
-              create: (BuildContext context) => SearchWarehouseCubit(),
+              create: (BuildContext context) => SearchWarehouseCubit(
+                selectedWarehouse: cubit.state.selectedWarehouse,
+              ),
             ),
           ],
           child: SingleChildScrollView(

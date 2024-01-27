@@ -40,8 +40,7 @@ class CheckoutInfo extends StatelessWidget {
         children: [
           const RoundedText(number: 1),
           const SizedBox(width: 8),
-          Text("Contact information".toUpperCase(),
-              style: theme.largeBoltText),
+          Text("Contact information".toUpperCase(), style: theme.largeBoltText),
         ],
       ),
       const SizedBox(height: 30),
@@ -136,8 +135,7 @@ class CheckoutInfo extends StatelessWidget {
         children: [
           const RoundedText(number: 3),
           const SizedBox(width: 8),
-          Text("Choose payment type".toUpperCase(),
-              style: theme.largeBoltText),
+          Text("Choose payment type".toUpperCase(), style: theme.largeBoltText),
         ],
       ),
       const SizedBox(height: 16),

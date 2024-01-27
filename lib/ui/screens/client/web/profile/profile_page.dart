@@ -67,10 +67,13 @@ class _ProfilePageState extends State<ProfilePage> {
           create: (BuildContext context) => cubit,
         ),
         BlocProvider<SearchCitiesCubit>(
-          create: (BuildContext context) => SearchCitiesCubit(),
+          create: (BuildContext context) =>
+              SearchCitiesCubit(selectedCity: cubit.state.profile.city),
         ),
         BlocProvider<SearchWarehouseCubit>(
-          create: (BuildContext context) => SearchWarehouseCubit(),
+          create: (BuildContext context) => SearchWarehouseCubit(
+            selectedWarehouse: cubit.state.profile.warehouse,
+          ),
         ),
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
