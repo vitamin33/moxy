@@ -44,7 +44,6 @@ class BottomSearchWarehouseDropdown extends StatelessWidget {
                 itemBuilder: _warehousePopupItemBuilder,
                 showSearchBox: true,
                 isFilterOnline: true,
-                searchDelay: const Duration(seconds: 2),
                 modalBottomSheetProps: const ModalBottomSheetProps(
                     enableDrag: true, shape: BeveledRectangleBorder()),
               ),
