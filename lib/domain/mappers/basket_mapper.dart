@@ -42,7 +42,7 @@ class BasketMapper {
     }
     return Basket(
       id: network.id,
-      client: userMapper.mapToProfileUser(network.client),
+      client: network.client?.let((it) => userMapper.mapToProfileUser(it)),
       basketItems: items,
       freeShippingThreshold: network.freeShippingThreshold,
     );
@@ -98,8 +98,9 @@ class BasketMapper {
       ),
     );
   }
-  
-  NetworkAddOrChange productDetailsMapToNetworkBasketChange(ProductDetails item) {
+
+  NetworkAddOrChange productDetailsMapToNetworkBasketChange(
+      ProductDetails item) {
     return NetworkAddOrChange(
       product: NetworkChangeBasketDimen(
         productId: item.product.id!,

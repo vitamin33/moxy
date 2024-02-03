@@ -69,10 +69,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
           create: (BuildContext context) => cubit,
         ),
         BlocProvider<SearchCitiesCubit>(
-          create: (BuildContext context) => SearchCitiesCubit(),
+          create: (BuildContext context) =>
+              SearchCitiesCubit(selectedCity: cubit.state.selectedCity),
         ),
         BlocProvider<SearchWarehouseCubit>(
-          create: (BuildContext context) => SearchWarehouseCubit(),
+          create: (BuildContext context) => SearchWarehouseCubit(
+            selectedWarehouse: cubit.state.selectedWarehouse,
+          ),
         ),
       ],
       child: BlocBuilder<CheckoutCubit, CheckoutState>(
@@ -103,8 +106,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                                 const SizedBox(
                                     width: 8), // Adjust the spacing as needed
-                                Text("Go back",
-                                    style: theme.largeBoltText),
+                                Text("Go back", style: theme.largeBoltText),
                               ],
                             ),
                           ),

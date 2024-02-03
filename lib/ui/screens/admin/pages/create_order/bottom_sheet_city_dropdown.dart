@@ -27,12 +27,7 @@ class BottomSearchCityDropdown extends StatelessWidget {
     return Column(
       children: [
         BlocConsumer<SearchCitiesCubit, SearchCitiesState>(
-          listener: (context, state) {
-            if (state.isLoading) {
-              context.read<SearchCitiesCubit>().controller.text =
-                  selectedCity.presentName;
-            }
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             if (state.isLoading) {
               return const CircularProgressIndicator();

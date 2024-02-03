@@ -25,12 +25,7 @@ class BottomSearchWarehouseDropdown extends StatelessWidget {
     return Column(
       children: [
         BlocConsumer<SearchWarehouseCubit, SearchWarehouseState>(
-          listener: (context, state) {
-            if (state.isLoading) {
-              context.read<SearchWarehouseCubit>().controller.text =
-                  selectedWarehouse!.number.toString();
-            }
-          },
+          listener: (context, state) {},
           builder: (context, state) {
             if (state.isLoading) {
               return const CircularProgressIndicator();

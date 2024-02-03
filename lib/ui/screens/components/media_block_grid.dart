@@ -38,14 +38,18 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
             _videoPlayerController.setLooping(true);
             _videoPlayerController.setVolume(0);
 
-            setState(() {});
+            if (mounted) {
+              setState(() {});
+            }
           });
 
     Timer.periodic(const Duration(seconds: 6), (timer) {
-      setState(() {
-        _index++;
-        media = widget.mediaList[_index % widget.mediaList.length];
-      });
+      if (mounted) {
+        setState(() {
+          _index++;
+          media = widget.mediaList[_index % widget.mediaList.length];
+        });
+      }
     });
   }
 

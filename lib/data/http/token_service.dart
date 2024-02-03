@@ -1,8 +1,11 @@
 import 'package:dio/dio.dart';
+import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/constants.dart';
+import 'package:moxy/data/models/response/login_response.dart';
 import 'package:moxy/data/models/response/token_response.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/extensions.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -72,5 +75,27 @@ class TokenService {
     }
 
     return Result.error(Exception('Error refreshing access token.'));
+  }
+
+  // GUEST
+  Future<LoginResponse?> generateAndSaveGuestToken() async {
+    try {
+      final baseUrl = Environment.apiUrl;
+      Response response = await _dio.post('$baseUrl$guestTokenUrl');
+      int code = response.statusCode ?? 0;
+      if (code.isSuccessful()) {
+        LoginResponse result = LoginResponse.fromJson(response.data);
+        final prefs = await SharedPreferences.getInstance();
+        saveAccessToken(result.accessToken);
+        await prefs.setString(userIdKey, result.userId);
+        await prefs.setString(userRoleKey, result.userRole);
+        return result;
+      } else {
+        return null;
+      }
+    } on DioException catch (e, stack) {
+      moxyPrint(stack);
+      return null;
+    }
   }
 }

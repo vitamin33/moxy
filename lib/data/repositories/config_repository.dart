@@ -1,5 +1,6 @@
 import 'package:moxy/constants.dart';
 import 'package:moxy/data/http/config_service.dart';
+import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/mappers/config_mapper.dart';
 import 'package:moxy/domain/models/attributes.dart';
 import 'package:moxy/services/get_it.dart';
@@ -10,10 +11,15 @@ class ConfigRepository {
   Attributes? attributes;
 
   ConfigRepository();
+  final AuthRepository authClient = locate<AuthRepository>();
   final ConfigService client = locate<ConfigService>();
   final ConfigMapper mapper = locate<ConfigMapper>();
 
   Future<bool> loadConfig() async {
+    bool loggedIn = await hasLoggedIn();
+    if (!loggedIn) {
+      authClient.generateGuestToken();
+    }
     return getAttributes().then((value) => true);
   }
 
@@ -33,13 +39,15 @@ class ConfigRepository {
 
   Future<bool> hasConfig() async {
     await getAttributes();
-    return attributes != null;
+    bool noToken = await hasLoggedIn();
+    return attributes != null && noToken;
   }
 
   Future<List<String>> getAttributesColorList() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> colorList = prefs.getStringList(attributesColorListKey) ?? [];
+      List<String> colorList =
+          prefs.getStringList(attributesColorListKey) ?? [];
       return colorList;
     } catch (e, stack) {
       moxyPrint(stack);
@@ -56,5 +64,10 @@ class ConfigRepository {
       moxyPrint(stack);
       rethrow;
     }
+  }
+
+  Future<bool> hasLoggedIn() async {
+    final loggedIn = await authClient.checkLoggedInState();
+    return loggedIn;
   }
 }
