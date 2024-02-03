@@ -25,7 +25,9 @@ class RootRouterCubit extends CubitWithEffects<RootRoute, UiEffect> {
   final _authRepository = locate<AuthRepository>();
   final _configRepository = locate<ConfigRepository>();
 
-  RootRouterCubit() : super(const SplashRoute());
+  RootRouterCubit() : super(const SplashRoute()) {
+    checkInitialState();
+  }
 
   void goToAdminFlow([String? text]) => emitEffect(NavigateAdminRoot());
   void goToClientHomeFlow([String? text]) => emitEffect(NavigateClientRoot());
@@ -41,10 +43,9 @@ class RootRouterCubit extends CubitWithEffects<RootRoute, UiEffect> {
   }
 
   void _checkAuthenticationAndLoadConfigurations() async {
-    bool isAuthenticated = await _authRepository.checkLoggedInState();
     bool configurationsLoaded = await _configRepository.hasConfig();
 
-    if (isAuthenticated && configurationsLoaded) {
+    if (configurationsLoaded) {
       Role? userRole = await _authRepository.getUserRole();
       userRole?.let(
         (role) {
@@ -64,7 +65,7 @@ class RootRouterCubit extends CubitWithEffects<RootRoute, UiEffect> {
       goToSplash();
       bool loaded = await _configRepository.loadConfig();
       if (loaded) {
-        _checkAuthenticationAndLoadConfigurations();
+        goToClientHomeFlow();
       }
     } else {
       goToAuthFlow();

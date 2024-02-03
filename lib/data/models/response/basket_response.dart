@@ -9,7 +9,7 @@ part 'basket_response.g.dart';
 class NetworkBasket {
   @JsonKey(name: '_id')
   String id;
-  NetworkProfileUser client;
+  NetworkProfileUser? client;
   List<NetworkBasketItem> basketItems;
   int freeShippingThreshold;
 

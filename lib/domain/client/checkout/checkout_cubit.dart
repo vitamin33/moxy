@@ -22,6 +22,7 @@ import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
+import 'package:moxy/utils/extensions.dart';
 import 'checkout_state.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -253,18 +254,18 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
   }
 
   void updateStateBasket(Basket basket) {
-    ProfileUser client = basket.client;
-    fillFields(client);
+    ProfileUser? client = basket.client;
+    client?.let((it) => fillFields(it));
     emit(
       state.copyWith(
         basket: basket,
         client: state.client.copyWith(
-          mobileNumber: client.mobileNumber,
-          firstName: client.firstName,
-          secondName: client.secondName,
+          mobileNumber: client?.mobileNumber,
+          firstName: client?.firstName,
+          secondName: client?.secondName,
         ),
-        selectedCity: client.city,
-        selectedWarehouse: client.novaPost,
+        selectedCity: client?.city,
+        selectedWarehouse: client?.novaPost,
         isFreeShipping: isShippingFree(),
         isLoading: false,
       ),
