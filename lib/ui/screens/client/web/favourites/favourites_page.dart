@@ -9,6 +9,8 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/profile_scope.dart';
+import 'package:moxy/ui/screens/client/web/guest_profile.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -49,53 +51,69 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.of(context)!;
-
     return BlocProvider<FavouritesCubit>(
       create: (BuildContext context) => _favouritesCubit,
       child: BlocBuilder<FavouritesCubit, FavouritesState>(
         builder: (context, state) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 24.0, horizontal: 30.0),
-                child: Text(
-                  'Список бажань',
-                  style: theme.headline3BoltText.copyWith(
-                    color: AppTheme.black,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: LayoutBuilder(builder: (context, constraints) {
-                  return SizedBox(
-                    height: constraints.maxHeight,
-                    width: constraints.maxWidth,
-                    child: _buildFavoritesArea(state),
-                  );
-                }),
-              ),
-            ],
-          );
+          final profile = ProfileScope.of(context);
+          if (profile != null && !profile.isGuest()) {
+            return FavoritesContent(state: state);
+          } else {
+            return const GuestProfileWidget();
+          }
         },
       ),
     );
   }
+}
 
-  Widget _buildFavoritesArea(FavouritesState state) {
+class FavoritesContent extends StatelessWidget {
+  final FavouritesState state;
+  const FavoritesContent({super.key, required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+    final cubit = context.read<FavouritesCubit>();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 30.0),
+          child: Text(
+            'Список бажань',
+            style: theme.headline3BoltText.copyWith(
+              color: AppTheme.black,
+            ),
+          ),
+        ),
+        Expanded(
+          child: LayoutBuilder(builder: (context, constraints) {
+            return SizedBox(
+              height: constraints.maxHeight,
+              width: constraints.maxWidth,
+              child: _buildFavoritesArea(context, state, cubit),
+            );
+          }),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFavoritesArea(
+      BuildContext context, FavouritesState state, FavouritesCubit cubit) {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
       child: state.isLoading
           ? const MoxyLoader(
               iconSize: 40,
             )
-          : buildFavoritesList(state),
+          : buildFavoritesList(context, state, cubit),
     );
   }
 
-  Widget buildFavoritesList(FavouritesState state) {
+  Widget buildFavoritesList(
+      BuildContext context, FavouritesState state, FavouritesCubit cubit) {
     if (state.favoriteProducts.isEmpty) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -134,7 +152,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                 child: ProductCard(
                   product: product,
                   onChangeFavorites: (Product product) =>
-                      _favouritesCubit.removeFromFavorites(product),
+                      cubit.removeFromFavorites(product),
                 ),
               ),
             ),

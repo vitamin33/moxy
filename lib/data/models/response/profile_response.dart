@@ -15,7 +15,7 @@ class NetworkProfile {
   List<NetworkProduct> favoriteProducts;
   NetworkCity? city;
   NetworkNovaPost? novaPost;
-  String password;
+  String? password;
   String id;
 
   NetworkProfile({

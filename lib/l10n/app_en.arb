@@ -137,6 +137,16 @@
   "clothesCategory": "Clothes",
   "favorites": "Favorites",
   "profile": "Profile",
+  "profilePageWelcomeGuest": "Welcome, Guest!",
+  "profilePageContinueExploring": "Continue exploring as a guest and make purchases directly. To enhance your experience, consider creating an account with us.",
+  "profilePageCashbackOffer": "Cashback for every purchase for registered users",
+  "profilePageSpecialPropositions": "Special propositions for loyal clients",
+  "profilePageRegisterAndGetCashback": "Register & Get Cashback",
+  "profilePageContactInformation": "Contact Information",
+  "profilePageHistoryOrders": "History Orders",
+  "profilePageAddressBook": "Address Book",
+  "profilePageLogOut": "Log Out",
+  "profilePageSave": "Save",
 
   "postWarning": "Please note: parcels are stored for 5 days from the date of arrival at the\n branch. On the 6th day, the package is automatically returned to the sender.",
   "termsAndConditionsWarning": "Placing an order on MOXY.UA, you agree to our Terms and Conditions"

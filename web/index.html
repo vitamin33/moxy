@@ -106,6 +106,12 @@
           path: 'icons/default_loader.json' // the path to the animation json
         });
 
+        // Function to stop and hide the animation
+        function stopAndHideLottieAnimation() {
+          lottieAnimation.stop(); // Stop the animation
+          document.getElementById('lottie-animation').style.display = 'none'; // Hide the animation container
+        }
+
         // Download main.dart.js
         _flutter.loader.loadEntrypoint({
           serviceWorker: {
@@ -115,8 +121,8 @@
             engineInitializer.initializeEngine().then(function (appRunner) {
               appRunner.runApp();
 
-              // Hide the animation once the app is ready
-              document.getElementById('lottie-animation').style.display = 'none';
+              // Stop and hide the Lottie animation once the app is ready
+              stopAndHideLottieAnimation();
             });
           }
         });

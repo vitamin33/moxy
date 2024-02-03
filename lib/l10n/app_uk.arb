@@ -135,6 +135,16 @@
   "clothesCategory": "Одяг",
   "favorites": "Улюблене",
   "profile": "Профіль",
+  "profilePageWelcomeGuest": "Ласкаво просимо, Гість!",
+  "profilePageContinueExploring": "Продовжуйте огляд як гість та робіть покупки безпосередньо. Щоб покращити свій досвід, розгляньте можливість створення облікового запису з нами.",
+  "profilePageCashbackOffer": "Кешбек за кожну покупку для зареєстрованих користувачів",
+  "profilePageSpecialPropositions": "Спеціальні пропозиції для постійних клієнтів",
+  "profilePageRegisterAndGetCashback": "Зареєструйтесь і отримайте кешбек",
+  "profilePageContactInformation": "Контактна інформація",
+  "profilePageHistoryOrders": "Історія замовлень",
+  "profilePageAddressBook": "Адресна книга",
+  "profilePageLogOut": "Вийти",
+  "profilePageSave": "Зберегти",
 
   "postWarning": "Зверніть увагу: посилки зберігаються 5 днів від дати прибуття на\n відділення. На 6 день посилка автоматично повертається відправнику. ",
   "termsAndConditionsWarning": "Оформлення замовлення на Moxy.ua, ви погоджуєтесь з нашими Умовами і положеннями"

@@ -58,6 +58,10 @@ class Profile {
       warehouse: warehouse ?? this.warehouse,
     );
   }
+
+  bool isGuest() {
+    return mobileNumber.isEmpty;
+  }
 }
 
 class ProfilePassword {

@@ -29,11 +29,11 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
       : super(ProfileState.defaultState()) {
     getProfile();
     getProfileOrders();
-    firstnameController = TextEditingController(text: state.profile.firstName);
+    firstnameController = TextEditingController(text: state.profile?.firstName);
     secondnameController =
-        TextEditingController(text: state.profile.secondName);
+        TextEditingController(text: state.profile?.secondName);
     mobileNumberController =
-        TextEditingController(text: state.profile.mobileNumber);
+        TextEditingController(text: state.profile?.mobileNumber);
     int activePage = _calculateInitialPage(extraPagePath);
     pageController = PageController(initialPage: activePage);
     emit(state.copyWith(
@@ -91,13 +91,14 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
 
   void firstNameChanged(value) {
     final String firstName = value;
-    emit(state.copyWith(profile: state.profile.copyWith(firstName: firstName)));
+    final profile = currentProfile();
+    emit(state.copyWith(profile: profile.copyWith(firstName: firstName)));
   }
 
   void secondNameChanged(value) {
     final String secondName = value;
-    emit(state.copyWith(
-        profile: state.profile.copyWith(secondName: secondName)));
+    final profile = currentProfile();
+    emit(state.copyWith(profile: profile.copyWith(secondName: secondName)));
   }
 
   void phoneNumberChanged(String value) {
@@ -105,8 +106,8 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
       return;
     }
     final String mobileNumber = value;
-    emit(state.copyWith(
-        profile: state.profile.copyWith(mobileNumber: mobileNumber)));
+    final profile = currentProfile();
+    emit(state.copyWith(profile: profile.copyWith(mobileNumber: mobileNumber)));
   }
 
   void oldPasswordChanged(value) {
@@ -129,28 +130,34 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   }
 
   void selectCity(City? city) {
+    final profile = currentProfile();
     emit(state.copyWith(
-        profile: state.profile
-            .copyWith(city: city, warehouse: Warehouse.defaultWarehouse())));
+        profile: profile.copyWith(
+            city: city, warehouse: Warehouse.defaultWarehouse())));
   }
 
   void selectWarehouse(Warehouse? warehouse) {
-    emit(state.copyWith(profile: state.profile.copyWith(warehouse: warehouse)));
+    final profile = currentProfile();
+    emit(state.copyWith(profile: profile.copyWith(warehouse: warehouse)));
+  }
+
+  Profile currentProfile() {
+    return state.profile ?? Profile.defaultProfile();
   }
 
   void editProfile() async {
     try {
+      final profile = currentProfile();
       final networkUser = userMapper.mapToNetworkProfileUser(
         User(
-            id: state.profile.id,
-            firstName: state.profile.firstName,
-            secondName: state.profile.secondName,
-            mobileNumber: state.profile.mobileNumber,
-            city: state.profile.city
-                .copyWith(presentName: state.profile.city.presentName),
+            id: profile.id,
+            firstName: profile.firstName,
+            secondName: profile.secondName,
+            mobileNumber: profile.mobileNumber,
+            city: profile.city.copyWith(presentName: profile.city.presentName),
             instagram: ''),
-        state.profile.city,
-        state.profile.warehouse,
+        profile.city,
+        profile.warehouse,
       );
 
       final result = await authRepository.editUser(networkUser);
@@ -193,15 +200,17 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   bool validateFields() {
     final errors = ProfileFieldErrors.noErrors();
     var noErrors = true;
-    if (isFieldEmpty(state.profile.firstName)) {
+    final profile = currentProfile();
+
+    if (isFieldEmpty(profile.firstName)) {
       errors.firstName = FieldError.empty;
       noErrors = false;
     }
-    if (isFieldEmpty(state.profile.secondName)) {
+    if (isFieldEmpty(profile.secondName)) {
       errors.secondName = FieldError.empty;
       noErrors = false;
     }
-    if (isFieldEmpty(state.profile.mobileNumber)) {
+    if (isFieldEmpty(profile.mobileNumber)) {
       errors.phoneNumber = FieldError.empty;
       noErrors = false;
     }
