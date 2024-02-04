@@ -15,6 +15,7 @@
   "search": "Пошук",
   "choose": "Вибрати",
   "delete": "Видалити",
+  "email": "E-mail",
   "orderProductList": "Продукти замовлення",
   "cancel": "Відміна",
   "ordersConfirmDelete": "Підтвердити видалення",
@@ -145,6 +146,10 @@
   "profilePageAddressBook": "Адресна книга",
   "profilePageLogOut": "Вийти",
   "profilePageSave": "Зберегти",
+  "subscribeInfoText": "Підпишись щоб отримувати ексклюзивні пропозиції, кешбек та останні новини від нас.",
+  "subscribeNewsletter": "НОВИНИ",
+  "subscribe": "Підписатись",
+  "subscribeSuccessMessage": "Ви підписались, очікуйте на наші ексклюзивні  пропозиції!",
 
   "postWarning": "Зверніть увагу: посилки зберігаються 5 днів від дати прибуття на\n відділення. На 6 день посилка автоматично повертається відправнику. ",
   "termsAndConditionsWarning": "Оформлення замовлення на Moxy.ua, ви погоджуєтесь з нашими Умовами і положеннями"

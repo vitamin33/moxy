@@ -70,4 +70,15 @@ class ProfileRepository {
       rethrow;
     }
   }
+
+  Future<Result<bool, Exception>> subscribeLead(
+      String email, String firstName) async {
+    try {
+      bool result = await client.subscribeLead(email, firstName);
+      return Result.success(result);
+    } on Exception catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
 }
