@@ -14,6 +14,7 @@
   "products": "Products",
   "feedbacks": "Feedbacks",
   "ok": "OK",
+  "email": "E-mail",
   "filter": "Filter",
   "search": "Search",
   "choose": "Choose",
@@ -147,6 +148,10 @@
   "profilePageAddressBook": "Address Book",
   "profilePageLogOut": "Log Out",
   "profilePageSave": "Save",
+  "subscribeInfoText": "Subscribe to receive updates, access to exclusive deals, and more.",
+  "subscribeNewsletter": "NEWSLETTER",
+  "subscribe": "Subscribe",
+  "subscribeSuccessMessage": "You are ready for our updates and exclusive  offers. Thank you!",
 
   "postWarning": "Please note: parcels are stored for 5 days from the date of arrival at the\n branch. On the 6th day, the package is automatically returned to the sender.",
   "termsAndConditionsWarning": "Placing an order on MOXY.UA, you agree to our Terms and Conditions"

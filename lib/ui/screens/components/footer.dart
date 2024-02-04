@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:moxy/ui/components/custom_textfield.dart';
+import 'package:moxy/ui/screens/client/web/subscribe/subscribe_view.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
-import '../../../constant/icon_path.dart';
 import '../../../domain/client/footer/footer_cubit.dart';
 import '../../../domain/client/footer/footer_state.dart';
 import '../../theme/app_theme.dart';
@@ -21,7 +19,6 @@ class Footer extends StatelessWidget {
       create: (BuildContext context) => FooterCubit(),
       child: BlocBuilder<FooterCubit, FooterState>(
         builder: (context, state) {
-          final cubit = context.read<FooterCubit>();
           final isMobile = ResponsiveUtil.isMobile(context);
           return Container(
               decoration: const BoxDecoration(color: AppTheme.pink),
@@ -32,7 +29,7 @@ class Footer extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          emailColumn(cubit, state, theme),
+                          const SubscribeView(),
                           menuColumn(theme),
                           contactColumn(theme)
                         ],
@@ -41,7 +38,7 @@ class Footer extends StatelessWidget {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        emailColumn(cubit, state, theme),
+                        const SubscribeView(),
                         menuColumn(theme),
                         contactColumn(theme)
                       ],
@@ -50,98 +47,6 @@ class Footer extends StatelessWidget {
       ),
     );
   }
-}
-
-Widget emailColumn(FooterCubit cubit, FooterState state, AppTheme theme) {
-  return Padding(
-    padding: const EdgeInsets.all(20.0),
-    child: Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 60),
-        SvgPicture.asset(
-          IconPath.moxyLogoWeb,
-          width: 100,
-        ),
-        const SizedBox(height: 40),
-        SizedBox(
-          width: 290,
-          child: Text(
-            "ПІДПИШИСЬ ЩОБ ОТРИМАТИ КАШБЕК \n -15% ВІД ПЕРШОГО ЗАМОВЛЕННЯ",
-            overflow: TextOverflow.visible,
-            maxLines: 5,
-            softWrap: true,
-            style: theme.headline2Text,
-            textAlign: TextAlign.start,
-          ),
-        ),
-        const SizedBox(height: 20),
-        SizedBox(
-            width: 300,
-            child: Stack(
-              children: [
-                TextField(
-                  controller: cubit.userEmailController,
-                  maxLines: 1,
-                  onChanged: cubit.emailChanged,
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: isValid(state.errors.emailUser)
-                                  ? AppTheme.pinkDark
-                                  : AppTheme.red))),
-                ),
-                Positioned(
-                    top: 20,
-                    right: 0,
-                    child: GestureDetector(
-                        onTap: () {
-                          cubit.sendEmail();
-                        },
-                        child: SvgPicture.asset(IconPath.textFieldArrowWeb)))
-              ],
-            )),
-        const SizedBox(height: 20),
-        Row(
-          children: [
-            GestureDetector(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: AppTheme.black,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(
-                      IconPath.instagramIcon,
-                      color: AppTheme.white,
-                    ),
-                  ),
-                )),
-            const SizedBox(
-              width: 10,
-            ),
-            GestureDetector(
-                onTap: () {},
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: AppTheme.black,
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SvgPicture.asset(
-                      IconPath.tikTokIcon,
-                      color: AppTheme.white,
-                    ),
-                  ),
-                )),
-          ],
-        ),
-      ],
-    ),
-  );
 }
 
 Widget menuColumn(AppTheme theme) {
