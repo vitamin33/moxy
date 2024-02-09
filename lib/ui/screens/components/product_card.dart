@@ -184,37 +184,21 @@ class ProductCard extends StatelessWidget {
       BuildContext context, AppTheme theme, bool isMobile) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child:
-          // isMobile
-          //     ? Column(
-          //         crossAxisAlignment: CrossAxisAlignment.center,
-          //         children: [
-          //           Text(
-          //             product.name.toUpperCase(),
-          //             style: theme.titleText,
-          //           ),
-          //           _buildPriceInfo(theme),
-          //         ],
-          //       )
-          // :
-          //   Flexible(
-          // child:
-          Container(
-        child: Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                product.name.toUpperCase(),
-                style: theme.titleText,
-                overflow: TextOverflow.fade,
-              ),
-              _buildPriceInfo(theme),
-            ],
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child:
+                Text(
+              product.name.toUpperCase(),
+              style: theme.titleText,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
-        ),
+          _buildPriceInfo(theme),
+        ],
       ),
-      // ),
     );
   }
 
