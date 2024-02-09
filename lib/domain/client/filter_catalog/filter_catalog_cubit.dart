@@ -8,7 +8,7 @@ import 'package:moxy/domain/models/sort_by.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 
-abstract class FilterCatalogCubit extends Cubit<FilterCatalogState>
+ class FilterCatalogCubit extends Cubit<FilterCatalogState>
     with CatalogsFilteringMixin {
   FilterCatalogCubit() : super(FilterCatalogState.defaultFilterCatalogState()) {
     getAttributes();
