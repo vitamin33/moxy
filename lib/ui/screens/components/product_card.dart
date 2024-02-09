@@ -54,7 +54,7 @@ class ProductCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  _buildProductInfoRow(context, theme),
+                  _buildProductInfoRow(context, theme, isMobile),
                 ],
               ),
             ),
@@ -79,7 +79,6 @@ class ProductCard extends StatelessWidget {
                       _currentImagePath(enableHover),
                     )
                   : Image.asset(
-                     
                       'assets/images/placeholder.jpg',
                       fit: BoxFit.cover,
                     )),
@@ -181,19 +180,41 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProductInfoRow(BuildContext context, AppTheme theme) {
+  Widget _buildProductInfoRow(
+      BuildContext context, AppTheme theme, bool isMobile) {
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            product.name.toUpperCase(),
-            style: theme.titleText,
+      child:
+          // isMobile
+          //     ? Column(
+          //         crossAxisAlignment: CrossAxisAlignment.center,
+          //         children: [
+          //           Text(
+          //             product.name.toUpperCase(),
+          //             style: theme.titleText,
+          //           ),
+          //           _buildPriceInfo(theme),
+          //         ],
+          //       )
+          // :
+          //   Flexible(
+          // child:
+          Container(
+        child: Expanded(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                product.name.toUpperCase(),
+                style: theme.titleText,
+                overflow: TextOverflow.fade,
+              ),
+              _buildPriceInfo(theme),
+            ],
           ),
-          _buildPriceInfo(theme),
-        ],
+        ),
       ),
+      // ),
     );
   }
 

@@ -5,7 +5,6 @@ import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_state
 import 'package:moxy/ui/screens/components/accessories_catalog.dart';
 
 import '../../../../../theme/app_theme.dart';
-import '../../../../components/filter_container.dart';
 import '../../../../components/footer.dart';
 import '../../../../components/promo_container.dart';
 
@@ -20,21 +19,21 @@ class AccessoriesProductPage extends StatelessWidget {
           create: (context) => AccessoriesCatalogCubit(),
           child: BlocBuilder<AccessoriesCatalogCubit, AccessoriesCatalogState>(
             builder: (context, state) {
-              final cubit = context.read<AccessoriesCatalogCubit>();
+              // final cubit = context.read<AccessoriesCatalogCubit>();
               return SingleChildScrollView(
                 child: Column(
                   children: [
-                    FilterContainer(
-                      title: 'Аксесуари',
-                      productCount: state.accessoriesList.length.toString(),
-                      selectedColors: '',
-                      selectedPriceRange: '',
-                      selectedTimeRange: '',
-                      filterProductColors: state.attributes,
-                      onChangedSelectedColors: cubit.setFilterColor,
-                      onChangedSelectedPriceRange: cubit.setFilterPrice,
-                      onChangedSelectedTimeRange: cubit.setFilterTime,
-                    ),
+                    // FilterContainer(
+                    //   title: 'Аксесуари',
+                    //   productCount: state.accessoriesList.length.toString(),
+                    //   selectedColors: '',
+                    //   selectedPriceRange: '',
+                    //   selectedTimeRange: '',
+                    //   filterProductColors: state.attributes,
+                    //   onChangedSelectedColors: cubit.setFilterColor,
+                    //   onChangedSelectedPriceRange: cubit.setFilterPrice,
+                    //   onChangedSelectedTimeRange: cubit.setFilterTime,
+                    // ),
                     const AccessoriesCatalog(),
                     const PromoContainer(),
                     const Footer(),

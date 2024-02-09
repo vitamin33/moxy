@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:moxy/constant/filter_catalog.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/client/filter_catalog/filter_catalog_cubit.dart';
+import 'package:moxy/domain/client/filter_catalog/filter_catalog_state.dart';
 import 'package:moxy/ui/components/sidesheet.dart';
 import 'package:moxy/ui/screens/components/filter_sidesheet.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -10,25 +12,12 @@ import 'package:moxy/utils/responsive_utils.dart';
 class FilterContainer extends StatelessWidget {
   final String title;
   final String productCount;
-  final String selectedColors;
-  final String selectedPriceRange;
-  final String selectedTimeRange;
-  final List<String> filterProductColors;
-  final Function(String) onChangedSelectedColors;
-  final Function(String) onChangedSelectedPriceRange;
-  final Function(String) onChangedSelectedTimeRange;
+ 
 
   const FilterContainer({
     super.key,
     required this.title,
     required this.productCount,
-    required this.selectedColors,
-    required this.selectedPriceRange,
-    required this.selectedTimeRange,
-    required this.filterProductColors,
-    required this.onChangedSelectedColors,
-    required this.onChangedSelectedPriceRange,
-    required this.onChangedSelectedTimeRange,
   });
 
   @override
@@ -36,105 +25,102 @@ class FilterContainer extends StatelessWidget {
     final theme = AppTheme.of(context)!;
     final isMobile = ResponsiveUtil.isMobile(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return
+        BlocBuilder<FilterCatalogCubit, FilterCatalogState>(
+      builder: (context, state) {
+        final cubit = context.read<FilterCatalogCubit>();
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      title,
-                      style: theme.bigTitleSemiBoltText,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: theme.bigTitleSemiBoltText,
+                        ),
+                        Text(
+                          "($productCount)",
+                          style: theme.titleSemiBoltText,
+                        ),
+                      ],
                     ),
-                    Text(
-                      "($productCount)",
-                      style: theme.titleSemiBoltText,
-                    ),
+                    if (isMobile)
+                      InkWell(
+                        onTap: () {
+                          SideSheet.right(
+                              body: FilterSideSheet(
+                                title: 'Сумки',
+                                productCount: productCount,
+                              ),
+                              context: context);
+                        },
+                        child: SvgPicture.asset(
+                          IconPath.filter,
+                        ),
+                      )
                   ],
                 ),
-                if (isMobile)
-                  InkWell(
-                    onTap: () {
-                      SideSheet.right(
-                          body: FilterSideSheet(
-                            title: 'Сумки',
-                            productCount: productCount,
-                            selectedColors: selectedColors,
-                            selectedPriceRange: selectedPriceRange,
-                            selectedTimeRange: selectedTimeRange,
-                            filterProductColors: filterProductColors,
-                            onChangedSelectedColors: onChangedSelectedColors,
-                            onChangedSelectedPriceRange:
-                                onChangedSelectedPriceRange,
-                            onChangedSelectedTimeRange:
-                                onChangedSelectedTimeRange,
-                          ),
-                          context: context);
-                    },
-                    child: SvgPicture.asset(
-                      IconPath.filter,
-                    ),
-                  )
+                const SizedBox(
+                  height: 20,
+                ),
+                if (!isMobile)
+                  Row(
+                    children: [
+                      TestSelect(
+                          title: 'Color',
+                          dropDownItems: state.attributes.colors
+                              .map((e) => e.name)
+                              .toList(),
+                          onChanged: cubit.onChangeFilterColor),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TestSelect(
+                          title: 'Price',
+                          dropDownItems:
+                              state.filterPrice.map((e) => e.name).toList(),
+                          onChanged: cubit.onChangeFilterPrice),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      TestSelect(
+                          title: 'New',
+                          dropDownItems:
+                              state.sortBy.map((e) => e.name).toList(),
+                          onChanged: cubit.onChangeFilterTime),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                    ],
+                  ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
-            if (!isMobile)
-              Row(
-                children: [
-                  TestSelect(
-                      title: 'Color',
-                      dropDownItems: filterProductColors,
-                      selectedValue: selectedColors,
-                      onChanged: onChangedSelectedColors),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  TestSelect(
-                      title: 'Price',
-                      dropDownItems: filterRangePrice,
-                      selectedValue: selectedPriceRange,
-                      onChanged: onChangedSelectedPriceRange),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  TestSelect(
-                      title: 'New',
-                      dropDownItems: filterTime,
-                      selectedValue: selectedTimeRange,
-                      onChanged: onChangedSelectedTimeRange),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                ],
-              ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
 
 class TestSelect extends StatefulWidget {
   final String title;
-  final String selectedValue;
   final List<String> dropDownItems;
   final Function(String) onChanged;
 
-  const TestSelect(
-      {super.key,
-      required this.title,
-      required this.dropDownItems,
-      required this.onChanged,
-      required this.selectedValue});
+  const TestSelect({
+    super.key,
+    required this.title,
+    required this.dropDownItems,
+    required this.onChanged,
+  });
 
   @override
   State<TestSelect> createState() => _TestSelectState();

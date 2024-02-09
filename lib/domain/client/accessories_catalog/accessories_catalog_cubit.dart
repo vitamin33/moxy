@@ -20,7 +20,7 @@ class AccessoriesCatalogCubit
   AccessoriesCatalogCubit()
       : super(AccessoriesCatalogState.defaultAccessoriesCatalogState()) {
     fetchAccessoriesCatalog();
-    getAttributesColorList();
+    // getAttributesColorList();
   }
 
   final productRepository = locate<ProductRepository>();
@@ -45,14 +45,14 @@ class AccessoriesCatalogCubit
     }
   }
 
-void getAttributesColorList() async {
-    try {
-      final colorList = await configRepository.getAttributesColorList();
-      emit(state.copyWith(attributes: colorList));
-    } catch (e) {
-      moxyPrint(e);
-    }
-  }
+// void getAttributesColorList() async {
+//     try {
+//       final colorList = await configRepository.getAttributesColorList();
+//       emit(state.copyWith(attributes: colorList));
+//     } catch (e) {
+//       moxyPrint(e);
+//     }
+//   }
   
   void toggleFavoriteForProduct(String? productId) async {
     if (productId == null) {

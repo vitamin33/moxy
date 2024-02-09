@@ -9,8 +9,7 @@ const deliveryTypeKey = 'deliveryType';
 const paymentTypeKey = 'paymentType';
 const statusKey = 'status';
 const dateRangeKey = 'dateRange';
-const attributesColorListKey = 'attributesColorList';
-const attributesSizeListKey = 'attributesSizeList';
+const attributesKey = 'attributesList';
 
 // GET params keys
 const uniqueIdKey = 'uniqueId';

@@ -2,7 +2,6 @@
 import 'package:moxy/config/routes.dart';
 import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/favourites/favorites_effects.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
@@ -35,21 +34,17 @@ class FavouritesCubit extends CubitWithEffects<FavouritesState, UiEffect> {
     });
   }
 
-  void removeFromFavorites(Product product) async {
-    final productId = product.id;
-    if (productId == null) {
-      return;
-    }
+  void removeFromFavorites(String productId) async {
     try {
       state.favoriteProducts.removeWhere(
-        (element) => element.id == product.id,
+        (element) => element.id == productId,
       );
       emit(state.copyWith(favoriteProducts: state.favoriteProducts));
       Result<bool, Exception> response =
-          await profileRepository.removeFavoriteProduct(product.id!);
+          await profileRepository.removeFavoriteProduct(productId);
       bool success = response.tryGetSuccess() ?? false;
       if (!success) {
-        state.favoriteProducts.add(product);
+        // state.favoriteProducts.add(product);
         emit(state.copyWith(favoriteProducts: state.favoriteProducts));
         emitEffect(RemoveFavoriteFailed());
       }

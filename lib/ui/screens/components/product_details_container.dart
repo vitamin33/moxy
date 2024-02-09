@@ -182,20 +182,19 @@ Widget _aboutProductDetails(
               'Color:',
               style: theme.headlineSemiBoltText,
             ),
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (Dimension dimen
-                        in state.productDetails.product.dimensions)
-                      Padding(
-                        padding: const EdgeInsets.all(3.0),
-                        child: _buildColorWidget(dimen, cubit),
-                      ),
-                  ],
-                ),
+            SizedBox(
+              width: 400,
+              height: 50,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  for (Dimension dimen
+                      in state.productDetails.product.dimensions)
+                    Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: _buildColorWidget(dimen, cubit),
+                    ),
+                ],
               ),
             ),
           ],
