@@ -25,3 +25,14 @@ extension MapIndexed on Iterable {
     }
   }
 }
+
+extension FindOrNull<T> on Iterable<T> {
+  T? findOrNull(bool Function(T) test) {
+    for (T element in this) {
+      if (test(element)) {
+        return element;
+      }
+    }
+    return null;
+  }
+}

@@ -23,9 +23,11 @@ class BagsProductPage extends StatefulWidget {
 }
 
 class _BagsProductPageState extends State<BagsProductPage> {
+  late BagsCatalogCubit cubit;
   @override
   void initState() {
     super.initState();
+    cubit = BagsCatalogCubit();
 
     context.read<BasketCubit>().effectStream.listen((effect) {
       if (effect is OpenBasketSideSheet) {
@@ -40,6 +42,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
   @override
   void dispose() {
     super.dispose();
+    cubit.close();
   }
 
   @override
@@ -59,6 +62,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
                           FilterContainer(
                             title: 'Сумки',
                             productCount: state.bagsList.length.toString(),
+                            parentCubit: cubit,
                           ),
                           const BagsCatalog(),
                           const PromoContainer(),

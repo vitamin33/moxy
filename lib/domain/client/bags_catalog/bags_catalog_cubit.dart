@@ -3,8 +3,11 @@ import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_effect.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_state.dart';
+import 'package:moxy/domain/filterable_cubit.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/models/filter_price.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/sort_by.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
@@ -12,7 +15,8 @@ import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect> {
+class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
+    with FilterableCubit {
   late List<Product> originalBagsList;
   late SharedPreferences prefs;
 
@@ -41,10 +45,7 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect> {
     }
   }
 
-  void toggleFavoriteForProduct(String? productId) async {
-    if (productId == null) {
-      return;
-    }
+  void toggleFavoriteForProduct(String productId) async {
     try {
       Product product = state.bagsList.firstWhere((it) => it.id == productId);
       product.isFavorite = !product.isFavorite;
@@ -65,5 +66,11 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect> {
     } catch (e, stack) {
       moxyPrint(stack);
     }
+  }
+
+  @override
+  void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
+      List<SortBy> sortBy) {
+    // TODO: implement reaction of change in this cubit, emit new state
   }
 }

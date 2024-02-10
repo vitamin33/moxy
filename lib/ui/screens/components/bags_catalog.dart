@@ -23,7 +23,8 @@ class _BagsCatalogState extends State<BagsCatalog> {
   @override
   void initState() {
     super.initState();
-    cubit = BagsCatalogCubit();
+
+    cubit = context.read<BagsCatalogCubit>();
 
     cubit.effectStream.listen((effect) {
       if (effect is ChangeFavoriteFailed) {

@@ -1,6 +1,10 @@
+import 'package:moxy/domain/models/filter_price.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/sort_by.dart';
 
-mixin CatalogsFilteringMixin {
+abstract mixin class FilterableCubit {
+  void onApplyFilters(
+      List<ProductColor> colors, List<FilterPrice> prices, List<SortBy> sortBy);
 
   List<Product> filterColorCatalog(
       String selectedColors, List<Product> originalList) {
@@ -13,8 +17,7 @@ mixin CatalogsFilteringMixin {
 
   List<Product> filterPriceCatalog(
       String selectedPriceRange, List<Product> originalList) {
-    List<Product> filteredPriceBagList =
-        originalList.where((product) {
+    List<Product> filteredPriceBagList = originalList.where((product) {
       List<String> priceRange = selectedPriceRange.split('-');
 
       if (priceRange.length == 2) {

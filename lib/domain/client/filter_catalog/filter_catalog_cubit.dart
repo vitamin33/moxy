@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/config_repository.dart';
-import 'package:moxy/domain/catalog_filtering_mixin.dart';
 import 'package:moxy/domain/client/filter_catalog/filter_catalog_state.dart';
+import 'package:moxy/domain/filterable_cubit.dart';
 import 'package:moxy/domain/models/filter_price.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/models/sort_by.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 
- class FilterCatalogCubit extends Cubit<FilterCatalogState>
-    with CatalogsFilteringMixin {
-  FilterCatalogCubit() : super(FilterCatalogState.defaultFilterCatalogState()) {
+class FilterCatalogCubit extends Cubit<FilterCatalogState> {
+  final FilterableCubit parentCubit;
+  FilterCatalogCubit({required this.parentCubit})
+      : super(FilterCatalogState.defaultFilterCatalogState()) {
     getAttributes();
   }
 
@@ -19,21 +20,27 @@ import 'package:moxy/utils/common.dart';
   void getAttributes() async {
     try {
       final attributes = await configRepository.getSharedAttributes();
-      emit(state.copyWith(attributes: attributes));
+      emit(state.copyWith(filterColors: attributes.colors));
     } catch (e) {
       moxyPrint(e);
     }
   }
 
-  void onChangeFilterColor(String selectedColorName) {
-    // final bagList = filterColorCatalog(selectedColorName, originalBagsList);
-
-    final updateAttributes =
-        selectedAttributesColor(selectedColorName, state.attributes.colors);
-
+  void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
+      List<SortBy> sortBy) {
     emit(state.copyWith(
-        // bagsList: bagList,
-        attributes: state.attributes.copyWith(colors: updateAttributes)));
+        filterColors: colors, filterPrice: prices, sortBy: sortBy));
+    parentCubit.onApplyFilters(
+        state.filterColors, state.filterPrice, state.sortBy);
+  }
+
+  void onChangeFilterColor(String selectedColorName) {
+    final updateColors =
+        selectedAttributesColor(selectedColorName, state.filterColors);
+
+    emit(state.copyWith(filterColors: updateColors));
+    parentCubit.onApplyFilters(
+        state.filterColors, state.filterPrice, state.sortBy);
   }
 
   List<ProductColor> selectedAttributesColor(
@@ -59,8 +66,10 @@ import 'package:moxy/utils/common.dart';
     final updateFilterPrice =
         selectedFilterPrice(selectedPriceRange, state.filterPrice);
     emit(state.copyWith(
-      // bagsList: bagList,
-       filterPrice: updateFilterPrice));
+        // bagsList: bagList,
+        filterPrice: updateFilterPrice));
+    parentCubit.onApplyFilters(
+        state.filterColors, state.filterPrice, state.sortBy);
   }
 
   List<FilterPrice> selectedFilterPrice(
@@ -82,8 +91,10 @@ import 'package:moxy/utils/common.dart';
     //     sortCatalogByCreateTime(selectedTimeRange, originalBagsList);
     final updateSortBy = selectedSortBy(selectedTimeRange, state.sortBy);
     emit(state.copyWith(
-      // bagsList: bagList,
-       sortBy: updateSortBy));
+        // bagsList: bagList,
+        sortBy: updateSortBy));
+    parentCubit.onApplyFilters(
+        state.filterColors, state.filterPrice, state.sortBy);
   }
 
   List<SortBy> selectedSortBy(String selectedTimeRange, List<SortBy> sortTime) {
