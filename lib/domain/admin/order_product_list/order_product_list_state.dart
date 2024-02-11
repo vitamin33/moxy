@@ -6,6 +6,7 @@ import '../../models/product.dart';
 
 class OrderProductListState implements Copyable<OrderProductListState> {
   final List<DimensionProduct> productsByDimension;
+  final List<DimensionProduct> searchProductsByDimension;
   final bool isLoading;
   final bool isEdit;
   final String? searchText;
@@ -15,6 +16,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
 
   OrderProductListState({
     required this.productsByDimension,
+    required this.searchProductsByDimension,
     required this.allProducts,
     required this.isLoading,
     required this.selectedProducts,
@@ -26,6 +28,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
   static OrderProductListState defaultAllProductsState() {
     return OrderProductListState(
       productsByDimension: [],
+      searchProductsByDimension: [],
       allProducts: [],
       selectedProducts: {},
       isLoading: false,
@@ -41,8 +44,9 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     bool? isEdit,
     String? searchText,
     String? errorMessage,
-    List<Product>? allENs,
+    List<Product>? allProducts,
     List<DimensionProduct>? productsByDimension,
+    List<DimensionProduct>? searchProductsByDimension,
     Set<OrderedItem>? selectedProducts,
   }) {
     return OrderProductListState(
@@ -51,8 +55,14 @@ class OrderProductListState implements Copyable<OrderProductListState> {
       searchText: searchText ?? this.searchText,
       errorMessage: errorMessage ?? this.errorMessage,
       productsByDimension: productsByDimension ?? this.productsByDimension,
+      searchProductsByDimension:
+          searchProductsByDimension ?? this.searchProductsByDimension,
       selectedProducts: selectedProducts ?? this.selectedProducts,
-      allProducts: allENs ?? this.allProducts,
+      allProducts: allProducts ?? this.allProducts,
     );
+  }
+
+  bool isSearching() {
+    return !(searchText == null || searchText!.isEmpty);
   }
 }
