@@ -48,7 +48,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BagsCatalogCubit>(
-        create: (context) => BagsCatalogCubit(),
+        create: (context) => cubit,
         child: BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
           builder: (context, state) {
             return BlocBuilder<BasketCubit, BasketState>(

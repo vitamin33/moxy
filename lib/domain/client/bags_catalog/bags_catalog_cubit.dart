@@ -38,7 +38,8 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
         originalBagsList = allProductsList;
         emit(state.copyWith(bagsList: allProductsList, isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
+        emit(state.copyWith(
+            errorMessage: 'Failed allSellingProduct', isLoading: false));
       });
     } catch (e) {
       moxyPrint('$e');
@@ -71,6 +72,15 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
   @override
   void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
       List<SortBy> sortBy) {
-    // TODO: implement reaction of change in this cubit, emit new state
+    try {
+      moxyPrint('cheboksar');
+      final seletedColor =
+          colors.firstWhere((element) => element.isSelected == true);
+      final updateBagList =
+          filterColorCatalog(seletedColor.name, originalBagsList);
+      emit(state.copyWith(bagsList: updateBagList));
+    } catch (e, stack) {
+      moxyPrint(stack);
+    }
   }
 }
