@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:go_router/src/route.dart';
 import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
+import 'package:moxy/domain/admin/overview/dashboard_cubit.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/theme/app_theme.dart';

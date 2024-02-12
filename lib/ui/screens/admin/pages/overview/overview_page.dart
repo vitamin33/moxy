@@ -4,8 +4,8 @@ import 'package:moxy/ui/screens/components/ads_report.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../constant/icon_path.dart';
-import '../../../../../domain/admin/dashboard/dashboard_cubit.dart';
-import '../../../../../domain/admin/dashboard/dashboard_state.dart';
+import '../../../../../domain/admin/overview/dashboard_cubit.dart';
+import '../../../../../domain/admin/overview/dashboard_state.dart';
 import '../../../../components/current_stat_value.dart';
 import '../../../../components/orders_chart.dart';
 import '../../../../components/overview_chart.dart';
