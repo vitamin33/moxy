@@ -46,17 +46,17 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
     }
   }
 
-  void toggleFavoriteForProduct(String productId) async {
+  void toggleFavoriteForProduct(Product productId) async {
     try {
-      Product product = state.bagsList.firstWhere((it) => it.id == productId);
+      Product product = state.bagsList.firstWhere((it) => it.id == productId.id);
       product.isFavorite = !product.isFavorite;
       emit(state.copyWith(bagsList: state.bagsList));
       bool success;
       Result<bool, Exception> response;
       if (product.isFavorite) {
-        response = await profileRepository.addFavoriteProduct(productId);
+        response = await profileRepository.addFavoriteProduct(productId.id!);
       } else {
-        response = await profileRepository.removeFavoriteProduct(productId);
+        response = await profileRepository.removeFavoriteProduct(productId.id!);
       }
       success = response.tryGetSuccess() ?? false;
       if (!success) {

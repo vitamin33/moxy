@@ -9,7 +9,7 @@ const deliveryTypeKey = 'deliveryType';
 const paymentTypeKey = 'paymentType';
 const statusKey = 'status';
 const dateRangeKey = 'dateRange';
-const attributesSizeListKey = 'attributesSizeList';
+const attributesKey = 'attributesList';
 const novaPostApiKey = 'novaPostApiKey';
 
 // GET params keys

@@ -88,36 +88,36 @@ class _CheckoutPageState extends State<CheckoutPage> {
             body: ScrollableSection(
               content: Column(
                 children: [
-                    alignment: Alignment.topLeft,
-                    child:
-                        // Padding(
-                        //   padding: const EdgeInsets.fromLTRB(36, 18, 36, 4),
-                        //   child:
-                        SizedBox(
-                      width: 300,
-                      child: InkWell(
-                        onTap: () => {
-                          context.pop(),
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Icon(
-                                Icons.arrow_back,
-                                color: AppTheme.textColor,
-                              ),
-                              const SizedBox(
-                                  width: 8), // Adjust the spacing as needed
-                              Text("Go back", style: theme.largeBoltText),
-                            ],
-                          ),
+                  // alignment: Alignment.topLeft,
+                  // child:
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(36, 18, 36, 4),
+                  //   child:
+                  SizedBox(
+                    width: 300,
+                    child: InkWell(
+                      onTap: () => {
+                        context.pop(),
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.arrow_back,
+                              color: AppTheme.textColor,
+                            ),
+                            const SizedBox(
+                                width: 8), // Adjust the spacing as needed
+                            Text("Go back", style: theme.largeBoltText),
+                          ],
                         ),
                       ),
                     ),
-                    // ),
                   ),
+                  // ),
+
                   isMobile
                       ? Column(
                           children: [

@@ -147,7 +147,7 @@ class ProfileTabPage extends StatelessWidget {
         final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
             padding: EdgeInsets.all(isMobile ? 0.0 : 24.0),
-            child: Column(
+            child:isGuest?const GuestProfileWidget() :Column(
               children: [
                 isMobile
                     ? _selectedTabMobile(cubit, state)
@@ -172,12 +172,6 @@ class ProfileTabPage extends StatelessWidget {
                 const SizedBox(height: 50),
               ],
             ));
-        return Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: isGuest
-              ? const GuestProfileWidget()
-              : _buildUserProfile(context, state),
-        );
       },
     );
   }
@@ -420,7 +414,7 @@ class ProfileTabPage extends StatelessWidget {
     context.go(path);
   }
 
-  Widget _buildUserProfile(BuildContext context, ProfileState state) {
+  Widget _buildUserProfile(BuildContext context, ProfileState state, bool isMobile) {
     final cubit = context.read<ProfileCubit>();
     final theme = AppTheme.of(context)!;
     final router = context.read<RootRouterCubit>();
@@ -431,9 +425,9 @@ class ProfileTabPage extends StatelessWidget {
           child: Row(
             children: [
               // Drawer Menu
-              _drawerMenu(context, cubit, state, theme, router),
+              _drawerMenu(context, cubit, state, theme, router,isMobile),
               // Selected Tab Content
-              _selectedTabContent(cubit, state),
+              _selectedTabContent(cubit, state,isMobile),
             ],
           ),
         ),

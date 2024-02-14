@@ -17,7 +17,6 @@ import 'package:multiple_result/multiple_result.dart';
 class AccessoriesCatalogCubit
     extends CubitWithEffects<AccessoriesCatalogState, UiEffect>
     with FilterableCubit {
-
   late List<Product> originalAccessoriesList;
   AccessoriesCatalogCubit()
       : super(AccessoriesCatalogState.defaultAccessoriesCatalogState()) {
@@ -47,20 +46,18 @@ class AccessoriesCatalogCubit
     }
   }
 
-
-
-  void toggleFavoriteForProduct(String productId) async {
+  void toggleFavoriteForProduct(Product productId) async {
     try {
       Product product =
-          state.accessoriesList.firstWhere((it) => it.id == productId);
+          state.accessoriesList.firstWhere((it) => it.id == productId.id);
       product.isFavorite = !product.isFavorite;
       emit(state.copyWith(accessoriesList: state.accessoriesList));
       bool success;
       Result<bool, Exception> response;
       if (product.isFavorite) {
-        response = await profileRepository.addFavoriteProduct(productId);
+        response = await profileRepository.addFavoriteProduct(productId.id!);
       } else {
-        response = await profileRepository.removeFavoriteProduct(productId);
+        response = await profileRepository.removeFavoriteProduct(productId.id!);
       }
       success = response.tryGetSuccess() ?? false;
       if (!success) {
@@ -77,6 +74,5 @@ class AccessoriesCatalogCubit
   void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
       List<SortBy> sortBy) {
     // TODO: implement reaction of change in this cubit, emit new state
-
   }
 }

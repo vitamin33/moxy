@@ -56,48 +56,67 @@ class _FavouritesPageState extends State<FavouritesPage> {
     return BlocProvider<FavouritesCubit>(
       create: (BuildContext context) => _favouritesCubit,
       child: BlocBuilder<FavouritesCubit, FavouritesState>(
-        builder: (context, state) {
-          final isMobile = ResponsiveUtil.isMobile(context);
-          return Scaffold(
-            backgroundColor: AppTheme.white,
-            body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      'Список бажань',
-                      style: theme.headline3BoltText.copyWith(
-                        color: AppTheme.black,
-                      ),
+          builder: (context, state) {
+        final isMobile = ResponsiveUtil.isMobile(context);
+        final theme = AppTheme.of(context)!;
+        final profile = ProfileScope.of(context);
+
+        return Scaffold(
+          backgroundColor: AppTheme.white,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    'Список бажань',
+                    style: theme.headline3BoltText.copyWith(
+                      color: AppTheme.black,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: _buildFavoritesArea(state, isMobile),
-                  ),
-                  const Footer()
-                ],
-              ),
+                ),
+                (profile != null && !profile.isGuest())
+                    ? FavoritesContent(state: state, cubit: _favouritesCubit)
+                    : const GuestProfileWidget(),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: _buildFavoritesArea(state, isMobile),
+                // ),
+                const Footer()
+              ],
             ),
-          );
-          final profile = ProfileScope.of(context);
-          if (profile != null && !profile.isGuest()) {
-            return FavoritesContent(state: state);
-          } else {
-            return const GuestProfileWidget();
-          }
-      ),
+          ),
+        );
+      }),
     );
   }
 }
 
 class FavoritesContent extends StatelessWidget {
   final FavouritesState state;
-  const FavoritesContent({super.key, required this.state});
+  final FavouritesCubit cubit;
+  const FavoritesContent({super.key, required this.state,required this.cubit});
 
-  Widget _buildFavoritesArea(FavouritesState state, bool isMobile) {
+  // Widget _buildFavoritesArea(FavouritesState state, bool isMobile) {
+  //   return AnimatedSwitcher(
+  //       duration: const Duration(milliseconds: 300),
+  //       child: state.isLoading
+  //           ? const Center(
+  //               child: Padding(
+  //                 padding: EdgeInsets.all(30.0),
+  //                 child: MoxyLoader(
+  //                   iconSize: 40,
+  //                 ),
+  //               ),
+  //             )
+  //           : buildFavoritesList(state, isMobile,context));
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtil.isMobile(context);
+    // TODO: implement build
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: state.isLoading
@@ -109,10 +128,12 @@ class FavoritesContent extends StatelessWidget {
                   ),
                 ),
               )
-            : buildFavoritesList(state, isMobile));
+            : buildFavoritesList(state, isMobile, context));
+    // throw UnimplementedError();
   }
 
-  Widget buildFavoritesList(FavouritesState state, bool isMobile) {
+  Widget buildFavoritesList(
+      FavouritesState state, bool isMobile, BuildContext context) {
     if (state.favoriteProducts.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(30.0),
@@ -148,10 +169,9 @@ class FavoritesContent extends StatelessWidget {
         final product = state.favoriteProducts[index];
         return ProductCard(
           product: product,
-          onChangeFavorites: _favouritesCubit.removeFromFavorites,
+          onChangeFavorites: cubit.removeFromFavorites,
         );
       },
     ));
-
   }
 }

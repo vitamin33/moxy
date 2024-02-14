@@ -36,7 +36,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
     secondnameController =
         TextEditingController(text: state.profile?.secondName);
     mobileNumberController =
-        TextEditingController(text: state.profile.mobileNumber);
+        TextEditingController(text: state.profile?.mobileNumber);
      activePage = _calculateInitialPage(extraPagePath);
     pageController = PageController(initialPage: activePage);
     emit(state.copyWith(
