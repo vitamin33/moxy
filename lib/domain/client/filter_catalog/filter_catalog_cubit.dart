@@ -62,11 +62,9 @@ class FilterCatalogCubit extends Cubit<FilterCatalogState> {
   }
 
   void onChangeFilterPrice(String selectedPriceRange) {
-    // final bagList = filterPriceCatalog(selectedPriceRange, originalBagsList);
     final updateFilterPrice =
         selectedFilterPrice(selectedPriceRange, state.filterPrice);
     emit(state.copyWith(
-        // bagsList: bagList,
         filterPrice: updateFilterPrice));
     parentCubit.onApplyFilters(
         state.filterColors, state.filterPrice, state.sortBy);
@@ -87,11 +85,8 @@ class FilterCatalogCubit extends Cubit<FilterCatalogState> {
   }
 
   void onChangeFilterTime(String selectedTimeRange) {
-    // final bagList =
-    //     sortCatalogByCreateTime(selectedTimeRange, originalBagsList);
     final updateSortBy = selectedSortBy(selectedTimeRange, state.sortBy);
     emit(state.copyWith(
-        // bagsList: bagList,
         sortBy: updateSortBy));
     parentCubit.onApplyFilters(
         state.filterColors, state.filterPrice, state.sortBy);

@@ -2,6 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
 class SideSheet {
+  /// Open Left side sheet
+  /// ```dart
+  ///onPressed: () => SideSheet.left(body: Text("Body"), context: context)
+  /// ```
+  static Future<dynamic> left(
+      {
+      ///Use this to pass any widget you want to display in the side sheet
+      required Widget body,
+      required BuildContext context,
+
+      /// Use this to set the width of the side sheet
+      double? width,
+      String barrierLabel = "Side Sheet",
+
+      /// Use barrierDismissible to dismiss the side sheet by tapping outside of it
+      bool barrierDismissible = true,
+
+      /// Use barrierColor to set the outside color of the side sheet when opened
+      Color barrierColor = const Color(0xFF66000000),
+
+      /// Use sheetBorderRadius to set the outside border radius of the side sheet when opened
+      double sheetBorderRadius = 0,
+
+      /// Use sheetColor to set the color of the side sheet when opened
+      /// Default is white
+      Color sheetColor = Colors.white,
+
+      /// Use transitionDuration to set the duration of the animation when the side sheet is opened or closed
+      Duration transitionDuration = const Duration(milliseconds: 300)}) async {
+    dynamic data = await _showSheetSide(
+      body: body,
+      width: width,
+      rightSide: false,
+      context: context,
+      barrierLabel: barrierLabel,
+      barrierDismissible: barrierDismissible,
+      barrierColor: barrierColor,
+      sheetBorderRadius: sheetBorderRadius,
+      sheetColor: sheetColor,
+      transitionDuration: transitionDuration,
+    );
+    if (data == null) return '';
+
+    return data;
+  }
+
+  /// Open Right side sheet
+  /// ```dart
+  ///onPressed: () => SideSheet.right(body: Text("Body"), context: context)
+  /// ```
   static Future<dynamic> right(
       {
       ///Use this to pass any widget you want to display in the side sheet
@@ -16,7 +66,7 @@ class SideSheet {
       bool barrierDismissible = true,
 
       /// Use barrierColor to set the outside color of the side sheet when opened
-      Color barrierColor = Colors.black,
+      Color barrierColor = const Color(0xFF66000000),
 
       /// Use sheetBorderRadius to set the outside border radius of the side sheet when opened
       double sheetBorderRadius = 0,
@@ -57,10 +107,11 @@ class SideSheet {
     required Duration transitionDuration,
   }) {
     BorderRadius borderRadius = BorderRadius.only(
-      topLeft: Radius.circular(sheetBorderRadius),
-      bottomLeft: Radius.circular(sheetBorderRadius),
-      topRight: Radius.circular(sheetBorderRadius),
-      bottomRight: Radius.circular(sheetBorderRadius),
+      topLeft: rightSide ? Radius.circular(sheetBorderRadius) : Radius.zero,
+      bottomLeft: rightSide ? Radius.circular(sheetBorderRadius) : Radius.zero,
+      topRight: !rightSide ? Radius.circular(sheetBorderRadius) : Radius.zero,
+      bottomRight:
+          !rightSide ? Radius.circular(sheetBorderRadius) : Radius.zero,
     );
 
     return showGeneralDialog(
@@ -72,7 +123,7 @@ class SideSheet {
       pageBuilder: (context, animation1, animation2) {
         final isMobile = ResponsiveUtil.isMobile(context);
         return Align(
-          alignment: Alignment.centerRight,
+          alignment: (rightSide ? Alignment.centerRight : Alignment.centerLeft),
           child: Material(
             elevation: 15,
             color: Colors.transparent,
@@ -90,8 +141,9 @@ class SideSheet {
       },
       transitionBuilder: (context, animation1, animation2, child) {
         return SlideTransition(
-          position: Tween(begin: const Offset(1, 0), end: const Offset(0, 0))
-              .animate(animation1),
+          position:
+              Tween(begin: Offset((rightSide ? 1 : -1), 0), end: Offset(0, 0))
+                  .animate(animation1),
           child: child,
         );
       },

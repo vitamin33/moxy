@@ -73,12 +73,41 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
   void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
       List<SortBy> sortBy) {
     try {
-      moxyPrint('cheboksar');
-      final seletedColor =
-          colors.firstWhere((element) => element.isSelected == true);
-      final updateBagList =
-          filterColorCatalog(seletedColor.name, originalBagsList);
-      emit(state.copyWith(bagsList: updateBagList));
+      List<Product> updatedBagList = List.from(originalBagsList);
+
+      List<String> selectedColor = [];
+      List<String> selectedPrice = [];
+      List<String> selectedSortBy = [];
+      for (var color in colors) {
+        if (color.isSelected == true) {
+          selectedColor.add(color.name);
+        }
+      }
+      for (var price in prices) {
+        if (price.isSelected == true) {
+          selectedPrice.add(price.name);
+        }
+      }
+      for (var time in sortBy) {
+        if (time.isSelected == true) {
+          selectedSortBy.add(time.name);
+        }
+      }
+
+      if (selectedColor.isNotEmpty) {
+        updatedBagList = filterColorCatalog(selectedColor, updatedBagList);
+      }
+
+      if (selectedPrice.isNotEmpty) {
+        updatedBagList = filterPriceCatalog(selectedPrice, updatedBagList);
+      }
+
+      if (selectedSortBy.isNotEmpty) {
+        updatedBagList =
+            sortCatalogByCreateTime(selectedSortBy, updatedBagList);
+      }
+
+      emit(state.copyWith(bagsList: updatedBagList));
     } catch (e, stack) {
       moxyPrint(stack);
     }

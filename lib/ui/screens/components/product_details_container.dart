@@ -235,16 +235,17 @@ Widget _aboutProductDetails(
                   ),
                 ],
               ),
-            CustomButton(
-              outline: true,
-              title: 'ADD TO CART',
-              onTap: () {
-                context
-                    .read<BasketCubit>()
-                    .addProductDetailsToBasket(state.productDetails);
-              },
-              buttonWidth: isMobile ? 450 : 375,
-            ),
+            if (isMobile)
+              CustomButton(
+                outline: true,
+                title: 'ADD TO CART',
+                onTap: () {
+                  context
+                      .read<BasketCubit>()
+                      .addProductDetailsToBasket(state.productDetails);
+                },
+                buttonWidth: isMobile ? 450 : 375,
+              ),
             const SizedBox(height: 10),
             CustomButton(
               title: 'BUY IT NOW',

@@ -8,8 +8,6 @@ import 'package:moxy/domain/filterable_cubit.dart';
 import 'package:moxy/ui/components/sidesheet.dart';
 import 'package:moxy/ui/screens/components/filter_sidesheet.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/extensions.dart';
-import 'package:moxy/utils/responsive_utils.dart';
 
 class FilterContainer extends StatefulWidget {
   final String title;
@@ -45,7 +43,6 @@ class _FilterContainerState extends State<FilterContainer> {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
-    final isMobile = ResponsiveUtil.isMobile(context);
 
     return BlocProvider(
       create: (context) => cubit,
@@ -74,71 +71,26 @@ class _FilterContainerState extends State<FilterContainer> {
                           ),
                         ],
                       ),
-                      if (isMobile)
-                        InkWell(
-                          onTap: () {
-                            SideSheet.right(
-                              body: FilterSideSheet(
-                                title: 'Сумки',
-                                productCount: widget.productCount,
-                                filterColors: state.filterColors,
-                                filterPrice: state.filterPrice,
-                                sortBy: state.sortBy,
-                                onApplyFilters: cubit.onApplyFilters,
-                              ),
-                              context: context,
-                            );
-                          },
-                          child: SvgPicture.asset(
-                            IconPath.filter,
-                          ),
-                        )
+                      InkWell(
+                        onTap: () {
+                          SideSheet.left(
+                            body: FilterSideSheet(
+                              title: 'Сумки',
+                              productCount: widget.productCount,
+                              filterColors: state.filterColors,
+                              filterPrice: state.filterPrice,
+                              sortBy: state.sortBy,
+                              onApplyFilters: cubit.onApplyFilters,
+                            ),
+                            context: context,
+                          );
+                        },
+                        child: SvgPicture.asset(
+                          IconPath.filter,
+                        ),
+                      )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  if (!isMobile)
-                    Row(
-                      children: [
-                        TestSelect(
-                          title: 'Color',
-                          dropDownItems:
-                              state.filterColors.map((e) => e.name).toList(),
-                          onChanged: cubit.onChangeFilterColor,
-                          initValue: state.filterColors
-                              .findOrNull((e) => e.isSelected)
-                              ?.name,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TestSelect(
-                          title: 'Price',
-                          dropDownItems:
-                              state.filterPrice.map((e) => e.name).toList(),
-                          onChanged: cubit.onChangeFilterPrice,
-                          initValue: state.filterPrice
-                              .findOrNull((e) => e.isSelected)
-                              ?.name,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TestSelect(
-                          title: 'New',
-                          dropDownItems:
-                              state.sortBy.map((e) => e.name).toList(),
-                          onChanged: cubit.onChangeFilterTime,
-                          initValue: state.sortBy
-                              .findOrNull((e) => e.isSelected)
-                              ?.name,
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                      ],
-                    ),
                 ],
               ),
             ),
@@ -146,70 +98,5 @@ class _FilterContainerState extends State<FilterContainer> {
         },
       ),
     );
-  }
-}
-
-class TestSelect extends StatefulWidget {
-  final String title;
-  final String? initValue;
-  final List<String> dropDownItems;
-  final Function(String) onChanged;
-
-  const TestSelect({
-    super.key,
-    required this.title,
-    required this.dropDownItems,
-    required this.onChanged,
-    this.initValue,
-  });
-
-  @override
-  State<TestSelect> createState() => _TestSelectState();
-}
-
-class _TestSelectState extends State<TestSelect> {
-  String? myServices;
-
-  @override
-  void initState() {
-    super.initState();
-    myServices = widget.initValue;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = AppTheme.of(context)!;
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        height: 50,
-        width: 150,
-        decoration: const BoxDecoration(
-            color: AppTheme.white,
-            border:
-                Border(bottom: BorderSide(width: 2, color: AppTheme.black))),
-        child: Center(
-          child: DropdownButton<String>(
-              hint: Text(widget.title),
-              elevation: 16,
-              underline: const SizedBox(),
-              isExpanded: true,
-              style: theme.largeText,
-              onChanged: (String? changedValue) {
-                widget.onChanged(changedValue!);
-                myServices = changedValue;
-                setState(() {
-                  myServices;
-                });
-              },
-              value: myServices,
-              items: widget.dropDownItems.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList()),
-        ),
-      ),
-    ]);
   }
 }

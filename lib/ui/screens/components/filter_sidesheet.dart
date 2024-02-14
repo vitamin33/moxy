@@ -248,11 +248,10 @@ class _FilterSideSheetState extends State<FilterSideSheet> {
   }
 
   void _checkSortByByName(String name) {
-    for (var price in widget.sortBy) {
-      if (price.name == name) {
-        price.isSelected = !price.isSelected;
+    setState(() {
+      for (var time in widget.sortBy) {
+        time.isSelected = (time.name == name);
       }
-    }
-    setState(() {});
+    });
   }
 }
