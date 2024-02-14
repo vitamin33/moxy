@@ -6,7 +6,7 @@ part 'login_response.g.dart';
 class LoginResponse {
   String userId;
   String accessToken;
-  String refreshToken;
+  String? refreshToken;
   String userRole;
 
   LoginResponse(

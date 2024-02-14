@@ -5,7 +5,7 @@ import '../copyable.dart';
 
 class Basket implements Copyable<Basket> {
   String id;
-  ProfileUser client;
+  ProfileUser? client;
   List<BasketItem> basketItems;
   int freeShippingThreshold;
 

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import '../../../../../components/custom_textfield.dart';
@@ -29,11 +30,25 @@ class About extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                  onPressed: () {
-                    cubit.pasteUsersData();
-                  },
-                  icon: const Icon(Icons.paste)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      cubit.pasteUsersData();
+                    },
+                    icon: const Icon(Icons.paste),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      cubit.openNovaPostENs();
+                    },
+                    icon: Image.asset(
+                      ImageAssets.novaPoshta,
+                    ),
+                  ),
+                ],
+              ),
               CustomTextField(
                   title: AppLocalizations.of(context)!.userFirstName,
                   maxLines: 1,

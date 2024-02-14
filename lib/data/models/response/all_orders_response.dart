@@ -57,6 +57,7 @@ class NetworkOrder {
   String createdAt;
   String updatedAt;
   String? ukrPostInfo;
+  String? novaEN;
 
   NetworkOrder({
     this.id,
@@ -71,6 +72,7 @@ class NetworkOrder {
     required this.createdAt,
     required this.updatedAt,
     required this.ukrPostInfo,
+    required this.novaEN,
   });
 
   factory NetworkOrder.fromJson(Map<String, dynamic> json) =>

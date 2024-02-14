@@ -34,22 +34,22 @@ class ProfileAdress extends StatelessWidget {
                 const SizedBox(height: 40),
                 Text('Місто', style: theme.headlineSemiBoltText),
                 SearchCityDropdown(
-                    selectedWarehouse: state.profile.warehouse,
+                    selectedWarehouse: state.profile!.warehouse,
                     onChanged: (city) {
                       cubit.selectCity(city);
                     },
-                    selectedCity: state.profile.city),
+                    selectedCity: state.profile!.city),
                 const SizedBox(height: 30),
                 Text(
                   'Відділення',
                   style: theme.headlineSemiBoltText,
                 ),
                 SearchWarehouseDropdown(
-                    selectedWarehouse: state.profile.warehouse,
+                    selectedWarehouse: state.profile!.warehouse,
                     onChanged: (warehouse) {
                       cubit.selectWarehouse(warehouse);
                     },
-                    selectedCity: state.profile.city),
+                    selectedCity: state.profile!.city),
               ],
             ),
           ),

@@ -9,7 +9,8 @@ const deliveryTypeKey = 'deliveryType';
 const paymentTypeKey = 'paymentType';
 const statusKey = 'status';
 const dateRangeKey = 'dateRange';
-const attributesKey = 'attributesList';
+const attributesSizeListKey = 'attributesSizeList';
+const novaPostApiKey = 'novaPostApiKey';
 
 // GET params keys
 const uniqueIdKey = 'uniqueId';
@@ -19,4 +20,6 @@ const defaultCashAvanceValue = 200;
 
 // Fiat signs
 const uah = 'грн';
+const usd = '\$';
+const percent = '%';
 const piece = 'шт.';

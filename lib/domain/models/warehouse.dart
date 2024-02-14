@@ -1,3 +1,6 @@
+import 'package:moxy/domain/models/nova_en.dart';
+import 'package:moxy/utils/common.dart';
+
 import '../copyable.dart';
 
 class Warehouse implements Copyable<Warehouse> {
@@ -12,6 +15,28 @@ class Warehouse implements Copyable<Warehouse> {
     required this.description,
     required this.number,
   });
+
+  factory Warehouse.fromEN(NovaEN en) {
+    int? number;
+    try {
+      // Regular expression to find a number following the '№' sign
+      RegExp regExp = RegExp(r'№(\d+)');
+      var match = regExp.firstMatch(en.recipientAddressDescription);
+
+      if (match != null) {
+        number = int.parse(match.group(1)!);
+      }
+    } catch (e) {
+      moxyPrint('Unable to parse Nova Post number');
+    }
+
+    return Warehouse(
+      ref: en.cityRecepientRef,
+      description: en.recipientAddressDescription,
+      postMachineType: null,
+      number: number ?? 0,
+    );
+  }
 
   static Warehouse defaultWarehouse() {
     return Warehouse(

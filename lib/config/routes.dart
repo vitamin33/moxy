@@ -45,6 +45,7 @@ class Routes {
   static const adminFilterOrder = 'filter-order';
   static const adminOrderProductList = 'order-product-list';
   static const adminFeedbacks = 'feedbacks';
+  static const adminNovaPostENs = 'nova-post-ens';
 
   static Widget errorWidget(BuildContext context, GoRouterState state) =>
       const NotFoundScreen();

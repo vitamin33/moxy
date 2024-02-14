@@ -191,4 +191,8 @@ class AuthRepository {
       return Result.error(Exception('error resetPassword'));
     }
   }
+
+  void generateGuestToken() async {
+    tokenService.generateAndSaveGuestToken();
+  }
 }

@@ -14,9 +14,12 @@ class SearchWarehouseCubit extends Cubit<SearchWarehouseState> {
   final NovaPoshtaClient apiService = locate<NovaPoshtaClient>();
   final WarehouseMapper mapper = locate<WarehouseMapper>();
   TextEditingController controller = TextEditingController();
+  Warehouse? selectedWarehouse;
 
-  SearchWarehouseCubit()
-      : super(SearchWarehouseState.defaultSearchWarehouseState());
+  SearchWarehouseCubit({required this.selectedWarehouse})
+      : super(SearchWarehouseState.defaultSearchWarehouseState()) {
+    controller.text = selectedWarehouse?.number.toString() ?? '';
+  }
 
   Future<List<Warehouse>> searchWarehouse(String searchTerm, city) async {
     emit(state.copyWith(isLoading: true));
@@ -37,9 +40,9 @@ class SearchWarehouseCubit extends Cubit<SearchWarehouseState> {
 
   Future<List<Warehouse>> clearWarehouse() async {
     try {
-      emit(state.copyWith(
-        warehouseList: [],
-      ));
+      emit(
+        state.copyWith(warehouseList: [], searchTerm: null),
+      );
     } catch (e) {
       moxyPrint('Clear warehouseLIst');
     }

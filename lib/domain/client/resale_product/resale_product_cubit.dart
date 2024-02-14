@@ -58,12 +58,14 @@ class ResaleProductCubit extends Cubit<ResaleProductState> {
     }
   }
 
-    void toggleFavoriteForProduct(String? productId) async {
+  void toggleFavoriteForProduct(Product product) async {
+    String? productId = product.id;
     if (productId == null) {
       return;
     }
     try {
-      Product product = state.resaleProducts.firstWhere((it) => it.id == productId);
+      Product product =
+          state.resaleProducts.firstWhere((it) => it.id == productId);
       product.isFavorite = !product.isFavorite;
       emit(state.copyWith(resaleProducts: state.resaleProducts));
       bool success;

@@ -2,15 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:moxy/constant/order_constants.dart';
-import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/edit_order/edit_order_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/status.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/ui/screens/admin/pages/orders/order_content_item.dart';
 
 import '../../../../../constant/order_status.dart';
 import '../../../../components/snackbar_widgets.dart';
@@ -121,30 +120,6 @@ class _OrdersPageState extends State<OrdersPage> {
         ),
       );
     });
-  }
-
-  Widget _buildImage(List<OrderedItem> products) {
-    bool noDimensions = products.any((element) => element.dimensions.isEmpty);
-    bool noImages = products.any((element) =>
-        element.dimensions.any((element) => element.images.isEmpty));
-    if (products.isEmpty || noDimensions || noImages) {
-      return Image.asset(
-        width: 50,
-        height: 50,
-        'assets/images/placeholder.jpg',
-        fit: BoxFit.cover,
-      );
-    } else {
-      String firstImageUrl =
-          products.first.dimensions.first.images.first.imagePath;
-      return FadeInImage.assetNetwork(
-        placeholder: 'assets/images/placeholder.jpg',
-        image: firstImageUrl,
-        width: 50,
-        height: 50,
-        fit: BoxFit.cover,
-      );
-    }
   }
 
   List<Widget> _filterChipsList(
@@ -308,7 +283,7 @@ class _OrdersPageState extends State<OrdersPage> {
                 .reduce((total, price) => total + price)
                 .toString();
             return _buildOrderItemWidget(
-                cubit, order, orderDate, orderPrice, theme);
+                cubit, order, orderDate, orderPrice, theme, index);
           } else if (state.isLoading) {
             return const Center(
               child: LinearProgressIndicator(),
@@ -337,43 +312,6 @@ class _OrdersPageState extends State<OrdersPage> {
       case OrderStatus.PaymentFailed:
         return AppLocalizations.of(context)!.statusPaymentFailed;
     }
-  }
-
-  listTileTitle(Order order, AppTheme theme) {
-    return Text(
-      '${order.client.firstName} ${order.client.secondName}',
-      style: theme.largeBoltText,
-    );
-  }
-
-  listTileSubtitle(Order order, String orderPrice, AppTheme theme) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(order.orderedItems.map((item) => item.productName).join(', '),
-            style: theme.smallText),
-        Text(
-          '$orderPrice $uah',
-          style: theme.largeBoltText.copyWith(color: AppTheme.black),
-        ),
-      ],
-    );
-  }
-
-  listTileTrailing(Order order, String orderDate, AppTheme theme) {
-    return Column(
-      children: [
-        Text(_mapStatusToStringValue(order.status, context),
-            style: theme.largeText
-                .copyWith(color: _mapStatusToColor(order.status))),
-        const SizedBox(height: 8),
-        Text(
-          orderDate,
-          style: theme.smallText,
-        ),
-      ],
-    );
   }
 
   void showPopupMenu(BuildContext context, Order order, AllOrdersCubit cubit,
@@ -410,22 +348,6 @@ class _OrdersPageState extends State<OrdersPage> {
             .toList());
   }
 
-  Color _mapStatusToColor(Status status) {
-    switch (status.statusValue) {
-      case OrderStatus.Returned:
-      case OrderStatus.Canceled:
-      case OrderStatus.PaymentFailed:
-        return AppTheme.red;
-      case OrderStatus.Sale:
-      case OrderStatus.Sent:
-        return AppTheme.greenDark;
-      case OrderStatus.Paid:
-        return AppTheme.orange;
-      default:
-        return AppTheme.greyDark;
-    }
-  }
-
   Widget _buildLoadingIfNeeded(AllOrdersState state) {
     return state.isLoading
         ? const LinearProgressIndicator(
@@ -435,11 +357,33 @@ class _OrdersPageState extends State<OrdersPage> {
         : Container();
   }
 
-  Widget _buildOrderItemWidget(AllOrdersCubit cubit, Order order,
-      String orderDate, String orderPrice, AppTheme theme) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GestureDetector(
+  Widget _buildOrderItemWidget(
+    AllOrdersCubit cubit,
+    Order order,
+    String orderDate,
+    String orderPrice,
+    AppTheme theme,
+    int index,
+  ) {
+    return Dismissible(
+      key: UniqueKey(),
+      background: Container(
+        color: AppTheme.red,
+        alignment: Alignment.centerRight,
+        padding: const EdgeInsets.only(right: 20.0),
+        child: const Icon(Icons.delete, color: Colors.white),
+      ),
+      direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) async {
+        return await _showConfirmDeleteOrderDialog(context);
+      },
+      onDismissed: (direction) {
+        cubit.deleteOrder(order.id, index);
+      },
+      child: OrderItemContent(
+        order: order,
+        orderPrice: orderPrice,
+        orderDate: orderDate,
         onLongPressStart: (details) =>
             showPopupMenu(context, order, cubit, details, theme),
         onTap: () {
@@ -449,36 +393,30 @@ class _OrdersPageState extends State<OrdersPage> {
           context.push(RouterProvider.adminEditOrderPath(order.id!));
           context.read<EditOrderCubit>().getOrder(order);
         },
-        child: ListTile(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding: const EdgeInsets.all(14.0),
-            tileColor: AppTheme.white,
-            leading: Stack(children: [
-              ClipOval(child: _buildImage(order.orderedItems)),
-              Positioned(
-                top: 22.0,
-                left: 22.0,
-                child: CircleAvatar(
-                  radius: 14,
-                  backgroundColor: AppTheme.white,
-                  child: CircleAvatar(
-                    backgroundColor: _mapStatusToColor(order.status),
-                    radius: 12,
-                    child: SvgPicture.asset(
-                      order.status.iconPath,
-                      width: 20,
-                      color: AppTheme.white,
-                    ),
-                  ),
-                ),
-              )
-            ]),
-            title: listTileTitle(order, theme),
-            subtitle: listTileSubtitle(order, orderPrice, theme),
-            trailing: listTileTrailing(order, orderDate, theme)),
       ),
     );
+  }
+
+  Future<bool> _showConfirmDeleteOrderDialog(BuildContext context) async {
+    return await showDialog<bool>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.ordersConfirmDelete),
+              content: Text(AppLocalizations.of(context)!.ordersSureToDelete),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: Text(AppLocalizations.of(context)!.cancel),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(AppLocalizations.of(context)!.delete),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false; // Returning false if dialog is dismissed
   }
 }

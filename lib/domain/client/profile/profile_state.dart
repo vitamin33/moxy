@@ -7,7 +7,7 @@ import '../../models/profile.dart';
 class ProfileState implements Copyable<ProfileState> {
   final bool isLoading;
   final int activePage;
-  final Profile profile;
+  final Profile? profile;
   final List<Order> historyOrders;
   final ProfilePassword password;
   final bool showSaveButton;
@@ -24,6 +24,10 @@ class ProfileState implements Copyable<ProfileState> {
     required this.errors,
     required this.showSaveButton,
   });
+
+  bool isGuestProfile() {
+    return profile == null || profile!.mobileNumber.isEmpty;
+  }
 
   static defaultState() {
     return ProfileState(

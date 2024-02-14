@@ -17,7 +17,7 @@ class RecomendedProductCubit extends Cubit<RecomendedProductState> {
 
   final productRepository = locate<ProductRepository>();
   final productMapper = locate<ProductMapper>();
-   final profileRepository = locate<ProfileRepository>();
+  final profileRepository = locate<ProfileRepository>();
   final ScrollController scrollController = ScrollController();
 
   void moveToPreviousProduct() {
@@ -60,12 +60,14 @@ class RecomendedProductCubit extends Cubit<RecomendedProductState> {
     }
   }
 
-  void toggleFavoriteForProduct(String? productId) async {
+  void toggleFavoriteForProduct(Product product) async {
+    String? productId = product.id;
     if (productId == null) {
       return;
     }
     try {
-      Product product = state.recomendedProducts.firstWhere((it) => it.id == productId);
+      Product product =
+          state.recomendedProducts.firstWhere((it) => it.id == productId);
       product.isFavorite = !product.isFavorite;
       emit(state.copyWith(recomendedProducts: state.recomendedProducts));
       bool success;

@@ -10,6 +10,8 @@ import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/footer.dart';
+import 'package:moxy/ui/profile_scope.dart';
+import 'package:moxy/ui/screens/client/web/guest_profile.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -51,7 +53,6 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.of(context)!;
     return BlocProvider<FavouritesCubit>(
       create: (BuildContext context) => _favouritesCubit,
       child: BlocBuilder<FavouritesCubit, FavouritesState>(
@@ -81,10 +82,20 @@ class _FavouritesPageState extends State<FavouritesPage> {
               ),
             ),
           );
-        },
+          final profile = ProfileScope.of(context);
+          if (profile != null && !profile.isGuest()) {
+            return FavoritesContent(state: state);
+          } else {
+            return const GuestProfileWidget();
+          }
       ),
     );
   }
+}
+
+class FavoritesContent extends StatelessWidget {
+  final FavouritesState state;
+  const FavoritesContent({super.key, required this.state});
 
   Widget _buildFavoritesArea(FavouritesState state, bool isMobile) {
     return AnimatedSwitcher(
@@ -119,6 +130,12 @@ class _FavouritesPageState extends State<FavouritesPage> {
         ),
       );
     }
+    bool isMobile = ResponsiveUtil.isMobile(context);
+    final crossAxisExtent = isMobile ? 500.0 : 300.0;
+    final spacing = isMobile
+        ? AppTheme.defaultGridSpacingMobile
+        : AppTheme.defaultGridSpacing;
+
     return AnimationLimiter(
         child: AlignedGridView.count(
       physics: const NeverScrollableScrollPhysics(),
@@ -135,5 +152,6 @@ class _FavouritesPageState extends State<FavouritesPage> {
         );
       },
     ));
+
   }
 }

@@ -28,6 +28,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
   int cashAdvanceValue;
   List<OrderStatus> availableStatuses = [];
   String? ukrPostInfo;
+  String? novaEN;
 
   // field errors
   FieldErrors errors;
@@ -51,6 +52,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     required this.cashAdvanceValue,
     required this.availableStatuses,
     required this.ukrPostInfo,
+    required this.novaEN,
   });
 
   static CreateOrderState defaultCreateProductState() {
@@ -73,6 +75,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       cashAdvanceValue: defaultCashAvanceValue,
       availableStatuses: [],
       ukrPostInfo: null,
+      novaEN: null,
     );
   }
 
@@ -98,6 +101,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
     int? cashAdvanceValue,
     List<OrderStatus>? availableStatuses,
     String? ukrPostInfo,
+    String? novaEN,
   }) {
     return CreateOrderState(
       isLoading: isLoading ?? this.isLoading,
@@ -118,6 +122,7 @@ class CreateOrderState implements Copyable<CreateOrderState> {
       cashAdvanceValue: cashAdvanceValue ?? this.cashAdvanceValue,
       availableStatuses: availableStatuses ?? this.availableStatuses,
       ukrPostInfo: ukrPostInfo ?? this.ukrPostInfo,
+      novaEN: novaEN ?? this.novaEN,
     );
   }
 }

@@ -8,6 +8,8 @@ class AppTheme extends InheritedWidget {
   static const double defaultPaddingMobile = 16;
   static const double defaultGridSpacing = 8;
   static const double defaultGridSpacingMobile = 16;
+  static const double arrowPadding = 40;
+  static const double arrowPaddingMobile = 20;
   static const Widget smallVerticalSpasing = SizedBox(height: 10);
   static const Widget mediumVerticalSpasing = SizedBox(height: 30);
   static const Widget largeVerticalSpasing = SizedBox(height: 50);

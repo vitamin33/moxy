@@ -58,7 +58,8 @@ class SearchCubit extends CubitWithEffects<SearchState, UiEffect>
     emit(state.copyWith(searchProduct: searchProduct));
   }
 
-  void toggleFavoriteForProduct(String? productId) async {
+  void toggleFavoriteForProduct(Product product) async {
+    String? productId = product.id;
     if (productId == null) {
       return;
     }

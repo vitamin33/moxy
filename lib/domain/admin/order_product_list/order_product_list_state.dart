@@ -41,7 +41,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     bool? isEdit,
     String? searchText,
     String? errorMessage,
-    List<Product>? allProducts,
+    List<Product>? allENs,
     List<DimensionProduct>? productsByDimension,
     Set<OrderedItem>? selectedProducts,
   }) {
@@ -52,7 +52,7 @@ class OrderProductListState implements Copyable<OrderProductListState> {
       errorMessage: errorMessage ?? this.errorMessage,
       productsByDimension: productsByDimension ?? this.productsByDimension,
       selectedProducts: selectedProducts ?? this.selectedProducts,
-      allProducts: allProducts ?? this.allProducts,
+      allProducts: allENs ?? this.allProducts,
     );
   }
 }

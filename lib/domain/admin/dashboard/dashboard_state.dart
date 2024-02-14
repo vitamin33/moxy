@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/data/models/response/dashboard_response.dart';
 import 'package:moxy/domain/copyable.dart';
+import 'package:moxy/domain/models/ads_report.dart';
 
 class DashboardState implements Copyable<DashboardState> {
   final bool isLoading;
@@ -21,30 +22,35 @@ class DashboardState implements Copyable<DashboardState> {
   final List<TotalByTimeFrame> saleFromTimeFrame;
   final List<TotalByTimeFrame> costFromTimeFrame;
   final List<TotalByTimeFrame> profitFromTimeFrame;
+  final AdsReport currentAdsReport;
+  final AdsReport previousAdsReport;
   final String errorMessage;
   final DateTimeRange? selectedDate;
 
-  DashboardState(
-      {required this.isLoading,
-      required this.animated,
-      required this.totalSale,
-      required this.totalCost,
-      required this.totalOrders,
-      required this.totalProfit,
-      required this.previousTotalSaleValue,
-      required this.previousTotalCostValue,
-      required this.previousTotalOrdersCount,
-      required this.previousTotalProfit,
-      required this.saleValuePercentageChange,
-      required this.costValuePercentageChange,
-      required this.ordersCountPercentageChange,
-      required this.profitPercentageChange,
-      required this.ordersFromTimeFrame,
-      required this.saleFromTimeFrame,
-      required this.costFromTimeFrame,
-      required this.profitFromTimeFrame,
-      required this.errorMessage,
-      this.selectedDate});
+  DashboardState({
+    required this.isLoading,
+    required this.animated,
+    required this.totalSale,
+    required this.totalCost,
+    required this.totalOrders,
+    required this.totalProfit,
+    required this.previousTotalSaleValue,
+    required this.previousTotalCostValue,
+    required this.previousTotalOrdersCount,
+    required this.previousTotalProfit,
+    required this.saleValuePercentageChange,
+    required this.costValuePercentageChange,
+    required this.ordersCountPercentageChange,
+    required this.profitPercentageChange,
+    required this.ordersFromTimeFrame,
+    required this.saleFromTimeFrame,
+    required this.costFromTimeFrame,
+    required this.profitFromTimeFrame,
+    required this.currentAdsReport,
+    required this.previousAdsReport,
+    required this.errorMessage,
+    this.selectedDate,
+  });
 
   static defaultDashboardState() {
     return DashboardState(
@@ -64,6 +70,8 @@ class DashboardState implements Copyable<DashboardState> {
         saleFromTimeFrame: [],
         costFromTimeFrame: [],
         profitFromTimeFrame: [],
+        currentAdsReport: AdsReport.defaultReport(),
+        previousAdsReport: AdsReport.defaultReport(),
         isLoading: false,
         animated: false,
         selectedDate: null,
@@ -91,6 +99,8 @@ class DashboardState implements Copyable<DashboardState> {
       List<TotalByTimeFrame>? saleFromTimeFrame,
       List<TotalByTimeFrame>? costFromTimeFrame,
       List<TotalByTimeFrame>? profitFromTimeFrame,
+      AdsReport? currentAdsReport,
+      AdsReport? previousAdsReport,
       DateTimeRange? selectedDate}) {
     return DashboardState(
         totalSale: totalSale ?? this.totalSale,
@@ -118,6 +128,8 @@ class DashboardState implements Copyable<DashboardState> {
         saleFromTimeFrame: saleFromTimeFrame ?? this.saleFromTimeFrame,
         costFromTimeFrame: costFromTimeFrame ?? this.costFromTimeFrame,
         profitFromTimeFrame: profitFromTimeFrame ?? this.profitFromTimeFrame,
+        currentAdsReport: currentAdsReport ?? this.currentAdsReport,
+        previousAdsReport: previousAdsReport ?? this.previousAdsReport,
         selectedDate: selectedDate ?? this.selectedDate,
         errorMessage: errorMessage ?? this.errorMessage);
   }

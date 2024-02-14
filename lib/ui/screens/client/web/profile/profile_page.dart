@@ -9,6 +9,8 @@ import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/profile_scope.dart';
+import 'package:moxy/ui/screens/client/web/guest_profile.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_adress.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_contact_info.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.dart';
@@ -18,6 +20,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class ProfilePage extends StatefulWidget {
@@ -71,14 +74,20 @@ class _ProfilePageState extends State<ProfilePage>
           create: (BuildContext context) => cubit,
         ),
         BlocProvider<SearchCitiesCubit>(
-          create: (BuildContext context) => SearchCitiesCubit(),
+          create: (BuildContext context) =>
+              SearchCitiesCubit(selectedCity: cubit.state.profile?.city),
         ),
         BlocProvider<SearchWarehouseCubit>(
-          create: (BuildContext context) => SearchWarehouseCubit(),
+          create: (BuildContext context) => SearchWarehouseCubit(
+            selectedWarehouse: cubit.state.profile?.warehouse,
+          ),
         ),
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
+          final profile = ProfileScope.of(context);
+          bool isGuest = profile == null || profile.isGuest();
+
           return Scaffold(
             body: Container(
               height: MediaQuery.of(context).size.height,
@@ -87,14 +96,16 @@ class _ProfilePageState extends State<ProfilePage>
                 child: Column(
                   children: [
                     SizedBox(
+
+                      height: isGuest ? 400 : 600,
                       child: AnimatedSwitcher(
                         duration: const Duration(
-                            milliseconds: 500), // Adjust the duration as needed
+                            milliseconds: 400), // Adjust the duration as needed
                         child: state.isLoading
                             ? const MoxyLoader(
                                 iconSize: 40,
                               )
-                            : ProfileTabPage(),
+                            : ProfileTabPage(isGuest: isGuest),
                       ),
                     ),
                     const PromoContainer(),
@@ -122,7 +133,9 @@ class ProfileTabPage extends StatelessWidget {
     ProfileAdress(),
   ];
 
-  ProfileTabPage({Key? key}) : super(key: key);
+  final bool isGuest;
+
+  ProfileTabPage({super.key, required this.isGuest});
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +172,12 @@ class ProfileTabPage extends StatelessWidget {
                 const SizedBox(height: 50),
               ],
             ));
+        return Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: isGuest
+              ? const GuestProfileWidget()
+              : _buildUserProfile(context, state),
+        );
       },
     );
   }
@@ -357,7 +376,7 @@ class ProfileTabPage extends StatelessWidget {
                             cubit.signOut();
                             context.go(RouterProvider.loginPath());
                           },
-                          child: Text('Вихід',
+                          child:  Text(AppLocalizations.of(context)!.profilePageLogOut,
                               style: theme.largeSemiBoltText
                                   .copyWith(color: AppTheme.gray)),
                         ),
@@ -399,5 +418,33 @@ class ProfileTabPage extends StatelessWidget {
         break;
     }
     context.go(path);
+  }
+
+  Widget _buildUserProfile(BuildContext context, ProfileState state) {
+    final cubit = context.read<ProfileCubit>();
+    final theme = AppTheme.of(context)!;
+    final router = context.read<RootRouterCubit>();
+    return Column(
+      children: [
+        SizedBox(
+          height: contentHeight,
+          child: Row(
+            children: [
+              // Drawer Menu
+              _drawerMenu(context, cubit, state, theme, router),
+              // Selected Tab Content
+              _selectedTabContent(cubit, state),
+            ],
+          ),
+        ),
+        const SizedBox(height: 30),
+        AnimatedOpacity(
+          opacity: state.showSaveButton ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 300),
+          child: _buildSaveButton(cubit),
+        ),
+        const SizedBox(height: 50),
+      ],
+    );
   }
 }

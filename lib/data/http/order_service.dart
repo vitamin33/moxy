@@ -8,6 +8,7 @@ import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/domain/models/filter_order_param.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/extensions.dart';
 
 class OrderService {
   final baseUrl = Environment.apiUrl;
@@ -125,6 +126,19 @@ class OrderService {
     } catch (e, stack) {
       moxyPrint(stack);
       rethrow;
+    }
+  }
+
+  Future<bool> deleteOrder(String orderId) async {
+    try {
+      Response response = await _dio.delete(
+        '$orderByIdUrl$orderId',
+      );
+      int code = response.statusCode ?? 0;
+      return code.isSuccessful();
+    } catch (e, stack) {
+      moxyPrint(stack);
+      return false;
     }
   }
 }

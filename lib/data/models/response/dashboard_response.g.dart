@@ -39,6 +39,10 @@ NetworkDashboard _$NetworkDashboardFromJson(Map<String, dynamic> json) =>
           (json['totalProfitValueByTimeFrame'] as List<dynamic>)
               .map((e) => TotalByTimeFrame.fromJson(e as Map<String, dynamic>))
               .toList(),
+      currentAdsReport: AdsReportResponse.fromJson(
+          json['currentAdsReport'] as Map<String, dynamic>),
+      previousAdsReport: AdsReportResponse.fromJson(
+          json['previousAdsReport'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
@@ -59,6 +63,8 @@ Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
       'totalSaleValueByTimeFrame': instance.totalSaleValueByTimeFrame,
       'totalCostValueByTimeFrame': instance.totalCostValueByTimeFrame,
       'totalProfitValueByTimeFrame': instance.totalProfitValueByTimeFrame,
+      'currentAdsReport': instance.currentAdsReport,
+      'previousAdsReport': instance.previousAdsReport,
     };
 
 TotalByTimeFrame _$TotalByTimeFrameFromJson(Map<String, dynamic> json) =>
@@ -75,4 +81,24 @@ Map<String, dynamic> _$TotalByTimeFrameToJson(TotalByTimeFrame instance) =>
       'toDate': instance.toDate.toIso8601String(),
       'key': instance.key,
       'value': instance.value,
+    };
+
+AdsReportResponse _$AdsReportResponseFromJson(Map<String, dynamic> json) =>
+    AdsReportResponse(
+      spend: json['spend'] as String,
+      spendInUah: json['spendInUah'] as String,
+      reach: json['reach'] as String,
+      cpm: json['cpm'] as String,
+      cpc: json['cpc'] as String,
+      ctr: json['ctr'] as String,
+    );
+
+Map<String, dynamic> _$AdsReportResponseToJson(AdsReportResponse instance) =>
+    <String, dynamic>{
+      'spend': instance.spend,
+      'spendInUah': instance.spendInUah,
+      'reach': instance.reach,
+      'cpm': instance.cpm,
+      'ctr': instance.ctr,
+      'cpc': instance.cpc,
     };

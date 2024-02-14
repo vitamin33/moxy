@@ -70,10 +70,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
           create: (BuildContext context) => cubit,
         ),
         BlocProvider<SearchCitiesCubit>(
-          create: (BuildContext context) => SearchCitiesCubit(),
+          create: (BuildContext context) =>
+              SearchCitiesCubit(selectedCity: cubit.state.selectedCity),
         ),
         BlocProvider<SearchWarehouseCubit>(
-          create: (BuildContext context) => SearchWarehouseCubit(),
+          create: (BuildContext context) => SearchWarehouseCubit(
+            selectedWarehouse: cubit.state.selectedWarehouse,
+          ),
         ),
       ],
       child: BlocBuilder<CheckoutCubit, CheckoutState>(
@@ -85,7 +88,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             body: ScrollableSection(
               content: Column(
                 children: [
-                  Align(
                     alignment: Alignment.topLeft,
                     child:
                         // Padding(

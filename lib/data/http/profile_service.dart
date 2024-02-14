@@ -1,8 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:moxy/constant/api_path.dart';
+import 'package:moxy/data/models/request/subscribe_request.dart';
 import 'package:moxy/data/models/request/user_request.dart';
 import 'package:moxy/data/models/response/all_orders_response.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
+import 'package:moxy/data/models/response/error_response.dart';
 import 'package:moxy/data/models/response/profile_response.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/utils/common.dart';
@@ -101,5 +103,22 @@ class ProfileService {
       rethrow;
     }
     return Result.success(result);
+  }
+
+  Future<bool> subscribeLead(String email, String firstName) async {
+    try {
+      final request = SubscribeRequest(email: email, firstName: firstName);
+      final response =
+          await _dio.post('$baseUrl$subscribeLeadUrl', data: request.toJson());
+      int code = response.statusCode ?? 0;
+      return code.isSuccessful();
+    } on DioException catch (error) {
+      if (error.response != null) {
+        final errorResponse = ErrorResponse.fromJson(error.response!.data);
+        throw Exception(errorResponse.message);
+      } else {
+        throw Exception('Unknown error occurred. ${error.toString()}');
+      }
+    }
   }
 }

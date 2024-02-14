@@ -5,13 +5,18 @@ import 'package:moxy/domain/admin/create_order/search_cities/search_cities_state
 import 'package:moxy/domain/mappers/city_mapper.dart';
 import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/services/get_it.dart';
+import 'package:moxy/utils/common.dart';
 
 class SearchCitiesCubit extends Cubit<SearchCitiesState> {
   final NovaPoshtaClient apiService = locate<NovaPoshtaClient>();
   final CityMapper mapper = locate<CityMapper>();
   TextEditingController controller = TextEditingController();
+  City? selectedCity;
 
-  SearchCitiesCubit() : super(SearchCitiesState.defaultSearchCitiesState());
+  SearchCitiesCubit({required this.selectedCity})
+      : super(SearchCitiesState.defaultSearchCitiesState()) {
+    controller.text = selectedCity?.presentName ?? '';
+  }
 
   Future<List<City>> searchCities(String searchTerm) async {
     emit(state.copyWith(isLoading: true));
@@ -25,6 +30,16 @@ class SearchCitiesCubit extends Cubit<SearchCitiesState> {
       emit(state.copyWith(isLoading: false));
     }
     return [];
+  }
+
+  Future<void> clearCity() async {
+    try {
+      emit(
+        state.copyWith(cityList: [], searchTerm: null),
+      );
+    } catch (e) {
+      moxyPrint('Clear cities failed');
+    }
   }
 
   String getCurrentSearchTerm() {

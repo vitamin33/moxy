@@ -2,6 +2,7 @@ const String createProductUrl = '/products/create';
 const String loginUserUrl = '/auth/login';
 const String registerUserUrl = '/auth/register';
 const String verifyUserUrl = '/auth/verify-confirmation';
+const String guestTokenUrl = '/auth/guest-token';
 const String resendVerifyUserUrl = '/auth/resend-confirmation';
 const String allProductsUrl = '/products';
 const String getProductByIdUrl = '/products/details/';
@@ -35,6 +36,7 @@ const String getAttributesUrl = '/attributes';
 const String getFavoriteUrl = '/favorites';
 const String getHomeMediaUrl = '/settings/media/home';
 const String getReviewsUrl = '/reviews';
+const String subscribeLeadUrl = '/profile/subscribe';
 
 // MONO
 const String monoCreateInvoiceUrl =

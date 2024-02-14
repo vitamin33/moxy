@@ -22,7 +22,7 @@ NetworkProfile _$NetworkProfileFromJson(Map<String, dynamic> json) =>
           ? null
           : NetworkNovaPost.fromJson(json['novaPost'] as Map<String, dynamic>),
       role: json['role'] as String,
-      password: json['password'] as String,
+      password: json['password'] as String?,
       id: json['id'] as String,
     );
 
