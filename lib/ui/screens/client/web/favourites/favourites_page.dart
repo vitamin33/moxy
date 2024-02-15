@@ -57,7 +57,6 @@ class _FavouritesPageState extends State<FavouritesPage> {
       create: (BuildContext context) => _favouritesCubit,
       child: BlocBuilder<FavouritesCubit, FavouritesState>(
           builder: (context, state) {
-        final isMobile = ResponsiveUtil.isMobile(context);
         final theme = AppTheme.of(context)!;
         final profile = ProfileScope.of(context);
 
@@ -98,25 +97,10 @@ class FavoritesContent extends StatelessWidget {
   final FavouritesCubit cubit;
   const FavoritesContent({super.key, required this.state,required this.cubit});
 
-  // Widget _buildFavoritesArea(FavouritesState state, bool isMobile) {
-  //   return AnimatedSwitcher(
-  //       duration: const Duration(milliseconds: 300),
-  //       child: state.isLoading
-  //           ? const Center(
-  //               child: Padding(
-  //                 padding: EdgeInsets.all(30.0),
-  //                 child: MoxyLoader(
-  //                   iconSize: 40,
-  //                 ),
-  //               ),
-  //             )
-  //           : buildFavoritesList(state, isMobile,context));
-  // }
 
   @override
   Widget build(BuildContext context) {
     final isMobile = ResponsiveUtil.isMobile(context);
-    // TODO: implement build
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: state.isLoading
@@ -129,7 +113,6 @@ class FavoritesContent extends StatelessWidget {
                 ),
               )
             : buildFavoritesList(state, isMobile, context));
-    // throw UnimplementedError();
   }
 
   Widget buildFavoritesList(

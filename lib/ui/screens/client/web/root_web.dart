@@ -62,7 +62,10 @@ class RootWebWidget extends HookWidget {
       leading: isMobile ? _buildHamburgerButton(context) : _buildLogo(),
       backgroundColor: AppTheme.white,
       elevation: 8.0,
-      title: isMobile ? null : _buildTabsWidget(context, tabController),
+      title: isMobile
+          ? SvgPicture.asset(IconPath.moxyLogoWeb, width: 60)
+          : _buildTabsWidget(context, tabController),
+      centerTitle: true,
       actions: isMobile
           ? _buildMobileActions(context, theme)
           : _buildActions(context, theme),

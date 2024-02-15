@@ -48,7 +48,8 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
 
   void toggleFavoriteForProduct(Product productId) async {
     try {
-      Product product = state.bagsList.firstWhere((it) => it.id == productId.id);
+      Product product =
+          state.bagsList.firstWhere((it) => it.id == productId.id);
       product.isFavorite = !product.isFavorite;
       emit(state.copyWith(bagsList: state.bagsList));
       bool success;
@@ -79,17 +80,17 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
       List<String> selectedPrice = [];
       List<String> selectedSortBy = [];
       for (var color in colors) {
-        if (color.isSelected == true) {
+        if (color.isSelected) {
           selectedColor.add(color.name);
         }
       }
       for (var price in prices) {
-        if (price.isSelected == true) {
+        if (price.isSelected) {
           selectedPrice.add(price.name);
         }
       }
       for (var time in sortBy) {
-        if (time.isSelected == true) {
+        if (time.isSelected) {
           selectedSortBy.add(time.name);
         }
       }

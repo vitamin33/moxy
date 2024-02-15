@@ -144,6 +144,15 @@ class ProductMapper {
       images: dimen.images.map((e) => e.imagePath).toList(),
     );
   }
+  NetworkDimension mapToNetworkDimensionWithOneQuantity(Dimension dimen) {
+    return NetworkDimension(
+      color: mapToNetworkColor(dimen.color),
+      size: mapToNetworkSize(dimen.size),
+      material: mapToNetworkMaterial(dimen.material),
+      quantity: 1,
+      images: dimen.images.map((e) => e.imagePath).toList(),
+    );
+  }
 
   NetworkColor mapToNetworkColor(ProductColor item) {
     return NetworkColor(
