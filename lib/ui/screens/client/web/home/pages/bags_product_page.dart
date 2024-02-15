@@ -23,9 +23,11 @@ class BagsProductPage extends StatefulWidget {
 }
 
 class _BagsProductPageState extends State<BagsProductPage> {
+  late BagsCatalogCubit cubit;
   @override
   void initState() {
     super.initState();
+    cubit = BagsCatalogCubit();
 
     context.read<BasketCubit>().effectStream.listen((effect) {
       if (effect is OpenBasketSideSheet) {
@@ -40,15 +42,15 @@ class _BagsProductPageState extends State<BagsProductPage> {
   @override
   void dispose() {
     super.dispose();
+    cubit.close();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BagsCatalogCubit>(
-        create: (context) => BagsCatalogCubit(),
+        create: (context) => cubit,
         child: BlocBuilder<BagsCatalogCubit, BagsCatalogState>(
           builder: (context, state) {
-            final cubit = context.read<BagsCatalogCubit>();
             return BlocBuilder<BasketCubit, BasketState>(
               builder: (context, basketState) {
                 return Scaffold(
@@ -60,13 +62,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
                           FilterContainer(
                             title: 'Сумки',
                             productCount: state.bagsList.length.toString(),
-                            selectedColors: state.selectedColors,
-                            selectedPriceRange: state.selectedPriceRange,
-                            selectedTimeRange: state.selectedTimeRange,
-                            filterProductColors: state.attributes,
-                            onChangedSelectedColors: cubit.setFilterColor,
-                            onChangedSelectedPriceRange: cubit.setFilterPrice,
-                            onChangedSelectedTimeRange: cubit.setFilterTime,
+                            parentCubit: cubit,
                           ),
                           const BagsCatalog(),
                           const PromoContainer(),

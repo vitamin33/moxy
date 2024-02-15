@@ -22,15 +22,12 @@ class CheckoutInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
     final cubit = context.read<CheckoutCubit>();
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          ..._buildContactInfoWidget(theme, cubit),
-          ..._buildDeliveryWidget(theme, cubit),
-          ..._buildPaymentWidget(theme, cubit),
-        ],
-      ),
+    return Column(
+      children: [
+        ..._buildContactInfoWidget(theme, cubit),
+        ..._buildDeliveryWidget(theme, cubit),
+        ..._buildPaymentWidget(theme, cubit),
+      ],
     );
   }
 

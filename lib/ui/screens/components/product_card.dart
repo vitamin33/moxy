@@ -57,7 +57,7 @@ class ProductCard extends StatelessWidget {
                       ],
                     ),
                   ),
-                  _buildProductInfoRow(context, theme),
+                  _buildProductInfoRow(context, theme, isMobile),
                 ],
               ),
             ),
@@ -183,15 +183,21 @@ class ProductCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProductInfoRow(BuildContext context, AppTheme theme) {
+  Widget _buildProductInfoRow(
+      BuildContext context, AppTheme theme, bool isMobile) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            product.name.toUpperCase(),
-            style: theme.titleText,
+          Expanded(
+            child:
+                Text(
+              product.name.toUpperCase(),
+              style: theme.titleText,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
           _buildPriceInfo(theme),
         ],

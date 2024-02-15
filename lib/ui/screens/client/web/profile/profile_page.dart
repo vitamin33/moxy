@@ -17,6 +17,7 @@ import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.d
 import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -32,13 +33,16 @@ class ProfilePage extends StatefulWidget {
 
 const double contentHeight = 400.0;
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
   late ProfileCubit cubit;
 
   @override
   void initState() {
     super.initState();
     cubit = ProfileCubit(extraPagePath: widget.extraPage);
+    cubit.tabController =
+        TabController(initialIndex: cubit.activePage, length: 3, vsync: this);
 
     cubit.effectStream.listen((effect) {
       if (effect is ProfileApiRequestFailed) {
@@ -87,12 +91,12 @@ class _ProfilePageState extends State<ProfilePage> {
           return Scaffold(
             body: Container(
               height: MediaQuery.of(context).size.height,
-              width: double.infinity,
               color: AppTheme.white,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     SizedBox(
+
                       height: isGuest ? 400 : 600,
                       child: AnimatedSwitcher(
                         duration: const Duration(
@@ -137,17 +141,43 @@ class ProfileTabPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final cubit = context.read<ProfileCubit>();
+        final theme = AppTheme.of(context)!;
+        final router = context.read<RootRouterCubit>();
+        final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: isGuest
-              ? const GuestProfileWidget()
-              : _buildUserProfile(context, state),
-        );
+            padding: EdgeInsets.all(isMobile ? 0.0 : 24.0),
+            child:isGuest?const GuestProfileWidget() :Column(
+              children: [
+                isMobile
+                    ? _selectedTabMobile(cubit, state)
+                    : SizedBox(
+                        height: contentHeight,
+                        child: Row(
+                          children: [
+                            // Drawer Menu
+                            _drawerMenu(
+                                context, cubit, state, theme, router, isMobile),
+                            // Selected Tab Content
+                            _selectedTabContent(cubit, state, isMobile),
+                          ],
+                        ),
+                      ),
+                const SizedBox(height: 30),
+                AnimatedOpacity(
+                  opacity: state.showSaveButton ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: _buildSaveButton(cubit),
+                ),
+                const SizedBox(height: 50),
+              ],
+            ));
       },
     );
   }
 
-  Widget _selectedTabContent(ProfileCubit cubit, ProfileState state) {
+  Widget _selectedTabContent(
+      ProfileCubit cubit, ProfileState state, bool isMobile) {
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -175,76 +205,180 @@ class ProfileTabPage extends StatelessWidget {
     );
   }
 
-  Widget _drawerMenu(BuildContext context, ProfileCubit cubit,
-      ProfileState state, AppTheme theme, RootRouterCubit router) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
-      child: SizedBox(
-        width: 250,
-        height: contentHeight,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: List.generate(tabTitles.length, (index) {
-            return GestureDetector(
-              onTap: () {
-                if (cubit.pageController.hasClients) {
-                  cubit.pageController.animateToPage(
-                    index,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
-                  );
-                  updateNavigator(context, index);
-                }
-              },
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: state.activePage == index
-                      ? const Border(
-                          right: BorderSide(
-                            color: AppTheme.black,
-                            width: 2,
-                            style: BorderStyle.solid,
-                          ),
-                        )
-                      : const Border(
-                          right: BorderSide(
-                            color: AppTheme.greyLigth,
-                            width: 2,
-                            style: BorderStyle.solid,
-                          ),
-                        ),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 25),
-                child: Text(
-                  tabTitles[index],
-                  style: theme.largeBoltText.copyWith(
-                    color: state.activePage == index
-                        ? AppTheme.pinkDark
-                        : AppTheme.black,
-                  ),
-                ),
+  Widget _selectedTabMobile(ProfileCubit cubit, ProfileState state) {
+    return Column(
+      children: [
+        Column(
+          children: [
+            TabBar(
+              overlayColor: MaterialStateProperty.resolveWith<Color?>(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.hovered)) {
+                    return AppTheme.greyLigth;
+                  }
+                  return null;
+                },
               ),
-            );
-          })
-            ..add(
-              Expanded(
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: InkWell(
-                    onTap: () {
-                      cubit.signOut();
-                      context.go(RouterProvider.loginPath());
-                    },
-                    child: Text(AppLocalizations.of(context)!.profilePageLogOut,
-                        style: theme.largeSemiBoltText
-                            .copyWith(color: AppTheme.gray)),
-                  ),
-                ),
+              tabAlignment: TabAlignment.fill,
+              labelPadding:const EdgeInsets.all(15),
+              controller: cubit.tabController,
+              indicatorColor: AppTheme.black,
+              labelColor: AppTheme.black,
+              onTap: (int index) {
+                cubit.onChangePage(index);
+              },
+              tabs: [
+                for (final pageTitle in tabTitles)
+                  Tab(
+                      child: Wrap(children: [
+                    Center(
+                        child: Text(
+                      pageTitle,
+                      textAlign: TextAlign.center,
+                    ))
+                  ])),
+              ],
+            ),
+            SizedBox(
+              height: 600,
+              width: double.infinity,
+              child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: cubit.tabController,
+                children: [
+                  for (final pageWidget in tabPages) pageWidget,
+                ],
               ),
             ),
-        ),
-      ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Widget _drawerMenu(
+      BuildContext context,
+      ProfileCubit cubit,
+      ProfileState state,
+      AppTheme theme,
+      RootRouterCubit router,
+      bool isMobile) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
+      child: isMobile
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: List.generate(tabTitles.length, (index) {
+                return GestureDetector(
+                  onTap: () {
+                    if (cubit.pageController.hasClients) {
+                      cubit.pageController.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeIn,
+                      );
+                      updateNavigator(context, index);
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: state.activePage == index
+                          ? const Border(
+                              right: BorderSide(
+                                color: AppTheme.black,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                            )
+                          : const Border(
+                              right: BorderSide(
+                                color: AppTheme.greyLigth,
+                                width: 2,
+                                style: BorderStyle.solid,
+                              ),
+                            ),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 25),
+                    child: Text(
+                      tabTitles[index],
+                      style: theme.largeBoltText.copyWith(
+                        color: state.activePage == index
+                            ? AppTheme.pinkDark
+                            : AppTheme.black,
+                      ),
+                    ),
+                  ),
+                );
+              }))
+          : SizedBox(
+              width: 250,
+              height: contentHeight,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(tabTitles.length, (index) {
+                  return GestureDetector(
+                    onTap: () {
+                      if (cubit.pageController.hasClients) {
+                        cubit.pageController.animateToPage(
+                          index,
+                          duration: const Duration(milliseconds: 200),
+                          curve: Curves.easeIn,
+                        );
+                        updateNavigator(context, index);
+                      }
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: state.activePage == index
+                            ? const Border(
+                                right: BorderSide(
+                                  color: AppTheme.black,
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                              )
+                            : const Border(
+                                right: BorderSide(
+                                  color: AppTheme.greyLigth,
+                                  width: 2,
+                                  style: BorderStyle.solid,
+                                ),
+                              ),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 25),
+                      child: Text(
+                        tabTitles[index],
+                        style: theme.largeBoltText.copyWith(
+                          color: state.activePage == index
+                              ? AppTheme.pinkDark
+                              : AppTheme.black,
+                        ),
+                      ),
+                    ),
+                  );
+                })
+                  ..add(
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.bottomLeft,
+                        child: InkWell(
+                          onTap: () {
+                            cubit.signOut();
+                            context.go(RouterProvider.loginPath());
+                          },
+                          child:  Text(AppLocalizations.of(context)!.profilePageLogOut,
+                              style: theme.largeSemiBoltText
+                                  .copyWith(color: AppTheme.gray)),
+                        ),
+                      ),
+                    ),
+                  ),
+              ),
+            ),
     );
   }
 
@@ -280,7 +414,7 @@ class ProfileTabPage extends StatelessWidget {
     context.go(path);
   }
 
-  Widget _buildUserProfile(BuildContext context, ProfileState state) {
+  Widget _buildUserProfile(BuildContext context, ProfileState state, bool isMobile) {
     final cubit = context.read<ProfileCubit>();
     final theme = AppTheme.of(context)!;
     final router = context.read<RootRouterCubit>();
@@ -291,9 +425,9 @@ class ProfileTabPage extends StatelessWidget {
           child: Row(
             children: [
               // Drawer Menu
-              _drawerMenu(context, cubit, state, theme, router),
+              _drawerMenu(context, cubit, state, theme, router,isMobile),
               // Selected Tab Content
-              _selectedTabContent(cubit, state),
+              _selectedTabContent(cubit, state,isMobile),
             ],
           ),
         ),

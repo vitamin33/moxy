@@ -21,8 +21,8 @@ class AccessoriesCatalogState implements Copyable<AccessoriesCatalogState> {
   static defaultAccessoriesCatalogState() {
     return AccessoriesCatalogState(
       isLoading: false,
-      accessoriesList: [Product.defaultProduct()],
-       selectedColors: '',
+      accessoriesList: [],
+      selectedColors: '',
       selectedPriceRange: '',
       selectedTimeRange: '',
       attributes: [],

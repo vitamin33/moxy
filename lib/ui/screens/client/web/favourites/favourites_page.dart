@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:lottie/lottie.dart';
 import 'package:moxy/domain/client/favourites/favorites_effects.dart';
 import 'package:moxy/domain/client/favourites/favourites_cubit.dart';
 import 'package:moxy/domain/client/favourites/favourites_state.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/profile_scope.dart';
 import 'package:moxy/ui/screens/client/web/guest_profile.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
@@ -19,6 +20,7 @@ class FavouritesPage extends StatefulWidget {
   const FavouritesPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _FavouritesPageState createState() => _FavouritesPageState();
 }
 
@@ -54,76 +56,99 @@ class _FavouritesPageState extends State<FavouritesPage> {
     return BlocProvider<FavouritesCubit>(
       create: (BuildContext context) => _favouritesCubit,
       child: BlocBuilder<FavouritesCubit, FavouritesState>(
-        builder: (context, state) {
-          final profile = ProfileScope.of(context);
-          if (profile != null && !profile.isGuest()) {
-            return FavoritesContent(state: state);
-          } else {
-            return const GuestProfileWidget();
-          }
-        },
-      ),
+          builder: (context, state) {
+        final isMobile = ResponsiveUtil.isMobile(context);
+        final theme = AppTheme.of(context)!;
+        final profile = ProfileScope.of(context);
+
+        return Scaffold(
+          backgroundColor: AppTheme.white,
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    'Список бажань',
+                    style: theme.headline3BoltText.copyWith(
+                      color: AppTheme.black,
+                    ),
+                  ),
+                ),
+                (profile != null && !profile.isGuest())
+                    ? FavoritesContent(state: state, cubit: _favouritesCubit)
+                    : const GuestProfileWidget(),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: _buildFavoritesArea(state, isMobile),
+                // ),
+                const Footer()
+              ],
+            ),
+          ),
+        );
+      }),
     );
   }
 }
 
 class FavoritesContent extends StatelessWidget {
   final FavouritesState state;
-  const FavoritesContent({super.key, required this.state});
+  final FavouritesCubit cubit;
+  const FavoritesContent({super.key, required this.state,required this.cubit});
+
+  // Widget _buildFavoritesArea(FavouritesState state, bool isMobile) {
+  //   return AnimatedSwitcher(
+  //       duration: const Duration(milliseconds: 300),
+  //       child: state.isLoading
+  //           ? const Center(
+  //               child: Padding(
+  //                 padding: EdgeInsets.all(30.0),
+  //                 child: MoxyLoader(
+  //                   iconSize: 40,
+  //                 ),
+  //               ),
+  //             )
+  //           : buildFavoritesList(state, isMobile,context));
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final theme = AppTheme.of(context)!;
-    final cubit = context.read<FavouritesCubit>();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 30.0),
-          child: Text(
-            'Список бажань',
-            style: theme.headline3BoltText.copyWith(
-              color: AppTheme.black,
-            ),
-          ),
-        ),
-        Expanded(
-          child: LayoutBuilder(builder: (context, constraints) {
-            return SizedBox(
-              height: constraints.maxHeight,
-              width: constraints.maxWidth,
-              child: _buildFavoritesArea(context, state, cubit),
-            );
-          }),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildFavoritesArea(
-      BuildContext context, FavouritesState state, FavouritesCubit cubit) {
+    final isMobile = ResponsiveUtil.isMobile(context);
+    // TODO: implement build
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 300),
-      child: state.isLoading
-          ? const MoxyLoader(
-              iconSize: 40,
-            )
-          : buildFavoritesList(context, state, cubit),
-    );
+        duration: const Duration(milliseconds: 300),
+        child: state.isLoading
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(30.0),
+                  child: MoxyLoader(
+                    iconSize: 40,
+                  ),
+                ),
+              )
+            : buildFavoritesList(state, isMobile, context));
+    // throw UnimplementedError();
   }
 
   Widget buildFavoritesList(
-      BuildContext context, FavouritesState state, FavouritesCubit cubit) {
+      FavouritesState state, bool isMobile, BuildContext context) {
     if (state.favoriteProducts.isEmpty) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-              height: 260,
-              width: 200,
-              child: Lottie.asset('assets/anim/empty_list.json')),
-          const Text('Поки що список бажань пустий.'),
-        ],
+      return Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: SizedBox(
+                  height: 260,
+                  width: 200,
+                  child: Lottie.asset('assets/anim/empty_list.json')),
+            ),
+            const Text('Поки що список бажань пустий.'),
+          ],
+        ),
       );
     }
     bool isMobile = ResponsiveUtil.isMobile(context);
@@ -133,32 +158,20 @@ class FavoritesContent extends StatelessWidget {
         : AppTheme.defaultGridSpacing;
 
     return AnimationLimiter(
-      child: GridView.builder(
-        itemCount: state.favoriteProducts.length,
-        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          childAspectRatio: 0.8,
-          maxCrossAxisExtent: crossAxisExtent,
-          crossAxisSpacing: spacing,
-          mainAxisSpacing: spacing,
-        ),
-        itemBuilder: (context, index) {
-          Product product = state.favoriteProducts[index];
-          return AnimationConfiguration.staggeredList(
-            position: index,
-            duration: const Duration(milliseconds: 375),
-            child: SlideAnimation(
-              verticalOffset: 50.0,
-              child: FadeInAnimation(
-                child: ProductCard(
-                  product: product,
-                  onChangeFavorites: (Product product) =>
-                      cubit.removeFromFavorites(product),
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+        child: AlignedGridView.count(
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: state.favoriteProducts.length,
+      crossAxisCount: isMobile ? 2 : 4,
+      crossAxisSpacing: 5,
+      mainAxisSpacing: 5,
+      itemBuilder: (context, index) {
+        final product = state.favoriteProducts[index];
+        return ProductCard(
+          product: product,
+          onChangeFavorites: cubit.removeFromFavorites,
+        );
+      },
+    ));
   }
 }

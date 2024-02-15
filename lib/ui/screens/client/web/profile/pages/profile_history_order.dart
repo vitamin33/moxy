@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moxy/constant/order_status.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/status.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 import '../../../../../../domain/client/profile/profile_state.dart';
 import '../../../../../theme/app_theme.dart';
@@ -16,17 +18,20 @@ class ProfileHistoryOrder extends StatelessWidget {
     final theme = AppTheme.of(context)!;
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
+        final isMobile = ResponsiveUtil.isMobile(context);
         return LayoutBuilder(builder: (context, constraints) {
           return SizedBox(
             height: constraints.maxHeight,
+            width: constraints.maxWidth,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+              padding: EdgeInsets.symmetric(
+                  horizontal: isMobile ? 10 : 80, vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Історія Замовлення', style: theme.headline3BoltText),
                   const SizedBox(height: 10),
-                  Expanded(child: _buildOrdersList(state, theme)),
+                  Expanded(child: _buildOrdersList(state, theme, isMobile)),
                 ],
               ),
             ),
@@ -36,13 +41,13 @@ class ProfileHistoryOrder extends StatelessWidget {
     );
   }
 
-  Widget _buildOrdersList(ProfileState state, AppTheme theme) {
+  Widget _buildOrdersList(ProfileState state, AppTheme theme, isMobile) {
     return state.historyOrders.isEmpty
         ? const Text('No Orders')
-        : _listView(state, theme);
+        : _listView(state, theme, isMobile);
   }
 
-  Widget _listView(ProfileState state, AppTheme theme) {
+  Widget _listView(ProfileState state, AppTheme theme, bool isMobile) {
     return ListView.builder(
       itemCount: state.historyOrders.length,
       scrollDirection: Axis.vertical,
@@ -85,12 +90,14 @@ class ProfileHistoryOrder extends StatelessWidget {
                           ),
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Text(
-                              order.status.statusTitle,
-                              style: theme.headlineText
-                                  .copyWith(color: _statusColor(order.status)),
-                            ),
+                                const EdgeInsets.symmetric(horizontal: 0.0),
+                            child: isMobile
+                                ? SvgPicture.asset(order.status.iconPath)
+                                : Text(
+                                    order.status.statusTitle,
+                                    style: theme.headlineText.copyWith(
+                                        color: _statusColor(order.status)),
+                                  ),
                           ),
                         ],
                       ),

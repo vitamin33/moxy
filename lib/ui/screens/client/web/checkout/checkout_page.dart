@@ -9,6 +9,7 @@ import 'package:moxy/domain/client/checkout/checkout_effects.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../theme/app_theme.dart';
@@ -81,56 +82,73 @@ class _CheckoutPageState extends State<CheckoutPage> {
       child: BlocBuilder<CheckoutCubit, CheckoutState>(
         builder: (context, state) {
           final theme = AppTheme.of(context)!;
+          final isMobile = ResponsiveUtil.isMobile(context);
           return Scaffold(
             backgroundColor: Colors.transparent,
             body: ScrollableSection(
               content: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(36, 18, 36, 4),
-                      child: SizedBox(
-                        width: 300,
-                        child: InkWell(
-                          onTap: () => {
-                            context.pop(),
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Row(
-                              children: [
-                                const Icon(
-                                  Icons.arrow_back,
-                                  color: AppTheme.textColor,
-                                ),
-                                const SizedBox(
-                                    width: 8), // Adjust the spacing as needed
-                                Text("Go back", style: theme.largeBoltText),
-                              ],
+                  // alignment: Alignment.topLeft,
+                  // child:
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(36, 18, 36, 4),
+                  //   child:
+                  SizedBox(
+                    width: 300,
+                    child: InkWell(
+                      onTap: () => {
+                        context.pop(),
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const Icon(
+                              Icons.arrow_back,
+                              color: AppTheme.textColor,
                             ),
-                          ),
+                            const SizedBox(
+                                width: 8), // Adjust the spacing as needed
+                            Text("Go back", style: theme.largeBoltText),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: CheckoutInfo(state: state),
-                      ),
-                      const VerticalDivider(width: 1, thickness: 1),
-                      Expanded(
-                        flex: 1,
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: CheckoutProducts(state: state),
-                        ),
-                      ),
-                    ],
-                  )
+                  // ),
+
+                  isMobile
+                      ? Column(
+                          children: [
+                            CheckoutInfo(
+                              state: state,
+                            ),
+                            CheckoutProducts(
+                              state: state,
+                            )
+                          ],
+                        )
+                      : Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CheckoutInfo(state: state),
+                              ),
+                            ),
+                            const VerticalDivider(width: 1, thickness: 1),
+                            Expanded(
+                              flex: 1,
+                              child: Align(
+                                alignment: Alignment.topLeft,
+                                child: CheckoutProducts(state: state),
+                              ),
+                            ),
+                          ],
+                        )
                 ],
               ),
             ),

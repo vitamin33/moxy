@@ -5,6 +5,7 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/screens/components/carousel_indicator.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class ImageCarousel extends StatefulWidget {
   final List<Dimension> dimensions;
@@ -38,7 +39,6 @@ class _ImageCarouselState extends State<ImageCarousel> {
     } else {
       allImages =
           widget.dimensions.expand((dimension) => dimension.images).toList();
-      
     }
   }
 
@@ -52,6 +52,8 @@ class _ImageCarouselState extends State<ImageCarousel> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtil.isMobile(context);
+    double imageWidth = isMobile ? 1.1 : 2.2;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -59,7 +61,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
           builder: (isHovered) {
             return Stack(children: [
               SizedBox(
-                width: MediaQuery.sizeOf(context).width / 2.2,
+                width: MediaQuery.sizeOf(context).width / imageWidth,
                 height: 550,
                 child: PageView.builder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -173,51 +175,52 @@ class _ImageCarouselState extends State<ImageCarousel> {
             ]);
           },
         ),
-        SizedBox(
-          height: 100,
-          width: 400,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: allImages.length,
-            itemBuilder: (context, index) {
-              return Row(
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        activePage = index;
-                        if (_pageController.hasClients) {
-                          _pageController.animateToPage(
-                            index,
-                            duration: const Duration(microseconds: 100),
-                            curve: Curves.easeIn,
-                          );
-                        }
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          width: 1,
-                          color: activePage == index
-                              ? AppTheme.pinkDark
-                              : Colors.white,
+        if (!isMobile)
+          SizedBox(
+            height: 100,
+            width: 400,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: allImages.length,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          activePage = index;
+                          if (_pageController.hasClients) {
+                            _pageController.animateToPage(
+                              index,
+                              duration: const Duration(microseconds: 100),
+                              curve: Curves.easeIn,
+                            );
+                          }
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 1,
+                            color: activePage == index
+                                ? AppTheme.pinkDark
+                                : Colors.white,
+                          ),
+                        ),
+                        width: 70,
+                        height: 75,
+                        child: Image.network(
+                          allImages[index].imagePath,
+                          fit: BoxFit.cover,
                         ),
                       ),
-                      width: 70,
-                      height: 75,
-                      child: Image.network(
-                        allImages[index].imagePath,
-                        fit: BoxFit.cover,
-                      ),
                     ),
-                  ),
-                  const SizedBox(width: 10)
-                ],
-              );
-            },
+                    const SizedBox(width: 10)
+                  ],
+                );
+              },
+            ),
           ),
-        ),
       ],
     );
   }

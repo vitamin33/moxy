@@ -17,6 +17,7 @@ import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class BasketPage extends StatefulWidget {
   const BasketPage({super.key});
@@ -34,6 +35,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveUtil.isMobile(context);
     return BlocBuilder<BasketCubit, BasketState>(
       builder: (context, state) {
         final BasketCubit cubit = context.read<BasketCubit>();
@@ -84,7 +86,8 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                 SizedBox(
                   width: double.infinity,
                   height: 350,
-                  child: _buildBasketItemList(cubit, state.basket, theme),
+                  child: _buildBasketItemList(
+                      cubit, state.basket, theme, isMobile),
                 ),
                 const Divider(),
                 Row(
@@ -119,7 +122,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
   }
 
   Widget _buildBasketItemList(
-      BasketCubit cubit, Basket basket, AppTheme theme) {
+      BasketCubit cubit, Basket basket, AppTheme theme, bool isMobile) {
     if (basket.isEmpty()) {
       return Column(
         children: [
@@ -138,7 +141,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
         itemCount: basket.basketItems.length,
         itemBuilder: (context, index) {
           final item = basket.basketItems[index];
-          return _buildProductItem(cubit, item, theme);
+          return _buildProductItem(cubit, item, theme, isMobile);
         },
       );
     }
@@ -146,10 +149,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
 }
 
 Widget _buildProductItem(
-  BasketCubit cubit,
-  BasketItem item,
-  AppTheme theme,
-) {
+    BasketCubit cubit, BasketItem item, AppTheme theme, bool isMobile) {
   String productName = item.product.name.toUpperCase();
   String color = item.dimension.color.name.toUpperCase();
   return Padding(
@@ -165,6 +165,7 @@ Widget _buildProductItem(
             height: 150,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   flex: 1,
@@ -176,13 +177,19 @@ Widget _buildProductItem(
                         '$productName $color',
                         style: theme.mediumBoltText,
                       ),
-                      Text(
-                        '${item.product.salePrice} uah',
-                        style: theme.largeBoltText,
-                      ),
+                      if (!isMobile)
+                        Text(
+                          '${item.product.salePrice} uah',
+                          style: theme.largeBoltText,
+                        ),
                     ],
                   ),
                 ),
+                if (isMobile)
+                  Text(
+                    '${item.product.salePrice} uah',
+                    style: theme.largeBoltText,
+                  ),
                 Expanded(
                   flex: 1,
                   child: Row(
@@ -211,11 +218,16 @@ Widget _buildProductItem(
                       InkWell(
                         child: Padding(
                           padding: const EdgeInsets.all(8),
-                          child: Text(
-                            'Remove',
-                            style: theme.titleText
-                                .copyWith(decoration: TextDecoration.underline),
-                          ),
+                          child: isMobile
+                              ? const Icon(
+                                  Icons.delete,
+                                  color: AppTheme.black,
+                                )
+                              : Text(
+                                  'Remove',
+                                  style: theme.titleText.copyWith(
+                                      decoration: TextDecoration.underline),
+                                ),
                         ),
                         onTap: () {
                           cubit.removeProductFromBasket(item);

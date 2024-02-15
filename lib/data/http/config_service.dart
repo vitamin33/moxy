@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/constants.dart';
@@ -17,8 +19,9 @@ class ConfigService {
     try {
       final response = await _dio.get('$baseUrl$getAttributesUrl');
       final data = response.data;
+      final jsonResponse = jsonEncode(data);
+      saveNetworkAttributesResponse(jsonResponse);
       final result = NetworkAttributesResponse.fromJson(data);
-      saveNetworkAttributesResponse(result);
       return Result.success(result);
     } catch (e) {
       rethrow;
@@ -26,14 +29,8 @@ class ConfigService {
   }
 
   Future<void> saveNetworkAttributesResponse(
-      NetworkAttributesResponse networkAttributesResponse) async {
-    final colorList =
-        networkAttributesResponse.colors.map((e) => e.name).toList();
-    final sizeList =
-        networkAttributesResponse.sizes.map((e) => e.name).toList();
-
+      String jsonAttributesResponse) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList(attributesColorListKey, colorList);
-    await prefs.setStringList(attributesSizeListKey, sizeList);
+    await prefs.setString(attributesKey, jsonAttributesResponse);
   }
 }

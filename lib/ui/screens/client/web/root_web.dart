@@ -316,7 +316,7 @@ class RootWebWidget extends HookWidget {
                   ),
                   title: Text(AppLocalizations.of(context)!.profile),
                   onTap: () {
-                    navigateToBranch(context, 4);
+                    navigateToBranch(context, 5);
                     Navigator.of(context).pop();
                   },
                 ),

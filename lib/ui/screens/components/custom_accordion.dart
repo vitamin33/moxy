@@ -11,8 +11,14 @@ class CustomAccordion extends StatefulWidget {
       this.contentChild,
       this.collapsedTitleBackgroundColor = AppTheme.white,
       this.expandedTitleBackgroundColor = const Color(0xFFE0E0E0),
-      this.collapsedIcon = const Icon(Icons.keyboard_arrow_down),
-      this.expandedIcon = const Icon(Icons.keyboard_arrow_up),
+      this.collapsedIcon = const Icon(
+        Icons.keyboard_arrow_down,
+        color: AppTheme.black,
+      ),
+      this.expandedIcon = const Icon(
+        Icons.keyboard_arrow_up,
+        color: AppTheme.black,
+      ),
       this.textStyle = const TextStyle(
           color: Colors.black,
           fontSize: 16,

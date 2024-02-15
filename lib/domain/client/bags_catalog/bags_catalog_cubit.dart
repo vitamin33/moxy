@@ -3,9 +3,11 @@ import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/data/repositories/profile_repository.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_effect.dart';
 import 'package:moxy/domain/client/bags_catalog/bags_catalog_state.dart';
-import 'package:moxy/domain/catalog_filtering_mixin.dart';
+import 'package:moxy/domain/filterable_cubit.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/models/filter_price.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/domain/models/sort_by.dart';
 import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
@@ -14,13 +16,12 @@ import 'package:multiple_result/multiple_result.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
-    with CatalogsFilteringMixin {
+    with FilterableCubit {
   late List<Product> originalBagsList;
   late SharedPreferences prefs;
 
   BagsCatalogCubit() : super(BagsCatalogState.defaultBagsCatalogState()) {
     fetchBagsCatalog();
-    getAttributesColorList();
   }
 
   final productRepository = locate<ProductRepository>();
@@ -37,37 +38,25 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
         originalBagsList = allProductsList;
         emit(state.copyWith(bagsList: allProductsList, isLoading: false));
       }, (error) {
-        emit(state.copyWith(errorMessage: 'Failed allSellingProduct'));
+        emit(state.copyWith(
+            errorMessage: 'Failed allSellingProduct', isLoading: false));
       });
     } catch (e) {
       moxyPrint('$e');
     }
   }
 
-  void getAttributesColorList() async {
+  void toggleFavoriteForProduct(Product productId) async {
     try {
-      final colorList = await configRepository.getAttributesColorList();
-      emit(state.copyWith(attributes: colorList));
-    } catch (e) {
-      moxyPrint(e);
-    }
-  }
-
-  void toggleFavoriteForProduct(Product product) async {
-    String? productId = product.id;
-    if (productId == null) {
-      return;
-    }
-    try {
-      Product product = state.bagsList.firstWhere((it) => it.id == productId);
+      Product product = state.bagsList.firstWhere((it) => it.id == productId.id);
       product.isFavorite = !product.isFavorite;
       emit(state.copyWith(bagsList: state.bagsList));
       bool success;
       Result<bool, Exception> response;
       if (product.isFavorite) {
-        response = await profileRepository.addFavoriteProduct(productId);
+        response = await profileRepository.addFavoriteProduct(productId.id!);
       } else {
-        response = await profileRepository.removeFavoriteProduct(productId);
+        response = await profileRepository.removeFavoriteProduct(productId.id!);
       }
       success = response.tryGetSuccess() ?? false;
       if (!success) {
@@ -80,21 +69,47 @@ class BagsCatalogCubit extends CubitWithEffects<BagsCatalogState, UiEffect>
     }
   }
 
-  void setFilterColor(String selectedColors) {
-    final bagList = filterColorCatalog(selectedColors, originalBagsList);
-    emit(state.copyWith(selectedColors: selectedColors, bagsList: bagList));
-  }
+  @override
+  void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
+      List<SortBy> sortBy) {
+    try {
+      List<Product> updatedBagList = List.from(originalBagsList);
 
-  void setFilterPrice(String selectedPriceRange) {
-    final bagList = filterPriceCatalog(selectedPriceRange, originalBagsList);
-    emit(state.copyWith(
-        selectedPriceRange: selectedPriceRange, bagsList: bagList));
-  }
+      List<String> selectedColor = [];
+      List<String> selectedPrice = [];
+      List<String> selectedSortBy = [];
+      for (var color in colors) {
+        if (color.isSelected == true) {
+          selectedColor.add(color.name);
+        }
+      }
+      for (var price in prices) {
+        if (price.isSelected == true) {
+          selectedPrice.add(price.name);
+        }
+      }
+      for (var time in sortBy) {
+        if (time.isSelected == true) {
+          selectedSortBy.add(time.name);
+        }
+      }
 
-  void setFilterTime(String selectedTimeRange) {
-    final bagList =
-        sortCatalogByCreateTime(selectedTimeRange, originalBagsList);
-    emit(state.copyWith(
-        selectedTimeRange: selectedTimeRange, bagsList: bagList));
+      if (selectedColor.isNotEmpty) {
+        updatedBagList = filterColorCatalog(selectedColor, updatedBagList);
+      }
+
+      if (selectedPrice.isNotEmpty) {
+        updatedBagList = filterPriceCatalog(selectedPrice, updatedBagList);
+      }
+
+      if (selectedSortBy.isNotEmpty) {
+        updatedBagList =
+            sortCatalogByCreateTime(selectedSortBy, updatedBagList);
+      }
+
+      emit(state.copyWith(bagsList: updatedBagList));
+    } catch (e, stack) {
+      moxyPrint(stack);
+    }
   }
 }

@@ -35,21 +35,17 @@ class FavouritesCubit extends CubitWithEffects<FavouritesState, UiEffect> {
     });
   }
 
-  void removeFromFavorites(Product product) async {
-    final productId = product.id;
-    if (productId == null) {
-      return;
-    }
+  void removeFromFavorites(Product productId) async {
     try {
       state.favoriteProducts.removeWhere(
-        (element) => element.id == product.id,
+        (element) => element.id == productId.id,
       );
       emit(state.copyWith(favoriteProducts: state.favoriteProducts));
       Result<bool, Exception> response =
-          await profileRepository.removeFavoriteProduct(product.id!);
+          await profileRepository.removeFavoriteProduct(productId.id!);
       bool success = response.tryGetSuccess() ?? false;
       if (!success) {
-        state.favoriteProducts.add(product);
+        // state.favoriteProducts.add(product);
         emit(state.copyWith(favoriteProducts: state.favoriteProducts));
         emitEffect(RemoveFavoriteFailed());
       }

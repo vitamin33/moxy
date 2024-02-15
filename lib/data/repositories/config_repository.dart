@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:moxy/constants.dart';
 import 'package:moxy/data/http/config_service.dart';
+import 'package:moxy/data/models/response/attributes_response.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/mappers/config_mapper.dart';
 import 'package:moxy/domain/models/attributes.dart';
@@ -8,9 +11,8 @@ import 'package:moxy/utils/common.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigRepository {
-  Attributes? attributes;
-
   ConfigRepository();
+  Attributes? attributes;
   final AuthRepository authClient = locate<AuthRepository>();
   final ConfigService client = locate<ConfigService>();
   final ConfigMapper mapper = locate<ConfigMapper>();
@@ -43,31 +45,25 @@ class ConfigRepository {
     return attributes != null && noToken;
   }
 
-  Future<List<String>> getAttributesColorList() async {
+
+   Future<Attributes> getSharedAttributes() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> colorList =
-          prefs.getStringList(attributesColorListKey) ?? [];
-      return colorList;
+      String stringAttributesList = prefs.getString(attributesKey) ?? '';
+      dynamic attributesResponse = jsonDecode(stringAttributesList);
+      NetworkAttributesResponse networkAttributesResponse =
+          NetworkAttributesResponse.fromJson(attributesResponse);
+
+      final attributes = mapper.mapToAttributes(networkAttributesResponse);
+      return attributes;
     } catch (e, stack) {
       moxyPrint(stack);
       rethrow;
     }
   }
 
-  Future<List<String>> getAttributesSizeList() async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      List<String> sizeList = prefs.getStringList(attributesSizeListKey) ?? [];
-      return sizeList;
-    } catch (e, stack) {
-      moxyPrint(stack);
-      rethrow;
-    }
-  }
-
-  Future<bool> hasLoggedIn() async {
+   Future<bool> hasLoggedIn() async {
     final loggedIn = await authClient.checkLoggedInState();
     return loggedIn;
   }
-}
+  }

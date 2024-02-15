@@ -1,5 +1,6 @@
 // ignore: depend_on_referenced_packages
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:moxy/config/routes.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
@@ -23,6 +24,8 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   late TextEditingController secondnameController;
   late TextEditingController mobileNumberController;
   late PageController pageController;
+  late TabController tabController;
+  late int activePage;
   final String? extraPagePath;
 
   ProfileCubit({required this.extraPagePath})
@@ -34,7 +37,7 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
         TextEditingController(text: state.profile?.secondName);
     mobileNumberController =
         TextEditingController(text: state.profile?.mobileNumber);
-    int activePage = _calculateInitialPage(extraPagePath);
+     activePage = _calculateInitialPage(extraPagePath);
     pageController = PageController(initialPage: activePage);
     emit(state.copyWith(
         activePage: activePage, showSaveButton: _showSaveButton(activePage)));
