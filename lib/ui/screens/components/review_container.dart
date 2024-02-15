@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
-import 'package:moxy/domain/feadback/review_cubit.dart';
-import 'package:moxy/domain/feadback/review_state.dart';
+import 'package:moxy/domain/review/review_cubit.dart';
+import 'package:moxy/domain/review/review_state.dart';
 import 'package:moxy/ui/screens/components/review_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
