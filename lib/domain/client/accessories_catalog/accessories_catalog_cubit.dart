@@ -21,7 +21,6 @@ class AccessoriesCatalogCubit
   AccessoriesCatalogCubit()
       : super(AccessoriesCatalogState.defaultAccessoriesCatalogState()) {
     fetchAccessoriesCatalog();
-    // getAttributesColorList();
   }
 
   final productRepository = locate<ProductRepository>();
@@ -73,6 +72,46 @@ class AccessoriesCatalogCubit
   @override
   void onApplyFilters(List<ProductColor> colors, List<FilterPrice> prices,
       List<SortBy> sortBy) {
-    // TODO: implement reaction of change in this cubit, emit new state
+    try {
+      List<Product> updatedAccessoriesList = List.from(originalAccessoriesList);
+
+      List<String> selectedColor = [];
+      List<String> selectedPrice = [];
+      List<String> selectedSortBy = [];
+      for (var color in colors) {
+        if (color.isSelected == true) {
+          selectedColor.add(color.name);
+        }
+      }
+      for (var price in prices) {
+        if (price.isSelected == true) {
+          selectedPrice.add(price.name);
+        }
+      }
+      for (var time in sortBy) {
+        if (time.isSelected == true) {
+          selectedSortBy.add(time.name);
+        }
+      }
+
+      if (selectedColor.isNotEmpty) {
+        updatedAccessoriesList =
+            filterColorCatalog(selectedColor, originalAccessoriesList);
+      }
+
+      if (selectedPrice.isNotEmpty) {
+        updatedAccessoriesList =
+            filterPriceCatalog(selectedPrice, originalAccessoriesList);
+      }
+
+      if (selectedSortBy.isNotEmpty) {
+        updatedAccessoriesList =
+            sortCatalogByCreateTime(selectedSortBy, originalAccessoriesList);
+      }
+
+      emit(state.copyWith(accessoriesList: updatedAccessoriesList));
+    } catch (e, stack) {
+      moxyPrint(stack);
+    }
   }
 }

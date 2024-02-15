@@ -114,7 +114,7 @@ class BasketMapper {
       product: NetworkChangeBasketDimen(
         productId: product.id!,
         dimension:
-            productMapper.mapToNetworkDimension(product.dimensions.first),
+            productMapper.mapToNetworkDimensionWithOneQuantity(product.dimensions.first),
       ),
     );
   }

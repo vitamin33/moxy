@@ -45,7 +45,6 @@ class FavouritesCubit extends CubitWithEffects<FavouritesState, UiEffect> {
           await profileRepository.removeFavoriteProduct(productId.id!);
       bool success = response.tryGetSuccess() ?? false;
       if (!success) {
-        // state.favoriteProducts.add(product);
         emit(state.copyWith(favoriteProducts: state.favoriteProducts));
         emitEffect(RemoveFavoriteFailed());
       }

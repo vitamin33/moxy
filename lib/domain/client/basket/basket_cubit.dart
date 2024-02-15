@@ -144,7 +144,14 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     final result = await basketRepository.addProductToBasket(item);
     result.when((success) {
       final List<BasketItem> updateBasketItemsList = [
-        BasketItem(product: product, dimension: product.dimensions.first)
+        BasketItem(
+            product: product,
+            dimension: Dimension(
+                color: product.dimensions.first.color,
+                quantity: 1,
+                material: product.dimensions.first.material,
+                size: product.dimensions.first.size,
+                images: product.dimensions.first.images)),
       ];
       emit(state.copyWith(
           isLoading: false,
