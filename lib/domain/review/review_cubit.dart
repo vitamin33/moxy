@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/data/repositories/review_repository.dart';
-import 'package:moxy/domain/feadback/review_state.dart';
+import 'package:moxy/domain/review/review_state.dart';
 import 'package:moxy/domain/mappers/review_mapper.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
