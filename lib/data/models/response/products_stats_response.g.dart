@@ -9,8 +9,8 @@ part of 'products_stats_response.dart';
 NetworkProductsStats _$NetworkProductsStatsFromJson(
         Map<String, dynamic> json) =>
     NetworkProductsStats(
-      productStats:
-          ProductStats.fromJson(json['productStats'] as Map<String, dynamic>),
+      productStats: NetworkProductStats.fromJson(
+          json['productStats'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NetworkProductsStatsToJson(
@@ -19,45 +19,55 @@ Map<String, dynamic> _$NetworkProductsStatsToJson(
       'productStats': instance.productStats,
     };
 
-ProductStats _$ProductStatsFromJson(Map<String, dynamic> json) => ProductStats(
-      fromDate: DateTime.parse(json['fromDate'] as String),
-      toDate: DateTime.parse(json['toDate'] as String),
+NetworkProductStats _$NetworkProductStatsFromJson(Map<String, dynamic> json) =>
+    NetworkProductStats(
+      orderStats: (json['orderStats'] as List<dynamic>)
+          .map((e) =>
+              NetworkProductOrderCountStat.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      profitStats: (json['profitStats'] as List<dynamic>)
+          .map((e) =>
+              NetworkProductProfitStat.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
-Map<String, dynamic> _$ProductStatsToJson(ProductStats instance) =>
+Map<String, dynamic> _$NetworkProductStatsToJson(
+        NetworkProductStats instance) =>
     <String, dynamic>{
-      'fromDate': instance.fromDate.toIso8601String(),
-      'toDate': instance.toDate.toIso8601String(),
+      'orderStats': instance.orderStats,
+      'profitStats': instance.profitStats,
     };
 
-ProductOrderCountStat _$ProductOrderCountStatFromJson(
+NetworkProductOrderCountStat _$NetworkProductOrderCountStatFromJson(
         Map<String, dynamic> json) =>
-    ProductOrderCountStat(
+    NetworkProductOrderCountStat(
       orderCount: json['orderCount'] as int,
       percentageFromAllOrdersCount:
           (json['percentageFromAllOrdersCount'] as num).toDouble(),
       product: NetworkProduct.fromJson(json['product'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$ProductOrderCountStatToJson(
-        ProductOrderCountStat instance) =>
+Map<String, dynamic> _$NetworkProductOrderCountStatToJson(
+        NetworkProductOrderCountStat instance) =>
     <String, dynamic>{
       'orderCount': instance.orderCount,
       'percentageFromAllOrdersCount': instance.percentageFromAllOrdersCount,
       'product': instance.product,
     };
 
-ProductProfitStat _$ProductProfitStatFromJson(Map<String, dynamic> json) =>
-    ProductProfitStat(
-      orderCount: json['orderCount'] as int,
-      percentageFromAllOrdersCount:
-          (json['percentageFromAllOrdersCount'] as num).toDouble(),
+NetworkProductProfitStat _$NetworkProductProfitStatFromJson(
+        Map<String, dynamic> json) =>
+    NetworkProductProfitStat(
+      profit: json['profit'] as int,
+      percentageFromAllProfit:
+          (json['percentageFromAllProfit'] as num).toDouble(),
       product: NetworkProduct.fromJson(json['product'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$ProductProfitStatToJson(ProductProfitStat instance) =>
+Map<String, dynamic> _$NetworkProductProfitStatToJson(
+        NetworkProductProfitStat instance) =>
     <String, dynamic>{
-      'orderCount': instance.orderCount,
-      'percentageFromAllOrdersCount': instance.percentageFromAllOrdersCount,
+      'profit': instance.profit,
+      'percentageFromAllProfit': instance.percentageFromAllProfit,
       'product': instance.product,
     };

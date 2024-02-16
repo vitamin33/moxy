@@ -5,7 +5,7 @@ part 'products_stats_response.g.dart';
 
 @JsonSerializable()
 class NetworkProductsStats {
-  ProductStats productStats;
+  NetworkProductStats productStats;
 
   NetworkProductsStats({
     required this.productStats,
@@ -18,50 +18,50 @@ class NetworkProductsStats {
 }
 
 @JsonSerializable()
-class ProductStats {
-  List<ProductOrderCountStat> orderStats;
-  List<ProductProfitStat> profitStats;
+class NetworkProductStats {
+  List<NetworkProductOrderCountStat> orderStats;
+  List<NetworkProductProfitStat> profitStats;
 
-  ProductStats({
+  NetworkProductStats({
     required this.orderStats,
     required this.profitStats,
   });
-  factory ProductStats.fromJson(Map<String, dynamic> json) =>
-      _$ProductStatsFromJson(json);
+  factory NetworkProductStats.fromJson(Map<String, dynamic> json) =>
+      _$NetworkProductStatsFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductStatsToJson(this);
+  Map<String, dynamic> toJson() => _$NetworkProductStatsToJson(this);
 }
 
 @JsonSerializable()
-class ProductOrderCountStat {
+class NetworkProductOrderCountStat {
   int orderCount;
   double percentageFromAllOrdersCount;
   NetworkProduct product;
 
-  ProductOrderCountStat({
+  NetworkProductOrderCountStat({
     required this.orderCount,
     required this.percentageFromAllOrdersCount,
     required this.product,
   });
-  factory ProductOrderCountStat.fromJson(Map<String, dynamic> json) =>
-      _$ProductOrderCountStatFromJson(json);
+  factory NetworkProductOrderCountStat.fromJson(Map<String, dynamic> json) =>
+      _$NetworkProductOrderCountStatFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductOrderCountStatToJson(this);
+  Map<String, dynamic> toJson() => _$NetworkProductOrderCountStatToJson(this);
 }
 
 @JsonSerializable()
-class ProductProfitStat {
-  int orderCount;
-  double percentageFromAllOrdersCount;
+class NetworkProductProfitStat {
+  int profit;
+  double percentageFromAllProfit;
   NetworkProduct product;
 
-  ProductProfitStat({
-    required this.orderCount,
-    required this.percentageFromAllOrdersCount,
+  NetworkProductProfitStat({
+    required this.profit,
+    required this.percentageFromAllProfit,
     required this.product,
   });
-  factory ProductProfitStat.fromJson(Map<String, dynamic> json) =>
-      _$ProductProfitStatFromJson(json);
+  factory NetworkProductProfitStat.fromJson(Map<String, dynamic> json) =>
+      _$NetworkProductProfitStatFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ProductProfitStatToJson(this);
+  Map<String, dynamic> toJson() => _$NetworkProductProfitStatToJson(this);
 }

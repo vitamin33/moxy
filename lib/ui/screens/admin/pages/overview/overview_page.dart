@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/screens/admin/pages/overview/product_stats_page.dart';
 import 'package:moxy/ui/screens/components/ads_report.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
@@ -38,6 +40,7 @@ class OverviewPage extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         selectedDateTextWidget(state, context, theme),
                         totalSelectedDataWidget(context, state),
@@ -94,6 +97,10 @@ class OverviewPage extends StatelessWidget {
                                   ],
                                 ),
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _buildProductStatsButton(context, state),
                       ],
                     ),
                   ),
@@ -113,14 +120,17 @@ class OverviewPage extends StatelessWidget {
             duration: const Duration(milliseconds: 200),
             child: state.isLoading
                 ? Container()
-                : Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                          '${AppLocalizations.of(context)!.overviewSelectedDate} ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
-                          style: theme.smallSemiBoltText),
-                    )
-                  ]),
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                            '${AppLocalizations.of(context)!.overviewSelectedDate} ${state.selectedDate?.start.toString().split(' ')[0]} - ${state.selectedDate?.end.toString().split(' ')[0]}',
+                            style: theme.smallSemiBoltText),
+                      )
+                    ],
+                  ),
           )
         : Container();
   }
@@ -270,6 +280,37 @@ class OverviewPage extends StatelessWidget {
           ],
         ),
       ],
+    );
+  }
+
+  Widget _buildProductStatsButton(BuildContext context, DashboardState state) {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        color: AppTheme.white,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            const Expanded(
+              child: Text('Product Statistics: '),
+            ),
+            Expanded(
+              child: CustomButton(
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return ProductsStatsPage(stats: state.stats);
+                      });
+                },
+                title: 'Open',
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

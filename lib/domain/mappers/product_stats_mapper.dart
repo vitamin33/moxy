@@ -1,44 +1,34 @@
-import 'package:moxy/data/models/request/create_order_request.dart';
 import 'package:moxy/data/models/response/products_stats_response.dart';
+import 'package:moxy/domain/mappers/product_mapper.dart';
 import 'package:moxy/domain/models/product_stats.dart';
-
-import '../models/city.dart';
+import 'package:moxy/services/get_it.dart';
 
 class ProductStatsMapper {
-  ProductStats mapToProductStats(NetworkProductsStats network) {
-    return networkCities
-        .map(
-          (e) => City(
-            mainDescription: e.mainDescription,
-            ref: e.ref,
-            deliveryCityRef: e.deliveryCityRef,
-            presentName: e.presentName,
-          ),
-        )
-        .toList();
-  }
+  final ProductMapper mapper = locate<ProductMapper>();
 
-  ProductOrderCountStat mapToProductOrderStat(ProductOrderCountStat network) {
-    if (city == null) {
-      return null;
-    }
-    return NetworkCity(
-      ref: city.ref,
-      mainDescription: city.mainDescription,
-      deliveryCityRef: city.deliveryCityRef,
-      presentName: city.presentName,
+  ProductStats mapToProductStats(NetworkProductStats network) {
+    return ProductStats(
+      orderStats:
+          network.orderStats.map((e) => mapToProductOrderStat(e)).toList(),
+      profitStats:
+          network.profitStats.map((e) => mapToProductProfitStat(e)).toList(),
     );
   }
 
-  City? mapToCity(NetworkCity? city) {
-    if (city == null) {
-      return null;
-    }
-    return City(
-      mainDescription: city.mainDescription!,
-      ref: city.ref!,
-      deliveryCityRef: city.deliveryCityRef!,
-      presentName: city.presentName!,
+  ProductOrderCountStat mapToProductOrderStat(
+      NetworkProductOrderCountStat network) {
+    return ProductOrderCountStat(
+      orderCount: network.orderCount,
+      percentageFromAllOrdersCount: network.percentageFromAllOrdersCount,
+      product: mapper.mapToProduct(network.product),
+    );
+  }
+
+  ProductProfitStat mapToProductProfitStat(NetworkProductProfitStat network) {
+    return ProductProfitStat(
+      profit: network.profit,
+      percentageFromAllProfit: network.percentageFromAllProfit,
+      product: mapper.mapToProduct(network.product),
     );
   }
 }

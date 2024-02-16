@@ -1,6 +1,7 @@
 // ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:moxy/domain/mappers/product_stats_mapper.dart';
 import 'package:moxy/domain/models/ads_report.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardCubit extends Cubit<DashboardState> {
   final overviewRepository = locate<OverviewRepository>();
+  final statsMapper = locate<ProductStatsMapper>();
 
   DashboardCubit() : super(DashboardState.defaultDashboardState()) {
     getDashboard(
@@ -24,6 +26,7 @@ class DashboardCubit extends Cubit<DashboardState> {
       result.when((success) {
         final currentReport = AdsReport.fromResponse(success.currentAdsReport);
         final prevReport = AdsReport.fromResponse(success.previousAdsReport);
+        final stats = statsMapper.mapToProductStats(success.productStats);
         emit(state.copyWith(
           totalSale: success.totalSaleValue,
           totalCost: success.totalCostValue,
@@ -37,12 +40,13 @@ class DashboardCubit extends Cubit<DashboardState> {
           costValuePercentageChange: success.costValuePercentageChange,
           ordersCountPercentageChange: success.ordersCountPercentageChange,
           profitPercentageChange: success.profitValuePercentageChange,
-          saleFromTimeFrame: success.totalSaleValueByTimeFrame,
+          profitStats: success.totalSaleValueByTimeFrame,
           costFromTimeFrame: success.totalCostValueByTimeFrame,
-          ordersFromTimeFrame: success.ordersCountByTimeFrame,
+          orderCountStats: success.ordersCountByTimeFrame,
           profitFromTimeFrame: success.totalProfitValueByTimeFrame,
           currentAdsReport: currentReport,
           previousAdsReport: prevReport,
+          stats: stats,
           isLoading: false,
           animated: true,
         ));
@@ -58,7 +62,6 @@ class DashboardCubit extends Cubit<DashboardState> {
   }
 
   Future<void> selectDate(context) async {
-    // emit(state.copyWith(animated: false));
     final DateTimeRange? result = await showDateRangePicker(
       context: context,
       firstDate: DateTime(2022, 1, 1),

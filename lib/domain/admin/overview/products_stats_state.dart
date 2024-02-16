@@ -1,48 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:moxy/data/models/response/dashboard_response.dart';
 import 'package:moxy/domain/copyable.dart';
+import 'package:moxy/domain/models/product_stats.dart';
 
 class ProductsStatsState implements Copyable<ProductsStatsState> {
   final bool isLoading;
-  final bool animated;
-  final List<TotalByTimeFrame> ordersFromTimeFrame;
-  final List<TotalByTimeFrame> saleFromTimeFrame;
-  final String errorMessage;
-  final DateTimeRange? selectedDate;
+  final List<ProductOrderCountStat> orderCountStats;
+  final List<ProductProfitStat> profitStats;
+  final String? errorMessage;
 
   ProductsStatsState({
     required this.isLoading,
-    required this.animated,
-    required this.ordersFromTimeFrame,
-    required this.saleFromTimeFrame,
-    required this.errorMessage,
-    this.selectedDate,
+    required this.orderCountStats,
+    required this.profitStats,
+    this.errorMessage,
   });
 
   static defaultState() {
     return ProductsStatsState(
-        ordersFromTimeFrame: [],
-        saleFromTimeFrame: [],
-        isLoading: false,
-        animated: false,
-        selectedDate: null,
-        errorMessage: '');
+      orderCountStats: [],
+      profitStats: [],
+      isLoading: false,
+      errorMessage: '',
+    );
   }
 
   @override
-  ProductsStatsState copyWith(
-      {bool? isLoading,
-      bool? animated,
-      String? errorMessage,
-      List<TotalByTimeFrame>? ordersFromTimeFrame,
-      List<TotalByTimeFrame>? saleFromTimeFrame,
-      DateTimeRange? selectedDate}) {
+  ProductsStatsState copyWith({
+    bool? isLoading,
+    bool? animated,
+    String? errorMessage,
+    List<ProductOrderCountStat>? orderCountStats,
+    List<ProductProfitStat>? profitStats,
+    DateTimeRange? selectedDate,
+  }) {
     return ProductsStatsState(
-        isLoading: isLoading ?? this.isLoading,
-        animated: animated ?? this.animated,
-        ordersFromTimeFrame: ordersFromTimeFrame ?? this.ordersFromTimeFrame,
-        saleFromTimeFrame: saleFromTimeFrame ?? this.saleFromTimeFrame,
-        selectedDate: selectedDate ?? this.selectedDate,
-        errorMessage: errorMessage ?? this.errorMessage);
+      isLoading: isLoading ?? this.isLoading,
+      orderCountStats: orderCountStats ?? this.orderCountStats,
+      profitStats: profitStats ?? this.profitStats,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
   }
 }

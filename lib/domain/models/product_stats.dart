@@ -6,7 +6,7 @@ class ProductStats {
 
   ProductStats({required this.orderStats, required this.profitStats});
 
-  factory ProductStats.defaultReport() {
+  factory ProductStats.defaultStats() {
     return ProductStats(orderStats: [], profitStats: []);
   }
 }
@@ -24,13 +24,13 @@ class ProductOrderCountStat {
 }
 
 class ProductProfitStat {
-  int orderCount;
-  double percentageFromAllOrdersCount;
+  int profit;
+  double percentageFromAllProfit;
   Product product;
 
   ProductProfitStat({
-    required this.orderCount,
-    required this.percentageFromAllOrdersCount,
+    required this.profit,
+    required this.percentageFromAllProfit,
     required this.product,
   });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moxy/data/models/response/dashboard_response.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/ads_report.dart';
+import 'package:moxy/domain/models/product_stats.dart';
 
 class DashboardState implements Copyable<DashboardState> {
   final bool isLoading;
@@ -24,6 +25,7 @@ class DashboardState implements Copyable<DashboardState> {
   final List<TotalByTimeFrame> profitFromTimeFrame;
   final AdsReport currentAdsReport;
   final AdsReport previousAdsReport;
+  final ProductStats stats;
   final String errorMessage;
   final DateTimeRange? selectedDate;
 
@@ -48,34 +50,37 @@ class DashboardState implements Copyable<DashboardState> {
     required this.profitFromTimeFrame,
     required this.currentAdsReport,
     required this.previousAdsReport,
+    required this.stats,
     required this.errorMessage,
     this.selectedDate,
   });
 
   static defaultDashboardState() {
     return DashboardState(
-        totalSale: 0,
-        totalCost: 0,
-        totalOrders: 0,
-        totalProfit: 0,
-        previousTotalSaleValue: 0,
-        previousTotalCostValue: 0,
-        previousTotalOrdersCount: 0,
-        previousTotalProfit: 0,
-        saleValuePercentageChange: 0,
-        costValuePercentageChange: 0,
-        ordersCountPercentageChange: 0,
-        profitPercentageChange: 0,
-        ordersFromTimeFrame: [],
-        saleFromTimeFrame: [],
-        costFromTimeFrame: [],
-        profitFromTimeFrame: [],
-        currentAdsReport: AdsReport.defaultReport(),
-        previousAdsReport: AdsReport.defaultReport(),
-        isLoading: false,
-        animated: false,
-        selectedDate: null,
-        errorMessage: '');
+      totalSale: 0,
+      totalCost: 0,
+      totalOrders: 0,
+      totalProfit: 0,
+      previousTotalSaleValue: 0,
+      previousTotalCostValue: 0,
+      previousTotalOrdersCount: 0,
+      previousTotalProfit: 0,
+      saleValuePercentageChange: 0,
+      costValuePercentageChange: 0,
+      ordersCountPercentageChange: 0,
+      profitPercentageChange: 0,
+      ordersFromTimeFrame: [],
+      saleFromTimeFrame: [],
+      costFromTimeFrame: [],
+      profitFromTimeFrame: [],
+      currentAdsReport: AdsReport.defaultReport(),
+      previousAdsReport: AdsReport.defaultReport(),
+      stats: ProductStats.defaultStats(),
+      isLoading: false,
+      animated: false,
+      selectedDate: null,
+      errorMessage: '',
+    );
   }
 
   @override
@@ -95,12 +100,13 @@ class DashboardState implements Copyable<DashboardState> {
       double? costValuePercentageChange,
       double? ordersCountPercentageChange,
       double? profitPercentageChange,
-      List<TotalByTimeFrame>? ordersFromTimeFrame,
-      List<TotalByTimeFrame>? saleFromTimeFrame,
+      List<TotalByTimeFrame>? orderCountStats,
+      List<TotalByTimeFrame>? profitStats,
       List<TotalByTimeFrame>? costFromTimeFrame,
       List<TotalByTimeFrame>? profitFromTimeFrame,
       AdsReport? currentAdsReport,
       AdsReport? previousAdsReport,
+      ProductStats? stats,
       DateTimeRange? selectedDate}) {
     return DashboardState(
         totalSale: totalSale ?? this.totalSale,
@@ -124,12 +130,13 @@ class DashboardState implements Copyable<DashboardState> {
             ordersCountPercentageChange ?? this.ordersCountPercentageChange,
         profitPercentageChange:
             profitPercentageChange ?? this.profitPercentageChange,
-        ordersFromTimeFrame: ordersFromTimeFrame ?? this.ordersFromTimeFrame,
-        saleFromTimeFrame: saleFromTimeFrame ?? this.saleFromTimeFrame,
+        ordersFromTimeFrame: orderCountStats ?? ordersFromTimeFrame,
+        saleFromTimeFrame: profitStats ?? saleFromTimeFrame,
         costFromTimeFrame: costFromTimeFrame ?? this.costFromTimeFrame,
         profitFromTimeFrame: profitFromTimeFrame ?? this.profitFromTimeFrame,
         currentAdsReport: currentAdsReport ?? this.currentAdsReport,
         previousAdsReport: previousAdsReport ?? this.previousAdsReport,
+        stats: stats ?? this.stats,
         selectedDate: selectedDate ?? this.selectedDate,
         errorMessage: errorMessage ?? this.errorMessage);
   }
