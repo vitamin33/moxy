@@ -19,12 +19,12 @@ class NetworkProductsStats {
 
 @JsonSerializable()
 class ProductStats {
-  DateTime fromDate;
-  DateTime toDate;
+  List<ProductOrderCountStat> orderStats;
+  List<ProductProfitStat> profitStats;
 
   ProductStats({
-    required this.fromDate,
-    required this.toDate,
+    required this.orderStats,
+    required this.profitStats,
   });
   factory ProductStats.fromJson(Map<String, dynamic> json) =>
       _$ProductStatsFromJson(json);
