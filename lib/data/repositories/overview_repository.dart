@@ -9,9 +9,21 @@ class OverviewRepository {
   OverviewRepository();
   final DioClient client = locate<DioClient>();
 
-  Future<Result<NetworkDashboard, Exception>> getOverview(DateTime? fromDate,DateTime? toDate) async {
+  Future<Result<NetworkDashboard, Exception>> getOverview(
+      DateTime? fromDate, DateTime? toDate) async {
     try {
-      final result =await client.getDashboard(fromDate,toDate);
+      final result = await client.getDashboard(fromDate, toDate);
+      return Result.success(result);
+    } catch (e) {
+      moxyPrint('Repository Error:$e');
+      return Result.error(Exception('$e'));
+    }
+  }
+
+  Future<Result<NetworkDashboard, Exception>> getProductsStatistics(
+      DateTime? fromDate, DateTime? toDate) async {
+    try {
+      final result = await client.getDashboard(fromDate, toDate);
       return Result.success(result);
     } catch (e) {
       moxyPrint('Repository Error:$e');

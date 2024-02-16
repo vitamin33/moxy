@@ -36,7 +36,7 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
             selectedItems,
           );
           emit(state.copyWith(
-            allENs: products,
+            allProducts: products,
             isLoading: false,
             productsByDimension: productsByDimen,
           ));
@@ -108,43 +108,127 @@ class OrderProductListCubit extends Cubit<OrderProductListState> {
   }
 
   void searchFieldChanged(String searchText) {
-    final filteredProducts = state.allProducts.where((element) {
+    final filteredProducts = state.productsByDimension.where((element) {
       return element.name.toLowerCase().contains(searchText.toLowerCase());
     }).toList();
-    final productsByDimen = _produtctMapper.mapToGroupProductsByDimension(
-      filteredProducts,
-      getSelectedProductList(),
-    );
-    emit(state.copyWith(productsByDimension: productsByDimen));
+
+    emit(state.copyWith(
+        searchProductsByDimension: filteredProducts, searchText: searchText));
   }
 
   void toggleProductSelection(int index) {
-    bool isSelected = state.productsByDimension[index].isSelected;
-    state.productsByDimension[index].isSelected = !isSelected;
+    if (state.isSearching()) {
+      final item = state.searchProductsByDimension[index];
+      state.searchProductsByDimension[index].isSelected = !item.isSelected;
 
-    emit(state.copyWith(productsByDimension: state.productsByDimension));
+      findByIdAndSelect(
+        state.productsByDimension,
+        item.id,
+        item.dimension,
+        item.isSelected,
+      );
+
+      emit(state.copyWith(
+        productsByDimension: state.productsByDimension,
+        searchProductsByDimension: state.searchProductsByDimension,
+      ));
+    } else {
+      bool isSelected = state.productsByDimension[index].isSelected;
+      state.productsByDimension[index].isSelected = !isSelected;
+
+      emit(state.copyWith(productsByDimension: state.productsByDimension));
+    }
   }
 
   void quantityAdd(int index) {
-    List<DimensionProduct> productsList = state.productsByDimension;
+    List<DimensionProduct> productsList = activeProductsList();
 
-    DimensionProduct product = productsList[index];
-    int maxQuantity = product.dimension.quantity;
-    int selectedQuantity = product.selectedQuantity;
-    if (selectedQuantity < maxQuantity) {
-      product.selectedQuantity++;
-      emit(state.copyWith(productsByDimension: productsList));
+    if (state.isSearching()) {
+      DimensionProduct product = productsList[index];
+      int maxQuantity = product.dimension.quantity;
+      int selectedQuantity = product.selectedQuantity;
+
+      if (selectedQuantity < maxQuantity) {
+        product.selectedQuantity++;
+        findByIdAndChangeSelectedQuantity(
+          state.productsByDimension,
+          product,
+          product.selectedQuantity,
+        );
+        emit(state.copyWith(
+          productsByDimension: state.productsByDimension,
+          searchProductsByDimension: productsList,
+        ));
+      }
+    } else {
+      DimensionProduct product = productsList[index];
+      int maxQuantity = product.dimension.quantity;
+      int selectedQuantity = product.selectedQuantity;
+      if (selectedQuantity < maxQuantity) {
+        product.selectedQuantity++;
+        emit(state.copyWith(productsByDimension: productsList));
+      }
     }
   }
 
   void quantityRemove(int index) {
-    List<DimensionProduct> productsList = state.productsByDimension;
+    List<DimensionProduct> productsList = activeProductsList();
+    if (state.isSearching()) {
+      DimensionProduct product = productsList[index];
+      int selectedQuantity = product.selectedQuantity;
 
-    DimensionProduct product = productsList[index];
-    int selectedQuantity = product.selectedQuantity;
-    if (selectedQuantity > 1) {
-      product.selectedQuantity--;
-      emit(state.copyWith(productsByDimension: productsList));
+      if (selectedQuantity > 1) {
+        product.selectedQuantity--;
+        findByIdAndChangeSelectedQuantity(
+          state.productsByDimension,
+          product,
+          product.selectedQuantity,
+        );
+        emit(state.copyWith(
+          productsByDimension: state.productsByDimension,
+          searchProductsByDimension: productsList,
+        ));
+      }
+    } else {
+      DimensionProduct product = productsList[index];
+      int selectedQuantity = product.selectedQuantity;
+      if (selectedQuantity > 1) {
+        product.selectedQuantity--;
+        emit(state.copyWith(productsByDimension: productsList));
+      }
+    }
+  }
+
+  void findByIdAndSelect(
+    List<DimensionProduct> list,
+    String? productId,
+    Dimension d,
+    bool isSelected,
+  ) {
+    for (final e in list) {
+      if (e.id == productId && e.dimension.color == d.color) {
+        e.isSelected = isSelected;
+      }
+    }
+  }
+
+  void findByIdAndChangeSelectedQuantity(
+    List<DimensionProduct> list,
+    DimensionProduct product,
+    int quantity,
+  ) {
+    for (final e in list) {
+      if (e.id == product.id && e.dimension.color == product.dimension.color) {
+        e.selectedQuantity = quantity;
+      }
+    }
+  }
+
+  List<DimensionProduct> activeProductsList() {
+    if (state.isSearching()) {
+      return state.searchProductsByDimension;
+    } else {
+      return state.productsByDimension;
     }
   }
 

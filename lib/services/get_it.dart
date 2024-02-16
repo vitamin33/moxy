@@ -22,6 +22,7 @@ import 'package:moxy/domain/mappers/config_mapper.dart';
 import 'package:moxy/domain/mappers/media_mapper.dart';
 import 'package:moxy/domain/mappers/order_mapper.dart';
 import 'package:moxy/domain/mappers/product_mapper.dart';
+import 'package:moxy/domain/mappers/product_stats_mapper.dart';
 import 'package:moxy/domain/mappers/profile_mapper.dart';
 import 'package:moxy/domain/mappers/promo_mapper.dart';
 import 'package:moxy/domain/mappers/review_mapper.dart';
@@ -42,6 +43,7 @@ class GetItService {
   static initializeService() {
     final dio = Dio();
     getIt.registerSingleton<ProductMapper>(ProductMapper());
+    getIt.registerSingleton<ProductStatsMapper>(ProductStatsMapper());
     getIt.registerSingleton<FilterParamsMapper>(FilterParamsMapper());
     getIt.registerSingleton<ConfigMapper>(ConfigMapper());
     getIt.registerSingleton<CityMapper>(CityMapper());

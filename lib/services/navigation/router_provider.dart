@@ -285,13 +285,14 @@ class RouterProvider {
                   builder: (context, state) => const ProductsPage(),
                   routes: [
                     GoRoute(
-                        path: '${Routes.adminEditProduct}/:productId',
-                        builder: (context, state) {
-                          return CreateProductPage(
-                            editProductId: state.pathParameters['productId'],
-                            isEditMode: true,
-                          );
-                        }),
+                      path: '${Routes.adminEditProduct}/:productId',
+                      builder: (context, state) {
+                        return CreateProductPage(
+                          editProductId: state.pathParameters['productId'],
+                          isEditMode: true,
+                        );
+                      },
+                    ),
                   ]),
             ],
           ),

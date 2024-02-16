@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/admin/filter_orders/filter_orders_cubit.dart';
 import 'package:moxy/domain/admin/create_order/create_order_cubit.dart';
-import 'package:moxy/domain/admin/dashboard/dashboard_cubit.dart';
+import 'package:moxy/domain/admin/overview/dashboard_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';

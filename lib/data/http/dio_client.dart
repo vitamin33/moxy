@@ -104,7 +104,7 @@ class DioClient {
   Future<NetworkDashboard> getDashboard(
       DateTime? fromDate, DateTime? toDate) async {
     try {
-      final requestData;
+      final Map<String, String> requestData;
 
       if (toDate != null || fromDate != null) {
         requestData = {
@@ -237,13 +237,13 @@ class DioClient {
       Response response = await dio.get(
         getReviewsUrl,
       );
-       final data = response.data;
+      final data = response.data;
       final orderList = <NetworkReview>[];
       for (var value in (data as List)) {
         orderList.add(NetworkReview.fromJson(value));
       }
       return orderList;
-    } catch (e,stack) {
+    } catch (e, stack) {
       moxyPrint(stack);
       rethrow;
     }

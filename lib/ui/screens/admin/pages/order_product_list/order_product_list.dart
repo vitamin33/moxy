@@ -25,6 +25,12 @@ class OrderProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+    List<DimensionProduct> items;
+    if (state.isSearching()) {
+      items = state.searchProductsByDimension;
+    } else {
+      items = state.productsByDimension;
+    }
 
     return Scaffold(
       body: Material(
@@ -48,10 +54,9 @@ class OrderProductList extends StatelessWidget {
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: state.productsByDimension.length,
+                          itemCount: items.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final dimenProduct =
-                                state.productsByDimension.elementAt(index);
+                            final dimenProduct = items.elementAt(index);
                             bool availableInStock =
                                 dimenProduct.isAvailableInStock;
                             return Padding(
