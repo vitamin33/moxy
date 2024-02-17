@@ -71,7 +71,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           textAlign: TextAlign.start,
           style: theme.bigTitleBoltText,
         ),
-        AppTheme.smallVerticalSpasing,
+        AppTheme.smallVerticalSpacing,
         Padding(
           padding: const EdgeInsets.symmetric(vertical: AppTheme.cardPadding),
           child: Text(
@@ -79,7 +79,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             style: theme.largeText.copyWith(color: AppTheme.gray),
           ),
         ),
-        AppTheme.smallVerticalSpasing,
+        AppTheme.smallVerticalSpacing,
         CustomTextField(
           borderColor: AppTheme.greyLigth,
           title: 'Email',
@@ -88,7 +88,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           state: state.error.resetPasswordEmail,
           validation: true,
         ),
-        AppTheme.largeVerticalSpasing,
+        AppTheme.largeVerticalSpacing,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: CustomButton(

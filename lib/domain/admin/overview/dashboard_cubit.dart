@@ -26,7 +26,6 @@ class DashboardCubit extends Cubit<DashboardState> {
       result.when((success) {
         final currentReport = AdsReport.fromResponse(success.currentAdsReport);
         final prevReport = AdsReport.fromResponse(success.previousAdsReport);
-        final stats = statsMapper.mapToProductStats(success.productStats);
         emit(state.copyWith(
           totalSale: success.totalSaleValue,
           totalCost: success.totalCostValue,
@@ -46,7 +45,6 @@ class DashboardCubit extends Cubit<DashboardState> {
           profitFromTimeFrame: success.totalProfitValueByTimeFrame,
           currentAdsReport: currentReport,
           previousAdsReport: prevReport,
-          stats: stats,
           isLoading: false,
           animated: true,
         ));

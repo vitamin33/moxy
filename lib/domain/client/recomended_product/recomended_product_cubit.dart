@@ -9,6 +9,8 @@ import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:multiple_result/multiple_result.dart';
 
+const itemWidth = 400;
+
 class RecomendedProductCubit extends Cubit<RecomendedProductState> {
   RecomendedProductCubit()
       : super(RecomendedProductState.defaultRecomendedProductState()) {
@@ -19,29 +21,36 @@ class RecomendedProductCubit extends Cubit<RecomendedProductState> {
   final productMapper = locate<ProductMapper>();
   final profileRepository = locate<ProfileRepository>();
   final ScrollController scrollController = ScrollController();
+  final PageController pageController = PageController();
 
-  void moveToPreviousProduct() {
-    final currentOffset = scrollController.offset;
-    final itemWidth = 400;
-    final targetOffset = currentOffset - itemWidth;
-
-    scrollController.animateTo(
-      targetOffset,
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 300),
-    );
+  void moveToPreviousProduct(bool isMobile) {
+    if (isMobile) {
+      pageController.previousPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      final currentOffset = scrollController.offset;
+      final targetOffset = currentOffset - itemWidth;
+      scrollController.animateTo(
+        targetOffset,
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
-  void moveToNextProduct() {
-    final currentOffset = scrollController.offset;
-    final itemWidth = 400;
-    final targetOffset = currentOffset + itemWidth;
-
-    scrollController.animateTo(
-      targetOffset,
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 300),
-    );
+  void moveToNextProduct(bool isMobile) {
+    if (isMobile) {
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      final currentOffset = scrollController.offset;
+      final targetOffset = currentOffset + itemWidth;
+      scrollController.animateTo(
+        targetOffset,
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
   void fetchRecomendedProducts() async {
@@ -85,5 +94,12 @@ class RecomendedProductCubit extends Cubit<RecomendedProductState> {
     } catch (e, stack) {
       moxyPrint(stack);
     }
+  }
+
+  @override
+  Future<void> close() {
+    scrollController.dispose();
+    pageController.dispose();
+    return super.close();
   }
 }

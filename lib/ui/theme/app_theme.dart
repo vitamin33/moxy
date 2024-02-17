@@ -10,11 +10,11 @@ class AppTheme extends InheritedWidget {
   static const double defaultGridSpacingMobile = 16;
   static const double arrowPadding = 40;
   static const double arrowPaddingMobile = 20;
-  static const Widget smallVerticalSpasing = SizedBox(height: 10);
-  static const Widget mediumVerticalSpasing = SizedBox(height: 30);
-  static const Widget largeVerticalSpasing = SizedBox(height: 50);
-  static const Widget smallHorizontalSpasing = SizedBox(width: 10);
-  static const Widget mediumHorizontalSpasing = SizedBox(width: 30);
+  static const Widget smallVerticalSpacing = SizedBox(height: 10);
+  static const Widget mediumVerticalSpacing = SizedBox(height: 30);
+  static const Widget largeVerticalSpacing = SizedBox(height: 50);
+  static const Widget smallHorizontalSpacing = SizedBox(width: 10);
+  static const Widget mediumHorizontalSpacing = SizedBox(width: 30);
   static const Widget largeHorizontalSpasing = SizedBox(width: 50);
   static const double elementSpacing = cardPadding * 0.5;
   static const double bottomNavBarHeight = 64;

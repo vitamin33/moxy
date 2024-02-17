@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:moxy/data/models/response/products_stats_response.dart';
 
 part 'dashboard_response.g.dart';
 
@@ -23,7 +22,6 @@ class NetworkDashboard {
   List<TotalByTimeFrame> totalProfitValueByTimeFrame;
   AdsReportResponse currentAdsReport;
   AdsReportResponse previousAdsReport;
-  NetworkProductStats productStats;
 
   NetworkDashboard({
     required this.totalSaleValue,
@@ -44,7 +42,6 @@ class NetworkDashboard {
     required this.totalProfitValueByTimeFrame,
     required this.currentAdsReport,
     required this.previousAdsReport,
-    required this.productStats,
   });
 
   factory NetworkDashboard.fromJson(Map<String, dynamic> json) =>

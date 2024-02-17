@@ -8,8 +8,8 @@ import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/all_products/all_products_cubit.dart';
 import 'package:moxy/domain/admin/all_products/all_products_effects.dart';
 import 'package:moxy/domain/admin/all_products/all_products_state.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/ui/components/product_image.dart';
 
 import '../../../../components/search_textfield.dart';
 import '../../../../components/snackbar_widgets.dart';
@@ -136,7 +136,7 @@ class _ProductsPageState extends State<ProductsPage> {
                                       },
                                       tileColor: AppTheme.white,
                                       leading: ClipOval(
-                                        child: _buildProductImage(product),
+                                        child: ProductImage(product: product),
                                       ),
                                       title: Text(product.name),
                                       subtitle: Column(
@@ -216,23 +216,4 @@ Widget _buildLoadingIfNeeded(AllProductsState state) {
           backgroundColor: AppTheme.pink,
         )
       : Container();
-}
-
-Widget _buildProductImage(Product product) {
-  if (product.dimensions.first.images.isNotEmpty) {
-    return FadeInImage.assetNetwork(
-      placeholder: 'assets/images/placeholder.jpg',
-      image: product.dimensions.first.images.first.imagePath,
-      width: 50,
-      height: 50,
-      fit: BoxFit.cover,
-    );
-  } else {
-    return Image.asset(
-      width: 50,
-      height: 50,
-      'assets/images/placeholder.jpg',
-      fit: BoxFit.cover,
-    );
-  }
 }

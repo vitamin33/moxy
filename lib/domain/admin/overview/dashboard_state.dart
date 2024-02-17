@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:moxy/data/models/response/dashboard_response.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/ads_report.dart';
-import 'package:moxy/domain/models/product_stats.dart';
 
 class DashboardState implements Copyable<DashboardState> {
   final bool isLoading;
@@ -25,7 +24,6 @@ class DashboardState implements Copyable<DashboardState> {
   final List<TotalByTimeFrame> profitFromTimeFrame;
   final AdsReport currentAdsReport;
   final AdsReport previousAdsReport;
-  final ProductStats stats;
   final String errorMessage;
   final DateTimeRange? selectedDate;
 
@@ -50,7 +48,6 @@ class DashboardState implements Copyable<DashboardState> {
     required this.profitFromTimeFrame,
     required this.currentAdsReport,
     required this.previousAdsReport,
-    required this.stats,
     required this.errorMessage,
     this.selectedDate,
   });
@@ -75,7 +72,6 @@ class DashboardState implements Copyable<DashboardState> {
       profitFromTimeFrame: [],
       currentAdsReport: AdsReport.defaultReport(),
       previousAdsReport: AdsReport.defaultReport(),
-      stats: ProductStats.defaultStats(),
       isLoading: false,
       animated: false,
       selectedDate: null,
@@ -106,7 +102,6 @@ class DashboardState implements Copyable<DashboardState> {
       List<TotalByTimeFrame>? profitFromTimeFrame,
       AdsReport? currentAdsReport,
       AdsReport? previousAdsReport,
-      ProductStats? stats,
       DateTimeRange? selectedDate}) {
     return DashboardState(
         totalSale: totalSale ?? this.totalSale,
@@ -136,7 +131,6 @@ class DashboardState implements Copyable<DashboardState> {
         profitFromTimeFrame: profitFromTimeFrame ?? this.profitFromTimeFrame,
         currentAdsReport: currentAdsReport ?? this.currentAdsReport,
         previousAdsReport: previousAdsReport ?? this.previousAdsReport,
-        stats: stats ?? this.stats,
         selectedDate: selectedDate ?? this.selectedDate,
         errorMessage: errorMessage ?? this.errorMessage);
   }
