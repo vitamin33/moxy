@@ -9,10 +9,12 @@ import 'package:moxy/ui/components/product_image.dart';
 import '../../../../theme/app_theme.dart';
 
 class ProductsStatsPage extends StatefulWidget {
-  final ProductStats stats;
+  final DateTime? fromDate;
+  final DateTime? toDate;
   const ProductsStatsPage({
     super.key,
-    required this.stats,
+    required this.fromDate,
+    required this.toDate,
   });
 
   @override
@@ -28,7 +30,8 @@ class _ProductsStatsPageState extends State<ProductsStatsPage>
   @override
   void initState() {
     super.initState();
-    _cubit = ProductsStatsCubit(stats: widget.stats);
+    _cubit =
+        ProductsStatsCubit(fromDate: widget.fromDate, toDate: widget.toDate);
     _controller = TabController(length: 2, vsync: this);
   }
 

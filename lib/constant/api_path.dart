@@ -19,6 +19,7 @@ const String editUserPasswordUrl = '/auth/change-password';
 const String setNewPasswordUrl = '/auth/new-password';
 const String resetPasswordUrl = '/auth/reset-password';
 const String ordersDashboardUrl = '/dashboard/orders';
+const String productStatsUrl = '/dashboard/product-stats';
 const String sendFooterEmailUrl = '/sendfootetemail';
 const String getBasketUrl = '/basket';
 const String changeBasketUrl = '/basket/add-change';

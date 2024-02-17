@@ -302,7 +302,10 @@ class OverviewPage extends StatelessWidget {
                   showDialog(
                       context: context,
                       builder: (context) {
-                        return ProductsStatsPage(stats: state.stats);
+                        return ProductsStatsPage(
+                          fromDate: state.selectedDate?.start,
+                          toDate: state.selectedDate?.end,
+                        );
                       });
                 },
                 title: 'Open',

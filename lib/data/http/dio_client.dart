@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:moxy/data/http/token_service.dart';
 import 'package:moxy/data/models/request/register_request.dart';
+import 'package:moxy/data/models/response/products_stats_response.dart';
 import 'package:moxy/data/models/response/review_response.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/services/get_it.dart';
@@ -35,8 +36,8 @@ class DioClient {
     // Set default configs
     dio.options.baseUrl = baseUrl;
 
-    dio.options.connectTimeout = const Duration(seconds: 15); //15s
-    dio.options.receiveTimeout = const Duration(seconds: 15);
+    dio.options.connectTimeout = const Duration(seconds: 20); //15s
+    dio.options.receiveTimeout = const Duration(seconds: 20);
 
     // customization
     dio.interceptors.add(PrettyDioLogger(
@@ -122,8 +123,36 @@ class DioClient {
       final data = response.data;
       final result = NetworkDashboard.fromJson(data);
       return result;
-    } catch (e) {
+    } catch (e, stack) {
+      moxyPrint(stack);
       throw Exception('Failed to load product: $e');
+    }
+  }
+
+  Future<NetworkProductStats> getProductStats(
+      DateTime? fromDate, DateTime? toDate) async {
+    try {
+      final Map<String, String> requestData;
+
+      if (toDate != null || fromDate != null) {
+        requestData = {
+          "fromDate": fromDate.toString(),
+          "toDate": toDate.toString()
+        };
+      } else {
+        requestData = {
+          "fromDate": "2023-05-22T12:00:00.000Z",
+          "toDate": "2023-07-21T12:00:00.000Z"
+        };
+      }
+
+      final response = await dio.post(productStatsUrl, data: requestData);
+      final data = response.data;
+      final result = NetworkProductStats.fromJson(data);
+      return result;
+    } catch (e, stack) {
+      moxyPrint(stack);
+      throw Exception('Failed to load product stats: $e');
     }
   }
 

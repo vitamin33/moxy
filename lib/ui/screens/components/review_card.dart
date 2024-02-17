@@ -12,12 +12,19 @@ class ReviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
 
-    return Container(
-        color: AppTheme.white,
+    return Card(
+      elevation: 8,
+      margin: const EdgeInsets.all(16),
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: SizedBox(
         width: 330,
         height: 240,
         child: Padding(
-          padding: const EdgeInsets.all(AppTheme.cardPadding),
+          padding: const EdgeInsets.symmetric(
+              vertical: AppTheme.cardPadding, horizontal: 36),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,7 +45,7 @@ class ReviewCard extends StatelessWidget {
                 Row(
                   children: [
                     _buildAvatarImage(review.avatarImageUrl),
-                    AppTheme.smallHorizontalSpasing,
+                    AppTheme.mediumHorizontalSpacing,
                     Text(
                       review.clientName,
                       style: theme.headlineText,
@@ -46,7 +53,9 @@ class ReviewCard extends StatelessWidget {
                   ],
                 )
               ]),
-        ));
+        ),
+      ),
+    );
   }
 }
 
@@ -55,8 +64,8 @@ Widget _buildAvatarImage(String image) {
     child: FadeInImage.assetNetwork(
       placeholder: 'assets/images/placeholder.jpg',
       image: image,
-      width: 50,
-      height: 50,
+      width: 30,
+      height: 30,
       fit: BoxFit.cover,
     ),
   );

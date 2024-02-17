@@ -95,8 +95,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
 class FavoritesContent extends StatelessWidget {
   final FavouritesState state;
   final FavouritesCubit cubit;
-  const FavoritesContent({super.key, required this.state,required this.cubit});
-
+  const FavoritesContent({super.key, required this.state, required this.cubit});
 
   @override
   Widget build(BuildContext context) {
@@ -135,10 +134,10 @@ class FavoritesContent extends StatelessWidget {
       );
     }
     bool isMobile = ResponsiveUtil.isMobile(context);
-    final crossAxisExtent = isMobile ? 500.0 : 300.0;
-    final spacing = isMobile
-        ? AppTheme.defaultGridSpacingMobile
-        : AppTheme.defaultGridSpacing;
+    // final crossAxisExtent = isMobile ? 500.0 : 300.0;
+    // final spacing = isMobile
+    //     ? AppTheme.defaultGridSpacingMobile
+    //     : AppTheme.defaultGridSpacing;
 
     return AnimationLimiter(
         child: AlignedGridView.count(

@@ -43,8 +43,6 @@ NetworkDashboard _$NetworkDashboardFromJson(Map<String, dynamic> json) =>
           json['currentAdsReport'] as Map<String, dynamic>),
       previousAdsReport: AdsReportResponse.fromJson(
           json['previousAdsReport'] as Map<String, dynamic>),
-      productStats: NetworkProductStats.fromJson(
-          json['productStats'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
@@ -67,7 +65,6 @@ Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
       'totalProfitValueByTimeFrame': instance.totalProfitValueByTimeFrame,
       'currentAdsReport': instance.currentAdsReport,
       'previousAdsReport': instance.previousAdsReport,
-      'productStats': instance.productStats,
     };
 
 TotalByTimeFrame _$TotalByTimeFrameFromJson(Map<String, dynamic> json) =>

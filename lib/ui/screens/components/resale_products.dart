@@ -6,6 +6,7 @@ import 'package:moxy/domain/client/resale_product/resale_product_cubit.dart';
 import 'package:moxy/domain/client/resale_product/resale_products_state.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class ResaleProducts extends StatelessWidget {
   const ResaleProducts({super.key});
@@ -19,6 +20,7 @@ class ResaleProducts extends StatelessWidget {
         builder: (context, state) {
           final cubit = context.read<ResaleProductCubit>();
           final theme = AppTheme.of(context)!;
+          final isMobile = ResponsiveUtil.isMobile(context);
 
           return state.isLoading
               ? const CircularProgressIndicator()
@@ -42,7 +44,7 @@ class ResaleProducts extends StatelessWidget {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                cubit.moveToPreviousProduct();
+                                cubit.moveToPreviousProduct(isMobile);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -60,26 +62,40 @@ class ResaleProducts extends StatelessWidget {
                               ),
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                controller: cubit.scrollController,
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: state.resaleProducts.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: ProductCard(
-                                      product: state.resaleProducts[index],
-                                      onChangeFavorites:
-                                          cubit.toggleFavoriteForProduct,
+                              child: isMobile
+                                  ? PageView.builder(
+                                      controller: cubit.pageController,
+                                      itemCount: state.resaleProducts.length,
+                                      itemBuilder: (context, index) {
+                                        return ProductCard(
+                                          product: state.resaleProducts[index],
+                                          onChangeFavorites:
+                                              cubit.toggleFavoriteForProduct,
+                                        );
+                                      },
+                                    )
+                                  : ListView.builder(
+                                      controller: cubit.scrollController,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: state.resaleProducts.length,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ProductCard(
+                                            product:
+                                                state.resaleProducts[index],
+                                            onChangeFavorites:
+                                                cubit.toggleFavoriteForProduct,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
                             ),
                             GestureDetector(
                               onTap: () {
-                                cubit.moveToNextProduct();
+                                cubit.moveToNextProduct(isMobile);
                               },
                               child: Container(
                                 decoration: BoxDecoration(

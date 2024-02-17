@@ -47,7 +47,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 textAlign: TextAlign.start,
                 style: theme.bigTitleBoltText,
               ),
-              AppTheme.smallVerticalSpasing,
+              AppTheme.smallVerticalSpacing,
               Row(
                 children: [
                   Expanded(
@@ -129,7 +129,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   ),
                 ],
               ),
-              AppTheme.smallVerticalSpasing,
+              AppTheme.smallVerticalSpacing,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: CustomButton(

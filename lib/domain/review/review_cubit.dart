@@ -6,6 +6,8 @@ import 'package:moxy/domain/mappers/review_mapper.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
 
+const itemWidth = 400;
+
 class ReviewCubit extends Cubit<ReviewState> {
   ReviewCubit() : super(ReviewState.defaultReviewState()) {
     fetchFeadback();
@@ -14,29 +16,39 @@ class ReviewCubit extends Cubit<ReviewState> {
   final reviewRepository = locate<ReviewRepository>();
   final reviewMapper = locate<ReviewMapper>();
   final ScrollController scrollController = ScrollController();
+  final PageController pageController = PageController(viewportFraction: 0.9);
 
-  void moveToPreviousProduct() {
-    final currentOffset = scrollController.offset;
-    final itemWidth = 400;
-    final targetOffset = currentOffset - itemWidth;
+  void moveToPreviousProduct(bool isMobile) {
+    if (isMobile) {
+      pageController.previousPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      final currentOffset = scrollController.offset;
 
-    scrollController.animateTo(
-      targetOffset,
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 300),
-    );
+      final targetOffset = currentOffset - itemWidth;
+
+      scrollController.animateTo(
+        targetOffset,
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
-  void moveToNextProduct() {
-    final currentOffset = scrollController.offset;
-    final itemWidth = 400;
-    final targetOffset = currentOffset + itemWidth;
+  void moveToNextProduct(bool isMobile) {
+    if (isMobile) {
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    } else {
+      final currentOffset = scrollController.offset;
+      final targetOffset = currentOffset + itemWidth;
 
-    scrollController.animateTo(
-      targetOffset,
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 300),
-    );
+      scrollController.animateTo(
+        targetOffset,
+        curve: Curves.easeInOut,
+        duration: const Duration(milliseconds: 300),
+      );
+    }
   }
 
   void fetchFeadback() async {
@@ -52,5 +64,12 @@ class ReviewCubit extends Cubit<ReviewState> {
     } catch (e) {
       moxyPrint('$e');
     }
+  }
+
+  @override
+  Future<void> close() {
+    scrollController.dispose();
+    pageController.dispose();
+    return super.close();
   }
 }
