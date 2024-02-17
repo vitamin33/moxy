@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/constants.dart';
 import 'package:moxy/domain/admin/overview/products_stats_cubit.dart';
 import 'package:moxy/domain/admin/overview/products_stats_state.dart';
 import 'package:moxy/domain/models/product_stats.dart';
+import 'package:moxy/ui/components/product_image.dart';
 
 import '../../../../theme/app_theme.dart';
 
@@ -121,23 +121,29 @@ class _CountStatsItem extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.all(14.0),
         tileColor: AppTheme.white,
-        title: Text(item.product.name),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(item.orderCount.toString()),
-              ],
-            ),
-            Text(
-              item.percentageFromAllOrdersCount.toString(),
-              maxLines: 2,
-            ),
+            ProductImage(product: item.product, size: 30),
+            const SizedBox(width: 10),
+            Text(item.product.name),
           ],
         ),
-        trailing: SvgPicture.asset(IconPath.forwardArrow),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Text('${item.orderCount.toString()} $piece'),
+              ),
+              Text(
+                '${item.percentageFromAllOrdersCount.toString()} $percent',
+                maxLines: 2,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -157,23 +163,28 @@ class _ProfitStatsItem extends StatelessWidget {
         ),
         contentPadding: const EdgeInsets.all(14.0),
         tileColor: AppTheme.white,
-        title: Text(item.product.name),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(item.profit.toString()),
-              ],
-            ),
-            Text(
-              item.percentageFromAllProfit.toString(),
-              maxLines: 2,
-            ),
+            ProductImage(product: item.product, size: 30),
+            const SizedBox(width: 10),
+            Text(item.product.name),
           ],
         ),
-        trailing: SvgPicture.asset(IconPath.forwardArrow),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                child: Text('${item.profit.toString()}  $uah'),
+              ),
+              Text(
+                '${item.percentageFromAllProfit.toString()} $percent',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
