@@ -6,15 +6,17 @@ import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
 class ProductCard extends StatelessWidget {
+  final GlobalKey widgetKey = GlobalKey();
   final Product product;
   final Function(Product product) onChangeFavorites;
 
-  const ProductCard({
+  ProductCard({
     super.key,
     required this.product,
     required this.onChangeFavorites,
@@ -70,23 +72,26 @@ class ProductCard extends StatelessWidget {
   Widget _buildImageWithAnimation(bool isMobile, bool isCardHover) {
     bool enableHover = isCardHover && !isMobile;
 
-    return TweenAnimationBuilder(
-      duration: const Duration(milliseconds: 200),
-      tween: Tween<double>(begin: 1.0, end: enableHover ? 1.0 : 0.95),
-      builder: (BuildContext context, double value, _) {
-        return Transform.scale(
-          scale: value,
-          child: Center(
-              child: (product.dimensions.first.images.isNotEmpty)
-                  ? Image.network(
-                      _currentImagePath(enableHover),
-                    )
-                  : Image.asset(
-                      'assets/images/placeholder.jpg',
-                      fit: BoxFit.cover,
-                    )),
-        );
-      },
+    return Container(
+      key: widgetKey,
+      child: TweenAnimationBuilder(
+        duration: const Duration(milliseconds: 200),
+        tween: Tween<double>(begin: 1.0, end: enableHover ? 1.0 : 0.95),
+        builder: (BuildContext context, double value, _) {
+          return Transform.scale(
+            scale: value,
+            child: Center(
+                child: (product.dimensions.first.images.isNotEmpty)
+                    ? Image.network(
+                        _currentImagePath(enableHover),
+                      )
+                    : Image.asset(
+                        'assets/images/placeholder.jpg',
+                        fit: BoxFit.cover,
+                      )),
+          );
+        },
+      ),
     );
   }
 
@@ -139,6 +144,8 @@ class ProductCard extends StatelessWidget {
   Widget _buildAddBasketButton(
       BuildContext context, AppTheme theme, bool isCardHover) {
     final isMobile = ResponsiveUtil.isMobile(context);
+    final cubit = context.read<RootRouterCubit>();
+    final basketCubit = context.read<BasketCubit>();
     final buttonSize =
         isMobile ? AppTheme.iconButtonSizeMobile : AppTheme.iconButtonSize;
     final padding =
@@ -152,8 +159,10 @@ class ProductCard extends StatelessWidget {
       right: padding,
       bottom: enableHover ? padding : -50,
       child: GestureDetector(
-        onTap: () {
-          context.read<BasketCubit>().addProductToBasket(product);
+        onTap: () async {
+          await cubit.runAddToCartAnimation(widgetKey);
+          await cubit.cartKey.currentState!.runCartAnimation();
+          basketCubit.addProductToBasket(product);
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),
@@ -191,8 +200,7 @@ class ProductCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Expanded(
-            child:
-                Text(
+            child: Text(
               product.name.toUpperCase(),
               style: theme.titleText,
               overflow: TextOverflow.ellipsis,

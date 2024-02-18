@@ -1,3 +1,4 @@
+import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -36,7 +37,7 @@ class RootWebWidget extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
-
+    final cubit = context.read<RootRouterCubit>();
     int routeIndex = navigationShell.currentIndex;
     int initialIndex = routeIndex >= 3 ? 0 : routeIndex;
     final isMobile = ResponsiveUtil.isMobile(context);
@@ -44,13 +45,27 @@ class RootWebWidget extends HookWidget {
     // ignore: unused_local_variable
     final tabController =
         useTabController(initialLength: 3, initialIndex: initialIndex);
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: buildAppBar(context, theme, tabController, isMobile),
-      drawer: isMobile ? _buildMobileDrawer(context) : null,
-      body: AnimatedBranchContainer(
-        currentIndex: navigationShell.currentIndex,
-        children: children,
+    return AddToCartAnimation(
+      cartKey: cubit.cartKey,
+      height: 50,
+      width: 50,
+      opacity: 0.85,
+      dragAnimation: const DragToCartAnimationOptions(
+        rotation: true,
+      ),
+      jumpAnimation: const JumpAnimationOptions(),
+      createAddToCartAnimation: (runAnimation) {
+        // You can run the animation by addToCartAnimationMethod, just pass trough the the global key of  the image as parameter
+        cubit.runAddToCartAnimation = runAnimation;
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: buildAppBar(context, theme, tabController, isMobile),
+        drawer: isMobile ? _buildMobileDrawer(context) : null,
+        body: AnimatedBranchContainer(
+          currentIndex: navigationShell.currentIndex,
+          children: children,
+        ),
       ),
     );
   }
@@ -127,41 +142,50 @@ class RootWebWidget extends HookWidget {
     return BlocBuilder<BasketCubit, BasketState>(
       builder: (context, state) {
         final cubit = context.read<BasketCubit>();
+        final rootCubit = context.read<RootRouterCubit>();
 
-        return Stack(children: [
-          Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: Container(
-              alignment: Alignment.center,
-              width: finalSize,
-              height: finalSize,
-              child: GestureDetector(
-                onTap: () {
-                  onPressed.call();
-                },
-                child: SvgPicture.asset(
-                  iconData,
-                ),
-              ),
-            ),
+        return AddToCartIcon(
+          key: rootCubit.cartKey,
+          badgeOptions: const BadgeOptions(
+            active: false,
           ),
-          if (state.basket.basketItems.isNotEmpty)
-            Positioned(
-              top: 10,
-              right: 10,
-              child: CircleAvatar(
-                radius: 8,
-                backgroundColor: AppTheme.red,
-                child: Padding(
-                  padding: const EdgeInsets.all(3.0),
-                  child: Text(
-                    cubit.getBasketCount(),
-                    style: theme.xSmallText.copyWith(color: AppTheme.white),
+          icon: Stack(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  width: finalSize,
+                  height: finalSize,
+                  child: GestureDetector(
+                    onTap: () {
+                      onPressed.call();
+                    },
+                    child: SvgPicture.asset(
+                      iconData,
+                    ),
                   ),
                 ),
               ),
-            ),
-        ]);
+              if (state.basket.basketItems.isNotEmpty)
+                Positioned(
+                  top: 10,
+                  right: 10,
+                  child: CircleAvatar(
+                    radius: 8,
+                    backgroundColor: AppTheme.red,
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: Text(
+                        cubit.getBasketCount(),
+                        style: theme.xSmallText.copyWith(color: AppTheme.white),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
       },
     );
   }

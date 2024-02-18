@@ -12,6 +12,8 @@ class RegistrationApiRequestFailed implements UiEffect {
 
 class NavigateToLogin implements UiEffect {}
 
+class NavigateToVerification implements UiEffect {}
+
 class RegisterSuccess implements UiEffect {}
 
 class ResendConfirm implements UiEffect {}

@@ -5,6 +5,11 @@ class LoginFailed implements UiEffect {
   LoginFailed(this.failureText);
 }
 
+class ValidationFailed implements UiEffect {
+  String failureText;
+  ValidationFailed(this.failureText);
+}
+
 class NavigateToClient implements UiEffect {}
 
 class NavigateToAdmin implements UiEffect {}

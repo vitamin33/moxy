@@ -88,9 +88,7 @@ class AuthenticationContainer extends StatelessWidget {
                   title: AppLocalizations.of(context)!.login,
                   state: state.state is Loading
                       ? ButtonState.loading
-                      : (state.mobileNumberIsValid
-                          ? ButtonState.idle
-                          : ButtonState.disabled),
+                      : ButtonState.idle,
                   onTap: context.read<LoginCubit>().logInWithCredentials,
                 ),
               ),

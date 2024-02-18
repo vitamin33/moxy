@@ -11,6 +11,7 @@ class Routes {
   static const resetPassword = 'reset-password';
   static const newPassword = 'new-password';
   static const successPassword = 'success-password';
+  static const verification = 'verification';
   static const splash = 'splash';
   static const admin = 'admin';
   static const shop = 'shop';

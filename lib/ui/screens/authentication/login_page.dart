@@ -34,6 +34,9 @@ class _LoginPageState extends State<LoginPage> {
       } else if (effect is LoginFailed) {
         ScaffoldMessenger.of(context).showSnackBar(
             snackBarWhenFailure(snackBarFailureText: effect.failureText));
+      } else if (effect is ValidationFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarWhenFailure(snackBarFailureText: effect.failureText));
       }
     });
   }
@@ -114,9 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                 title: AppLocalizations.of(context)!.login,
                 state: state.state is Loading
                     ? ButtonState.loading
-                    : (state.mobileNumberIsValid
-                        ? ButtonState.idle
-                        : ButtonState.disabled),
+                    : ButtonState.idle,
                 onTap: context.read<LoginCubit>().logInWithCredentials,
               ),
             ),

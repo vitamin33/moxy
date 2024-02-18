@@ -80,14 +80,14 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
       emit(state.copyWith(state: Loading()));
       final result = await authRepository.register(state.firstName,
           state.secondName, state.mobileNumber, state.email, state.password);
-      if (result.isSuccess()) {
-        emitEffect(NavigateToLogin());
+      result.when((success) {
+        emitEffect(NavigateToVerification());
         emitEffect(RegisterSuccess());
-      } else {
-        emit(state.copyWith(
-            state: RegisterFailed(
-                message: 'Unable to login. Try one more time.')));
-      }
+        emit(state.copyWith(state: Register()));
+      }, (error) {
+        emitEffect(RegistrationApiRequestFailed(error));
+        emit(state.copyWith(state: RegisterFailed(message: error)));
+      });
     } catch (error) {
       emitEffect(RegistrationApiRequestFailed(error.toString()));
       emit(state.copyWith(state: RegisterFailed(message: error.toString())));
@@ -198,10 +198,38 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
       errors.password = FieldError.invalid;
       noErrors = false;
     }
+    if (!validateEmailAddress(state.email)) {
+      errors.email = FieldError.invalid;
+      noErrors = false;
+      emit(state.copyWith(error: errors));
+      emitEffect(RegistrationValidationFailed(
+          'E-mail невалідний перевірте та спробуйте знову.'));
+      return noErrors;
+    }
+    if (!isValidMobileNumber(state.mobileNumber)) {
+      errors.mobileNumber = FieldError.invalid;
+      noErrors = false;
+      emit(state.copyWith(error: errors));
+      emitEffect(RegistrationValidationFailed(
+          'Номер телефону невалідний перевірте та спробуйте знову.'));
+      return noErrors;
+    }
+    if (!isValidPassword(state.password)) {
+      errors.password = FieldError.invalid;
+      noErrors = false;
+      emit(state.copyWith(error: errors));
+      emitEffect(RegistrationValidationFailed(
+          'Пароль має бути хоча б 6 символів в довжину.'));
+      return noErrors;
+    }
     if (!validateRepeatPassword(
         state.password, state.confirmRegisterPassword)) {
       errors.confirmRegisterPassword = FieldError.invalid;
       noErrors = false;
+      emit(state.copyWith(error: errors));
+      emitEffect(RegistrationValidationFailed(
+          'Пароль та підтвердження пароля мають бути однакові.'));
+      return noErrors;
     }
     if (!noErrors) {
       emitEffect(RegistrationValidationFailed(errors.formErrorMessageFields()));
@@ -229,7 +257,11 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
     final errors = RegisterFieldErrors.noErrors();
     var noErrors = true;
     if (isFieldEmpty(state.emailForResetPassword)) {
-      errors.emailForResetPassword = FieldError.invalid;
+      errors.resetPasswordEmail = FieldError.empty;
+      noErrors = false;
+    }
+    if (!validateEmailAddress(state.emailForResetPassword)) {
+      errors.resetPasswordEmail = FieldError.invalid;
       noErrors = false;
     }
     if (!noErrors) {
@@ -237,6 +269,18 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
     }
     emit(state.copyWith(error: errors));
     return noErrors;
+  }
+
+  bool validateResetPasswordEmail() {
+    if (isFieldEmpty(state.emailForResetPassword)) {
+      emitEffect(RegistrationValidationFailed('Введіть e-mail.'));
+      return false;
+    }
+    if (validateEmailAddress(state.emailForResetPassword)) {
+      emitEffect(RegistrationValidationFailed('Введений e-mail невалідний.'));
+      return false;
+    }
+    return true;
   }
 
   bool validateNewPasswordFields() {
@@ -259,12 +303,17 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
 
   void sendResetEmail() async {
     if (validateChangePasswordFields()) {
+      emit(state.copyWith(state: Loading()));
       final result =
           await authRepository.resetPassword(state.emailForResetPassword);
       if (result.isSuccess()) {
-        emit(state.copyWith(isResetEmailSent: true));
+        emit(state.copyWith(
+            isResetEmailSent: true, state: const RegisterState()));
       } else {
         emitEffect(ResetEmailFailed());
+        emit(state.copyWith(
+            state: RegisterFailed(
+                message: 'Не вдалося відправити запит на зміну паролю.')));
       }
     }
   }

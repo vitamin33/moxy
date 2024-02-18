@@ -8,6 +8,7 @@ import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:moxy/domain/auth/login/login_state.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_effect.dart';
+import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -37,14 +38,17 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
     registerCubit = context.read<RegistrationCubit>();
     registerCubit.effectStream.listen((effect) {
       if (effect is RegistrationValidationFailed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            snackBarWhenFailure(snackBarFailureText: 'error validation'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'Перевірте введені дані: ${effect.failureText}'));
       } else if (effect is RegistrationApiRequestFailed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            snackBarWhenFailure(snackBarFailureText: 'error api'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'Помилка сервера, спробуйте пізніше: ${effect.failureText}'));
       } else if (effect is RegisterSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            snackBarWhenSuccess(snackBarSuccessText: 'register success'));
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
+            snackBarSuccessText:
+                'Ви успішно зареєструвались, перейдіть в пошту та підтвердіть ваш e-mail.'));
       } else if (effect is NavigateToLogin) {
         context.read<LoginCubit>().moveToPage(0);
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
@@ -52,6 +56,8 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
       } else if (effect is ResendConfirm) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
             snackBarSuccessText: 'resend confirm register code'));
+      } else if (effect is NavigateToVerification) {
+        context.go(RouterProvider.verificationPath());
       }
     });
   }

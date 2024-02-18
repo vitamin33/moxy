@@ -16,6 +16,8 @@ class VerificationPage extends StatelessWidget {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
+        bool isLoading = state.state is Loading;
+
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -62,6 +64,7 @@ class VerificationPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: CustomButton(
+                  state: isLoading ? ButtonState.loading : ButtonState.idle,
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити код',
                   onTap: () {

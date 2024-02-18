@@ -10,9 +10,10 @@ import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key? key}) : super(key: key);
+  const RegistrationPage({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
@@ -30,11 +31,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   @override
+  void dispose() {
+    _registerCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<RegistrationCubit, RegistrationState>(
       builder: (context, state) {
         final cubit = context.read<RegistrationCubit>();
         final theme = AppTheme.of(context)!;
+        bool isLoading = state.state is Loading;
 
         return Padding(
           padding: const EdgeInsets.all(AppTheme.cardPadding),
@@ -133,6 +141,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: CustomButton(
+                  state: isLoading ? ButtonState.loading : ButtonState.idle,
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Далі',
                   onTap: () {
