@@ -45,6 +45,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       builder: (context, state) {
         final theme = AppTheme.of(context)!;
         final cubit = context.read<RegistrationCubit>();
+        bool isLoading = state.state is Loading;
 
         return Padding(
           padding: const EdgeInsets.all(8.0),
@@ -87,6 +88,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
                 child: CustomButton(
+                  state: isLoading ? ButtonState.loading : ButtonState.idle,
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Змінити пароль',
                   onTap: () {

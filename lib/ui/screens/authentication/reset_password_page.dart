@@ -32,6 +32,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText:
                 'Unable to send Reset Password Email, try again later.'));
+      } else if (effect is RegistrationValidationFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                'Перевірте введені дані: ${effect.failureText}'));
       }
     });
   }
@@ -63,6 +67,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   Widget _buildTextForm(
       BuildContext context, RegistrationState state, AppTheme theme) {
+    bool isLoading = state.state is Loading;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -92,6 +97,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 6.0),
           child: CustomButton(
+            state: isLoading ? ButtonState.loading : ButtonState.idle,
             buttonWidth: MediaQuery.of(context).size.width,
             title: 'Відправити E-mail',
             onTap: () {

@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:moxy/data/repositories/auth_repository.dart';
 import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/domain/roles.dart';
@@ -14,6 +16,8 @@ import 'package:moxy/utils/extensions.dart';
 part 'root_router_state.dart';
 
 class RootRouterCubit extends CubitWithEffects<RootRoute, UiEffect> {
+  GlobalKey<CartIconKey> cartKey = GlobalKey<CartIconKey>();
+  late Function(GlobalKey) runAddToCartAnimation;
   final _eventController = StreamController<NavigationEvent>.broadcast();
 
   Stream<NavigationEvent> get eventStream => _eventController.stream;
