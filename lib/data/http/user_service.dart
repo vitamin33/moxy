@@ -9,6 +9,7 @@ import 'package:moxy/data/models/response/login_response.dart';
 import 'package:moxy/environment.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/extensions.dart';
+import 'package:multiple_result/multiple_result.dart';
 
 class UserService {
   final baseUrl = Environment.apiUrl;
@@ -90,27 +91,28 @@ class UserService {
   }
 
   //REGISTER
-  Future<bool> register(NetworkRegister networkRegister) async {
+  Future<Result<bool, String>> register(NetworkRegister networkRegister) async {
     try {
       Response response = await _dio.post(
         registerUserUrl,
         data: networkRegister.toJson(),
       );
       if (response.statusCode == HttpStatus.created) {
-        return true;
+        return const Result.success(true);
       } else {
-        return false;
+        return const Result.error('Помилка при реєстрації');
       }
     } on DioException catch (e) {
       if (e.response?.statusCode == HttpStatus.conflict) {
-        return true;
+        return const Result.error(
+            'Аккаунт з таким телефоном чи email-ом вже існує');
       } else {
         rethrow;
       }
     }
   }
 
-  Future<bool> sendConfirmationCode(
+  Future<Result<bool, String>> sendConfirmationCode(
       NetworkConfirmationCode networkConfirmationCode) async {
     try {
       Response response = await _dio.post(
@@ -118,9 +120,10 @@ class UserService {
         data: networkConfirmationCode.toJson(),
       );
       if (response.statusCode == HttpStatus.created) {
-        return true;
+        return const Result.success(true);
       } else {
-        return false;
+        return const Result.error(
+            'Не вдалося відправити код підтверження, спробуйте пізніше.');
       }
     } catch (e, stack) {
       moxyPrint(stack);

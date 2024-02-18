@@ -124,7 +124,6 @@ class RegisterFieldErrors {
   FieldError? confirmRegisterPassword;
   FieldError? confirmationCode;
   FieldError? resetPasswordEmail;
-  FieldError? emailForResetPassword;
   FieldError? newPassword;
   FieldError? confirmPassword;
 
@@ -137,7 +136,6 @@ class RegisterFieldErrors {
     this.confirmRegisterPassword,
     this.confirmationCode,
     this.resetPasswordEmail,
-    this.emailForResetPassword,
     this.newPassword,
     this.confirmPassword,
   });
@@ -148,36 +146,32 @@ class RegisterFieldErrors {
 
   String formErrorMessageFields() {
     var buffer = StringBuffer();
-    buffer.write('Validation errors: ');
     if (firstName != null) {
-      buffer.write('firstName');
+      buffer.write('Ім\'я ');
     }
     if (email != null) {
-      buffer.write('email');
+      buffer.write('E-mail ');
     }
     if (mobileNumber != null) {
-      buffer.write('mobileNumber');
+      buffer.write('Номер телефону ');
     }
     if (password != null) {
-      buffer.write('password');
+      buffer.write('Пароль ');
     }
     if (confirmRegisterPassword != null) {
-      buffer.write('confirmRegisterPassword');
+      buffer.write('Підтвердження пароля ');
     }
     if (confirmationCode != null) {
-      buffer.write('confirmationCode');
+      buffer.write('Код підтвердження, ');
     }
     if (resetPasswordEmail != null) {
-      buffer.write('resetPasswordEmail');
-    }
-    if (emailForResetPassword != null) {
-      buffer.write('mobileNumberPassword');
+      buffer.write('E-mail для скидування паролю, ');
     }
     if (newPassword != null) {
-      buffer.write('newPassword');
+      buffer.write('Новий пароль');
     }
     if (confirmPassword != null) {
-      buffer.write('confirmPassword');
+      buffer.write('Підтвердження нового паролю');
     }
     buffer.write('.');
     return buffer.toString();

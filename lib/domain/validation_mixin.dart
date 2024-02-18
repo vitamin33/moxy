@@ -3,9 +3,17 @@ import 'package:moxy/constants.dart';
 import 'package:moxy/domain/models/dimension_product.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/models/status.dart';
+import 'package:moxy/utils/common.dart';
 
 mixin ValidationMixin {
   bool isFieldEmpty(String? fieldValue) => fieldValue?.isEmpty ?? true;
+
+  bool isValidMobileNumber(String? phone) {
+    if (phone == null) {
+      return false;
+    }
+    return phoneNumberRegExp.hasMatch(phone);
+  }
 
   bool isValidPrice(double? price) {
     if (price == null) {
@@ -65,14 +73,21 @@ mixin ValidationMixin {
     }
   }
 
-  bool validateEmailAddress(String? email) {
-    if (email == null) {
+  bool isValidPassword(String? password) {
+    if (password == null || password.isEmpty) {
       return false;
     }
 
-    return RegExp(
-            r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-        .hasMatch(email);
+    return password.length >= 6;
+  }
+
+  bool validateEmailAddress(String? email) {
+    if (email == null || email.isEmpty) {
+      return false;
+    }
+
+    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    return RegExp(emailPattern).hasMatch(email);
   }
 }
 

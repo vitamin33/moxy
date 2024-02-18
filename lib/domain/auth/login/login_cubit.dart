@@ -4,17 +4,18 @@ import 'package:moxy/data/secure_storage.dart';
 import 'package:moxy/domain/auth/login/login_effects.dart';
 import 'package:moxy/domain/roles.dart';
 import 'package:moxy/domain/ui_effect.dart';
+import 'package:moxy/domain/validation_mixin.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
 import 'login_state.dart';
 
-class LoginCubit extends CubitWithEffects<LoginState, UiEffect> {
+class LoginCubit extends CubitWithEffects<LoginState, UiEffect>
+    with ValidationMixin {
   final storage = locate<ISecureStorageRepository>();
   final authRepository = locate<AuthRepository>();
 
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  String walletConnectURI = '';
   final PageController pageController = PageController(initialPage: 0);
 
   LoginCubit()
@@ -47,6 +48,9 @@ class LoginCubit extends CubitWithEffects<LoginState, UiEffect> {
 
   void logInWithCredentials() async {
     try {
+      if (!validateFields()) {
+        return;
+      }
       emit(state.copyWith(state: Loading()));
 
       final result = await authRepository.loginWithCredentials(
@@ -109,5 +113,23 @@ class LoginCubit extends CubitWithEffects<LoginState, UiEffect> {
       emitEffect(NavigateToClient());
     }
     emit(state.copyWith(state: LoginWithCredsSuccess()));
+  }
+
+  bool validateFields() {
+    if (state.mobileNumber.isEmpty) {
+      emitEffect(ValidationFailed('Введіть номер телефону.'));
+      return false;
+    } else if (!isValidMobileNumber(state.mobileNumber)) {
+      emitEffect(ValidationFailed('Номер телефону невалідний.'));
+      return false;
+    }
+    if (state.password.isEmpty) {
+      emitEffect(ValidationFailed('Введіть пароль.'));
+      return false;
+    } else if (!isValidPassword(state.password)) {
+      emitEffect(ValidationFailed('Пароль має бути хоча б 6 символів.'));
+      return false;
+    }
+    return true;
   }
 }

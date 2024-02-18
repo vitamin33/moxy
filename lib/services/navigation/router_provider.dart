@@ -21,6 +21,7 @@ import 'package:moxy/ui/screens/authentication/new_password_page.dart';
 import 'package:moxy/ui/screens/authentication/registration_page.dart';
 import 'package:moxy/ui/screens/authentication/reset_password_page.dart';
 import 'package:moxy/ui/screens/authentication/success_password_page.dart';
+import 'package:moxy/ui/screens/authentication/verification_page.dart';
 import 'package:moxy/ui/screens/client/root_view.dart';
 import 'package:moxy/ui/screens/client/web/checkout/checkout_page.dart';
 import 'package:moxy/ui/screens/client/web/favourites/favourites_page.dart';
@@ -39,6 +40,7 @@ class RouterProvider {
   // Auth pathes
   static loginPath() => '/${Routes.login}';
   static registerPath() => '/${Routes.register}';
+  static verificationPath() => '/${Routes.register}/${Routes.verification}';
   static resetPasswordPath() => '/${Routes.resetPassword}';
   static newPasswordPath(String email, String token) =>
       '/${Routes.resetPassword}/${Routes.newPassword}';
@@ -93,6 +95,10 @@ class RouterProvider {
 
   static Widget _successPasswordScreen(
           BuildContext context, GoRouterState state) =>
+      const SuccessPasswordPage();
+
+  static Widget _verificationScreen(
+          BuildContext context, GoRouterState state) =>
       const VerificationPage();
 
   static Widget errorWidget(BuildContext context, GoRouterState state) =>
@@ -134,10 +140,10 @@ class RouterProvider {
           StatefulShellBranch(
             initialLocation: registerPath(),
             routes: <RouteBase>[
-              GoRoute(
-                path: registerPath(),
-                builder: _registerScreen,
-              ),
+              GoRoute(path: registerPath(), builder: _registerScreen, routes: [
+                GoRoute(
+                    path: Routes.verification, builder: _verificationScreen),
+              ]),
             ],
           ),
           StatefulShellBranch(

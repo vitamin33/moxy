@@ -35,8 +35,6 @@ class LoginState implements Copyable<LoginState> {
         activePage: activePage ?? this.activePage,
         state: state ?? this.state);
   }
-
-  bool get mobileNumberIsValid => mobileNumber.length > 9;
 }
 
 class AuthState {

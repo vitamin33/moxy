@@ -133,31 +133,20 @@ class AuthRepository {
     }
   }
 
-  Future<Result<bool, Exception>> register(String firstName, String secondName,
+  Future<Result<bool, String>> register(String firstName, String secondName,
       String mobileNumber, String email, String password) async {
-    final resultCase = await client.register(NetworkRegister(
+    return await client.register(NetworkRegister(
         firstName: firstName,
         secondName: secondName,
         mobileNumber: mobileNumber,
         email: email,
         password: password));
-    if (resultCase) {
-      return Result.success(resultCase);
-    } else {
-      return Result.error(Exception('error register'));
-    }
   }
 
-  Future<Result<bool, Exception>> sendConfirmationCode(
+  Future<Result<bool, String>> sendConfirmationCode(
       String confirmationCode, String email) async {
-    final resultCase = await client.sendConfirmationCode(
-        NetworkConfirmationCode(
-            email: email, confirmationCode: confirmationCode));
-    if (resultCase) {
-      return Result.success(resultCase);
-    } else {
-      return Result.error(Exception('error sendConfirmationCode'));
-    }
+    return await client.sendConfirmationCode(NetworkConfirmationCode(
+        email: email, confirmationCode: confirmationCode));
   }
 
   Future<Result<bool, Exception>> resendConfirmationCode(String email) async {
