@@ -95,6 +95,7 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     result.when((success) {
       emitSuccessBasket(success);
     }, (error) {
+      emit(state.copyWith(isLoading: false));
       emitEffect(
           BasketApiRequestFailed('Failed update cart ${error.toString()}'));
     });
@@ -165,35 +166,45 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
   }
 
   void addBasketItemToBasket(BasketItem basketItem) async {
+    emit(state.copyWith(isLoading: true));
     NetworkAddOrChange item = basketMapper.mapToNetworkBasketChange(basketItem);
     final result = await basketRepository.addProductToBasket(item);
     result.when((success) {
       emit(state.copyWith(
           basket: state.basket.copyWith(basketItems: [basketItem])));
     }, (error) {
+      emit(state.copyWith(isLoading: false));
       emitEffect(BasketApiRequestFailed(
           'Failed add product to basket  ${error.toString()}'));
     });
   }
 
   Future<bool> addProductDetailsToBasket(ProductDetails productDetails) async {
-    bool isProductInBusket = false;
+    emit(state.copyWith(isLoading: true));
+    bool isProductInBasket = false;
     NetworkAddOrChange item =
         basketMapper.productDetailsMapToNetworkBasketChange(productDetails);
     final result = await basketRepository.addProductToBasket(item);
     result.when((success) {
-      emit(state.copyWith(
-          basket: state.basket.copyWith(basketItems: [
-        BasketItem(
-            product: productDetails.product,
-            dimension: productDetails.dimension)
-      ])));
-      isProductInBusket = true;
+      emit(
+        state.copyWith(
+          isLoading: false,
+          basket: state.basket.copyWith(
+            basketItems: [
+              BasketItem(
+                  product: productDetails.product,
+                  dimension: productDetails.dimension)
+            ],
+          ),
+        ),
+      );
+      isProductInBasket = true;
     }, (error) {
+      emit(state.copyWith(isLoading: false));
       emitEffect(BasketApiRequestFailed(
           'Failed add product to basket  ${error.toString()}'));
     });
-    return isProductInBusket;
+    return isProductInBasket;
   }
 
   String getBasketCount() {
