@@ -12,48 +12,69 @@ class ReviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
 
-    return Card(
-      elevation: 8,
-      margin: const EdgeInsets.all(16),
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: SizedBox(
-        width: 330,
-        height: 240,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: AppTheme.cardPadding, horizontal: 36),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RatingBarIndicator(
-                  rating: review.rating.toDouble(),
-                  itemBuilder: (context, index) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  itemCount: 5,
-                  itemSize: 15.0,
+    return SizedBox(
+      width: 380,
+      height: 240,
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Card(
+              elevation: 8,
+              margin: const EdgeInsets.all(16),
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: SizedBox(
+                width: 330,
+                height: 240,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: AppTheme.cardPadding, horizontal: 36),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RatingBarIndicator(
+                          rating: review.rating.toDouble(),
+                          itemBuilder: (context, index) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          itemCount: 5,
+                          itemSize: 15.0,
+                        ),
+                        Text(
+                          review.reviewText,
+                          style: theme.largeSemiBoltText,
+                        ),
+                        Row(
+                          children: [
+                            _buildAvatarImage(review.avatarImageUrl),
+                            AppTheme.mediumHorizontalSpacing,
+                            Expanded(
+                              child: Text(
+                                review.clientName,
+                                style: theme.titleSemiBoltText,
+                              ),
+                            ),
+                          ],
+                        )
+                      ]),
                 ),
-                Text(
-                  review.reviewText,
-                  style: theme.largeSemiBoltText,
-                ),
-                Row(
-                  children: [
-                    _buildAvatarImage(review.avatarImageUrl),
-                    AppTheme.mediumHorizontalSpacing,
-                    Text(
-                      review.clientName,
-                      style: theme.headlineText,
-                    ),
-                  ],
-                )
-              ]),
-        ),
+              ),
+            ),
+          ),
+          const Positioned(
+            right: 30,
+            top: -10,
+            child: Icon(
+              Icons.format_quote,
+              size: 50,
+              color: AppTheme.pinkAvarage,
+            ),
+          )
+        ],
       ),
     );
   }
