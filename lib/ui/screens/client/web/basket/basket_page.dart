@@ -27,10 +27,18 @@ class BasketPage extends StatefulWidget {
 }
 
 class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
+  late BasketCubit cubit;
   @override
   void initState() {
     super.initState();
-    context.read<BasketCubit>().getBasketInfo();
+    cubit = context.read<BasketCubit>();
+    cubit.getBasketInfo();
+    cubit.effectStream.listen((effect) {
+      if (effect is BasketApiRequestFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBarWhenFailure(snackBarFailureText: effect.failureText));
+      }
+    });
   }
 
   @override
@@ -38,14 +46,8 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
     final isMobile = ResponsiveUtil.isMobile(context);
     return BlocBuilder<BasketCubit, BasketState>(
       builder: (context, state) {
-        final BasketCubit cubit = context.read<BasketCubit>();
         final theme = AppTheme.of(context)!;
-        cubit.effectStream.listen((effect) {
-          if (effect is BasketApiRequestFailed) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                snackBarWhenFailure(snackBarFailureText: effect.failureText));
-          }
-        });
+
         return Container(
           height: MediaQuery.of(context).size.height,
           color: AppTheme.white,

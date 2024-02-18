@@ -16,7 +16,6 @@ import 'package:moxy/ui/screens/client/web/basket/basket_page.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/responsive_utils.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RootWebWidget extends HookWidget {
@@ -47,8 +46,8 @@ class RootWebWidget extends HookWidget {
         useTabController(initialLength: 3, initialIndex: initialIndex);
     return AddToCartAnimation(
       cartKey: cubit.cartKey,
-      height: 50,
-      width: 50,
+      height: 30,
+      width: 30,
       opacity: 0.85,
       dragAnimation: const DragToCartAnimationOptions(
         rotation: true,
