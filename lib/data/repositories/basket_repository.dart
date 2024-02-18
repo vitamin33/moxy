@@ -38,13 +38,7 @@ class BasketRepository {
 
   Future<Result<Object, Exception>> addProductToBasket(
       NetworkAddOrChange change) async {
-    try {
-      final result = await client.addProductToBasket(change);
-      return result;
-    } catch (e, stack) {
-      moxyPrint(stack);
-      rethrow;
-    }
+    return await client.addProductToBasket(change);
   }
 
   Future<Result<NetworkBasket, Exception>> removeProductFromBasket(

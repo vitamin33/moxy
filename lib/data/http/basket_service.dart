@@ -74,7 +74,7 @@ class BasketService {
       return Result.success(result);
     } catch (e, stack) {
       moxyPrint(stack);
-      rethrow;
+      return Result.error(Exception(e.toString()));
     }
   }
 

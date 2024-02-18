@@ -160,9 +160,9 @@ class ProductCard extends StatelessWidget {
       bottom: enableHover ? padding : -50,
       child: GestureDetector(
         onTap: () async {
+          basketCubit.addProductToBasket(product);
           await cubit.runAddToCartAnimation(widgetKey);
           await cubit.cartKey.currentState!.runCartAnimation();
-          basketCubit.addProductToBasket(product);
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),
