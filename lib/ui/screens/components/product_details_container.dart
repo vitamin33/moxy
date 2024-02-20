@@ -7,9 +7,9 @@ import 'package:moxy/domain/client/product_details/product_details_state.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/screens/components/custom_accordion.dart';
 import 'package:moxy/ui/screens/components/image_carousel.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/screens/components/rate_indicator.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
@@ -30,9 +30,7 @@ class ProductDetailsContainer extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: state.isLoading
-              ? const MoxyLoader(
-                  iconSize: 50,
-                )
+              ? LottieLoader()
               : isMobile
                   ? Column(
                       children: [

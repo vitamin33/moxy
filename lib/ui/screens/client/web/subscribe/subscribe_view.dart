@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/constant/api_path.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/subscribe/subscribe_cubit.dart';
 import 'package:moxy/domain/client/subscribe/subscribe_effect.dart';
@@ -8,6 +9,7 @@ import 'package:moxy/domain/client/subscribe/subscribe_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SubscribeView extends StatefulWidget {
   const SubscribeView({super.key});
@@ -109,7 +111,9 @@ class _SubscribeViewState extends State<SubscribeView> {
                   Row(
                     children: [
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            launchUrl(Uri.parse(instagramMoxyUrl));
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 color: AppTheme.black,
@@ -126,7 +130,9 @@ class _SubscribeViewState extends State<SubscribeView> {
                         width: 10,
                       ),
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            launchUrl(Uri.parse(tiktokMoxyUrl));
+                          },
                           child: Container(
                             decoration: BoxDecoration(
                                 color: AppTheme.black,

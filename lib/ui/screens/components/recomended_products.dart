@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/recomended_product/recomended_product_cubit.dart';
 import 'package:moxy/domain/client/recomended_product/recomended_products_state.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -23,7 +24,7 @@ class RecomendedProducts extends StatelessWidget {
           final isMobile = ResponsiveUtil.isMobile(context);
 
           return state.isLoading
-              ? const CircularProgressIndicator()
+              ?  LottieLoader()
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(

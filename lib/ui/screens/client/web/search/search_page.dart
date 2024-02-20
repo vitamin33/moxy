@@ -5,8 +5,8 @@ import 'package:lottie/lottie.dart';
 import 'package:moxy/domain/client/search/search_cubit.dart';
 import 'package:moxy/domain/client/search/search_effect.dart';
 import 'package:moxy/domain/client/search/search_state.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -61,7 +61,7 @@ class _SearchPageState extends State<SearchPage> {
           return Scaffold(
               backgroundColor: AppTheme.white,
               body: state.isLoading
-                  ? const Center(child: MoxyLoader(iconSize: 50))
+                  ? Center(child: LottieLoader())
                   : Padding(
                       padding: const EdgeInsets.all(AppTheme.defaultPadding),
                       child: Column(

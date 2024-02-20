@@ -7,11 +7,11 @@ import 'package:moxy/domain/client/favourites/favorites_effects.dart';
 import 'package:moxy/domain/client/favourites/favourites_cubit.dart';
 import 'package:moxy/domain/client/favourites/favourites_state.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/profile_scope.dart';
 import 'package:moxy/ui/screens/client/web/guest_profile.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -75,13 +75,12 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     ),
                   ),
                 ),
-                (profile != null && !profile.isGuest())
-                    ? FavoritesContent(state: state, cubit: _favouritesCubit)
-                    : const GuestProfileWidget(),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: _buildFavoritesArea(state, isMobile),
-                // ),
+                (profile != null)
+                    ? (!profile.isGuest())
+                        ? FavoritesContent(
+                            state: state, cubit: _favouritesCubit)
+                        : const GuestProfileWidget()
+                    : Center(child: LottieLoader()),
                 const Footer()
               ],
             ),
@@ -103,13 +102,8 @@ class FavoritesContent extends StatelessWidget {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: state.isLoading
-            ? const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(30.0),
-                  child: MoxyLoader(
-                    iconSize: 40,
-                  ),
-                ),
+            ? Center(
+                child: LottieLoader(),
               )
             : buildFavoritesList(state, isMobile, context));
   }
@@ -134,10 +128,7 @@ class FavoritesContent extends StatelessWidget {
       );
     }
     bool isMobile = ResponsiveUtil.isMobile(context);
-    // final crossAxisExtent = isMobile ? 500.0 : 300.0;
-    // final spacing = isMobile
-    //     ? AppTheme.defaultGridSpacingMobile
-    //     : AppTheme.defaultGridSpacing;
+
 
     return AnimationLimiter(
         child: AlignedGridView.count(

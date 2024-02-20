@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/config/routes.dart';
+import 'package:moxy/constant/menu_title.dart';
 import 'package:moxy/ui/profile_scope.dart';
 import 'package:moxy/ui/screens/admin/admin_root_view.dart';
 import 'package:moxy/ui/screens/admin/pages/create_order/create_order_page.dart';
@@ -28,6 +29,7 @@ import 'package:moxy/ui/screens/client/web/favourites/favourites_page.dart';
 import 'package:moxy/ui/screens/client/web/home/pages/accessories_product_page.dart';
 import 'package:moxy/ui/screens/client/web/home/pages/bags_product_page.dart';
 import 'package:moxy/ui/screens/client/web/home/pages/new_product_page.dart';
+import 'package:moxy/ui/screens/client/web/menu/menu_page.dart';
 import 'package:moxy/ui/screens/client/web/product_details.dart/product_details_page.dart';
 import 'package:moxy/ui/screens/client/web/profile/profile_page.dart';
 import 'package:moxy/ui/screens/client/web/search/search_page.dart';
@@ -60,6 +62,7 @@ class RouterProvider {
   static checkoutPath() => '/${Routes.checkout}';
   static producDetailsPath(String productId) =>
       '/${Routes.brandNew}/${Routes.productDetails}/$productId';
+  static menuPath(String menuTitle) => '/${Routes.menu}/${menuTitle}/';
 
   // Admin pathes
   static adminProductsPath() => '/${Routes.adminProducts}';
@@ -255,6 +258,16 @@ class RouterProvider {
               GoRoute(
                 path: checkoutPath(),
                 builder: (context, state) => const CheckoutPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            initialLocation: '/${Routes.menu}/:menuTitle',
+            routes: <RouteBase>[
+              GoRoute(
+                path: '/${Routes.menu}/:menuTitle',
+                builder: (context, state) =>
+                    MenuPage(menuTitle: state.pathParameters['menuTitle']!),
               ),
             ],
           ),

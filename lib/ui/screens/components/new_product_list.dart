@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/new_product_list/new_product_list_cubit.dart';
 import 'package:moxy/domain/client/new_product_list/new_product_list_effects.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_grid.dart';
 
 import '../../../domain/client/new_product_list/new_product_list_state.dart';
@@ -43,7 +44,7 @@ class _NewProductListState extends State<NewProductList> {
       child: BlocBuilder<NewProductListCubit, NewProductListState>(
         builder: (context, state) {
           return state.isLoading
-              ? const CircularProgressIndicator()
+              ?  LottieLoader()
               : Column(
                   children: [
                     NewProductListGrid(

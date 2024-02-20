@@ -12,8 +12,8 @@ import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
@@ -63,8 +63,8 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                       style: theme.headline4BoltText,
                     ),
                     if (state.isLoading)
-                      const MoxyLoader(
-                        iconSize: 30,
+                      LottieLoader(
+                        size: 40,
                       ),
                     InkWell(
                       onTap: () {
