@@ -43,7 +43,8 @@ class VerificationPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  const Text('Didnt receive a code?'),
+                  Text('Didnt receive a code?',
+                      style: theme.mediumSemiBoltText),
                   InkWell(
                     onTap: () {
                       cubit.resendConfirmationCode();
@@ -91,7 +92,7 @@ Widget downText(BuildContext context, AppTheme theme) {
         style: theme.titleText,
       ),
       const SizedBox(
-        width: 2,
+        width: 4,
       ),
       InkWell(
           onTap: () {},

@@ -5,7 +5,7 @@
     "titleTextStyle": {
       "color": "#ff0a0a0a",
       "decoration": "none",
-      "fontFamily": "Roboto",
+      "fontFamily": "HelveticaNeue",
       "fontSize": 24,
       "fontWeight": "w400",
       "inherit": false,
@@ -15,7 +15,7 @@
     "toolbarTextStyle": {
       "color": "#ff0a0a0a",
       "decoration": "none",
-      "fontFamily": "Roboto",
+      "fontFamily": "HelveticaNeue",
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,
@@ -29,7 +29,7 @@
     "selectedLabelStyle": {
       "color": "#ff0a0a0a",
       "decoration": "none",
-      "fontFamily": "Roboto",
+      "fontFamily": "HelveticaNeue",
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,
@@ -41,7 +41,7 @@
     "unselectedLabelStyle": {
       "color": "#ff0a0a0a",
       "decoration": "none",
-      "fontFamily": "Roboto",
+      "fontFamily": "HelveticaNeue",
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,
@@ -711,7 +711,7 @@
     "labelStyle": {
       "color": "#ff0a0a0a",
       "decoration": "none",
-      "fontFamily": "Roboto",
+      "fontFamily": "HelveticaNeue",
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,
@@ -722,7 +722,7 @@
     "unselectedLabelStyle": {
       "color": "#ff0a0a0a",
       "decoration": "none",
-      "fontFamily": "Roboto",
+      "fontFamily": "HelveticaNeue",
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,
@@ -908,10 +908,8 @@
     "bodyLarge": {
       "color": "#dd000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 16,
       "fontWeight": "w400",
       "inherit": false,
@@ -921,10 +919,8 @@
     "bodyMedium": {
       "color": "#dd000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 14,
       "fontWeight": "w400",
       "inherit": false,
@@ -934,10 +930,8 @@
     "bodySmall": {
       "color": "#8a000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 12,
       "fontWeight": "w400",
       "inherit": false,
@@ -947,10 +941,8 @@
     "displayLarge": {
       "color": "#8a000000",
       "decoration": "none",
-      "fontFamily": "Roboto_300",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 96,
       "fontWeight": "w300",
       "inherit": false,
@@ -960,10 +952,8 @@
     "displayMedium": {
       "color": "#8a000000",
       "decoration": "none",
-      "fontFamily": "Roboto_300",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 60,
       "fontWeight": "w300",
       "inherit": false,
@@ -973,10 +963,8 @@
     "displaySmall": {
       "color": "#8a000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 48,
       "fontWeight": "w400",
       "inherit": false,
@@ -986,10 +974,8 @@
     "headlineLarge": {
       "color": "#8a000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 40,
       "fontWeight": "w400",
       "inherit": false,
@@ -999,10 +985,8 @@
     "headlineMedium": {
       "color": "#8a000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 34,
       "fontWeight": "w400",
       "inherit": false,
@@ -1012,10 +996,8 @@
     "headlineSmall": {
       "color": "#dd000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 24,
       "fontWeight": "w400",
       "inherit": false,
@@ -1025,10 +1007,8 @@
     "labelLarge": {
       "color": "#dd000000",
       "decoration": "none",
-      "fontFamily": "Roboto_500",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,
@@ -1038,10 +1018,8 @@
     "labelMedium": {
       "color": "#ff000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 11,
       "fontWeight": "w400",
       "inherit": false,
@@ -1051,10 +1029,8 @@
     "labelSmall": {
       "color": "#ff000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 10,
       "fontWeight": "w400",
       "inherit": false,
@@ -1064,10 +1040,8 @@
     "titleLarge": {
       "color": "#dd000000",
       "decoration": "none",
-      "fontFamily": "Roboto_500",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 20,
       "fontWeight": "w500",
       "inherit": false,
@@ -1077,10 +1051,8 @@
     "titleMedium": {
       "color": "#dd000000",
       "decoration": "none",
-      "fontFamily": "Roboto_regular",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 16,
       "fontWeight": "w400",
       "inherit": false,
@@ -1090,10 +1062,8 @@
     "titleSmall": {
       "color": "#ff000000",
       "decoration": "none",
-      "fontFamily": "Roboto_500",
-      "fontFamilyFallback": [
-        "Roboto"
-      ],
+      "fontFamily": "HelveticaNeue",
+      "fontFamilyFallback": ["HelveticaNeue"],
       "fontSize": 14,
       "fontWeight": "w500",
       "inherit": false,

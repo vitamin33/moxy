@@ -57,77 +57,77 @@ class AppTheme extends InheritedWidget {
   final TextStyle invisibleText = const TextStyle(fontSize: 0);
 
   final TextStyle xSmallText = const TextStyle(
-      fontSize: 10, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 10, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
   final TextStyle smallText = const TextStyle(
-      fontSize: 12, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 12, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
 
   final TextStyle smallSemiBoltText = const TextStyle(
-      fontSize: 12, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 12, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle smallBoltText = const TextStyle(
-      fontSize: 12, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 12, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle mediumText = const TextStyle(
-      fontSize: 14, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 14, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
 
   final TextStyle mediumSemiBoltText = const TextStyle(
-      fontSize: 14, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 14, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle mediumBoltText = const TextStyle(
-      fontSize: 14, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 14, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle largeText = const TextStyle(
-      fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 16, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
 
   final TextStyle largeSemiBoltText = const TextStyle(
-      fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 16, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle largeBoltText = const TextStyle(
-      fontSize: 16, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 16, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle titleText = const TextStyle(
-      fontSize: 18, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 18, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
 
   final TextStyle titleSemiBoltText = const TextStyle(
-      fontSize: 18, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 18, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle titleBoltText = const TextStyle(
-      fontSize: 18, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 18, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle headlineText = const TextStyle(
-      fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 20, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
 
   final TextStyle headlineSemiBoltText = const TextStyle(
-      fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 20, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle headlineBoltText = const TextStyle(
-      fontSize: 20, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 20, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle headline2Text = const TextStyle(
-      fontSize: 22, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 22, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle headline2BoltText = const TextStyle(
-      fontSize: 22, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 22, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle headline3BoltText = const TextStyle(
-      fontSize: 28, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 28, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle headline4SemiBoltText = const TextStyle(
-      fontSize: 36, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 36, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle headline4BoltText = const TextStyle(
-      fontSize: 36, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 36, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
   final TextStyle bigTitleText = const TextStyle(
-      fontSize: 42, fontFamily: 'Poppins', fontWeight: FontWeight.w400);
+      fontSize: 42, fontFamily: 'OpenSans', fontWeight: FontWeight.w400);
 
   final TextStyle bigTitleSemiBoltText = const TextStyle(
-      fontSize: 42, fontFamily: 'Poppins', fontWeight: FontWeight.w500);
+      fontSize: 42, fontFamily: 'OpenSans', fontWeight: FontWeight.w500);
 
   final TextStyle bigTitleBoltText = const TextStyle(
-      fontSize: 42, fontFamily: 'Poppins', fontWeight: FontWeight.w600);
+      fontSize: 42, fontFamily: 'OpenSans', fontWeight: FontWeight.w600);
 
-  const AppTheme({super.key, required Widget child}) : super(child: child);
+  const AppTheme({super.key, required super.child});
 
   static AppTheme? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<AppTheme>();

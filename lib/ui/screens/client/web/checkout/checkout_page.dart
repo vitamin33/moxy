@@ -90,33 +90,37 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 children: [
                   // alignment: Alignment.topLeft,
                   // child:
-                  // Padding(
-                  //   padding: const EdgeInsets.fromLTRB(36, 18, 36, 4),
-                  //   child:
-                  SizedBox(
-                    width: 300,
-                    child: InkWell(
-                      onTap: () => {
-                        context.pop(),
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const Icon(
-                              Icons.arrow_back,
-                              color: AppTheme.textColor,
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: SizedBox(
+                        width: 300,
+                        child: InkWell(
+                          onTap: () => {
+                            context.pop(),
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Icon(
+                                  Icons.arrow_back,
+                                  color: AppTheme.textColor,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  "Go back",
+                                  style: theme.largeBoltText,
+                                ),
+                              ],
                             ),
-                            const SizedBox(
-                                width: 8), // Adjust the spacing as needed
-                            Text("Go back", style: theme.largeBoltText),
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                  // ),
 
                   isMobile
                       ? Column(
@@ -126,7 +130,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             ),
                             CheckoutProducts(
                               state: state,
-                            )
+                            ),
+                            const SizedBox(height: 20),
                           ],
                         )
                       : Row(
@@ -135,7 +140,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             Expanded(
                               flex: 1,
                               child: Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.only(right: 40),
                                 child: CheckoutInfo(state: state),
                               ),
                             ),

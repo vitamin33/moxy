@@ -13,6 +13,7 @@ import 'package:moxy/ui/screens/components/contact_textfield.dart';
 import 'package:moxy/ui/screens/components/two_radio_group.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckoutInfo extends StatelessWidget {
   final CheckoutState state;
@@ -24,20 +25,27 @@ class CheckoutInfo extends StatelessWidget {
     final cubit = context.read<CheckoutCubit>();
     return Column(
       children: [
-        ..._buildContactInfoWidget(theme, cubit),
-        ..._buildDeliveryWidget(theme, cubit),
-        ..._buildPaymentWidget(theme, cubit),
+        ..._buildContactInfoWidget(theme, cubit, context),
+        ..._buildDeliveryWidget(theme, cubit, context),
+        ..._buildPaymentWidget(theme, cubit, context),
       ],
     );
   }
 
-  List<Widget> _buildContactInfoWidget(AppTheme theme, CheckoutCubit cubit) {
+  List<Widget> _buildContactInfoWidget(
+    AppTheme theme,
+    CheckoutCubit cubit,
+    BuildContext context,
+  ) {
     return [
       Row(
         children: [
           const RoundedText(number: 1),
           const SizedBox(width: 8),
-          Text("Contact information".toUpperCase(), style: theme.largeBoltText),
+          Text(
+            AppLocalizations.of(context)!.contactInfo.toUpperCase(),
+            style: theme.largeBoltText,
+          ),
         ],
       ),
       const SizedBox(height: 30),
@@ -47,7 +55,7 @@ class CheckoutInfo extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ContactTextField(
-                labelText: 'First Name',
+                labelText: AppLocalizations.of(context)!.userFirstName,
                 controller: cubit.firstNameController,
                 onChanged: cubit.firstNameChanged,
                 hasError: state.errors.firstName != null),
@@ -56,16 +64,17 @@ class CheckoutInfo extends StatelessWidget {
           Expanded(
             flex: 1,
             child: ContactTextField(
-                labelText: 'Second Name',
-                controller: cubit.secondNameController,
-                onChanged: cubit.secondNameChanged,
-                hasError: state.errors.secondName != null),
+              labelText: AppLocalizations.of(context)!.userSecondName,
+              controller: cubit.secondNameController,
+              onChanged: cubit.secondNameChanged,
+              hasError: state.errors.secondName != null,
+            ),
           ),
         ],
       ),
       const SizedBox(height: 30),
       ContactTextField(
-          labelText: 'Phone Number',
+          labelText: AppLocalizations.of(context)!.userPhoneNumber,
           prefixText: '+38',
           controller: cubit.phoneNumberController,
           onChanged: cubit.phoneNumberChanged,
@@ -91,14 +100,18 @@ class CheckoutInfo extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildDeliveryWidget(AppTheme theme, CheckoutCubit cubit) {
+  List<Widget> _buildDeliveryWidget(
+    AppTheme theme,
+    CheckoutCubit cubit,
+    BuildContext context,
+  ) {
     return [
       const SizedBox(height: 30),
       Row(
         children: [
           const RoundedText(number: 2),
           const SizedBox(width: 8),
-          Text("Choose delivery type".toUpperCase(),
+          Text(AppLocalizations.of(context)!.chooseDeliveryType.toUpperCase(),
               style: theme.largeBoltText),
         ],
       ),
@@ -108,14 +121,14 @@ class CheckoutInfo extends StatelessWidget {
         firstOption: RadioItem(
           0,
           Image.asset(ImageAssets.novaPoshta, width: 60, height: 35),
-          'Nova Poshta',
-          'Fast delivery',
+          AppLocalizations.of(context)!.novaPoshta,
+          AppLocalizations.of(context)!.novaPoshtaAdvantage,
         ),
         secondOption: RadioItem(
           1,
           Image.asset(ImageAssets.ukrPoshta, width: 60, height: 35),
-          'Ukr Poshta',
-          'Long to wait delivery',
+          AppLocalizations.of(context)!.ukrPoshta,
+          AppLocalizations.of(context)!.ukrPoshtaDisadvantage,
         ),
         onItemSelected: (value) => {
           cubit.changeDelivery(_mapToDeliveryType(value)),
@@ -125,14 +138,21 @@ class CheckoutInfo extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildPaymentWidget(AppTheme theme, CheckoutCubit cubit) {
+  List<Widget> _buildPaymentWidget(
+    AppTheme theme,
+    CheckoutCubit cubit,
+    BuildContext context,
+  ) {
     return [
       const SizedBox(height: 30),
       Row(
         children: [
           const RoundedText(number: 3),
           const SizedBox(width: 8),
-          Text("Choose payment type".toUpperCase(), style: theme.largeBoltText),
+          Text(
+            AppLocalizations.of(context)!.choosePaymentType.toUpperCase(),
+            style: theme.largeBoltText,
+          ),
         ],
       ),
       const SizedBox(height: 16),
@@ -141,14 +161,14 @@ class CheckoutInfo extends StatelessWidget {
         firstOption: RadioItem(
           0,
           SvgPicture.asset(IconPath.fullPayment, width: 30),
-          'Full payment',
-          'No additional payment',
+          AppLocalizations.of(context)!.fullPayment,
+          AppLocalizations.of(context)!.fullPaymentAdvantage,
         ),
         secondOption: RadioItem(
           1,
           SvgPicture.asset(IconPath.cashPayment, width: 30),
-          'Cash in advance',
-          'You need to pay cash shipping fee',
+          AppLocalizations.of(context)!.cashAdvance,
+          AppLocalizations.of(context)!.cashAdvanceDisadvantage,
         ),
         onItemSelected: (value) =>
             {cubit.changePayment(_mapToPaymentType(value))},
