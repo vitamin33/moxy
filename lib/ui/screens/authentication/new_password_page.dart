@@ -115,7 +115,7 @@ Widget downText(BuildContext context, AppTheme theme) {
         style: theme.titleText,
       ),
       const SizedBox(
-        width: 2,
+        width: 4,
       ),
       InkWell(
           onTap: () {},

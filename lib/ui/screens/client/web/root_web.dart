@@ -229,9 +229,12 @@ class RootWebWidget extends HookWidget {
   }
 
   Widget _buildTabsWidget(BuildContext context, TabController controller) {
+    final theme = AppTheme.of(context)!;
+
     return SizedBox(
-      width: 350,
+      width: 430,
       child: TabBar(
+        labelStyle: theme.mediumBoltText,
         overlayColor: MaterialStateProperty.resolveWith<Color?>(
           (Set<MaterialState> states) {
             if (states.contains(MaterialState.hovered)) {
@@ -247,9 +250,12 @@ class RootWebWidget extends HookWidget {
           navigateToBranch(context, index);
         },
         tabs: [
-          Tab(text: AppLocalizations.of(context)!.newCategory),
-          Tab(text: AppLocalizations.of(context)!.bagsCategory),
-          Tab(text: AppLocalizations.of(context)!.accessoriesCategory),
+          Tab(text: AppLocalizations.of(context)!.newCategory.toUpperCase()),
+          Tab(text: AppLocalizations.of(context)!.bagsCategory.toUpperCase()),
+          Tab(
+              text: AppLocalizations.of(context)!
+                  .accessoriesCategory
+                  .toUpperCase()),
         ],
       ),
     );
@@ -281,6 +287,8 @@ class RootWebWidget extends HookWidget {
   }
 
   Drawer _buildMobileDrawer(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return Drawer(
       child: Column(
         children: [
@@ -297,7 +305,10 @@ class RootWebWidget extends HookWidget {
                     height: 26,
                     width: 24,
                   ),
-                  title: Text(AppLocalizations.of(context)!.newCategory),
+                  title: Text(
+                    AppLocalizations.of(context)!.newCategory.toUpperCase(),
+                    style: theme.largeSemiBoltText,
+                  ),
                   onTap: () {
                     navigateToBranch(context, 0);
                     Navigator.of(context).pop();
@@ -307,7 +318,10 @@ class RootWebWidget extends HookWidget {
                   leading: SvgPicture.asset(
                     IconPath.bagWeb,
                   ),
-                  title: Text(AppLocalizations.of(context)!.bagsCategory),
+                  title: Text(
+                    AppLocalizations.of(context)!.bagsCategory.toUpperCase(),
+                    style: theme.largeSemiBoltText,
+                  ),
                   onTap: () {
                     navigateToBranch(context, 1);
                     Navigator.of(context).pop();
@@ -315,8 +329,12 @@ class RootWebWidget extends HookWidget {
                 ),
                 ListTile(
                   leading: SvgPicture.asset(IconPath.accessoriesIcon),
-                  title:
-                      Text(AppLocalizations.of(context)!.accessoriesCategory),
+                  title: Text(
+                    AppLocalizations.of(context)!
+                        .accessoriesCategory
+                        .toUpperCase(),
+                    style: theme.largeSemiBoltText,
+                  ),
                   onTap: () {
                     navigateToBranch(context, 2);
                     Navigator.of(context).pop();
@@ -328,7 +346,10 @@ class RootWebWidget extends HookWidget {
                     height: 26,
                     width: 24,
                   ),
-                  title: Text(AppLocalizations.of(context)!.favorites),
+                  title: Text(
+                    AppLocalizations.of(context)!.favorites.toUpperCase(),
+                    style: theme.largeSemiBoltText,
+                  ),
                   onTap: () {
                     navigateToBranch(context, 4);
                     Navigator.of(context).pop();
@@ -340,7 +361,10 @@ class RootWebWidget extends HookWidget {
                     height: 26,
                     width: 24,
                   ),
-                  title: Text(AppLocalizations.of(context)!.profile),
+                  title: Text(
+                    AppLocalizations.of(context)!.profile.toUpperCase(),
+                    style: theme.largeSemiBoltText,
+                  ),
                   onTap: () {
                     navigateToBranch(context, 5);
                     Navigator.of(context).pop();
