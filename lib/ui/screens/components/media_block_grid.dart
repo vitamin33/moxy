@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:moxy/constant/home_media.dart';
 import 'package:moxy/domain/models/media.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:video_player/video_player.dart';
 import '../../theme/app_theme.dart';
@@ -28,19 +29,22 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
   void initState() {
     super.initState();
 
-    media = widget.mediaList.isNotEmpty
+    final mediaN = widget.mediaList.isNotEmpty
         ? widget.mediaList[_index % widget.mediaList.length]
         : Media.defaultMedia();
+    media = mediaN;
     _videoPlayerController =
         VideoPlayerController.networkUrl(Uri.parse(media.mediaUrls.first))
           ..initialize().then((_) {
+            _videoPlayerController.setVolume(0);
             _videoPlayerController.play();
             _videoPlayerController.setLooping(true);
-            _videoPlayerController.setVolume(0);
 
             if (mounted) {
               setState(() {});
             }
+          }, onError: (e) {
+            moxyPrint('Video error $e');
           });
 
     Timer.periodic(const Duration(seconds: 6), (timer) {
