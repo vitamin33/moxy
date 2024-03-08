@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/admin/pages/overview/product_stats_page.dart';
 import 'package:moxy/ui/screens/components/ads_report.dart';
+import 'package:moxy/ui/screens/components/kpis_info.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
 import '../../../../../constant/icon_path.dart';
@@ -71,6 +72,35 @@ class OverviewPage extends StatelessWidget {
                             title: AppLocalizations.of(context)!
                                 .overviewPreviusPeriod,
                             report: state.previousAdsReport),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                                AppLocalizations.of(context)!.overviewKpis,
+                                style: theme.smallSemiBoltText),
+                          ),
+                        ),
+                        KpisInfo(
+                          title: AppLocalizations.of(context)!
+                              .overviewSelectedDate,
+                          avgOrderValue: state.kpis.avgOrderValue,
+                          avgOrderProfit: state.kpis.avgOrderProfit,
+                          ltgpToCacRatio: state.kpis.ltgpToCacRatio,
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        KpisInfo(
+                          title: AppLocalizations.of(context)!
+                              .overviewPreviusPeriod,
+                          avgOrderValue: state.kpis.avgOrderValuePrev,
+                          avgOrderProfit: state.kpis.avgOrderProfitPrev,
+                          ltgpToCacRatio: state.kpis.ltgpToCacRatioPrev,
+                        ),
                         const SizedBox(
                           height: 10,
                         ),
