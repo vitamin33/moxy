@@ -43,6 +43,7 @@ NetworkDashboard _$NetworkDashboardFromJson(Map<String, dynamic> json) =>
           json['currentAdsReport'] as Map<String, dynamic>),
       previousAdsReport: AdsReportResponse.fromJson(
           json['previousAdsReport'] as Map<String, dynamic>),
+      kpis: KpisResponse.fromJson(json['kpis'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
@@ -65,6 +66,7 @@ Map<String, dynamic> _$NetworkDashboardToJson(NetworkDashboard instance) =>
       'totalProfitValueByTimeFrame': instance.totalProfitValueByTimeFrame,
       'currentAdsReport': instance.currentAdsReport,
       'previousAdsReport': instance.previousAdsReport,
+      'kpis': instance.kpis,
     };
 
 TotalByTimeFrame _$TotalByTimeFrameFromJson(Map<String, dynamic> json) =>
@@ -101,4 +103,23 @@ Map<String, dynamic> _$AdsReportResponseToJson(AdsReportResponse instance) =>
       'cpm': instance.cpm,
       'ctr': instance.ctr,
       'cpc': instance.cpc,
+    };
+
+KpisResponse _$KpisResponseFromJson(Map<String, dynamic> json) => KpisResponse(
+      avgOrderValue: json['avgOrderValue'] as String,
+      avgOrderValuePrev: json['avgOrderValuePrev'] as String,
+      avgOrderProfit: json['avgOrderProfit'] as String,
+      avgOrderProfitPrev: json['avgOrderProfitPrev'] as String,
+      ltgpToCacRatio: json['ltgpToCacRatio'] as String,
+      ltgpToCacRatioPrev: json['ltgpToCacRatioPrev'] as String,
+    );
+
+Map<String, dynamic> _$KpisResponseToJson(KpisResponse instance) =>
+    <String, dynamic>{
+      'avgOrderValue': instance.avgOrderValue,
+      'avgOrderValuePrev': instance.avgOrderValuePrev,
+      'avgOrderProfit': instance.avgOrderProfit,
+      'avgOrderProfitPrev': instance.avgOrderProfitPrev,
+      'ltgpToCacRatio': instance.ltgpToCacRatio,
+      'ltgpToCacRatioPrev': instance.ltgpToCacRatioPrev,
     };

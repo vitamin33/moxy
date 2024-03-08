@@ -22,6 +22,7 @@ class NetworkDashboard {
   List<TotalByTimeFrame> totalProfitValueByTimeFrame;
   AdsReportResponse currentAdsReport;
   AdsReportResponse previousAdsReport;
+  KpisResponse kpis;
 
   NetworkDashboard({
     required this.totalSaleValue,
@@ -42,6 +43,7 @@ class NetworkDashboard {
     required this.totalProfitValueByTimeFrame,
     required this.currentAdsReport,
     required this.previousAdsReport,
+    required this.kpis,
   });
 
   factory NetworkDashboard.fromJson(Map<String, dynamic> json) =>
@@ -89,4 +91,28 @@ class AdsReportResponse {
       _$AdsReportResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$AdsReportResponseToJson(this);
+}
+
+@JsonSerializable()
+class KpisResponse {
+  String avgOrderValue;
+  String avgOrderValuePrev;
+  String avgOrderProfit;
+  String avgOrderProfitPrev;
+  String ltgpToCacRatio;
+  String ltgpToCacRatioPrev;
+
+  KpisResponse({
+    required this.avgOrderValue,
+    required this.avgOrderValuePrev,
+    required this.avgOrderProfit,
+    required this.avgOrderProfitPrev,
+    required this.ltgpToCacRatio,
+    required this.ltgpToCacRatioPrev,
+  });
+
+  factory KpisResponse.fromJson(Map<String, dynamic> json) =>
+      _$KpisResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$KpisResponseToJson(this);
 }
