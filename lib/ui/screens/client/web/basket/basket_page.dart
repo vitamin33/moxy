@@ -18,6 +18,7 @@ import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/responsive_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BasketPage extends StatefulWidget {
   const BasketPage({super.key});
@@ -60,7 +61,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'BASKET',
+                      AppLocalizations.of(context)!.basket.toUpperCase(),
                       style: theme.headline4BoltText,
                     ),
                     if (state.isLoading)
@@ -103,7 +104,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                   height: 20,
                 ),
                 CustomButton(
-                  title: 'Chekout',
+                  title: AppLocalizations.of(context)!.checkout.toUpperCase(),
                   onTap: () {
                     Navigator.pop(
                       context,

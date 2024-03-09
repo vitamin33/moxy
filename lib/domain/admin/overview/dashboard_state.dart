@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moxy/data/models/response/dashboard_response.dart';
 import 'package:moxy/domain/copyable.dart';
 import 'package:moxy/domain/models/ads_report.dart';
+import 'package:moxy/domain/models/kpis.dart';
 
 class DashboardState implements Copyable<DashboardState> {
   final bool isLoading;
@@ -26,6 +27,7 @@ class DashboardState implements Copyable<DashboardState> {
   final AdsReport previousAdsReport;
   final String errorMessage;
   final DateTimeRange? selectedDate;
+  final Kpis kpis;
 
   DashboardState({
     required this.isLoading,
@@ -48,6 +50,7 @@ class DashboardState implements Copyable<DashboardState> {
     required this.profitFromTimeFrame,
     required this.currentAdsReport,
     required this.previousAdsReport,
+    required this.kpis,
     required this.errorMessage,
     this.selectedDate,
   });
@@ -72,6 +75,7 @@ class DashboardState implements Copyable<DashboardState> {
       profitFromTimeFrame: [],
       currentAdsReport: AdsReport.defaultReport(),
       previousAdsReport: AdsReport.defaultReport(),
+      kpis: Kpis.defaultKpis(),
       isLoading: false,
       animated: false,
       selectedDate: null,
@@ -80,58 +84,62 @@ class DashboardState implements Copyable<DashboardState> {
   }
 
   @override
-  DashboardState copyWith(
-      {bool? isLoading,
-      bool? animated,
-      String? errorMessage,
-      int? totalSale,
-      int? totalCost,
-      int? totalOrders,
-      int? totalProfit,
-      int? previousTotalSaleValue,
-      int? previousTotalCostValue,
-      int? previousTotalOrdersCount,
-      int? previousTotalProfit,
-      double? saleValuePercentageChange,
-      double? costValuePercentageChange,
-      double? ordersCountPercentageChange,
-      double? profitPercentageChange,
-      List<TotalByTimeFrame>? orderCountStats,
-      List<TotalByTimeFrame>? profitStats,
-      List<TotalByTimeFrame>? costFromTimeFrame,
-      List<TotalByTimeFrame>? profitFromTimeFrame,
-      AdsReport? currentAdsReport,
-      AdsReport? previousAdsReport,
-      DateTimeRange? selectedDate}) {
+  DashboardState copyWith({
+    bool? isLoading,
+    bool? animated,
+    String? errorMessage,
+    int? totalSale,
+    int? totalCost,
+    int? totalOrders,
+    int? totalProfit,
+    int? previousTotalSaleValue,
+    int? previousTotalCostValue,
+    int? previousTotalOrdersCount,
+    int? previousTotalProfit,
+    double? saleValuePercentageChange,
+    double? costValuePercentageChange,
+    double? ordersCountPercentageChange,
+    double? profitPercentageChange,
+    List<TotalByTimeFrame>? orderCountStats,
+    List<TotalByTimeFrame>? profitStats,
+    List<TotalByTimeFrame>? costFromTimeFrame,
+    List<TotalByTimeFrame>? profitFromTimeFrame,
+    AdsReport? currentAdsReport,
+    AdsReport? previousAdsReport,
+    Kpis? kpis,
+    DateTimeRange? selectedDate,
+  }) {
     return DashboardState(
-        totalSale: totalSale ?? this.totalSale,
-        isLoading: isLoading ?? this.isLoading,
-        animated: animated ?? this.animated,
-        totalCost: totalCost ?? this.totalCost,
-        totalProfit: totalProfit ?? this.totalProfit,
-        totalOrders: totalOrders ?? this.totalOrders,
-        previousTotalSaleValue:
-            previousTotalSaleValue ?? this.previousTotalSaleValue,
-        previousTotalCostValue:
-            previousTotalCostValue ?? this.previousTotalCostValue,
-        previousTotalOrdersCount:
-            previousTotalOrdersCount ?? this.previousTotalOrdersCount,
-        previousTotalProfit: previousTotalProfit ?? this.previousTotalProfit,
-        saleValuePercentageChange:
-            saleValuePercentageChange ?? this.saleValuePercentageChange,
-        costValuePercentageChange:
-            costValuePercentageChange ?? this.costValuePercentageChange,
-        ordersCountPercentageChange:
-            ordersCountPercentageChange ?? this.ordersCountPercentageChange,
-        profitPercentageChange:
-            profitPercentageChange ?? this.profitPercentageChange,
-        ordersFromTimeFrame: orderCountStats ?? ordersFromTimeFrame,
-        saleFromTimeFrame: profitStats ?? saleFromTimeFrame,
-        costFromTimeFrame: costFromTimeFrame ?? this.costFromTimeFrame,
-        profitFromTimeFrame: profitFromTimeFrame ?? this.profitFromTimeFrame,
-        currentAdsReport: currentAdsReport ?? this.currentAdsReport,
-        previousAdsReport: previousAdsReport ?? this.previousAdsReport,
-        selectedDate: selectedDate ?? this.selectedDate,
-        errorMessage: errorMessage ?? this.errorMessage);
+      totalSale: totalSale ?? this.totalSale,
+      isLoading: isLoading ?? this.isLoading,
+      animated: animated ?? this.animated,
+      totalCost: totalCost ?? this.totalCost,
+      totalProfit: totalProfit ?? this.totalProfit,
+      totalOrders: totalOrders ?? this.totalOrders,
+      previousTotalSaleValue:
+          previousTotalSaleValue ?? this.previousTotalSaleValue,
+      previousTotalCostValue:
+          previousTotalCostValue ?? this.previousTotalCostValue,
+      previousTotalOrdersCount:
+          previousTotalOrdersCount ?? this.previousTotalOrdersCount,
+      previousTotalProfit: previousTotalProfit ?? this.previousTotalProfit,
+      saleValuePercentageChange:
+          saleValuePercentageChange ?? this.saleValuePercentageChange,
+      costValuePercentageChange:
+          costValuePercentageChange ?? this.costValuePercentageChange,
+      ordersCountPercentageChange:
+          ordersCountPercentageChange ?? this.ordersCountPercentageChange,
+      profitPercentageChange:
+          profitPercentageChange ?? this.profitPercentageChange,
+      ordersFromTimeFrame: orderCountStats ?? ordersFromTimeFrame,
+      saleFromTimeFrame: profitStats ?? saleFromTimeFrame,
+      costFromTimeFrame: costFromTimeFrame ?? this.costFromTimeFrame,
+      profitFromTimeFrame: profitFromTimeFrame ?? this.profitFromTimeFrame,
+      currentAdsReport: currentAdsReport ?? this.currentAdsReport,
+      previousAdsReport: previousAdsReport ?? this.previousAdsReport,
+      kpis: kpis ?? this.kpis,
+      selectedDate: selectedDate ?? this.selectedDate,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moxy/ui/theme/app_theme.dart';
 
 class RootMobileWidget extends StatefulWidget {
   const RootMobileWidget({super.key});
@@ -11,19 +12,35 @@ class RootMobileWidget extends StatefulWidget {
 class _RootMobileWidgetState extends State<RootMobileWidget> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = <Widget>[
-    Text('Home Page'),
-    Text('Favorites Page'),
-    Text('Profile Page'),
-    Text('Basket Page'),
-    // Add more pages as needed
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+    final List<Widget> pages = <Widget>[
+      Text(
+        'Home Page',
+        style: theme.titleSemiBoltText,
+      ),
+      Text(
+        'Favorites Page',
+        style: theme.titleSemiBoltText,
+      ),
+      Text(
+        'Profile Page',
+        style: theme.titleSemiBoltText,
+      ),
+      Text(
+        'Basket Page',
+        style: theme.titleSemiBoltText,
+      ),
+      // Add more pages as needed
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Moxy Store'),
+        title: Text(
+          'Moxy Store',
+          style: theme.titleSemiBoltText,
+        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.search),
@@ -88,7 +105,7 @@ class _RootMobileWidgetState extends State<RootMobileWidget> {
           ),
           Expanded(
             child: Center(
-              child: _pages.elementAt(_selectedIndex),
+              child: pages.elementAt(_selectedIndex),
             ),
           ),
         ],

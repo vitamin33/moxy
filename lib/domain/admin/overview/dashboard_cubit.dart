@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:moxy/domain/mappers/product_stats_mapper.dart';
 import 'package:moxy/domain/models/ads_report.dart';
+import 'package:moxy/domain/models/kpis.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../data/repositories/overview_repository.dart';
@@ -45,6 +46,7 @@ class DashboardCubit extends Cubit<DashboardState> {
           profitFromTimeFrame: success.totalProfitValueByTimeFrame,
           currentAdsReport: currentReport,
           previousAdsReport: prevReport,
+          kpis: Kpis.fromResponse(success.kpis),
           isLoading: false,
           animated: true,
         ));

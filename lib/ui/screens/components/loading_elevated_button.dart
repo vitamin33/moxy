@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoadingElevatedButton extends StatelessWidget {
   const LoadingElevatedButton(
@@ -20,9 +21,7 @@ class LoadingElevatedButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: isLoadingState ? AppTheme.gray : AppTheme.textColor,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0), // Rounded corners
-        ),
+        shape: const BeveledRectangleBorder(borderRadius: BorderRadius.zero),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -30,8 +29,8 @@ class LoadingElevatedButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Checkout',
-              style: theme.headline2BoltText,
+              AppLocalizations.of(context)!.checkout.toUpperCase(),
+              style: theme.titleBoltText,
             ),
             const SizedBox(width: 20),
             isLoadingState
@@ -39,9 +38,8 @@ class LoadingElevatedButton extends StatelessWidget {
                     height: 12,
                     width: 12,
                     child: CircularProgressIndicator(
-                      backgroundColor:
-                          Colors.white, // Change the color as needed
-                      strokeWidth: 2.0, // Adjust the thickness as needed
+                      backgroundColor: Colors.white,
+                      strokeWidth: 2.0,
                     ),
                   )
                 : const SizedBox(),

@@ -11,6 +11,7 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CheckoutProducts extends StatelessWidget {
   final double productRowHeight = 150;
@@ -25,15 +26,15 @@ class CheckoutProducts extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ..._buildYourOrderWidget(theme, cubit, isMobile),
-        ..._buildCheckoutArea(theme, cubit),
-        ..._buildWarningsAndTerms(theme, cubit),
+        ..._buildYourOrderWidget(theme, cubit, isMobile, context),
+        ..._buildCheckoutArea(theme, cubit, context),
+        ..._buildWarningsAndTerms(theme, cubit, context),
       ],
     );
   }
 
-  List<Widget> _buildYourOrderWidget(
-      AppTheme theme, CheckoutCubit cubit, bool isMobile) {
+  List<Widget> _buildYourOrderWidget(AppTheme theme, CheckoutCubit cubit,
+      bool isMobile, BuildContext context) {
     List<Widget> productWidgets = [];
     int rowCount = state.basket.basketItems.length;
 
@@ -45,7 +46,8 @@ class CheckoutProducts extends StatelessWidget {
     return [
       Align(
         alignment: Alignment.centerLeft,
-        child: Text('Your order'.toUpperCase(), style: theme.largeBoltText),
+        child: Text(AppLocalizations.of(context)!.yourOrder.toUpperCase(),
+            style: theme.largeBoltText),
       ),
       const SizedBox(height: 30),
       ...productWidgets,
@@ -53,10 +55,11 @@ class CheckoutProducts extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildCheckoutArea(AppTheme theme, CheckoutCubit cubit) {
+  List<Widget> _buildCheckoutArea(
+      AppTheme theme, CheckoutCubit cubit, BuildContext context) {
     String freeShippingText = state.isFreeShipping
-        ? 'You have free shipping.'
-        : 'In order to have free shipping you need to order more for ';
+        ? AppLocalizations.of(context)!.youHaveFreeShipping
+        : AppLocalizations.of(context)!.toHaveFreeShipping;
 
     return [
       Divider(
@@ -68,7 +71,7 @@ class CheckoutProducts extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Total value to pay'.toUpperCase(),
+              AppLocalizations.of(context)!.totalValueToPay.toUpperCase(),
               style: theme.largeBoltText,
             ),
             Text(
@@ -92,7 +95,7 @@ class CheckoutProducts extends StatelessWidget {
             ? null
             : '${state.basket.amountForFreeShipping()} $uah',
         additionalText:
-            'For free shipping you need to order at least for ${state.basket.freeShippingThreshold} $uah.',
+            '${AppLocalizations.of(context)!.forFreeShippinYouNeed} ${state.basket.freeShippingThreshold} $uah.',
       ),
 
       // ),
@@ -106,17 +109,21 @@ class CheckoutProducts extends StatelessWidget {
     ];
   }
 
-  List<Widget> _buildWarningsAndTerms(AppTheme theme, CheckoutCubit cubit) {
+  List<Widget> _buildWarningsAndTerms(
+    AppTheme theme,
+    CheckoutCubit cubit,
+    BuildContext context,
+  ) {
     return [
       const SizedBox(height: 10),
       Text.rich(
         TextSpan(
           children: [
             TextSpan(
-                text: 'Ordering on MOXY.UA you agreed with ',
+                text: AppLocalizations.of(context)!.orderingYouAgreed,
                 style: theme.smallText),
             TextSpan(
-              text: 'Privacy And Policy',
+              text: AppLocalizations.of(context)!.privacyAndPolicy,
               style: theme.smallBoltText.copyWith(
                 color: AppTheme.pinkDark,
                 decoration: TextDecoration.underline,
@@ -129,10 +136,11 @@ class CheckoutProducts extends StatelessWidget {
       Text.rich(
         TextSpan(
           children: [
-            TextSpan(text: 'Warning: ', style: theme.smallBoltText),
             TextSpan(
-                text:
-                    'Your order is keeping for 5 days in post warehouse. On 6th day it will be returned back to the sender.',
+                text: AppLocalizations.of(context)!.warningWithDots,
+                style: theme.smallBoltText),
+            TextSpan(
+                text: AppLocalizations.of(context)!.yourOrderIsKeeping,
                 style: theme.smallText),
           ],
         ),

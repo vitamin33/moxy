@@ -10,43 +10,42 @@ class GuestProfileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = AppTheme.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Text(
-              AppLocalizations.of(context)!.profilePageWelcomeGuest,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(AppLocalizations.of(context)!.profilePageWelcomeGuest,
+                style: theme.headline4SemiBoltText),
             const SizedBox(height: 20),
             Text(
               AppLocalizations.of(context)!.profilePageContinueExploring,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-              ),
+              style: theme.largeSemiBoltText,
             ),
             const SizedBox(height: 30),
             // List of advantages
             ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 150),
+              contentPadding: const EdgeInsets.all(16),
               leading: const Icon(Icons.monetization_on, color: AppTheme.black),
-              title:
-                  Text(AppLocalizations.of(context)!.profilePageCashbackOffer),
+              title: Text(
+                AppLocalizations.of(context)!.profilePageCashbackOffer,
+                style: theme.headlineSemiBoltText,
+              ),
             ),
 
             ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 150),
+              contentPadding: const EdgeInsets.all(16),
               leading: const Icon(Icons.star, color: AppTheme.black),
               title: Text(
-                  AppLocalizations.of(context)!.profilePageSpecialPropositions),
+                AppLocalizations.of(context)!.profilePageSpecialPropositions,
+                style: theme.headlineSemiBoltText,
+              ),
             ),
+
             const SizedBox(height: 20),
             CustomButton(
               title: AppLocalizations.of(context)!
