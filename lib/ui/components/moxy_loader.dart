@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
+
 class MoxyLoader extends StatefulWidget {
   const MoxyLoader({
     Key? key,
@@ -61,7 +62,8 @@ class _MoxyLoaderState extends State<MoxyLoader>
       child: Padding(
         padding: const EdgeInsets.all(3.0),
         child: Center(
-          child: SvgPicture.asset(
+          child:
+              SvgPicture.asset(
             IconPath.moxyLogoWeb,
             width: _iconSize,
             color: AppTheme.white,

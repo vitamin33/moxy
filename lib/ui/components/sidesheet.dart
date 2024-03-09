@@ -134,7 +134,7 @@ class SideSheet {
                 height: double.infinity,
                 width: isMobile
                     ? MediaQuery.of(context).size.width
-                    : MediaQuery.of(context).size.width / 2,
+                    : MediaQuery.of(context).size.width / 1.7,
                 child: body),
           ),
         );

@@ -12,8 +12,8 @@ import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
@@ -55,6 +55,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
           child: Padding(
             padding: const EdgeInsets.all(40),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,8 +65,8 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                       style: theme.headline4BoltText,
                     ),
                     if (state.isLoading)
-                      const MoxyLoader(
-                        iconSize: 30,
+                      LottieLoader(
+                        size: 40,
                       ),
                     InkWell(
                       onTap: () {
@@ -86,12 +87,9 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                   ],
                 ),
                 const SizedBox(height: 40),
-                SizedBox(
-                  width: double.infinity,
-                  height: 350,
-                  child: _buildBasketItemList(
-                      cubit, state.basket, theme, isMobile),
-                ),
+                Expanded(
+                    child: _buildBasketItemList(
+                        cubit, state.basket, theme, isMobile)),
                 const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,26 +171,22 @@ Widget _buildProductItem(
                 Expanded(
                   flex: 1,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        '$productName $color',
-                        style: theme.mediumBoltText,
-                      ),
-                      if (!isMobile)
-                        Text(
-                          '${item.product.salePrice} uah',
+                      Expanded(
+                        child: Text(
+                          '$productName $color',
+                          maxLines: 3,
                           style: theme.largeBoltText,
                         ),
+                      ),
+                      Text(
+                        '${item.product.salePrice} uah',
+                        style: theme.largeBoltText,
+                      ),
                     ],
                   ),
                 ),
-                if (isMobile)
-                  Text(
-                    '${item.product.salePrice} uah',
-                    style: theme.largeBoltText,
-                  ),
                 Expanded(
                   flex: 1,
                   child: Row(
@@ -203,41 +197,31 @@ Widget _buildProductItem(
                     ],
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      QuantityPicker(
-                        quantity: item.dimension.quantity,
-                        onPlus: () {
-                          cubit.addQuantityOfProduct(item);
-                        },
-                        onMinus: () {
-                          cubit.removeQuantityOfProduct(item);
-                        },
-                      ),
-                      InkWell(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: isMobile
-                              ? const Icon(
-                                  Icons.delete,
-                                  color: AppTheme.black,
-                                )
-                              : Text(
-                                  'Remove',
-                                  style: theme.titleText.copyWith(
-                                      decoration: TextDecoration.underline),
-                                ),
-                        ),
-                        onTap: () {
-                          cubit.removeProductFromBasket(item);
-                        },
-                      ),
-                    ],
-                  ),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    QuantityPicker(
+                      quantity: item.dimension.quantity,
+                      onPlus: () {
+                        cubit.addQuantityOfProduct(item);
+                      },
+                      onMinus: () {
+                        cubit.removeQuantityOfProduct(item);
+                      },
+                    ),
+                    InkWell(
+                      child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(
+                            Icons.delete,
+                            color: AppTheme.black,
+                          )),
+                      onTap: () {
+                        cubit.removeProductFromBasket(item);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

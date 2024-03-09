@@ -71,7 +71,7 @@ class _BagsProductPageState extends State<BagsProductPage> {
                         ],
                       ),
                     ),
-                    if (basketState.isLoading)
+                    if (state.isLoading)
                       const Positioned(
                         top: 0,
                         left: 0,

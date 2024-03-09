@@ -5,9 +5,9 @@ import 'package:lottie/lottie.dart';
 import 'package:moxy/domain/client/search/search_cubit.dart';
 import 'package:moxy/domain/client/search/search_effect.dart';
 import 'package:moxy/domain/client/search/search_state.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
+import 'package:moxy/ui/screens/components/shimer_product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
@@ -59,69 +59,111 @@ class _SearchPageState extends State<SearchPage> {
         builder: (context, state) {
           final cubit = context.read<SearchCubit>();
           return Scaffold(
-              backgroundColor: AppTheme.white,
-              body: state.isLoading
-                  ? const Center(child: MoxyLoader(iconSize: 50))
-                  : Padding(
-                      padding: const EdgeInsets.all(AppTheme.defaultPadding),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppTheme.cardPadding,
-                            ),
-                            child: Text(
-                              'Search',
-                              style: theme.bigTitleBoltText,
-                            ),
+            backgroundColor: AppTheme.white,
+            body: state.isLoading
+                ? _buildSearchShimmerList(theme, crossAxisCount, spacing, cubit)
+                : Padding(
+                    padding: const EdgeInsets.all(AppTheme.defaultPadding),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: AppTheme.cardPadding,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(AppTheme.cardPadding),
-                            child: TextField(
-                              decoration: const InputDecoration(
-                                  label: Text('Search Product'),
-                                  border: OutlineInputBorder()),
-                              onChanged: (value) {
-                                cubit.searchProduct(value);
-                              },
-                            ),
+                          child: Text(
+                            'Search',
+                            style: theme.bigTitleBoltText,
                           ),
-                          state.searchProduct.isNotEmpty
-                              ? Expanded(
-                                  child: AlignedGridView.count(
-                                      itemCount: state.searchProduct.length,
-                                      crossAxisCount: crossAxisCount,
-                                      crossAxisSpacing: spacing,
-                                      mainAxisSpacing: spacing,
-                                      itemBuilder: (context, index) {
-                                        return ProductCard(
-                                          product: state.searchProduct[index],
-                                          onChangeFavorites:
-                                              cubit.toggleFavoriteForProduct,
-                                        );
-                                      }),
-                                )
-                              : Center(
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                          height: 260,
-                                          width: 200,
-                                          child: Lottie.asset(
-                                              'assets/anim/empty_list.json')),
-                                      Text(
-                                        'Не знайдено продуктів',
-                                        style: theme.largeSemiBoltText,
-                                      )
-                                    ],
-                                  ),
-                                )
-                        ],
-                      ),
-                    ));
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(AppTheme.cardPadding),
+                          child: TextField(
+                            decoration: const InputDecoration(
+                                label: Text('Search Product'),
+                                border: OutlineInputBorder()),
+                            onChanged: (value) {
+                              cubit.searchProduct(value);
+                            },
+                          ),
+                        ),
+                        state.searchProduct.isNotEmpty
+                            ? Expanded(
+                                child: AlignedGridView.count(
+                                    itemCount: state.searchProduct.length,
+                                    crossAxisCount: crossAxisCount,
+                                    crossAxisSpacing: spacing,
+                                    mainAxisSpacing: spacing,
+                                    itemBuilder: (context, index) {
+                                      return ProductCard(
+                                        product: state.searchProduct[index],
+                                        onChangeFavorites:
+                                            cubit.toggleFavoriteForProduct,
+                                      );
+                                    }),
+                              )
+                            : Center(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        height: 260,
+                                        width: 200,
+                                        child: Lottie.asset(
+                                            'assets/anim/empty_list.json')),
+                                    Text(
+                                      'Не знайдено продуктів',
+                                      style: theme.largeSemiBoltText,
+                                    )
+                                  ],
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+          );
         },
       ),
     );
   }
+}
+
+_buildSearchShimmerList(
+    AppTheme theme, int crossAxisCount, double spacing, SearchCubit cubit) {
+  return Padding(
+    padding: const EdgeInsets.all(AppTheme.defaultPadding),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.cardPadding,
+          ),
+          child: Text(
+            'Search',
+            style: theme.bigTitleBoltText,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(AppTheme.cardPadding),
+          child: TextField(
+            decoration: const InputDecoration(
+                label: Text('Search Product'), border: OutlineInputBorder()),
+            onChanged: (value) {
+              cubit.searchProduct(value);
+            },
+          ),
+        ),
+        Expanded(
+          child: AlignedGridView.count(
+              itemCount: 8,
+              crossAxisCount: crossAxisCount,
+              crossAxisSpacing: spacing,
+              mainAxisSpacing: spacing,
+              itemBuilder: (context, index) {
+                return const ShimmerProductCard();
+              }),
+        )
+      ],
+    ),
+  );
 }

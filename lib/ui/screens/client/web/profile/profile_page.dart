@@ -7,7 +7,6 @@ import 'package:moxy/domain/client/profile/profile_state.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/components/custom_button.dart';
-import 'package:moxy/ui/components/moxy_loader.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/profile_scope.dart';
 import 'package:moxy/ui/screens/client/web/guest_profile.dart';
@@ -15,6 +14,7 @@ import 'package:moxy/ui/screens/client/web/profile/pages/profile_adress.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_contact_info.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.dart';
 import 'package:moxy/ui/screens/components/footer.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -85,9 +85,6 @@ class _ProfilePageState extends State<ProfilePage>
       ],
       child: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
-          final profile = ProfileScope.of(context);
-          bool isGuest = profile == null || profile.isGuest();
-
           return Scaffold(
             body: Container(
               height: MediaQuery.of(context).size.height,
@@ -96,16 +93,10 @@ class _ProfilePageState extends State<ProfilePage>
                 child: Column(
                   children: [
                     SizedBox(
-
-                      height: isGuest ? 400 : 600,
                       child: AnimatedSwitcher(
-                        duration: const Duration(
-                            milliseconds: 400), // Adjust the duration as needed
-                        child: state.isLoading
-                            ? const MoxyLoader(
-                                iconSize: 40,
-                              )
-                            : ProfileTabPage(isGuest: isGuest),
+                        duration: const Duration(milliseconds: 400),
+                        child:
+                            state.isLoading ? LottieLoader() : ProfileTabPage(),
                       ),
                     ),
                     const PromoContainer(),
@@ -133,9 +124,9 @@ class ProfileTabPage extends StatelessWidget {
     ProfileAdress(),
   ];
 
-  final bool isGuest;
-
-  ProfileTabPage({super.key, required this.isGuest});
+  ProfileTabPage({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -145,33 +136,39 @@ class ProfileTabPage extends StatelessWidget {
         final theme = AppTheme.of(context)!;
         final router = context.read<RootRouterCubit>();
         final isMobile = ResponsiveUtil.isMobile(context);
+        final profile = ProfileScope.of(context);
         return Padding(
             padding: EdgeInsets.all(isMobile ? 0.0 : 24.0),
-            child:isGuest?const GuestProfileWidget() :Column(
-              children: [
-                isMobile
-                    ? _selectedTabMobile(cubit, state)
-                    : SizedBox(
-                        height: contentHeight,
-                        child: Row(
-                          children: [
-                            // Drawer Menu
-                            _drawerMenu(
-                                context, cubit, state, theme, router, isMobile),
-                            // Selected Tab Content
-                            _selectedTabContent(cubit, state, isMobile),
-                          ],
-                        ),
-                      ),
-                const SizedBox(height: 30),
-                AnimatedOpacity(
-                  opacity: state.showSaveButton ? 1.0 : 0.0,
-                  duration: const Duration(milliseconds: 300),
-                  child: _buildSaveButton(cubit),
-                ),
-                const SizedBox(height: 50),
-              ],
-            ));
+            child: profile != null
+                ? profile.isGuest()
+                    ? const GuestProfileWidget()
+                    : Column(
+                        children: [
+                          isMobile
+                              ? _selectedTabMobile(cubit, state)
+                              : SizedBox(
+                                  height: contentHeight,
+                                  child: Row(
+                                    children: [
+                                      // Drawer Menu
+                                      _drawerMenu(context, cubit, state, theme,
+                                          router, isMobile),
+                                      // Selected Tab Content
+                                      _selectedTabContent(
+                                          cubit, state, isMobile),
+                                    ],
+                                  ),
+                                ),
+                          const SizedBox(height: 30),
+                          AnimatedOpacity(
+                            opacity: state.showSaveButton ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 300),
+                            child: _buildSaveButton(cubit),
+                          ),
+                          const SizedBox(height: 50),
+                        ],
+                      )
+                : LottieLoader());
       },
     );
   }
@@ -220,7 +217,7 @@ class ProfileTabPage extends StatelessWidget {
                 },
               ),
               tabAlignment: TabAlignment.fill,
-              labelPadding:const EdgeInsets.all(15),
+              labelPadding: const EdgeInsets.all(15),
               controller: cubit.tabController,
               indicatorColor: AppTheme.black,
               labelColor: AppTheme.black,
@@ -243,7 +240,7 @@ class ProfileTabPage extends StatelessWidget {
               height: 600,
               width: double.infinity,
               child: TabBarView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 controller: cubit.tabController,
                 children: [
                   for (final pageWidget in tabPages) pageWidget,
@@ -370,7 +367,8 @@ class ProfileTabPage extends StatelessWidget {
                             cubit.signOut();
                             context.go(RouterProvider.loginPath());
                           },
-                          child:  Text(AppLocalizations.of(context)!.profilePageLogOut,
+                          child: Text(
+                              AppLocalizations.of(context)!.profilePageLogOut,
                               style: theme.largeSemiBoltText
                                   .copyWith(color: AppTheme.gray)),
                         ),
@@ -412,33 +410,5 @@ class ProfileTabPage extends StatelessWidget {
         break;
     }
     context.go(path);
-  }
-
-  Widget _buildUserProfile(BuildContext context, ProfileState state, bool isMobile) {
-    final cubit = context.read<ProfileCubit>();
-    final theme = AppTheme.of(context)!;
-    final router = context.read<RootRouterCubit>();
-    return Column(
-      children: [
-        SizedBox(
-          height: contentHeight,
-          child: Row(
-            children: [
-              // Drawer Menu
-              _drawerMenu(context, cubit, state, theme, router,isMobile),
-              // Selected Tab Content
-              _selectedTabContent(cubit, state,isMobile),
-            ],
-          ),
-        ),
-        const SizedBox(height: 30),
-        AnimatedOpacity(
-          opacity: state.showSaveButton ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 300),
-          child: _buildSaveButton(cubit),
-        ),
-        const SizedBox(height: 50),
-      ],
-    );
   }
 }

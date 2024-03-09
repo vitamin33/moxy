@@ -17,7 +17,7 @@ import 'checkout_info.dart';
 import 'checkout_products.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({Key? key}) : super(key: key);
+  const CheckoutPage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -87,6 +87,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             backgroundColor: Colors.transparent,
             body: ScrollableSection(
               content: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // alignment: Alignment.topLeft,
                   // child:
@@ -149,7 +150,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               flex: 1,
                               child: Align(
                                 alignment: Alignment.topLeft,
-                                child: CheckoutProducts(state: state),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: CheckoutProducts(state: state),
+                                ),
                               ),
                             ),
                           ],

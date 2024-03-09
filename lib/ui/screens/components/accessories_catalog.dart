@@ -5,6 +5,7 @@ import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_cubit
 import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_effect.dart';
 import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
 
 class AccessoriesCatalog extends StatefulWidget {
@@ -44,7 +45,7 @@ class _AccessoriesCatalogState extends State<AccessoriesCatalog> {
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: state.isLoading
-              ? const CircularProgressIndicator()
+              ?  LottieLoader()
               : AlignedGridView.count(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,

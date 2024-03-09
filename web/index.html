@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!--
+
+<head>
+  <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
 
@@ -14,119 +15,93 @@
     This is a placeholder for base href that will be replaced by the value of
     the `--base-href` argument provided to `flutter build`.
   -->
-    <base href="$FLUTTER_BASE_HREF" />
+  <base href="$FLUTTER_BASE_HREF" />
 
-    <meta charset="UTF-8" />
-    <meta
-      content="IE=Edge"
-      http-equiv="X-UA-Compatible"
-    />
-    <meta
-      name="description"
-      content="A new Flutter project."
-    />
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description" content="A new Flutter project." />
 
-    <!-- iOS meta tags & icons -->
-    <meta
-      name="apple-mobile-web-app-capable"
-      content="yes"
-    />
-    <meta
-      name="apple-mobile-web-app-status-bar-style"
-      content="black"
-    />
-    <meta
-      name="apple-mobile-web-app-title"
-      content="moxy"
-    />
-    <link
-      rel="apple-touch-icon"
-      href="icons/Icon-192.png"
-    />
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="moxy" />
+  <link rel="apple-touch-icon" href="assets/icons/moxy_icon.png" />
 
-    <!-- Favicon -->
-    <link
-      rel="icon"
-      type="image/png"
-      href="favicon.png"
-    />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/icons/moxy_icon.png" />
 
-    <title>moxy</title>
-    <link
-      rel="manifest"
-      href="manifest.json"
-    />
+  <title>moxy</title>
+  <link rel="manifest" href="manifest.json" />
 
-    <style>
-      #lottie {
-        width: 50vw; /* 50% of the viewport width */
-        height: 50vw; /* 50% of the viewport width, you can also use vh for viewport height */
-      }
-      /* Ensure the custom Lottie loader is above all other content */
-      #lottie-animation {
-        z-index: 1000;
-      }
+  <style>
+    #lottie {
+      width: 50vw;
+      /* 50% of the viewport width */
+      height: 50vw;
+      /* 50% of the viewport width, you can also use vh for viewport height */
+    }
 
-      /* Attempt to hide common elements used for loaders */
-      .loader, #loader, .progress, .progress-bar {
-        display: none !important;
-      }
-    </style>
+    /* Ensure the custom Lottie loader is above all other content */
+    #lottie-animation {
+      z-index: 1000;
+    }
 
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      var serviceWorkerVersion = null;
-    </script>
-    <!-- This script adds the flutter initialization JS code -->
-    <script
-      src="flutter.js"
-      defer
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js"
-      defer
-    ></script>
-  </head>
+    /* Attempt to hide common elements used for loaders */
+    .loader,
+    #loader,
+    .progress,
+    .progress-bar {
+      display: none !important;
+    }
+  </style>
 
-  <body>
-    <div
-      id="lottie-animation"
-      style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #FFFFFF;"
-    >
-      <div id="lottie"></div>
-      <!-- Adjust size as needed -->
-    </div>
-    <script>
-      window.addEventListener('load', function (ev) {
-        var lottieAnimation = bodymovin.loadAnimation({
-          container: document.getElementById('lottie'), // the container for the animation
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path: 'icons/default_loader.json' // the path to the animation json
-        });
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    var serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.4/lottie.min.js" defer></script>
+</head>
 
-        // Function to stop and hide the animation
-        function stopAndHideLottieAnimation() {
-          lottieAnimation.stop(); // Stop the animation
-          document.getElementById('lottie-animation').style.display = 'none'; // Hide the animation container
-        }
-
-        // Download main.dart.js
-        _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
-          onEntrypointLoaded: function (engineInitializer) {
-            engineInitializer.initializeEngine().then(function (appRunner) {
-              appRunner.runApp();
-
-              // Stop and hide the Lottie animation once the app is ready
-              stopAndHideLottieAnimation();
-            });
-          }
-        });
+<body>
+  <div id="lottie-animation"
+    style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; align-items: center; background-color: #FFFFFF;">
+    <div id="lottie"></div>
+    <!-- Adjust size as needed -->
+  </div>
+  <script>
+    window.addEventListener('load', function (ev) {
+      var lottieAnimation = bodymovin.loadAnimation({
+        container: document.getElementById('lottie'), // the container for the animation
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'icons/default_loader.json' // the path to the animation json
       });
-    </script>
-  </body>
+
+      // Function to stop and hide the animation
+      function stopAndHideLottieAnimation() {
+        lottieAnimation.stop(); // Stop the animation
+        document.getElementById('lottie-animation').style.display = 'none'; // Hide the animation container
+      }
+
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: function (engineInitializer) {
+          engineInitializer.initializeEngine().then(function (appRunner) {
+            appRunner.runApp();
+
+            // Stop and hide the Lottie animation once the app is ready
+            stopAndHideLottieAnimation();
+          });
+        }
+      });
+    });
+  </script>
+</body>
+
 </html>

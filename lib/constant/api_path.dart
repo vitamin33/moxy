@@ -42,3 +42,10 @@ const String subscribeLeadUrl = '/profile/subscribe';
 // MONO
 const String monoCreateInvoiceUrl =
     "https://api.monobank.ua/api/merchant/invoice/create";
+
+// INSTAGRAM
+const String instagramMoxyUrl = 'https://www.instagram.com/moxy_ua/';
+
+//TOKTOK
+const String tiktokMoxyUrl =
+    'https://www.tiktok.com/@moxy.ua?_t=8k12CcaIuLV&_r=1';

@@ -27,6 +27,7 @@ class Routes {
   static const productDetails = 'product';
   static const orders = 'orders';
   static const addresses = 'address';
+  static const menu = 'menu';
   // profile
   static const profile = 'profile';
   static const profileInfo = 'info';

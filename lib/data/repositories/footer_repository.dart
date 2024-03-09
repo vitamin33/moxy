@@ -1,3 +1,4 @@
+import 'package:moxy/constant/menu_title.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 import '../../services/get_it.dart';
@@ -13,6 +14,21 @@ class FooterRepository {
       return Result.success(result);
     } catch (e) {
       return Result.error(Exception('$e'));
+    }
+  }
+
+   MenuTitle parseToMenuTitle(String menuTitle) {
+    switch (menuTitle) {
+      case 'delivery':
+        return MenuTitle.delivery;
+      case 'change':
+        return MenuTitle.change;
+      case 'questions':
+        return MenuTitle.questions;
+      case 'privacy':
+        return MenuTitle.privacy;
+      default:
+        return MenuTitle.delivery;
     }
   }
 }

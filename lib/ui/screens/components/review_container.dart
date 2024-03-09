@@ -5,6 +5,7 @@ import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/review/review_cubit.dart';
 import 'package:moxy/domain/review/review_state.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
+import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/review_card.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -23,7 +24,7 @@ class ReviewContainer extends StatelessWidget {
           final isMobile = ResponsiveUtil.isMobile(context);
 
           return state.isLoading
-              ? const CircularProgressIndicator()
+              ? LottieLoader()
               : Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Column(

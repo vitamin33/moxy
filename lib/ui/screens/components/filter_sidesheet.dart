@@ -39,177 +39,176 @@ class _FilterSideSheetState extends State<FilterSideSheet> {
     return Padding(
       padding: const EdgeInsets.all(40.0),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Filter', style: theme.bigTitleBoltText),
-                    const Divider(color: AppTheme.gray),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: AppTheme.greyLigth,
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SvgPicture.asset(
-                              IconPath.closeDrawer,
-                            ),
-                          )),
-                    ),
-                  ],
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Filter', style: theme.bigTitleBoltText),
+                const Divider(color: AppTheme.gray),
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: AppTheme.greyLigth,
+                          borderRadius: BorderRadius.circular(15)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SvgPicture.asset(
+                          IconPath.closeDrawer,
+                        ),
+                      )),
                 ),
-              ),
-              Column(
-                children: [
-                  CustomAccordion(
-                      title: 'COLOR',
-                      contentChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (ProductColor color in widget.filterColors)
-                            InkWell(
-                              onTap: () {
-                                _checkColorByName(color.name);
-                              },
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                      key: ValueKey(color.name),
-                                      side: const BorderSide(
-                                          color: AppTheme.gray, width: 0.5),
-                                      hoverColor: AppTheme.white,
-                                      fillColor:
-                                          MaterialStateProperty.resolveWith(
-                                              (states) {
-                                        if (!states
-                                            .contains(MaterialState.selected)) {
-                                          return AppTheme.white;
-                                        }
-                                        return AppTheme.gray;
-                                      }),
-                                      checkColor: AppTheme.white,
-                                      activeColor: AppTheme.gray,
-                                      value: color.isSelected,
-                                      onChanged: (onChanged) {
-                                        _checkColorByName(color.name);
-                                      }),
-                                  Text(
-                                    color.name,
-                                    style: theme.titleText
-                                        .copyWith(color: AppTheme.black),
-                                  )
-                                ],
-                              ),
-                            )
-                        ],
-                      )),
-                  const Divider(
-                    color: AppTheme.gray,
-                  ),
-                  CustomAccordion(
-                      title: 'PRICE',
-                      contentChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (FilterPrice price in widget.filterPrice)
-                            InkWell(
-                              onTap: () {
-                                _checkFilterPriceByName(price.name);
-                              },
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                      key: ValueKey(price.name),
-                                      side: const BorderSide(
-                                          color: AppTheme.gray, width: 0.5),
-                                      hoverColor: AppTheme.white,
-                                      fillColor:
-                                          MaterialStateProperty.resolveWith(
-                                              (states) {
-                                        if (!states
-                                            .contains(MaterialState.selected)) {
-                                          return AppTheme.white;
-                                        }
-                                        return AppTheme.gray;
-                                      }),
-                                      checkColor: AppTheme.white,
-                                      activeColor: AppTheme.gray,
-                                      value: price.isSelected,
-                                      onChanged: (onChanged) {
-                                        _checkFilterPriceByName(price.name);
-                                      }),
-                                  Text(
-                                    price.name,
-                                    style: theme.titleText
-                                        .copyWith(color: AppTheme.black),
-                                  )
-                                ],
-                              ),
-                            )
-                        ],
-                      )),
-                  const Divider(
-                    color: AppTheme.gray,
-                  ),
-                  CustomAccordion(
-                      title: 'SORT BY',
-                      contentChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          for (SortBy time in widget.sortBy)
-                            InkWell(
-                              onTap: () {
-                                _checkSortByByName(time.name);
-                              },
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                      key: ValueKey(time.name),
-                                      side: const BorderSide(
-                                          color: AppTheme.gray, width: 0.5),
-                                      hoverColor: AppTheme.white,
-                                      fillColor:
-                                          MaterialStateProperty.resolveWith(
-                                              (states) {
-                                        if (!states
-                                            .contains(MaterialState.selected)) {
-                                          return AppTheme.white;
-                                        }
-                                        return AppTheme.gray;
-                                      }),
-                                      checkColor: AppTheme.white,
-                                      activeColor: AppTheme.gray,
-                                      value: time.isSelected,
-                                      onChanged: (onChanged) {
-                                        _checkSortByByName(time.name);
-                                      }),
-                                  Text(
-                                    time.name,
-                                    style: theme.titleText
-                                        .copyWith(color: AppTheme.black),
-                                  )
-                                ],
-                              ),
-                            )
-                        ],
-                      )),
-                  const Divider(
-                    color: AppTheme.gray,
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
+          Expanded(
+            child: ListView(
+              children: [
+                CustomAccordion(
+                    title: 'COLOR',
+                    contentChild: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (ProductColor color in widget.filterColors)
+                          InkWell(
+                            onTap: () {
+                              _checkColorByName(color.name);
+                            },
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                    key: ValueKey(color.name),
+                                    side: const BorderSide(
+                                        color: AppTheme.gray, width: 0.5),
+                                    hoverColor: AppTheme.white,
+                                    fillColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) {
+                                      if (!states
+                                          .contains(MaterialState.selected)) {
+                                        return AppTheme.white;
+                                      }
+                                      return AppTheme.gray;
+                                    }),
+                                    checkColor: AppTheme.white,
+                                    activeColor: AppTheme.gray,
+                                    value: color.isSelected,
+                                    onChanged: (onChanged) {
+                                      _checkColorByName(color.name);
+                                    }),
+                                Text(
+                                  color.name,
+                                  style: theme.titleText
+                                      .copyWith(color: AppTheme.black),
+                                )
+                              ],
+                            ),
+                          )
+                      ],
+                    )),
+                const Divider(
+                  color: AppTheme.gray,
+                ),
+                CustomAccordion(
+                    title: 'PRICE',
+                    contentChild: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (FilterPrice price in widget.filterPrice)
+                          InkWell(
+                            onTap: () {
+                              _checkFilterPriceByName(price.name);
+                            },
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                    key: ValueKey(price.name),
+                                    side: const BorderSide(
+                                        color: AppTheme.gray, width: 0.5),
+                                    hoverColor: AppTheme.white,
+                                    fillColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) {
+                                      if (!states
+                                          .contains(MaterialState.selected)) {
+                                        return AppTheme.white;
+                                      }
+                                      return AppTheme.gray;
+                                    }),
+                                    checkColor: AppTheme.white,
+                                    activeColor: AppTheme.gray,
+                                    value: price.isSelected,
+                                    onChanged: (onChanged) {
+                                      _checkFilterPriceByName(price.name);
+                                    }),
+                                Text(
+                                  price.name,
+                                  style: theme.titleText
+                                      .copyWith(color: AppTheme.black),
+                                )
+                              ],
+                            ),
+                          )
+                      ],
+                    )),
+                const Divider(
+                  color: AppTheme.gray,
+                ),
+                CustomAccordion(
+                    title: 'SORT BY',
+                    contentChild: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (SortBy time in widget.sortBy)
+                          InkWell(
+                            onTap: () {
+                              _checkSortByByName(time.name);
+                            },
+                            child: Row(
+                              children: [
+                                Checkbox(
+                                    key: ValueKey(time.name),
+                                    side: const BorderSide(
+                                        color: AppTheme.gray, width: 0.5),
+                                    hoverColor: AppTheme.white,
+                                    fillColor:
+                                        MaterialStateProperty.resolveWith(
+                                            (states) {
+                                      if (!states
+                                          .contains(MaterialState.selected)) {
+                                        return AppTheme.white;
+                                      }
+                                      return AppTheme.gray;
+                                    }),
+                                    checkColor: AppTheme.white,
+                                    activeColor: AppTheme.gray,
+                                    value: time.isSelected,
+                                    onChanged: (onChanged) {
+                                      _checkSortByByName(time.name);
+                                    }),
+                                Text(
+                                  time.name,
+                                  style: theme.titleText
+                                      .copyWith(color: AppTheme.black),
+                                )
+                              ],
+                            ),
+                          )
+                      ],
+                    )),
+                const Divider(
+                  color: AppTheme.gray,
+                ),
+              ],
+            ),
+          ),
+          Divider(),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: CustomButton(
