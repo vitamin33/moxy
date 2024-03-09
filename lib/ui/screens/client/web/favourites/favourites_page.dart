@@ -11,8 +11,8 @@ import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/profile_scope.dart';
 import 'package:moxy/ui/screens/client/web/guest_profile.dart';
-import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
+import 'package:moxy/ui/screens/components/shimer_product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
@@ -66,6 +66,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                if (state.isLoading) LinearProgressIndicator(),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Text(
@@ -80,8 +81,8 @@ class _FavouritesPageState extends State<FavouritesPage> {
                         ? FavoritesContent(
                             state: state, cubit: _favouritesCubit)
                         : const GuestProfileWidget()
-                    : Center(child: LottieLoader()),
-                const Footer()
+                    : buildFavoritesShimmerList(context),
+                const Footer(),
               ],
             ),
           ),
@@ -102,9 +103,7 @@ class FavoritesContent extends StatelessWidget {
     return AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
         child: state.isLoading
-            ? Center(
-                child: LottieLoader(),
-              )
+            ? buildFavoritesShimmerList(context)
             : buildFavoritesList(state, isMobile, context));
   }
 
@@ -129,22 +128,38 @@ class FavoritesContent extends StatelessWidget {
     }
     bool isMobile = ResponsiveUtil.isMobile(context);
 
-
     return AnimationLimiter(
-        child: AlignedGridView.count(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: state.favoriteProducts.length,
-      crossAxisCount: isMobile ? 2 : 4,
-      crossAxisSpacing: 5,
-      mainAxisSpacing: 5,
-      itemBuilder: (context, index) {
-        final product = state.favoriteProducts[index];
-        return ProductCard(
-          product: product,
-          onChangeFavorites: cubit.removeFromFavorites,
-        );
-      },
-    ));
+      child: AlignedGridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: state.favoriteProducts.length,
+        crossAxisCount: isMobile ? 2 : 4,
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5,
+        itemBuilder: (context, index) {
+          final product = state.favoriteProducts[index];
+          return ProductCard(
+            product: product,
+            onChangeFavorites: cubit.removeFromFavorites,
+          );
+        },
+      ),
+    );
   }
+}
+
+Widget buildFavoritesShimmerList(BuildContext context) {
+  bool isMobile = ResponsiveUtil.isMobile(context);
+
+  return AlignedGridView.count(
+    physics: const NeverScrollableScrollPhysics(),
+    shrinkWrap: true,
+    itemCount: 8,
+    crossAxisCount: isMobile ? 2 : 4,
+    crossAxisSpacing: 5,
+    mainAxisSpacing: 5,
+    itemBuilder: (context, index) {
+      return const ShimmerProductCard();
+    },
+  );
 }

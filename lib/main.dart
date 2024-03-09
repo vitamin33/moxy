@@ -64,4 +64,3 @@ void initNavigationSercie() {
   final navService = locate<NavigationService>();
   navService.router = RouterProvider.router;
 }
- 

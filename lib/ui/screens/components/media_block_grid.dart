@@ -31,6 +31,7 @@ class _MediaBlockGridState extends State<MediaBlockGrid> {
     media = widget.mediaList.isNotEmpty
         ? widget.mediaList[_index % widget.mediaList.length]
         : Media.defaultMedia();
+
     _videoPlayerController =
         VideoPlayerController.networkUrl(Uri.parse(media.mediaUrls.first))
           ..initialize().then((_) {
