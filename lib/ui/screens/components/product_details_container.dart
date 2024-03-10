@@ -46,7 +46,10 @@ class _ProductDetailsContainerState extends State<ProductDetailsContainer> {
         final isMobile = ResponsiveUtil.isMobile(context);
 
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: isMobile ? AppTheme.defaultPaddingMobile : 24,
+          ),
           child: isMobile
               ? Column(
                   children: [
@@ -58,8 +61,14 @@ class _ProductDetailsContainerState extends State<ProductDetailsContainer> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const ImageCarousel(),
-                    _AboutProductDetails(state: state, cubit: cubit)
+                    const Expanded(
+                      flex: 4,
+                      child: ImageCarousel(),
+                    ),
+                    Expanded(
+                      flex: 5,
+                      child: _AboutProductDetails(state: state, cubit: cubit),
+                    ),
                   ],
                 ),
         );
@@ -87,12 +96,13 @@ class _AboutProductDetails extends StatelessWidget {
     final cubit = context.read<ProductDetailsCubit>();
     final isMobile = ResponsiveUtil.isMobile(context);
     final basketCubit = context.read<BasketCubit>();
+    final rightPanelWidth = MediaQuery.of(context).size.width * 0.4;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
             state.productDetails.product.name.toUpperCase(),
@@ -120,9 +130,13 @@ class _AboutProductDetails extends StatelessWidget {
                 'Color:',
                 style: theme.headlineSemiBoltText,
               ),
-              SizedBox(
-                width: 400,
-                height: 50,
+              Container(
+                constraints: BoxConstraints(
+                  maxHeight: 50,
+                  minHeight: 50,
+                  maxWidth: rightPanelWidth,
+                  minWidth: 200,
+                ),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   children: [
@@ -157,9 +171,8 @@ class _AttributesInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
 
-    return SizedBox(
-      width: 500,
-      child: Column(children: [
+    return Column(
+      children: [
         const Divider(
           color: AppTheme.black,
         ),
@@ -256,7 +269,7 @@ class _AttributesInfo extends StatelessWidget {
         const Divider(
           color: AppTheme.black,
         ),
-      ]),
+      ],
     );
   }
 }
@@ -272,37 +285,40 @@ class _ButtonsArea extends StatelessWidget {
     final cubit = context.read<ProductDetailsCubit>();
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (!isMobile)
           Row(
             children: [
-              Row(
-                children: [
-                  QuantityPicker(
-                    quantity: state.productDetails.selectedDimension.quantity,
-                    onPlus: () {
-                      cubit.addQuantityOfProduct();
-                    },
-                    onMinus: () {
-                      cubit.removeQuantityOfProduct();
-                    },
-                  ),
-                ],
+              Expanded(
+                flex: 4,
+                child: QuantityPicker(
+                  quantity: state.productDetails.selectedDimension.quantity,
+                  onPlus: () {
+                    cubit.addQuantityOfProduct();
+                  },
+                  onMinus: () {
+                    cubit.removeQuantityOfProduct();
+                  },
+                ),
               ),
               const SizedBox(width: 5),
-              CustomButton(
-                outline: true,
-                title: 'ADD TO CART',
-                onTap: () {
-                  context.read<BasketCubit>().addProductDetailsToBasket(
-                      productDetails: state.productDetails);
-                },
-                buttonWidth: isMobile ? 450 : 375,
+              Expanded(
+                flex: 7,
+                child: OutlineStateButton(
+                  outline: true,
+                  title: 'ADD TO CART',
+                  onTap: () {
+                    context.read<BasketCubit>().addProductDetailsToBasket(
+                        productDetails: state.productDetails);
+                  },
+                  buttonWidth: isMobile ? 450 : 375,
+                ),
               ),
             ],
           ),
         if (isMobile)
-          CustomButton(
+          OutlineStateButton(
             outline: true,
             title: 'ADD TO CART',
             onTap: () {
@@ -312,7 +328,7 @@ class _ButtonsArea extends StatelessWidget {
             buttonWidth: isMobile ? 450 : 375,
           ),
         const SizedBox(height: 10),
-        CustomButton(
+        OutlineStateButton(
           title: 'BUY IT NOW',
           onTap: () {
             basketCubit.addProductDetailsToBasket(
@@ -320,7 +336,7 @@ class _ButtonsArea extends StatelessWidget {
               navigateToCheckout: true,
             );
           },
-          buttonWidth: 500,
+          buttonWidth: isMobile ? 450 : 500,
         ),
       ],
     );

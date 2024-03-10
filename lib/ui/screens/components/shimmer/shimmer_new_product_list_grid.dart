@@ -20,20 +20,22 @@ class ShimmerNewProductListGrid extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: StaggeredGrid.count(
-            crossAxisCount: isMobile ? 1 : 4,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 10,
-            children: [
-              if (isMobile) const ShimmerMediaBlockGrid(),
-              if (bigBlockLeading && !isMobile) const ShimmerMediaBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-              if (!bigBlockLeading && !isMobile) const ShimmerMediaBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-            ],
-          )),
+            child: StaggeredGrid.count(
+              crossAxisCount: isMobile ? 1 : 4,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 10,
+              children: [
+                if (isMobile) const ShimmerMediaBlockGrid(),
+                if (bigBlockLeading && !isMobile) const ShimmerMediaBlockGrid(),
+                const ShimmerSmallBlockGrid(),
+                const ShimmerSmallBlockGrid(),
+                if (!bigBlockLeading && !isMobile)
+                  const ShimmerMediaBlockGrid(),
+                const ShimmerSmallBlockGrid(),
+                const ShimmerSmallBlockGrid(),
+              ],
+            ),
+          ),
         ],
       ),
     );

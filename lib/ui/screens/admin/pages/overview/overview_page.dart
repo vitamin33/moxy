@@ -327,7 +327,7 @@ class OverviewPage extends StatelessWidget {
               child: Text('Product Statistics: '),
             ),
             Expanded(
-              child: CustomButton(
+              child: OutlineStateButton(
                 onTap: () {
                   showDialog(
                       context: context,

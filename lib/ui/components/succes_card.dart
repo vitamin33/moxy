@@ -47,7 +47,7 @@ class SuccessCard extends StatelessWidget {
                     const SizedBox(
                       height: 40,
                     ),
-                    CustomButton(
+                    OutlineStateButton(
                       buttonWidth: 250,
                       title: titleButton,
                       onTap: () {

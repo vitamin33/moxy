@@ -103,7 +103,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                 const SizedBox(
                   height: 20,
                 ),
-                CustomButton(
+                OutlineStateButton(
                   title: AppLocalizations.of(context)!.checkout.toUpperCase(),
                   onTap: () {
                     Navigator.pop(

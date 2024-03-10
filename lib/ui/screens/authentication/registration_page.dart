@@ -140,7 +140,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               AppTheme.smallVerticalSpacing,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: CustomButton(
+                child: OutlineStateButton(
                   state: isLoading ? ButtonState.loading : ButtonState.idle,
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Далі',

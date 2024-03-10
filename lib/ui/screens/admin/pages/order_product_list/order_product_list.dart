@@ -84,7 +84,7 @@ class OrderProductList extends StatelessWidget {
                             );
                           },
                         )),
-              CustomButton(
+              OutlineStateButton(
                 title: AppLocalizations.of(context)!.choose,
                 onTap: () {
                   cubit.productsSelected();

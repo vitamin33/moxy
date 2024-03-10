@@ -64,7 +64,7 @@ class VerificationPage extends StatelessWidget {
                   children: []),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: CustomButton(
+                child: OutlineStateButton(
                   state: isLoading ? ButtonState.loading : ButtonState.idle,
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити код',

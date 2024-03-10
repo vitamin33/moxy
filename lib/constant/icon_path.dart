@@ -53,4 +53,5 @@ class IconPath {
       "assets/icons/textfield_arrow_web.svg";
   static const String newIcon = "assets/icons/new_icon.svg";
   static const String accessoriesIcon = "assets/icons/accessories_icon.svg";
+  static const String noImage = "assets/icons/no_image.svg";
 }

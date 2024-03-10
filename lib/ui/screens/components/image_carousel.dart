@@ -37,6 +37,9 @@ class _ImageCarouselState extends State<ImageCarousel> {
         final isMobile = ResponsiveUtil.isMobile(context);
         double imageWidth = isMobile ? 1.1 : 2.2;
         double height = isMobile ? 370 : 550;
+        bool hasImages = state.allImages.isNotEmpty;
+
+        double widgetWidth = MediaQuery.sizeOf(context).width / imageWidth;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -45,126 +48,131 @@ class _ImageCarouselState extends State<ImageCarousel> {
                 return Stack(
                   children: [
                     SizedBox(
-                      width: MediaQuery.sizeOf(context).width / imageWidth,
+                      width: widgetWidth,
                       height: height,
-                      child: PageView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: _pageController,
-                          itemCount: state.allImages.length,
-                          onPageChanged: (newPage) {
-                            setState(() {
-                              activePage = newPage;
-                            });
-                          },
-                          itemBuilder: (context, pagePosition) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                    state.allImages[pagePosition].imagePath,
+                      child: hasImages
+                          ? PageView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              controller: _pageController,
+                              itemCount: state.allImages.length,
+                              onPageChanged: (newPage) {
+                                setState(() {
+                                  activePage = newPage;
+                                });
+                              },
+                              itemBuilder: (context, pagePosition) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        state.allImages[pagePosition].imagePath,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
-                          }),
+                                );
+                              },
+                            )
+                          : SvgPicture.asset(
+                              IconPath.noImage,
+                              width: widgetWidth,
+                              height: height,
+                            ),
                     ),
-                    Positioned(
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      child: Column(
-                        children: [
-                          isHovered
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: InkWell(
+                    hasImages && isHovered
+                        ? Positioned(
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          if (_pageController.hasClients) {
+                                            _pageController.previousPage(
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              curve: Curves.easeIn,
+                                            );
+                                          }
+                                        });
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.greyLigth,
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                        ),
+                                        height: 50,
+                                        width: 50,
+                                        child: Center(
+                                          child: SvgPicture.asset(
+                                            IconPath.backArrow,
+                                            width: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    )),
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: AppTheme.greyLigth,
+                                          borderRadius:
+                                              BorderRadius.circular(50)),
+                                      height: 50,
+                                      width: 50,
+                                      child: GestureDetector(
                                           onTap: () {
                                             setState(() {
                                               if (_pageController.hasClients) {
-                                                _pageController.previousPage(
-                                                  duration: const Duration(
-                                                      milliseconds: 300),
-                                                  curve: Curves.easeIn,
-                                                );
+                                                _pageController.nextPage(
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    curve: Curves.easeIn);
                                               }
                                             });
                                           },
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              color: AppTheme.greyLigth,
-                                              borderRadius:
-                                                  BorderRadius.circular(50),
+                                          child: Center(
+                                            child: SvgPicture.asset(
+                                              IconPath.forwardArrow,
+                                              width: 20,
                                             ),
-                                            height: 50,
-                                            width: 50,
-                                            child: Center(
-                                              child: SvgPicture.asset(
-                                                IconPath.backArrow,
-                                                width: 20,
-                                              ),
-                                            ),
-                                          ),
-                                        )),
-                                    Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: AppTheme.greyLigth,
-                                              borderRadius:
-                                                  BorderRadius.circular(50)),
-                                          height: 50,
-                                          width: 50,
-                                          child: GestureDetector(
-                                              onTap: () {
-                                                setState(() {
-                                                  if (_pageController
-                                                      .hasClients) {
-                                                    _pageController.nextPage(
-                                                        duration:
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    300),
-                                                        curve: Curves.easeIn);
-                                                  }
-                                                });
-                                              },
-                                              child: Center(
-                                                child: SvgPicture.asset(
-                                                  IconPath.forwardArrow,
-                                                  width: 20,
-                                                ),
-                                              )),
-                                        )),
-                                  ],
-                                )
-                              : Container(),
-                          const SizedBox(height: 200),
-                          SizedBox(
-                              height: 50,
-                              child: Center(
-                                child: SmoothPageIndicator(
-                                  controller: _pageController,
-                                  count: state.allImages.length,
-                                  onDotClicked: (index) {
-                                    _pageController.animateToPage(index,
-                                        duration:
-                                            const Duration(milliseconds: 300),
-                                        curve: Curves.easeIn);
-                                  },
-                                  effect: const ExpandingDotsEffect(
-                                    dotHeight: 6,
-                                    dotWidth: 10,
-                                  ),
-                                ),
-                              )),
-                        ],
+                                          )),
+                                    )),
+                              ],
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                    Positioned(
+                      bottom: 10,
+                      left: 0,
+                      right: 0,
+                      child: SizedBox(
+                        height: 50,
+                        child: Center(
+                          child: SmoothPageIndicator(
+                            controller: _pageController,
+                            count: state.allImages.length,
+                            onDotClicked: (index) {
+                              _pageController.animateToPage(index,
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeIn);
+                            },
+                            effect: const ExpandingDotsEffect(
+                              dotHeight: 6,
+                              dotWidth: 10,
+                            ),
+                          ),
+                        ),
                       ),
-                    )
+                    ),
                   ],
                 );
               },
