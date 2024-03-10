@@ -47,7 +47,7 @@ class _ProductDetailsContainerState extends State<ProductDetailsContainer> {
 
         return Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 8.0,
+            vertical: 16.0,
             horizontal: isMobile ? AppTheme.defaultPaddingMobile : 24,
           ),
           child: isMobile
@@ -135,7 +135,7 @@ class _AboutProductDetails extends StatelessWidget {
                   maxHeight: 50,
                   minHeight: 50,
                   maxWidth: rightPanelWidth,
-                  minWidth: 200,
+                  minWidth: 100,
                 ),
                 child: ListView(
                   scrollDirection: Axis.horizontal,
