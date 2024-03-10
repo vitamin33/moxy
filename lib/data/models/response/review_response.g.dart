@@ -18,6 +18,24 @@ Map<String, dynamic> _$AllReviewResponseToJson(AllReviewResponse instance) =>
       'allReview': instance.allReview,
     };
 
+ProductReviewsResponse _$ProductReviewsResponseFromJson(
+        Map<String, dynamic> json) =>
+    ProductReviewsResponse(
+      (json['allReview'] as List<dynamic>?)
+          ?.map((e) => NetworkReview.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      json['avgRating'] as String,
+      json['totalVotes'] as int,
+    );
+
+Map<String, dynamic> _$ProductReviewsResponseToJson(
+        ProductReviewsResponse instance) =>
+    <String, dynamic>{
+      'allReview': instance.allReview,
+      'avgRating': instance.avgRating,
+      'totalVotes': instance.totalVotes,
+    };
+
 NetworkReview _$NetworkReviewFromJson(Map<String, dynamic> json) =>
     NetworkReview(
       id: json['_id'] as String?,

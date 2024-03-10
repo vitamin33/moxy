@@ -1,9 +1,8 @@
 import 'package:moxy/data/models/response/review_response.dart';
 import 'package:moxy/domain/models/review.dart';
 
-
 class ReviewMapper {
-  List<Review> mapToReview(List<NetworkReview> networkReviews) {
+  List<Review> mapToReviews(List<NetworkReview> networkReviews) {
     return networkReviews.map(
       (p) {
         return Review(
@@ -14,5 +13,14 @@ class ReviewMapper {
             avatarImageUrl: p.avatarImageUrl);
       },
     ).toList();
+  }
+
+  ReviewStats mapToReviewStats(ProductReviewsResponse networkReviwStats) {
+    final reviews = mapToReviews(networkReviwStats.allReview ?? []);
+    return ReviewStats(
+      reviews: reviews,
+      avgRating: networkReviwStats.avgRating,
+      totalVotes: networkReviwStats.totalVotes,
+    );
   }
 }

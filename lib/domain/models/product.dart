@@ -53,23 +53,22 @@ class Product implements Copyable<Product> {
   }
 
   @override
-  Product copyWith({
-    String? id,
-    String? name,
-    String? idName,
-    String? category,
-    String? description,
-    double? costPriceInUsd,
-    double? discountPrice,
-    double? costPrice,
-    double? salePrice,
-    List<Dimension>? dimensions,
-    bool? forSale,
-    bool? isFavorite,
-    ProductAttributes? attributes,
-    String? createdAt,
-    String? updatedAt
-  }) {
+  Product copyWith(
+      {String? id,
+      String? name,
+      String? idName,
+      String? category,
+      String? description,
+      double? costPriceInUsd,
+      double? discountPrice,
+      double? costPrice,
+      double? salePrice,
+      List<Dimension>? dimensions,
+      bool? forSale,
+      bool? isFavorite,
+      ProductAttributes? attributes,
+      String? createdAt,
+      String? updatedAt}) {
     return Product(
       id: id ?? this.id,
       name: name ?? this.name,
@@ -126,6 +125,8 @@ class ProductAttributes implements Copyable<ProductAttributes> {
     this.producer,
     this.style,
   });
+
+  String get sizeString => '${widthInCm}x${heightInCm}x$lengthInCm';
 
   static ProductAttributes defaultAttributes() {
     return ProductAttributes(

@@ -66,7 +66,8 @@ class ProductMapper {
 
   ProductDetails mapToProductDetails(NetworkProductDetails network) {
     List<NetworkDimension> dimens = network.dimensions ?? [];
-    List<NetworkProductAdantages?> productAdvantages = network.productAdvantages ?? [] ;
+    List<NetworkProductAdantages?> productAdvantages =
+        network.productAdvantages ?? [];
     return ProductDetails(
         product: Product(
           id: network.id,
@@ -87,8 +88,9 @@ class ProductMapper {
           isFavorite: network.isFavorite ?? false,
           attributes: mapToAttributes(network.attributes),
         ),
-        dimension: Dimension.defaultDimension(),
-        productAdvantages: productAdvantages.map((e) => mapToProductAdvantages(e!)).toList());
+        selectedDimension: Dimension.defaultDimension(),
+        productAdvantages:
+            productAdvantages.map((e) => mapToProductAdvantages(e!)).toList());
   }
 
   Dimension mapToDimension(NetworkDimension network) {
@@ -144,6 +146,7 @@ class ProductMapper {
       images: dimen.images.map((e) => e.imagePath).toList(),
     );
   }
+
   NetworkDimension mapToNetworkDimensionWithOneQuantity(Dimension dimen) {
     return NetworkDimension(
       color: mapToNetworkColor(dimen.color),
@@ -366,9 +369,9 @@ class ProductMapper {
 
   ProductAdvantages mapToProductAdvantages(
       NetworkProductAdantages networkProductAdvantages) {
-      return ProductAdvantages(
-          header: networkProductAdvantages.header,
-          imageUrl: networkProductAdvantages.imageUrl,
-          description: networkProductAdvantages.description ?? '');
+    return ProductAdvantages(
+        header: networkProductAdvantages.header,
+        imageUrl: networkProductAdvantages.imageUrl,
+        description: networkProductAdvantages.description ?? '');
   }
 }

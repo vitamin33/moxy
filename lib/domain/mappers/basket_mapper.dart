@@ -104,7 +104,7 @@ class BasketMapper {
     return NetworkAddOrChange(
       product: NetworkChangeBasketDimen(
         productId: item.product.id!,
-        dimension: productMapper.mapToNetworkDimension(item.dimension),
+        dimension: productMapper.mapToNetworkDimension(item.selectedDimension),
       ),
     );
   }
@@ -113,8 +113,8 @@ class BasketMapper {
     return NetworkAddOrChange(
       product: NetworkChangeBasketDimen(
         productId: product.id!,
-        dimension:
-            productMapper.mapToNetworkDimensionWithOneQuantity(product.dimensions.first),
+        dimension: productMapper
+            .mapToNetworkDimensionWithOneQuantity(product.dimensions.first),
       ),
     );
   }

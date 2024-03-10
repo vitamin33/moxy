@@ -37,6 +37,7 @@ const String getAttributesUrl = '/attributes';
 const String getFavoriteUrl = '/favorites';
 const String getHomeMediaUrl = '/settings/media/home';
 const String getReviewsUrl = '/reviews';
+const String getReviewProductStatsUrl = '/reviews/stats';
 const String subscribeLeadUrl = '/profile/subscribe';
 
 // MONO

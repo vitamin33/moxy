@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:moxy/ui/screens/components/shimer_product.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimer_product.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:shimmer/shimmer.dart';
 

@@ -7,7 +7,7 @@ import 'package:moxy/domain/client/search/search_effect.dart';
 import 'package:moxy/domain/client/search/search_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
-import 'package:moxy/ui/screens/components/shimer_product.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimer_product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 

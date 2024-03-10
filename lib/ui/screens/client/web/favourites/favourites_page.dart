@@ -12,7 +12,7 @@ import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/profile_scope.dart';
 import 'package:moxy/ui/screens/client/web/guest_profile.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
-import 'package:moxy/ui/screens/components/shimer_product.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimer_product.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
