@@ -174,7 +174,7 @@ Widget positionProductButton(CreateProductState state, CreateProductCubit cubit,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         state.activePage != 0
-            ? CustomButton(
+            ? OutlineStateButton(
                 title: AppLocalizations.of(context)!.previusButton,
                 onTap: cubit.moveToPreviustPage,
                 buttonWidth: 150,
@@ -183,7 +183,7 @@ Widget positionProductButton(CreateProductState state, CreateProductCubit cubit,
             : Container(
                 width: 150,
               ),
-        CustomButton(
+        OutlineStateButton(
           title: state.activePage != 1
               ? AppLocalizations.of(context)!.nextButton
               : AppLocalizations.of(context)!.addButton,

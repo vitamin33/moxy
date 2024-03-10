@@ -211,7 +211,7 @@ class _FilterSideSheetState extends State<FilterSideSheet> {
           Divider(),
           Padding(
             padding: const EdgeInsets.all(15.0),
-            child: CustomButton(
+            child: OutlineStateButton(
               title: 'View Results',
               onTap: () {
                 widget.onApplyFilters(

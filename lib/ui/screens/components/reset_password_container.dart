@@ -39,7 +39,7 @@ class ResetPasswordContainer extends StatelessWidget {
               const SizedBox(height: AppTheme.elementSpacing),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: CustomButton(
+                child: OutlineStateButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити Email',
                   onTap: () {

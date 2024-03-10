@@ -15,6 +15,24 @@ class AllReviewResponse {
 }
 
 @JsonSerializable()
+class ProductReviewsResponse {
+  List<NetworkReview>? allReview;
+  String avgRating;
+  int totalVotes;
+
+  ProductReviewsResponse(
+    this.allReview,
+    this.avgRating,
+    this.totalVotes,
+  );
+
+  factory ProductReviewsResponse.fromJson(Map<String, dynamic> json) =>
+      _$ProductReviewsResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ProductReviewsResponseToJson(this);
+}
+
+@JsonSerializable()
 class NetworkReview {
   @JsonKey(name: '_id')
   String? id;

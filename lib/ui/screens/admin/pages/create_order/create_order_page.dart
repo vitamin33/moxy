@@ -140,7 +140,7 @@ Widget positionOrderButton(CreateOrderState state, CreateOrderCubit cubit,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           state.activePage != 0
-              ? CustomButton(
+              ? OutlineStateButton(
                   title: AppLocalizations.of(context)!.previusButton,
                   onTap: cubit.moveToPreviustPage,
                   buttonWidth: 150,
@@ -149,7 +149,7 @@ Widget positionOrderButton(CreateOrderState state, CreateOrderCubit cubit,
               : Container(
                   width: 150,
                 ),
-          CustomButton(
+          OutlineStateButton(
             title: state.activePage != 3
                 ? AppLocalizations.of(context)!.nextButton
                 : AppLocalizations.of(context)!.addButton,

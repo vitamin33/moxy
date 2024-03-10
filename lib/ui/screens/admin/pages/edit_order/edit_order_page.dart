@@ -311,7 +311,7 @@ Widget positionEditOrderButton(EditOrderState state, EditOrderCubit cubit,
     padding: const EdgeInsets.symmetric(horizontal: 12.0),
     child: SizedBox(
         height: buttonsHeight,
-        child: CustomButton(
+        child: OutlineStateButton(
           title: 'Edit',
           onTap: () {
             cubit.editOrder();

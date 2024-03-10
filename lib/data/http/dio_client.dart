@@ -277,4 +277,19 @@ class DioClient {
       rethrow;
     }
   }
+
+  Future<ProductReviewsResponse> fetchReviewStatsForProduct(
+      String productId) async {
+    try {
+      Response response = await dio.get(
+        '$getReviewProductStatsUrl/$productId',
+      );
+      final data = response.data;
+
+      return ProductReviewsResponse.fromJson(data);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      rethrow;
+    }
+  }
 }

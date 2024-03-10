@@ -13,3 +13,7 @@ class BasketApiRequestFailed implements UiEffect {
 class OpenBasketSideSheet implements UiEffect {
   OpenBasketSideSheet();
 }
+
+class NavigateToCheckout implements UiEffect {
+  NavigateToCheckout();
+}

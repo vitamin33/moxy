@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/client/promo/promo_cubit.dart';
 import 'package:moxy/ui/screens/components/promo_page.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimmer_promo.dart';
 
 import '../../../domain/client/promo/promo_state.dart';
 
@@ -43,6 +44,10 @@ class _PromoContainerState extends State<PromoContainer> {
       child: BlocConsumer<PromoCubit, PromoState>(
         listener: (context, state) {},
         builder: (context, state) {
+          if (state.isLoading) {
+            return const ShimmerPromo();
+          }
+
           final cubit = context.read<PromoCubit>();
 
           final pages = state.allPromo.map((e) {

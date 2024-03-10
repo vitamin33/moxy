@@ -17,4 +17,15 @@ class ReviewRepository {
       rethrow;
     }
   }
+
+  Future<Result<ProductReviewsResponse, Exception>> getReviewsStatsForProduct(
+      String productId) async {
+    try {
+      final result = await client.fetchReviewStatsForProduct(productId);
+      return Result.success(result);
+    } catch (e, stack) {
+      moxyPrint(stack);
+      return Result.success(ProductReviewsResponse([], 'n/a', 0));
+    }
+  }
 }

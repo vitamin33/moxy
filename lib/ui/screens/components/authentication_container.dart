@@ -83,7 +83,7 @@ class AuthenticationContainer extends StatelessWidget {
               const SizedBox(height: AppTheme.cardPadding),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                child: CustomButton(
+                child: OutlineStateButton(
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: AppLocalizations.of(context)!.login,
                   state: state.state is Loading

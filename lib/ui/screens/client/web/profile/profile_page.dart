@@ -383,7 +383,7 @@ class ProfileTabPage extends StatelessWidget {
   Widget _buildSaveButton(ProfileCubit cubit) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 100),
-      child: CustomButton(
+      child: OutlineStateButton(
         title: 'Зберегти',
         onTap: () {
           if (cubit.validateFields()) {

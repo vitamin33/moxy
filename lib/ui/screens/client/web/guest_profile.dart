@@ -47,7 +47,7 @@ class GuestProfileWidget extends StatelessWidget {
             ),
 
             const SizedBox(height: 20),
-            CustomButton(
+            OutlineStateButton(
               title: AppLocalizations.of(context)!
                   .profilePageRegisterAndGetCashback,
               onTap: () {

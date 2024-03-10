@@ -168,7 +168,7 @@ class CreateUserPage extends StatelessWidget {
       CreateUserState state, CreateUserCubit cubit, context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6.0),
-      child: CustomButton(
+      child: OutlineStateButton(
         buttonWidth: 200,
         title: AppLocalizations.of(context)!.createUser,
         state: state.isLoading ? ButtonState.loading : ButtonState.idle,

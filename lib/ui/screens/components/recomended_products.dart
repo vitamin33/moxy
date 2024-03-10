@@ -6,6 +6,7 @@ import 'package:moxy/domain/client/recomended_product/recomended_product_cubit.d
 import 'package:moxy/domain/client/recomended_product/recomended_products_state.dart';
 import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimmer_horizontal_list.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
@@ -19,12 +20,16 @@ class RecomendedProducts extends StatelessWidget {
       child: BlocConsumer<RecomendedProductCubit, RecomendedProductState>(
         listener: (context, state) {},
         builder: (context, state) {
+          if (state.isLoading) {
+            return const ShimmerHorizontalList();
+          }
+
           final cubit = context.read<RecomendedProductCubit>();
           final theme = AppTheme.of(context)!;
           final isMobile = ResponsiveUtil.isMobile(context);
 
           return state.isLoading
-              ?  LottieLoader()
+              ? LottieLoader()
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(

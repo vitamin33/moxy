@@ -179,7 +179,10 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     });
   }
 
-  Future<bool> addProductDetailsToBasket(ProductDetails productDetails) async {
+  Future<bool> addProductDetailsToBasket({
+    required ProductDetails productDetails,
+    bool navigateToCheckout = false,
+  }) async {
     emit(state.copyWith(isLoading: true));
     bool isProductInBasket = false;
     NetworkAddOrChange item =
@@ -193,12 +196,14 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
             basketItems: [
               BasketItem(
                   product: productDetails.product,
-                  dimension: productDetails.dimension)
+                  dimension: productDetails.selectedDimension)
             ],
           ),
         ),
       );
-      isProductInBasket = true;
+      if (navigateToCheckout) {
+        emitEffect(NavigateToCheckout());
+      }
     }, (error) {
       emit(state.copyWith(isLoading: false));
       emitEffect(BasketApiRequestFailed(

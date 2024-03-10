@@ -56,7 +56,7 @@ class ReviewCubit extends Cubit<ReviewState> {
       emit(state.copyWith(isLoading: true));
       final result = await reviewRepository.getReviews();
       result.when((success) {
-        final allReviewsList = reviewMapper.mapToReview(success);
+        final allReviewsList = reviewMapper.mapToReviews(success);
         emit(state.copyWith(reviewsList: allReviewsList, isLoading: false));
       }, (error) {
         emit(state.copyWith(errorMessage: 'Failed allReviewsList'));

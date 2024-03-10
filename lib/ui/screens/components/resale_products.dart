@@ -6,6 +6,7 @@ import 'package:moxy/domain/client/resale_product/resale_product_cubit.dart';
 import 'package:moxy/domain/client/resale_product/resale_products_state.dart';
 import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimmer_horizontal_list.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
@@ -19,12 +20,16 @@ class ResaleProducts extends StatelessWidget {
       child: BlocConsumer<ResaleProductCubit, ResaleProductState>(
         listener: (context, state) {},
         builder: (context, state) {
+          if (state.isLoading) {
+            return const ShimmerHorizontalList();
+          }
+
           final cubit = context.read<ResaleProductCubit>();
           final theme = AppTheme.of(context)!;
           final isMobile = ResponsiveUtil.isMobile(context);
 
           return state.isLoading
-              ?  LottieLoader()
+              ? LottieLoader()
               : Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(

@@ -56,7 +56,7 @@ class _FilterOrderPageState extends State<FilterOrderPage> {
                     const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: CustomButton(
+                      child: OutlineStateButton(
                         title: AppLocalizations.of(context)!.filterButton,
                         onTap: () {
                           cubit.saveFilterParams();

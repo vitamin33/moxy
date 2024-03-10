@@ -5,7 +5,7 @@ import 'package:moxy/domain/client/new_product_list/new_product_list_cubit.dart'
 import 'package:moxy/domain/client/new_product_list/new_product_list_effects.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/new_product_list_grid.dart';
-import 'package:moxy/ui/screens/components/shimmer_new_product_list_grid.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimmer_new_product_list_grid.dart';
 
 import '../../../domain/client/new_product_list/new_product_list_state.dart';
 
@@ -68,11 +68,8 @@ class _NewProductListState extends State<NewProductList> {
                         ),
                       ],
                     ),
-                    
                   ),
-                 
           );
-          
         },
       ),
     );

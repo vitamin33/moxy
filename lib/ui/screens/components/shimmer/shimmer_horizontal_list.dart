@@ -1,41 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:moxy/ui/screens/components/shimer_product.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimer_product.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ShimmerNewProductListGrid extends StatelessWidget {
-  final bool bigBlockLeading;
-
-  const ShimmerNewProductListGrid({
+class ShimmerHorizontalList extends StatelessWidget {
+  const ShimmerHorizontalList({
     super.key,
-    required this.bigBlockLeading,
   });
 
   @override
   Widget build(BuildContext context) {
     final isMobile = ResponsiveUtil.isMobile(context);
-    return SizedBox(
-      width: double.infinity,
-      child: Row(
-        children: [
-          Expanded(
-              child: StaggeredGrid.count(
+    return Row(
+      children: [
+        Expanded(
+          child: StaggeredGrid.count(
             crossAxisCount: isMobile ? 1 : 4,
             mainAxisSpacing: 12,
             crossAxisSpacing: 10,
-            children: [
-              if (isMobile) const ShimmerMediaBlockGrid(),
-              if (bigBlockLeading && !isMobile) const ShimmerMediaBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-              if (!bigBlockLeading && !isMobile) const ShimmerMediaBlockGrid(),
-              const ShimmerSmallBlockGrid(),
-              const ShimmerSmallBlockGrid(),
+            children: const [
+              ShimmerSmallBlockGrid(),
+              ShimmerSmallBlockGrid(),
+              ShimmerSmallBlockGrid(),
+              ShimmerSmallBlockGrid(),
             ],
-          )),
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 }
