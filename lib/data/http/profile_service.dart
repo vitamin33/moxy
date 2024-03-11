@@ -20,7 +20,7 @@ class ProfileService {
   //PROFILE
   Future<NetworkProfile> getProfile() async {
     try {
-      final response = await _dio.get('$baseUrl $getProfileUrl');
+      final response = await _dio.get('$baseUrl$getProfileUrl');
       final profile = NetworkProfile.fromJson(response.data);
       return profile;
     } catch (e) {
@@ -42,7 +42,7 @@ class ProfileService {
 
   Future<List<NetworkProduct>> getFavoriteProducts() async {
     try {
-      final response = await _dio.get('$baseUrl $getFavoriteUrl');
+      final response = await _dio.get('$baseUrl$getFavoriteUrl');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {

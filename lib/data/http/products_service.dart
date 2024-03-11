@@ -148,7 +148,7 @@ class ProductsService {
 
   Future<List<NetworkProduct>> getSellingProducts() async {
     try {
-      final response = await _dio.get('$baseUrl $allSellingProductsUrl');
+      final response = await _dio.get('$baseUrl$allSellingProductsUrl');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
@@ -162,7 +162,7 @@ class ProductsService {
 
   Future<List<NetworkProduct>> getRecomendedProducts() async {
     try {
-      final response = await _dio.get('$baseUrl $getRecomendedProductsUrl');
+      final response = await _dio.get('$baseUrl$getRecomendedProductsUrl');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
@@ -176,7 +176,7 @@ class ProductsService {
 
   Future<List<NetworkProduct>> getResaleProducts() async {
     try {
-      final response = await _dio.get('$baseUrl $getResaleProductsUrl');
+      final response = await _dio.get('$baseUrl$getResaleProductsUrl');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
@@ -191,7 +191,7 @@ class ProductsService {
   Future<List<NetworkProduct>> getBagsCatalog() async {
     try {
       final response = await _dio
-          .get('$baseUrl $getCatalogUrl${ProductCategory.bags.urlSegment}');
+          .get('$baseUrl$getCatalogUrl${ProductCategory.bags.urlSegment}');
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {
@@ -235,7 +235,7 @@ class ProductsService {
   Future<NetworkProductDetails> getProductsDetails(String productId) async {
     try {
       final response =
-          await _dio.get('$baseUrl $getProductDetailsAdvUrl/$productId');
+          await _dio.get('$baseUrl$getProductDetailsAdvUrl/$productId');
       final data = response.data;
       final result = NetworkProductDetails.fromJson(data);
       return result;
@@ -246,7 +246,7 @@ class ProductsService {
 
   Future<List<NetworkMedia>> fetchHomeMedia() async {
     try {
-      final response = await _dio.get('$baseUrl $getHomeMediaUrl');
+      final response = await _dio.get(getHomeMediaUrl);
       final data = response.data;
       final mediaList = <NetworkMedia>[];
       for (var value in (data as List)) {
@@ -261,7 +261,7 @@ class ProductsService {
 
   Future<List<NetworkProduct>> getSearchProducts() async {
     try {
-      final response = await _dio.get('$baseUrl $allSellingProductsUrl');
+      final response = await _dio.get(allSellingProductsUrl);
       final data = response.data;
       final productList = <NetworkProduct>[];
       for (var value in (data as List)) {

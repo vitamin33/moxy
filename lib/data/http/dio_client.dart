@@ -177,7 +177,7 @@ class DioClient {
   // PROMO
   Future<List<NetworkPromos>> getPromos() async {
     try {
-      final response = await dio.get('$baseUrl $getPromosUrl');
+      final response = await dio.get('$baseUrl$getPromosUrl');
       final data = response.data;
       final promosList = <NetworkPromos>[];
       for (var value in (data as List)) {
