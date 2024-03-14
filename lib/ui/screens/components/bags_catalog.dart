@@ -47,7 +47,7 @@ class _BagsCatalogState extends State<BagsCatalog> {
       builder: (context, state) {
         final isMobile = ResponsiveUtil.isMobile(context);
         return AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 400),
             child: state.isLoading
                 ? AlignedGridView.count(
                     physics: const NeverScrollableScrollPhysics(),

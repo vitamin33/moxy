@@ -64,10 +64,6 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                       AppLocalizations.of(context)!.basket.toUpperCase(),
                       style: theme.headline4BoltText,
                     ),
-                    if (state.isLoading)
-                      LottieLoader(
-                        size: 40,
-                      ),
                     InkWell(
                       onTap: () {
                         Navigator.pop(
@@ -86,7 +82,9 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                     ),
                   ],
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
+                if (state.isLoading) LinearProgressIndicator(),
+                const SizedBox(height: 20),
                 Expanded(
                     child: _buildBasketItemList(
                         cubit, state.basket, theme, isMobile)),
