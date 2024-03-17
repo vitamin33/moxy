@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:moxy/domain/admin/create_order/search_cities/search_cities_cubit.dart';
 import 'package:moxy/domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
@@ -12,7 +11,6 @@ import 'package:moxy/ui/screens/components/scrollable_section.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../../theme/app_theme.dart';
 import 'checkout_info.dart';
 import 'checkout_products.dart';
 
@@ -81,7 +79,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ],
       child: BlocBuilder<CheckoutCubit, CheckoutState>(
         builder: (context, state) {
-          final theme = AppTheme.of(context)!;
           final isMobile = ResponsiveUtil.isMobile(context);
           return Scaffold(
             backgroundColor: Colors.transparent,
@@ -89,40 +86,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
               content: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // alignment: Alignment.topLeft,
-                  // child:
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: SizedBox(
-                        width: 300,
-                        child: InkWell(
-                          onTap: () => {
-                            context.pop(),
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                const Icon(
-                                  Icons.arrow_back,
-                                  color: AppTheme.textColor,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  "Go back",
-                                  style: theme.largeBoltText,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: BackButton(),
                   ),
-
                   isMobile
                       ? Column(
                           children: [

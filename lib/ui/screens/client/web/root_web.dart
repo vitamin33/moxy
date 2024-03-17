@@ -54,7 +54,6 @@ class RootWebWidget extends HookWidget {
       ),
       jumpAnimation: const JumpAnimationOptions(),
       createAddToCartAnimation: (runAnimation) {
-        // You can run the animation by addToCartAnimationMethod, just pass trough the the global key of  the image as parameter
         cubit.runAddToCartAnimation = runAnimation;
       },
       child: Scaffold(
@@ -87,12 +86,23 @@ class RootWebWidget extends HookWidget {
   }
 
   Widget _buildHamburgerButton(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.menu),
-      onPressed: () {
-        _scaffoldKey.currentState!.openDrawer();
-      },
-    );
+    bool canPop = RouterProvider.router.canPop();
+    return Row(children: [
+      IconButton(
+        icon: const Icon(Icons.menu),
+        onPressed: () {
+          _scaffoldKey.currentState!.openDrawer();
+        },
+      ),
+      canPop
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+                context.pop();
+              },
+            )
+          : const SizedBox.shrink(),
+    ]);
   }
 
   Widget _buildPaddedIconButton(

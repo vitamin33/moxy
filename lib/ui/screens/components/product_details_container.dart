@@ -350,22 +350,36 @@ class _PriceView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
+    final isMobile = ResponsiveUtil.isMobile(context);
 
     return state.productDetails.product.discountPrice != 0
-        ? Row(
-            children: [
-              Text('${state.productDetails.product.discountPrice} UAH',
-                  style: theme.headline3BoltText
-                      .copyWith(color: AppTheme.pinkDark)),
-              const SizedBox(
-                width: 20,
-              ),
-              Text('${state.productDetails.product.salePrice} UAH',
-                  style: theme.titleText.copyWith(
-                      color: AppTheme.gray,
-                      decoration: TextDecoration.lineThrough)),
-            ],
-          )
+        ? isMobile
+            ? Column(
+                children: [
+                  Text('${state.productDetails.product.salePrice} UAH',
+                      style: theme.largeText.copyWith(
+                          color: AppTheme.gray,
+                          decoration: TextDecoration.lineThrough)),
+                  const SizedBox(width: 10),
+                  Text('${state.productDetails.product.discountPrice} UAH',
+                      style: theme.headline3BoltText
+                          .copyWith(color: AppTheme.pinkDark)),
+                ],
+              )
+            : Row(
+                children: [
+                  Text('${state.productDetails.product.discountPrice} UAH',
+                      style: theme.headline3BoltText
+                          .copyWith(color: AppTheme.pinkDark)),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  Text('${state.productDetails.product.salePrice} UAH',
+                      style: theme.titleText.copyWith(
+                          color: AppTheme.gray,
+                          decoration: TextDecoration.lineThrough)),
+                ],
+              )
         : Row(
             children: [
               Text('${state.productDetails.product.salePrice} UAH',
@@ -384,33 +398,66 @@ class _RatingView extends StatelessWidget {
     return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
       builder: (context, state) {
         final theme = AppTheme.of(context)!;
+        final isMobile = ResponsiveUtil.isMobile(context);
 
-        return Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(state.reviewStats.avgRating),
-            ),
-            RatingBarIndicator(
-              rating: double.parse(state.reviewStats.avgRating),
-              itemBuilder: (context, index) => const Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              itemCount: 5,
-              itemSize: 15.0,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                '${state.reviewStats.totalVotes} відгуків',
-                style: theme.mediumText.copyWith(
-                  color: AppTheme.gray,
-                ),
-              ),
-            ),
-          ],
-        );
+        return isMobile
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text(state.reviewStats.avgRating),
+                      ),
+                      RatingBarIndicator(
+                        rating: double.parse(state.reviewStats.avgRating),
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 15.0,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      '${state.reviewStats.totalVotes} відгуків',
+                      style: theme.mediumText.copyWith(
+                        color: AppTheme.gray,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(state.reviewStats.avgRating),
+                  ),
+                  RatingBarIndicator(
+                    rating: double.parse(state.reviewStats.avgRating),
+                    itemBuilder: (context, index) => const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 15.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Text(
+                      '${state.reviewStats.totalVotes} відгуків',
+                      style: theme.mediumText.copyWith(
+                        color: AppTheme.gray,
+                      ),
+                    ),
+                  ),
+                ],
+              );
       },
     );
   }

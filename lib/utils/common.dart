@@ -22,30 +22,27 @@ final nameSurnameRegExp = RegExp(
 );
 
 Color hexToColor(String code) {
-  // Remove any leading # character
   code = code.replaceAll("#", "");
-
-  // Parse the hex color code as an integer
+  if (code.length == 6) {
+    code = 'FF$code';
+  }
   int intValue = int.parse(code, radix: 16);
 
-  // Create the Color object from the integer value
-  return Color(intValue)
-      .withAlpha(255); // Set alpha to 255 for fully opaque color
+  return Color(intValue);
 }
 
 final _random = Random();
 
 int random(int min, int max) => min + _random.nextInt(max - min);
 
-class SizeConfig{
-    
-  double heightSize(BuildContext context, double value){
+class SizeConfig {
+  double heightSize(BuildContext context, double value) {
     value /= 100;
     return MediaQuery.of(context).size.height * value;
   }
 
-  double widthSize(BuildContext context,double value ){
-    value /=100;
+  double widthSize(BuildContext context, double value) {
+    value /= 100;
     return MediaQuery.of(context).size.width * value;
   }
 }

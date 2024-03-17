@@ -26,7 +26,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _registerCubit = context.read<RegistrationCubit>();
     _registerCubit.effectStream.listen((effect) {
       if (effect is NavigateToLogin) {
-        context.go(RouterProvider.loginPath());
+        context.push(RouterProvider.loginPath());
       }
     });
   }
@@ -48,70 +48,86 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
         return Column(
           children: [
-            SingleChildScrollView(
+            Expanded(
+              flex: 10,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppTheme.cardPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Center(
+                        child: Text(
+                          'Реєстрація',
+                          textAlign: TextAlign.start,
+                          style: theme.bigTitleBoltText,
+                        ),
+                      ),
+                      AppTheme.smallVerticalSpacing,
+                      !isMobile
+                          ? _buildNameSurname(state, cubit)
+                          : const SizedBox.shrink(),
+                      ...isMobile ? _buildMobileNameSurname(state, cubit) : [],
+                      CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Номер телефону',
+                        controller: cubit.mobileNumberController,
+                        onChanged: (value) => cubit.mobileNumberChanged(value),
+                        autofillHints: const [
+                          AutofillHints.telephoneNumber,
+                        ],
+                        state: state.error.mobileNumber,
+                        validation: true,
+                      ),
+                      CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Email',
+                        controller: cubit.emailController,
+                        onChanged: (value) => cubit.emailChanged(value),
+                        autofillHints: const [
+                          AutofillHints.telephoneNumber,
+                        ],
+                        state: state.error.email,
+                        validation: true,
+                      ),
+                      !isMobile
+                          ? _buildPassword(state, cubit)
+                          : const SizedBox.shrink(),
+                      ...isMobile ? _buildMobilePassword(state, cubit) : [],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
               child: Padding(
-                padding: const EdgeInsets.all(AppTheme.cardPadding),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppTheme.cardPadding,
+                ),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Реєстрація',
-                      textAlign: TextAlign.start,
-                      style: theme.bigTitleBoltText,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                      child: OutlineStateButton(
+                        state:
+                            isLoading ? ButtonState.loading : ButtonState.idle,
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        title: 'Далі',
+                        onTap: () {
+                          if (cubit.validateRegisterFields()) {
+                            cubit.register();
+                          }
+                        },
+                      ),
                     ),
-                    AppTheme.smallVerticalSpacing,
-                    !isMobile
-                        ? _buildNameSurname(state, cubit)
-                        : const SizedBox.shrink(),
-                    ...isMobile ? _buildMobileNameSurname(state, cubit) : [],
-                    CustomTextField(
-                      borderColor: AppTheme.greyLigth,
-                      title: 'Номер телефону',
-                      controller: cubit.mobileNumberController,
-                      onChanged: (value) => cubit.mobileNumberChanged(value),
-                      autofillHints: const [
-                        AutofillHints.telephoneNumber,
-                      ],
-                      state: state.error.mobileNumber,
-                      validation: true,
-                    ),
-                    CustomTextField(
-                      borderColor: AppTheme.greyLigth,
-                      title: 'Email',
-                      controller: cubit.emailController,
-                      onChanged: (value) => cubit.emailChanged(value),
-                      autofillHints: const [
-                        AutofillHints.telephoneNumber,
-                      ],
-                      state: state.error.email,
-                      validation: true,
-                    ),
-                    !isMobile
-                        ? _buildPassword(state, cubit)
-                        : const SizedBox.shrink(),
-                    ...isMobile ? _buildMobilePassword(state, cubit) : [],
+                    // AppTheme.smallVerticalSpasing,
+                    downText(context, theme),
                   ],
                 ),
               ),
             ),
-            AppTheme.smallVerticalSpacing,
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0.0),
-              child: OutlineStateButton(
-                state: isLoading ? ButtonState.loading : ButtonState.idle,
-                buttonWidth: MediaQuery.of(context).size.width,
-                title: 'Далі',
-                onTap: () {
-                  if (cubit.validateRegisterFields()) {
-                    cubit.register();
-                  }
-                },
-              ),
-            ),
-            // AppTheme.smallVerticalSpasing,
-            downText(context, theme),
-            const SizedBox(height: 40),
           ],
         );
       },
@@ -242,7 +258,7 @@ Widget downText(BuildContext context, AppTheme theme) {
       ),
       InkWell(
           onTap: () {
-            context.go(RouterProvider.loginPath());
+            context.push(RouterProvider.loginPath());
           },
           child: Text("Увійти",
               style: theme.titleBoltText.copyWith(

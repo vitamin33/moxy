@@ -19,7 +19,10 @@ class VerificationPage extends StatelessWidget {
         bool isLoading = state.state is Loading;
 
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.cardPadding,
+            vertical: 8,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -25,6 +25,9 @@ class OrderProductListState implements Copyable<OrderProductListState> {
     this.errorMessage,
   });
 
+  List<DimensionProduct> get products =>
+      isSearching() ? searchProductsByDimension : productsByDimension;
+
   static OrderProductListState defaultAllProductsState() {
     return OrderProductListState(
       productsByDimension: [],

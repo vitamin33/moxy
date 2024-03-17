@@ -9,6 +9,7 @@ import 'package:moxy/domain/auth/login/login_state.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
+import 'package:moxy/ui/components/back_button_area.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -57,7 +58,7 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenSuccess(
             snackBarSuccessText: 'resend confirm register code'));
       } else if (effect is NavigateToVerification) {
-        context.go(RouterProvider.verificationPath());
+        context.push(RouterProvider.verificationPath());
       }
     });
   }
@@ -73,37 +74,41 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
     final isMobile = ResponsiveUtil.isMobile(context);
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
       final cubit = context.read<LoginCubit>();
-      return Scaffold(
-        backgroundColor: AppTheme.white,
-        body: Container(
-            child:
-                isMobile ? buildMobileContent(cubit) : buildWebContent(cubit)),
+      return SafeArea(
+        child: Scaffold(
+          backgroundColor: AppTheme.white,
+          body: Container(
+              child: isMobile
+                  ? buildMobileContent(cubit)
+                  : buildWebContent(cubit)),
+        ),
       );
     });
   }
 
   Widget buildMobileContent(LoginCubit cubit) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(AppTheme.cardPadding),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(AppTheme.cardPadding),
-              child: SvgPicture.asset(
-                IconPath.moxylogo,
-                width: 150,
+    return BackButtonArea(
+      wrappedWidget: Column(
+        children: [
+          Center(
+            child: InkWell(
+              onTap: () => context.go(RouterProvider.homeNewPath()),
+              child: Padding(
+                padding: const EdgeInsets.all(AppTheme.moxyLogoPadding),
+                child: SvgPicture.asset(
+                  IconPath.moxylogo,
+                  width: 150,
+                ),
               ),
             ),
-            LayoutBuilder(builder: (context, constraints) {
-              return AnimatedBranchContainer(
-                currentIndex: widget.navigationShell.currentIndex,
-                children: widget.children,
-              );
-            }),
-          ],
-        ),
+          ),
+          Expanded(
+            child: AnimatedBranchContainer(
+              currentIndex: widget.navigationShell.currentIndex,
+              children: widget.children,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -25,12 +25,6 @@ class OrderProductList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
-    List<DimensionProduct> items;
-    if (state.isSearching()) {
-      items = state.searchProductsByDimension;
-    } else {
-      items = state.productsByDimension;
-    }
 
     return Scaffold(
       body: Material(
@@ -54,9 +48,10 @@ class OrderProductList extends StatelessWidget {
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: items.length,
+                          itemCount: state.products.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final dimenProduct = items.elementAt(index);
+                            final dimenProduct =
+                                state.products.elementAt(index);
                             bool availableInStock =
                                 dimenProduct.isAvailableInStock;
                             return Padding(
@@ -135,7 +130,7 @@ Color _generateColor(Dimension dimen) {
 
 Widget _listTile(OrderProductListState state, DimensionProduct product,
     OrderProductListCubit cubit, int index, AppTheme theme) {
-  final Dimension colorAvatar = state.productsByDimension[index].dimension;
+  final Dimension colorAvatar = state.products[index].dimension;
   final color = _generateColor(colorAvatar);
   final chosenQuantity = product.selectedQuantity;
   final fullQuantity = product.dimension.quantity;
