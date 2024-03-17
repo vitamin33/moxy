@@ -47,7 +47,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         final theme = AppTheme.of(context)!;
 
         return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppTheme.cardPadding,
+              vertical: 8,
+            ),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: state.isResetEmailSent

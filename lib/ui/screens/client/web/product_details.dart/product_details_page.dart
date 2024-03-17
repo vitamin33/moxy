@@ -15,20 +15,21 @@ class ProductDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => ProductDetailsCubit(productId: productId),
-        child: const Scaffold(
-          backgroundColor: AppTheme.white,
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                ProductDetailsContainer(),
-                ProductAdvantagesContainer(),
-                RecomendedProducts(),
-                ResaleProducts(),
-                Footer()
-              ],
-            ),
+      create: (context) => ProductDetailsCubit(productId: productId),
+      child: const Scaffold(
+        backgroundColor: AppTheme.white,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              ProductDetailsContainer(),
+              ProductAdvantagesContainer(),
+              RecomendedProducts(),
+              ResaleProducts(),
+              Footer()
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

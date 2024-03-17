@@ -13,7 +13,6 @@ import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
-import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
@@ -195,31 +194,34 @@ Widget _buildProductItem(
                     ],
                   ),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    QuantityPicker(
-                      quantity: item.dimension.quantity,
-                      onPlus: () {
-                        cubit.addQuantityOfProduct(item);
-                      },
-                      onMinus: () {
-                        cubit.removeQuantityOfProduct(item);
-                      },
-                    ),
-                    InkWell(
-                      child: const Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Icon(
-                            Icons.delete,
-                            color: AppTheme.black,
-                          )),
-                      onTap: () {
-                        cubit.removeProductFromBasket(item);
-                      },
-                    ),
-                  ],
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      QuantityPicker(
+                        quantity: item.dimension.quantity,
+                        onPlus: () {
+                          cubit.addQuantityOfProduct(item);
+                        },
+                        onMinus: () {
+                          cubit.removeQuantityOfProduct(item);
+                        },
+                      ),
+                      InkWell(
+                        child: const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Icon(
+                              Icons.delete,
+                              color: AppTheme.black,
+                            )),
+                        onTap: () {
+                          cubit.removeProductFromBasket(item);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

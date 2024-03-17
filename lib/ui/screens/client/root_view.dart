@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/ui/screens/client/web/root_web.dart';
 
-
 class RootView extends StatelessWidget {
   /// The navigation shell and container for the branch Navigators.
   final StatefulNavigationShell navigationShell;
@@ -11,10 +10,10 @@ class RootView extends StatelessWidget {
   final List<Widget> children;
 
   const RootView({
-    Key? key,
+    super.key,
     required this.navigationShell,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

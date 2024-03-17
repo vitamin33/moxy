@@ -30,7 +30,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     _registerCubit.initNewPasswordFlow(widget.email, widget.resetToken);
     _registerCubit.effectStream.listen((effect) {
       if (effect is NavigateToLogin) {
-        context.go(RouterProvider.loginPath());
+        context.push(RouterProvider.loginPath());
       } else if (effect is NoResetTokenFound) {
         ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
             snackBarFailureText:
@@ -48,7 +48,10 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         bool isLoading = state.state is Loading;
 
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppTheme.cardPadding,
+            vertical: 8,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceAround,

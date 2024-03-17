@@ -24,6 +24,7 @@ class AppTheme extends InheritedWidget {
   static const double iconSizeMobile = 25;
   static const double iconButtonSize = 30;
   static const double iconButtonSizeMobile = 40;
+  static const double moxyLogoPadding = 36;
 
   static const Color textColor = Color(0xFF0C0C0C);
   static const Color blackLight = Color(0xFF292031);

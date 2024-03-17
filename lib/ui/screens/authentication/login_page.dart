@@ -46,84 +46,103 @@ class _LoginPageState extends State<LoginPage> {
     final theme = AppTheme.of(context)!;
     final isMobile = ResponsiveUtil.isMobile(context);
     return BlocBuilder<LoginCubit, LoginState>(builder: (context, state) {
-      return Padding(
-        padding: const EdgeInsets.all(AppTheme.cardPadding),
-        child: Column(
-          crossAxisAlignment:
-              isMobile ? CrossAxisAlignment.center : CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Text(
-              AppLocalizations.of(context)!.login,
-              textAlign: TextAlign.start,
-              style: theme.bigTitleBoltText,
+      return Column(
+        children: [
+          Expanded(
+            flex: 10,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(AppTheme.cardPadding),
+                child: Column(
+                  crossAxisAlignment: isMobile
+                      ? CrossAxisAlignment.center
+                      : CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      AppLocalizations.of(context)!.login,
+                      textAlign: TextAlign.start,
+                      style: theme.bigTitleBoltText,
+                    ),
+                    const SizedBox(height: AppTheme.cardPadding),
+                    CustomTextField(
+                      controller: context.read<LoginCubit>().phoneController,
+                      borderColor: AppTheme.greyLigth,
+                      title: AppLocalizations.of(context)!.phoneNumber,
+                      onChanged: (value) =>
+                          context.read<LoginCubit>().mobileNumberChanged(value),
+                      autofillHints: const [
+                        AutofillHints.telephoneNumber,
+                      ],
+                    ),
+                    const SizedBox(height: AppTheme.elementSpacing),
+                    CustomTextField(
+                      controller: context.read<LoginCubit>().passwordController,
+                      borderColor: AppTheme.greyLigth,
+                      title: AppLocalizations.of(context)!.password,
+                      onChanged: (value) =>
+                          context.read<LoginCubit>().passwordChanged(value),
+                      autofillHints: const [
+                        AutofillHints.password,
+                      ],
+                    ),
+                    const SizedBox(height: AppTheme.elementSpacing),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(value: true, onChanged: (onChanged) {}),
+                              const Text('Запамятати мене')
+                            ],
+                          ),
+                          InkWell(
+                            onTap: () {
+                              context.push(RouterProvider.resetPasswordPath());
+                            },
+                            child: OnHover(
+                              builder: (isHovered) {
+                                return Text(
+                                  'Забули пароль?',
+                                  style: TextStyle(
+                                      decoration: isHovered
+                                          ? TextDecoration.underline
+                                          : TextDecoration.none),
+                                );
+                              },
+                            ),
+                          )
+                        ]),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Divider(),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: AppTheme.cardPadding),
-            CustomTextField(
-              controller: context.read<LoginCubit>().phoneController,
-              borderColor: AppTheme.greyLigth,
-              title: AppLocalizations.of(context)!.phoneNumber,
-              onChanged: (value) =>
-                  context.read<LoginCubit>().mobileNumberChanged(value),
-              autofillHints: const [
-                AutofillHints.telephoneNumber,
-              ],
-            ),
-            const SizedBox(height: AppTheme.elementSpacing),
-            CustomTextField(
-              controller: context.read<LoginCubit>().passwordController,
-              borderColor: AppTheme.greyLigth,
-              title: AppLocalizations.of(context)!.password,
-              onChanged: (value) =>
-                  context.read<LoginCubit>().passwordChanged(value),
-              autofillHints: const [
-                AutofillHints.password,
-              ],
-            ),
-            const SizedBox(height: AppTheme.elementSpacing),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Row(
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
+              child: Column(
                 children: [
-                  Checkbox(value: true, onChanged: (onChanged) {}),
-                  const Text('Запамятати мене')
+                  OutlineStateButton(
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    title: AppLocalizations.of(context)!.login,
+                    state: state.state is Loading
+                        ? ButtonState.loading
+                        : ButtonState.idle,
+                    onTap: context.read<LoginCubit>().logInWithCredentials,
+                  ),
+                  downText(context, theme)
                 ],
               ),
-              InkWell(
-                onTap: () {
-                  context.push(RouterProvider.resetPasswordPath());
-                },
-                child: OnHover(
-                  builder: (isHovered) {
-                    return Text(
-                      'Забули пароль?',
-                      style: TextStyle(
-                          decoration: isHovered
-                              ? TextDecoration.underline
-                              : TextDecoration.none),
-                    );
-                  },
-                ),
-              )
-            ]),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Divider(),
             ),
-            const SizedBox(height: AppTheme.cardPadding),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6.0),
-              child: OutlineStateButton(
-                buttonWidth: MediaQuery.of(context).size.width,
-                title: AppLocalizations.of(context)!.login,
-                state: state.state is Loading
-                    ? ButtonState.loading
-                    : ButtonState.idle,
-                onTap: context.read<LoginCubit>().logInWithCredentials,
-              ),
-            ),
-            downText(context, theme)
-          ],
-        ),
+          ),
+        ],
       );
     });
   }
