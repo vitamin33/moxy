@@ -62,29 +62,36 @@ class _FavouritesPageState extends State<FavouritesPage> {
 
         return Scaffold(
           backgroundColor: AppTheme.white,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (state.isLoading) LinearProgressIndicator(),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    'Список бажань',
-                    style: theme.headline3BoltText.copyWith(
-                      color: AppTheme.black,
+          body: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        'Список бажань',
+                        style: theme.headline3BoltText.copyWith(
+                          color: AppTheme.black,
+                        ),
+                      ),
                     ),
-                  ),
+                    (profile != null)
+                        ? (!profile.isGuest())
+                            ? FavoritesContent(
+                                state: state, cubit: _favouritesCubit)
+                            : const GuestProfileWidget()
+                        : buildFavoritesShimmerList(context),
+                    const Footer(),
+                  ],
                 ),
-                (profile != null)
-                    ? (!profile.isGuest())
-                        ? FavoritesContent(
-                            state: state, cubit: _favouritesCubit)
-                        : const GuestProfileWidget()
-                    : buildFavoritesShimmerList(context),
-                const Footer(),
-              ],
-            ),
+              ),
+              if (state.isLoading)
+                const Positioned(
+                  child: LinearProgressIndicator(),
+                )
+            ],
           ),
         );
       }),

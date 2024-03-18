@@ -5,8 +5,9 @@ import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_cubit
 import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_effect.dart';
 import 'package:moxy/domain/client/accessories_catalog/accessories_catalog_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
-import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/product_card.dart';
+import 'package:moxy/ui/screens/components/shimmer/shimer_product.dart';
+import 'package:moxy/utils/responsive_utils.dart';
 
 class AccessoriesCatalog extends StatefulWidget {
   const AccessoriesCatalog({super.key});
@@ -42,26 +43,39 @@ class _AccessoriesCatalogState extends State<AccessoriesCatalog> {
   Widget build(BuildContext context) {
     return BlocBuilder<AccessoriesCatalogCubit, AccessoriesCatalogState>(
       builder: (context, state) {
+        final isMobile = ResponsiveUtil.isMobile(context);
         return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: state.isLoading
-              ?  LottieLoader()
-              : AlignedGridView.count(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.accessoriesList.length,
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  itemBuilder: (context, index) {
-                    final product = state.accessoriesList[index];
-                    return ProductCard(
-                      product: product,
-                      onChangeFavorites: cubit.toggleFavoriteForProduct,
-                    );
-                  },
-                ),
-        );
+            padding: const EdgeInsets.all(8.0),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 400),
+              child: state.isLoading
+                  ? AlignedGridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: 8,
+                      crossAxisCount: isMobile ? 1 : 3,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      itemBuilder: (context, index) {
+                        return const ShimmerProductCard();
+                      },
+                    )
+                  : AlignedGridView.count(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.accessoriesList.length,
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 5,
+                      mainAxisSpacing: 5,
+                      itemBuilder: (context, index) {
+                        final product = state.accessoriesList[index];
+                        return ProductCard(
+                          product: product,
+                          onChangeFavorites: cubit.toggleFavoriteForProduct,
+                        );
+                      },
+                    ),
+            ));
       },
     );
   }

@@ -82,7 +82,11 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                   ],
                 ),
                 const SizedBox(height: 20),
-                if (state.isLoading) LinearProgressIndicator(),
+                (state.isLoading)
+                    ? const LinearProgressIndicator()
+                    : const SizedBox(
+                        height: 4,
+                      ),
                 const SizedBox(height: 20),
                 Expanded(
                     child: _buildBasketItemList(
