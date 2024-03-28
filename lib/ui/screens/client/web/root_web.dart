@@ -71,10 +71,14 @@ class RootWebWidget extends HookWidget {
   AppBar buildAppBar(BuildContext context, AppTheme theme,
       TabController tabController, bool isMobile) {
     return AppBar(
-      leadingWidth: isMobile ? 56 : 150, // Adjust the leading width
+      shape: const Border(
+          bottom: BorderSide(
+        color: Color(0xFFF0F1F5),
+      )),
+      leadingWidth: isMobile ? 56 : 150,
       leading: isMobile ? _buildHamburgerButton(context) : _buildLogo(),
       backgroundColor: AppTheme.white,
-      elevation: 8.0,
+      elevation: 0.0,
       title: isMobile
           ? SvgPicture.asset(IconPath.moxyLogoWeb, width: 60)
           : _buildTabsWidget(context, tabController),
@@ -86,7 +90,7 @@ class RootWebWidget extends HookWidget {
   }
 
   Widget _buildHamburgerButton(BuildContext context) {
-    bool canPop = RouterProvider.router.canPop();
+    // bool canPop = RouterProvider.router.canPop();
     return Row(children: [
       IconButton(
         icon: const Icon(Icons.menu),
@@ -94,14 +98,6 @@ class RootWebWidget extends HookWidget {
           _scaffoldKey.currentState!.openDrawer();
         },
       ),
-      canPop
-          ? IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                context.pop();
-              },
-            )
-          : const SizedBox.shrink(),
     ]);
   }
 

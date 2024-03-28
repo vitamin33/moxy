@@ -47,8 +47,8 @@ class _ProductDetailsContainerState extends State<ProductDetailsContainer> {
 
         return Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 16.0,
-            horizontal: isMobile ? AppTheme.defaultPaddingMobile : 24,
+            vertical: 0.0,
+            horizontal: isMobile ? 0 : 0,
           ),
           child: isMobile
               ? Column(
@@ -290,17 +290,14 @@ class _ButtonsArea extends StatelessWidget {
         if (!isMobile)
           Row(
             children: [
-              Expanded(
-                flex: 4,
-                child: QuantityPicker(
-                  quantity: state.productDetails.selectedDimension.quantity,
-                  onPlus: () {
-                    cubit.addQuantityOfProduct();
-                  },
-                  onMinus: () {
-                    cubit.removeQuantityOfProduct();
-                  },
-                ),
+              QuantityPicker(
+                quantity: state.productDetails.selectedDimension.quantity,
+                onPlus: () {
+                  cubit.addQuantityOfProduct();
+                },
+                onMinus: () {
+                  cubit.removeQuantityOfProduct();
+                },
               ),
               const SizedBox(width: 5),
               Expanded(

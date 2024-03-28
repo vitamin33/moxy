@@ -34,6 +34,7 @@ class VerificationPage extends StatelessWidget {
               ),
               const SizedBox(height: AppTheme.cardPadding),
               OtpTextField(
+                textStyle: TextStyle(fontSize: 18),
                 state: state.error.confirmationCode,
                 numberOfFields: 4,
                 borderColor: AppTheme.greyLigth,

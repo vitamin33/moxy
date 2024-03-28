@@ -14,12 +14,12 @@ class ProductAdvantagesContainer extends StatelessWidget {
     return BlocBuilder<ProductDetailsCubit, ProductDetailsState>(
       builder: (context, state) {
         final advantages = state.productDetails.productAdvantages;
-        return (advantages != null && advantages.isNotEmpty)
+        return advantages != null && advantages.isNotEmpty
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    padding: const EdgeInsets.symmetric(vertical: 0.0),
                     child: Text(
                       'Переваги товару',
                       style: theme.bigTitleBoltText,
@@ -40,7 +40,7 @@ class ProductAdvantagesContainer extends StatelessWidget {
                   )
                 ],
               )
-            : const SizedBox();
+            : SizedBox.shrink();
       },
     );
   }
@@ -66,38 +66,62 @@ class AdvantageItem extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (!showTextFirst)
-            Image.network(
-              image,
-              fit: BoxFit.cover,
-            ),
-          if (!showTextFirst) const SizedBox(width: 130),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      child: showTextFirst
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  header,
-                  style: theme.bigTitleBoltText,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        header,
+                        style: theme.bigTitleBoltText,
+                      ),
+                      const Divider(
+                        color: AppTheme.black,
+                      ),
+                      Text(description, style: theme.titleText),
+                    ],
+                  ),
                 ),
-                const Divider(
-                  color: AppTheme.black,
+                const SizedBox(width: 30),
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width / 2.5,
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                Text(description, style: theme.titleText),
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: MediaQuery.sizeOf(context).width / 2.5,
+                  child: Image.network(
+                    image,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        header,
+                        style: theme.bigTitleBoltText,
+                      ),
+                      const Divider(
+                        color: AppTheme.black,
+                      ),
+                      Text(description, style: theme.titleText),
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-          if (showTextFirst) const SizedBox(width: 130),
-          if (showTextFirst)
-            Image.network(
-              image,
-              fit: BoxFit.cover,
-            ),
-        ],
-      ),
     );
   }
 }

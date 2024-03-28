@@ -31,7 +31,7 @@ class RecomendedProducts extends StatelessWidget {
           return state.isLoading
               ? LottieLoader()
               : Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(0.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
