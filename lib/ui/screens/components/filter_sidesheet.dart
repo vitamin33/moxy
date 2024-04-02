@@ -7,6 +7,8 @@ import 'package:moxy/domain/models/sort_by.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/components/custom_accordion.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 
 class FilterSideSheet extends StatefulWidget {
   final String title;
@@ -71,7 +73,7 @@ class _FilterSideSheetState extends State<FilterSideSheet> {
             child: ListView(
               children: [
                 CustomAccordion(
-                    title: 'COLOR',
+                    title:AppLocalizations.of(context)!.color,
                     contentChild: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -116,7 +118,7 @@ class _FilterSideSheetState extends State<FilterSideSheet> {
                   color: AppTheme.gray,
                 ),
                 CustomAccordion(
-                    title: 'PRICE',
+                    title:AppLocalizations.of(context)!.price,
                     contentChild: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -161,7 +163,7 @@ class _FilterSideSheetState extends State<FilterSideSheet> {
                   color: AppTheme.gray,
                 ),
                 CustomAccordion(
-                    title: 'SORT BY',
+                    title: AppLocalizations.of(context)!.sortBy,
                     contentChild: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

@@ -40,7 +40,7 @@ class CheckoutProducts extends StatelessWidget {
 
     for (int i = 0; i < rowCount; i++) {
       productWidgets.add(
-        _buildProductItem(cubit, theme, i, isMobile),
+        _buildProductItem(context, cubit, theme, i, isMobile),
       );
     }
     return [
@@ -148,8 +148,8 @@ class CheckoutProducts extends StatelessWidget {
     ];
   }
 
-  Widget _buildProductItem(
-      CheckoutCubit cubit, AppTheme theme, int index, bool isMobile) {
+  Widget _buildProductItem(BuildContext context, CheckoutCubit cubit,
+      AppTheme theme, int index, bool isMobile) {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
     String color = item.dimension.color.name.toUpperCase();
@@ -198,7 +198,8 @@ class CheckoutProducts extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Color:', style: theme.largeText),
+                      Text(AppLocalizations.of(context)!.color,
+                          style: theme.largeText),
                       _buildColorWidget(item.dimension),
                     ],
                   ),
@@ -224,7 +225,7 @@ class CheckoutProducts extends StatelessWidget {
                           child: isMobile
                               ? Icon(Icons.delete)
                               : Text(
-                                  'Remove',
+                                  AppLocalizations.of(context)!.delete,
                                   style: theme.titleText.copyWith(
                                       color: AppTheme.gray,
                                       decoration: TextDecoration.underline),

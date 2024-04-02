@@ -65,10 +65,13 @@ class _OutlineStateButtonState extends State<OutlineStateButton> {
                             child: const CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation(AppTheme.pink),
                             )))
-                    : Text(
-                        widget.title,
-                        style:
-                            theme.titleBoltText.copyWith(color: AppTheme.white),
+                    : Center(
+                        child: Text(
+                          widget.title,
+                          textAlign: TextAlign.center,
+                          style: theme.titleBoltText
+                              .copyWith(color: AppTheme.white),
+                        ),
                       ),
               ),
             ),

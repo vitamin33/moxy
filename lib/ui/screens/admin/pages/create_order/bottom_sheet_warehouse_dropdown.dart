@@ -13,8 +13,7 @@ class BottomSearchWarehouseDropdown extends StatelessWidget {
   final City selectedCity;
   final ValueChanged onChanged;
 
-  const BottomSearchWarehouseDropdown({
-    Key? key,
+  const BottomSearchWarehouseDropdown({super.key, 
     required this.selectedWarehouse,
     required this.onChanged,
     required this.selectedCity,
@@ -39,8 +38,8 @@ class BottomSearchWarehouseDropdown extends StatelessWidget {
               },
               popupProps: PopupPropsMultiSelection.modalBottomSheet(
                 showSelectedItems: false,
-                searchFieldProps:
-                    _createSearchFieldProps(warehouseSearchCubit.controller),
+                searchFieldProps: _createSearchFieldProps(
+                    context, warehouseSearchCubit.controller),
                 itemBuilder: _warehousePopupItemBuilder,
                 showSearchBox: true,
                 isFilterOnline: true,
@@ -81,11 +80,12 @@ class BottomSearchWarehouseDropdown extends StatelessWidget {
     );
   }
 
-  TextFieldProps _createSearchFieldProps(TextEditingController controller) {
+  TextFieldProps _createSearchFieldProps(
+      BuildContext context, TextEditingController controller) {
     return TextFieldProps(
       cursorColor: AppTheme.pinkDark,
       decoration: InputDecoration(
-        labelText: 'Enter warehouse',
+        labelText: AppLocalizations.of(context)!.chooseWarehouse,
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: AppTheme.greyDark,

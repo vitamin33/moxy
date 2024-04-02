@@ -7,6 +7,7 @@ import 'package:moxy/domain/models/city.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../../../../../domain/models/warehouse.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchCityDropdown extends StatelessWidget {
   final Warehouse? selectedWarehouse;
@@ -32,13 +33,16 @@ class SearchCityDropdown extends StatelessWidget {
                 items: state.cityList,
                 asyncItems: citySearchCubit.searchCities,
                 popupProps: PopupPropsMultiSelection.menu(
+                  emptyBuilder: (context, searchEntry) {
+                    return Center(child: Text(AppLocalizations.of(context)!.cityNotFound));
+                  },
                   loadingBuilder: (context, searchEntry) {
                     return const LinearProgressIndicator();
                   },
                   menuProps: const MenuProps(backgroundColor: AppTheme.white),
                   showSelectedItems: false,
-                  searchFieldProps:
-                      _createSearchFieldProps(citySearchCubit.controller),
+                  searchFieldProps: _createSearchFieldProps(
+                      context, citySearchCubit.controller),
                   itemBuilder: _cityPopupItemBuilder,
                   showSearchBox: true,
                   isFilterOnline: true,
@@ -46,7 +50,7 @@ class SearchCityDropdown extends StatelessWidget {
                 selectedItem: selectedCity,
                 itemAsString: selectedCity.presentName != ''
                     ? (City city) => city.toString()
-                    : (City city) => 'Choose City',
+                    : (City city) => AppLocalizations.of(context)!.chooseCity,
                 onChanged: (City? city) {
                   onChanged(city);
                   warehousSearchCubit.clearWarehouse();
@@ -76,11 +80,12 @@ class SearchCityDropdown extends StatelessWidget {
     );
   }
 
-  TextFieldProps _createSearchFieldProps(TextEditingController controller) {
+  TextFieldProps _createSearchFieldProps(
+      BuildContext context, TextEditingController controller) {
     return TextFieldProps(
       cursorColor: AppTheme.pinkDark,
       decoration: InputDecoration(
-        labelText: 'Enter city name',
+        labelText: AppLocalizations.of(context)!.chooseCity,
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: AppTheme.greyDark,

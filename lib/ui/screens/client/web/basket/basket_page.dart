@@ -143,15 +143,15 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
         itemCount: basket.basketItems.length,
         itemBuilder: (context, index) {
           final item = basket.basketItems[index];
-          return _buildProductItem(cubit, item, theme, isMobile);
+          return _buildProductItem(context, cubit, item, theme, isMobile);
         },
       );
     }
   }
 }
 
-Widget _buildProductItem(
-    BasketCubit cubit, BasketItem item, AppTheme theme, bool isMobile) {
+Widget _buildProductItem(BuildContext context, BasketCubit cubit,
+    BasketItem item, AppTheme theme, bool isMobile) {
   String productName = item.product.name.toUpperCase();
   String color = item.dimension.color.name.toUpperCase();
   return Padding(
@@ -193,7 +193,8 @@ Widget _buildProductItem(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Color:', style: theme.largeText),
+                      Text(AppLocalizations.of(context)!.color,
+                          style: theme.largeText),
                       _buildColorWidget(item.dimension),
                     ],
                   ),

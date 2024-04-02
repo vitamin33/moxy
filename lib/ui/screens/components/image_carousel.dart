@@ -91,7 +91,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                               children: [
                                 Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
+                                    child: GestureDetector(
                                       onTap: () {
                                         setState(() {
                                           if (_pageController.hasClients) {

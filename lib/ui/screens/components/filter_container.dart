@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moxy/constant/icon_path.dart';
@@ -71,7 +72,7 @@ class _FilterContainerState extends State<FilterContainer> {
                           ),
                         ],
                       ),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
                           SideSheet.left(
                             body: FilterSideSheet(

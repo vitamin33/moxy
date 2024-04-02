@@ -174,10 +174,10 @@ class RootWebWidget extends HookWidget {
               ),
               if (state.basket.basketItems.isNotEmpty)
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 6,
+                  right: 6,
                   child: CircleAvatar(
-                    radius: 8,
+                    radius: 10,
                     backgroundColor: AppTheme.red,
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),

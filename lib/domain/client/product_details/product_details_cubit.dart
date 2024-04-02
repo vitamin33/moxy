@@ -39,9 +39,7 @@ class ProductDetailsCubit
             _updateSelectedImagesList(productDetails.product.dimensions);
         emit(state.copyWith(
           allImages: images,
-          productDetails: state.productDetails.copyWith(
-              product: productDetails.product,
-              productAdvantages: productDetails.productAdvantages),
+          productDetails: productDetails,
           isLoading: false,
         ));
       }, (error) {

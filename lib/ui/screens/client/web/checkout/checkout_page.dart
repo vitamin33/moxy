@@ -9,6 +9,7 @@ import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/back_container.dart';
 import 'package:moxy/ui/screens/components/footer.dart';
+import 'package:moxy/ui/screens/components/resale_products.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -130,6 +131,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ],
                     ),
                   ),
+                  const ResaleProducts(),
                   const Footer()
                 ],
               ),
