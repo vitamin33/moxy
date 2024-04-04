@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
-import 'package:moxy/domain/models/basket.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/screens/components/expandable_text.dart';
 import 'package:moxy/ui/screens/components/loading_elevated_button.dart';
-import 'package:moxy/ui/screens/components/quantity_picker.dart';
+import 'package:moxy/ui/screens/components/product_item.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,9 +36,12 @@ class CheckoutProducts extends StatelessWidget {
     int rowCount = state.basket.basketItems.length;
 
     for (int i = 0; i < rowCount; i++) {
-      productWidgets.add(
-        _buildProductItem(context, cubit, theme, i, isMobile),
-      );
+      productWidgets.add(ProductItem(
+              productItem: state.basket.basketItems[i],
+              addQuantityOfProduct: cubit.addQuantityOfProduct,
+              removeQuantityOfProduct: cubit.removeQuantityOfProduct,
+              removeProductFromBasket: cubit.removeProductFromBasket)
+          );
     }
     return [
       Align(
@@ -70,13 +70,15 @@ class CheckoutProducts extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              AppLocalizations.of(context)!.totalValueToPay.toUpperCase(),
-              style: theme.largeBoltText,
+            Expanded(
+              child: Text(
+                AppLocalizations.of(context)!.totalValueToPay.toUpperCase(),
+                style: theme.largeBoltText,
+              ),
             ),
             Text(
               '${state.basket.totalValue()} $uah',
-              style: theme.smallText,
+              style: theme.mediumBoltText,
             )
           ],
         ),
@@ -85,9 +87,6 @@ class CheckoutProducts extends StatelessWidget {
         color: AppTheme.gray.withOpacity(0.3),
       ),
       const SizedBox(height: 30),
-      // SizedBox(
-      //   width: double.infinity,
-      //   child:
       ExpandableShippingText(
         maxLines: 5,
         collapsedText: freeShippingText,
@@ -97,8 +96,6 @@ class CheckoutProducts extends StatelessWidget {
         additionalText:
             '${AppLocalizations.of(context)!.forFreeShippinYouNeed} ${state.basket.freeShippingThreshold} $uah.',
       ),
-
-      // ),
       const SizedBox(height: 32),
       LoadingElevatedButton(
           onPressed: () {
@@ -147,146 +144,4 @@ class CheckoutProducts extends StatelessWidget {
       ),
     ];
   }
-
-  Widget _buildProductItem(BuildContext context, CheckoutCubit cubit,
-      AppTheme theme, int index, bool isMobile) {
-    BasketItem item = state.basket.basketItems[index];
-    String productName = item.product.name.toUpperCase();
-    String color = item.dimension.color.name.toUpperCase();
-    return
-        //  Padding(
-        //   padding: const EdgeInsets.all(8),
-        //   child:
-        Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildProductImage(item),
-        // const SizedBox(width: 30),
-        Expanded(
-          child: SizedBox(
-            height: productRowHeight,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '$productName $color',
-                        style: theme.mediumBoltText,
-                      ),
-                      if (!isMobile)
-                        Text(
-                          '${item.product.salePrice} $uah',
-                          style: theme.largeBoltText,
-                        ),
-                    ],
-                  ),
-                ),
-                if (isMobile)
-                  Text(
-                    '${item.product.salePrice} $uah',
-                    style: theme.largeBoltText,
-                  ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(AppLocalizations.of(context)!.color,
-                          style: theme.largeText),
-                      _buildColorWidget(item.dimension),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      QuantityPicker(
-                        quantity: item.dimension.quantity,
-                        onPlus: () {
-                          cubit.addQuantityOfProduct(item);
-                        },
-                        onMinus: () {
-                          cubit.removeQuantityOfProduct(item);
-                        },
-                      ),
-                      InkWell(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: isMobile
-                              ? Icon(Icons.delete)
-                              : Text(
-                                  AppLocalizations.of(context)!.delete,
-                                  style: theme.titleText.copyWith(
-                                      color: AppTheme.gray,
-                                      decoration: TextDecoration.underline),
-                                ),
-                        ),
-                        onTap: () {
-                          cubit.removeProductFromBasket(item);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-    // );
-  }
-
-  Widget _buildColorWidget(Dimension dimen) {
-    final color = _generateColor(dimen);
-    return Container(
-      padding: const EdgeInsets.all(2),
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(
-          style: BorderStyle.solid,
-          color: AppTheme.gray.withOpacity(0.4),
-          width: 1,
-        ),
-      ),
-      child: CircleAvatar(
-        radius: 15,
-        backgroundColor: AppTheme.greyLigth,
-        child: CircleAvatar(radius: 13, backgroundColor: color),
-      ),
-    );
-  }
-
-  Widget _buildProductImage(BasketItem item) {
-    if (item.dimension.images.isNotEmpty) {
-      return FadeInImage.assetNetwork(
-        placeholder: 'assets/images/placeholder.jpg',
-        image: item.dimension.images.first.imagePath,
-        width: productRowHeight,
-        height: productRowHeight,
-        fit: BoxFit.cover,
-      );
-    } else {
-      return Image.asset(
-        width: productRowHeight,
-        height: productRowHeight,
-        'assets/images/placeholder.jpg',
-        fit: BoxFit.cover,
-      );
-    }
-  }
-}
-
-Color _generateColor(Dimension dimen) {
-  return hexToColor(dimen.color.hexCode);
 }

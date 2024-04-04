@@ -20,28 +20,40 @@ class QuantityPicker extends StatelessWidget {
       decoration: BoxDecoration(border: Border.all(color: AppTheme.black)),
       padding: const EdgeInsets.all(1),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          InkWell(
-            onTap: () {
-              onMinus();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(12),
-              child: Icon(Icons.remove, size: 24),
+          Flexible(
+            child: GestureDetector(
+              onTap: () {
+                onMinus();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(5),
+                child: Icon(
+                  Icons.remove,
+                ),
+              ),
             ),
           ),
-          Text(
-            '$quantity',
-            style: theme.mediumText,
-            textAlign: TextAlign.center,
+          Flexible(
+            child: Text(
+              '$quantity',
+              style: theme.mediumText,
+              textAlign: TextAlign.center,
+            ),
           ),
-          InkWell(
-            onTap: () {
-              onPlus();
-            },
-            child: const Padding(
-              padding: EdgeInsets.all(12),
-              child: Icon(Icons.add, size: 24),
+          Flexible(
+            child: GestureDetector(
+              onTap: () {
+                onPlus();
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(5),
+                child: Icon(
+                  Icons.add,
+                ),
+              ),
             ),
           ),
         ],

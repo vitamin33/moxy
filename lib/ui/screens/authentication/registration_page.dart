@@ -64,11 +64,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           style: theme.bigTitleBoltText,
                         ),
                       ),
-                      AppTheme.smallVerticalSpacing,
-                      !isMobile
-                          ? _buildNameSurname(state, cubit)
-                          : const SizedBox.shrink(),
-                      ...isMobile ? _buildMobileNameSurname(state, cubit) : [],
+                      CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Імя',
+                        controller: cubit.firstNameController,
+                        onChanged: (value) => cubit.firstNameChanged(value),
+                        state: state.error.firstName,
+                        validation: true,
+                      ),
+                      CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Прізвище',
+                        controller: cubit.secondNameController,
+                        onChanged: (value) => cubit.secondNameChanged(value),
+                        state: state.error.secondName,
+                        validation: true,
+                      ),
                       CustomTextField(
                         borderColor: AppTheme.greyLigth,
                         title: 'Номер телефону',
@@ -134,33 +145,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  Widget _buildNameSurname(RegistrationState state, RegistrationCubit cubit) {
-    return Row(
-      children: [
-        Expanded(
-          child: CustomTextField(
-            borderColor: AppTheme.greyLigth,
-            title: 'Імя',
-            controller: cubit.firstNameController,
-            onChanged: (value) => cubit.firstNameChanged(value),
-            state: state.error.firstName,
-            validation: true,
-          ),
-        ),
-        Expanded(
-          child: CustomTextField(
-            borderColor: AppTheme.greyLigth,
-            title: 'Прізвище',
-            controller: cubit.secondNameController,
-            onChanged: (value) => cubit.secondNameChanged(value),
-            state: state.error.secondName,
-            validation: true,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _buildPassword(RegistrationState state, RegistrationCubit cubit) {
     return Row(
       children: [
@@ -193,28 +177,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
       ],
     );
   }
-}
-
-List<Widget> _buildMobileNameSurname(
-    RegistrationState state, RegistrationCubit cubit) {
-  return [
-    CustomTextField(
-      borderColor: AppTheme.greyLigth,
-      title: 'Імя',
-      controller: cubit.firstNameController,
-      onChanged: (value) => cubit.firstNameChanged(value),
-      state: state.error.firstName,
-      validation: true,
-    ),
-    CustomTextField(
-      borderColor: AppTheme.greyLigth,
-      title: 'Прізвище',
-      controller: cubit.secondNameController,
-      onChanged: (value) => cubit.secondNameChanged(value),
-      state: state.error.secondName,
-      validation: true,
-    ),
-  ];
 }
 
 List<Widget> _buildMobilePassword(

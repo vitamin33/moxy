@@ -5,7 +5,7 @@ import 'package:moxy/ui/screens/components/footer.dart';
 import 'package:moxy/ui/screens/components/back_container.dart';
 import 'package:moxy/ui/screens/components/product_advantages_container.dart';
 import 'package:moxy/ui/screens/components/product_details_container.dart';
-import 'package:moxy/ui/screens/components/recomended_products.dart';
+import 'package:moxy/ui/screens/components/review_container.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
@@ -28,7 +28,7 @@ class ProductDetailsPage extends StatelessWidget {
                     BackContainer(),
                     ProductDetailsContainer(),
                     ProductAdvantagesContainer(),
-                    RecomendedProducts(),
+                    ReviewContainer()
                   ],
                 ),
               ),
