@@ -25,6 +25,13 @@ jobs:
           BASE_URL=http://34.118.78.215
           EOF
 
+      # Add a step here to print the contents of the .prod.env file
+      - name: Print .prod.env file contents
+        run: cat .prod.env
+      # Add a step here to print the contents of the .dev.env file
+      - name: Print .dev.env file contents
+        run: cat .dev.env
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
