@@ -75,6 +75,14 @@ class CheckoutCubit extends CubitWithEffects<CheckoutState, UiEffect>
     emit(state.copyWith(deliveryType: type));
   }
 
+  void changeUserType(UserType type) {
+    emit(state.copyWith(userType: type));
+
+    if (type == UserType.regularCustomer) {
+      emitEffect(NavigateToLogin());
+    }
+  }
+
   void addQuantityOfProduct(BasketItem basketItem) {
     if (!checkMaxQuantityAvailability(basketItem)) {
       return;

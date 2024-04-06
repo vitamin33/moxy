@@ -153,16 +153,12 @@ class CheckoutProducts extends StatelessWidget {
     BasketItem item = state.basket.basketItems[index];
     String productName = item.product.name.toUpperCase();
     String color = item.dimension.color.name.toUpperCase();
-    return
-        //  Padding(
-        //   padding: const EdgeInsets.all(8),
-        //   child:
-        Row(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildProductImage(item),
-        // const SizedBox(width: 30),
+        const SizedBox(width: 10),
         Expanded(
           child: SizedBox(
             height: productRowHeight,
@@ -243,7 +239,6 @@ class CheckoutProducts extends StatelessWidget {
         ),
       ],
     );
-    // );
   }
 
   Widget _buildColorWidget(Dimension dimen) {

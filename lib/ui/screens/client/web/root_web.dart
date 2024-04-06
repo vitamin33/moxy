@@ -86,7 +86,6 @@ class RootWebWidget extends HookWidget {
   }
 
   Widget _buildHamburgerButton(BuildContext context) {
-    bool canPop = RouterProvider.router.canPop();
     return Row(children: [
       IconButton(
         icon: const Icon(Icons.menu),
@@ -94,14 +93,6 @@ class RootWebWidget extends HookWidget {
           _scaffoldKey.currentState!.openDrawer();
         },
       ),
-      canPop
-          ? IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                context.pop();
-              },
-            )
-          : const SizedBox.shrink(),
     ]);
   }
 
