@@ -22,7 +22,14 @@ import 'ui/theme/theme_provider.dart';
 
 void main() {
   runZonedGuarded<Future<void>>(() async {
-    await dotenv.load(fileName: Environment.fileName);
+    try {
+      await dotenv.load(fileName: Environment.fileName);
+      print("Loaded env file: ${Environment.fileName}");
+      print("BASE_URL: ${dotenv.env['BASE_URL']}");
+    } catch (e) {
+      print("Error loading env file: $e");
+    }
+
     WidgetsFlutterBinding.ensureInitialized();
 
     final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
