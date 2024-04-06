@@ -14,8 +14,8 @@ import 'package:moxy/ui/screens/client/web/profile/pages/profile_adress.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_contact_info.dart';
 import 'package:moxy/ui/screens/client/web/profile/pages/profile_history_order.dart';
 import 'package:moxy/ui/screens/components/footer.dart';
-import 'package:moxy/ui/screens/components/lottie_loader.dart';
 import 'package:moxy/ui/screens/components/promo_container.dart';
+import 'package:moxy/ui/screens/components/shimmer_profile.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import '../../../../../domain/admin/create_order/search_cities/search_cities_cubit.dart';
@@ -89,21 +89,19 @@ class _ProfilePageState extends State<ProfilePage>
             body: Container(
               height: MediaQuery.of(context).size.height,
               color: AppTheme.white,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 400),
-                        child:
-                            state.isLoading ? LottieLoader() : ProfileTabPage(),
-                      ),
-                    ),
-                    const PromoContainer(),
-                    const Footer(),
-                  ],
+              child: Stack(children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ProfileTabPage(),
+                      const PromoContainer(),
+                      const Footer(),
+                    ],
+                  ),
                 ),
-              ),
+                if (state.isLoading)
+                  const Positioned(child: LinearProgressIndicator())
+              ]),
             ),
           );
         },
@@ -139,36 +137,39 @@ class ProfileTabPage extends StatelessWidget {
         final profile = ProfileScope.of(context);
         return Padding(
             padding: EdgeInsets.all(isMobile ? 0.0 : 24.0),
-            child: profile != null
-                ? profile.isGuest()
-                    ? const GuestProfileWidget()
-                    : Column(
-                        children: [
-                          isMobile
-                              ? _selectedTabMobile(cubit, state)
-                              : SizedBox(
-                                  height: contentHeight,
-                                  child: Row(
-                                    children: [
-                                      // Drawer Menu
-                                      _drawerMenu(context, cubit, state, theme,
-                                          router, isMobile),
-                                      // Selected Tab Content
-                                      _selectedTabContent(
-                                          cubit, state, isMobile),
-                                    ],
+            child: AnimatedSwitcher(
+              duration: const Duration(seconds: 1),
+              child: !state.isLoading && profile != null
+                  ? profile.isGuest()
+                      ? const GuestProfileWidget()
+                      : Column(
+                          children: [
+                            isMobile
+                                ? _selectedTabMobile(cubit, state)
+                                : SizedBox(
+                                    height: contentHeight,
+                                    child: Row(
+                                      children: [
+                                        // Drawer Menu
+                                        _drawerMenu(context, cubit, state,
+                                            theme, router, isMobile),
+                                        // Selected Tab Content
+                                        _selectedTabContent(
+                                            cubit, state, isMobile),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                          const SizedBox(height: 30),
-                          AnimatedOpacity(
-                            opacity: state.showSaveButton ? 1.0 : 0.0,
-                            duration: const Duration(milliseconds: 300),
-                            child: _buildSaveButton(cubit),
-                          ),
-                          const SizedBox(height: 50),
-                        ],
-                      )
-                : LottieLoader());
+                            const SizedBox(height: 30),
+                            AnimatedOpacity(
+                              opacity: state.showSaveButton ? 1.0 : 0.0,
+                              duration: const Duration(milliseconds: 300),
+                              child: _buildSaveButton(cubit),
+                            ),
+                            const SizedBox(height: 50),
+                          ],
+                        )
+                  : const ShimmerProfile(),
+            ));
       },
     );
   }

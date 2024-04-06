@@ -38,20 +38,33 @@ class _AccessoriesProductPageState extends State<AccessoriesProductPage> {
           create: (context) => AccessoriesCatalogCubit(),
           child: BlocBuilder<AccessoriesCatalogCubit, AccessoriesCatalogState>(
             builder: (context, state) {
-              // final cubit = context.read<AccessoriesCatalogCubit>();
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FilterContainer(
-                      title: 'Аксесуари',
-                      productCount: state.accessoriesList.length.toString(),
-                      parentCubit: cubit,
+              return Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        FilterContainer(
+                          title: 'Аксесуари',
+                          productCount: state.accessoriesList.length.toString(),
+                          parentCubit: cubit,
+                        ),
+                        const AccessoriesCatalog(),
+                        const PromoContainer(),
+                        const Footer(),
+                      ],
                     ),
-                    const AccessoriesCatalog(),
-                    const PromoContainer(),
-                    const Footer(),
-                  ],
-                ),
+                  ),
+                  if (state.isLoading)
+                      const Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: LinearProgressIndicator(
+                          color: AppTheme.pinkDark,
+                          backgroundColor: AppTheme.pink,
+                        ),
+                      ),
+                ],
               );
             },
           ),
