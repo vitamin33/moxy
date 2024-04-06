@@ -8,24 +8,34 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Clone repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Set up Flutter
-      - name: Set up Flutter
+      - name: Create .dev.env file
+        run: |
+          cat > .dev.env <<EOF
+          BASE_URL=http://34.118.78.215
+          EOF
+
+      - name: Create .prod.env file
+        run: |
+          cat > .prod.env <<EOF
+          BASE_URL=http://34.118.78.215
+          EOF
+
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
-          flutter-version: '3.19.0' # Use the specific Flutter version you need
+          flutter-version: '3.19.0' # Specify your project's Flutter version
 
-      # Install dependencies and build the web app
-      - name: Install dependencies and build
-        run: |
-          flutter pub get
-          flutter build web
+      - name: Install dependencies
+        run: flutter pub get
 
-      # Deploy to Firebase Hosting
+      - name: Build Flutter Web App
+        run: flutter build web
+
       - name: Deploy to Firebase Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
