@@ -8,7 +8,6 @@ import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/responsive_utils.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({super.key});
@@ -44,7 +43,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
         final cubit = context.read<RegistrationCubit>();
         final theme = AppTheme.of(context)!;
         bool isLoading = state.state is Loading;
-        final isMobile = ResponsiveUtil.isMobile(context);
 
         return Column(
           children: [
@@ -57,13 +55,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Center(
-                        child: Text(
-                          'Реєстрація',
-                          textAlign: TextAlign.start,
-                          style: theme.bigTitleBoltText,
-                        ),
+                      Text(
+                        'Реєстрація',
+                        textAlign: TextAlign.start,
+                        style: theme.bigTitleBoltText,
                       ),
+                      const SizedBox(height: 10),
                       CustomTextField(
                         borderColor: AppTheme.greyLigth,
                         title: 'Імя',
@@ -102,10 +99,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         state: state.error.email,
                         validation: true,
                       ),
-                      !isMobile
-                          ? _buildPassword(state, cubit)
-                          : const SizedBox.shrink(),
-                      ...isMobile ? _buildMobilePassword(state, cubit) : [],
+                      CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Пароль',
+                        controller: cubit.passwordController,
+                        onChanged: (value) => cubit.passwordChanged(value),
+                        autofillHints: const [
+                          AutofillHints.password,
+                        ],
+                        state: state.error.password,
+                        validation: true,
+                      ),
+                      CustomTextField(
+                        borderColor: AppTheme.greyLigth,
+                        title: 'Підтвердити Пароль',
+                        controller: cubit.confirmRegisterPasswordController,
+                        onChanged: (value) =>
+                            cubit.confirmRegisterPasswordChanged(value),
+                        autofillHints: const [
+                          AutofillHints.password,
+                        ],
+                        state: state.error.confirmRegisterPassword,
+                        validation: true,
+                      ),
                     ],
                   ),
                 ),
@@ -133,7 +149,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         },
                       ),
                     ),
-                    // AppTheme.smallVerticalSpasing,
                     downText(context, theme),
                   ],
                 ),
@@ -145,87 +160,26 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  Widget _buildPassword(RegistrationState state, RegistrationCubit cubit) {
+  Widget downText(BuildContext context, AppTheme theme) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Expanded(
-          child: CustomTextField(
-            borderColor: AppTheme.greyLigth,
-            title: 'Пароль',
-            controller: cubit.passwordController,
-            onChanged: (value) => cubit.passwordChanged(value),
-            autofillHints: const [
-              AutofillHints.password,
-            ],
-            state: state.error.password,
-            validation: true,
-          ),
+        Text(
+          'Вже існує акаунт?',
+          style: theme.titleText,
         ),
-        Expanded(
-          child: CustomTextField(
-            borderColor: AppTheme.greyLigth,
-            title: 'Підтвердити Пароль',
-            controller: cubit.confirmRegisterPasswordController,
-            onChanged: (value) => cubit.confirmRegisterPasswordChanged(value),
-            autofillHints: const [
-              AutofillHints.password,
-            ],
-            state: state.error.confirmRegisterPassword,
-            validation: true,
-          ),
+        const SizedBox(
+          width: 4,
         ),
+        InkWell(
+            onTap: () {
+              context.push(RouterProvider.loginPath());
+            },
+            child: Text("Увійти",
+                style: theme.titleBoltText.copyWith(
+                    color: AppTheme.pinkDark,
+                    decoration: TextDecoration.underline))),
       ],
     );
   }
-}
-
-List<Widget> _buildMobilePassword(
-    RegistrationState state, RegistrationCubit cubit) {
-  return [
-    CustomTextField(
-      borderColor: AppTheme.greyLigth,
-      title: 'Пароль',
-      controller: cubit.passwordController,
-      onChanged: (value) => cubit.passwordChanged(value),
-      autofillHints: const [
-        AutofillHints.password,
-      ],
-      state: state.error.password,
-      validation: true,
-    ),
-    CustomTextField(
-      borderColor: AppTheme.greyLigth,
-      title: 'Підтвердити Пароль',
-      controller: cubit.confirmRegisterPasswordController,
-      onChanged: (value) => cubit.confirmRegisterPasswordChanged(value),
-      autofillHints: const [
-        AutofillHints.password,
-      ],
-      state: state.error.confirmRegisterPassword,
-      validation: true,
-    ),
-  ];
-}
-
-Widget downText(BuildContext context, AppTheme theme) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text(
-        'Вже існує акаунт?',
-        style: theme.titleText,
-      ),
-      const SizedBox(
-        width: 4,
-      ),
-      InkWell(
-          onTap: () {
-            context.push(RouterProvider.loginPath());
-          },
-          child: Text("Увійти",
-              style: theme.titleBoltText.copyWith(
-                  color: AppTheme.pinkDark,
-                  decoration: TextDecoration.underline))),
-    ],
-  );
 }

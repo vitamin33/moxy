@@ -24,7 +24,6 @@ void main() {
   runZonedGuarded<Future<void>>(() async {
     await dotenv.load(fileName: Environment.fileName);
     WidgetsFlutterBinding.ensureInitialized();
-
     final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
     final themeDarkStr =
         await rootBundle.loadString('assets/appainter_theme.json');

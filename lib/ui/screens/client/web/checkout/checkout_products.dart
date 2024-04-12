@@ -9,6 +9,8 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as dartJsFile;
 
 class CheckoutProducts extends StatelessWidget {
   final double productRowHeight = 150;
@@ -37,11 +39,10 @@ class CheckoutProducts extends StatelessWidget {
 
     for (int i = 0; i < rowCount; i++) {
       productWidgets.add(ProductItem(
-              productItem: state.basket.basketItems[i],
-              addQuantityOfProduct: cubit.addQuantityOfProduct,
-              removeQuantityOfProduct: cubit.removeQuantityOfProduct,
-              removeProductFromBasket: cubit.removeProductFromBasket)
-          );
+          productItem: state.basket.basketItems[i],
+          addQuantityOfProduct: cubit.addQuantityOfProduct,
+          removeQuantityOfProduct: cubit.removeQuantityOfProduct,
+          removeProductFromBasket: cubit.removeProductFromBasket));
     }
     return [
       Align(
@@ -100,6 +101,8 @@ class CheckoutProducts extends StatelessWidget {
       LoadingElevatedButton(
           onPressed: () {
             cubit.clickCheckout();
+            dartJsFile.context.callMethod(
+                'fbqPurchaseEvent', [state.basket.amountForFreeShipping().toString()]);
           },
           isLoadingState: state.isLoadingPaymentButton),
       const SizedBox(height: 20),

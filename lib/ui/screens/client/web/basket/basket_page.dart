@@ -16,6 +16,8 @@ import 'package:moxy/ui/screens/components/product_item.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as dartJsFile;
 
 class BasketPage extends StatefulWidget {
   const BasketPage({super.key});
@@ -108,6 +110,8 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                     Navigator.pop(
                       context,
                     );
+
+                    dartJsFile.context.callMethod('fbqInitiateCheckoutEvent');
 
                     context.push(RouterProvider.checkoutPath());
                   },

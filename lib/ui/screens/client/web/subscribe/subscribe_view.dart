@@ -10,6 +10,8 @@ import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:js' as dartJsFile;
 
 class SubscribeView extends StatefulWidget {
   const SubscribeView({super.key});
@@ -102,6 +104,7 @@ class _SubscribeViewState extends State<SubscribeView> {
                       InkWell(
                         onTap: () {
                           cubit.subscribeLead();
+                          dartJsFile.context.callMethod('fbqLeadEvent',[cubit.emailController.text]);
                         },
                         child: SvgPicture.asset(IconPath.textFieldArrowWeb),
                       )

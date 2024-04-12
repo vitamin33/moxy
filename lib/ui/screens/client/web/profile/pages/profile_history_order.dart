@@ -6,6 +6,7 @@ import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/models/order.dart';
 import 'package:moxy/domain/models/status.dart';
 import 'package:moxy/utils/responsive_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../../domain/client/profile/profile_state.dart';
 import '../../../../../theme/app_theme.dart';
@@ -31,7 +32,8 @@ class ProfileHistoryOrder extends StatelessWidget {
                 children: [
                   Text('Історія Замовлення', style: theme.headline3BoltText),
                   const SizedBox(height: 10),
-                  Expanded(child: _buildOrdersList(state, theme, isMobile)),
+                  Expanded(
+                      child: _buildOrdersList(state, theme, isMobile, context)),
                 ],
               ),
             ),
@@ -41,9 +43,10 @@ class ProfileHistoryOrder extends StatelessWidget {
     );
   }
 
-  Widget _buildOrdersList(ProfileState state, AppTheme theme, isMobile) {
+  Widget _buildOrdersList(
+      ProfileState state, AppTheme theme, bool isMobile, BuildContext context) {
     return state.historyOrders.isEmpty
-        ? const Text('No Orders')
+        ? Center(child: Text(AppLocalizations.of(context)!.emptyOrders))
         : _listView(state, theme, isMobile);
   }
 

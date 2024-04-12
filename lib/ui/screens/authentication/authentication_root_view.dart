@@ -14,7 +14,6 @@ import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import '../../components/snackbar_widgets.dart';
-// import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 // ignore: must_be_immutable
 class AuthenticationRootView extends StatefulWidget {
@@ -115,9 +114,10 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
 
   Widget buildWebContent(LoginCubit cubit) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Expanded(
+          flex: 1,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -144,12 +144,16 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(40),
-            child: Image.asset(
-              ImageAssets.loginWeb,
+        Expanded(
+          flex: 1,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: Image.asset(
+                ImageAssets.loginWeb,
+                fit: BoxFit.fitHeight,
+              ),
             ),
           ),
         ),
