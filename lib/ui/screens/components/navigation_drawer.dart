@@ -11,7 +11,7 @@ import 'navigation_card.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DashboardDrawer extends StatelessWidget {
-  const DashboardDrawer({Key? key}) : super(key: key);
+  const DashboardDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,11 @@ class DashboardDrawer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SvgPicture.asset(IconPath.moxylogo),
+                        SvgPicture.asset(
+                          IconPath.moxylogo,
+                          height: 30,
+                          width: 60,
+                        ),
                         IconButton(
                             onPressed: () {
                               Scaffold.of(context).closeDrawer();

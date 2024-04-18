@@ -27,13 +27,13 @@ jobs:
       - name: Create .dev.env file
         run: |
           cat > .dev.env <<EOF
-          BASE_URL=https://moxy.com.ua
+          BASE_URL=https://apimoxy.tech
           EOF
 
       - name: Create .prod.env file
         run: |
           cat > .prod.env <<EOF
-          BASE_URL=https://moxy.com.ua
+          BASE_URL=https://apimoxy.tech
           EOF
 
       # Extract Git tag and set it as env variable

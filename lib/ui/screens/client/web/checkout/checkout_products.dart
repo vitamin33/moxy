@@ -147,4 +147,141 @@ class CheckoutProducts extends StatelessWidget {
       ),
     ];
   }
+
+
+  Widget _buildProductItem(
+      CheckoutCubit cubit, AppTheme theme, int index, bool isMobile) {
+    BasketItem item = state.basket.basketItems[index];
+    String productName = item.product.name.toUpperCase();
+    String color = item.dimension.color.name.toUpperCase();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildProductImage(item),
+        const SizedBox(width: 10),
+        Expanded(
+          child: SizedBox(
+            height: productRowHeight,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '$productName $color',
+                        style: theme.mediumBoltText,
+                      ),
+                      if (!isMobile)
+                        Text(
+                          '${item.product.salePrice} $uah',
+                          style: theme.largeBoltText,
+                        ),
+                    ],
+                  ),
+                ),
+                if (isMobile)
+                  Text(
+                    '${item.product.salePrice} $uah',
+                    style: theme.largeBoltText,
+                  ),
+                Expanded(
+                  flex: 1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Color:', style: theme.largeText),
+                      _buildColorWidget(item.dimension),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      QuantityPicker(
+                        quantity: item.dimension.quantity,
+                        onPlus: () {
+                          cubit.addQuantityOfProduct(item);
+                        },
+                        onMinus: () {
+                          cubit.removeQuantityOfProduct(item);
+                        },
+                      ),
+                      InkWell(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: isMobile
+                              ? Icon(Icons.delete)
+                              : Text(
+                                  'Remove',
+                                  style: theme.titleText.copyWith(
+                                      color: AppTheme.gray,
+                                      decoration: TextDecoration.underline),
+                                ),
+                        ),
+                        onTap: () {
+                          cubit.removeProductFromBasket(item);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorWidget(Dimension dimen) {
+    final color = _generateColor(dimen);
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          style: BorderStyle.solid,
+          color: AppTheme.gray.withOpacity(0.4),
+          width: 1,
+        ),
+      ),
+      child: CircleAvatar(
+        radius: 15,
+        backgroundColor: AppTheme.greyLigth,
+        child: CircleAvatar(radius: 13, backgroundColor: color),
+      ),
+    );
+  }
+
+  Widget _buildProductImage(BasketItem item) {
+    if (item.dimension.images.isNotEmpty) {
+      return FadeInImage.assetNetwork(
+        placeholder: 'assets/images/placeholder.jpg',
+        image: item.dimension.images.first.imagePath,
+        width: productRowHeight,
+        height: productRowHeight,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.asset(
+        width: productRowHeight,
+        height: productRowHeight,
+        'assets/images/placeholder.jpg',
+        fit: BoxFit.cover,
+      );
+    }
+  }
+}
+
+Color _generateColor(Dimension dimen) {
+  return hexToColor(dimen.color.hexCode);
 }

@@ -14,7 +14,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? guestId;
+  const LoginPage({super.key, this.guestId});
 
   @override
   _LoginPageState createState() => _LoginPageState();

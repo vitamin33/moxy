@@ -10,6 +10,10 @@ class NavigateToPaymentProccess implements UiEffect {
   NavigateToPaymentProccess(this.paymentUri);
 }
 
+class NavigateToLogin implements UiEffect {
+  NavigateToLogin();
+}
+
 class UnableToLoadPaymentUrl implements UiEffect {}
 
 class NewOrderCreationFailed implements UiEffect {}

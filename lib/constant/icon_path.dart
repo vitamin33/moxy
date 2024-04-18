@@ -54,4 +54,6 @@ class IconPath {
   static const String newIcon = "assets/icons/new_icon.svg";
   static const String accessoriesIcon = "assets/icons/accessories_icon.svg";
   static const String noImage = "assets/icons/no_image.svg";
+  static const String pinkDiamond = "assets/icons/pink_diamond.svg";
+  static const String guestUser = "assets/icons/guest_user.svg";
 }

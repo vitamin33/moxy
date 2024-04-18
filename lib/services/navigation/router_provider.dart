@@ -86,7 +86,7 @@ class RouterProvider {
   static adminFeedbacksPath() => '/${Routes.adminFeedbacks}';
 
   static Widget _loginScreen(BuildContext context, GoRouterState state) =>
-      const LoginPage();
+      LoginPage(guestId: state.uri.queryParameters['guestId']);
   static Widget _registerScreen(BuildContext context, GoRouterState state) =>
       const RegistrationPage();
   static Widget _resetPasswordScreen(
@@ -256,7 +256,8 @@ class RouterProvider {
             routes: <RouteBase>[
               GoRoute(
                 path: checkoutPath(),
-                builder: (context, state) => const CheckoutPage(),
+                builder: (context, state) =>
+                    const ProfileScope(child: CheckoutPage()),
               ),
             ],
           ),
