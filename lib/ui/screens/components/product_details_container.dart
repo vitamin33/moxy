@@ -28,9 +28,12 @@ class ProductDetailsContainer extends StatefulWidget {
 
 class _ProductDetailsContainerState extends State<ProductDetailsContainer> {
   late BasketCubit basketCubit;
+  late ProductDetailsCubit productDetailsCubit;
+
   @override
   void initState() {
     super.initState();
+    productDetailsCubit = context.read<ProductDetailsCubit>();
     basketCubit = context.read<BasketCubit>();
     basketCubit.effectStream.listen((effect) {
       if (effect is NavigateToCheckout) {
@@ -128,7 +131,7 @@ class _AboutProductDetails extends StatelessWidget {
           Row(
             children: [
               Text(
-                AppLocalizations.of(context)!.color ,
+                AppLocalizations.of(context)!.color,
                 style: theme.headlineSemiBoltText,
               ),
               Container(

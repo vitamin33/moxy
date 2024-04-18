@@ -35,7 +35,7 @@ class WarehouseMapper {
       ref: warehouse.ref,
       postMachineType: warehouse.postMachineType,
       presentName: warehouse.description,
-      number: warehouse.number,
+      number: warehouse.number ?? 0,
     );
   }
 }

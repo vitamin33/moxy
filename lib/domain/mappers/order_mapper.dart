@@ -161,7 +161,7 @@ class OrderMapper {
       deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
       paymentType: _mapPaymentTypeNetwork(paymentType.name),
       novaPost: novapost?.let((n) => NetworkNovaPost(
-            number: n.number,
+            number: n.number??0,
             ref: n.ref,
             postMachineType: n.postMachineType,
             presentName: n.description,
@@ -212,7 +212,7 @@ class OrderMapper {
       deliveryType: _mapDeliveryTypeNetwork(deliveryType.name),
       paymentType: _mapPaymentTypeNetwork(paymentType.name),
       novaPost: NetworkNovaPost(
-          number: novapost.number,
+          number: novapost.number??0,
           ref: novapost.ref,
           postMachineType: novapost.postMachineType,
           presentName: novapost.description),
