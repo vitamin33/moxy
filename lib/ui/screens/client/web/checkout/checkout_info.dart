@@ -111,9 +111,11 @@ class _CheckoutInfoState extends State<CheckoutInfo> {
         children: [
           const RoundedText(number: 2),
           const SizedBox(width: 8),
-          Text(
-            AppLocalizations.of(context)!.contactInfo.toUpperCase(),
-            style: theme.largeBoltText,
+          Expanded(
+            child: Text(
+              AppLocalizations.of(context)!.contactInfo.toUpperCase(),
+              style: theme.largeBoltText,
+            ),
           ),
         ],
       ),
@@ -180,8 +182,12 @@ class _CheckoutInfoState extends State<CheckoutInfo> {
         children: [
           const RoundedText(number: 3),
           const SizedBox(width: 8),
-          Text(AppLocalizations.of(context)!.chooseDeliveryType.toUpperCase(),
-              style: theme.largeBoltText),
+          Expanded(
+            child: Text(
+                AppLocalizations.of(context)!.chooseDeliveryType.toUpperCase(),
+                overflow: TextOverflow.fade,
+                style: theme.largeBoltText),
+          ),
         ],
       ),
       const SizedBox(height: 16),

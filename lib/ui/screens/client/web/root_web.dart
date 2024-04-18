@@ -71,10 +71,14 @@ class RootWebWidget extends HookWidget {
   AppBar buildAppBar(BuildContext context, AppTheme theme,
       TabController tabController, bool isMobile) {
     return AppBar(
-      leadingWidth: isMobile ? 56 : 150, // Adjust the leading width
+      shape: const Border(
+          bottom: BorderSide(
+        color: Color(0xFFF0F1F5),
+      )),
+      leadingWidth: isMobile ? 56 : 150,
       leading: isMobile ? _buildHamburgerButton(context) : _buildLogo(),
       backgroundColor: AppTheme.white,
-      elevation: 8.0,
+      elevation: 0.0,
       title: isMobile
           ? SvgPicture.asset(IconPath.moxyLogoWeb, width: 60)
           : _buildTabsWidget(context, tabController),
@@ -169,10 +173,10 @@ class RootWebWidget extends HookWidget {
               ),
               if (state.basket.basketItems.isNotEmpty)
                 Positioned(
-                  top: 10,
-                  right: 10,
+                  top: 6,
+                  right: 6,
                   child: CircleAvatar(
-                    radius: 8,
+                    radius: 10,
                     backgroundColor: AppTheme.red,
                     child: Padding(
                       padding: const EdgeInsets.all(3.0),

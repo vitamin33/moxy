@@ -23,6 +23,7 @@ class Footer extends StatelessWidget {
         builder: (context, state) {
           final isMobile = ResponsiveUtil.isMobile(context);
           return Container(
+              padding:const EdgeInsets.all(30),
               decoration: const BoxDecoration(color: AppTheme.pink),
               width: double.infinity,
               child: isMobile
@@ -40,9 +41,9 @@ class Footer extends StatelessWidget {
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        const SubscribeView(),
-                        menuColumn(theme, context),
-                        contactColumn(theme)
+                        const Expanded(flex: 1, child: SubscribeView()),
+                        Expanded(flex: 1, child: menuColumn(theme, context)),
+                        Expanded(child: contactColumn(theme))
                       ],
                     ));
         },
@@ -134,7 +135,7 @@ Widget menuColumn(AppTheme theme, BuildContext context) {
 
 Widget contactColumn(AppTheme theme) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 00.0),
     child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -161,7 +162,7 @@ Widget contactColumn(AppTheme theme) {
               ],
             ),
           ),
-          const SizedBox(height: 58),
+          const SizedBox(height: 20),
           Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -178,15 +179,19 @@ Widget contactColumn(AppTheme theme) {
                     'E-mail: ',
                     style: theme.mediumText,
                   ),
-                  OnHover(
-                    builder: ((isHovered) {
-                      return Text('Support@moxy.ua',
-                          style: theme.mediumText.copyWith(
-                              color: isHovered ? AppTheme.gray : AppTheme.black,
-                              decoration: isHovered
-                                  ? TextDecoration.underline
-                                  : TextDecoration.none));
-                    }),
+                  Expanded(
+                    child: OnHover(
+                      builder: ((isHovered) {
+                        return Text('Support@moxy.ua',
+                            maxLines: 2,
+                            style: theme.mediumText.copyWith(
+                                color:
+                                    isHovered ? AppTheme.gray : AppTheme.black,
+                                decoration: isHovered
+                                    ? TextDecoration.underline
+                                    : TextDecoration.none));
+                      }),
+                    ),
                   ),
                 ],
               ),

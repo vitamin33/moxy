@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
-import 'package:moxy/domain/models/basket.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/ui/screens/components/expandable_text.dart';
 import 'package:moxy/ui/screens/components/loading_elevated_button.dart';
-import 'package:moxy/ui/screens/components/quantity_picker.dart';
+import 'package:moxy/ui/screens/components/product_item.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/moxy_analytics.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -39,9 +37,11 @@ class CheckoutProducts extends StatelessWidget {
     int rowCount = state.basket.basketItems.length;
 
     for (int i = 0; i < rowCount; i++) {
-      productWidgets.add(
-        _buildProductItem(cubit, theme, i, isMobile),
-      );
+      productWidgets.add(ProductItem(
+          productItem: state.basket.basketItems[i],
+          addQuantityOfProduct: cubit.addQuantityOfProduct,
+          removeQuantityOfProduct: cubit.removeQuantityOfProduct,
+          removeProductFromBasket: cubit.removeProductFromBasket));
     }
     return [
       Align(
@@ -70,13 +70,15 @@ class CheckoutProducts extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              AppLocalizations.of(context)!.totalValueToPay.toUpperCase(),
-              style: theme.largeBoltText,
+            Expanded(
+              child: Text(
+                AppLocalizations.of(context)!.totalValueToPay.toUpperCase(),
+                style: theme.largeBoltText,
+              ),
             ),
             Text(
               '${state.basket.totalValue()} $uah',
-              style: theme.smallText,
+              style: theme.mediumBoltText,
             )
           ],
         ),
@@ -85,9 +87,6 @@ class CheckoutProducts extends StatelessWidget {
         color: AppTheme.gray.withOpacity(0.3),
       ),
       const SizedBox(height: 30),
-      // SizedBox(
-      //   width: double.infinity,
-      //   child:
       ExpandableShippingText(
         maxLines: 5,
         collapsedText: freeShippingText,
@@ -97,12 +96,13 @@ class CheckoutProducts extends StatelessWidget {
         additionalText:
             '${AppLocalizations.of(context)!.forFreeShippinYouNeed} ${state.basket.freeShippingThreshold} $uah.',
       ),
-
-      // ),
       const SizedBox(height: 32),
       LoadingElevatedButton(
           onPressed: () {
             cubit.clickCheckout();
+            MoxyAnalytics().purchaseEvent(valuePurchase: [
+              state.basket.amountForFreeShipping().toString()
+            ]);
           },
           isLoadingState: state.isLoadingPaymentButton),
       const SizedBox(height: 20),
@@ -147,6 +147,7 @@ class CheckoutProducts extends StatelessWidget {
       ),
     ];
   }
+
 
   Widget _buildProductItem(
       CheckoutCubit cubit, AppTheme theme, int index, bool isMobile) {

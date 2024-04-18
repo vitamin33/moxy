@@ -145,6 +145,7 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
     final result = await basketRepository.addProductToBasket(item);
     result.when((success) {
       final List<BasketItem> updateBasketItemsList = [
+        ...state.basket.basketItems,
         BasketItem(
             product: product,
             dimension: Dimension(
@@ -157,7 +158,6 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
       emit(state.copyWith(
           isLoading: false,
           basket: state.basket.copyWith(basketItems: updateBasketItemsList)));
-      emitEffect(OpenBasketSideSheet());
     }, (error) {
       emit(state.copyWith(isLoading: false));
       emitEffect(BasketApiRequestFailed(
@@ -194,6 +194,7 @@ class BasketCubit extends CubitWithEffects<BasketState, UiEffect>
           isLoading: false,
           basket: state.basket.copyWith(
             basketItems: [
+              ...state.basket.basketItems,
               BasketItem(
                   product: productDetails.product,
                   dimension: productDetails.selectedDimension)

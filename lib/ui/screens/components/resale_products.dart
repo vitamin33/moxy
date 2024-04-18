@@ -38,7 +38,7 @@ class ResaleProducts extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Допродаж',
+                          'Також обирають',
                           style: theme.headline4BoltText,
                         ),
                       ),

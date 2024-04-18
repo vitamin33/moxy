@@ -9,8 +9,9 @@ import 'package:moxy/domain/client/subscribe/subscribe_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:moxy/utils/moxy_analytics.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+// ignore: avoid_web_libraries_in_flutter
 class SubscribeView extends StatefulWidget {
   const SubscribeView({super.key});
 
@@ -102,6 +103,7 @@ class _SubscribeViewState extends State<SubscribeView> {
                       InkWell(
                         onTap: () {
                           cubit.subscribeLead();
+                          MoxyAnalytics().leadEvent(leadEmail:  cubit.emailController.text);
                         },
                         child: SvgPicture.asset(IconPath.textFieldArrowWeb),
                       )

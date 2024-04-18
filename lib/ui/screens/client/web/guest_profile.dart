@@ -53,7 +53,7 @@ class GuestProfileWidget extends StatelessWidget {
               onTap: () {
                 context.go(RouterProvider.registerPath());
               },
-              buttonWidth: 300,
+              buttonWidth: 350,
             ),
           ],
         ),

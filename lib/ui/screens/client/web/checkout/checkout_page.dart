@@ -7,6 +7,9 @@ import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_effects.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
+import 'package:moxy/ui/screens/components/back_container.dart';
+import 'package:moxy/ui/screens/components/footer.dart';
+import 'package:moxy/ui/screens/components/resale_products.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -81,50 +84,55 @@ class _CheckoutPageState extends State<CheckoutPage> {
         builder: (context, state) {
           final isMobile = ResponsiveUtil.isMobile(context);
           return Scaffold(
-            backgroundColor: Colors.transparent,
-            body: ScrollableSection(
-              content: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              child: Column(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: BackButton(),
+                  ScrollableSection(
+                    content: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const BackContainer(),
+                        isMobile
+                            ? Column(
+                                children: [
+                                  CheckoutInfo(
+                                    state: state,
+                                  ),
+                                  CheckoutProducts(
+                                    state: state,
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 40),
+                                      child: CheckoutInfo(state: state),
+                                    ),
+                                  ),
+                                  const VerticalDivider(width: 1, thickness: 1),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: CheckoutProducts(state: state),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                      ],
+                    ),
                   ),
-                  isMobile
-                      ? Column(
-                          children: [
-                            CheckoutInfo(
-                              state: state,
-                            ),
-                            CheckoutProducts(
-                              state: state,
-                            ),
-                            const SizedBox(height: 20),
-                          ],
-                        )
-                      : Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Padding(
-                                padding: const EdgeInsets.only(right: 40),
-                                child: CheckoutInfo(state: state),
-                              ),
-                            ),
-                            const VerticalDivider(width: 1, thickness: 1),
-                            Expanded(
-                              flex: 1,
-                              child: Align(
-                                alignment: Alignment.topLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: CheckoutProducts(state: state),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
+                  const ResaleProducts(),
+                  const Footer()
                 ],
               ),
             ),

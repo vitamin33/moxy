@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_theme/json_theme.dart';
+import 'package:moxy/firebase_options.dart';
 import 'package:moxy/moxy_app.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/services/navigation/navigation_service.dart';
@@ -31,7 +33,6 @@ void main() {
     }
 
     WidgetsFlutterBinding.ensureInitialized();
-
     final themeStr = await rootBundle.loadString('assets/appainter_theme.json');
     final themeDarkStr =
         await rootBundle.loadString('assets/appainter_theme.json');
@@ -51,6 +52,9 @@ void main() {
 
     GetItService.initializeService();
     initNavigationSercie();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
 
     runApp(
       ChangeNotifierProvider(

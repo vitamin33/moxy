@@ -10,7 +10,7 @@ import 'package:moxy/ui/screens/components/shimmer/shimmer_new_product_list_grid
 import '../../../domain/client/new_product_list/new_product_list_state.dart';
 
 class NewProductList extends StatefulWidget {
-  const NewProductList({Key? key}) : super(key: key);
+  const NewProductList({super.key});
 
   @override
   _NewProductListState createState() => _NewProductListState();

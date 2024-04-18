@@ -81,6 +81,7 @@ class SearchCubit extends CubitWithEffects<SearchState, UiEffect>
         emit(state.copyWith(searchProduct: state.searchProduct));
         emitEffect(ChangeFavoriteFailed());
       }
+      
     } catch (e, stack) {
       moxyPrint(stack);
     }

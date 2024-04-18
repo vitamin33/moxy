@@ -39,8 +39,8 @@ class BottomSearchCityDropdown extends StatelessWidget {
                 asyncItems: citySearchCubit.searchCities,
                 popupProps: PopupPropsMultiSelection.modalBottomSheet(
                   showSelectedItems: false,
-                  searchFieldProps:
-                      _createSearchFieldProps(citySearchCubit.controller),
+                  searchFieldProps: _createSearchFieldProps(
+                      context, citySearchCubit.controller),
                   itemBuilder: _cityPopupItemBuilder,
                   showSearchBox: true,
                   isFilterOnline: true,
@@ -80,11 +80,12 @@ class BottomSearchCityDropdown extends StatelessWidget {
     );
   }
 
-  TextFieldProps _createSearchFieldProps(TextEditingController controller) {
+  TextFieldProps _createSearchFieldProps(
+      BuildContext context, TextEditingController controller) {
     return TextFieldProps(
       cursorColor: AppTheme.pinkDark,
       decoration: InputDecoration(
-        labelText: 'Enter city name',
+        labelText: AppLocalizations.of(context)!.chooseCity,
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: AppTheme.greyDark,

@@ -5,6 +5,8 @@ import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/components/otp_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:moxy/utils/moxy_analytics.dart';
 
 class VerificationPage extends StatelessWidget {
   const VerificationPage({super.key});
@@ -28,12 +30,13 @@ class VerificationPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               Text(
-                'Код верифікації',
+                AppLocalizations.of(context)!.verCode,
                 textAlign: TextAlign.center,
                 style: theme.bigTitleBoltText,
               ),
               const SizedBox(height: AppTheme.cardPadding),
               OtpTextField(
+                textStyle: const TextStyle(fontSize: 18),
                 state: state.error.confirmationCode,
                 numberOfFields: 4,
                 borderColor: AppTheme.greyLigth,
@@ -46,14 +49,14 @@ class VerificationPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text('Didnt receive a code?',
+                  Text(AppLocalizations.of(context)!.tryAgain,
                       style: theme.mediumSemiBoltText),
                   InkWell(
                     onTap: () {
                       cubit.resendConfirmationCode();
                     },
                     child: Text(
-                      'Try Again',
+                      AppLocalizations.of(context)!.receiveCodeQuestion,
                       style: theme.largeSemiBoltText.copyWith(
                           color: AppTheme.pinkDark,
                           decoration: TextDecoration.underline),
@@ -70,10 +73,11 @@ class VerificationPage extends StatelessWidget {
                 child: OutlineStateButton(
                   state: isLoading ? ButtonState.loading : ButtonState.idle,
                   buttonWidth: MediaQuery.of(context).size.width,
-                  title: 'Відправити код',
+                  title: AppLocalizations.of(context)!.sendCode,
                   onTap: () {
                     if (cubit.validateConfirmCodeFields()) {
                       context.read<RegistrationCubit>().sendConfirmationCode();
+                      MoxyAnalytics().completeRegistrationEvent();
                     }
                   },
                 ),

@@ -6,14 +6,14 @@ import 'package:moxy/domain/models/warehouse.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_cubit.dart';
 import '../../../../../domain/admin/create_order/search_warehouse/search_warehouse_state.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchWarehouseDropdown extends StatelessWidget {
   final Warehouse? selectedWarehouse;
   final City selectedCity;
   final ValueChanged onChanged;
 
-  const SearchWarehouseDropdown({
-    Key? key,
+  const SearchWarehouseDropdown({super.key, 
     required this.selectedWarehouse,
     required this.onChanged,
     required this.selectedCity,
@@ -33,13 +33,19 @@ class SearchWarehouseDropdown extends StatelessWidget {
                     searchTerm, selectedCity.deliveryCityRef);
               },
               popupProps: PopupPropsMultiSelection.menu(
+                emptyBuilder: (context, searchEntry) {
+                  return Center(
+                    child:
+                        Text(AppLocalizations.of(context)!.warehouseNotFound),
+                  );
+                },
                 loadingBuilder: (context, searchEntry) {
                   return const LinearProgressIndicator();
                 },
                 menuProps: const MenuProps(backgroundColor: AppTheme.white),
                 showSelectedItems: false,
-                searchFieldProps:
-                    _createSearchFieldProps(warehouseSearchCubit.controller),
+                searchFieldProps: _createSearchFieldProps(
+                    context, warehouseSearchCubit.controller),
                 itemBuilder: _warehousePopupItemBuilder,
                 showSearchBox: true,
                 isFilterOnline: true,
@@ -47,7 +53,8 @@ class SearchWarehouseDropdown extends StatelessWidget {
               selectedItem: selectedWarehouse,
               itemAsString: selectedWarehouse!.description != ''
                   ? (Warehouse warehouse) => warehouse.description.toString()
-                  : (Warehouse warehouse) => 'Choose warehouse',
+                  : (Warehouse warehouse) =>
+                      AppLocalizations.of(context)!.chooseWarehouse,
               onChanged: (Warehouse? warehouse) {
                 onChanged(warehouse);
               },
@@ -77,11 +84,12 @@ class SearchWarehouseDropdown extends StatelessWidget {
     );
   }
 
-  TextFieldProps _createSearchFieldProps(TextEditingController controller) {
+  TextFieldProps _createSearchFieldProps(
+      BuildContext context, TextEditingController controller) {
     return TextFieldProps(
       cursorColor: AppTheme.pinkDark,
       decoration: InputDecoration(
-        labelText: 'Enter warehouse',
+        labelText: AppLocalizations.of(context)!.chooseWarehouse,
         enabledBorder: OutlineInputBorder(
           borderSide: const BorderSide(
             color: AppTheme.greyDark,

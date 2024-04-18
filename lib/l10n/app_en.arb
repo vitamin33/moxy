@@ -179,7 +179,20 @@
   "subscribeNewsletter": "NEWSLETTER",
   "subscribe": "Subscribe",
   "subscribeSuccessMessage": "You are ready for our updates and exclusive  offers. Thank you!",
-
+  "chooseWarehouse":"Choose warehouse",
+  "chooseCity":"Choose City",
+  "cityNotFound" : "City not found",
+  "warehouseNotFound": "Warehouse not found",
+  "color":"Color",
+  "size": "Size",
+  "sortBy":"Sort by",
+  "price":"Price",
+  "verCode":"Verification Code",
+  "tryAgain":"Try Again",
+  "receiveCodeQuestion":"Didn't receive a code?",
+  "sendCode":"Send Code",
+  "emptyOrders":"You have no orders yet",
+  
   "postWarning": "Please note: parcels are stored for 5 days from the date of arrival at the\n branch. On the 6th day, the package is automatically returned to the sender.",
   "termsAndConditionsWarning": "Placing an order on MOXY.UA, you agree to our Terms and Conditions"
 }

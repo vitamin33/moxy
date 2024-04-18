@@ -9,13 +9,12 @@ import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_effect.dart';
 import 'package:moxy/domain/client/basket/basket_state.dart';
 import 'package:moxy/domain/models/basket.dart';
-import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
-import 'package:moxy/ui/screens/components/quantity_picker.dart';
+import 'package:moxy/ui/screens/components/product_item.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
-import 'package:moxy/utils/common.dart';
+import 'package:moxy/utils/moxy_analytics.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -110,7 +109,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                     Navigator.pop(
                       context,
                     );
-
+                    MoxyAnalytics().initiateCheckoutEvent();
                     context.push(RouterProvider.checkoutPath());
                   },
                   buttonWidth: double.infinity,
@@ -143,138 +142,13 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
         itemCount: basket.basketItems.length,
         itemBuilder: (context, index) {
           final item = basket.basketItems[index];
-          return _buildProductItem(cubit, item, theme, isMobile);
+          return ProductItem(
+              productItem: item,
+              addQuantityOfProduct: cubit.addQuantityOfProduct,
+              removeQuantityOfProduct: cubit.removeQuantityOfProduct,
+              removeProductFromBasket: cubit.removeProductFromBasket);
         },
       );
     }
   }
-}
-
-Widget _buildProductItem(
-    BasketCubit cubit, BasketItem item, AppTheme theme, bool isMobile) {
-  String productName = item.product.name.toUpperCase();
-  String color = item.dimension.color.name.toUpperCase();
-  return Padding(
-    padding: const EdgeInsets.all(8),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildProductImage(item),
-        const SizedBox(width: 30),
-        Expanded(
-          child: SizedBox(
-            height: 150,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '$productName $color',
-                          maxLines: 3,
-                          style: theme.largeBoltText,
-                        ),
-                      ),
-                      Text(
-                        '${item.product.salePrice} uah',
-                        style: theme.largeBoltText,
-                      ),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Color:', style: theme.largeText),
-                      _buildColorWidget(item.dimension),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      QuantityPicker(
-                        quantity: item.dimension.quantity,
-                        onPlus: () {
-                          cubit.addQuantityOfProduct(item);
-                        },
-                        onMinus: () {
-                          cubit.removeQuantityOfProduct(item);
-                        },
-                      ),
-                      InkWell(
-                        child: const Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Icon(
-                              Icons.delete,
-                              color: AppTheme.black,
-                            )),
-                        onTap: () {
-                          cubit.removeProductFromBasket(item);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildProductImage(BasketItem item) {
-  if (item.dimension.images.isNotEmpty) {
-    return FadeInImage.assetNetwork(
-      placeholder: 'assets/images/placeholder.jpg',
-      image: item.dimension.images.first.imagePath,
-      width: 100,
-      height: 150,
-      fit: BoxFit.cover,
-    );
-  } else {
-    return Image.asset(
-      width: 100,
-      height: 150,
-      'assets/images/placeholder.jpg',
-      fit: BoxFit.cover,
-    );
-  }
-}
-
-Widget _buildColorWidget(Dimension dimen) {
-  final color = _generateColor(dimen);
-  return Container(
-    padding: const EdgeInsets.all(2),
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(
-        style: BorderStyle.solid,
-        color: AppTheme.gray.withOpacity(0.4),
-        width: 1,
-      ),
-    ),
-    child: CircleAvatar(
-      radius: 15,
-      backgroundColor: AppTheme.greyLigth,
-      child: CircleAvatar(radius: 13, backgroundColor: color),
-    ),
-  );
-}
-
-Color _generateColor(Dimension dimen) {
-  return hexToColor(dimen.color.hexCode);
 }

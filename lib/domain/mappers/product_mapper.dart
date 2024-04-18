@@ -66,6 +66,22 @@ class ProductMapper {
 
   ProductDetails mapToProductDetails(NetworkProductDetails network) {
     List<NetworkDimension> dimens = network.dimensions ?? [];
+    final dimensions = dimens
+        .map(
+          (e) => mapToDimension(e),
+        )
+        .toList();
+    final firstSelectedDimension = dimensions
+        .map((e) => e.hashCode == dimensions.first.hashCode
+            ? Dimension(
+                color: e.color,
+                quantity: e.quantity,
+                material: e.material,
+                size: e.size,
+                images: e.images,
+                isSelected: true)
+            : e)
+        .toList();
     List<NetworkProductAdantages?> productAdvantages =
         network.productAdvantages ?? [];
     return ProductDetails(
@@ -77,18 +93,20 @@ class ProductMapper {
           discountPrice: network.discountPrice ?? 0,
           costPrice: network.costPrice ?? 0,
           salePrice: network.salePrice,
-          dimensions: dimens
-              .map(
-                (e) => mapToDimension(e),
-              )
-              .toList(),
+          dimensions: firstSelectedDimension,
           idName: network.idName,
           category: network.category,
           forSale: network.forSale,
           isFavorite: network.isFavorite ?? false,
           attributes: mapToAttributes(network.attributes),
         ),
-        selectedDimension: Dimension.defaultDimension(),
+        selectedDimension: Dimension(
+            isSelected: true,
+            color: dimensions.first.color,
+            quantity: 1,
+            material: dimensions.first.material,
+            size: dimensions.first.size,
+            images: dimensions.first.images),
         productAdvantages:
             productAdvantages.map((e) => mapToProductAdvantages(e!)).toList());
   }

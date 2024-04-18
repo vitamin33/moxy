@@ -3,7 +3,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moxy/domain/models/media.dart';
 import 'package:moxy/ui/screens/components/media_block_grid.dart';
 import 'package:moxy/ui/screens/components/small_block_grid.dart';
-import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
 import '../../../domain/models/product.dart';
@@ -22,7 +21,6 @@ class NewProductListGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final length = allSellingProduct.length - 1;
     final isMobile = ResponsiveUtil.isMobile(context);
     return SizedBox(
       width: double.infinity,
@@ -38,18 +36,18 @@ class NewProductListGrid extends StatelessWidget {
               if (bigBlockLeading && !isMobile)
                 MediaBlockGrid(mediaList: mediaList),
               SmallBlockGrid(
-                product: allSellingProduct[random(0, length)],
+                product: allSellingProduct[0],
               ),
               SmallBlockGrid(
-                product: allSellingProduct[random(0, length)],
+                product: allSellingProduct[1],
               ),
               if (!bigBlockLeading && !isMobile)
                 MediaBlockGrid(mediaList: mediaList),
               SmallBlockGrid(
-                product: allSellingProduct[random(0, length)],
+                product: allSellingProduct[2],
               ),
               SmallBlockGrid(
-                product: allSellingProduct[random(0, length)],
+                product: allSellingProduct[3],
               ),
             ],
           )),

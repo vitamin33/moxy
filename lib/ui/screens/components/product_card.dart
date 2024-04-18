@@ -9,6 +9,7 @@ import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/moxy_analytics.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
 class ProductCard extends StatelessWidget {
@@ -115,6 +116,7 @@ class ProductCard extends StatelessWidget {
         alignment: Alignment.topRight,
         child: GestureDetector(
           onTap: () {
+            MoxyAnalytics().addToWishlistEvent(productName:product.name);
             onChangeFavorites(product);
           },
           child: OnHover(
@@ -163,6 +165,7 @@ class ProductCard extends StatelessWidget {
           basketCubit.addProductToBasket(product);
           await cubit.runAddToCartAnimation(widgetKey);
           await cubit.cartKey.currentState!.runCartAnimation();
+          MoxyAnalytics().addToCartEvent(productName:product.name);
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),

@@ -15,6 +15,7 @@ import 'package:moxy/ui/screens/components/rate_indicator.dart';
 import 'package:moxy/ui/screens/components/shimmer/shimmer_product_attributes.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 
 class ProductDetailsContainer extends StatefulWidget {
@@ -47,8 +48,8 @@ class _ProductDetailsContainerState extends State<ProductDetailsContainer> {
 
         return Padding(
           padding: EdgeInsets.symmetric(
-            vertical: 16.0,
-            horizontal: isMobile ? AppTheme.defaultPaddingMobile : 24,
+            vertical: 0.0,
+            horizontal: isMobile ? 0 : 0,
           ),
           child: isMobile
               ? Column(
@@ -127,7 +128,7 @@ class _AboutProductDetails extends StatelessWidget {
           Row(
             children: [
               Text(
-                'Color:',
+                AppLocalizations.of(context)!.color ,
                 style: theme.headlineSemiBoltText,
               ),
               Container(
@@ -290,17 +291,14 @@ class _ButtonsArea extends StatelessWidget {
         if (!isMobile)
           Row(
             children: [
-              Expanded(
-                flex: 4,
-                child: QuantityPicker(
-                  quantity: state.productDetails.selectedDimension.quantity,
-                  onPlus: () {
-                    cubit.addQuantityOfProduct();
-                  },
-                  onMinus: () {
-                    cubit.removeQuantityOfProduct();
-                  },
-                ),
+              QuantityPicker(
+                quantity: state.productDetails.selectedDimension.quantity,
+                onPlus: () {
+                  cubit.addQuantityOfProduct();
+                },
+                onMinus: () {
+                  cubit.removeQuantityOfProduct();
+                },
               ),
               const SizedBox(width: 5),
               Expanded(
@@ -351,7 +349,6 @@ class _PriceView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = AppTheme.of(context)!;
     final isMobile = ResponsiveUtil.isMobile(context);
-
     return state.productDetails.product.discountPrice != 0
         ? isMobile
             ? Column(
