@@ -2,14 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:moxy/constants.dart';
 import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/checkout/checkout_state.dart';
+import 'package:moxy/domain/models/basket.dart';
 import 'package:moxy/ui/screens/components/expandable_text.dart';
 import 'package:moxy/ui/screens/components/loading_elevated_button.dart';
 import 'package:moxy/ui/screens/components/product_item.dart';
+import 'package:moxy/ui/screens/components/quantity_picker.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/common.dart';
 import 'package:moxy/utils/moxy_analytics.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../../../domain/models/product.dart';
 
 class CheckoutProducts extends StatelessWidget {
   final double productRowHeight = 150;
