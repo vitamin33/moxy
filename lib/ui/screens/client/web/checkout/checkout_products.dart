@@ -6,11 +6,10 @@ import 'package:moxy/ui/screens/components/expandable_text.dart';
 import 'package:moxy/ui/screens/components/loading_elevated_button.dart';
 import 'package:moxy/ui/screens/components/product_item.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
+import 'package:moxy/utils/moxy_analytics.dart';
 import 'package:moxy/utils/responsive_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:js' as dartJsFile;
 
 class CheckoutProducts extends StatelessWidget {
   final double productRowHeight = 150;
@@ -101,8 +100,9 @@ class CheckoutProducts extends StatelessWidget {
       LoadingElevatedButton(
           onPressed: () {
             cubit.clickCheckout();
-            dartJsFile.context.callMethod(
-                'fbqPurchaseEvent', [state.basket.amountForFreeShipping().toString()]);
+            MoxyAnalytics().purchaseEvent(valuePurchase: [
+              state.basket.amountForFreeShipping().toString()
+            ]);
           },
           isLoadingState: state.isLoadingPaymentButton),
       const SizedBox(height: 20),

@@ -6,8 +6,7 @@ import 'package:moxy/ui/components/custom_button.dart';
 import 'package:moxy/ui/screens/components/otp_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:js' as dartJsFile;
+import 'package:moxy/utils/moxy_analytics.dart';
 
 class VerificationPage extends StatelessWidget {
   const VerificationPage({super.key});
@@ -78,8 +77,7 @@ class VerificationPage extends StatelessWidget {
                   onTap: () {
                     if (cubit.validateConfirmCodeFields()) {
                       context.read<RegistrationCubit>().sendConfirmationCode();
-                      dartJsFile.context
-                          .callMethod('fbqCompleteRegistrationEvent');
+                      MoxyAnalytics().completeRegistrationEvent();
                     }
                   },
                 ),
