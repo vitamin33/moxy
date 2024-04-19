@@ -1,0 +1,51 @@
+name: Deploy to Firebase Hosting on merge
+
+'on':
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create .dev.env file
+        run: |
+          cat > .dev.env <<EOF
+          BASE_URL=http://34.118.78.215
+          EOF
+
+      - name: Create .prod.env file
+        run: |
+          cat > .prod.env <<EOF
+          BASE_URL=http://34.118.78.215
+          EOF
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0' # Specify your project's Flutter version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Flutter Web App
+        run: flutter build web --no-tree-shake-icons --base-href=/
+
+      # New step to copy .env files to the build/web directory
+      - name: Copy .env files to build output
+        run: |
+          cp .prod.env build/web/.prod.env
+          cp .dev.env build/web/.dev.env
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_MOXY_144F2 }}'
+          channelId: live
+          projectId: moxy-144f2

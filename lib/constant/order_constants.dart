@@ -3,6 +3,11 @@ enum DeliveryType {
   ukrPost,
 }
 
+enum UserType {
+  guest,
+  regularCustomer,
+}
+
 enum PaymentType { cashAdvance, fullPayment }
 
 enum FilterPaymentType { empty, cashAdvance, fullPayment }

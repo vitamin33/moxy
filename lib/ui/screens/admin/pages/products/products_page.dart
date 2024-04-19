@@ -34,6 +34,18 @@ class _ProductsPageState extends State<ProductsPage> {
     super.initState();
     _scrollController.addListener(_onScroll);
     cubit = context.read<AllProductsCubit>();
+    cubit.effectStream.listen((effect) {
+      if (effect is ProductsLoadingFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                '${AppLocalizations.of(context)!.productsLoadingFailed} ${effect.failureText}'));
+      }
+      if (effect is DeleteProductFailed) {
+        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
+            snackBarFailureText:
+                '${AppLocalizations.of(context)!.deleteProductFailed} ${effect.failureText}'));
+      }
+    });
   }
 
   @override
@@ -59,21 +71,8 @@ class _ProductsPageState extends State<ProductsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final AllProductsCubit cubit = context.read<AllProductsCubit>();
     final theme = AppTheme.of(context)!;
 
-    cubit.effectStream.listen((effect) {
-      if (effect is ProductsLoadingFailed) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText:
-                '${AppLocalizations.of(context)!.productsLoadingFailed} ${effect.failureText}'));
-      }
-      if (effect is DeleteProductFailed) {
-        ScaffoldMessenger.of(context).showSnackBar(snackBarWhenFailure(
-            snackBarFailureText:
-                '${AppLocalizations.of(context)!.deleteProductFailed} ${effect.failureText}'));
-      }
-    });
     return BlocBuilder<AllProductsCubit, AllProductsState>(
       builder: (context, state) {
         return Scaffold(

@@ -13,6 +13,7 @@ class CheckoutState implements Copyable<CheckoutState> {
   final Basket basket;
   DeliveryType deliveryType;
   PaymentType paymentType;
+  UserType userType;
   City selectedCity;
   Warehouse selectedWarehouse;
   Client client;
@@ -26,6 +27,7 @@ class CheckoutState implements Copyable<CheckoutState> {
     required this.basket,
     required this.deliveryType,
     required this.paymentType,
+    required this.userType,
     required this.selectedCity,
     required this.selectedWarehouse,
     required this.client,
@@ -40,6 +42,7 @@ class CheckoutState implements Copyable<CheckoutState> {
       basket: Basket.defaultBasket(),
       deliveryType: DeliveryType.novaPost,
       paymentType: PaymentType.fullPayment,
+      userType: UserType.guest,
       selectedCity: City.defaultCity(),
       selectedWarehouse: Warehouse.defaultWarehouse(),
       client: Client.defaultClient(),
@@ -57,6 +60,7 @@ class CheckoutState implements Copyable<CheckoutState> {
     Basket? basket,
     DeliveryType? deliveryType,
     PaymentType? paymentType,
+    UserType? userType,
     City? selectedCity,
     Warehouse? selectedWarehouse,
     Client? client,
@@ -71,6 +75,7 @@ class CheckoutState implements Copyable<CheckoutState> {
       basket: basket ?? this.basket,
       deliveryType: deliveryType ?? this.deliveryType,
       paymentType: paymentType ?? this.paymentType,
+      userType: userType ?? this.userType,
       selectedCity: selectedCity ?? this.selectedCity,
       selectedWarehouse: selectedWarehouse ?? this.selectedWarehouse,
       client: client ?? this.client,
