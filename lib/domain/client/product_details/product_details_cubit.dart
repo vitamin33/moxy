@@ -9,20 +9,13 @@ import 'package:moxy/domain/ui_effect.dart';
 import 'package:moxy/services/cubit_with_effects.dart';
 import 'package:moxy/services/get_it.dart';
 import 'package:moxy/utils/common.dart';
-import 'package:moxy/utils/extensions.dart';
 
 class ProductDetailsCubit
     extends CubitWithEffects<ProductDetailsState, UiEffect> {
-  final String? productId;
-  ProductDetailsCubit({required this.productId})
-      : super(ProductDetailsState.defaultProductDetailsState()) {
-    productId?.let(
-      (id) {
-        fetchReviewStatsForProduct(id);
-        getProductsDetails(id);
-      },
-    );
-  }
+
+  ProductDetailsCubit()
+      : super(ProductDetailsState.defaultProductDetailsState());
+
   final productRepository = locate<ProductRepository>();
   final reviewsRepository = locate<ReviewRepository>();
   final productMapper = locate<ProductMapper>();

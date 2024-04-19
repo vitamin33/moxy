@@ -15,7 +15,7 @@ class SearchCityDropdown extends StatelessWidget {
   final ValueChanged onChanged;
 
   const SearchCityDropdown({
-    Key? key,
+    super.key,
     required this.selectedWarehouse,
     required this.onChanged,
     required this.selectedCity,
@@ -30,11 +30,17 @@ class SearchCityDropdown extends StatelessWidget {
             final citySearchCubit = context.read<SearchCitiesCubit>();
             final warehousSearchCubit = context.read<SearchWarehouseCubit>();
             return DropdownSearch<City>(
+                dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownSearchDecoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8)))),
                 items: state.cityList,
                 asyncItems: citySearchCubit.searchCities,
                 popupProps: PopupPropsMultiSelection.menu(
                   emptyBuilder: (context, searchEntry) {
-                    return Center(child: Text(AppLocalizations.of(context)!.cityNotFound));
+                    return Center(
+                        child:
+                            Text(AppLocalizations.of(context)!.cityNotFound));
                   },
                   loadingBuilder: (context, searchEntry) {
                     return const LinearProgressIndicator();
@@ -69,7 +75,7 @@ class SearchCityDropdown extends StatelessWidget {
           ? null
           : BoxDecoration(
               border: Border.all(color: Theme.of(context).primaryColor),
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(8),
               color: Colors.white,
             ),
       child: ListTile(
