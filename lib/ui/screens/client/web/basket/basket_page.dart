@@ -125,17 +125,11 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
   Widget _buildBasketItemList(
       BasketCubit cubit, Basket basket, AppTheme theme, bool isMobile) {
     if (basket.isEmpty()) {
-      return Column(
-        children: [
-          SizedBox(
-              height: 260,
-              width: 200,
-              child: Lottie.asset('assets/anim/empty_list.json')),
-          const Text(
-            'Ваша корзина порожня.\n Не пропустіть шанс зробити свій день яскравішим!',
-            textAlign: TextAlign.center,
-          ),
-        ],
+      return const Center(
+        child: Text(
+          'Ваша корзина порожня.\n Не пропустіть шанс зробити свій день яскравішим!',
+          textAlign: TextAlign.center,
+        ),
       );
     } else {
       return ListView.builder(

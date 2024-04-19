@@ -61,7 +61,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
                                 });
                               },
                               itemBuilder: (context, pagePosition) {
-                                return Container(
+                            return Container(
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       fit: BoxFit.cover,

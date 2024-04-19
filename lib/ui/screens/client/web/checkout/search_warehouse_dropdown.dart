@@ -13,7 +13,8 @@ class SearchWarehouseDropdown extends StatelessWidget {
   final City selectedCity;
   final ValueChanged onChanged;
 
-  const SearchWarehouseDropdown({super.key, 
+  const SearchWarehouseDropdown({
+    super.key,
     required this.selectedWarehouse,
     required this.onChanged,
     required this.selectedCity,
@@ -27,6 +28,10 @@ class SearchWarehouseDropdown extends StatelessWidget {
           builder: (context, state) {
             final warehouseSearchCubit = context.read<SearchWarehouseCubit>();
             return DropdownSearch<Warehouse>(
+              dropdownDecoratorProps: DropDownDecoratorProps(
+                  dropdownSearchDecoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8)))),
               items: state.warehouseList,
               asyncItems: (String searchTerm) {
                 return warehouseSearchCubit.searchWarehouse(

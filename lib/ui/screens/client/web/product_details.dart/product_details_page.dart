@@ -9,32 +9,43 @@ import 'package:moxy/ui/screens/components/review_container.dart';
 import 'package:moxy/ui/screens/components/scrollable_section.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
-class ProductDetailsPage extends StatelessWidget {
+class ProductDetailsPage extends StatefulWidget {
   final String? productId;
   const ProductDetailsPage({super.key, required this.productId});
 
   @override
+  State<ProductDetailsPage> createState() => _ProductDetailsPageState();
+}
+
+class _ProductDetailsPageState extends State<ProductDetailsPage> {
+  @override
+  void initState() {
+    context
+        .read<ProductDetailsCubit>()
+        .fetchReviewStatsForProduct(widget.productId!);
+    context.read<ProductDetailsCubit>().getProductsDetails(widget.productId!);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductDetailsCubit(productId: productId),
-      child: const Scaffold(
-        backgroundColor: AppTheme.white,
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              ScrollableSection(
-                content: Column(
-                  children: [
-                    BackContainer(),
-                    ProductDetailsContainer(),
-                    ProductAdvantagesContainer(),
-                    ReviewContainer()
-                  ],
-                ),
+    return const Scaffold(
+      backgroundColor: AppTheme.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ScrollableSection(
+              content: Column(
+                children: [
+                  BackContainer(),
+                  ProductDetailsContainer(),
+                  ProductAdvantagesContainer(),
+                  ReviewContainer()
+                ],
               ),
-              Footer()
-            ],
-          ),
+            ),
+            Footer()
+          ],
         ),
       ),
     );

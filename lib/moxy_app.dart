@@ -6,6 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
+import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
+import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';
 import 'package:moxy/ui/theme/theme_provider.dart';
@@ -51,7 +53,10 @@ class MoxyApp extends StatelessWidget {
             create: (BuildContext context) => FilterOrdersCubit()),
         BlocProvider<BasketCubit>(
           create: (BuildContext context) => BasketCubit(),
-        )
+        ),
+        BlocProvider<ProductDetailsCubit>(
+          create: (BuildContext context) => ProductDetailsCubit(),
+        ),
       ],
       child: BlocBuilder<RootRouterCubit, RootRoute>(builder: (context, state) {
         return MaterialApp.router(
