@@ -7,13 +7,13 @@ class Warehouse implements Copyable<Warehouse> {
   final String ref;
   final String? postMachineType;
   final String description;
-  final int number;
+  final int? number;
 
   Warehouse({
     required this.ref,
     required this.postMachineType,
     required this.description,
-    required this.number,
+     this.number,
   });
 
   factory Warehouse.fromEN(NovaEN en) {
@@ -34,7 +34,7 @@ class Warehouse implements Copyable<Warehouse> {
       ref: en.cityRecepientRef,
       description: en.recipientAddressDescription,
       postMachineType: null,
-      number: number ?? 0,
+      number: number ,
     );
   }
 
@@ -43,7 +43,7 @@ class Warehouse implements Copyable<Warehouse> {
       ref: '',
       postMachineType: '',
       description: '',
-      number: 0,
+      number: null,
     );
   }
 

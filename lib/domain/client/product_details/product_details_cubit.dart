@@ -23,7 +23,6 @@ class ProductDetailsCubit
       },
     );
   }
-
   final productRepository = locate<ProductRepository>();
   final reviewsRepository = locate<ReviewRepository>();
   final productMapper = locate<ProductMapper>();

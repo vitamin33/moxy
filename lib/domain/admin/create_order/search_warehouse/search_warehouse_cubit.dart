@@ -18,7 +18,7 @@ class SearchWarehouseCubit extends Cubit<SearchWarehouseState> {
 
   SearchWarehouseCubit({required this.selectedWarehouse})
       : super(SearchWarehouseState.defaultSearchWarehouseState()) {
-    controller.text = selectedWarehouse?.number.toString() ?? '';
+    controller.text = selectedWarehouse?.number?.toString() ?? '';
   }
 
   Future<List<Warehouse>> searchWarehouse(String searchTerm, city) async {
