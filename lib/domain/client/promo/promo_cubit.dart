@@ -28,7 +28,10 @@ class PromoCubit extends Cubit<PromoState> {
   }
 
   void moveToNextPage() {
-    final currentIndex = pageController.page ?? 0;
+    double currentIndex = 0;
+    if (pageController.hasClients) {
+      currentIndex = pageController.page ?? 0;
+    }
     if (currentIndex < state.allPromo.length - 1) {
       pageController.nextPage(
           duration: const Duration(milliseconds: 200), curve: Curves.easeIn);
