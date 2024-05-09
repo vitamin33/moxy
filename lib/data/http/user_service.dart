@@ -93,6 +93,7 @@ class UserService {
   //REGISTER
   Future<Result<bool, String>> register(NetworkRegister networkRegister) async {
     try {
+      _dio.options.headers['Content-Type'] = Headers.jsonContentType;
       Response response = await _dio.post(
         registerUserUrl,
         data: networkRegister.toJson(),
@@ -115,6 +116,7 @@ class UserService {
   Future<Result<bool, String>> sendConfirmationCode(
       NetworkConfirmationCode networkConfirmationCode) async {
     try {
+      _dio.options.headers['Content-Type'] = Headers.jsonContentType;
       Response response = await _dio.post(
         verifyUserUrl,
         data: networkConfirmationCode.toJson(),
@@ -133,6 +135,7 @@ class UserService {
 
   Future<bool> resendConfirmationCode(String email) async {
     try {
+      _dio.options.headers['Content-Type'] = Headers.jsonContentType;
       Response response = await _dio.post(
         resendVerifyUserUrl,
         data: {'email': email},
