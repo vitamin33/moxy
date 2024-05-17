@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moxy/constant/place_production.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/domain/admin/create_product/create_product_cubit.dart';
 import 'package:moxy/domain/models/product.dart';
+import 'package:moxy/ui/screens/components/place_production_container.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/common.dart';
 import '../../../../../components/dashed_path_painter.dart';
@@ -31,43 +33,51 @@ class Branding extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: AppTheme.cardPadding),
               child: Column(
                 children: [
-                  CustomTextField(
-                    title:
-                        ' ${AppLocalizations.of(context)!.createProductWeight}',
-                    controller: cubit.weightController,
-                    onChanged: cubit.weightInGramsChanged,
-                    state: state.errors.weightInGrams,
-                    maxLines: 1,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      LengthLimitingTextInputFormatter(16),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  CustomTextField(
-                    title:
-                        ' ${AppLocalizations.of(context)!.createProductPrice} (\$)',
-                    controller: cubit.costPriceInUsdController,
-                    onChanged: cubit.costPriceInUsdChanged,
-                    state: state.errors.costPriceInUsd,
-                    maxLines: 1,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(
-                          RegExp(r'^\d+\.?\d{0,2}$')),
-                      LengthLimitingTextInputFormatter(16),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.createProductCostPrice,
-                      ),
-                      Text('${state.product.costPrice.toString()} UAH'),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
+                  PlaceProductionConrainer(),
+                  const SizedBox(height: 10),
+                  (state.placeProduction == PlaceProduction.china)
+                      ? Column(children: [
+                          CustomTextField(
+                            title:
+                                ' ${AppLocalizations.of(context)!.createProductWeight}',
+                            controller: cubit.weightController,
+                            onChanged: cubit.weightInGramsChanged,
+                            state: state.errors.weightInGrams,
+                            maxLines: 1,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(16),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          CustomTextField(
+                            title:
+                                ' ${AppLocalizations.of(context)!.createProductPriceTao}',
+                            controller: cubit.costPriceInUsdController,
+                            onChanged: cubit.costPriceInUsdChanged,
+                            state: state.errors.costPriceInUsd,
+                            maxLines: 1,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+\.?\d{0,2}$')),
+                              LengthLimitingTextInputFormatter(16),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                        ])
+                      : CustomTextField(
+                          title:
+                              ' ${AppLocalizations.of(context)!.createProductPriceUah}',
+                          controller: cubit.costPriceController,
+                          onChanged: cubit.costPriceChanged,
+                          state: state.errors.costPrice,
+                          maxLines: 1,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                                RegExp(r'^\d+\.?\d{0,2}$')),
+                            LengthLimitingTextInputFormatter(16),
+                          ],
+                        ),
                   CustomTextField(
                     title:
                         '${AppLocalizations.of(context)!.createProductSalePrice} (UAH)',

@@ -21,7 +21,7 @@ class NetworkProduct {
   String? id;
   String name;
   String? description;
-  double costPriceInUsd;
+  double? costPriceInUsd;
   double? discountPrice;
   double? costPrice;
   double salePrice;
@@ -38,7 +38,7 @@ class NetworkProduct {
     this.id,
     required this.name,
     required this.description,
-    required this.costPriceInUsd,
+    this.costPriceInUsd,
     this.discountPrice,
     required this.costPrice,
     required this.salePrice,
@@ -64,7 +64,7 @@ class NetworkProductDetails {
   String? id;
   String name;
   String? description;
-  double costPriceInUsd;
+  double? costPriceInUsd;
   double? discountPrice;
   double? costPrice;
   double salePrice;
@@ -80,7 +80,7 @@ class NetworkProductDetails {
     this.id,
     required this.name,
     required this.description,
-    required this.costPriceInUsd,
+    this.costPriceInUsd,
     this.discountPrice,
     required this.costPrice,
     required this.salePrice,

@@ -1,0 +1,1 @@
+enum PlaceProduction { ukraine, china, }

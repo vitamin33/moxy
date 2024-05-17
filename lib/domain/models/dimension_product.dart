@@ -6,7 +6,8 @@ class DimensionProduct implements Copyable<DimensionProduct> {
   String? id;
   String name;
   String description;
-  double costPriceInUsd;
+  double? costPriceInUsd;
+  double? costPrice;
   double salePrice;
   Dimension dimension;
   String idName;
@@ -18,7 +19,8 @@ class DimensionProduct implements Copyable<DimensionProduct> {
     this.id,
     required this.name,
     required this.description,
-    required this.costPriceInUsd,
+    this.costPriceInUsd,
+    this.costPrice,
     required this.salePrice,
     required this.dimension,
     required this.idName,
@@ -33,6 +35,7 @@ class DimensionProduct implements Copyable<DimensionProduct> {
     String? idName,
     String? description,
     double? costPriceInUsd,
+    double? costPrice,
     double? salePrice,
     Dimension? dimension,
     bool? isSelected,
@@ -43,6 +46,7 @@ class DimensionProduct implements Copyable<DimensionProduct> {
       name: name ?? this.name,
       description: description ?? this.description,
       costPriceInUsd: costPriceInUsd ?? this.costPriceInUsd,
+      costPrice: costPrice ?? this.costPrice,
       salePrice: salePrice ?? this.salePrice,
       dimension: dimension ?? this.dimension,
       idName: idName ?? this.idName,
