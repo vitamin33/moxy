@@ -6,6 +6,7 @@ import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/domain/auth/registration/registration_state.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/components/custom_password_textfield.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 
@@ -99,7 +100,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         state: state.error.email,
                         validation: true,
                       ),
-                      CustomTextField(
+                      CustomPasswordTextField(
                         borderColor: AppTheme.greyLigth,
                         title: 'Пароль',
                         controller: cubit.passwordController,
@@ -110,7 +111,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         state: state.error.password,
                         validation: true,
                       ),
-                      CustomTextField(
+                      CustomPasswordTextField(
                         borderColor: AppTheme.greyLigth,
                         title: 'Підтвердити Пароль',
                         controller: cubit.confirmRegisterPasswordController,

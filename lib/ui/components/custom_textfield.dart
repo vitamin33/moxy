@@ -10,7 +10,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
   final List<String> autofillHints;
-  final int? maxLines;
+  final int maxLines;
   final int mixLines;
   final bool validation;
   final bool expands;
@@ -23,7 +23,7 @@ class CustomTextField extends StatelessWidget {
       required this.title,
       required this.controller,
       this.onChanged,
-      this.maxLines,
+      this.maxLines = 1,
       this.mixLines = 1,
       this.scrollPhysics,
       this.inputFormatters,

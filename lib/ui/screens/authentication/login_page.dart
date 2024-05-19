@@ -6,6 +6,7 @@ import 'package:moxy/domain/auth/login/login_effects.dart';
 import 'package:moxy/domain/auth/login/login_state.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/ui/components/custom_button.dart';
+import 'package:moxy/ui/components/custom_password_textfield.dart';
 import 'package:moxy/ui/components/custom_textfield.dart';
 import 'package:moxy/ui/components/snackbar_widgets.dart';
 import 'package:moxy/ui/screens/components/onhover.dart';
@@ -77,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     const SizedBox(height: AppTheme.elementSpacing),
-                    CustomTextField(
+                    CustomPasswordTextField(
                       controller: context.read<LoginCubit>().passwordController,
                       borderColor: AppTheme.greyLigth,
                       title: AppLocalizations.of(context)!.password,

@@ -89,7 +89,6 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
         emit(state.copyWith(state: RegisterFailed(message: error)));
       });
     } catch (error) {
-      emitEffect(RegistrationApiRequestFailed(error.toString()));
       emit(state.copyWith(state: RegisterFailed(message: error.toString())));
     }
   }
