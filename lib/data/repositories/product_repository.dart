@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:moxy/constant/place_production.dart';
 import 'package:moxy/data/http/products_service.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
 import 'package:moxy/data/models/response/media_response.dart';
@@ -27,24 +28,28 @@ class ProductRepository {
 
   void resetSelectedProductList() => _selectedProductSubject.sink.add([]);
 
-  Future<Result<dynamic, Exception>> addProduct(NetworkProduct product,
-      List<ImagePath> chosenImages, List<int> numberOfChosenImages) async {
+  Future<Result<dynamic, Exception>> addProduct(
+      NetworkProduct product,
+      List<ImagePath> chosenImages,
+      List<int> numberOfChosenImages,
+      PlaceProduction placeProduction) async {
     try {
       final result = await client.createProduct(
-        product.name,
-        product.description,
-        product.costPriceInUsd,
-        product.salePrice,
-        product.dimensions ?? [],
-        product.idName,
-        product.category,
-        product.attributes,
-        chosenImages
-            .where((e) => e.type == Type.file)
-            .map((e) => e.imagePath)
-            .toList(),
-        numberOfChosenImages,
-      );
+          product.name,
+          product.description,
+          placeProduction == PlaceProduction.china ? product.costPriceInUsd : 0,
+          placeProduction == PlaceProduction.ukraine ? product.costPrice : 0,
+          product.salePrice,
+          product.dimensions ?? [],
+          product.idName,
+          product.category,
+          product.attributes,
+          chosenImages
+              .where((e) => e.type == Type.file)
+              .map((e) => e.imagePath)
+              .toList(),
+          numberOfChosenImages,
+          placeProduction.name);
       if (result != null) {
         return Result.success(result);
       } else {
@@ -75,11 +80,13 @@ class ProductRepository {
   }
 
   Future<Result<bool, Exception>> editProduct(
-      NetworkProduct product,
-      List<Dimension> productDimensions,
-      List<ImagePath> chosenImages,
-      List<int> numberOfChosenImages,
-      String editProductId) async {
+    NetworkProduct product,
+    List<Dimension> productDimensions,
+    List<ImagePath> chosenImages,
+    List<int> numberOfChosenImages,
+    String editProductId,
+    PlaceProduction placeProduction,
+  ) async {
     try {
       bool result = (await client.editProduct(
         product.id,
@@ -90,12 +97,14 @@ class ProductRepository {
         productDimensions
             .map((e) => productMapper.mapToNetworkDimension(e))
             .toList(),
-        product.costPriceInUsd,
+        placeProduction == PlaceProduction.china ? product.costPriceInUsd : 0,
+        placeProduction == PlaceProduction.ukraine ? product.costPrice : 0,
         product.salePrice,
         product.attributes,
         chosenImages.map((e) => e.imagePath).toList(),
         numberOfChosenImages,
         editProductId,
+        placeProduction.name,
       ));
       return Result.success(result);
     } catch (e, stack) {

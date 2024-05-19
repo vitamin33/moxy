@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:moxy/constant/api_path.dart';
+import 'package:moxy/constant/place_production.dart';
 import 'package:moxy/constant/product_categories.dart';
 import 'package:moxy/data/models/request/create_product_request.dart';
 import 'package:moxy/data/models/response/all_products_response.dart';
@@ -23,7 +24,8 @@ class ProductsService {
   Future<CreateProduct?> createProduct(
     String name,
     String? description,
-    double costPrice,
+    double? costPriceInUsd,
+    double? costPrice,
     double salePrice,
     List<NetworkDimension> dimensions,
     String idName,
@@ -31,6 +33,7 @@ class ProductsService {
     NetworkProductAttributes attributes,
     List<String> choosenImages,
     List<int> numberOfChosenImages,
+    String placeProduction,
   ) async {
     final CreateProduct? result;
     List<MultipartFile> imageFiles = [];
@@ -47,7 +50,8 @@ class ProductsService {
     FormData formData = FormData.fromMap({
       'name': name,
       'description': description ?? '',
-      'costPriceInUsd': costPrice,
+      'costPriceInUsd': costPriceInUsd,
+      'costPrice': costPrice,
       'salePrice': salePrice,
       'dimensions': jsonDecode(jsonEncode(dimensions)),
       'numberOfImagesForDimensions':
@@ -55,7 +59,8 @@ class ProductsService {
       'images': imageFiles,
       'idName': idName,
       'category': category,
-      'attributes': jsonDecode(jsonEncode(attributes))
+      'attributes': jsonDecode(jsonEncode(attributes)),
+      'placeProduction': placeProduction,
     });
     try {
       Response response = await _dio.post(
@@ -103,12 +108,14 @@ class ProductsService {
     String idName,
     String category,
     List<NetworkDimension> dimensions,
-    double costPriceInUsd,
+    double? costPriceInUsd,
+    double? costPrice,
     double salePrice,
     NetworkProductAttributes attributes,
     List<String> choosenImages,
     List<int> numberOfChosenImages,
     editProductId,
+    String placeProduction,
   ) async {
     List<MultipartFile> newImage = [];
     for (String image in choosenImages) {
@@ -124,6 +131,7 @@ class ProductsService {
       'name': name,
       'description': description ?? '',
       'costPriceInUsd': costPriceInUsd,
+      'costPrice': costPrice,
       'salePrice': salePrice,
       'idName': idName,
       'category': category,
@@ -131,7 +139,8 @@ class ProductsService {
       'dimensions': jsonDecode(jsonEncode(dimensions)),
       'numberOfImagesForDimensions':
           jsonDecode(jsonEncode(numberOfChosenImages)),
-      'attributes': jsonDecode(jsonEncode(attributes))
+      'attributes': jsonDecode(jsonEncode(attributes)),
+      'placeProduction': placeProduction
     });
     try {
       Response response = await _dio.post(

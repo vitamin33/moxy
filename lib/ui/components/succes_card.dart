@@ -21,7 +21,7 @@ class SuccessCard extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       constraints: const BoxConstraints.expand(),
-      color: AppTheme.white,
+      color: AppTheme.pink,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

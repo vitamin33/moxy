@@ -4,7 +4,7 @@ class Product implements Copyable<Product> {
   String? id;
   String name;
   String description;
-  double costPriceInUsd;
+  double? costPriceInUsd;
   double discountPrice;
   double costPrice;
   double salePrice;
@@ -21,7 +21,7 @@ class Product implements Copyable<Product> {
     this.id,
     required this.name,
     required this.description,
-    required this.costPriceInUsd,
+    this.costPriceInUsd,
     required this.discountPrice,
     required this.costPrice,
     required this.salePrice,

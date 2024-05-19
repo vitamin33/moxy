@@ -1,3 +1,4 @@
+import 'package:moxy/constant/place_production.dart';
 import 'package:moxy/domain/models/product.dart';
 import 'package:moxy/domain/validation_mixin.dart';
 
@@ -15,6 +16,7 @@ class CreateProductState implements Copyable<CreateProductState> {
   String? editProductId;
   List<ProductColor> allConfigColors;
   List<String> productCategories;
+  PlaceProduction placeProduction;
 
   // field errors
   FieldErrors errors;
@@ -32,6 +34,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     required this.errors,
     required this.allConfigColors,
     required this.productCategories,
+    required this.placeProduction,
   });
 
   static CreateProductState defaultCreateProductState() {
@@ -48,6 +51,7 @@ class CreateProductState implements Copyable<CreateProductState> {
       errors: FieldErrors(),
       allConfigColors: [],
       productCategories: [],
+      placeProduction: PlaceProduction.china,
     );
   }
 
@@ -65,6 +69,7 @@ class CreateProductState implements Copyable<CreateProductState> {
     FieldErrors? errors,
     List<ProductColor>? allConfigColors,
     List<String>? productCategories,
+    PlaceProduction? placeProduction,
   }) {
     return CreateProductState(
       isLoading: isLoading ?? this.isLoading,
@@ -79,6 +84,7 @@ class CreateProductState implements Copyable<CreateProductState> {
       errors: errors ?? this.errors,
       allConfigColors: allConfigColors ?? this.allConfigColors,
       productCategories: productCategories ?? this.productCategories,
+      placeProduction: placeProduction ?? this.placeProduction,
     );
   }
 }
@@ -89,6 +95,7 @@ class FieldErrors {
   FieldError? productIdName;
   FieldError? salePrice;
   FieldError? costPriceInUsd;
+  FieldError? costPrice;
   FieldError? weightInGrams;
   FieldError? weightInCm;
   FieldError? heightInCm;
@@ -102,6 +109,7 @@ class FieldErrors {
     this.productIdName,
     this.salePrice,
     this.costPriceInUsd,
+    this.costPrice,
     this.weightInGrams,
     this.heightInCm,
     this.widthInCm,
@@ -116,7 +124,7 @@ class FieldErrors {
   String formErrorMessageFields() {
     var buffer = StringBuffer();
     buffer.write('Validation errors: ');
-    if (productName != null) {
+    if (productName != null ) {
       buffer.write('productName ');
     }
     if (productDescription != null) {
@@ -127,6 +135,9 @@ class FieldErrors {
     }
     if (costPriceInUsd != null) {
       buffer.write('costPriceInUsd ');
+    }
+    if (costPrice != null) {
+      buffer.write('costPrice ');
     }
     if (weightInGrams != null) {
       buffer.write('weightInGrams ');

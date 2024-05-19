@@ -2,6 +2,7 @@ import 'dart:io';
 // ignore: depend_on_referenced_packages
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:moxy/constant/place_production.dart';
 import 'package:moxy/data/repositories/config_repository.dart';
 import 'package:moxy/data/repositories/product_repository.dart';
 import 'package:moxy/domain/admin/create_product/create_product_effects.dart';
@@ -38,6 +39,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
   final TextEditingController salePriceController = TextEditingController();
   final TextEditingController costPriceInUsdController =
       TextEditingController();
+  final TextEditingController costPriceController = TextEditingController();
   final TextEditingController weightController = TextEditingController();
   final TextEditingController colorController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
@@ -58,11 +60,12 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     try {
       emit(state.copyWith(isLoading: true));
       final images = _getAllChosenFileDimenImages();
+
       final product = productMapper.mapToNetworkProduct(state.product);
       List<int> imageIndexes =
           formNumberOfChoseImagesIndexes(state.product.dimensions);
-      final pushProduct =
-          await productRepository.addProduct(product, images, imageIndexes);
+      final pushProduct = await productRepository.addProduct(
+          product, images, imageIndexes, state.placeProduction);
       pushProduct.when((success) {
         _clearFieldsControllers();
 
@@ -162,6 +165,14 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       final double costPrice = double.parse(value);
       emit(state.copyWith(
           product: state.product.copyWith(costPriceInUsd: costPrice)));
+    }
+  }
+
+  void costPriceChanged(String value) {
+    if (value.isNotEmpty) {
+      final double costPrice = double.parse(value);
+      emit(state.copyWith(
+          product: state.product.copyWith(costPrice: costPrice)));
     }
   }
 
@@ -361,6 +372,10 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     emit(state.copyWith(errorMessage: ''));
   }
 
+  void changePlaceProduction(PlaceProduction updatePlaceProduction) {
+    emit(state.copyWith(placeProduction: updatePlaceProduction));
+  }
+
   //  EDIT FUNCTION
   void getProductById(id) async {
     emit(state.copyWith(editProductId: id, isLoading: true));
@@ -386,6 +401,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     costPriceInUsdController.text = product.costPriceInUsd.toString();
     weightController.text = product.attributes.weightInGrams.toString();
     salePriceController.text = product.salePrice.toString();
+    costPriceController.text = product.costPrice.toString();
     idNameController.text = product.idName.toString();
     heightController.text = product.attributes.heightInCm.toString();
     widthController.text = product.attributes.widthInCm.toString();
@@ -425,7 +441,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       List<Dimension> filteredDimens =
           filterFileImagesDimens(state.product.dimensions);
       final updated = await productRepository.editProduct(
-          product, filteredDimens, allDimenImages, imageIndexes, editProductId);
+          product, filteredDimens, allDimenImages, imageIndexes, editProductId,state.placeProduction);
       updated.when((success) {
         _clearFieldsControllers();
         emit(state.copyWith(isLoading: false));
@@ -455,12 +471,19 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
       errors.productIdName = FieldError.empty;
       noErrors = false;
     }
-    if (!isValidPrice(state.product.costPriceInUsd)) {
+    if (!isValidPrice(state.product.costPriceInUsd) &&
+        state.placeProduction == PlaceProduction.china) {
       errors.costPriceInUsd = FieldError.invalid;
       noErrors = false;
     }
-    if (!isValidWeight(state.product.attributes.weightInGrams)) {
+    if (!isValidWeight(state.product.attributes.weightInGrams) &&
+        state.placeProduction == PlaceProduction.china) {
       errors.weightInGrams = FieldError.invalid;
+      noErrors = false;
+    }
+    if (!isValidPrice(state.product.costPrice) &&
+        state.placeProduction == PlaceProduction.ukraine) {
+      errors.costPriceInUsd = FieldError.invalid;
       noErrors = false;
     }
     if (!isValidSizeValues(state.product.attributes.heightInCm)) {
@@ -533,6 +556,7 @@ class CreateProductCubit extends CubitWithEffects<CreateProductState, UiEffect>
     nameController.clear();
     descriptionController.clear();
     costPriceInUsdController.clear();
+    costPriceController.clear();
     weightController.clear();
     salePriceController.clear();
     colorController.clear();
