@@ -105,9 +105,9 @@ class CheckoutProducts extends StatelessWidget {
       LoadingElevatedButton(
           onPressed: () {
             cubit.clickCheckout();
-            MoxyAnalytics().purchaseEvent(valuePurchase: [
-              state.basket.amountForFreeShipping().toString()
-            ]);
+            // MoxyAnalytics().purchaseEvent(valuePurchase: [
+            //   state.basket.amountForFreeShipping().toString()
+            // ]);
           },
           isLoadingState: state.isLoadingPaymentButton),
       const SizedBox(height: 20),
