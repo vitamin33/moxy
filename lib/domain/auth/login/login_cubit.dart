@@ -58,6 +58,7 @@ class LoginCubit extends CubitWithEffects<LoginState, UiEffect>
 
       result.when((role) {
         successfulLogin(role);
+        clearLoginTextfied();
       }, (error) {
         emitEffect(LoginFailed('Unable to login. Try one more time.'));
         emit(state.copyWith(state: SigninFailed()));
@@ -73,6 +74,7 @@ class LoginCubit extends CubitWithEffects<LoginState, UiEffect>
       await authRepository.logout();
       await storage.clear();
       emit(state.copyWith(state: Logout()));
+      authRepository.generateGuestToken();
     } catch (error) {
       emit(state.copyWith(state: LogoutFailed()));
     }
@@ -131,5 +133,11 @@ class LoginCubit extends CubitWithEffects<LoginState, UiEffect>
       return false;
     }
     return true;
+  }
+
+  void clearLoginTextfied() {
+    phoneController.text = '';
+    passwordController.text = '';
+    emit(state.copyWith(mobileNumber: '', password: ''));
   }
 }

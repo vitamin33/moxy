@@ -43,8 +43,10 @@ class ResetPasswordContainer extends StatelessWidget {
                   buttonWidth: MediaQuery.of(context).size.width,
                   title: 'Відправити Email',
                   onTap: () {
+                    
                     if (cubit.validateChangePasswordFields()) {
                       context.read<LoginCubit>().nextPage();
+                                            
                     }
                   },
                 ),

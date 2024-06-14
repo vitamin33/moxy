@@ -8,6 +8,7 @@ class Product implements Copyable<Product> {
   double discountPrice;
   double costPrice;
   double salePrice;
+  
   List<Dimension> dimensions;
   String idName;
   String category;

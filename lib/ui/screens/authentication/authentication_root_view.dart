@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/constant/image_path.dart';
 import 'package:moxy/domain/auth/login/login_cubit.dart';
@@ -9,7 +11,6 @@ import 'package:moxy/domain/auth/login/login_state.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_effect.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
-import 'package:moxy/ui/components/back_button_area.dart';
 import 'package:moxy/ui/theme/app_theme.dart';
 import 'package:moxy/utils/animated_branch_container.dart';
 import 'package:moxy/utils/responsive_utils.dart';
@@ -86,29 +87,27 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
   }
 
   Widget buildMobileContent(LoginCubit cubit) {
-    return BackButtonArea(
-      wrappedWidget: Column(
-        children: [
-          Center(
-            child: InkWell(
-              onTap: () => context.go(RouterProvider.homeNewPath()),
-              child: Padding(
-                padding: const EdgeInsets.all(AppTheme.moxyLogoPadding),
-                child: SvgPicture.asset(
-                  IconPath.moxylogo,
-                  width: 150,
-                ),
+    return Column(
+      children: [
+        Center(
+          child: InkWell(
+            onTap: () => context.go(RouterProvider.homeNewPath()),
+            child: Padding(
+              padding: const EdgeInsets.all(AppTheme.moxyLogoPadding),
+              child: SvgPicture.asset(
+                IconPath.moxylogo,
+                width: 150,
               ),
             ),
           ),
-          Expanded(
-            child: AnimatedBranchContainer(
-              currentIndex: widget.navigationShell.currentIndex,
-              children: widget.children,
-            ),
+        ),
+        Expanded(
+          child: AnimatedBranchContainer(
+            currentIndex: widget.navigationShell.currentIndex,
+            children: widget.children,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -123,13 +122,16 @@ class _AuthenticationRootViewState extends State<AuthenticationRootView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: SvgPicture.asset(
-                      IconPath.moxylogo,
-                      width: 100,
+                GestureDetector(
+                  onTap: () => context.go(RouterProvider.homeNewPath()),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: SvgPicture.asset(
+                        IconPath.moxylogo,
+                        width: 100,
+                      ),
                     ),
                   ),
                 ),

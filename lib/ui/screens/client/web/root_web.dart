@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:moxy/config/routes.dart';
 import 'package:moxy/constant/icon_path.dart';
+import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_state.dart';
 import 'package:moxy/services/navigation/navigation_event.dart';
@@ -372,6 +373,22 @@ class RootWebWidget extends HookWidget {
                   ),
                   onTap: () {
                     navigateToBranch(context, 5);
+                    Navigator.of(context).pop();
+                  },
+                ),
+                ListTile(
+                  leading: SvgPicture.asset(
+                    IconPath.logout,
+                    height: 26,
+                    width: 24,
+                  ),
+                  title: Text(
+                    AppLocalizations.of(context)!.logout.toUpperCase(),
+                    style: theme.largeSemiBoltText,
+                  ),
+                  onTap: () {
+                    context.read<LoginCubit>().signOut();
+                    navigateToBranch(context, 0);
                     Navigator.of(context).pop();
                   },
                 ),

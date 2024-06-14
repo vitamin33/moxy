@@ -81,7 +81,7 @@ class DioClient {
           } else {
             moxyPrint(
                 'Error during refreshing access token: ${error.toString()}');
-            _navigator.push(RouterProvider.loginPath());
+            // _navigator.push(RouterProvider.loginPath());
             return handler.reject(error);
           }
         } else if (error.response?.statusCode == 401) {

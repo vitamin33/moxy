@@ -55,6 +55,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               duration: const Duration(milliseconds: 300),
               child: state.isResetEmailSent
                   ? SuccessCard(
+                    backgroundColor: AppTheme.white,
                       onTap: () {
                         context.go(RouterProvider.loginPath());
                         _registerCubit.clearResetState();

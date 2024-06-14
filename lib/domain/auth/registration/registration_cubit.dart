@@ -100,6 +100,8 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
           state.confirmationCode, state.email);
       if (result.isSuccess()) {
         emitEffect(NavigateToLogin());
+        clearRegisterTextfied();
+        emit(RegistrationState.defaultRegisterState());
       } else {
         emit(state.copyWith(
             state: RegisterFailed(
@@ -117,6 +119,7 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
       final result = await authRepository.resendConfirmationCode(state.email);
       if (result.isSuccess()) {
         emitEffect(ResendConfirm());
+        emit(state.copyWith(state: Register()));
       } else {
         emit(state.copyWith(
             state: RegisterFailed(
@@ -319,6 +322,15 @@ class RegistrationCubit extends CubitWithEffects<RegistrationState, UiEffect>
 
   void clearResetState() {
     emit(state.copyWith(isResetEmailSent: false));
+  }
+
+  void clearRegisterTextfied() {
+    firstNameController.text = '';
+    secondNameController.text = '';
+    mobileNumberController.text = '';
+    emailController.text = '';
+    passwordController.text = '';
+    confirmRegisterPasswordController.text = '';
   }
 
   void initNewPasswordFlow(String? email, String? resetToken) {

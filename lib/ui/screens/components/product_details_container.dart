@@ -127,8 +127,11 @@ class _AboutProductDetails extends StatelessWidget {
                     _PriceView(state: state),
                   ],
                 ),
-          const SizedBox(height: 20),
-          Row(
+          const Divider(
+            color: AppTheme.gray,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 AppLocalizations.of(context)!.color,
@@ -154,11 +157,31 @@ class _AboutProductDetails extends StatelessWidget {
               ),
             ],
           ),
-          Text(
-            state.productDetails.product.description,
-            style: theme.largeSemiBoltText,
-          ),
-          const SizedBox(height: 20),
+          if (isMobile)
+            // Padding(
+            //   padding: EdgeInsets.all(8),
+            //   child:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'Quantity',
+                style: theme.headlineSemiBoltText,
+              ),
+              SizedBox(height: 10),
+              Container(
+                width: 100,
+                child: QuantityPicker(
+                  quantity: state.productDetails.selectedDimension.quantity,
+                  onPlus: () {
+                    cubit.addQuantityOfProduct();
+                  },
+                  onMinus: () {
+                    cubit.removeQuantityOfProduct();
+                  },
+                ),
+              ),
+            ]),
+          // ),
+          SizedBox(height: 10),
           _ButtonsArea(state: state, basketCubit: basketCubit),
           _AttributesInfo(state: state),
         ],
@@ -177,6 +200,14 @@ class _AttributesInfo extends StatelessWidget {
 
     return Column(
       children: [
+        const Divider(
+          color: AppTheme.black,
+        ),
+        CustomAccordion(
+          title: 'ПРО ПРОДУКТ',
+          content: state.productDetails.product.description,
+          showIcon: false,
+        ),
         const Divider(
           color: AppTheme.black,
         ),
