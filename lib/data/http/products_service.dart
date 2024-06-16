@@ -246,7 +246,7 @@ class ProductsService {
       final response =
           await _dio.get('$baseUrl$getProductDetailsAdvUrl/$productId');
       final data = response.data;
-      final result = NetworkProductDetails.fromJson(data);
+    final result = NetworkProductDetails.fromJson(data);
       return result;
     } catch (e) {
       rethrow;

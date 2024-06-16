@@ -197,6 +197,9 @@ class ProfileCubit extends CubitWithEffects<ProfileState, UiEffect>
   void signOut() async {
     emit(state.copyWith(isLoading: true));
     await authRepository.logout();
+     
+    authRepository.generateGuestToken();
+
     emit(state.copyWith(isLoading: false));
   }
 

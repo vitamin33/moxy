@@ -18,15 +18,14 @@ class AnimatedBranchContainer extends StatelessWidget {
         children: children.mapIndexed(
       children,
       (int index, Widget navigator) {
+        // return _branchNavigatorWrapper(index, navigator);
         return AnimatedScale(
-          scale: index == currentIndex ? 1 : 1.4,
-          duration: const Duration(milliseconds: 300),
-          child: AnimatedOpacity(
-            opacity: index == currentIndex ? 1 : 0,
-            duration: const Duration(milliseconds: 300),
-            child: _branchNavigatorWrapper(index, navigator),
-          ),
-        );
+            scale: index == currentIndex ? 1.0 : 0,
+            duration: const Duration(seconds: 2),
+            child: AnimatedOpacity(
+                opacity: index == currentIndex ? 1.0 : 0,
+                duration: const Duration(seconds: 2),
+                child: _branchNavigatorWrapper(index, navigator)));
       },
     ).toList());
   }

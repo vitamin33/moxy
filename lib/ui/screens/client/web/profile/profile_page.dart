@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:moxy/constant/icon_path.dart';
 import 'package:moxy/domain/client/profile/profile_cubit.dart';
 import 'package:moxy/domain/client/profile/profile_effects.dart';
 import 'package:moxy/domain/client/profile/profile_state.dart';
@@ -368,10 +370,15 @@ class ProfileTabPage extends StatelessWidget {
                             cubit.signOut();
                             context.go(RouterProvider.loginPath());
                           },
-                          child: Text(
-                              AppLocalizations.of(context)!.profilePageLogOut,
-                              style: theme.largeSemiBoltText
-                                  .copyWith(color: AppTheme.gray)),
+                          child: Row(
+                            children: [
+                              SvgPicture.asset(IconPath.logout),
+                              Text(
+                                  AppLocalizations.of(context)!
+                                      .profilePageLogOut,
+                                  style: theme.largeSemiBoltText),
+                            ],
+                          ),
                         ),
                       ),
                     ),
