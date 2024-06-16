@@ -116,7 +116,7 @@ class ProductCard extends StatelessWidget {
         alignment: Alignment.topRight,
         child: GestureDetector(
           onTap: () {
-            MoxyAnalytics().addToWishlistEvent(productName: product.name);
+            // MoxyAnalytics().addToWishlistEvent(productName: product.name);
             onChangeFavorites(product);
           },
           child: OnHover(
@@ -165,7 +165,7 @@ class ProductCard extends StatelessWidget {
           basketCubit.addProductToBasket(product);
           await cubit.runAddToCartAnimation(widgetKey);
           await cubit.cartKey.currentState!.runCartAnimation();
-          MoxyAnalytics().addToCartEvent(productName: product.name);
+          // MoxyAnalytics().addToCartEvent(productName: product.name);
         },
         child: AnimatedOpacity(
           duration: const Duration(milliseconds: 400),

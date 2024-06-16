@@ -77,7 +77,7 @@ class VerificationPage extends StatelessWidget {
                   onTap: () {
                     if (cubit.validateConfirmCodeFields()) {
                       context.read<RegistrationCubit>().sendConfirmationCode();
-                      MoxyAnalytics().completeRegistrationEvent();
+                      // MoxyAnalytics().completeRegistrationEvent();
                     }
                   },
                 ),

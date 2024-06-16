@@ -32,6 +32,7 @@ class AdminProductDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 _buildDescriptionTextField(context, state, cubit),
+
                 const SizedBox(height: 10),
                 ProductCategoryChooser(
                     categories: state.productCategories,

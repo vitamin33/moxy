@@ -112,9 +112,7 @@ class _BasketPageState extends State<BasketPage> with TickerProviderStateMixin {
                     Navigator.pop(
                       context,
                     );
-                    MoxyAnalytics().initiateCheckoutEvent();
-                    context.go(RouterProvider.checkoutPath());
-                    
+                    context.push(RouterProvider.checkoutPath());
                   },
                   buttonWidth: double.infinity,
                 )

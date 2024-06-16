@@ -103,7 +103,7 @@ class _SubscribeViewState extends State<SubscribeView> {
                       InkWell(
                         onTap: () {
                           cubit.subscribeLead();
-                          MoxyAnalytics().leadEvent(leadEmail:  cubit.emailController.text);
+                          // MoxyAnalytics().leadEvent(leadEmail:  cubit.emailController.text);
                         },
                         child: SvgPicture.asset(IconPath.textFieldArrowWeb),
                       )
