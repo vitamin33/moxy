@@ -53,6 +53,7 @@ class CreateOrderPage extends StatelessWidget {
               builder: (context, isKeyboardVisible) {
                 return state.isSuccess
                     ? SuccessCard(
+                      backgroundColor: AppTheme.pink,
                         onTap: () {
                           if (state.isEdit) {
                             cubit.createNew();

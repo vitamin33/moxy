@@ -59,6 +59,7 @@ class EditOrderPage extends StatelessWidget {
                 builder: (context, isKeyboardVisible) {
                   return state.isSuccess
                       ? SuccessCard(
+                        backgroundColor: AppTheme.pink,
                           onTap: () {
                             context.pop();
                             cubit.clearState();

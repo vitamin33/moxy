@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moxy/domain/auth/login/login_cubit.dart';
 import 'package:moxy/domain/auth/registration/registration_cubit.dart';
 import 'package:moxy/domain/client/basket/basket_cubit.dart';
-import 'package:moxy/domain/client/checkout/checkout_cubit.dart';
 import 'package:moxy/domain/client/product_details/product_details_cubit.dart';
 import 'package:moxy/services/navigation/router_provider.dart';
 import 'package:moxy/services/navigation/splash/root_router_cubit.dart';

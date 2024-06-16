@@ -148,6 +148,7 @@ class _CreateProductPageState extends State<CreateProductPage> {
   Widget _buildSuccessWidget(BuildContext context, CreateProductCubit cubit,
       CreateProductState state) {
     return SuccessCard(
+      backgroundColor: AppTheme.pink,
         onTap: () {
           if (state.isEdit) {
             cubit.clearState();

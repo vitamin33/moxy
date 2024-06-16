@@ -135,17 +135,56 @@ class RouterProvider {
             routes: <RouteBase>[
               GoRoute(
                 path: loginPath(),
-                builder: _loginScreen,
+                pageBuilder: (context, state) {
+                  return CustomTransitionPage(
+                    transitionDuration: const Duration(milliseconds: 100),
+                    reverseTransitionDuration:
+                        const Duration(milliseconds: 300),
+                    child: _loginScreen(context, state),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      return Opacity(opacity: animation.value, child: child);
+                    },
+                  );
+                },
               ),
             ],
           ),
           StatefulShellBranch(
             initialLocation: registerPath(),
             routes: <RouteBase>[
-              GoRoute(path: registerPath(), builder: _registerScreen, routes: [
-                GoRoute(
-                    path: Routes.verification, builder: _verificationScreen),
-              ]),
+              GoRoute(
+                  path: registerPath(),
+                  pageBuilder: (context, state) {
+                    return CustomTransitionPage(
+                      transitionDuration: const Duration(milliseconds: 100),
+                      reverseTransitionDuration:
+                          const Duration(milliseconds: 300),
+                      child: _registerScreen(context, state),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return Opacity(opacity: animation.value, child: child);
+                      },
+                    );
+                  },
+                  routes: [
+                    GoRoute(
+                      path: Routes.verification,
+                      pageBuilder: (context, state) {
+                        return CustomTransitionPage(
+                          transitionDuration: const Duration(milliseconds: 100),
+                          reverseTransitionDuration:
+                              const Duration(milliseconds: 300),
+                          child: _verificationScreen(context, state),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return Opacity(
+                                opacity: animation.value, child: child);
+                          },
+                        );
+                      },
+                    ),
+                  ]),
             ],
           ),
           StatefulShellBranch(
@@ -153,14 +192,36 @@ class RouterProvider {
             routes: <RouteBase>[
               GoRoute(
                   path: resetPasswordPath(),
-                  builder: _resetPasswordScreen,
+                  pageBuilder: (context, state) {
+                    return CustomTransitionPage(
+                      transitionDuration: const Duration(milliseconds: 100),
+                      reverseTransitionDuration:
+                          const Duration(milliseconds: 300),
+                      child: const ResetPasswordPage(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        return Opacity(opacity: animation.value, child: child);
+                      },
+                    );
+                  },
                   routes: [
                     GoRoute(
                       path: Routes.newPassword,
-                      builder: (context, state) {
+                      pageBuilder: (context, state) {
                         final email = state.uri.queryParameters['email'];
                         final token = state.uri.queryParameters['token'];
-                        return NewPasswordPage(email: email, resetToken: token);
+                        return CustomTransitionPage(
+                            transitionDuration:
+                                const Duration(milliseconds: 100),
+                            reverseTransitionDuration:
+                                const Duration(milliseconds: 300),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              return Opacity(
+                                  opacity: animation.value, child: child);
+                            },
+                            child: NewPasswordPage(
+                                email: email, resetToken: token));
                       },
                     ),
                     GoRoute(

@@ -9,11 +9,13 @@ class SuccessCard extends StatelessWidget {
   final Function onTap;
   final String title;
   final String titleButton;
+  final Color backgroundColor;
   const SuccessCard(
       {super.key,
       required this.onTap,
       required this.title,
-      required this.titleButton});
+      required this.titleButton,
+      required this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -21,15 +23,15 @@ class SuccessCard extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       constraints: const BoxConstraints.expand(),
-      color: AppTheme.pink,
+      color: backgroundColor,
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(6.0)),
-                  color: AppTheme.pink),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(6.0)),
+                  color: backgroundColor),
               child: Padding(
                 padding: const EdgeInsets.all(40.0),
                 child: Column(
