@@ -129,7 +129,7 @@ class NavigationBarCardList extends StatelessWidget {
             ),
             title: Text(
               menu.title,
-              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     color: isTapped
                         ? AppTheme.primaryColor
                         : AppTheme.onPrimaryContainerColor,
